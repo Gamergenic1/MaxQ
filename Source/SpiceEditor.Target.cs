@@ -23,7 +23,7 @@ public class SpiceEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
-		ExtraModuleNames.AddRange( new string[] { "MainModule", "Spice" } );
+		ExtraModuleNames.AddRange( new string[] { "Spice" } );
 		
 		bUseFastPDBLinking = false;
 		bPublicSymbolsByDefault = true;  // <- Forced to true on Windows anyways
