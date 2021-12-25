@@ -24,7 +24,6 @@ Unreal Engine 5 "will empower creators across all industries to deliver stunning
 
 For an example of what Uneal Engine 5 is capable of, see [The Matrix Awakens: An Unreal Engine 5 Experience](https://www.unrealengine.com/en-US/wakeup).
 
-{{< youtube WU0gvPcc3jQ  >}}
 
 Additional information about Early Access to Unreal Engine 5 can be found on [Epic Games Unreal Engine 5 portal](https://www.unrealengine.com/en-US/unreal-engine-5).
 
@@ -38,6 +37,5 @@ For more information about Blueprints, see the [Unreal Engine "Blueprints - Esse
 
 Simulation of a solar system celestial body or space vehicle based on real or synthesized data can be set up in just minutes.
 
-For more information, see [Adding Third-Party Libraries to Unreal Engine : NASA's SPICE Toolkit] (https://gamedevtricks.com/tags/third-party-libs-series/) on [gamedevtricks.com](https://gamedevtricks.com/).
-
+For more information, see <https://gamedevtricks.com/tags/third-party-libs-series/>.
 
