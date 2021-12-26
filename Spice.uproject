@@ -11,5 +11,9 @@
 		}
 	],
 	"Plugins": [
+		{
+			"Name": "GLTFImporter",
+			"Enabled": true
+		}
 	]
 }
