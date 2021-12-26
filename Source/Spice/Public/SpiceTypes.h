@@ -394,6 +394,15 @@ inline FSDistanceVector operator*(const FSDistanceVector& lhs, double rhs)
     return FSDistanceVector(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }
 
+inline FSDistanceVector operator/(const FSDistanceVector& lhs, double rhs)
+{
+    return FSDistanceVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
+}
+
+inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistance& rhs)
+{
+    return FSDimensionlessVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
+}
 
 
 USTRUCT(BlueprintType)
@@ -1794,6 +1803,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "To double (km)",
             ToolTip = "Converts a distance to a double (kilometers)"
             ))
     static double Conv_SDistanceToDouble(
@@ -1805,6 +1815,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "From double (km)",
             ToolTip = "Converts a double (kilometers) to a distance"
             ))
     static FSDistance Conv_DoubleToSDistance(
@@ -1816,6 +1827,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to double (km/s)",
             ToolTip = "Converts a speed to a double (kilometers/sec)"
             ))
     static double Conv_SSpeedToDouble(
@@ -1827,6 +1839,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from double (km/s)",
             ToolTip = "Converts a double (kilometers/sec) to a speed"
             ))
     static FSSpeed Conv_DoubleToSSpeed(
@@ -1838,6 +1851,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to double (radians)",
             ToolTip = "Converts an angle to a double (radians)"
             ))
     static double Conv_SAngleToDouble(
@@ -1849,6 +1863,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from double (radians)",
             ToolTip = "Converts an double (radians) to an angle"
             ))
     static FSAngle Conv_DoubleToSAngle(
@@ -1860,6 +1875,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to double (radians/sec)",
             ToolTip = "Converts an angular rate to a double (radians/sec)"
             ))
     static double Conv_SAngularRateToDouble(
@@ -1871,6 +1887,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from double (radians/sec)",
             ToolTip = "Converts a doouble (radians/sec) to an angular rate"
             ))
     static FSAngularRate Conv_DoubleToSAngularRate(
@@ -1882,6 +1899,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to double (sec past J2000)",
             ToolTip = "Converts an ephemeris time to a double (sec past J2000)"
             ))
     static double Conv_SEphemerisTimeToDouble(
@@ -1893,6 +1911,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from double (sec past J2000)",
             ToolTip = "Converts a double (sec past J2000) to an ephemeris time"
             ))
     static FSEphemerisTime Conv_DoubleToSEphemerisTime(
@@ -1904,6 +1923,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to double (sec)",
             ToolTip = "Converts an ephemeris period to a double (sec)"
             ))
     static double Conv_SEphemerisPeriodToDouble(
@@ -1915,6 +1935,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from double (sec)",
             ToolTip = "Converts a double (sec) to an ephemeris period"
             ))
     static FSEphemerisPeriod Conv_DoubleToSEphemerisPeriod(
@@ -1926,6 +1947,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to double",
             ToolTip = "Converts a mass constant to a double"
             ))
     static double Conv_SMassConstantToDouble(
@@ -1937,6 +1959,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from double",
             ToolTip = "Converts a double to a mass constant"
             ))
     static FSMassConstant Conv_DoubleToSMassConstant(
@@ -1948,6 +1971,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to dimensionless vector (in km/sec)",
             ToolTip = "Converts a velocity vector to a dimensionless vector (km/sec)"
             ))
         static FSDimensionlessVector Conv_SVelocityVectorToSDimensionlessVector(
@@ -1959,6 +1983,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from dimensionless vector (in km/sec)",
             ToolTip = "Converts a dimensionless vector to a velocity vector (km/sec)"
             ))
         static FSVelocityVector Conv_SDimensionlessVectorToSVelocityVector(
@@ -2014,6 +2039,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "to dimensionless vector (in km)",
             ToolTip = "Converts a distance vector to a dimensionless vector (km)"
             ))
         static FSDimensionlessVector Conv_SDistanceVectorToSDimensionlessVector(
@@ -2025,6 +2051,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "from dimensionless vector (in km)",
             ToolTip = "Converts a dimensionless vector (double precision) to a distance vector"
             ))
     static FSDistanceVector Conv_SDimensionlessVectorToSDistanceVector(
@@ -2033,43 +2060,43 @@ public:
 
     /* Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "time + period", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "Spice|Math|Time")
-    static FSEphemerisTime Add_SEphemerisTimeSEphemerisPeriod(FSEphemerisTime A, FSEphemerisPeriod B);
+    static FSEphemerisTime Add_SEphemerisTimeSEphemerisPeriod(const FSEphemerisTime& A, const FSEphemerisPeriod& B);
 
     /* Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period + time", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "Spice|Math|Time")
-    static FSEphemerisTime Add_SEphemerisPeriodSEphemerisTime(FSEphemerisPeriod A, FSEphemerisTime B);
+    static FSEphemerisTime Add_SEphemerisPeriodSEphemerisTime(const FSEphemerisPeriod& A, const FSEphemerisTime& B);
 
     /** Returns true if A is greater than B (A > B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime > SEphemerisTime", CompactNodeTitle = ">", Keywords = "> greater"), Category = "Spice|Math|DateTime")
-    static bool Greater_SEphemerisTimeSEphemerisTime(FSEphemerisTime A, FSEphemerisTime B);
+    static bool Greater_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /** Returns true if A is less than B (A < B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "SEphemerisTime < SEphemerisTime", CompactNodeTitle = "<", Keywords = "< less"), Category = "Spice|Math|DateTime")
-    static bool Less_SEphemerisTimeSEphemerisTime(FSEphemerisTime A, FSEphemerisTime B);
+    static bool Less_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /* Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period + period", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Time")
-    static FSEphemerisPeriod Add_SEphemerisPeriodSEphemerisPeriod(FSEphemerisPeriod A, FSEphemerisPeriod B);
+    static FSEphemerisPeriod Add_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
 
     /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "time - time", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Time")
-    static FSEphemerisPeriod Subtract_SEphemerisTimeSEphemerisTime(FSEphemerisTime A, FSEphemerisTime B);
+    static FSEphemerisPeriod Subtract_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B);
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "double * period", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Time")
-    static FSEphemerisPeriod Multiply_DoubleSEphemerisPeriod(double A, FSEphemerisPeriod B);
+    static FSEphemerisPeriod Multiply_DoubleSEphemerisPeriod(double A, const FSEphemerisPeriod& B);
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Time")
-    static FSEphemerisPeriod Multiply_SEphemerisPeriodDouble(FSEphemerisPeriod A, double B);
+    static FSEphemerisPeriod Multiply_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
 
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Time")
-    static FSEphemerisPeriod Divide_SEphemerisPeriodDouble(FSEphemerisPeriod A, double B);
+    static FSEphemerisPeriod Divide_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
 
     /* Modulo (A % B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period % (double)", CompactNodeTitle = "%", Keywords = "% modulus"), Category = "Spice|Math|Time")
-    static FSEphemerisPeriod Modulus_SEphemerisPeriodDouble(FSEphemerisPeriod A, double B);
+    static FSEphemerisPeriod Modulus_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
 
     //////////////////////
     /* Multiplication (A * B) */
@@ -2108,40 +2135,43 @@ public:
     
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector + distance vector", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Distance")
     static FSDistanceVector Add_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
-    
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    static FSDistanceVector Divide_SDistanceVectorDouble(const FSDistanceVector& A, double B);
+
     //////////////////////
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
-        static FSSpeed Multiply_SSpeedDouble(const FSSpeed& A, double B);
+    static FSSpeed Multiply_SSpeedDouble(const FSSpeed& A, double B);
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "double * speed", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
-        static FSSpeed Multiply_DoubleSSpeed(double A, const FSSpeed& B);
+    static FSSpeed Multiply_DoubleSSpeed(double A, const FSSpeed& B);
 
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Speed")
-        static FSSpeed Divide_SSpeedDouble(FSSpeed A, double B);
+    static FSSpeed Divide_SSpeedDouble(FSSpeed A, double B);
 
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / speed", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Speed")
-        static double Divide_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
+    static double Divide_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
 
     /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed - speed", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Speed")
-        static FSSpeed Subtract_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
+    static FSSpeed Subtract_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
 
     /*  Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed + speed", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Speed")
-        static FSSpeed Add_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
+    static FSSpeed Add_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
 
     //////////////////////
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
-        static FSVelocityVector Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B);
+    static FSVelocityVector Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B);
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
-        static FSVelocityVector Multiply_DoubleSVelocityVector(double A, const FSVelocityVector& B);
+    static FSVelocityVector Multiply_DoubleSVelocityVector(double A, const FSVelocityVector& B);
 
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Speed")
@@ -2149,11 +2179,11 @@ public:
 
     /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity - velocity", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Speed")
-        static FSVelocityVector Subtract_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
+    static FSVelocityVector Subtract_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /*  Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Speed")
-        static FSVelocityVector Add_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
+    static FSVelocityVector Add_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /*
     *
@@ -2226,16 +2256,18 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "To UE Vector",
             ToolTip = "Converts a Spice dimensionless vector (double precision, RHS) to a UE Vector (single precision, LHS)"
             ))
         static FVector Conv_SDimensionlessToVector(
-            const FSDimensionlessVector& value
+            FSDimensionlessVector value
         );
 
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "To UE Vector",
             ToolTip = "Converts a Spice distance vector (double precision, RHS) to a UE Vector (km, single precision, LHS)"
             ))
         static FVector Conv_SDistanceVectorToVector(
@@ -2246,6 +2278,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "To UE Vector",
             ToolTip = "Converts a Spice velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
             ))
         static FVector Conv_SVelocityVectorToVector(
@@ -2256,6 +2289,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "From UE Vector",
             ToolTip = "Converts a UE Vector (single precision, LHS) to a Spice dimensionless vector (double precision, RHS)"
             ))
         static FSDimensionlessVector Conv_VectorToSDimensionless(
@@ -2266,6 +2300,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "From UE Vector",
             ToolTip = "Converts a UE Vector (km, single precision, LHS) to a Spice distance vector (double precision, RHS)"
             ))
         static FSDistanceVector Conv_VectorToSDistanceVector(
@@ -2276,6 +2311,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "From UE Vector",
             ToolTip = "Converts a UE Vector (kmps, single precision, LHS) to a Spice velocity vector (double precision, RHS)"
             ))
         static FSVelocityVector Conv_VectorToSVelocityVector(
@@ -2287,6 +2323,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "To UE Quat",
             ToolTip = "Converts a Spice quaternion (double precision, RHS) to a UE Quat (single precision, LHS)"
             ))
     static FQuat Conv_SQuaternionToQuat(const FSQuaternion& value);
@@ -2296,6 +2333,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
+            CompactNodeTitle = "From UE Quat",
             ToolTip = "Converts a UE Quat (single precision, LHS) to a Spice quaternion (double precision, RHS)"
             ))
     static FSQuaternion Conv_QuatToSQuaternion(const FQuat& value);

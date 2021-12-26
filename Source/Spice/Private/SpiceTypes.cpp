@@ -405,51 +405,51 @@ FSDistanceVector USpiceTypes::Conv_SDimensionlessVectorToSDistanceVector(
 
 
 /* Addition (A + B) */
-FSEphemerisTime USpiceTypes::Add_SEphemerisTimeSEphemerisPeriod(FSEphemerisTime A, FSEphemerisPeriod B)
+FSEphemerisTime USpiceTypes::Add_SEphemerisTimeSEphemerisPeriod(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
 {
     return A + B;
 }
 
 /* Addition (A + B) */
-FSEphemerisTime USpiceTypes::Add_SEphemerisPeriodSEphemerisTime(FSEphemerisPeriod A, FSEphemerisTime B)
+FSEphemerisTime USpiceTypes::Add_SEphemerisPeriodSEphemerisTime(const FSEphemerisPeriod& A, const FSEphemerisTime& B)
 {
     return A + B;
 }
 
 
 /* Addition (A + B) */
-FSEphemerisPeriod USpiceTypes::Add_SEphemerisPeriodSEphemerisPeriod(FSEphemerisPeriod A, FSEphemerisPeriod B)
+FSEphemerisPeriod USpiceTypes::Add_SEphemerisPeriodSEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return A + B;
 }
 
 /* Subtraction (A - B) */
-FSEphemerisPeriod USpiceTypes::Subtract_SEphemerisTimeSEphemerisTime(FSEphemerisTime A, FSEphemerisTime B)
+FSEphemerisPeriod USpiceTypes::Subtract_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B)
 {
     return A - B;
 }
 
 /* Multiplication (A * B) */
-FSEphemerisPeriod USpiceTypes::Multiply_DoubleSEphemerisPeriod(double A, FSEphemerisPeriod B)
+FSEphemerisPeriod USpiceTypes::Multiply_DoubleSEphemerisPeriod(double A, const FSEphemerisPeriod& B)
 {
     return A * B;
 }
 
 /* Multiplication (A * B) */
-FSEphemerisPeriod USpiceTypes::Multiply_SEphemerisPeriodDouble(FSEphemerisPeriod A, double B)
+FSEphemerisPeriod USpiceTypes::Multiply_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B)
 {
     return A * B;
 }
 
 
 /* Division (A / B) */
-FSEphemerisPeriod USpiceTypes::Divide_SEphemerisPeriodDouble(FSEphemerisPeriod A, double B)
+FSEphemerisPeriod USpiceTypes::Divide_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B)
 {
     return A / B;
 }
 
 /* Modulo (A % B) */
-FSEphemerisPeriod USpiceTypes::Modulus_SEphemerisPeriodDouble(FSEphemerisPeriod A, double B)
+FSEphemerisPeriod USpiceTypes::Modulus_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B)
 {
     return A % B;
 }
@@ -515,12 +515,18 @@ FSDistanceVector USpiceTypes::Add_DoubleSDistanceVector(const FSDistanceVector& 
 }
 
 
-bool USpiceTypes::Greater_SEphemerisTimeSEphemerisTime(FSEphemerisTime A, FSEphemerisTime B)
+FSDistanceVector USpiceTypes::Divide_SDistanceVectorDouble(const FSDistanceVector& A, double B)
+{
+    return A / B;
+}
+
+
+bool USpiceTypes::Greater_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B)
 {
     return A.seconds > B.seconds;
 }
 
-bool USpiceTypes::Less_SEphemerisTimeSEphemerisTime(FSEphemerisTime A, FSEphemerisTime B)
+bool USpiceTypes::Less_SEphemerisTimeSEphemerisTime(const FSEphemerisTime& A, const FSEphemerisTime& B)
 {
     return A.seconds < B.seconds;
 }
@@ -592,7 +598,7 @@ FSVelocityVector USpiceTypes::Add_SVelocityVectorSVelocityVector(const FSVelocit
  */
 
 FVector USpiceTypes::Conv_SDimensionlessToVector(
-    const FSDimensionlessVector& value
+    FSDimensionlessVector value
 )
 {
     return Swizzle(value);
