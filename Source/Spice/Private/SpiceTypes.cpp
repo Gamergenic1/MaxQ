@@ -515,7 +515,7 @@ FSDistanceVector USpiceTypes::Add_DoubleSDistanceVector(const FSDistanceVector& 
 }
 
 
-FSDistanceVector USpiceTypes::Divide_SDistanceVectorDouble(const FSDistanceVector& A, double B)
+FSDimensionlessVector USpiceTypes::Divide_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B)
 {
     return A / B;
 }
