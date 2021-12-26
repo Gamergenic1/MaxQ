@@ -399,6 +399,11 @@ inline FSDistanceVector operator/(const FSDistanceVector& lhs, double rhs)
     return FSDistanceVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
 
+inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, FSDistanceVector rhs)
+{
+    return FSDimensionlessVector(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
+}
+
 inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistance& rhs)
 {
     return FSDimensionlessVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
@@ -2136,8 +2141,9 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector + distance vector", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Distance")
     static FSDistanceVector Add_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
-    static FSDistanceVector Divide_SDistanceVectorDouble(const FSDistanceVector& A, double B);
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / distance vector", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    static FSDimensionlessVector Divide_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
+
 
     //////////////////////
     /* Multiplication (A * B) */
