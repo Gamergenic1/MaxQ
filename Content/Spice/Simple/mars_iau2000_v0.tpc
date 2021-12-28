@@ -1,0 +1,568 @@
+KPL/PCK
+
+\beginlabel
+PDS_VERSION_ID               = PDS3
+RECORD_TYPE                  = STREAM
+RECORD_BYTES                 = "N/A"
+^SPICE_KERNEL                = "mars_iau2000_v0.tpc"
+MISSION_NAME                 = "MARS EXPLORATION ROVER"
+SPACECRAFT_NAME              = "MARS EXPLORATION ROVER 2"
+DATA_SET_ID                  = "MER2-M-SPICE-6-V1.0"
+KERNEL_TYPE_ID               = PCK
+PRODUCT_ID                   = "mars_iau2000_v0.tpc"
+PRODUCT_CREATION_TIME        = 2004-07-22T14:53:35
+PRODUCER_ID                  = "NAIF/JPL"
+MISSION_PHASE_NAME           = "N/A"
+PRODUCT_VERSION_TYPE         = ACTUAL
+PLATFORM_OR_MOUNTING_NAME    = "N/A"
+START_TIME                   = "N/A"
+STOP_TIME                    = "N/A"
+SPACECRAFT_CLOCK_START_COUNT = "N/A"
+SPACECRAFT_CLOCK_STOP_COUNT  = "N/A"
+TARGET_NAME                  = MARS
+INSTRUMENT_NAME              = "N/A"
+NAIF_INSTRUMENT_ID           = "N/A"
+SOURCE_PRODUCT_ID            = "N/A"
+NOTE                         = "See comments in the file for details"
+OBJECT                       = SPICE_KERNEL
+  INTERCHANGE_FORMAT         = ASCII
+  KERNEL_TYPE                = TARGET_CONSTANTS
+  DESCRIPTION                = "Special PCK file incorporating IAU2000 Mars
+Rotation data from the ``Report of the IAU/IAG Working Group on Cartographic
+Coordinates and Rotational Elements of the Planets and Satellites:  2000.'' "
+END_OBJECT                   = SPICE_KERNEL
+\endlabel
+
+
+P_constants (PcK) SPICE kernel file
+===========================================================================
+
+        By: Nat Bachman, Boris Semenov (NAIF)    2001 December 11
+ 
+ 
+Organization
+--------------------------------------------------------
+ 
+     The contents of this file are as follows.
+ 
+     Introductory Information:
+ 
+         --   Version description
+ 
+         --   Disclaimer
+ 
+         --   Sources
+ 
+         --   Explanation
+ 
+         --   Body numbers and names
+ 
+     Pck Data:
+ 
+         --   Orientation constants for Mars and its natural
+              satellites
+         
+         --   Radii of Mars and its natural satellites
+ 
+ 
+Version description
+--------------------------------------------------------
+ 
+     This file was created on December 11, 2001.  This version
+     incorporates new data from a preprint of the ``Report of 
+     the IAU/IAG Working Group on Cartographic Coordinates
+     and Rotational Elements of the Planets and Satellites:  2000.''
+                 
+ 
+Disclaimer
+--------------------------------------------------------
+ 
+     This constants file may not contain the parameter values that
+     you prefer. Note that this file may be readily modified by
+     you or anyone else. NAIF suggests that you inspect this file
+     visually before proceeding with any critical or extended
+     data processing.
+ 
+     NAIF requests that you update the ``by line' and date if you
+     modify the file.
+ 
+ 
+Sources
+--------------------------------------------------------
+ 
+     The sources for the constants listed in this file are:
+ 
+         1.   Preprint:  ``Report of the IAU/IAG Working Group 
+              on Cartographic Coordinates and Rotational Elements of
+              the Planets and Satellites: 2000.''  
+ 
+         2.   ``Planetary Geodetic Control Using Satellite
+              Imaging,'' Journal of Geophysical Research, Vol. 84,
+              No. B3, March 10, 1979, by Thomas C. Duxbury. This
+              paper is cataloged as NAIF document 190.0.
+
+         3.   Letter from Thomas C. Duxbury to Dr. Ephraim
+              Lazeryevich Akim, Keldish Institute of Applied
+              Mathematics, USSR Academy of Sciences, Moscow, USSR.
+              This letter is catalogued as NAIF document number
+              195.0.
+              
+         
+     Most values are from [1].  All exceptions are commented
+     where they occur in this file.  The exceptions are:
+              
+         --   The second nutation precession angle (M2) for Mars is
+              represented by a quadratic polynomial in the 1994
+              IAU report. The SPICELIB subroutine BODEUL can not
+              handle this term (which is extremely small), so we
+              truncate the polynomial to a linear one.
+
+         --   Values for Mars' prime meridian offset are listed
+              as comments.  These are taken from [2] and [3].
+
+
+     ``Old values'' listed are from the SPICE PCK file dated April
+     24, 2000.  Most of these values came from the 1997 IAU report.
+  
+ 
+Explanation
+--------------------------------------------------------
+ 
+     The NAIF Toolkit software that uses this file is documented in
+     the NAIF ``Required Reading'' file PCK.REQ. See that document
+     for a detailed explanation of the NAIF text kernel file format. 
+     PCK.REQ is available in both printed and electronic form.
+ 
+     This file, which is logically part of the SPICE P-kernel,
+     contains constants used to model the orientation and shape of
+     the Sun, planets, and satellites. The orientation models
+     express the direction of the pole and location of the prime
+     meridian of a body as a function of time. The shape models
+     represent all bodies as ellipsoids, using two equatorial
+     radii and a polar radius. Spheroids and spheres are obtained
+     when two or all three radii are equal.
+ 
+ 
+Orientation models
+
+     The discussion below was taken from a PCK file containing
+     data for bodies for which data was provided in the 1997 IAU
+     report.  While it refers to data that are not present in
+     this file, the explanation remains applicable to this file.
+ 
+     All of the orientation models use three Euler angles to
+     describe body orientation. To be precise, the Euler angles
+     describe the orientation of the coordinate axes of the
+     ``Body Equator and Prime Meridian'' system with respect to
+     an inertial system.  By default, the inertial system is
+     J2000 (also called ``EME2000''), but other frames can be
+     specified in the file.  See the PCK Required Reading for
+     details.
+ 
+     The first two angles, in order, are the right ascension and
+     declination (henceforth RA and DEC) of the north pole of a
+     body as a function of time. The third angle is the prime
+     meridian location (represented by ``W''), which is expressed
+     as a rotation about the north pole, and is also a function of time.
+ 
+     For the Sun and planets, the expressions for the north pole's
+     right ascension and declination, as well as prime meridian location,
+     are always (as far as the models that appear in this file are
+     concerned) quadratic polynomials, where the independent variable is
+     time. Some coefficients may be zero.
+ 
+     In this file, the time arguments in expressions always refer
+     to Barycentric Dynamical Time (TDB), measured in centuries or
+     days past the a reference epoch.  By default, the reference
+     epoch is the J2000 epoch, which is Julian ephemeris date
+     2451545.0, but other epochs can be specified in the file.  See
+     the PCK Required Reading for details.
+ 
+ 
+     Example:  1991 IAU Model for orientation of the Earth.   Note that 
+     these values are used as an example only; see the data area below 
+     for current values.
+
+ 
+        alpha   =   0.00 - 0.641 T             ( RA )
+             0
+ 
+        delta   =  90.0  - 0.557 T             ( DEC )
+             0
+ 
+        W       =  190.16 + 360.9856235 d      ( Prime meridian )
+ 
+ 
+        T represents centuries past J2000 ( TDB ),
+ 
+        d represents days past J2000 ( TDB ).
+ 
+     In this file, the polynomials' coefficients above are assigned to the
+     symbols
+ 
+        BODY399_POLE_RA
+        BODY399_POLE_DEC
+        BODY399_POLE_PM
+ 
+     as follows:
+ 
+        BODY399_POLE_RA        = (    0.      -0.641         0. )
+        BODY399_POLE_DEC       = (  +90.      -0.557         0. )
+        BODY399_PM             = (  190.16  +360.9856235     0. )
+ 
+     Note the number ``399''; this is the NAIF ID code for the Earth.
+ 
+     You'll see an additional symbol grouped with the ones listed here; it
+     is
+ 
+        BODY399_LONG_AXIS
+ 
+     This term is zero for all bodies except Mars. It represents the offset
+     between the longest axis of the triaxial ellipsoid used to model a
+     body and the prime meridian of the body.
+ 
+     Expressions for satellites are a little more complicated; in addition
+     to polynomial terms, there are trigonometric terms. The arguments of
+     the trigonometric terms are linear polynomials. In this file, we call
+     the arguments of these trigonometric terms ``nutation precession
+     angles.''
+ 
+     In this file, the polynomial expressions for the nutation precession
+     angles are listed along with the planet's RA, DEC, and prime meridian
+     terms.
+ 
+     Example: 1991 IAU nutation precession angles for Earth.  Note that these
+     values are used as an example only; see the data area below for current 
+     values.
+ 
+        E1 = 125.045 -  0.052992 d
+        E2 = 250.090 -  0.105984 d
+        E3 = 260.008 + 13.012001 d
+        E4 = 176.625 + 13.340716 d
+        E5 = 357.529 +  0.985600 d
+ 
+        d represents days past J2000 ( TDB )
+ 
+     Because the NAIF Toolkit software expects the time units for the
+     angles to be CENTURIES (as in the IAU models for most bodies--the
+     Earth is an exception), the linear coefficients are scaled by 36525.0
+     in the assignments:
+ 
+        BODY3_NUT_PREC_ANGLES  = (  125.045    -1935.5328
+                                    250.090    -3871.0656
+                                    260.008   475263.336525
+                                    176.625   487269.6519
+                                    357.529    35999.04     )
+ 
+     As stated above, the satellite orientation models use polynomial and
+     trigonometric terms, where the arguments of the trigonometric terms
+     are the ``nutation precession angles.''
+ 
+     Example: 1988 IAU values for the Moon.  Again, these values are used 
+     as an example only; see the data area below for current values.
+ 
+ 
+        alpha   =  270.000  +  0.003 T  -  3.878 sin(E1) - 0.120 sin(E2)
+             0
+                                        +  0.070 sin(E3) - 0.017 sin(E4)  (RA)
+ 
+ 
+        delta   =  66.541   +  0.013 T  +  1.543 cos(E1) + 0.024 cos(E2)
+             0
+                                        -  0.028 cos(E3) + 0.007 cos(E4)  (DEC)
+ 
+ 
+        W       =  38.317   + 13.1763582 d    +  3.558 sin(E1)
+ 
+                                              +  0.121 sin(E2)
+ 
+                                              -  0.064 sin(E3)
+ 
+                                              +  0.016 sin(E4)
+ 
+                                              +  0.025 sin(E5)  ( Prime
+                                                                 meridian )
+ 
+        d represents days past J2000.
+ 
+        E1--E5 are the nutation precession angles.
+ 
+     The polynomial terms are assigned to symbols by the statements
+ 
+        BODY301_POLE_RA        = (  270.000    0.003        0. )
+        BODY301_POLE_DEC       = (  +66.541    0.013        0. )
+        BODY301_PM             = (   38.317  +13.1763582    0. )
+ 
+     The coefficients of the trigonometric terms are assigned to symbols by
+     the statements
+ 
+        BODY301_NUT_PREC_RA  = (  -3.878  -0.120  +0.070  -0.017   0.    )
+        BODY301_NUT_PREC_DEC = (  +1.543  +0.024  -0.028  +0.007   0.    )
+        BODY301_NUT_PREC_PM  = (  +3.558  +0.121  -0.064  +0.016  +0.025 )
+ 
+     Note that for the RA and PM (prime meridian) assignments, the ith term
+     is the coefficient of sin(Ei) in the expression used in the IAU model,
+     while for the DEC assignment, the ith term is the coefficient of
+     cos(Ei) in the expression used in the IAU model.
+ 
+     NAIF software expects the models for satellite orientation to
+     follow the form of the model shown here: the polynomial portions of the
+     RA, DEC, and W expressions are expected to be quadratic, the 
+     trigonometric terms for RA and W (satellite prime meridian) are expected 
+     to be linear combinations of sines of nutation precession angles, the 
+     trigonometric terms for DEC are expected to be linear combinations of 
+     cosines of nutation precession angles, and the polynomials for the 
+     nutation precession angles themselves are expected to be linear.
+ 
+     Eventually, the software will handle more complex expressions, we
+     expect.
+ 
+ 
+Shape models
+ 
+     There is only one kind of shape model supported by the NAIF Toolkit
+     software at present: the triaxial ellipsoid. The 1994 IAU report does
+     not use any other models.
+ 
+     For each body, three radii are listed:  The first number is
+     the largest equatorial radius (the length of the semi-axis
+     containing the prime meridian), the second number is the smaller
+     equatorial radius, and the third is the polar radius.
+ 
+     Example: Radii of the Earth.
+ 
+        BODY399_RADII     = (     6378.14    6378.14      6356.75   )
+ 
+ 
+Body numbers and names
+--------------------------------------------------------
+ 
+     The NAIF ID codes used in this file are
+ 
+          4  Mars barycenter
+        499  Mars
+        401  Phobos      
+        402  Deimos
+ 
+     See the NAIF_IDS Required Reading for the full list of ID
+     codes recognized by the SPICE system.
+
+ 
+Orientation constants for Mars and its natural satellites
+---------------------------------------------------------
+ 
+ 
+ 
+Mars
+ 
+     Old values:
+ 
+        Values shown are from the 1997 IAU report.
+        
+        body499_pole_ra          = (  317.681     -0.108       0.  )
+        body499_pole_dec         = (  +52.886     -0.061       0.  )
+        body499_pm               = (  176.868   +350.8919830   0.  )
+ 
+        Old nutation precession angles match those in the 2000 report.
+
+ 
+     Current values:
+ 
+        \begindata
+ 
+        BODY499_POLE_RA          = ( 317.68143   -0.1061      0. )
+        BODY499_POLE_DEC         = (  52.88650   -0.0609      0. )
+        BODY499_PM               = ( 176.630    350.89198226 )
+ 
+        \begintext
+ 
+        Source [2] specifies the following value for the lambda_a term
+        (BODY4_LONG_AXIS ) for Mars.
+ 
+        This term is the POSITIVE WEST LONGITUDE, measured from the prime
+        meridian, of the longest axis of the ellipsoid representing the ``mean
+        planet surface,'' as the article states.
+ 
+           body499_long_axis        = (  110.  )
+ 
+        Source [3] specifies the lambda_a value
+ 
+           body499_long_axis        = (  104.9194  )
+ 
+        We list these lambda_a values for completeness. The IAU gives equal
+        values for both equatorial radii, so the lambda_a offset does not
+        apply to the IAU model.
+ 
+
+        The 2000 IAU report defines M2, the second nutation precession angle,
+        by: 
+                                                2
+           192.93  +  1128.4096700 d  +  8.864 T
+ 
+        We truncate the M2 series to a linear expression, because the PCK
+        software cannot handle the quadratic term.
+ 
+        Again, the linear terms are scaled by 36525.0:
+ 
+            -0.4357640000000000       -->     -15916.28010000000
+          1128.409670000000           -->   41215163.19675000
+            -1.8151000000000000E-02   -->       -662.9652750000000
+ 
+        We also introduce a fourth nutation precession angle, which
+        is the pi/2-complement of the third angle.  This angle is used
+        in computing the prime meridian location for Deimos.  See the
+        discussion of this angle below in the section containing orientation
+        constants for Deimos.
+ 
+        \begindata
+
+        BODY4_NUT_PREC_ANGLES  = (  169.51     -15916.2801
+                                    192.93  +41215163.19675
+                                     53.47       -662.965275 
+                                     36.53       +662.965275  )
+ 
+        \begintext
+ 
+
+ 
+ 
+Satellites of Mars
+ 
+ 
+     Phobos
+ 
+          Old values:
+ 
+             Values are unchanged in the 2000 report.
+ 
+          Current values:
+ 
+            The quadratic prime meridian term is scaled by 1/36525**2:
+ 
+               8.864000000000000   --->   6.6443009930565219E-09
+ 
+          \begindata
+ 
+          BODY401_POLE_RA       = (  317.68      -0.108       0.  )
+          BODY401_POLE_DEC      = (  +52.90      -0.061       0.  )
+          BODY401_PM            = (   35.06    
+                                   +1128.8445850 
+                                       6.6443009930565219D-09     )
+                                       
+          BODY401_LONG_AXIS     = (    0.    )
+ 
+          BODY401_NUT_PREC_RA   = (   +1.79   0.    0.  0. )
+          BODY401_NUT_PREC_DEC  = (   -1.08   0.    0.  0. )
+          BODY401_NUT_PREC_PM   = (   -1.42  -0.78  0.  0. )
+ 
+          \begintext
+ 
+ 
+     Deimos
+ 
+        Old values:
+ 
+           Values are unchanged in the 2000 report.
+ 
+ 
+        New values:
+ 
+           The Deimos prime meridian expression is:
+ 
+ 
+                                                     2
+              W = 79.41  +  285.1618970 d  -  0.520 T  -  2.58 sin M
+                                                                    3
+ 
+                                                       +  0.19 cos M .
+                                                                    3
+ 
+ 
+           At the present time, the constants kernel software (the routine
+           BODEUL in particular) cannot handle the cosine term directly,
+           but we can represent it as
+ 
+              0.19 sin M
+                        4
+ 
+           where
+ 
+              M   =  90.D0 - M
+               4              3
+ 
+           Therefore, the nutation precession angle assignments for Phobos
+           and Deimos contain four coefficients rather than three.
+ 
+           The quadratic prime meridian term is scaled by 1/36525**2:
+ 
+              -0.5200000000000000  --->   -3.8978300049519307E-10
+ 
+           \begindata
+ 
+           BODY402_POLE_RA       = (  316.65     -0.108       0.            )
+           BODY402_POLE_DEC      = (  +53.52     -0.061       0.            )
+           BODY402_PM            = (   79.41   +285.1618970  -3.897830D-10  )
+           BODY402_LONG_AXIS     = (    0.                                  )
+ 
+           BODY402_NUT_PREC_RA   = (    0.   0.   +2.98   0.    )
+           BODY402_NUT_PREC_DEC  = (    0.   0.   -1.78   0.    )
+           BODY402_NUT_PREC_PM   = (    0.   0.   -2.58   0.19  )
+ 
+           \begintext
+ 
+ 
+ 
+
+ 
+Radii for Mars and its natural satellites
+--------------------------------------------------------
+ 
+Mars
+ 
+ 
+     Old values:
+ 
+        Values are from the 1997 IAU report.
+ 
+        body499_radii       = (     3397.      3397.         3375.     )
+
+
+
+     Current values:
+ 
+        Per the source [1], the polar radius is the average of the
+        north polar radius:
+
+           3373.19 km
+
+        and the south polar radius:
+
+           3379.21 km
+
+        \begindata
+ 
+        BODY499_RADII       = (     3396.19    3396.19       3376.20   )
+ 
+        \begintext
+ 
+ 
+
+ 
+Satellites of Mars
+ 
+     Old values:
+ 
+        Values for Phobos and Deimos are unchanged in the 2000 report.
+ 
+ 
+     Current values:
+ 
+        \begindata
+ 
+        BODY401_RADII     = (       13.4        11.2          9.2    )
+        BODY402_RADII     = (        7.5         6.1          5.2    )
+ 
+        \begintext
+ 
+ 
+
