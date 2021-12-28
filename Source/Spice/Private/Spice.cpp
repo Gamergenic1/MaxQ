@@ -7788,7 +7788,7 @@ Exceptions
 void USpice::vsep(
     const FSDimensionlessVector& v1,
     const FSDimensionlessVector& v2,
-    double& out
+    FSAngle& out
 )
 {
     // Inputs
@@ -7801,7 +7801,7 @@ void USpice::vsep(
     _out = vsep_c(_v1, _v2);
 
     // Return Value
-    out = double(_out);
+    out = FSAngle(_out);
 }
 
 /*
@@ -7958,6 +7958,29 @@ void USpice::xf2rav(
     av = FSAngularVelocity(_av);
 }
 
+
+ConstSpiceChar* CoordsToStr(ES_CoordinateSystem coords)
+{
+    switch (coords)
+    {
+    case ES_CoordinateSystem::RECTANGULAR:
+        return "RECTANGULAR";
+    case ES_CoordinateSystem::CYLINDRICAL:
+        return "CYLINDRICAL";
+    case ES_CoordinateSystem::LATITUDINAL:
+        return "LATITUDINAL";
+    case ES_CoordinateSystem::SPHERICAL:
+        return "SPHERICAL";
+    case ES_CoordinateSystem::GEODETIC:
+        return "GEODETIC";
+    case ES_CoordinateSystem::PLANETOGRAPHIC:
+        return "PLANETOGRAPHIC";
+    }
+
+    return "NONE";
+}
+
+
 /*
 Exceptions
    1)  If either the input or output coordinate system is not
@@ -8009,17 +8032,25 @@ Exceptions
 void USpice::xfmsta(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSStateVector& input_state,
-    const FString& input_coord_sys,
-    const FString& output_coord_sys,
-    const FString& body,
-    FSStateVector& output_state
+    const FSDimensionlessVector& in1,
+    const FSDimensionlessVector& in2,
+    FSDimensionlessVector& out1,
+    FSDimensionlessVector& out2,
+    ES_CoordinateSystem input_coord_sys,
+    ES_CoordinateSystem output_coord_sys,
+    const FString& body
 )
 {
     // Inputs
-    SpiceDouble     _input_state[6];    input_state.CopyTo(_input_state);
-    ConstSpiceChar* _input_coord_sys = TCHAR_TO_ANSI(*input_coord_sys);
-    ConstSpiceChar* _output_coord_sys = TCHAR_TO_ANSI(*output_coord_sys);
+    SpiceDouble     _input_state[6];
+    _input_state[0] = in1.x;
+    _input_state[1] = in1.y;
+    _input_state[2] = in1.z;
+    _input_state[3] = in2.x;
+    _input_state[4] = in2.y;
+    _input_state[5] = in2.z;
+    ConstSpiceChar* _input_coord_sys = CoordsToStr(input_coord_sys);
+    ConstSpiceChar* _output_coord_sys = CoordsToStr(output_coord_sys);
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
     // Output
     SpiceDouble _output_state[6];       ZeroOut(_output_state);
@@ -8028,7 +8059,8 @@ void USpice::xfmsta(
     xfmsta_c(_input_state, _input_coord_sys, _output_coord_sys, _body, _output_state);
 
     // Return Value
-    output_state = FSStateVector(_output_state);
+    out1 = FSDimensionlessVector(_output_state[0], _output_state[1], _output_state[2]);
+    out2 = FSDimensionlessVector(_output_state[3], _output_state[4], _output_state[5]);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);

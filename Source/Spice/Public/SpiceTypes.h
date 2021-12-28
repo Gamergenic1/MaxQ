@@ -118,6 +118,19 @@ enum class ES_Axis : uint8
 
 
 UENUM(BlueprintType)
+enum class ES_CoordinateSystem : uint8
+{
+    RECTANGULAR     UMETA(DisplayName = "Rectangular"),
+    CYLINDRICAL     UMETA(DisplayName = "Cylindrical"),
+    LATITUDINAL     UMETA(DisplayName = "Latitudinal"),
+    SPHERICAL       UMETA(DisplayName = "Spherical"),
+    GEODETIC        UMETA(DisplayName = "Geodetic"),
+    PLANETOGRAPHIC  UMETA(DisplayName = "Planetographic")
+};
+
+
+
+UENUM(BlueprintType)
 enum class ES_Units : uint8
 {
     RADIANS UMETA(DisplayName = "Radians"),
@@ -535,6 +548,33 @@ public:
     static SPICE_API const FSAngle _0;
     static SPICE_API const FSAngle _360;
 };
+
+
+
+inline FSAngle operator*(double lhs, const FSAngle& rhs)
+{
+    return FSAngle(rhs.AsDouble() * lhs);
+}
+inline FSAngle operator*(const FSAngle& lhs,double rhs)
+{
+    return FSAngle(lhs.AsDouble() * rhs);
+}
+
+inline FSAngle operator+(const FSAngle& lhs, const FSAngle& rhs)
+{
+    return FSAngle(lhs.AsDouble() + rhs.AsDouble());
+}
+
+inline FSAngle operator-(const FSAngle& lhs, const FSAngle& rhs)
+{
+    return FSAngle(lhs.AsDouble() - rhs.AsDouble());
+}
+
+inline FSAngle operator/(const FSAngle& lhs, double rhs)
+{
+    return FSAngle(lhs.AsDouble() / rhs);
+}
+
 
 USTRUCT(BlueprintType)
 struct FSAngularRate
@@ -1857,7 +1897,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to double (radians)",
+            CompactNodeTitle = "to double (rads)",
             ToolTip = "Converts an angle to a double (radians)"
             ))
     static double Conv_SAngleToDouble(
@@ -1869,7 +1909,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from double (radians)",
+            CompactNodeTitle = "from double (rads)",
             ToolTip = "Converts an double (radians) to an angle"
             ))
     static FSAngle Conv_DoubleToSAngle(
@@ -1881,7 +1921,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to double (radians/sec)",
+            CompactNodeTitle = "to double (rads/s)",
             ToolTip = "Converts an angular rate to a double (radians/sec)"
             ))
     static double Conv_SAngularRateToDouble(
@@ -1893,7 +1933,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from double (radians/sec)",
+            CompactNodeTitle = "from double (rads/s)",
             ToolTip = "Converts a doouble (radians/sec) to an angular rate"
             ))
     static FSAngularRate Conv_DoubleToSAngularRate(
@@ -1905,7 +1945,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to double (sec past J2000)",
+            CompactNodeTitle = "to double (sec)",
             ToolTip = "Converts an ephemeris time to a double (sec past J2000)"
             ))
     static double Conv_SEphemerisTimeToDouble(
@@ -1917,7 +1957,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from double (sec past J2000)",
+            CompactNodeTitle = "from double (sec)",
             ToolTip = "Converts a double (sec past J2000) to an ephemeris time"
             ))
     static FSEphemerisTime Conv_DoubleToSEphemerisTime(
@@ -2172,24 +2212,42 @@ public:
     static FSSpeed Add_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
 
     //////////////////////
+    //////////////////////
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Angle")
+    static FSAngle Multiply_SAngleDouble(const FSAngle& A, double B);
+
+    /* Division (A / B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Angle")
+    static FSAngle Divide_SAngleDouble(const FSAngle A, double B);
+
+    /* Subtraction (A - B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle - angle", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Angle")
+    static FSAngle Subtract_SAngleSAngle(const FSAngle& A, const FSAngle& B);
+
+    /*  Addition (A + B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle + angle", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Angle")
+    static FSAngle Add_SAngleSAngle(const FSAngle& A, const FSAngle& B);
+
+
+    /* Multiplication (A * B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * double", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Velocity")
     static FSVelocityVector Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Velocity")
     static FSVelocityVector Multiply_DoubleSVelocityVector(double A, const FSVelocityVector& B);
 
     /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Velocity")
     static FSVelocityVector Divide_SVelocityVectorDouble(FSVelocityVector A, double B);
 
     /* Subtraction (A - B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity - velocity", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity - velocity", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Velocity")
     static FSVelocityVector Subtract_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /*  Addition (A + B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Speed")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Velocity")
     static FSVelocityVector Add_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /*

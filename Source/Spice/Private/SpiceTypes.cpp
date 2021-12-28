@@ -588,6 +588,29 @@ FSVelocityVector USpiceTypes::Add_SVelocityVectorSVelocityVector(const FSVelocit
     return A + B;
 }
 
+FSAngle USpiceTypes::Multiply_SAngleDouble(const FSAngle& A, double B)
+{
+    return A * B;
+}
+
+FSAngle USpiceTypes::Divide_SAngleDouble(const FSAngle A, double B)
+{
+    return A / B;
+}
+
+
+FSAngle USpiceTypes::Subtract_SAngleSAngle(const FSAngle& A, const FSAngle& B)
+{
+    return A - B;
+}
+
+
+FSAngle USpiceTypes::Add_SAngleSAngle(const FSAngle& A, const FSAngle& B)
+{
+    return A + B;
+}
+
+
 
 /* -----------------------------------------------------------------------------------------
  * 
