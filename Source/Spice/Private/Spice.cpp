@@ -5374,6 +5374,15 @@ void USpice::spd(double& value)
 
 /*
 Exceptions
+   Error free.
+*/
+void USpice::spd_day(FSEphemerisPeriod& oneDay)
+{
+    oneDay = FSEphemerisPeriod::Day;
+}
+
+/*
+Exceptions
 
    Error free.
 */
