@@ -2726,8 +2726,8 @@ void USpice::georec(
     const FSLonLat& lonlat,
     const FSDistance& alt,
     const FSDistance& re,
-    double f,
-    FSDistanceVector& rectan
+    FSDistanceVector& rectan,
+    double f
 )
 {
     SpiceDouble _rectan[3];
@@ -3008,6 +3008,7 @@ void USpice::ilumin(
         _abcorr = "NONE";
     };
 
+    // invocation
     ilumin_c(
         _method,
         _target,
@@ -3029,6 +3030,44 @@ void USpice::ilumin(
     phase  = FSAngle(_phase);
     incdnc = FSAngle(_incdnc);
     emissn = FSAngle(_emissn);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+/*
+Exceptions
+
+   1)  If radii for `body' are not found in the kernel pool, the error
+       will be diagnosed by routines called by this routine.
+
+   2)  If radii for `body' are invalid, the error will be diagnosed by
+       routines called by this routine.  The radii should be
+       positive.
+
+*/
+void USpice::srfrec(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FSLonLat& lonlat,
+    FSDistanceVector&   rectan,
+    int64           body
+)
+{
+    // Inputs
+    SpiceInt      _body         = (SpiceInt)body;
+    SpiceDouble   _longitude    = lonlat.longitude.radians();
+    SpiceDouble   _latitude     = lonlat.latitude.radians();
+    
+    // Output
+    SpiceDouble   _rectan[3];     ZeroOut(_rectan);
+
+    // invocation
+    srfrec_c(_body, _longitude, _latitude, _rectan);
+
+    // Copy Outputs
+    rectan = FSDistanceVector(_rectan);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3161,6 +3200,31 @@ void USpice::et_now(FSEphemerisTime& Now)
     Now = FSEphemerisTime(now_j2000.GetTotalSeconds());
 }
 
+/*
+Exceptions
+   Error free.
+*/
+void USpice::latrec(
+    const FSDistance&    radius,
+    const FSLonLat& lonlat,
+    FSDistanceVector& rectan
+)
+{
+    // Inputs
+    SpiceDouble    _radius = radius.AsDouble();
+    SpiceDouble    _longitude;
+    SpiceDouble    _latitude;
+    lonlat.CopyTo(_longitude, _latitude);
+
+    // Outputs
+    SpiceDouble    _rectan[3];
+
+    // Invocation
+    latrec_c(_radius, _longitude, _latitude, _rectan);
+
+    // Copy output
+    rectan = FSDistanceVector(_rectan);
+}
 
 #if 0
 void USpice::mxvg(
@@ -4093,6 +4157,77 @@ void USpice::oscltx(
 }
 
 
+/*
+Exceptions
+
+   1) If the body name `body' cannot be mapped to a NAIF ID code,
+      and if `body' is not a string representation of an integer,
+      the error SPICE(IDCODENOTFOUND) will be signaled.
+
+   2) If the kernel variable
+
+         BODY<ID code>_PGR_POSITIVE_LON
+
+      is present in the kernel pool but has a value other
+      than one of
+
+          'EAST'
+          'WEST'
+
+      the error SPICE(INVALIDOPTION) will be signaled.  Case
+      and blanks are ignored when these values are interpreted.
+
+   3) If polynomial coefficients for the prime meridian of `body'
+      are not available in the kernel pool, and if the kernel
+      variable BODY<ID code>_PGR_POSITIVE_LON is not present in
+      the kernel pool, the error SPICE(MISSINGDATA) will be signaled.
+
+   4) If the equatorial radius is non-positive, the error
+      SPICE(VALUEOUTOFRANGE) is signaled.
+
+   5) If the flattening coefficient is greater than or equal to one,
+      the error SPICE(VALUEOUTOFRANGE) is signaled.
+
+   6) The error SPICE(EMPTYSTRING) is signaled if the input
+      string `body' does not contain at least one character, since the
+      input string cannot be converted to a Fortran-style string in
+      this case.
+
+   7) The error SPICE(NULLPOINTER) is signaled if the input string
+      pointer `body' is null.
+*/
+void USpice::pgrrec(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FSLonLat&       lonlat,
+    const FSDistance& alt,
+    const FSDistance& re,
+    FSDistanceVector& rectan,
+    const FString& body,
+    double f
+)
+{
+    // Inputs
+    ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
+    SpiceDouble     _lon = lonlat.longitude.AsDouble();
+    SpiceDouble     _lat = lonlat.latitude.AsDouble();
+    SpiceDouble     _alt = alt.AsDouble();
+    SpiceDouble     _re  = re.AsDouble();
+    SpiceDouble     _f   = (SpiceDouble)f;
+    
+    // Outputs
+    SpiceDouble     _rectan[3]; ZeroOut(_rectan);
+
+    // Invocation
+    pgrrec_c(_body, _lon, _lat, _alt, _re, _f, _rectan);
+
+    // Copy output
+    rectan = FSDistanceVector(_rectan);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 void USpice::pi(double& pi)
 {
     pi = pi_c();
@@ -4428,10 +4563,10 @@ void USpice::raxisa(
 void USpice::recgeo(
     const FSDistanceVector& rectan,
     const FSDistance& re,
-    double f,
     FSLonLat& lonlat,
-    FSDistance& alt
-)
+    FSDistance& alt,
+    double f
+    )
 {
     SpiceDouble _rectan[3];
     rectan.CopyTo(_rectan);
@@ -4465,6 +4600,84 @@ void USpice::reclat(
     UnexpectedErrorCheck();
 }
 
+
+/*
+Exceptions
+
+   1) If the body name `body' cannot be mapped to a NAIF ID code,
+      and if `body' is not a string representation of an integer,
+      the error SPICE(IDCODENOTFOUND) will be signaled.
+
+   2) If the kernel variable
+
+         BODY<ID code>_PGR_POSITIVE_LON
+
+      is present in the kernel pool but has a value other than one
+      of
+
+          'EAST'
+          'WEST'
+
+      the error SPICE(INVALIDOPTION) will be signaled.  Case
+      and blanks are ignored when these values are interpreted.
+
+   3) If polynomial coefficients for the prime meridian of `body'
+      are not available in the kernel pool, and if the kernel
+      variable BODY<ID code>_PGR_POSITIVE_LON is not present in
+      the kernel pool, the error SPICE(MISSINGDATA) will be signaled.
+
+   4) If the equatorial radius is non-positive, the error
+      SPICE(VALUEOUTOFRANGE) is signaled.
+
+   5) If the flattening coefficient is greater than or equal to one,
+      the error SPICE(VALUEOUTOFRANGE) is signaled.
+
+   6) For points inside the reference ellipsoid, the nearest point
+      on the ellipsoid to `rectan' may not be unique, so latitude may
+      not be well-defined.
+
+   7) The error SPICE(EMPTYSTRING) is signaled if the input
+      string `body' does not contain at least one character, since the
+      input string cannot be converted to a Fortran-style string in
+      this case.
+
+   8) The error SPICE(NULLPOINTER) is signaled if the input string
+      pointer `body' is null.
+*/
+
+void USpice::recpgr(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FSDistanceVector& rectan,
+    const FSDistance&       re,
+    FSLonLat&               lonlat,
+    FSDistance&             alt,
+    const FString&          body,
+    double                  f
+)
+{
+    // Inputs
+    ConstSpiceChar*  _body          = TCHAR_TO_ANSI(*body);;
+    SpiceDouble      _rectan[3];    rectan.CopyTo(_rectan);
+    SpiceDouble     _re             = re.AsDouble();
+    SpiceDouble     _f              = (SpiceDouble)f;
+
+    // Outputs
+    SpiceDouble _lon = 0.;
+    SpiceDouble _lat = 0.;
+    SpiceDouble _alt = 0.;
+
+    // Invocation
+    recpgr_c(_body, _rectan, _re, _f, &_lon, &_lat, &_alt);
+
+    // Copy outputs
+    lonlat = FSLonLat(_lon, _lat);
+    alt = FSDistance(_alt);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 void USpice::recrad(
     const FSDistanceVector& rectan,
     FSDistance& range,
@@ -4485,6 +4698,7 @@ void USpice::recrad(
 
     UnexpectedErrorCheck();
 }
+
 
 void USpice::recsph(
     const FSDistanceVector& rectan,

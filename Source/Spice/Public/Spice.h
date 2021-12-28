@@ -1223,8 +1223,8 @@ public:
         const FSLonLat& lonlat,
         const FSDistance& alt,
         const FSDistance& re,
-        double f,
-        FSDistanceVector& rectan
+        FSDistanceVector& rectan,
+        double f = 0.00335281066474748071984552861852
     );
 
 
@@ -1472,7 +1472,7 @@ public:
             ShortToolTip = "Julian Date of 1950.0 JAN 1.0",
             ToolTip = "Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)"
             ))
-        static void j1950(FSEphemerisTime& j1950);
+    static void j1950(FSEphemerisTime& j1950);
 
     /// <summary>Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)</returns>
@@ -1482,7 +1482,7 @@ public:
             ShortToolTip = "Julian Date of 2000 JAN 1.5",
             ToolTip = "Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)"
             ))
-        static void j2000(FSEphemerisTime& j2000);
+    static void j2000(FSEphemerisTime& j2000);
 
     /// <summary>Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</summary>
     /// <returns>the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)</returns>
@@ -1492,7 +1492,7 @@ public:
             ShortToolTip = "Julian Date of 2100 JAN 1.5",
             ToolTip = "Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)"
             ))
-        static void j2100(FSEphemerisTime& j2100);
+    static void j2100(FSEphemerisTime& j2100);
 
     /// <summary>Return the number of seconds in a julian year</summary>
     /// <returns>The number of seconds/julian year</returns>
@@ -1502,7 +1502,20 @@ public:
             ShortToolTip = "Seconds per julian year",
             ToolTip = "Return the number of seconds in a julian year"
             ))
-        static void jyear(FSEphemerisPeriod& jyear);
+    static void jyear(FSEphemerisPeriod& jyear);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ShortToolTip = "Latitudinal to rectangular coordinates",
+            ToolTip = "Convert from latitudinal coordinates to rectangular coordinates"
+            ))
+    static void latrec(
+        const FSDistance& radius,
+        const FSLonLat& lonlat,
+        FSDistanceVector& rectan
+    );
+
 
     /// <summary>Evaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value. Return the value of both polynomialand derivative</summary>
     /// <param name="n">[in] Number of points defining the polynomial</param>
@@ -1520,7 +1533,7 @@ public:
             ShortToolTip = "Lagrange polynomial interpolation with derivative",
             ToolTip = "Evaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value.Return the value of both polynomialand derivative"
             ))
-        static void lgrind(
+    static void lgrind(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
             const TArray<double>& xvals,
@@ -1873,12 +1886,12 @@ public:
             ShortToolTip = "Determine conic elements from state",
             ToolTip = "Determine the set of osculating conic orbital elements that corresponds to the state(position, velocity) of a body at some epoch"
             ))
-        static void oscelt(
-            const FSStateVector& state,
-            const FSEphemerisTime& et,
-            const FSMassConstant& mu,
-            FSConicElements& elts
-        );
+    static void oscelt(
+        const FSStateVector& state,
+        const FSEphemerisTime& et,
+        const FSMassConstant& mu,
+        FSConicElements& elts
+    );
 
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/oscltx_c.html
     /// <summary>Determine the set of osculating conic orbital elements that corresponds to the state(position, velocity) of a body at some epoch. In additional to the classical elements, return the true anomaly, semi - major axis, and period, if applicable</summary>
@@ -1894,15 +1907,34 @@ public:
             ShortToolTip = "Extended osculating elements from state",
             ToolTip = "Determine the set of osculating conic orbital elements that corresponds to the state(position, velocity) of a body at some epoch.  In additional to the classical elements, return the true anomaly, semi - major axis, and period, if applicable"
             ))
-        static void oscltx(
-            const FSStateVector& state,
-            const FSEphemerisTime& et,
-            const FSMassConstant& mu,
-            FSConicElements& elts,
-            FSAngle& nu,
-            FSDistance& a,
-            FSEphemerisPeriod& tau
-        );
+    static void oscltx(
+        const FSStateVector& state,
+        const FSEphemerisTime& et,
+        const FSMassConstant& mu,
+        FSConicElements& elts,
+        FSAngle& nu,
+        FSDistance& a,
+        FSEphemerisPeriod& tau
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Planetographic to rectangular",
+            ToolTip = "Convert planetographic coordinates to rectangular coordinates"
+            ))
+    static void pgrrec(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSLonLat& lonlat,
+        const FSDistance& alt,
+        const FSDistance& re,
+        FSDistanceVector& rectan,
+        const FString& body = TEXT("EARTH"),
+        double f = 0.00335281066474748071984552861852
+    );
 
 
     /// <summary>the value of pi</summary>
@@ -1928,13 +1960,13 @@ public:
             ShortToolTip = "Project ellipse onto plane",
             ToolTip = "Project an ellipse onto a plane, orthogonally"
             ))
-        static void pjelpl(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSEllipse& elin,
-            const FSPlane& plane,
-            FSEllipse& elout
-        );
+    static void pjelpl(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSEllipse& elin,
+        const FSPlane& plane,
+        FSEllipse& elout
+    );
 
     /// <summary>Return a unit normal vector and constant that define a specified plane</summary>
     /// <param name="plane">[in] A CSPICE plane</param>
@@ -2189,9 +2221,9 @@ public:
     static void recgeo(
         const FSDistanceVector& rectan,
         const FSDistance& re,
-        double f,
         FSLonLat& lonlat,
-        FSDistance& alt
+        FSDistance& alt,
+        double f = 0.00335281066474748071984552861852
     );
 
     /// <summary>Convert from rectangular coordinates to latitudinal coordinates</summary>
@@ -2211,6 +2243,27 @@ public:
         FSDistance& radius,
         FSLonLat& lonlat
     );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Rectangular to planetographic",
+            ToolTip = "Convert rectangular coordinates to planetographic coordinates"
+            ))
+    static void recpgr(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDistanceVector& rectan,
+        const FSDistance& re,
+        FSLonLat& lonlat,
+        FSDistance& alt,
+        const FString& body = TEXT("EARTH"),
+        double f = 0.00335281066474748071984552861852
+    );
+
+
 
     /// <summary>Convert rectangular coordinates to range, right ascension, and declination</summary>
     /// <param name="rectan">[in] Rectangular coordinates of a point</param>
@@ -3088,6 +3141,21 @@ public:
         const FSAngle& lon,
         FSDistanceVector& rectan
     );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Surface to rectangular coordinates",
+            ToolTip = "Convert planetocentric latitude and longitude of a surface point on a specified body to rectangular coordinates"
+            ))
+    static void srfrec(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSLonLat& lonlat,
+        FSDistanceVector& rectan,
+        int64           body = 399
+        );
 
     /// <summary>String to ET</summary>
     /// <param name="str">[in] A string representing an epoch</param>
@@ -4157,32 +4225,6 @@ public:
         SpiceBoolean* found
     );
 
-    static void srfrec(
-        SpiceInt      body,
-        SpiceDouble   longitude,
-        SpiceDouble   latitude,
-        SpiceDouble   rectan[3]
-    );
-
-    static void recpgr(
-        ConstSpiceChar* body,
-        SpiceDouble        rectan[3],
-        SpiceDouble        re,
-        SpiceDouble        f,
-        SpiceDouble* lon,
-        SpiceDouble* lat,
-        SpiceDouble* alt
-    );
-
-    static void pgrrec(
-        ConstSpiceChar* body,
-        SpiceDouble       lon,
-        SpiceDouble       lat,
-        SpiceDouble       alt,
-        SpiceDouble       re,
-        SpiceDouble       f,
-        SpiceDouble       rectan[3]
-    );
 
     static void dskxv(
         SpiceBoolean         pri,
