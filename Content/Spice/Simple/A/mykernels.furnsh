@@ -1,0 +1,11 @@
+This doesn't actually work, because SPICE has no idea where to find the file.  The implementations in Unreal Engine prepend the project directory (not including 'Content'), so use relative directories for furnsh/furnsh_list.
+
+Use the alternatives given in:
+
+MostUsed_BPL/Accessing SPICE Kernel Data/Loading and unloading SPICE kernels
+
+      \begindata
+         KERNELS_TO_LOAD = (
+				'(this file load is expected to fail)'
+                           )
+      \begintext

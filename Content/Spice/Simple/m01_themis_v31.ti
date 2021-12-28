@@ -1,0 +1,1705 @@
+KPL/IK
+
+THEMIS Instrument kernel
+===========================================================================
+
+   This instrument kernel (I-kernel) contains the Mars Odyssey 2001
+   Thermal Emission Imaging System (THEMIS) optics, detector and
+   filter parameters.
+
+
+Version and Date
+---------------------------------------------------------------------------
+
+   Version 3.1 -- June 2, 2003 -- Boris Semenov, NAIF/JPL
+
+      Incorporated extensive review comments on the version 3.0 by Jim
+      Torson, USGS and Anton Ivanov, JPL.
+
+   Version 3.0 -- March 25, 2003 -- Boris Semenov, NAIF/JPL
+
+      Numerous updates to match the latest THEMIS model implemented in 
+      ISIS by Jim Torson, including additions of:
+   
+         -- IR and VIS focal length;
+         -- IR line rate and derived timing parameters;
+         -- IR and VIS boresight locations;
+         -- IR and VIS distortion models;
+
+   Version 2.2 -- November 15, 2002 -- Boris Semenov, NAIF/JPL
+
+      Corrected numerous typos and discrepancies pointed out by Jim Torson
+      ([9]). Updated IR filter band-centers. Clarified IR and VIS timing 
+      descriptions.
+
+   Version 2.1 -- October 7, 2002 -- Boris Semenov, NAIF/JPL
+
+      Corrected typos in IR filter numbering description table and 
+      INS-53031_FILTER_FIRST_ROW keyword.
+
+   Version 2.0 -- September 26, 2002 -- Boris Semenov, NAIF/JPL
+
+      Corrected IR filter numbering. Added section containing IR and VIS 
+      timing data.
+
+   Version 1.2 -- January 7, 2002 -- Boris Semenov, NAIF/JPL
+
+      Corrected VIS filter band center/band width values and added
+      VIS band ID parameter based on the information provided by Greg
+      Mehall on January 3, 2002.
+
+   Version 1.1 -- August 1, 2001 -- Boris Semenov, NAIF/JPL
+
+      Updated the active IR detector pixel size with values provided
+      by Greg Mehall.
+
+   Version 1.0 -- July 30, 2001 -- Boris Semenov, NAIF/JPL
+
+      Included description and parameter values provided by Greg Mehall.
+
+   Version 0.1 -- March 12, 2001 -- Boris Semenov, NAIF/JPL
+
+      Pre-release. Added IR and VIS FOV definitions based on nominal
+      FOV angular sizes.
+
+   Version 0.0 -- March 5, 2001 -- Boris Semenov, NAIF/JPL
+
+      Pre-release.
+
+
+References
+---------------------------------------------------------------------------
+
+   1. "Kernel Pool Required Reading"
+
+   2. "C-kernel Required Reading"
+
+   3. "THEMIS ICD", MSP01-97-0008, June 10, 1999
+
+   4. M'01 Frames Definition Kernel (FK), latest version.
+
+   5. THEMIS Instrument Characteristics, ASU THEMIS Team Web Site,
+      http://themis.asu.edu/inst.html (former http://emma.la.asu.edu/
+      THEMIS/inst.html), March 2001.
+
+   6. THEMIS Information Sheet, JPL M'01 Odyssey Web Site,
+      http://mars.jpl.nasa.gov/2001/instruments/images/themis1.jpg,
+      March 2001.
+
+   7. Corrections and additions by Greg Mehall, July 2001.
+
+   8. E-mail communications between Jim Torson, USGS and 
+      Greg Mehall, January-June 2002.
+
+   9. Review comments by Jim Torson, USGS, November 2002 & April 2003
+
+   11. ISIS THEMIS parameter definition file (thm_parameters.def.7) and
+      VIS distortion model routine source code (lev1u_m01_thm_routines.c)
+      provided by Jim Torson, USGS, March 5, 2003.
+
+   12. E-mail by Greg Mehall, January 14, 2003.
+
+   13. "THEMIS Standard Data Products Software Interface Specification",
+      January 1, 2003, http://themis-data.asu.edu/pds/document/sdpsis.pdf
+
+   14.  "2001 Mars Odyssey Thermal Emission Imaging System (THEMIS)
+      Data Processing User's Guide," Version 0.7, January 10, 2003.
+      http://themis-data.asu.edu/pds/calib/process.pdf
+
+
+Implementation Notes
+---------------------------------------------------------------------------
+
+   User programs that need I-kernel data must `load' the I-kernel file,
+   normally during program initialization.
+
+   Loading the kernel using SPICELIB routine LDPOOL causes the data items
+   and their associated values present in the kernel to become associated
+   with a data structure called the "kernel pool". Then a user's program
+   can obtain the value(s) for any data item using the SPICELIB routines
+   GDPOOL, GIPOOL and GCPOOL. See [1] for details.
+
+   This file was created and can be updated with a text editor or word
+   processor.
+
+
+Naming Conventions
+---------------------------------------------------------------------------
+
+   All names referencing values in this I-kernel start with the characters
+   "INS" followed by the NAIF M'01 spacecraft ID number (-53) followed by
+   the NAIF three digit THEMIS IR instrument reference number (031) or
+   THEMIS VIS instrument reference number (032).
+
+   The remainder of the name is an underscore character followed by the
+   unique name of the data item. For example, the focal length of the
+   THEMIS IR camera is specified by
+
+      INS-53031_FOCAL_LENGTH
+
+   The upper bound on the length of the name of any data item is 32
+   characters.
+
+   If the same item is included in more then one file, or if the same item
+   appears more than once within a single file, the latest value supersedes
+   any earlier values.
+
+
+THEMIS Overview
+---------------------------------------------------------------------------
+
+   From [5] & [7]:
+
+      "Infrared Imaging by THEMIS
+       --------------------------
+
+      The Thermal Emission Imaging System (THEMIS) will determine the
+      mineralogy and petrology of the Martian surface using
+      multi-spectral, thermal infrared images with 10 spectral filters
+      between 6.78 and 14.88 micrometers. The 9 infrared spectral
+      filters were selected in part based on the mineral results from
+      the Mars Global Surveyor Thermal Emission Spectrometer (TES).
+
+      The THEMIS infrared camera utilizes an uncooled 320 x 240 pixel
+      microbolometer detector array.  The array readout rate is
+      approximately 30 frames per second.  The detector array is
+      divided into ten 24 x 320 pixel "data" bands.  The infrared
+      camera also uses "time delayed integration" (TDI) to increase the
+      signal to noise for each band. This is accomplished by summing
+      the data from 16 of each 24 active rows in each data band.  Any
+      combination of the 10 data bands can be selected and downlinked
+      for each infrared image.  The resultant downlinked data is a 1 x
+      320 pixel line at a rate of approximately 30 lines per second for
+      each selected data band.  The TDI can be disabled but will result
+      in the reduction of the signal to noise by a factor of four. When
+      TDI is disabled, only the data from 1 of each 24 active rows in
+      each data band is downlinked
+ 
+      The 9 spectral optical filters are attached to the front of the
+      detector array.  The 6.78 microns spectral filter covers 2 data
+      bands (48 x 320 pixels) and the remaining spectral filters cover
+      1 data band (24 x 320 pixels).  Each spectral filter has a
+      full-width half-maximum bandwidth of approximately 1 microns.
+
+      The instantaneous field of view of each infrared pixel is 250
+      microrad. The resulting cross-track field of view is 80 mrad.
+      The image length is selectable in increments of 64 mrad allowing
+      the along-track field of view to vary from 68 to 16324 mrad.
+      From a 400 km mapping orbit, the entire planet will be mapped in
+      the infrared with a ground sampling distance of 100 meters.  At
+      this altitude, the image cross-track width will be 32 km and the
+      image along-track length can vary from 27 to 6530 km.
+
+      Visible Imaging by THEMIS
+      -------------------------
+
+      The THEMIS will study small-scale geologic processes on the
+      Martian surface using multi-spectral, visible images with 5
+      spectral filters between 425 and 860 nanometers.
+
+      The THEMIS visible camera utilizes a 1024 x 1024 pixel CCD. The
+      array integration time is selectable with a nominal setting of 6
+      milliseconds for Martian mapping operations.  The array
+      inter-frame time is also selectable with a nominal setting of 1
+      second.  The detector array is divided into five 1024 x 192 pixel
+      data bands.  Any combination of these 5 bands can be selected and
+      downlinked for each visible image.  The resultant downlinked data
+      is a 1024 x 192 pixel frame at a rate of one frame per second for
+      each selected band.  The visible camera also allows for 2x and 4x
+      pixel spatial summing to reduce data volume.
+
+      The 5 spectral optical filters are attached to the front of the
+      CCD. Each filter covers approximately 1024 x 204 pixels on the
+      CCD and includes the 1024 x 192 pixels of the data band.  Each
+      spectral filter has a full-width half-maximum bandwidth of
+      approximately 50 nanometers.
+ 
+      The instantaneous field of view of each visible pixel is 45
+      microrad. The resulting cross-track field of view is 46.08 mrad.
+      The image length is selectable in increments of 192 line frames.
+      Based on the nominal interframe time of 1 sec, the corresponding
+      incremental along-track field of view is 7.5 mrad.  The data
+      volume for each visible image is also limited to the 3,915,776
+      byte internal buffer in the visible camera electronics.  From a
+      400 km mapping orbit, the planet will be mapped in the visible
+      with a ground sampling distance of 19 meters.  At this altitude,
+      the image cross-track width will be 18.4 km and the image
+      along-track length can vary from 3.5 to 9 km for 5 band images
+      and from 3.5 to 57 km for single band images.  Use of spatial
+      summing will allow longer image lengths with reduced spatial
+      resolution.
+
+      The THEMIS instrument was designed and built by Arizona State
+      University, Tempe, Arizona, and Raytheon, Santa Barbara Remote
+      Sensing, Goleta California.  The visible camera sub-system and
+      flight software development were provided by Malin Space Science
+      Systems, San Diego, California.  The THEMIS will be controlled
+      and operated from the mission operations facility at Arizona
+      State University, Tempe, Arizona."
+
+
+THEMIS Mounting Alignment
+---------------------------------------------------------------------------
+
+   Refer to the latest version of Mars Odyssey 2001 Frames Definition
+   Kernel ([4]) for the THEMIS frame definitions and mounting alignment
+   information.
+
+
+THEMIS Optics Parameters
+---------------------------------------------------------------------------
+
+   The following THEMIS IR and VIS first order optical parameters are
+   included in the data section below ([6]&[7]):
+
+      -----------------------------------------------------------------
+             parameter                      IR               VIS
+      -----------------------------------------------------------------
+      Focal Length, mm                    200.0               200.0
+      f/ratio                             f/1.66              f/1.66
+      IFOV, rad/pixel                     0.000250            0.000045
+      Field of view (rad)
+          Cross-track                      0.080              0.04608
+          Along-track                      0.060              0.04608
+      -----------------------------------------------------------------
+
+   Per [11] the best estimate for the average THEMIS focal length is
+   203.9 mm, which is based on the Speedring acceptance measurements of
+   the telescope. This value is provided in the *_FOCAL_LENGTH
+   keywords below.
+
+   The values in the keywords are given in the same units as in the table.
+
+      \begindata
+
+         INS-53031_FOCAL_LENGTH       = ( 203.9              )
+         INS-53031_F/RATIO            = (   1.667            )
+         INS-53031_FOV_ANGULAR_SIZE   = (   0.080,   0.060   )
+         INS-53031_IFOV               = (   0.000250         )
+
+         INS-53032_FOCAL_LENGTH       = ( 203.9              )
+         INS-53032_F/RATIO            = (   1.667            )
+         INS-53032_FOV_ANGULAR_SIZE   = (   0.04608, 0.04608 )
+         INS-53032_IFOV               = (   0.000045         )
+
+      \begintext
+
+
+THEMIS FOV Definitions
+---------------------------------------------------------------------------
+
+   Both FOVs defined in this section are based on the nominal THEMIS
+   detector FOV angular sizes provided in the Table in "THEMIS Optics
+   Parameters" section above.
+
+   The set of keywords in the data section below defines nominal THEMIS
+   IR FOV with respect to the M01_THEMIS_IR frame to be a rectangle with
+   angular sizes of 0.080 radians in M01_THEMIS_IR XZ-plane (plane
+   parallel to the IR detector lines and, nominally, normal to the mapping
+   orbit plane) and 0.060 radians in M01_THEMIS_IR YZ-plane (normal to
+   the IR detector columns and, nominally, parallel to the mapping orbit
+   plane) with the boresight along +Z axis of M01_THEMIS_IR frame.
+
+      \begindata
+
+         INS-53031_FOV_FRAME                 = 'M01_THEMIS_IR'
+         INS-53031_FOV_SHAPE                 = 'RECTANGLE'
+         INS-53031_BORESIGHT                 = (
+
+             0.0000000000000000   0.0000000000000000  +1.0000000000000000
+
+                                               )
+         INS-53031_FOV_BOUNDARY_CORNERS      = (
+
+            +0.0399713690821580  +0.0299715285563850  +0.9987512188376500
+            -0.0399713690821580  +0.0299715285563850  +0.9987512188376500
+            -0.0399713690821580  -0.0299715285563850  +0.9987512188376500
+            +0.0399713690821580  -0.0299715285563850  +0.9987512188376500
+
+                                               )
+
+         INS-53031_FOV_FRAME                 = 'M01_THEMIS_IR'
+         INS-53031_FOV_SHAPE                 = 'POLYGON'
+         INS-53031_BORESIGHT                 = (
+  
+                  0.00000000      0.00000000   4078.00000000
+  
+                                               )
+         INS-53031_FOV_BOUNDARY_CORNERS      = (
+  
+               -162.58508786    107.24380000   4078.00000000
+                155.11563512    107.24380000   4078.00000000
+                156.61768283   -130.27250000   4078.00000000
+               -164.15946531   -130.27250000   4078.00000000
+  
+                                               )
+      \begintext
+
+   The set of keywords in the data section below defines nominal THEMIS
+   VIS FOV with respect to the M01_THEMIS_VIS frame to be a rectangle
+   with angular sizes of 0.04608 radians in M01_THEMIS_VIS XZ-plane
+   (plane parallel to the VIS detector lines and, nominally, normal to the
+   mapping orbit plane) and 0.04608 radians in M01_THEMIS_VIS YZ-plane
+   (normal to the VIS detector columns and, nominally, parallel to the mapping
+   orbit plane) with the boresight along +Z axis of M01_THEMIS_VIS frame.
+
+      \begindata
+
+         INS-53032_FOV_FRAME                 = 'M01_THEMIS_VIS'
+         INS-53032_FOV_SHAPE                 = 'RECTANGLE'
+         INS-53032_BORESIGHT                 = (
+
+             0.0000000000000000   0.0000000000000000  +1.0000000000000000
+
+                                               )
+         INS-53032_FOV_BOUNDARY_CORNERS      = (
+
+            +0.0230318503829290  +0.0230318503829290  +0.9994693930961000
+            -0.0230318503829290  +0.0230318503829290  +0.9994693930961000
+            -0.0230318503829290  -0.0230318503829290  +0.9994693930961000
+            +0.0230318503829290  -0.0230318503829290  +0.9994693930961000
+
+                                               )
+
+      \begintext
+
+
+THEMIS Detector Parameters
+---------------------------------------------------------------------------
+
+   The following THEMIS IR and VIS detector geometry parameters are
+   included in the data section below ([6]&[7]):
+
+      -----------------------------------------------------------------
+             parameter                     IR               VIS
+      -----------------------------------------------------------------
+      Pixel Size, microns
+          Physical
+              Cross-track                  50               9.0
+              Along-track                  50               9.0
+          Active
+              Cross-track                  45.4             2.6
+              Along-track                  24.6             6.2
+      Detector Array Size (physical)
+          Cross-track                      320              1024
+          Along-track                      240              1024
+      Detector Array Center (physical)
+          Cross-track                      160.5            512.5
+          Along-track                      120.5            512.5
+      Detector Array Size (Active)
+          Cross-track                      320              1008
+          Along-track                      240              1018
+      Detector Array Center (Active)
+          Cross-track                      160.5            504.5
+          Along-track                      120.5            509.5
+      -----------------------------------------------------------------
+
+   The values in the keywords are given in the same units as in the table
+   above.
+
+      \begindata
+
+         INS-53031_PIXEL_SIZE         = ( 50, 50 )
+         INS-53031_PIXEL_SAMPLES      = ( 320 )
+         INS-53031_PIXEL_LINES        = ( 240 )
+         INS-53031_CENTER             = ( 160.5, 120.5 )
+
+         INS-53032_PIXEL_SIZE         = ( 9, 9 )
+         INS-53032_PIXEL_SAMPLES      = ( 1008 )
+         INS-53032_PIXEL_LINES        = ( 1018 )
+         INS-53032_CENTER             = ( 504.5, 509.5 )
+
+      \begintext
+
+
+THEMIS Apparent Detector Coordinates, Reference Frame and Image Coordinates
+---------------------------------------------------------------------------
+
+   This section describes relationship between the apparent detector
+   coordinates, camera reference frames, and image coordinates.
+ 
+   The apparent detector is the projection of the actual detector onto
+   an imaginary plane in front of the camera optics showing in which
+   direction each individual pixel of the detector is looking with
+   respect to the camera frame. This concept hides transformations
+   (flips, rotations, etc) that occur along the optical path from the
+   optics entrance to the actual physical detector, establishing a
+   simple relationship between individual pixel look directions and the
+   frame(s) that are related to the s/c hardware design and/or orbital
+   motion.
+
+   The detector coordinates refer to the way of identifying pixels by
+   their row and column indexes within the apparent detector. For the
+   THEMIS IR and VIS detector oriented so that the down-track (s/c
+   velocity) direction is up, the (1,1) pixel is in the right-top
+   corner with the rows increasing down and the columns increasing to
+   the left.
+
+   The reference frame is a right hand frame in which the Cartesian
+   vector for each apparent detector pixel's view direction can be
+   defined. The orientation of the reference frame with respect to the
+   spacecraft, inertial and body-fixed frames is usually known from the
+   other SPICE data (FK, CK, PCK), and, therefore, the pixel view
+   vectors defined in the reference frame can be further mapped to
+   inertial or planetocentric space.
+
+   The image coordinates refer to the way of identifying pixels by
+   their line and sample indexes within an image. For the THEMIS IR and
+   VIS images projected in the normal top-bottom, left-right fashion
+   which puts the the down-track (s/c velocity) direction down, the
+   (1,1) pixel is in the left-top corner with lines increasing down and
+   samples increasing to the right.
+
+
+IR Detector Coordinates, Reference Frame, and Image Coordinates
+
+   This diagram shows apparent detector -- row-and-column --
+   coordinates (as the location of the (1,1) pixel and directions of
+   increasing row and column) and the IR reference frame,
+   M01_THEMIS_IR, axes -- +Xir, +Yir, +Zir:
+
+                                  ^
+                                  | s/c velocity (up)
+                                  |
+ 
+                         +Yir
+                    (along track) ^  Increasing column 
+                                  |     direction
+                                  |  <-----   
+                        +---------|---------+ Pixel (1,1)
+                        |         |         |
+                        |         |         | | 
+                        |         |         | | Increasing row  
+                        |         |         | |   direction
+                    <-------------x         | V
+              +Xir      |       +Zir        |
+          (cross-track) |     boresight     |  240 rows
+                        |    (into page)    |
+                        |                   |
+                        +-------------------+
+                             320 columns
+
+
+   This diagram shows the IR image -- line-and-sample -- coordinates:
+
+                                  |
+                                  | s/c velocity (down)
+                                  V
+
+                    Increasing sample
+                        direction
+                          ----->
+            Pixel (1,1) +-------------------+
+                        |                   |
+                      | |                   |
+     Increasing line  | |                   |
+        direction     | .                   .
+                      V .                   .
+                        .                   . N lines
+                        .                   .
+                        |                   |
+                        |                   |
+                        +-------------------+
+                               M samples 
+                        (depending on summing
+                         can be 320, 160, ...)
+
+                               
+   In the assembled image for a given band with no summing, the
+   pixel(s) from the apparent detector column 1 (detector's right side)
+   map to the image sample pixel 1 (image's left side) and the detector
+   increasing column direction and image increasing sample direction
+   are the SAME when considered with respect to the s/c velocity
+   direction. The apparent detector rows do NOT map as simply to the
+   images lines because each image line represents as sum of the signal
+   from all lines with a given band and is taken as a different time
+   than its neighboring lines. Later sections of the file describe the
+   IR image taking/assembly processes in detail.
+   
+
+VIS Detector Coordinates, Reference Frame, and Image Coordinates
+
+   This diagram shows apparent detector -- row-and-column --
+   coordinates (as the location of the (1,1) pixel and directions of
+   increasing row and column) and the VIS reference frame,
+   M01_THEMIS_VIS, axes -- +Xvis, +Yvis, +Zvis:
+
+                                  ^
+                                  | s/c velocity (up)
+                                  |
+ 
+                         +Yvis
+                    (along track) ^  Increasing column 
+                                  |     direction
+                                  |  <-----   
+                        +---------|---------+ Pixel (1,1)
+                        |         |         |
+                        |         |         | | 
+                        |         |         | | Increasing row  
+                        |         |         | |   direction
+                    <-------------x         | V
+              +Xvis     |       +Zvis       |
+          (cross-track) |     boresight     |  1018 rows
+                        |    (into page)    |
+                        |                   |
+                        +-------------------+
+                             1008 columns
+
+
+   This diagram shows the VIS image -- line-and-sample -- coordinates:
+
+                                  |
+                                  | s/c velocity (down)
+                                  V
+
+                    Increasing sample
+                        direction
+                          ----->
+            Pixel (1,1) +-------------------+
+                        |                   |
+                      | |                   |
+     Increasing line  | |                   |
+        direction     | .                   .
+                      V .                   .
+                        .                   . N lines
+                        .                   .
+                        |                   |
+                        |                   |
+                        +-------------------+
+                               M samples 
+                        (depending on summing
+                            can be 1008, ...)
+
+                               
+   In the assembled image for a given band with no summing, the
+   pixel(s) from the apparent detector column 1 (detector's right side)
+   map to the image sample pixel 1 (image's left side) and the detector
+   increasing column direction and image increasing sample direction
+   are the SAME when considered with respect to the s/c velocity
+   direction. The apparent detector rows do NOT map as simply to the
+   images lines because each image consists framelets taken at
+   different times than its neighboring lines, optional spatial summing
+   and other considerations. Later sections of the file describe the
+   VIS image taking/assembly processes in detail.
+
+
+Filters
+---------------------------------------------------------------------------
+
+IR Filters
+
+   The AR coated ZeSe window and multi-layer thin-film Ge filters
+   comprise the spectral separation for the ten THEMIS infrared
+   filters. Filters cover all 320 pixels in the THEMIS IR frame +X axis
+   direction (cross-track direction.) Filter 1 (6.78 microns band) is
+   in the THEMIS IR frame +Y direction (fore-track direction). Each
+   filter covers approximately 20 rows on the array but only 16 rows of
+   optically clear pixels are used. Dark mirror coating covers the rows
+   between each filter.
+
+      -----------------------------------------------------------------
+         Filter       Band Center,  Bandwidth,    Start    End
+            #          microns       microns       Row     Row
+      -----------------------------------------------------------------
+            1            6.78          1.01          1      16
+            2            6.78          1.01         17      32
+            3            7.93          1.09         43      58
+            4            8.56          1.16         69      84
+            5            9.35          1.20         95     110
+            6           10.21          1.10        121     136
+            7           11.04          1.19        147     162
+            8           11.79          1.07        173     188
+            9           12.57          0.81        198     213
+           10           14.88          0.87        224     239
+      -----------------------------------------------------------------
+   
+   The values provided in the table above have calculated using all the
+   available data on the mirror reflectivity, the beamsplitter
+   transmission, the filter transmission, and the detector response.
+   The details are described the latest Calibration Report for THEMIS.
+
+   The IR filter layout summarized in the table looks like this:
+
+                                    ^
+       Row Index                    | s/c velocity
+       ---------                    |
+
+         1   +-----------------------------------------------+
+             | IR Filter 1                                   | 16 rows
+        16/17|-----------------------------------------------| 
+             | IR Filter 2                                   | 16 rows
+         32  +-----------------------------------------------+
+         43  +---------------------------------(10 dark rows)+
+             | IR Filter 3                                   | 16 rows
+         58  +-----------------------------------------------+
+         69  +---------------------------------(10 dark rows)+
+    2        | IR Filter 4                                   | 16 rows
+    4    84  +--------------    +Yir         ----------------+
+    0    95  +--------------        ^        --(10 dark rows)+
+             | IR Filter 5          |                        | 16 rows
+    r    110 +--------------        |        ----------------+
+    o    121 +--------------  <---- x        --(10 dark rows)+
+    w        | IR Filter 6   +Xir    +Zir                    | 16 rows
+    s    136 +--------------        (into    ----------------+
+         147 +--------------         page)   --(10 dark rows)+
+             | IR Filter 7                                   | 16 rows
+         162 +-----------------------------------------------+
+         173 +---------------------------------(10 dark rows)+
+             | IR Filter 8                                   | 16 rows
+         188 +-----------------------------------------------+
+         198 +----------------------------------(9 dark rows)+
+             | IR Filter 9                                   | 16 rows
+         213 +-----------------------------------------------+
+         224 +---------------------------------(10 dark rows)+
+             | IR Filter 10                                  | 16 rows
+         239 +-----------------------------------------------+
+                                                 (1 dark row)
+                              320 columns
+
+   Note that the Filter 1 and Filter 2 are in reality a single physical
+   filter covering two separate bands of the detector. Since each band
+   produces a separate image, for consistency the "halves" of the
+   physical filter are numbered as two separate "logical" filters with
+   identical characteristics.
+
+   The set of keywords below contains wavelength center, bandwidth and
+   detector row ranges for each IR filter.
+
+      \begindata
+
+      INS-53031_FILTER_BANDCENTER = (
+              6.78, 6.78, 7.93, 8.56, 9.35, 10.21, 11.04, 11.79, 12.57, 14.88
+                                    )
+
+      INS-53031_FILTER_BANDWIDTH  = (
+              1.01, 1.01, 1.09, 1.16, 1.20,  1.10,  1.19,  1.07,  0.81,  0.87
+                                    )
+
+      INS-53031_FILTER_FIRST_ROW  = (
+               1,   17,   43,   69,   95,    121,   147,   173,   198,   224
+                                    )
+
+      INS-53031_FILTER_LAST_ROW   = (
+              16,   32,   58,   84,   110,   136,   162,   188,   213,   239
+                                    )
+      INS-53031_FILTER_MIDDLE_ROW = (
+             8.5,   24.5, 50.5, 76.5, 102.5, 128.5, 154.5, 180.5, 205.5, 231.5
+                                    )
+
+      \begintext
+
+   When TDI mode is off, the following IR detector row are used for each
+   band ([11]).
+
+      \begindata
+
+      INS-53031_FILTER_TDIOFF_ROW = (
+               9,   24,   52,   77,   102,   129,   155,   181,   206,   232
+                                    )
+
+      \begintext
+
+
+VIS Filters
+
+   Five color filters are cemented onto the visible detector surface
+   with the gaps between filters aligned with the detector rows. For
+   non-calibration images, the camera firmware skips the dark rows and
+   the gaps between filters, producing 192 lines per filter in the 1x1
+   summing mode. A special calibration image capability can be used to
+   read out all rows, 1x1 summing only. Filters cover all 1024 pixels
+   in the THEMIS VIS frame +X axis direction (cross-track direction.)
+   Filter 1 (0.870 microns band) is in the THEMIS VIS frame +Y
+   direction (fore-track direction). Each filter covers approximately
+   205 rows on the array but only the 192 rows of optically clear
+   pixels are used.  There are no dark mirror coatings over the rows
+   between each filter.
+
+      -----------------------------------------------------------------
+         Filter     Band      Band Center,  Bandwidth,    Start    End
+           #          # (*)    microns       microns       Row     Row
+      -----------------------------------------------------------------
+           1          5         0.860         0.045          4     195
+           2          1         0.425         0.049        203     394
+           3          3         0.654         0.053        404     595
+           4          4         0.749         0.053        612     803
+           5          2         0.540         0.051        814    1005
+      -----------------------------------------------------------------
+
+   (*)   To be consistent with the IR, the "filters" are numbered in
+         physical order on the array and "bands" are numbered in
+         chromatic order. Filter 1/Band 5 is the first filter to reach
+         the scene.
+
+   The VIS filter layout summarized in the table looks like this:
+
+                                    ^
+       Row Index                    | s/c velocity
+       ---------                    |
+                                                (3 dark rows)
+         4   +-----------------------------------------------+
+             |                                               |
+             | VIS Filter 1                                  | 192 rows
+             |                                               |
+         195 +-----------------------------------------------+
+         203 +----------------------------------(7 dark rows)+
+             |                                               |
+             | VIS Filter 2                                  | 192 rows
+             |                    +Yvis                      |
+    1    394 +---------------       ^        ----------------+
+    0    404 +---------------       |        ---(9 dark rows)+
+    1        |                      |                        |
+    8        | VIS Filter 3    <----x                        | 192 rows
+             |               +Xvis   +Zvis                   |
+    r    595 +--------------                 ----------------+
+    o    612 +--------------                 --(16 dark rows)+
+    w        |                                               |
+    s        | VIS Filter 4                                  | 192 rows
+             |                                               |
+         803 +-----------------------------------------------+
+         814 +---------------------------------(10 dark rows)+
+             |                                               |
+             | VIS Filter 5                                  | 192 rows
+             |                                               |
+        1005 +-----------------------------------------------+
+                                               (13 dark rows)
+                              1008 columns
+
+
+   The set of keywords below contains wavelength center, bandwidth and
+   detector row ranges for each VIS filter.
+
+      \begindata
+
+      INS-53032_FILTER_BANDID     = (
+                                          5,     1,     3,     4,     2
+                                    )
+
+      INS-53032_FILTER_BANDCENTER = (
+                                      0.860, 0.425, 0.654, 0.749, 0.540
+                                    )
+
+      INS-53032_FILTER_BANDWIDTH =  (
+                                      0.045, 0.049, 0.053, 0.053, 0.051
+                                    )
+
+      INS-53032_FILTER_FIRST_ROW =  (
+                                          4,   203,   404,   612,   814
+                                    )
+
+      INS-53032_FILTER_LAST_ROW  =  (
+                                        195,   394,   595,   803,  1005
+                                    )
+
+      \begintext
+
+
+THEMIS Pixel to View Direction Mapping
+---------------------------------------------------------------------------
+
+IR Pixel-to-View Mapping
+
+   The IR pixel to view direction mapping described in this section is
+   based on the THEMIS IR distortion model implemented by Jim Torson
+   in ISIS ([11].) This model "translates" actual detector row/image
+   sample coordinates into the perfect pinhole camera coordinates,
+   which are then converted into the view direction Cartesian vector in
+   the camera frame. The way actual coordinates are converted to
+   perfect pinhole coordinates is different for the X (sample) and Y
+   (line) directions.
+
+   For the X (sample) direction, the IR optical distortion correction
+   parameter defines an image horizontal "stretch" by giving the Band 9
+   image width change relative to the Band 1 for a 320-pixel wide
+   image. It assumes that Band 5 is "correct" and that the horizontal
+   stretch varies as a linear function of the detector band middle row
+   number. The negative value of the linear coefficient means that Band
+   9 angular extent is greater than that of the Band 1 (which makes the
+   features appear "narrower" in the Band 9 images than in the ones
+   taken by Band 1.)
+
+   For the Y (line) direction IR optical distortion correction is
+   specified as an offset to be added to the detector line coordinate.
+   These offsets were determined empirically for the middle row of each
+   band by examining the THEMIS data.
+ 
+   The following formulas can be used to compute the 3D view direction in 
+   the THEMIS_IR frame for the i-th pixel on a line of an n-th band image 
+   taken by the band's middle row:
+
+                         IS - BC
+            X = ---------------------------
+                    OD_CX   (MR[n] - MR[5])
+                1 + ----- * ---------------
+                     320    (MR[9] - MR[1])
+
+            Y = BR - MR[n] + OD_ICY[n]
+
+                FL
+            Z = --
+                PS
+
+   where
+
+      IS         -- image sample coordinate of a pixel on an image line, 
+                    IR pixels;
+
+      n          -- band number (1-10);
+ 
+      BR,BC      -- IR boresight detector row/column coordinates, IR pixels;
+
+      MR[i]      -- middle row of the detector's i-th band, IR pixels;
+
+      OD_CX      -- IR X-axis optical distortion coefficient;
+
+      OD_ICY[n]  -- IR Y-axis optical distortion correction for n-th band;
+
+      FL         -- focal length, meters;
+
+      PS         -- pixel physical size, meters;
+
+      X,Y,Z      -- view direction in the THEMIS_IR frame of the i-th pixel 
+                    of an image line observed by the n-th filter middle row.
+
+   The "IS - BC" in the X equation is correct because the detector
+   increasing column direction and image increasing sample direction
+   are the SAME when considered with respect to the s/c velocity
+   direction. The "BR - MR[n]" in the Y equation is also correct
+   because the detector increasing row direction is opposite of the +Y
+   axis of the camera reference frame.
+
+   Note that in order to correctly compute observation geometry this view
+   direction determined for the band's middle row MUST be used together
+   with the timing offset defining the instant when the middle row had
+   "taken" the image line of interest. See sections "Timing Offset" and
+   "View Direction and Timing Example" for more details.
+
+   All parameters used in the model (except MR, FL and PS) are provided
+   in the keyword block below. MR, FL and PS are provided in the
+   other sections of this file. The boresight coordinates provided below 
+   are the detector row and column coordinates.
+ 
+      \begindata
+
+      INS-53031_BORESIGHT_ROW    = 109.50
+      INS-53031_BORESIGHT_COLUMN = 164.25
+
+      INS-53031_OD_CX            =  -2.54
+      INS-53031_OD_ICY           = ( 
+                                    -1.2562,
+                                    -1.0636,
+                                    -0.6351,
+                                    -0.2397,
+                                     0.00,
+                                     0.1207,
+                                     0.2136,
+                                     0.2183,
+                                     0.2228,
+                                     0.2275
+                                   )
+      \begintext
+
+
+VIS Pixel-to-View Mapping
+
+   The VIS pixel to view direction mapping described in this section is
+   based on the THEMIS VIS distortion model developed by James Torson
+   in ISIS ([11].) This model implements VIS corrections via IR
+   empirically-derived corrections. Computing the view direction of a
+   particular image pixel in the THEMIS_VIS frame using this model 
+   involves three steps:
+
+      -- computing uncorrected focal plane coordinates in terms of 
+         VIS pixels, 
+ 
+      -- translating them into IR pixel space, applying distortion 
+         correction, and translating corrected IR pixel coordinates 
+         into VIS pixel space, and
+
+      -- constructing the view vector from corrected coordinates assuming 
+         perfect pinhole camera.
+
+
+   Step 1: computing uncorrected VIS pixel coordinates 
+   ---------------------------------------------------
+
+   Uncorrected X coordinate:
+
+      -- for specified image sample, IS, compute uncorrected X
+         coordinate, Xu, by "removing" spatial summing and making
+         coordinate relative to the detector boresight:
+
+                        1             1
+            Xu = ( IS - - ) * SPSUM + - - BC
+                        2             2
+
+   Uncorrected Y coordinate:
+
+      -- for specified image line, IL, compute spatially-summed line index 
+         within the framelet:
+
+                              192                                   192
+            FRLNS = MOD( IL, ----- ),   if FRLNS = 0, then FRLNS = -----
+                             SPSUM                                 SPSUM
+
+
+      -- compute "observing" line index within the framelet by
+         "removing" spatial summing:
+
+                              1             1
+            FRLN  = ( FRLNS - - ) * SPSUM + -
+                              2             2
+
+      -- convert coordinate relative the image framelet into 
+         uncorrected Y coordinate, Yu, relative to the detector boresight:
+
+            Yu    = BR - ( FR[n] + ( 192 - FRLN ) )
+
+   where:
+
+      n       -- filter index (1-5);
+
+      IL,IS   -- image pixel line/sample coordinates, image pixels;
+
+      SPSUM   -- spatial summing (1, 2, or 4);
+
+      192     -- number of lines used in each filter;
+
+      BR,BC   -- VIS boresight detector row/column coordinates, VIS pixels;
+ 
+      FRLNS   -- spatially-summed line index within the framelet, image 
+                 pixels;
+
+      FRLN    -- "observing" line index with the framelet, VIS pixels;
+
+      FR[n]   -- first row of the detector's n-th filter, VIS pixels;
+      
+      Xu,Yu   -- uncorrected coordinates, VIS pixels;
+
+
+   Step 2: computing corrected pixel coordinates (with distortion removed)
+   -----------------------------------------------------------------------
+
+   Corrected Y coordinate:
+
+      -- translate vertical offset from boresight into IR pixels:
+
+                 VISPS  
+            Jp = ----- * Yu
+                 IRPS
+
+      -- compute IR distortion in vertical direction (in IR pixels).
+         Negative of Jp is used here because the orientation of positive
+         displacement from the boresight in the Y direction assumed for
+         the correction parameters is opposite of the positive
+         direction for J:
+
+            deltaJp =  OD_ICY[1] + 
+                     ( OD_ICY[2] * (-Jp) ) + 
+                     ( OD_ICY[3] * (-Jp) * (-Jp) )
+
+      -- translate corrected IR pixel coordinates back to VIS pixel
+         space:
+
+                                     IRPS
+            Yp = ( Jp - deltaJp ) * -----
+                                     VISPS
+
+   Corrected X coordinate:
+
+      -- translate horizontal offset from boresight into IR pixels:
+
+                  VISPS
+             Ip = ----- * Xu
+                  IRPS
+
+      -- compute stretch factor in horizontal direction assuming that IR
+         Band 5 is "correct":
+
+             CB1 = OD_ICX * ( ( -Jp ) - deltaJp + ( IRBR - IRMR5 ) )
+
+      -- translate corrected IR pixel coordinates back to VIS pixel 
+         space:
+
+                               CB1       IRPS
+             Xp = Ip * ( 1 + ------- ) * -----
+                             1 - CB1     VISPS
+
+   where
+
+      Xu,Yu      -- uncorrected coordinates, VIS pixels;
+
+      VISPS      -- VIS pixel size, meters;
+
+      IRPS       -- IR pixel size, meters;
+        
+      OD_CX      -- VIS X-axis optical distortion coefficient;
+
+      OD_ICY     -- VIS Y-axis optical distortion coefficients;
+
+      IRBR       -- IR boresight detector row, IR pixels;
+
+      IRMR5      -- IR band 5 middle row, IR pixels;
+
+      Xp,Yp      -- corrected coordinates, VIS pixels;
+
+
+   Step 3: construct the view vector for a perfect pinhole camera
+   --------------------------------------------------------------
+
+   Corrected coordinates are packaged assuming perfect pinhole camera 
+   to represent the pixel view direction as follows:
+
+             X =  Xp
+
+             Y =  Yp
+
+                  FL
+             Z = -----
+                 VISPS
+
+   where:
+
+      Xp,Yp      -- corrected coordinates, VIS pixels;
+
+      VISPS      -- VIS pixel size, meters;
+
+      FL         -- focal length, meters;
+
+      X,Y,Z      -- view direction in the THEMIS_VIS frame of the specified 
+                    pixel of the filter "n" image. 
+
+   Note that in order to correctly compute observation geometry this
+   view direction MUST be used together with the timing offset defining
+   the instant when the specified filter had "taken" the image framelet
+   of interest. See sections "Timing Offset" and "View Direction and
+   Timing Example" for more details.
+
+   All parameters used in the model (except MR, FL and PS) are provided
+   in the keyword block below. MR, FL and PS are provided in the
+   other sections of this file. The boresight coordinates provided below 
+   are the detector row and column coordinates.
+ 
+      \begindata
+
+      INS-53032_BORESIGHT_ROW    = 512.5
+      INS-53032_BORESIGHT_COLUMN = 512.5
+
+      INS-53032_OD_CX            =   -0.0000402919
+      INS-53032_OD_ICY           = ( 
+                                     -0.0176112, 
+                                     -0.00718251, 
+                                      0.0000552591
+                                   )
+
+      \begintext
+
+
+Timing Offset
+---------------------------------------------------------------------------
+
+   This section provides information required to compute the time
+   associated with a particular line of an IR or VIS image using the
+   time tag provided in the image header.
+
+
+IR Timing
+
+   Most of the images taken by the THEMIS IR detector during operations
+   are taken in summing mode when the readouts from all lines of a
+   particular band taken over the same area on the surface are added up
+   to produce a single line per band. This process is known as Time Delay
+   Integration (TDI).
+ 
+   In this mode the IR sample rate for the micro-bolometer detector
+   array is approximately 1/30 second. During 1/30 of a second the
+   spacecraft moves one pixel spacing on the ground from a 400 km orbit
+   (250 urad IFOV), making sure that 16 lines of each band accumulate
+   light coming from the same area.
+ 
+   The following description by Jim Torson (from [8]) presents the
+   on-board IR image acquisition process in greater detail:
+
+      "... Detector row number 1 is the first to see an 
+      area on the ground. In frame readout number 2 (the frame  
+      taken 1/30 of a second after the frame 1), detector row 
+      number 2 sees the same area on the ground as row number 1 
+      saw in frame number 1.  Thus, the TDI to produce line 1 of 
+      band 1 (using detector rows 1-16) of the image file consists 
+      of combining detector row 1 from frame 1 with detector row 2 
+      from frame 2, etc.  The TDI for line 1 of band 2 (detector 
+      rows 17-32) begins with frame 17, when detector row 17 sees 
+      the same area on the ground as was seen for line 1 band 1 of 
+      the image file. Thus, the observation time for line 1 band 2 
+      is (17-1)/30=16/30 seconds later than for line 1 band 1. 
+      The TDI for line 1 band 3 (detector rows 43-58) begins with 
+      frame 43, when detector row 43 sees the same area of the 
+      ground as was seen for line 1 band 1.  Thus, the observation 
+      time for line 1 band 3 in the image file is (43-1)/30=42/30 
+      seconds later than the observation time for line 1 band 1. 
+      In a similar manner, the observation time for line 1 band 9 
+      (detector rows 198-213) is (198-1)/30=197/30 seconds later 
+      than the observation time for line 1 band 1.  Thus, for 
+      line 1 of the image file, the design is an attempt to have 
+      all the different bands for line 1 looking at the same area 
+      on the ground. This will not be exactly achieved for two 
+      reasons. First, each band in line 1 is observed at a 
+      different time and the planet rotates a small amount during 
+      the time interval, resulting in a left-right misalignment of 
+      the different bands in the image file. Second, the 1/30 
+      second interval between frame readouts might not exactly 
+      compensate for the ground motion (or spacecraft slew for the 
+      test images), resulting in an up-down misalignment of the 
+      different bands."
+
+   Based on this description the following simple formula can be used
+   to compute the time when the N-th row of the IR detector "observed"
+   the M-th line in a particular band of an assembled IR image:
+
+      T = SCLK + (M - 1)/LPS + (N - 1)/LPS
+
+   where:
+
+      SCLK   -- is the time of the first frame readout. While ideally 
+                this time should match the time recorded in the
+                SPACECRAFT_CLOCK_START_COUNT of the image label, the
+                actual time of observation could be slightly later
+                than the one recorded due to various delays discussed
+                below;
+
+      M      -- is the image line number in a particular band image;
+
+      N      -- is the effective physical detector row number belonging 
+                to the range of rows for that band; first and last row
+                indexes that are actually used for each band are
+                provided in the FILTER_FIRST_ROW/FILTER_LAST_ROW
+                keywords above; the average of these values (given in
+                FILTER_MIDDLE_ROW keyword) should be used for the value
+                N;
+
+      1      -- must be subtracted to compensate for the fact that 
+                numbering starts with "1" in both image and detector
+                array;
+
+      LPS    -- is the fixed IR line rate, nominally 30 lines per second. 
+                The actual value is slightly different and equal to 30.0477 
+                lines/sec ([11],[12].)
+
+   Using the "(N - 1)/LPS" member of the formula the following fixed IR
+   timing offsets can be computed:
+
+      -- offset between the image time and the time when the first line
+         of a particular band "observes" the surface area that appears
+         in the first line of the assembled image for that band (column
+         A);
+
+      -- offset between the image time and the time when the middle
+         line -- imaginary line between the 8th and 9th physical line
+         in a band -- of a particular band "observes" the surface area
+         that appears in first line of the assembled image for that
+         band (column B);
+
+      -- offset between the image time and the time when the last line
+         of a particular band "observes" the surface area that appears
+         in first line of the assembled image for that band (column C);
+
+   which are summarized in this table (offsets, computed using the actual
+   the line rate of 30.0477 lines/sec, are given in seconds):
+
+       Filter #        A            B            C
+      ----------   ----------   ----------   ----------
+              1     0.000000     0.249603     0.499206
+              2     0.532487     0.782090     1.031693
+              3     1.397778     1.647381     1.896984
+              4     2.263068     2.512672     2.762275
+              5     3.128359     3.377962     3.627566
+              6     3.993650     4.243253     4.492856
+              7     4.858941     5.108544     5.358147
+              8     5.724232     5.973835     6.223438
+              9     6.556242     6.805845     7.055449
+             10     7.421533     7.671136     7.920739
+      ----------   ----------   ----------   ----------
+
+   (When added to "SCLK + ( M - 1 ) / LPS" term the "B" offset will
+   result in correct time for M-th image line taken by the effective
+   middle row of that image band.)
+
+   The keywords in this data section provide the line rate, in seconds
+   per line, and offsets, in seconds, for the band middle points:
+
+      \begindata
+
+      INS-53031_LINE_RATE          =   0.033280417470
+
+      INS-53031_FILTER_TIME_OFFSET = (
+                                       0.249603
+                                       0.782090
+                                       1.647381
+                                       2.512672
+                                       3.377962
+                                       4.243253
+                                       5.108544
+                                       5.973835
+                                       6.805845
+                                       7.671136
+                                     )
+
+      \begintext
+
+   The following are the delays that could be added "on top" the SCLK
+   recorded for an image, which nominally corresponds to the time at
+   which the first detector frame readout occurs (note this time is for
+   the beginning of Band/Filter 1, EVEN if Band 1 is NOT contained
+   within the file):
+
+      0.000008 seconds   --  PACI write delay
+
+      0 to 1/30 seconds  --  delay of the image acquisition after 
+                             receipt of the command 
+
+      0 to 0.10 seconds  --  delay for the command sending by the 
+                             HPP code so that it is aligned on a 
+                             0.1 second boundary 
+
+   Since the 8 microseconds is a negligible fraction of the 1/30 second
+   line rate it can be ignored. The other two delays are (apparently)
+   variable and unknowable and are a potential source of error that
+   could result in projected coordinates being in error by as much as
+   four (4) pixels along track affecting all band acquisitions equally.
+
+   The overall uncertainty of the image time tag is specified in the
+   keyword below in seconds.
+
+      \begindata
+
+      INS-53031_TIME_UNCERTAINTY   =   0.13
+         
+      \begintext
+
+
+VIS Timing
+
+   Each of the images taken by the THEMIS VIS detector during mapping
+   operations consists of the consequent framelets -- mini-images taken
+   by a particular VIS filter/band at time instants that are nominally
+   1 second apart -- "glued" together in one image strip.
+
+   The following description by Greg Mehall (from [8]) with corrections
+   by Jim Torson ([9]) presents the on-board VIS image acquisition
+   process:
+
+     "The time given in the SPACECRAFT_CLOCK_START_COUNT keyword of the 
+      image header is the time when Filter 1 was exposed even if
+      Filter 1 was not selected or is not included in the image file.
+      Another time provided in the UNCORRECTED_SCLK_START_COUNT keyword
+      of the image header is the time when the data acquisition was
+      initiated by the flight software. At this time the
+      entire array is "exposed" with the exposure that was specified
+      (typically 3-6 msec). Only the data from the first selected
+      filter's framelet is sent to the downlink queue at this point.
+      All other filter's "framelets" are discarded. [Knowing the
+      filter, BVS] ... the offset from the optical axis for this filter
+      [can be computed] to get the correct projection on the surface.
+      On the next interframe time (typically 1 sec later) the
+      entire array is "exposed" again. At this time the second
+      framelet from the first filter and the first framelet from the
+      second selected filter (if selected and adjacent) is sent to the
+      downlink queue.  All other filter's framelets are discarded.
+      This process is repeated until you acquire the specified number
+      of frames for all selected filters. In essence, a ramp up and
+      ramp down of the images occur as the array is exposed on every
+      interframe time.
+ 
+      An example of a five frame, filter 2 (band 1=425nm) and filter 4
+      (band 4=749nm) image, that is commanded to start at SCLK=v
+      (recorded in the UNCORRECTED_SCLK_START_COUNT keyword), with
+      interframe time = 1 sec:
+
+         Time            Filter Data Saved and Downlinked 
+         v               F2 
+         v+1 sec         F2 
+         v+2 sec         F2, F4 
+         v+3 sec         F2, F4 
+         v+4 sec         F2, F4 
+         v+5 sec         F4 
+         v+6 sec         F4 
+
+      In this example, the center of the first filter 2 framelet (that
+      is collected at time=v) is foretrack of the THEMIS optical axis
+      by ~300 lines.  At 45 urad per line this equates to a foretrack
+      projection of this framelet relative to the THEMIS optical axis
+      of 13.5 mrad. From 420 km altitude this would represent a
+      foretrack shift from the sub-Nadir point of 5.4 km. ...
+
+      There are some small timing errors in the VIS flight software
+      that are comparable to the IR numbers. The following information
+      is based on discussions ... with Mike Caplinger at MSSS. The SCLK
+      time reported is the time that the PACI write for the command
+      that starts the image acquisition is issued. There should be no
+      delays in the PACI write since it is issued from the High
+      Precision Processing (HPP) part of the flight software, which is
+      effectively running with interrupts disabled.  The PACI write
+      itself will take 64 microseconds plus bus overhead.  The VIS
+      imaging starts about 50 milliseconds after the receipt of the
+      command.  It should also be noted that although you can specify
+      the start time to, and it is reported to, a precision of 1/256 of
+      a second, the HPP code only executes it at times aligned on 0.1
+      second boundaries."
+
+   Based on this description one can compute the fixed offset between
+   the "corrected" image time (SPACECRAFT_CLOCK_START_COUNT) and the
+   beginning of the exposure "window" when a particular filter
+   "observes" the surface area that appears in the first framelet of
+   the assembled image for that filter. These offsets computed based on 
+   the nominal 1 second framelet rate:
+
+      Filter #       Offset
+      ----------   ----------
+         1            0.0
+         2            1.0
+         3            2.0
+         4            3.0
+         5            4.0
+
+   The keywords in this data section provide the NOMINAL(!) framelet rate,
+   in seconds per framelet, and the NOMINAL(!) offsets, in seconds, for
+   the filter exposure window begin times. The ACTUAL framelet rate is 
+   provided in the INTERFRAME_DELAY keyword in each VIS image.
+
+      \begindata
+
+      INS-53032_FRAMELET_RATE      =   1.0
+
+      INS-53032_FILTER_TIME_OFFSET = (
+                                       0.0
+                                       1.0
+                                       2.0
+                                       3.0
+                                       4.0
+                                     )
+
+      \begintext
+
+
+View Direction and Timing Example
+---------------------------------------------------------------------------
+
+IR
+
+   This FORTRAN example computes the view direction (in the THEMIS_IR
+   frame) and time offset (from the start time specified in the EDR or
+   RDR image header) of the specified image pixel observed by the
+   specified band's effective middle row.
+
+         IMPLICIT              NONE
+
+         CHARACTER*(256)       FNAME
+         CHARACTER*(32)        BNDSTR
+         CHARACTER*(32)        LINSTR
+         CHARACTER*(32)        SAMSTR
+
+         DOUBLE PRECISION      MIDROW ( 10 )
+         DOUBLE PRECISION      PXSIZE (  2 )
+         DOUBLE PRECISION      FOCALL
+         DOUBLE PRECISION      BORERW
+         DOUBLE PRECISION      BORECL
+         DOUBLE PRECISION      ODCX
+         DOUBLE PRECISION      ODICY  ( 10 )
+         DOUBLE PRECISION      SECPLN
+         DOUBLE PRECISION      MRTIME ( 10 )
+         DOUBLE PRECISION      LINE
+         DOUBLE PRECISION      SAMPLE
+         DOUBLE PRECISION      EPS
+         DOUBLE PRECISION      TIMOFF
+         DOUBLE PRECISION      VECTOR ( 3 )
+
+         INTEGER               BAND
+         INTEGER               N
+
+         LOGICAL               F      ( 9 )
+         LOGICAL               EQSTR
+
+   C
+   C     Prompt for the name of and load THEMIS IK file.
+   C
+         CALL PROMPT( 'Enter IK file name > ', FNAME )
+         CALL FURNSH( FNAME )
+
+   C
+   C     Retrieve IR parameters required to compute view direction and 
+   C     timing.
+   C
+         CALL GDPOOL('INS-53031_FILTER_MIDDLE_ROW', 1, 10, N, MIDROW, F(1))
+         CALL GDPOOL('INS-53031_PIXEL_SIZE',        1,  2, N, PXSIZE, F(2))
+         CALL GDPOOL('INS-53031_FOCAL_LENGTH',      1,  1, N, FOCALL, F(3))
+         CALL GDPOOL('INS-53031_BORESIGHT_ROW',     1,  1, N, BORERW, F(4))
+         CALL GDPOOL('INS-53031_BORESIGHT_COLUMN',  1,  1, N, BORECL, F(5))
+         CALL GDPOOL('INS-53031_OD_CX',             1,  1, N, ODCX,   F(6))
+         CALL GDPOOL('INS-53031_OD_ICY',            1, 10, N, ODICY,  F(7))
+         CALL GDPOOL('INS-53031_LINE_RATE',         1,  1, N, SECPLN, F(8))
+         CALL GDPOOL('INS-53031_FILTER_TIME_OFFSET',1, 10, N, MRTIME, F(9))
+
+         IF ( .NOT. (     F(1) .AND. F(2) .AND. F(3) .AND. F(4) .AND. F(5)
+        .           .AND. F(6) .AND. F(7) .AND. F(8) .AND. F(9)  ) ) THEN
+            CALL SIGERR( 'IK DATA NOT AVAILABLE' ) 
+         END IF
+
+   C
+   C     Prompt for the band number.
+   C
+         CALL PROMPT( 'Enter Band Number  > ', BNDSTR )
+
+         DO WHILE ( .NOT. EQSTR( BNDSTR, ' ' ) )
+
+   C
+   C        Prompt for image line and sample and parse inputs.
+   C
+            CALL PROMPT( 'Enter Image Line   > ', LINSTR )
+            CALL PROMPT( 'Enter Image Sample > ', SAMSTR )
+
+            CALL PRSINT ( BNDSTR, BAND   )
+            CALL PRSDP  ( LINSTR, LINE   )
+            CALL PRSDP  ( SAMSTR, SAMPLE )
+
+   C
+   C        Compute the view direction in the THEMIS_IR frame for the
+   C        specified image line pixel of specified band as if taken by
+   C        the band's effective middle row. (Pixel size is scaled to mm.)
+   C
+            EPS = 1 + ( ODCX / 320.0D0 ) *
+        .             ( MIDROW(BAND)-MIDROW(5) ) / ( MIDROW(9)-MIDROW(1) )
+
+            VECTOR(1) = ( SAMPLE - BORECL ) / EPS
+            VECTOR(2) = BORERW - MIDROW(BAND) + ODICY(BAND)
+            VECTOR(3) = FOCALL / ( PXSIZE ( 1 ) / 1000.D0 )
+
+   C
+   C        Compute offset (in seconds, since the image start) of the instant
+   C        when specified line was taken by the middle row of specified band.
+   C
+            TIMOFF = (LINE - 1.D0) * SECPLN + MRTIME(BAND)
+
+   C
+   C        Print pixel view vector and time offset.
+   C
+            WRITE(*,*) ' '
+            WRITE(*,*) '         VIEW VECTOR = ', VECTOR 
+            WRITE(*,*) '   TIME OFFSET (SEC) = ', TIMOFF 
+            WRITE(*,*) ' '
+
+   C
+   C        Prompt again for the band number.
+   C
+            CALL PROMPT( 'Enter Band Number  > ', BNDSTR )
+
+         END DO
+
+         END
+
+
+VIS
+
+   This FORTRAN example computes the view direction (in the THEMIS_VIS
+   frame) and time offset (from the start time specified in the EDR or
+   RDR image header) of the specified image pixel observed by the
+   detector.
+
+         IMPLICIT              NONE
+
+         CHARACTER*(256)       FNAME
+         CHARACTER*(32)        FLTSTR
+         CHARACTER*(32)        LINSTR
+         CHARACTER*(32)        SAMSTR
+         CHARACTER*(32)        SPSSTR
+         CHARACTER*(32)        EXPSTR
+         CHARACTER*(32)        SECSTR
+
+         DOUBLE PRECISION      IRMDRW ( 10 )
+         DOUBLE PRECISION      IRBRRW
+         DOUBLE PRECISION      VISPSZ
+         DOUBLE PRECISION      IRPSZ
+         DOUBLE PRECISION      FOCALL
+         DOUBLE PRECISION      BORERW
+         DOUBLE PRECISION      BORECL
+         DOUBLE PRECISION      ODICX
+         DOUBLE PRECISION      ODICY  ( 3 )
+         DOUBLE PRECISION      SECPFR
+         DOUBLE PRECISION      FLTIME 
+         DOUBLE PRECISION      FRSTRW ( 5 )
+         DOUBLE PRECISION      LINE
+         DOUBLE PRECISION      SAMPLE
+         DOUBLE PRECISION      SPSUM
+         DOUBLE PRECISION      TIMOFF
+         DOUBLE PRECISION      FRLINS
+         DOUBLE PRECISION      FRLINE
+         DOUBLE PRECISION      XU
+         DOUBLE PRECISION      YU
+         DOUBLE PRECISION      XP
+         DOUBLE PRECISION      YP
+         DOUBLE PRECISION      JP
+         DOUBLE PRECISION      DELTJP
+         DOUBLE PRECISION      IP
+         DOUBLE PRECISION      CB1
+         DOUBLE PRECISION      VECTOR ( 3 )
+         DOUBLE PRECISION      EXPSRE
+
+         INTEGER               FILTER
+         INTEGER               N
+         INTEGER               FRAME
+
+         LOGICAL               F      ( 10 )
+         LOGICAL               EQSTR
+
+   C
+   C     Prompt for the name of and load THEMIS IK file.
+   C
+         CALL PROMPT( 'Enter IK file name     > ', FNAME )
+         CALL FURNSH( FNAME )
+
+   C
+   C     Retrieve VIS parameters required to compute view direction and 
+   C     timing.
+   C
+         CALL GDPOOL('INS-53032_PIXEL_SIZE',        1,  1, N, VISPSZ, F(1))
+         CALL GDPOOL('INS-53032_FOCAL_LENGTH',      1,  1, N, FOCALL, F(2))
+         CALL GDPOOL('INS-53032_BORESIGHT_ROW',     1,  1, N, BORERW, F(3))
+         CALL GDPOOL('INS-53032_BORESIGHT_COLUMN',  1,  1, N, BORECL, F(4))
+         CALL GDPOOL('INS-53032_OD_CX',             1,  1, N, ODICX,  F(5))
+         CALL GDPOOL('INS-53032_OD_ICY',            1,  3, N, ODICY,  F(6))
+         CALL GDPOOL('INS-53032_FILTER_FIRST_ROW',  1,  5, N, FRSTRW, F(7))
+
+   C
+   C     Retrieve additional IR parameters used by distortion model.
+   C
+         CALL GDPOOL('INS-53031_FILTER_MIDDLE_ROW', 1, 10, N, IRMDRW, F(8))
+         CALL GDPOOL('INS-53031_PIXEL_SIZE',        1,  1, N, IRPSZ,  F(9))
+         CALL GDPOOL('INS-53031_BORESIGHT_ROW',     1,  1, N, IRBRRW,F(10))
+
+   C
+   C     Check if all items were found.
+   C      
+         IF ( .NOT. ( F(1) .AND. F(2) .AND. F(3) .AND. 
+        .             F(4) .AND. F(5) .AND. F(6) .AND. 
+        .             F(7) .AND. F(8) .AND. F(9) .AND. 
+        .             F(10)                            ) ) THEN
+            CALL SIGERR( 'IK DATA NOT AVAILABLE' ) 
+         END IF
+
+   C
+   C     Prompt for the filter number.
+   C
+         CALL PROMPT( 'Enter Filter Number    > ', FLTSTR )
+
+         DO WHILE ( .NOT. EQSTR( FLTSTR, ' ' ) )
+
+   C
+   C        Prompt for image line and sample and other inputs.
+   C
+            CALL PROMPT( 'Enter Spatial Summing  > ', SPSSTR )
+            CALL PROMPT( 'Enter Image Line       > ', LINSTR )
+            CALL PROMPT( 'Enter Image Sample     > ', SAMSTR )
+            CALL PROMPT( 'Enter Exposure (msec)  > ', EXPSTR )
+            CALL PROMPT( 'Enter Frame Rate (sec) > ', SECSTR )
+
+   C
+   C        Parse inputs.
+   C
+            CALL PRSINT ( FLTSTR, FILTER )
+            CALL PRSDP  ( SPSSTR, SPSUM  )
+            CALL PRSDP  ( LINSTR, LINE   )
+            CALL PRSDP  ( SAMSTR, SAMPLE )
+            CALL PRSDP  ( EXPSTR, EXPSRE )
+            CALL PRSDP  ( SECSTR, SECPFR )
+
+   C
+   C        Compute filter time offset from frame rate.
+   C
+            FLTIME = SECPFR * ( FILTER - 1 )
+
+   C
+   C        Compute uncorrected Y coordinate.
+   C
+            FRLINS = DMOD( LINE, 192.D0 / SPSUM )
+            IF ( FRLINS .EQ. 0.D0 ) THEN
+               FRLINS = 192.D0 / SPSUM
+            END IF
+
+            FRLINE = ( FRLINS - 0.5D0 ) * SPSUM + 0.5D0
+
+            YU    = BORERW - ( FRSTRW(FILTER) + ( 192.D0 - FRLINE ) )
+
+   C
+   C        Compute uncorrected X coordinate.
+   C
+            XU = ( SAMPLE - 0.5D0 ) * SPSUM + 0.5D0 - BORECL
+
+   C
+   C        Compute corrected Y coordinate.
+   C
+            JP = ( VISPSZ / IRPSZ ) * YU
+
+            DELTJP =   ODICY(1) + 
+        .            ( ODICY(2) * ( -JP ) ) + 
+        .            ( ODICY(3) * ( -JP ) * ( -JP ) )
+
+            YP = ( JP - DELTJP ) * ( IRPSZ / VISPSZ )
+
+   C
+   C        Compute corrected X coordinate.
+   C
+            IP = ( VISPSZ / IRPSZ ) * XU
+
+            CB1 = ODICX * ( ( -JP ) - DELTJP + ( IRBRRW - IRMDRW(5) ) )
+
+            XP = IP * ( 1 + CB1 / ( 1.D0 - CB1 ) ) * ( IRPSZ / VISPSZ )
+
+   C
+   C        Construct the view vector for a perfect pinhole camera
+   C
+                 VECTOR(1) = XP
+                 VECTOR(2) = YP
+                 VECTOR(3) = FOCALL / ( VISPSZ / 1000.D0 )
+
+   C
+   C        Compute offset (in seconds, since the corrected image start
+   C        time) mid-exposure point corresponding to the computed view
+   C        direction. 
+   C
+            FRAME = INT( ( LINE - 0.5D0 ) / ( 192.D0 / SPSUM ) )
+
+            TIMOFF = FRAME * SECPFR + FLTIME + 
+        .            EXPSRE / 1000.D0 / 2.D0
+
+   C
+   C        Print pixel view vector and time offset.
+   C
+            WRITE(*,*) ' '
+            WRITE(*,*) '         VIEW VECTOR = ', VECTOR 
+            WRITE(*,*) '   TIME OFFSET (SEC) = ', TIMOFF 
+            WRITE(*,*) ' '
+
+   C
+   C        Prompt again for the band number.
+   C
+            CALL PROMPT( 'Enter Filter Number    > ', FLTSTR )
+
+         END DO
+
+         END
+
+   
+
+Platform ID
+---------------------------------------------------------------------------
+
+   This number is the NAIF instrument ID of the platform on which the
+   cameras are mounted. For both THEMIS detectors such platform is the
+   spacecraft itself.
+
+      \begindata
+
+      INS-53031_PLATFORM_ID  = ( -53000 )
+      INS-53032_PLATFORM_ID  = ( -53000 )
+
+      \begintext
+
