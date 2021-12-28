@@ -3417,8 +3417,7 @@ Exceptions
 */
 void USpice::halfpi(double& half_pi)
 {
-    SpiceDouble _halfpi = halfpi_c();
-    half_pi = double(half_pi);
+    half_pi = (double)halfpi_c();
 }
 
 /*
