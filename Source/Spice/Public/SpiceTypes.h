@@ -648,6 +648,7 @@ struct FSEphemerisPeriod
     inline double AsDouble() const { return seconds; }
 
     static SPICE_API const FSEphemerisPeriod Zero;
+    static SPICE_API const FSEphemerisPeriod Day;
 };
 
 inline static FSEphemerisTime operator+(const FSEphemerisPeriod& A, const FSEphemerisTime& B)

@@ -32,6 +32,7 @@ SPICE_API const FSEulerAngularTransform FSEulerAngularTransform::Identity = FSEu
 SPICE_API const FSComplexScalar FSComplexScalar::Zero = FSComplexScalar();
 SPICE_API const FSEphemerisTime FSEphemerisTime::J2000 = FSEphemerisTime();
 SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Zero = FSEphemerisPeriod();
+SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Day = FSEphemerisPeriod((double) spd_c());
 SPICE_API const FSRotationMatrix FSRotationMatrix::Identity = FSRotationMatrix();
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::Zero = FSDimensionlessVector();
 

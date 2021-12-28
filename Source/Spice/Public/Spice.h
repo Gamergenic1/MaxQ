@@ -3035,7 +3035,18 @@ public:
             ShortToolTip = "Seconds per day",
             ToolTip = "The number of seconds in a day"
             ))
-        static void spd(double& value);
+    static void spd(double& value);
+
+    /// <summary>Seconds in a day</summary>
+    /// <returns>Seconds.  Per day.</returns>
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "One Day",
+            ToolTip = "Ephemeris poriod of one day"
+            ))
+    static void spd_day(FSEphemerisPeriod& oneDay);
+
 
     /// <summary>Spherical to latitudinal coordinates</summary>
     /// <param name="r">[in] Distance of the point from the origin</param>
