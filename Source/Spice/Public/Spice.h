@@ -3972,7 +3972,7 @@ public:
         static void vsep(
             const FSDimensionlessVector& v1,
             const FSDimensionlessVector& v2,
-            double& out
+            FSAngle& out
         );
 
     /// <summary>Vector subtraction, 3 dimensions</summary>
@@ -4083,14 +4083,16 @@ public:
             ExpandEnumAsExecs = "ResultCode",
             ToolTip = "Transform a state between coordinate systems"
             ))
-        static void xfmsta(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSStateVector& input_state,
-            const FString& input_coord_sys,
-            const FString& output_coord_sys,
-            const FString& body,
-            FSStateVector& output_state
+    static void xfmsta(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDimensionlessVector& in1,
+        const FSDimensionlessVector& in2,
+        FSDimensionlessVector& out1,
+        FSDimensionlessVector& out2,
+        ES_CoordinateSystem input_coord_sys = ES_CoordinateSystem::RECTANGULAR,
+        ES_CoordinateSystem output_coord_sys = ES_CoordinateSystem::RECTANGULAR,
+        const FString& body = TEXT("")
         );
 
 
