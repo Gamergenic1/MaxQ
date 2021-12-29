@@ -404,6 +404,89 @@ FSDistanceVector USpiceTypes::Conv_SDimensionlessVectorToSDistanceVector(
     return FSDistanceVector(value);
 }
 
+FSRotationMatrix USpiceTypes::Conv_SQuaternionToSRotationMatrix(const FSQuaternion& value)
+{
+    FSRotationMatrix result;
+    USpice::q2m(value, result);
+    return result;
+}
+
+FSQuaternion USpiceTypes::Conv_SRotationMatrixToSQuaternion(const FSRotationMatrix& value)
+{
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+    FSQuaternion result;
+    
+    USpice::m2q(ResultCode, ErrorMessage, value, result);
+    
+    return ResultCode == ES_ResultCode::Success ? result : FSQuaternion::Identity;
+}
+
+// Operators that lean on SPICE's CSPICE implementations instead of implement themselves...
+FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs)
+{
+    FSRotationMatrix result;
+    USpice::mxm(lhs, rhs, result);
+    return result;
+}
+
+FSRotationMatrix USpiceTypes::Multiply_SRotationMatrixSRotationMatrix(const FSRotationMatrix& A, const FSRotationMatrix& B)
+{
+    return A * B;
+}
+
+
+FSDimensionlessVector operator*(const FSRotationMatrix& lhs, const FSDimensionlessVector& rhs)
+{
+    FSDimensionlessVector result;
+    USpice::mxv(lhs, rhs, result);
+    return result;
+}
+
+FSDimensionlessVector USpiceTypes::MultiplyVec_SRotationMatrixSDimensionlessVector(const FSRotationMatrix& A, const FSDimensionlessVector& B)
+{
+    return A * B;
+}
+
+FSDistanceVector operator*(const FSRotationMatrix& lhs, const FSDistanceVector& rhs)
+{
+    FSDistanceVector result;
+    USpice::mxv_distance(lhs, rhs, result);
+    return result;
+}
+
+FSDistanceVector USpiceTypes::MultiplyDist_SRotationMatrixSDistanceVector(const FSRotationMatrix& A, const FSDistanceVector& B)
+{
+    return A * B;
+}
+
+
+FSVelocityVector operator*(const FSRotationMatrix& lhs, const FSVelocityVector& rhs)
+{
+    FSVelocityVector result;
+    USpice::mxv_velocity(lhs, rhs, result);
+    return result;
+}
+
+FSVelocityVector USpiceTypes::MultiplyVel_SRotationMatrixVelocityVector(const FSRotationMatrix& A, const FSVelocityVector& B)
+{
+    return A * B;
+}
+
+
+
+FSQuaternion operator*(const FSQuaternion& lhs, const FSQuaternion& rhs)
+{
+    FSQuaternion result;
+    USpice::qxq(lhs, rhs, result);
+    return result;
+}
+
+FSQuaternion USpiceTypes::Multiply_SQuaternionSQuaternion(const FSQuaternion& A, const FSQuaternion& B)
+{
+    return A * B;
+}
+
 
 /* Addition (A + B) */
 FSEphemerisTime USpiceTypes::Add_SEphemerisTimeSEphemerisPeriod(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
@@ -455,14 +538,19 @@ FSEphemerisPeriod USpiceTypes::Modulus_SEphemerisPeriodDouble(const FSEphemerisP
     return A % B;
 }
 
-
-/* Division (A / B) */
-double USpiceTypes::Divide_SDistanceSDistance(const FSDistance& A, const FSDistance& B)
+double USpiceTypes::Ratio_SEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return A / B;
 }
 
-FSDistance USpiceTypes::Divide_SDistanceDouble(FSDistance A, double B)
+
+/* Ratio (A / B) */
+double USpiceTypes::Ratio_SDistance(const FSDistance& A, const FSDistance& B)
+{
+    return A / B;
+}
+
+FSDistance USpiceTypes::Divide_SDistanceDouble(const FSDistance& A, double B)
 {
     return A / B;
 }
@@ -516,7 +604,12 @@ FSDistanceVector USpiceTypes::Add_DoubleSDistanceVector(const FSDistanceVector& 
 }
 
 
-FSDimensionlessVector USpiceTypes::Divide_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B)
+FSDimensionlessVector USpiceTypes::Ratio_SDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B)
+{
+    return A / B;
+}
+
+FSDistanceVector USpiceTypes::Divide_SDistanceVectorSDimensionlessVector(const FSDistanceVector& A, const FSDimensionlessVector& B)
 {
     return A / B;
 }
@@ -548,7 +641,7 @@ FSSpeed USpiceTypes::Divide_SSpeedDouble(FSSpeed A, double B)
     return A * B;
 }
 
-double USpiceTypes::Divide_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B)
+double USpiceTypes::Ratio_SSpeed(const FSSpeed& A, const FSSpeed& B)
 {
     return A / B;
 }
@@ -573,10 +666,16 @@ FSVelocityVector USpiceTypes::Multiply_DoubleSVelocityVector(double A, const FSV
     return A * B;
 }
 
-FSVelocityVector USpiceTypes::Divide_SVelocityVectorDouble(FSVelocityVector A, double B)
+FSVelocityVector USpiceTypes::Divide_SVelocityVectorDouble(const FSVelocityVector& A, double B)
 {
     return A / B;
 }
+
+FSDimensionlessVector USpiceTypes::Ratio_SVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B)
+{
+    return A / B;
+}
+
 
 FSVelocityVector USpiceTypes::Subtract_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B)
 {
@@ -594,6 +693,11 @@ FSAngle USpiceTypes::Multiply_SAngleDouble(const FSAngle& A, double B)
 }
 
 FSAngle USpiceTypes::Divide_SAngleDouble(const FSAngle A, double B)
+{
+    return A / B;
+}
+
+double USpiceTypes::Ratio_SAngle(const FSAngle& A, const FSAngle& B)
 {
     return A / B;
 }

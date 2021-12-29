@@ -900,7 +900,7 @@ public:
             ShortToolTip = "Largest DP number",
             ToolTip = "Return the value of the largest (positive) number representable in a double precision variable"
             ))
-    static void dpmax(double& ReturnValue);
+    static void dpmax(double& doublePrecisionMax);
 
     /// <summary>Return the value of the smallest (negative) number representable in a double precision variable</summary>
     /// <returns>smallest (negative) number that can be represented in a double precision variable</returns>
@@ -911,7 +911,7 @@ public:
             ShortToolTip = "Smallest DP number",
             ToolTip = "Return the value of the smallest (negative) number representable in a double precision variable"
             ))
-    static void dpmin(double& ReturnValue);
+    static void dpmin(double& doublePrecisionMin);
 
     /// <summary>Return the number of degrees per radian</summary>
     /// <returns>The value of pi is determined by the ACOS function</returns>
@@ -922,7 +922,7 @@ public:
             ShortToolTip = "Degrees per radian",
             ToolTip = "Return the number of degrees per radian"
             ))
-    static void dpr(double& ReturnValue);
+    static void dpr(double& degreesPerRadian);
 
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/eqncpv_c.html
     /// <summary>Compute the state (position and velocity of an object whose trajectory is described via equinoctial elements relative to some fixed plane(usually the equatorial plane of some planet) </summary>
@@ -1322,15 +1322,15 @@ public:
             ShortToolTip = "Hermite polynomial interpolation",
             ToolTip = "Evaluate a Hermite interpolating polynomial at a specified abscissa value"
             ))
-        static void hrmint(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const TArray<double>& xvals,
-            const TArray<double>& yvals,
-            double x,
-            double& f,
-            double& df
-        );
+    static void hrmint(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const TArray<double>& xvals,
+        const TArray<double>& yvals,
+        double x,
+        double& f,
+        double& df
+    );
 
     /// <summary>Return half the value of pi</summary>
     /// <returns>half the value of pi</returns>
@@ -1340,7 +1340,17 @@ public:
             ShortToolTip = "Half the value of pi",
             ToolTip = "Return half the value of pi"
             ))
-        static void halfpi(double& half_pi);
+    static void halfpi(double& half_pi);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Angle of half the value of pi",
+            ToolTip = "Return angle of half the value of pi"
+            ))
+    static void halfpi_angle(FSAngle& half_pi);
+
+
     /// <summary>This routine returns the 3x3 identity matrix</summary>
     /// <returns>the 3x3 Identity matrix</returns>
     UFUNCTION(BlueprintPure,
@@ -1401,7 +1411,7 @@ public:
             ShortToolTip = "Largest integer number",
             ToolTip = "Value of the largest (positive) number representable in a SpiceInt variable"
             ))
-        static void intmax(int64& int_max);
+    static void intmax(int64& int_max);
 
     /// <summary>Return the value of the smallest (negative) number representable in a SpiceInt variable</summary>
     /// <returns>the smallest (negative) number that can be represented in a SpiceInt variable</returns>
@@ -1411,7 +1421,7 @@ public:
             ShortToolTip = "Smallest integer number",
             ToolTip = "Value of the smallest(negative) number representable in a SpiceInt variable"
             ))
-        static void intmin(int64& int_min);
+    static void intmin(int64& int_min);
 
     /// <summary>Generate the inverse of a 3x3 matrix</summary>
     /// <param name="m1">[in] Matrix to be inverted</param>
@@ -1425,12 +1435,12 @@ public:
             ShortToolTip = "Invert a 3x3 matrix",
             ToolTip = "Generate the inverse of a 3x3 matrix"
             ))
-        static void invert(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSRotationMatrix& m1,
-            FSRotationMatrix& mout
-        );
+    static void invert(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSRotationMatrix& m1,
+        FSRotationMatrix& mout
+    );
 
 
     /// <summary>Given a matrix, construct the matrix whose rows are the columns of the first divided by the length squared of the the corresponding columns of the input matrix</summary>
@@ -1445,12 +1455,33 @@ public:
             ShortToolTip = "Invert nearly orthogonal matrices",
             ToolTip = "Given a matrix, construct the matrix whose rows are the columns of the first divided by the length squared of the the corresponding columns of the input matrix"
             ))
-        static void invort(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSRotationMatrix& m,
-            FSRotationMatrix& mit
-        );
+    static void invort(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSRotationMatrix& m,
+        FSRotationMatrix& mit
+    );
+
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Besselian Date 1900.0",
+            ToolTip = "Return the Julian Date corresponding to Besselian Date 1900.0"
+            ))
+    static void b1900(
+        FSEphemerisTime& b1900
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Besselian Date 1950.0",
+            ToolTip = "Return the Julian Date corresponding to Besselian Date 1950.0"
+            ))
+    static void b1950(
+        FSEphemerisTime& b1950
+    );
 
     /// <summary>Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)</summary>
     /// <returns>the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)</returns>
@@ -1460,9 +1491,9 @@ public:
             ShortToolTip = "Julian Date of 1900.0 JAN 0.5",
             ToolTip = "Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)"
             ))
-        static void j1900(
-            FSEphemerisTime& j1900
-        );
+    static void j1900(
+        FSEphemerisTime& j1900
+    );
 
     /// <summary>Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)</summary>
     /// <returns>the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0) </returns>
@@ -1502,7 +1533,31 @@ public:
             ShortToolTip = "Seconds per julian year",
             ToolTip = "Return the number of seconds in a julian year"
             ))
-    static void jyear(FSEphemerisPeriod& jyear);
+    static void jyear(double& secondsPerJulianYear);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Seconds per tropical year",
+            ToolTip = "Return the number of seconds in a tropical year"
+            ))
+    static void tyear(double& secondsPerTropicalYear);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Ephemeris Period of one julian year",
+            ToolTip = "Return the number of seconds in a julian year"
+            ))
+    static void jyear_year(FSEphemerisPeriod& oneJulianYear);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Ephemeris Period of one tropical year",
+            ToolTip = "Return the number of seconds in a tropical year"
+            ))
+    static void tyear_year(FSEphemerisPeriod& oneTropicalYear);
 
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Geometry",
@@ -1948,6 +2003,16 @@ public:
             ))
     static void pi(double& pi);
 
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Angle of value pi",
+            ToolTip = "Return angle with the value of pi"
+            ))
+    static void pi_angle(FSAngle& pi);
+
+
     /// <summary>Project an ellipse onto a plane, orthogonally</summary>
     /// <param name="elin">A CSPICE ellipse to be projected</param>
     /// <param name="plane">A plane onto which elin is to be projected</param>
@@ -2368,7 +2433,7 @@ public:
             ))
     static void rpd(
         // Hmm... scalar value?
-        double& value
+        double& radiansPerDegree
     );
 
     /// <summary>Roots of a quadratic equation</summary>
@@ -3088,7 +3153,7 @@ public:
             ShortToolTip = "Seconds per day",
             ToolTip = "The number of seconds in a day"
             ))
-    static void spd(double& value);
+    static void spd(double& secondsPerDay);
 
     /// <summary>Seconds in a day</summary>
     /// <returns>Seconds.  Per day.</returns>
@@ -3096,7 +3161,7 @@ public:
         Category = "Spice|Api|Constants",
         meta = (
             ShortToolTip = "One Day",
-            ToolTip = "Ephemeris poriod of one day"
+            ToolTip = "Ephemeris period of one day"
             ))
     static void spd_day(FSEphemerisPeriod& oneDay);
 
@@ -3313,9 +3378,17 @@ public:
             ShortToolTip = "Twice the value of pi",
             ToolTip = "Return twice the value of pi"
             ))
-        static void twopi(
-            double& two_pi
-        );
+    static void twopi(
+        double& two_pi
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Constants",
+        meta = (
+            ShortToolTip = "Angle of twice the value pi",
+            ToolTip = "Return angle with twice the value of pi"
+            ))
+    static void twopi_angle(FSAngle& two_pi);
 
     /// <summary>Two vectors defining an orthonormal frame</summary>
     /// <param name="axdef">[in] Vector defining a principal axis</param>
