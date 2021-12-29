@@ -3313,6 +3313,118 @@ void USpice::mxm(
 
 /*
 Exceptions
+   Error free.
+*/
+void  USpice::mxmt(
+    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m2,
+    FSRotationMatrix& mout
+)
+{
+    SpiceDouble _mout[3][3];
+
+    mxmt_c(m1.m, m2.m, _mout);
+
+    mout = FSRotationMatrix(_mout);
+}
+
+
+/*
+Exceptions
+   Error free.
+*/
+void USpice::mtxm(
+    const FSRotationMatrix& m1,
+    const FSRotationMatrix& m2,
+    FSRotationMatrix& mout
+)
+{
+    SpiceDouble _mout[3][3];
+
+    mtxm_c(m1.m, m2.m, _mout);
+
+    mout = FSRotationMatrix(_mout);
+}
+
+
+/*
+Exceptions
+   Error free.
+*/
+void USpice::mtxv(
+    const FSRotationMatrix& m1,
+    const FSDimensionlessVector& vin,
+    FSDimensionlessVector& vout
+)
+{
+    // Inputs
+    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
+    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
+
+    // Outputs
+    SpiceDouble    _vout[3];
+
+    // Invocation
+    mtxv_c(_m1, _vin, _vout);
+
+    // Return Value
+    vout = FSDimensionlessVector(_vout);
+}
+
+
+/*
+Exceptions
+   Error free.
+*/
+
+void USpice::mtxv_distance(
+        const FSRotationMatrix& m1,
+        const FSDistanceVector& vin,
+        FSDistanceVector& vout
+    )
+{
+    // Inputs
+    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
+    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
+
+    // Outputs
+    SpiceDouble    _vout[3];
+
+    // Invocation
+    mtxv_c(_m1, _vin, _vout);
+
+    // Return Value
+    vout = FSDimensionlessVector(_vout);
+}
+
+
+/*
+Exceptions
+   Error free.
+*/ 
+void USpice::mtxv_velocity(
+    const FSRotationMatrix& m1,
+    const FSVelocityVector& vin,
+    FSVelocityVector& vout
+)
+{
+    // Inputs
+    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
+    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
+
+    // Outputs
+    SpiceDouble    _vout[3];
+
+    // Invocation
+    mtxv_c(_m1, _vin, _vout);
+
+    // Return Value
+    vout = FSDimensionlessVector(_vout);
+}
+
+
+/*
+Exceptions
    1)   If any of axis3, axis2, or axis1 do not have values in
 
            { 1, 2, 3 },
@@ -7330,7 +7442,6 @@ void USpice::dot_velocity(
 }
 
 
-#if 0
 // pointless, in blueprints
 /*
 Exceptions
@@ -7345,7 +7456,7 @@ void USpice::vequ(
     SpiceDouble _vin[3];
     vin.CopyTo(_vin);
     // Output
-    SpiceDouble _vout[3];
+    SpiceDouble _vout[3]; ZeroOut(_vout);
 
     // Invocation
     vequ_c(_vin, _vout);
@@ -7353,6 +7464,7 @@ void USpice::vequ(
     // Return Value
     vout = FSDimensionlessVector(_vout);
 }
+
 void USpice::vequ_distance(
     const FSDistanceVector& vin,
     FSDistanceVector& vout
@@ -7365,11 +7477,12 @@ void USpice::vequ_distance(
     SpiceDouble _vout[3];
 
     // Invocation
-    vequ_c(_vin, _vout);
+    vequ_c(_vin, _vout); ZeroOut(_vout);
 
     // Return Value
     vout = FSDistanceVector(_vout);
 }
+
 void USpice::vequ_velocity(
     const FSVelocityVector& vin,
     FSVelocityVector& vout
@@ -7379,7 +7492,7 @@ void USpice::vequ_velocity(
     SpiceDouble _vin[3];
     vin.CopyTo(_vin);
     // Output
-    SpiceDouble _vout[3];
+    SpiceDouble _vout[3]; ZeroOut(_vout);
 
     // Invocation
     vequ_c(_vin, _vout);
@@ -7387,6 +7500,7 @@ void USpice::vequ_velocity(
     // Return Value
     vout = FSVelocityVector(_vout);
 }
+
 void USpice::vequ_angular_velocity(
     const FSAngularVelocity& vin,
     FSAngularVelocity& vout
@@ -7396,7 +7510,7 @@ void USpice::vequ_angular_velocity(
     SpiceDouble _vin[3];
     vin.CopyTo(_vin);
     // Output
-    SpiceDouble _vout[3];
+    SpiceDouble _vout[3]; ZeroOut(_vout);
 
     // Invocation
     vequ_c(_vin, _vout);
@@ -7404,7 +7518,7 @@ void USpice::vequ_angular_velocity(
     // Return Value
     vout = FSAngularVelocity(_vout);
 }
-#endif
+
 
 /*
 Exceptions
@@ -7895,6 +8009,23 @@ void USpice::vsub(
     // Return Value
     vout = FSDimensionlessVector(_vout);
 }
+
+
+
+double  USpice::vtmv(
+    const FSDimensionlessVector& v1,
+    const FSRotationMatrix& matrix,
+    const FSDimensionlessVector& v2
+)
+{
+    // Inputs
+    SpiceDouble _v1[3]; v1.CopyTo(_v1);
+    SpiceDouble _matrix[3][3];	matrix.CopyTo(_matrix);
+    SpiceDouble _v2[3]; v2.CopyTo(_v2);
+
+    return vtmv_c(_v1, _matrix, _v2);
+}
+
 
 /*
 Exceptions

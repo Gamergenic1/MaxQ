@@ -69,7 +69,7 @@ public:
     static void furnsh(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FString& relativePath
+        const FString& relativePath = TEXT("Content/Spice/Kernels/")
     );
 
     UFUNCTION(BlueprintCallable,
@@ -1682,11 +1682,103 @@ public:
             ShortToolTip = "Matrix times matrix, 3x3",
             ToolTip = "Multiply two 3x3 matrices"
             ))
-        static void mxm(
-            const FSRotationMatrix& m1,
-            const FSRotationMatrix& m2,
-            FSRotationMatrix& mout
-        );
+    static void mxm(
+        const FSRotationMatrix& m1,
+        const FSRotationMatrix& m2,
+        FSRotationMatrix& mout
+    );
+
+
+    /// <summary"Matrix times matrix transpose, 3x3</summary>
+    /// <param name="m1">[in] 3x3 double precision matrix</param>
+    /// <param name="m2">[in] 3x3 double precision matrix</param>
+    /// <param name="mout">[out] The product m1 times m2 transpose</param>
+    /// <returns></returns>
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Matrix times matrix transpose, 3x3",
+            ToolTip = "multiplies a 3x3 matrix and the transpose of another 3x3 matrix"
+            ))
+    static void mxmt(
+        const FSRotationMatrix& m1,
+        const FSRotationMatrix& m2,
+        FSRotationMatrix& mout
+    );
+
+
+    /// <summary>Matrix transpose times vector, 3x3</summary>
+    /// <param name="m1">[in] 3x3 double precision matrix</param>
+    /// <param name="vin">[in] 3-dimensional double precision vector</param>
+    /// <param name="vout">[out] -dimensional double precision vector. vout is the product m1** t* vin</param>
+    /// <returns></returns>
+    UFUNCTION(
+        BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Matrix transpose times vector, 3x3",
+            ToolTip = "mtxv multiplies the transpose of a 3x3 matrix on the left with a vector below"
+            ))
+    static void mtxv(
+        const FSRotationMatrix& m1,
+        const FSDimensionlessVector& vin,
+        FSDimensionlessVector& vout
+    );
+
+
+    /// <summary>Matrix transpose times vector, 3x3</summary>
+    /// <param name="m1">[in] 3x3 double precision matrix</param>
+    /// <param name="vin">[in] 3-dimensional double precision vector</param>
+    /// <param name="vout">[out] -dimensional double precision vector. vout is the product m1** t* vin</param>
+    /// <returns></returns>
+    UFUNCTION(
+        BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Matrix transpose times vector, 3x3",
+            ToolTip = "mtxv multiplies the transpose of a 3x3 matrix on the left with a vector below"
+            ))
+    static void mtxv_distance(
+        const FSRotationMatrix& m1,
+        const FSDistanceVector& vin,
+        FSDistanceVector& vout
+    );
+
+
+    /// <summary>Matrix transpose times vector, 3x3</summary>
+    /// <param name="m1">[in] 3x3 double precision matrix</param>
+    /// <param name="vin">[in] 3-dimensional double precision vector</param>
+    /// <param name="vout">[out] -dimensional double precision vector. vout is the product m1** t* vin</param>
+    /// <returns></returns>
+    UFUNCTION(
+        BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Matrix transpose times vector, 3x3",
+            ToolTip = "mtxv multiplies the transpose of a 3x3 matrix on the left with a vector below"
+            ))
+    static void mtxv_velocity(
+        const FSRotationMatrix& m1,
+        const FSVelocityVector& vin,
+        FSVelocityVector& vout
+    );
+
+    /// <summary>Matrix transpose times matrix, 3x3</summary>
+    /// <param name="m1">[in] 3x3 double precision matrix</param>
+    /// <param name="m2">[in] 3x3 double precision matrix</param>
+    /// <param name="mout">[out] The produce m1 transpose times m2</param>
+    /// <returns></returns>
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Matrix transpose times matrix, 3x3",
+            ToolTip = "Multiply the transpose of a 3x3 matrix and a 3x3 matrix"
+            ))
+    static void mtxm(
+        const FSRotationMatrix& m1,
+        const FSRotationMatrix& m2,
+        FSRotationMatrix& mout
+    );
 
     /// <summary>Factor a rotation matrix as a product of three rotations about specified coordinate axes</summary>
     /// <param name="r">[in] Rotation matrix to be factored</param>
@@ -2788,7 +2880,7 @@ public:
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "SPK, constant position target state",
-            ToolTip = ""
+            ToolTip = "Return the state, relative to a specified observer, of a target having constant position in a specified reference frame. The target's position is provided by the calling program rather than by loaded SPK files"
             ))
         static void spkcpt(
             ES_ResultCode& ResultCode,
@@ -3647,7 +3739,7 @@ public:
     /// <param name="v1">First vector in the dot product</param>
     /// <param name="v2">Second vector in the dot product</param>
     /// <returns>dot product of v1 and v2</returns>
-    UFUNCTION(BlueprintCallable,
+    UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector dot product, 3 dimensions",
@@ -3681,8 +3773,6 @@ public:
             FSSpeed& out
         );
 
-    /* this is pointless in blueprints... */
-#if 0
     /// <summary>Copy one vector to another</summary>
     /// <param name="vin">[in] 3-dimensional double precision vector</param>
     /// <param name="vout">[out] value of vin</param>
@@ -3693,41 +3783,40 @@ public:
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
-        static void vequ(
-            const FSDimensionlessVector& vin,
-            FSDimensionlessVector& vout
-        );
+    static void vequ(
+        const FSDimensionlessVector& vin,
+        FSDimensionlessVector& vout
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
-        static void vequ_distance(
-            const FSDistanceVector& vin,
-            FSDistanceVector& vout
-        );
+    static void vequ_distance(
+        const FSDistanceVector& vin,
+        FSDistanceVector& vout
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
-        static void vequ_velocity(
-            const FSVelocityVector& vin,
-            FSVelocityVector& vout
-        );
+    static void vequ_velocity(
+        const FSVelocityVector& vin,
+        FSVelocityVector& vout
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
-        static void vequ_angular_velocity(
-            const FSAngularVelocity& vin,
-            FSAngularVelocity& vout
-        );
-#endif
+    static void vequ_angular_velocity(
+        const FSAngularVelocity& vin,
+        FSAngularVelocity& vout
+    );
 
     /// <summary>unit vector</summary>
     /// <param name="v1">[in] Vector to be unitized</param>
@@ -4059,11 +4148,24 @@ public:
             ShortToolTip = "Vector subtraction, 3 dimensions",
             ToolTip = "Compute the difference between two 3-dimensional, double precision vectors"
             ))
-        static void vsub(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            FSDimensionlessVector& vout
-        );
+    static void vsub(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        FSDimensionlessVector& vout
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Vector transpose times matrix times vector, 3 dim",
+            ToolTip = "Multiply the transpose of a 3-dimensional column vector, a 3x3 matrix, and a 3 - dimensional column vector"
+            ))
+    static double vtmv(
+        const FSDimensionlessVector& v1,
+        const FSRotationMatrix& matrix,
+        const FSDimensionlessVector& v2
+    );
+
 
     /// <summary>Unpack three scalar components from a vector</summary>
     /// <param name="v">[in] 3-vector</param>
@@ -4091,10 +4193,10 @@ public:
             ShortToolTip = "Is a vector the zero vector?",
             ToolTip = "Indicate whether a 3-vector is the zero vector"
             ))
-        void vzero(
-            const FSDimensionlessVector& v,
-            bool& is_zero
-        );
+    static void vzero(
+        const FSDimensionlessVector& v,
+        bool& is_zero
+    );
 
 
     /// <summary>Convert a state transformation matrix to Euler angles and their derivatives with respect to a specified set of axes</summary>
