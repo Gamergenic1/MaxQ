@@ -3420,6 +3420,11 @@ void USpice::halfpi(double& half_pi)
     half_pi = (double)halfpi_c();
 }
 
+void USpice::halfpi_angle(FSAngle& half_pi)
+{
+    half_pi = FSAngle(halfpi_c());
+}
+
 /*
 Exceptions
 
@@ -3571,6 +3576,31 @@ void USpice::invort(
 Exceptions
    Error free
 */
+void USpice::b1900(
+    FSEphemerisTime& b1900
+)
+{
+    SpiceDouble _b1900 = b1900_c();
+    b1900 = FSEphemerisTime(_b1900);
+}
+
+/*
+Exceptions
+   Error free
+*/
+void USpice::b1950(
+    FSEphemerisTime& b1950
+)
+{
+    SpiceDouble _b1950 = b1950_c();
+    b1950 = FSEphemerisTime(_b1950);
+}
+
+
+/*
+Exceptions
+   Error free
+*/
 void USpice::j1900(
     FSEphemerisTime& j1900
 )
@@ -3615,17 +3645,45 @@ void USpice::j2100(
     j2100 = FSEphemerisTime(_j2100);
 }
 
+
 /*
 Exceptions
    Error free
 */
-void USpice::jyear(
-    FSEphemerisPeriod& jyear
-)
+void USpice::jyear(double& secondsPerJulianYear)
+{
+    secondsPerJulianYear = jyear_c();
+}
+
+/*
+Exceptions
+   Error free
+*/
+void USpice::tyear(double& secondsPerTropicalYear)
+{
+    secondsPerTropicalYear = tyear_c();
+}
+
+/*
+Exceptions
+   Error free
+*/
+void USpice::jyear_year(FSEphemerisPeriod& oneJulianYear)
 {
     SpiceDouble _jyear = jyear_c();
-    jyear = FSEphemerisPeriod(_jyear);
+    oneJulianYear = FSEphemerisPeriod(_jyear);
 }
+
+/*
+Exceptions
+   Error free
+*/
+void USpice::tyear_year(FSEphemerisPeriod& oneTropicalYear)
+{
+    SpiceDouble _tyear = tyear_c();
+    oneTropicalYear = FSEphemerisPeriod(_tyear);
+}
+
 
 /*
 Exceptions
@@ -4230,6 +4288,11 @@ void USpice::pgrrec(
 void USpice::pi(double& pi)
 {
     pi = pi_c();
+}
+
+void USpice::pi_angle(FSAngle& _pi)
+{
+    _pi = FSAngle(pi_c());
 }
 
 /*
@@ -6742,6 +6805,12 @@ void USpice::twopi(
 )
 {
     two_pi = twopi_c();
+}
+
+
+void USpice::twopi_angle(FSAngle& two_pi)
+{
+    two_pi = FSAngle(twopi_c());
 }
 
 /*

@@ -575,6 +575,11 @@ inline FSAngle operator/(const FSAngle& lhs, double rhs)
     return FSAngle(lhs.AsDouble() / rhs);
 }
 
+inline double operator/(const FSAngle& lhs, const FSAngle& rhs)
+{
+    return lhs.AsDouble() / rhs.AsDouble();
+}
+
 
 USTRUCT(BlueprintType)
 struct FSAngularRate
@@ -726,6 +731,11 @@ inline static FSEphemerisPeriod operator/(const FSEphemerisPeriod& A, double B)
     return FSEphemerisPeriod(A.AsDouble() / B);
 }
 
+inline static double operator/(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+{
+    return A.AsDouble() / B.AsDouble();
+}
+
 inline static FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, double B)
 {
     return FSEphemerisPeriod(A.AsDouble() / B);
@@ -819,6 +829,10 @@ inline FSVelocityVector operator/(const FSVelocityVector& lhs, double rhs)
     return FSVelocityVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
 
+inline FSDimensionlessVector operator/(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+{
+    return FSDimensionlessVector(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
+}
 
 inline FSVelocityVector operator*(double lhs, const FSVelocityVector& rhs)
 {
@@ -1191,7 +1205,6 @@ struct FSRotationMatrix
     static SPICE_API const FSRotationMatrix Identity;
 };
 
-
 USTRUCT(BlueprintType)
 struct FSQuaternion
 {
@@ -1253,6 +1266,12 @@ struct FSQuaternion
 
     static SPICE_API const FSQuaternion Identity;
 };
+
+FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs);
+FSDimensionlessVector operator*(const FSRotationMatrix& lhs, const FSDimensionlessVector& rhs);
+FSDistanceVector operator*(const FSRotationMatrix& lhs, const FSDistanceVector& rhs);
+FSVelocityVector operator*(const FSRotationMatrix& lhs, const FSVelocityVector& rhs);
+FSQuaternion operator*(const FSQuaternion& lhs, const FSQuaternion& rhs);
 
 USTRUCT(BlueprintType)
 struct FSEllipse
@@ -2104,6 +2123,23 @@ public:
         const FSDimensionlessVector& value
     );
 
+    /* Multiplication (A * B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    static FSRotationMatrix Multiply_SRotationMatrixSRotationMatrix(const FSRotationMatrix& A, const FSRotationMatrix& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * vector", CompactNodeTitle = "m*vec", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    static FSDimensionlessVector MultiplyVec_SRotationMatrixSDimensionlessVector(const FSRotationMatrix& A, const FSDimensionlessVector& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * distance", CompactNodeTitle = "m*dist", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    static FSDistanceVector MultiplyDist_SRotationMatrixSDistanceVector(const FSRotationMatrix& A, const FSDistanceVector& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * velocity", CompactNodeTitle = "m*vel", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    static FSVelocityVector MultiplyVel_SRotationMatrixVelocityVector(const FSRotationMatrix& A, const FSVelocityVector& B);
+
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "quaterion * quaterion", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
+    static FSQuaternion Multiply_SQuaternionSQuaternion(const FSQuaternion& A, const FSQuaternion& B);
+
+
     /* Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "time + period", CompactNodeTitle = "+", Keywords = "+ add plus"), Category = "Spice|Math|Time")
     static FSEphemerisTime Add_SEphemerisTimeSEphemerisPeriod(const FSEphemerisTime& A, const FSEphemerisPeriod& B);
@@ -2140,6 +2176,10 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Time")
     static FSEphemerisPeriod Divide_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
 
+    /* Ratio (A / B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "period ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Time")
+    static double Ratio_SEphemerisPeriod(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B);
+
     /* Modulo (A % B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "period % (double)", CompactNodeTitle = "%", Keywords = "% modulus"), Category = "Spice|Math|Time")
     static FSEphemerisPeriod Modulus_SEphemerisPeriodDouble(const FSEphemerisPeriod& A, double B);
@@ -2155,11 +2195,11 @@ public:
 
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
-    static FSDistance Divide_SDistanceDouble(FSDistance A, double B);
+    static FSDistance Divide_SDistanceDouble(const FSDistance& A, double B);
 
-    /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance / distance", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
-    static double Divide_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
+    /* Ratio (A / B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    static double Ratio_SDistance(const FSDistance& A, const FSDistance& B);
 
     /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance - distance", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Distance")
@@ -2182,9 +2222,11 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector + distance vector", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Distance")
     static FSDistanceVector Add_DoubleSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
 
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / distance vector", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
-    static FSDimensionlessVector Divide_SDistanceVectorSDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "ratio distance vector", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    static FSDimensionlessVector Ratio_SDistanceVector(const FSDistanceVector& A, const FSDistanceVector& B);
 
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector / distance vector", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Distance")
+    static FSDistanceVector Divide_SDistanceVectorSDimensionlessVector(const FSDistanceVector& A, const FSDimensionlessVector& B);
 
     //////////////////////
     /* Multiplication (A * B) */
@@ -2199,9 +2241,9 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Speed")
     static FSSpeed Divide_SSpeedDouble(FSSpeed A, double B);
 
-    /* Division (A / B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed / speed", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Speed")
-    static double Divide_SSpeedSSpeed(const FSSpeed& A, const FSSpeed& B);
+    /* Ratio (A / B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "speed ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Speed")
+    static double Ratio_SSpeed(const FSSpeed& A, const FSSpeed& B);
 
     /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "speed - speed", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Speed")
@@ -2221,6 +2263,10 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "angle / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Angle")
     static FSAngle Divide_SAngleDouble(const FSAngle A, double B);
 
+    /* Ratio (A / B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "angle ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Angle")
+    static double Ratio_SAngle(const FSAngle& A, const FSAngle& B);
+
     /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "angle - angle", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Angle")
     static FSAngle Subtract_SAngleSAngle(const FSAngle& A, const FSAngle& B);
@@ -2235,12 +2281,16 @@ public:
     static FSVelocityVector Multiply_SVelocityVectorDouble(const FSVelocityVector& A, double B);
 
     /* Multiplication (A * B) */
-    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Velocity")
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "double * velocity", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Velocity")
     static FSVelocityVector Multiply_DoubleSVelocityVector(double A, const FSVelocityVector& B);
 
     /* Division (A / B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity / double", CompactNodeTitle = "/", Keywords = "/ divide"), Category = "Spice|Math|Velocity")
-    static FSVelocityVector Divide_SVelocityVectorDouble(FSVelocityVector A, double B);
+    static FSVelocityVector Divide_SVelocityVectorDouble(const FSVelocityVector& A, double B);
+
+    /* Ratio (A / B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity ratio", CompactNodeTitle = "ratio", Keywords = "/ divide"), Category = "Spice|Math|Velocity")
+    static FSDimensionlessVector Ratio_SVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
     /* Subtraction (A - B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity - velocity", CompactNodeTitle = "-", Keywords = "- subtract minus"), Category = "Spice|Math|Velocity")
@@ -2402,4 +2452,22 @@ public:
             ToolTip = "Converts a UE Quat (single precision, LHS) to a Spice quaternion (double precision, RHS)"
             ))
     static FSQuaternion Conv_QuatToSQuaternion(const FQuat& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "To SQuaternion",
+            ToolTip = "Converts a Spice quaternion to a Rotation Matrix"
+            ))
+    static FSRotationMatrix Conv_SQuaternionToSRotationMatrix(const FSQuaternion& value);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "To SRotationMatrix",
+            ToolTip = "Converts a Spice RotationMatrix to a Quaternion"
+            ))
+    static FSQuaternion Conv_SRotationMatrixToSQuaternion(const FSRotationMatrix& value);
 };
