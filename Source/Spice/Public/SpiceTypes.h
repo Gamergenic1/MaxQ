@@ -1569,6 +1569,58 @@ struct FSEquinoctialElements
     }
 };
 
+
+USTRUCT(BlueprintType)
+struct FSEphemerisTimeWindowSegment
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSEphemerisTime start;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSEphemerisTime stop;
+
+    FSEphemerisTimeWindowSegment()
+    {
+        start = 0.;
+        stop = 0.;
+    }
+
+    FSEphemerisTimeWindowSegment(
+        double _start,
+        double _stop
+    )
+    {
+        start = _start;
+        stop = _stop;
+    }
+
+    FSEphemerisTimeWindowSegment(
+        const double(&_segment)[2]
+    )
+    {
+        start = _segment[0];
+        stop = _segment[1];
+    }
+
+    void CopyTo(
+        double& _start,
+        double& _stop
+    ) const
+    {
+        _start = start.AsDouble();
+        _stop = stop.AsDouble();
+    }
+
+    void CopyTo(
+        double(&_segment)[2]
+    ) const
+    {
+        _segment[0] = start.AsDouble();
+        _segment[1] = stop.AsDouble();
+    }
+};
+
+
+// CK Files include windows in spacecraft clock encoded time (type: double)
 USTRUCT(BlueprintType)
 struct FSWindowSegment
 {
