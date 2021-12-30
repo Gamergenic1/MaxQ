@@ -72,6 +72,17 @@ enum class ES_AberrationCorrectionWithTransmissions : uint8
     XCN_S = 8 UMETA(DisplayName = "Transmission CN+S (Converged Newtonian light time correction and stellar aberration correction)")
 };
 
+
+UENUM(BlueprintType)
+enum class ES_AberrationCorrectionForOccultation : uint8
+{
+    None = 0 UMETA(DisplayName = "None (No Correction)"),
+    LT = 1 UMETA(DisplayName = "LT (Planetary Abberration)"),
+    CN = 3 UMETA(DisplayName = "CN (Converged Newtonian light time correction"),
+    XLT = 5 UMETA(DisplayName = "Transmission LT (Planetary Abberration)"),
+    XCN = 7 UMETA(DisplayName = "Transmission CN (Converged Newtonian light time correction"),
+};
+
 UENUM(BlueprintType)
 enum class ES_AberrationCorrection : uint8
 {
@@ -128,6 +139,25 @@ enum class ES_CoordinateSystem : uint8
     PLANETOGRAPHIC  UMETA(DisplayName = "Planetographic")
 };
 
+
+UENUM(BlueprintType)
+enum class ES_GeometricModel : uint8
+{
+    ELLIPSOID     UMETA(DisplayName = "Ellipsoid"),
+    POINT         UMETA(DisplayName = "Point"),
+    DSK           UMETA(DisplayName = "DSK")
+};
+
+
+UENUM(BlueprintType)
+enum class ES_OccultationType : uint8
+{
+    None    UMETA(DisplayName = "No occultation/transit"),
+    FULL    UMETA(DisplayName = "Total"),
+    ANNULAR UMETA(DisplayName = "Annular"),
+    PARTIAL UMETA(DisplayName = "Partial"),
+    ANY     UMETA(DisplayName = "Any occultation/transit")
+};
 
 
 UENUM(BlueprintType)

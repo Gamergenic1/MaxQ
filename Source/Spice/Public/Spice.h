@@ -1254,6 +1254,23 @@ public:
     );
 
 
+#if 0
+    static void gfoclt(
+        ConstSpiceChar* occtyp,
+        ConstSpiceChar* front,
+        ConstSpiceChar* fshape,
+        ConstSpiceChar* fframe,
+        ConstSpiceChar* back,
+        ConstSpiceChar* bshape,
+        ConstSpiceChar* bframe,
+        ConstSpiceChar* abcorr,
+        ConstSpiceChar* obsrvr,
+        SpiceDouble        step,
+        SpiceCell* cnfine,
+        SpiceCell* result
+    );
+#endif
+
     /// <summary>Get integers from the kernel pool</summary>
     /// <param name="name">[in] Name of the variable whose value is to be returned</param>
     /// <param name="start">[in] Which component to start retrieving for `name'</param>
@@ -2010,12 +2027,40 @@ public:
             ShortToolTip = "Normal vector and point to plane",
             ToolTip = "Make a plane from a normal vector and a point"
             ))
-        static void nvp2pl(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSDimensionlessVector& normal,
-            const FSDistanceVector& point,
-            FSPlane& plane
+    static void nvp2pl(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDimensionlessVector& normal,
+        const FSDistanceVector& point,
+        FSPlane& plane
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Occultation",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Normal vector and point to plane",
+            ToolTip = "Make a plane from a normal vector and a point",
+            AutoCreateRefTerm = "shape1Surfaces, shape2Surfaces"
+            ))
+    static void occult(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        ES_OccultationType& ocltid,
+        FString& front,
+        FString& back,
+        const FSEphemerisTime& et,
+        const TArray<FString>& shape1Surfaces,
+        const TArray<FString>& shape2Surfaces,
+        const FString& targ1 = TEXT("SATURN"),
+        ES_GeometricModel shape1 = ES_GeometricModel::ELLIPSOID,
+        const FString& frame1 = TEXT("IAU_SATURN"),
+        const FString& targ2 = TEXT("SUN"),
+        ES_GeometricModel shape2 = ES_GeometricModel::ELLIPSOID,
+        const FString& frame2 = TEXT("IAU_SUN"),
+        ES_AberrationCorrectionForOccultation abcorr = ES_AberrationCorrectionForOccultation::CN,
+        const FString& obsrvr = TEXT("CASSINI")
         );
 
 
@@ -4423,21 +4468,6 @@ public:
 
 
 #if defined(IN_PROGRESS)
-    static void gfoclt(
-        ConstSpiceChar* occtyp,
-        ConstSpiceChar* front,
-        ConstSpiceChar* fshape,
-        ConstSpiceChar* fframe,
-        ConstSpiceChar* back,
-        ConstSpiceChar* bshape,
-        ConstSpiceChar* bframe,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble        step,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
 
     static void latsrf(
         ConstSpiceChar* method,
@@ -4631,19 +4661,6 @@ public:
         ConstSpiceChar* obsrvr,
         SpiceDouble* et,
         SpiceBoolean* visible
-    );
-
-    static void occult(
-        ConstSpiceChar* targ1,
-        ConstSpiceChar* shape1,
-        ConstSpiceChar* frame1,
-        ConstSpiceChar* targ2,
-        ConstSpiceChar* shape2,
-        ConstSpiceChar* frame2,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble        et,
-        SpiceInt* ocltid
     );
 
     static void gfdist(
