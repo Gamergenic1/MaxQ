@@ -1769,6 +1769,39 @@ void USpice::conics(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+
+/*
+Exceptions
+
+   Error free.
+*/
+void USpice::cyllat(
+    const FSDistance& r,
+    const FSAngle&    lonc,
+    const FSDistance& z,
+    FSDistance& radius,
+    FSAngle& lon,
+    FSAngle& lat
+)
+{
+    // Inputs
+    SpiceDouble  _r = r.AsDouble();
+    SpiceDouble  _lonc = lonc.AsDouble();
+    SpiceDouble  _z = z.AsDouble();
+    
+    // Outputs
+    SpiceDouble _radius = 0.;
+    SpiceDouble _lon = 0.;
+    SpiceDouble _lat = 0.;
+
+    // Invocation
+    cyllat_c(_r, _lonc, _z, &_radius, &_lon, &_lat);
+
+    radius = FSDistance(_radius);
+    lon = FSAngle(_lon);
+    lat = FSAngle(_lat);
+}
+
 /*
 Exceptions
 
@@ -1830,6 +1863,38 @@ void USpice::cylrec(
     rectan = FSDistanceVector(_rectan);
 }
 
+
+/*
+Exceptions
+
+   Error free.
+*/
+void USpice::cylsph(
+    const FSDistance& r,
+    const FSAngle& lonc,
+    const FSAngle& z,
+    FSDistance& radius,
+    FSAngle& colat,
+    FSAngle& lon
+)
+{
+    // Inputs
+    SpiceDouble _r = r.AsDouble();
+    SpiceDouble _lonc = lonc.AsDouble();
+    SpiceDouble _z = z.AsDouble();
+    // Outputs
+    SpiceDouble _radius = 0.;
+    SpiceDouble _colat = 0.;
+    SpiceDouble _lon = 0.;
+
+    // Invocation
+    cylsph_c(_r, _lonc, _z, &_radius, &_colat, &_lon);
+
+    // Copy output
+    radius = FSDistance(_radius);
+    colat = FSAngle(_colat);
+    lon = FSAngle(_lon);
+}
 
 /*
 Exceptions
@@ -3376,6 +3441,38 @@ void USpice::et_now(FSEphemerisTime& Now)
     Now = FSEphemerisTime(now_j2000.GetTotalSeconds());
 }
 
+
+/*
+Exceptions
+   Error free.
+*/
+void USpice::latcyl(
+    const FSDistance& radius,
+    const FSLonLat& lonlat,
+    FSDistance& r,
+    FSAngle& lonc,
+    FSDistance& z
+)
+{
+    // Input
+    SpiceDouble _radius = radius.AsDouble();
+    SpiceDouble _lon = lonlat.longitude.AsDouble();
+    SpiceDouble _lat = lonlat.latitude.AsDouble();
+    
+    // Outputs
+    SpiceDouble _r = 0.;
+    SpiceDouble _lonc = 0.;
+    SpiceDouble _z = 0.;
+
+    // Invocation
+    latcyl_c(_radius, _lon, _lat, &_r, &_lonc, &_z);
+
+    // Copy Output
+    r = FSDistance(_r);
+    lonc = FSAngle(_lonc);
+    z = FSDistance(_z);
+}
+
 /*
 Exceptions
    Error free.
@@ -3401,6 +3498,38 @@ void USpice::latrec(
     // Copy output
     rectan = FSDistanceVector(_rectan);
 }
+
+
+/*
+Exceptions
+   Error free.
+*/
+void USpice::latsph(
+    const FSDistance& radius,
+    const FSLonLat& lonlat,
+    FSDistance& rho,
+    FSAngle& colat,
+    FSAngle& lons
+)
+{
+    // Inputs
+    SpiceDouble _radius = radius.AsDouble();
+    SpiceDouble _lon = lonlat.longitude.AsDouble();
+    SpiceDouble _lat = lonlat.latitude.AsDouble();
+    // Outputs
+    SpiceDouble _rho = 0.;
+    SpiceDouble _colat = 0.;
+    SpiceDouble _lons = 0.;
+
+    // Invocation
+    latsph_c(_radius, _lon, _lat, &_rho, &_colat, &_lons);
+
+    // Copy outputs
+    rho = FSDistance(_rho);
+    colat = FSAngle(_colat);
+    lons = FSAngle(_lons);
+}
+
 
 #if 0
 void USpice::mxvg(
@@ -6474,6 +6603,38 @@ void USpice::spd_day(FSEphemerisPeriod& oneDay)
 {
     oneDay = FSEphemerisPeriod::Day;
 }
+
+/*
+Exceptions
+   Error free.
+*/
+void USpice::sphcyl(
+    const FSDistance& radius,
+    const FSAngle& colat,
+    const FSAngle& slon,
+    FSDistance& r,
+    FSAngle& lon,
+    FSDistance& z
+)
+{
+    // Inputs
+    SpiceDouble _radius = radius.AsDouble();
+    SpiceDouble _colat = colat.AsDouble();
+    SpiceDouble _slon = slon.AsDouble();
+    // Outputs
+    SpiceDouble _r = 0.;
+    SpiceDouble _lon = 0.;
+    SpiceDouble _z = 0.;
+
+    // Invocation
+    sphcyl_c(_radius, _colat, _slon, &_r, &_lon, &_z);
+
+    // Copy Outputs
+    r = FSDistance(_r);
+    lon = FSAngle(_lon);
+    z = FSDistance(_z);
+}
+
 
 /*
 Exceptions

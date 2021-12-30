@@ -737,6 +737,21 @@ public:
         FSStateVector& state
     );
 
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            ShortToolTip = "Cylindrical to latitudinal",
+            ToolTip = "Convert from cylindrical to latitudinal coordinates"
+            ))
+        static void cyllat(
+            const FSDistance& r,
+            const FSAngle& lonc,
+            const FSDistance& z,
+            FSDistance& radius,
+            FSAngle& lon,
+            FSAngle& lat
+        );
+
     /// <summary>Take a measurement X, the units associated with X, and units to which X should be converted; return Y-- -the value of the measurement in the output units.  Google cspice+convrt for units</summary>
     /// <param name="x">[in] Number representing a measurement in some units</param>
     /// <param name="in">[in] The units in which x is measured</param>
@@ -791,6 +806,21 @@ public:
         const FSAngle& lon,
         const FSDistance& z,
         FSDistanceVector& rectan
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            ShortToolTip = "Cylindrical to spherical",
+            ToolTip = "Convert from cylindrical to spherical coordinates"
+            ))
+    static void cylsph(
+        const FSDistance& r,
+        const FSAngle& lonc,
+        const FSAngle& z,
+        FSDistance& radius,
+        FSAngle& colat,
+        FSAngle& lon
     );
 
     /// <summary>DAF, close</summary>
@@ -1603,6 +1633,20 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            ShortToolTip = "Latitudinal to cylindrical coordinates",
+            ToolTip = "Convert from latitudinal coordinates to cylindrical coordinates"
+            ))
+        static void latcyl(
+            const FSDistance& radius,
+            const FSLonLat& lonlat,
+            FSDistance& r,
+            FSAngle& lonc,
+            FSDistance& z
+        );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
             ShortToolTip = "Latitudinal to rectangular coordinates",
             ToolTip = "Convert from latitudinal coordinates to rectangular coordinates"
             ))
@@ -1610,6 +1654,20 @@ public:
         const FSDistance& radius,
         const FSLonLat& lonlat,
         FSDistanceVector& rectan
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            ShortToolTip = "Latitudinal to spherical coordinates",
+            ToolTip = "Convert from latitudinal coordinates to spherical coordinates"
+            ))
+    static void latsph(
+        const FSDistance& radius,
+        const FSLonLat& lonlat,
+        FSDistance& rho,
+        FSAngle& colat,
+        FSAngle& lons
     );
 
 
@@ -1630,14 +1688,14 @@ public:
             ToolTip = "Evaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value.Return the value of both polynomialand derivative"
             ))
     static void lgrind(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const TArray<double>& xvals,
-            const TArray<double>& yvals,
-            double x,
-            double& p,
-            double& dp
-        );
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const TArray<double>& xvals,
+        const TArray<double>& yvals,
+        double x,
+        double& p,
+        double& dp
+    );
 
     /// <summary>Compute L_s, the planetocentric longitude of the sun, as seen from a specified body</summary>
     /// <param name="body">[in] Name of central body</param>
@@ -3459,6 +3517,20 @@ public:
             ))
     static void spd_day(FSEphemerisPeriod& oneDay);
 
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            ShortToolTip = "Spherical to cylindrical coordinates",
+            ToolTip = "This routine converts from spherical coordinates to cylindrical coordinates"
+            ))
+    static void sphcyl(
+        const FSDistance& radius,
+        const FSAngle& colat,
+        const FSAngle& slon,
+        FSDistance& r,
+        FSAngle& lon,
+        FSDistance& z
+    );
 
     /// <summary>Spherical to latitudinal coordinates</summary>
     /// <param name="r">[in] Distance of the point from the origin</param>
@@ -3474,13 +3546,13 @@ public:
             ShortToolTip = "Spherical to latitudinal coordinates",
             ToolTip = "Convert from spherical coordinates to latitudinal coordinates"
             ))
-        static void sphlat(
-            const FSDistance& r,
-            const FSAngle& colat,
-            const FSAngle& lons,
-            FSDistance& radius,
-            FSLonLat& lonlat
-        );
+    static void sphlat(
+        const FSDistance& r,
+        const FSAngle& colat,
+        const FSAngle& lons,
+        FSDistance& radius,
+        FSLonLat& lonlat
+    );
 
     /// <summary>Spherical to rectangular coordinates</summary>
     /// <param name="r">[in] Distance of a point from the origin</param>
