@@ -1807,6 +1807,32 @@ void USpice::convrt(
 
 /*
 Exceptions
+   Error free.
+*/
+void USpice::cylrec(
+    const FSDistance& r,
+    const FSAngle& lon,
+    const FSDistance& z,
+    FSDistanceVector& rectan
+)
+{
+    // Inputs
+    SpiceDouble _r      = r.AsDouble();
+    SpiceDouble _lon    = lon.AsDouble();
+    SpiceDouble _z      = z.AsDouble();
+    // Output
+    SpiceDouble _rectan[3]; ZeroOut(_rectan);
+
+    // Invocation
+    cylrec_c(_r, _lon, _z, _rectan);
+
+    // Copy Output
+    rectan = FSDistanceVector(_rectan);
+}
+
+
+/*
+Exceptions
 
    1) If the number of comments to be added is not positive, the
       error SPICE(INVALIDARGUMENT) will be signaled.
@@ -5381,6 +5407,37 @@ void USpice::raxisa(
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+/*
+* Exceptions
+ 
+   Error free. 
+*/
+void USpice::reccyl(
+    const FSDistanceVector& rectan,
+    FSDistance& r,
+    FSAngle& lon,
+    FSDistance& z
+)
+{
+    // Input
+    SpiceDouble _rectan[3];
+    rectan.CopyTo(_rectan);
+    
+    // Outputs
+    SpiceDouble _r      = 0.;
+    SpiceDouble _lon    = 0.;
+    SpiceDouble _z      = 0.;
+
+    // Invocation
+    reccyl_c(_rectan, &_r, &_lon, &_z);
+
+    // Copy outputs
+    r = FSDistance(_r);
+    lon = FSAngle(_lon);
+    z = FSDistance(_z);
 }
 
 void USpice::recgeo(
