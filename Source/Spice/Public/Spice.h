@@ -712,7 +712,7 @@ public:
             ShortToolTip = "C, Speed of light in a vacuum",
             ToolTip = "Return the speed of light in a vacuum (IAU official value, in km / sec)"
             ))
-        static void clight(FSSpeed& c);
+    static void clight(FSSpeed& c);
 
     /**
       Determine the state (position, velocity) of an orbiting body
@@ -778,6 +778,19 @@ public:
         FString& ErrorMessage,
         int handle,                       // Todo, make a blue printable abstraction instead of handles!
         const TArray<FString>& comments
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            ShortToolTip = "Cylindrical to rectangular",
+            ToolTip = "Convert from cylindrical to rectangular coordinates"
+            ))
+    static void cylrec(
+        const FSDistance& r,
+        const FSAngle& lon,
+        const FSDistance& z,
+        FSDistanceVector& rectan
     );
 
     /// <summary>DAF, close</summary>
@@ -1211,7 +1224,7 @@ public:
     /// <param name="rectan">[out] Rectangular coordinates of point</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = " Geodetic to rectangular coordinates",
@@ -1588,7 +1601,7 @@ public:
     static void tyear_year(FSEphemerisPeriod& oneTropicalYear);
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Latitudinal to rectangular coordinates",
             ToolTip = "Convert from latitudinal coordinates to rectangular coordinates"
@@ -2487,7 +2500,7 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Convert from range, right ascension, and declination to rectangular coordinates",
             ToolTip = "Convert from range, right ascension, and declination to rectangular coordinates"
@@ -2529,13 +2542,26 @@ public:
             ShortToolTip = "Rotation axis of a matrix",
             ToolTip = "Compute the axis of the rotation given by an input matrix and the angle of the rotation about that axis"
             ))
-        static void raxisa(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSRotationMatrix& matrix,
-            FSDimensionlessVector& axis,
-            FSAngle& angle
-        );
+    static void raxisa(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSRotationMatrix& matrix,
+        FSDimensionlessVector& axis,
+        FSAngle& angle
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            ShortToolTip = "Rectangular to cylindrical coordinates",
+            ToolTip = "Convert from rectangular to cylindrical coordinates"
+            ))
+    static void reccyl(
+        const FSDistanceVector& rectan,
+        FSDistance& r,
+        FSAngle& lon,
+        FSDistance& z
+    );
 
     /// <summary>Convert from rectangular coordinates to geodetic coordinates</summary>
     /// <param name="rectan">[in] Rectangular coordinates of a point</param>
@@ -2546,7 +2572,7 @@ public:
     /// <param name="alt">[out] Altitude of the point above reference spheroid</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Rectangular to geodetic",
             ToolTip = "Convert from rectangular coordinates to geodetic coordinates"
@@ -2566,7 +2592,7 @@ public:
     /// <param name="latitude">[out] Latitude of the point in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Rectangular to latitudinal coordinates",
             ToolTip = "Convert from rectangular coordinates to latitudinal coordinates"
@@ -2579,7 +2605,7 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "Rectangular to planetographic",
@@ -2605,7 +2631,7 @@ public:
     /// <param name="dec">[out] Declination in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Rectangular coordinates to RA and DEC",
             ToolTip = "Convert rectangular coordinates to range, right ascension, and declination"
@@ -2624,7 +2650,7 @@ public:
     /// <param name="lon">[out] Longitude of the point in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Rectangular to spherical coordinates",
             ToolTip = "Convert from rectangular coordinates to spherical coordinates"
@@ -3443,7 +3469,7 @@ public:
     /// <param name="lat">[out] Angle of the point from the XY plane in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Spherical to latitudinal coordinates",
             ToolTip = "Convert from spherical coordinates to latitudinal coordinates"
@@ -3463,7 +3489,7 @@ public:
     /// <param name="rectan">[out] Rectangular coordinates of the point</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ShortToolTip = "Spherical to rectangular coordinates",
             ToolTip = "Convert from spherical coordinates to rectangular coordinates"
@@ -3476,7 +3502,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "Surface to rectangular coordinates",
@@ -4829,19 +4855,6 @@ public:
         SpiceCell* window
     );
 
-    static void reccyl(
-        ConstSpiceDouble     rectan[3],
-        SpiceDouble* r,
-        SpiceDouble* lon,
-        SpiceDouble* z
-    );
-
-    static void cylrec(
-        SpiceDouble r,
-        SpiceDouble lon,
-        SpiceDouble z,
-        SpiceDouble rectan[3]
-    );
 
     static void sphcyl(
         SpiceDouble     radius,
