@@ -196,7 +196,7 @@ public:
             ))
     static void bodfnd(
         ES_FoundCode& found,
-        int64 body = 399,
+        int body = 399,
         const FString& item = TEXT("RADAII")
     );
 
@@ -209,7 +209,7 @@ public:
             ))
     static void bodc2n(
         ES_FoundCode& found,
-        int64 code,
+        int code,
         FString& name
     );
 
@@ -223,7 +223,7 @@ public:
             ))
     static void bodn2c(
         ES_FoundCode& found,
-        int64& code,
+        int& code,
         const FString& name = TEXT("EARTH")
     );
 
@@ -245,7 +245,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         double& ReturnValue,
-        int64 bodyid = 399,
+        int bodyid = 399,
         const FString& item = TEXT("RADII")
     );
 
@@ -260,7 +260,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         FSDimensionlessVector& ReturnValue,
-        int64 bodyid = 399,
+        int bodyid = 399,
         const FString& item = TEXT("RADII")
     );
 
@@ -275,7 +275,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         FSMassConstant& ReturnValue,
-        int64 bodyid = 399,
+        int bodyid = 399,
         const FString& item = TEXT("GM")
     );
 
@@ -290,7 +290,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         FSDistanceVector& ReturnValue,
-        int64 bodyid = 399,
+        int bodyid = 399,
         const FString& item = TEXT("GM")
     );
 
@@ -395,7 +395,7 @@ public:
     static void ckcls(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 handle
+        int handle
     );
 
     /// <summary>Find the coverage window for a specified object in a specified CK file</summary>
@@ -419,7 +419,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         UPARAM(meta = (DisplayName = "project-relative file path")) const FString& ck_relative_path,
-        int64 idcode,
+        int idcode,
         bool need_av,
         double tol,
         UPARAM(meta = (DisplayName = "(optional) existing window to merge results with")) const TArray<FSWindowSegment>& merge_to,
@@ -448,7 +448,7 @@ public:
     static void ckgp(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 inst,
+        int inst,
         double sclkdp,
         double tol,
         const FString& ref,
@@ -477,7 +477,7 @@ public:
     static void ckgpav(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 inst,
+        int inst,
         double sclkdp,
         double tol,
         const FString& ref,
@@ -503,7 +503,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         UPARAM(meta = (DisplayName = "project-relative file path")) const FString& ck_relative_path,
-        int64& handle
+        int& handle
     );
 
     /// <summary>CK objects</summary>
@@ -521,7 +521,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         UPARAM(meta = (DisplayName = "project-relative file path")) const FString& relative_path,
-        TArray<int64>& ids
+        TArray<int>& ids
     );
 
     /// <summary>CK, open new file</summary>
@@ -543,7 +543,7 @@ public:
         UPARAM(meta = (DisplayName = "project-relative file path")) const FString& relativePath,
         UPARAM(meta = (DisplayName = "internal filename")) const FString& ifname,
         UPARAM(meta = (DisplayName = "number of characters to reserve for comments")) const int ncomch,
-        int64& handle
+        int& handle
     );
 
     /// <summary>C-kernel, Unload pointing file</summary>
@@ -556,7 +556,7 @@ public:
             ToolTip = "Unload a CK pointing file so that it will no longer be searched by the readers"
             ))
     static void ckupf(
-        int64 handle
+        int handle
     );
 
     /// <summary>C-Kernel, write segment to C-kernel, data type 1</summary>
@@ -582,10 +582,10 @@ public:
     static void ckw01(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 handle,
+        int handle,
         double begtim,
         double endtim,
-        int64 inst,
+        int inst,
         const FString& ref,
         bool        avflag,
         const FString& segid,
@@ -617,10 +617,10 @@ public:
     static void ckw02(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 handle,
+        int handle,
         double begtim,
         double endtim,
-        int64 inst,
+        int inst,
         const FString& ref,
         const FString& segid,
         const TArray<FSPointingType2Observation>& records
@@ -651,10 +651,10 @@ public:
     static void ckw03(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 handle,
+        int handle,
         double begtim,
         double endtim,
-        int64 inst,
+        int inst,
         const FString& ref,
         bool        avflag,
         const FString& segid,
@@ -690,12 +690,12 @@ public:
     static void ckw05(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 handle,
+        int handle,
         ES_CK05Subtype      subtyp,
         int                 degree,
         double begtim,
         double endtim,
-        int64 inst,
+        int inst,
         const FString& ref,
         bool  avflag,
         const FString& segid,
@@ -776,7 +776,7 @@ public:
     static void dafac(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 handle,                       // Todo, make a blue printable abstraction instead of handles!
+        int handle,                       // Todo, make a blue printable abstraction instead of handles!
         const TArray<FString>& comments
     );
 
@@ -794,7 +794,7 @@ public:
         static void dafcls(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 handle
+            int handle
         );
 
     /// <summary>DAF extract comments</summary>
@@ -816,7 +816,7 @@ public:
         static void dafec(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 handle,
+            int handle,
             TArray<FString>& comments
         );
 
@@ -836,7 +836,7 @@ public:
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
             const FString& relativePath,
-            int64& handle
+            int& handle
         );
 
     /// <summary>DAF, open for write</summary>
@@ -855,7 +855,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         const FString& relativePath,
-        int64& handle
+        int& handle
     );
 
     /// <summary>Return the value of Delta ET (ET-UTC) for an input epoch</summary>
@@ -976,7 +976,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         const FSEphemerisTime& et,
-        int64 body,
+        int body,
         const FSAngle& lon,
         ES_LongitudeType type,
         int& hr,
@@ -1246,7 +1246,7 @@ public:
     static void getfov(
         ES_ResultCode&  ResultCode,
         FString&        ErrorMessage,
-        int64           instid,
+        int           instid,
         FString&        shape,
         FString&        frame,
         FSDimensionlessVector&          bsight,
@@ -1273,7 +1273,7 @@ public:
     static void gipool(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        TArray<int64>& ivals,
+        TArray<int>& ivals,
         bool& found,
         const FString& name,
         int             start,
@@ -1411,7 +1411,7 @@ public:
             ShortToolTip = "Largest integer number",
             ToolTip = "Value of the largest (positive) number representable in a SpiceInt variable"
             ))
-    static void intmax(int64& int_max);
+    static void intmax(int& int_max);
 
     /// <summary>Return the value of the smallest (negative) number representable in a SpiceInt variable</summary>
     /// <returns>the smallest (negative) number that can be represented in a SpiceInt variable</returns>
@@ -1421,7 +1421,7 @@ public:
             ShortToolTip = "Smallest integer number",
             ToolTip = "Value of the smallest(negative) number representable in a SpiceInt variable"
             ))
-    static void intmin(int64& int_min);
+    static void intmin(int& int_min);
 
     /// <summary>Generate the inverse of a 3x3 matrix</summary>
     /// <param name="m1">[in] Matrix to be inverted</param>
@@ -1875,7 +1875,7 @@ public:
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
             const FString& frname,
-            int64& frcode
+            int& frcode
         );
 
     /// <summary>Find the nearest point on an ellipse to a specified point, both in three - dimensional space, and find the distance between the ellipseand the point</summary>
@@ -2065,6 +2065,95 @@ public:
     );
 
 
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Pck",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "PCK coverage",
+            ToolTip = "Find the coverage window for a specified reference frame in a specified binary PCK file"
+            ))
+    static void pckcov(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& pckFileRelativePath,
+        int           idcode,
+        const TArray<FSWindowSegment>& mergeWith,
+        TArray<FSWindowSegment>& coverage
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Pck",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "PCK reference frame class ID set",
+            ToolTip = "Find the set of reference frame class ID codes of all frames in a specified binary PCK file"
+            ))
+    static void pckfrm(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& pckRelativePath,
+        TArray<int>& ids
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Put character strings into the kernel pool",
+            ToolTip = "Provides a method for programmatically inserting character data into the kernel pool"
+            ))
+    static void pcpool_list(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        const TArray<FString>& cvals
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Put character strings into the kernel pool",
+            ToolTip = "Provides a method for programmatically inserting character data into the kernel pool"
+            ))
+    static void pcpool(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        const FString& cval
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Put d.p.'s into the kernel pool",
+            ToolTip = "Provides a method for programmatically inserting double precision data into the kernel pool"
+            ))
+    static void pdpool_list(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        const TArray<double>& dvals
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Put d.p.'s into the kernel pool",
+            ToolTip = "Provides a method for programmatically inserting double precision data into the kernel pool"
+            ))
+    static void pdpool(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        double dval
+    );
+
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Geometry",
         meta = (
@@ -2105,6 +2194,36 @@ public:
     static void pi_angle(FSAngle& pi);
 
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Put integers into the kernel pool",
+            ToolTip = "Provides a method for programmatically inserting integer data into the kernel pool"
+            ))
+    static void pipool_list(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        const TArray<int>& ivals
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Put integers into the kernel pool",
+            ToolTip = "Provides a method for programmatically inserting integer data into the kernel pool"
+            ))
+    static void pipool(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        int ival
+    );
+
+
+
     /// <summary>Project an ellipse onto a plane, orthogonally</summary>
     /// <param name="elin">A CSPICE ellipse to be projected</param>
     /// <param name="plane">A plane onto which elin is to be projected</param>
@@ -2124,6 +2243,7 @@ public:
         const FSPlane& plane,
         FSEllipse& elout
     );
+
 
     /// <summary>Return a unit normal vector and constant that define a specified plane</summary>
     /// <param name="plane">[in] A CSPICE plane</param>
@@ -2568,7 +2688,7 @@ public:
         static void scdecd(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             double sclkdp,
             FString& sclkch
         );
@@ -2588,7 +2708,7 @@ public:
         static void sce2c(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             const FSEphemerisTime& et,
             double& sclkdp
         );
@@ -2609,7 +2729,7 @@ public:
         static void sce2s(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             const FSEphemerisTime& et,
             FString& sclkch
         );
@@ -2629,7 +2749,7 @@ public:
         static void sce2t(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             const FSEphemerisTime& et,
             double& sclkdp
         );
@@ -2649,7 +2769,7 @@ public:
         static void scencd(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             const FString& sclkch,
             double& sclkdp
         );
@@ -2670,7 +2790,7 @@ public:
         static void scfmt(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             double ticks,
             FString& clkstr
         );
@@ -2691,7 +2811,7 @@ public:
         static void scpart(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             TArray<double>& pstart,
             TArray<double>& pstop
         );
@@ -2711,7 +2831,7 @@ public:
         static void scs2e(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             const FString& sclkch,
             FSEphemerisTime& et
         );
@@ -2731,7 +2851,7 @@ public:
         static void sct2e(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 sc,
+            int sc,
             double sclkdp,
             FSEphemerisTime& et
         );
@@ -2751,7 +2871,7 @@ public:
     static void sctiks(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        int64 sc,
+        int sc,
         const FString& clkstr,
         double& ticks
     );
@@ -2795,7 +2915,7 @@ public:
         static void spkcls(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 handle
+            int handle
         );
 
 
@@ -2820,7 +2940,7 @@ public:
         const FString& spk_relative_path,
 
         UPARAM(meta = (DisplayName = "is the integer ID code of an object in the ephemeris file"))
-        int64 idcode,
+        int idcode,
 
         UPARAM(meta = (DisplayName = "(optional) existing window to merge results with"))
         const TArray<FSWindowSegment>& merge_to,
@@ -2994,8 +3114,8 @@ public:
             const FSEphemerisTime& et,
             FSDistanceVector& ptarg,
             FSEphemerisPeriod& lt,
-            int64 targ,
-            int64 obs,
+            int targ,
+            int obs,
             const FString& ref,
             ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::None
         );
@@ -3047,9 +3167,9 @@ public:
         static void spkgeo(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 targ,
+            int targ,
             const FSEphemerisTime& et,
-            int64 obs,
+            int obs,
             FSStateVector& state,
             FSEphemerisPeriod& lt,
             const FString& ref = TEXT("ECLIPJ2000")
@@ -3074,9 +3194,9 @@ public:
         static void spkgps(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 targ,
+            int targ,
             const FSEphemerisTime& et,
-            int64 obs,
+            int obs,
             FSDistanceVector& pos,
             FSEphemerisPeriod& lt,
             const FString& ref = TEXT("ECLIPJ2000")
@@ -3127,7 +3247,7 @@ public:
             FString& ErrorMessage,
             UPARAM(meta = (DisplayName = "project-relative file path"))
             const FString& filename,
-            int64& handle
+            int& handle
         );
 
     /// <summary>Find the set of ID codes of all objects in a specified SPK file</summary>
@@ -3146,7 +3266,7 @@ public:
             FString& ErrorMessage,
             UPARAM(meta = (DisplayName = "project-relative file path"))
             const FString& relative_path,
-            TArray<int64>& ids
+            TArray<int>& ids
         );
 
     /// <summary>SPK open for addition</summary>
@@ -3165,7 +3285,7 @@ public:
             FString& ErrorMessage,
             UPARAM(meta = (DisplayName = "project-relative file path"))
             const FString& file,
-            int64& handle
+            int& handle
         );
 
     /// <summary>SPK, open new file</summary>
@@ -3187,7 +3307,7 @@ public:
             const FString& name,
             const FString& ifname,
             int         ncomch,
-            int64& handle
+            int& handle
         );
 
     /// <summary>S/P Kernel, Unload ephemeris file</summary>
@@ -3200,7 +3320,7 @@ public:
             ToolTip = "Unload an ephemeris file so that it will no longer be searched by the readers"
             ))
         static void spkuef(
-            int64 handle
+            int handle
         );
 
     /// <summary>Write SPK segment, type 5</summary>
@@ -3226,9 +3346,9 @@ public:
         static void spkw05(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            int64 handle,
-            int64 body,
-            int64 center,
+            int handle,
+            int body,
+            int center,
             const FString& frame,
             const FSEphemerisTime& first,
             const FSEphemerisTime& last,
@@ -3311,7 +3431,7 @@ public:
         FString& ErrorMessage,
         const FSLonLat& lonlat,
         FSDistanceVector& rectan,
-        int64           body = 399
+        int           body = 399
         );
 
     /// <summary>String to ET</summary>
@@ -4281,10 +4401,10 @@ public:
             ShortToolTip = "Transpose a matrix, 3x3",
             ToolTip = "Indicate whether a 3-vector is the zero vector"
             ))
-        static void xpose(
-            const FSRotationMatrix& m1,
-            FSRotationMatrix& mout
-        );
+    static void xpose(
+        const FSRotationMatrix& m1,
+        FSRotationMatrix& mout
+    );
 
 
     /// <summary></summary>
@@ -4303,24 +4423,6 @@ public:
 
 
 #if defined(IN_PROGRESS)
-    static void pckfrm(
-        ES_ResultCode& ResultCode,
-        FString& ErrorMessage,
-        const FString& pckRelativePath,
-        TArray<int64>& ids
-    );
-
-    static void pckcov(
-        ES_ResultCode& ResultCode,
-        FString& ErrorMessage,
-        const FString& pckFileRelativePath,
-        int64           idcode,
-        const TArray<FSWindowSegment>& mergeWith,
-        TArray<FSWindowSegment>& coverage
-    );
-
-
-
     static void gfoclt(
         ConstSpiceChar* occtyp,
         ConstSpiceChar* front,
