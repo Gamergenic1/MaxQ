@@ -2799,6 +2799,25 @@ void USpice::getfov(
 }
 
 
+#if 0
+void USpice::gfoclt(
+    ConstSpiceChar* occtyp,
+    ConstSpiceChar* front,
+    ConstSpiceChar* fshape,
+    ConstSpiceChar* fframe,
+    ConstSpiceChar* back,
+    ConstSpiceChar* bshape,
+    ConstSpiceChar* bframe,
+    ConstSpiceChar* abcorr,
+    ConstSpiceChar* obsrvr,
+    SpiceDouble        step,
+    SpiceCell* cnfine,
+    SpiceCell* result
+)
+{
+}
+#endif
+
 void USpice::gipool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
@@ -4281,6 +4300,154 @@ void USpice::nvp2pl(
 
     // Return Value - copy the plane back out back out
     CopyFrom(_plane, plane);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+FString GeometricModelString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
+{
+
+    if (model == ES_GeometricModel::ELLIPSOID)
+    {
+        return FString(TEXT("ELLIPSOID"));
+    }
+    else if (model == ES_GeometricModel::POINT)
+    {
+        return FString(TEXT("POINT"));
+    }
+
+    // From the docs:
+    // "DSK/UNPRIORITIZED[/SURFACES = <surface list>]"
+    // Which makes it look like UPRIORITIZED isn't optional or mutually esclusive with a list of surfaces..
+    // Is that correct, though?
+
+    FString result = "DSK/UNPRIORITIZED";
+
+    if (shapeSurfaces.Num() > 0)
+    {
+        result += "/SURFACES = ";
+
+        int num = shapeSurfaces.Num();
+
+        for (int i = 0; i < num; ++i)
+        {
+            result += shapeSurfaces[i];
+
+            if (i + 1 < num)
+            {
+                result += ", ";
+            }
+        }
+    }
+
+    return result;
+}
+
+
+void USpice::occult(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    ES_OccultationType& ocltid,
+    FString& front,
+    FString& back,
+    const FSEphemerisTime& et,
+    const TArray<FString>& shape1Surfaces,
+    const TArray<FString>& shape2Surfaces,
+    const FString& targ1,
+    ES_GeometricModel shape1,
+    const FString& frame1,
+    const FString& targ2,
+    ES_GeometricModel shape2,
+    const FString& frame2,
+    ES_AberrationCorrectionForOccultation abcorr,
+    const FString& obsrvr
+)
+{
+    // Inputs
+    ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
+    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*GeometricModelString(shape1, shape1Surfaces));
+    ConstSpiceChar* _frame1 = TCHAR_TO_ANSI(*frame1);
+    ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
+    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*GeometricModelString(shape2, shape2Surfaces));
+    ConstSpiceChar* _frame2 = TCHAR_TO_ANSI(*frame2);
+    ConstSpiceChar* _abcorr;
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble        _et = et.AsDouble();
+
+    switch (abcorr)
+    {
+    case ES_AberrationCorrectionForOccultation::LT:
+        _abcorr = "LT";
+        break;
+    case ES_AberrationCorrectionForOccultation::CN:
+        _abcorr = "CN";
+        break;
+    case ES_AberrationCorrectionForOccultation::XLT:
+        _abcorr = "XLT";
+        break;
+    case ES_AberrationCorrectionForOccultation::XCN:
+        _abcorr = "XCN";
+        break;
+    case ES_AberrationCorrectionForOccultation::None:
+    default:
+        _abcorr = "NONE";
+    }
+
+    // Output
+    SpiceInt _ocltid = 0;
+
+    // Invocation
+    occult_c(
+        _targ1,
+        _shape1,
+        _frame1,
+        _targ2,
+        _shape2,
+        _frame2,
+        _abcorr,
+        _obsrvr,
+        _et,
+        &_ocltid
+    );
+
+    // Pack output
+    if (_ocltid > 0)
+    {
+        front = targ1;
+        back = targ2;
+    }
+    else if (_ocltid < 0)
+    {
+        front = targ2;
+        back = targ1;
+    }
+    else
+    {
+        front = back = TEXT("");
+    }
+
+    switch (_ocltid)
+    {
+    case -1:
+    case 1:
+        ocltid = ES_OccultationType::PARTIAL;
+        break;
+    case -2:
+    case 2:
+        ocltid = ES_OccultationType::ANNULAR;
+            break;
+    case -3:
+    case 3:
+        ocltid = ES_OccultationType::FULL;
+            break;
+    case 0:
+    default:
+        ocltid = ES_OccultationType::None;
+            break;
+    }
+
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
