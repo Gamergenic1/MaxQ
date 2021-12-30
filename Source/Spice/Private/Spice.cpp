@@ -17,6 +17,10 @@ PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 #define LONG_MESSAGE_MAX_LENGTH 1841
 
+// May need a little rewrite for any platforms that don't support stack allocations.
+#define StackAlloc _alloca
+
+
 USpice::USpice()
 {
 
@@ -619,7 +623,7 @@ Exceptions
 */
 void USpice::bodfnd(
     ES_FoundCode& found,
-    int64 body,
+    int body,
     const FString& item
 )
 {
@@ -634,7 +638,7 @@ void USpice::bodfnd(
 
 void USpice::bodc2n(
     ES_FoundCode& found,
-    int64 code,
+    int code,
     FString& name
 )
 {
@@ -677,7 +681,7 @@ Exceptions
 */
 void USpice::bodn2c(
     ES_FoundCode& found,
-    int64& code,
+    int& code,
     const FString& name
 )
 {
@@ -689,7 +693,7 @@ void USpice::bodn2c(
 
     if (_found != SPICEFALSE)
     {
-        code = (int64)_code;
+        code = (int)_code;
         found = ES_FoundCode::Found;
     }
     else
@@ -735,7 +739,7 @@ void USpice::bodvcd_scalar(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     double& ReturnValue,
-    int64 bodyid,
+    int bodyid,
     const FString& item
 )
 {
@@ -758,7 +762,7 @@ void USpice::bodvcd_mass(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     FSMassConstant& ReturnValue,
-    int64 bodyid,
+    int bodyid,
     const FString& item
 )
 {
@@ -781,7 +785,7 @@ void USpice::bodvcd_distance_vector(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     FSDistanceVector& ReturnValue,
-    int64 bodyid,
+    int bodyid,
     const FString& item
 )
 {
@@ -839,7 +843,7 @@ void USpice::bodvcd_vector(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     FSDimensionlessVector& ReturnValue,
-    int64 bodyid,
+    int bodyid,
     const FString& item
 )
 {
@@ -1030,7 +1034,7 @@ Exceptions
 void USpice::ckcls(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle
+    int handle
 )
 {
     // Inputs
@@ -1094,7 +1098,7 @@ void USpice::ckcov(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& ck_relative_path,
-    int64 idcode,
+    int idcode,
     bool                            need_av,
     double tol,
     const TArray<FSWindowSegment>& merge_to,
@@ -1224,7 +1228,7 @@ Exceptions
 void USpice::ckgp(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 inst,
+    int inst,
     double sclkdp,
     double tol,
     const FString& ref,
@@ -1258,7 +1262,7 @@ void USpice::ckgp(
 void USpice::ckgpav(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 inst,
+    int inst,
     double sclkdp,
     double tol,
     const FString& ref,
@@ -1296,7 +1300,7 @@ void USpice::cklpf(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& relativePath,
-    int64& handle
+    int& handle
 )
 {
     auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
@@ -1347,7 +1351,7 @@ void USpice::ckobj(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& relativePath,
-    TArray<int64>& ids
+    TArray<int>& ids
 )
 {
     const int MAXOBJ = 1000;
@@ -1364,7 +1368,7 @@ void USpice::ckobj(
     // Invocation
     ckobj_c(_fname, _ids);
 
-    ids = TArray<int64>();
+    ids = TArray<int>();
     int count = card_c(_ids);
     for (int i = 0; i < count; i++)
     {
@@ -1392,7 +1396,7 @@ void USpice::ckopn(
     const FString& relativePath,
     const FString& ifname,
     const int ncomch,
-    int64& handle
+    int& handle
 )
 {
     // Inputs
@@ -1422,7 +1426,7 @@ Exceptions
       table, nothing happens.
 */
 void USpice::ckupf(
-    int64 handle
+    int handle
 )
 {
     // Inputs
@@ -1436,10 +1440,10 @@ void USpice::ckupf(
 void USpice::ckw01(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle,
+    int handle,
     double begtim,
     double endtim,
-    int64 inst,
+    int inst,
     const FString& ref,
     bool        avflag,
     const FString& segid,
@@ -1455,9 +1459,9 @@ void USpice::ckw01(
     SpiceBoolean        _avflag = avflag ? SPICETRUE : SPICEFALSE;
     ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
     SpiceInt        _nrec = records.Num();
-    SpiceDouble* _sclkdp = (SpiceDouble*)_alloca(_nrec * sizeof(SpiceDouble));
-    SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])_alloca(_nrec * sizeof(SpiceDouble[4]));
-    SpiceDouble(*_avvs)[3] = (SpiceDouble(*)[3])_alloca(_nrec * sizeof(SpiceDouble[3]));
+    SpiceDouble* _sclkdp = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
+    SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])StackAlloc(_nrec * sizeof(SpiceDouble[4]));
+    SpiceDouble(*_avvs)[3] = (SpiceDouble(*)[3])StackAlloc(_nrec * sizeof(SpiceDouble[3]));
 
     for (int i = 0; i < records.Num(); ++i)
     {
@@ -1477,10 +1481,10 @@ void USpice::ckw01(
 void USpice::ckw02(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle,
+    int handle,
     double begtim,
     double endtim,
-    int64 inst,
+    int inst,
     const FString& ref,
     const FString& segid,
     const TArray<FSPointingType2Observation>& records
@@ -1494,11 +1498,11 @@ void USpice::ckw02(
     ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
     ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
     SpiceInt        _nrec = records.Num();
-    SpiceDouble* _start = (SpiceDouble*)_alloca(_nrec * sizeof(SpiceDouble));
-    SpiceDouble* _stop = (SpiceDouble*)_alloca(_nrec * sizeof(SpiceDouble));
-    SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])_alloca(_nrec * sizeof(SpiceDouble[4]));
-    SpiceDouble(*_avvs)[3] = (SpiceDouble(*)[3])_alloca(_nrec * sizeof(SpiceDouble[3]));
-    SpiceDouble* _rates = (SpiceDouble*)_alloca(_nrec * sizeof(SpiceDouble));
+    SpiceDouble* _start = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
+    SpiceDouble* _stop = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
+    SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])StackAlloc(_nrec * sizeof(SpiceDouble[4]));
+    SpiceDouble(*_avvs)[3] = (SpiceDouble(*)[3])StackAlloc(_nrec * sizeof(SpiceDouble[3]));
+    SpiceDouble* _rates = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
 
     for (int i = 0; i < records.Num(); ++i)
     {
@@ -1518,10 +1522,10 @@ void USpice::ckw02(
 void USpice::ckw03(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle,
+    int handle,
     double begtim,
     double endtim,
-    int64 inst,
+    int inst,
     const FString& ref,
     bool        avflag,
     const FString& segid,
@@ -1538,9 +1542,9 @@ void USpice::ckw03(
     SpiceBoolean    _avflag = avflag ? SPICETRUE : SPICEFALSE;
     ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
     SpiceInt        _nrec = records.Num();
-    SpiceDouble* _sclkdp = (SpiceDouble*)_alloca(_nrec * sizeof(SpiceDouble));
-    SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])_alloca(_nrec * sizeof(SpiceDouble[4]));
-    SpiceDouble(*_avvs)[3] = (SpiceDouble(*)[3])_alloca(_nrec * sizeof(SpiceDouble[3]));
+    SpiceDouble* _sclkdp = (SpiceDouble*)StackAlloc(_nrec * sizeof(SpiceDouble));
+    SpiceDouble(*_quats)[4] = (SpiceDouble(*)[4])StackAlloc(_nrec * sizeof(SpiceDouble[4]));
+    SpiceDouble(*_avvs)[3] = (SpiceDouble(*)[3])StackAlloc(_nrec * sizeof(SpiceDouble[3]));
 
     for (int i = 0; i < _nrec; ++i)
     {
@@ -1550,7 +1554,7 @@ void USpice::ckw03(
     }
 
     SpiceInt        _nints = starts.Num();
-    SpiceDouble* _starts = (SpiceDouble*)_alloca(_nints * sizeof(SpiceDouble));
+    SpiceDouble* _starts = (SpiceDouble*)StackAlloc(_nints * sizeof(SpiceDouble));
     for (int i = 0; i < _nints; ++i)
     {
         _starts[i] = starts[i];
@@ -1566,12 +1570,12 @@ void USpice::ckw03(
 void USpice::ckw05(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle,
+    int handle,
     ES_CK05Subtype      subtyp,
     int                 degree,
     double begtim,
     double endtim,
-    int64 inst,
+    int inst,
     const FString& ref,
     bool  avflag,
     const FString& segid,
@@ -1593,18 +1597,18 @@ void USpice::ckw05(
     SpiceDouble         _rate = rate;
 
     SpiceInt        _nints = starts.Num();
-    SpiceDouble* _starts = (SpiceDouble*)_alloca(_nints * sizeof(SpiceDouble));
+    SpiceDouble* _starts = (SpiceDouble*)StackAlloc(_nints * sizeof(SpiceDouble));
     for (int i = 0; i < _nints; ++i)
     {
         _starts[i] = starts[i];
     }
 
     SpiceInt        _n = records.Num();
-    SpiceDouble* _sclkdp = (SpiceDouble*)_alloca(_n * sizeof(SpiceDouble));
+    SpiceDouble* _sclkdp = (SpiceDouble*)StackAlloc(_n * sizeof(SpiceDouble));
     const void* _packts = nullptr;
     if (subtyp == ES_CK05Subtype::Hermite8)
     {
-        SpiceDouble(*__packts)[8] = (SpiceDouble(*)[8])_alloca(_n * sizeof(SpiceDouble[8]));
+        SpiceDouble(*__packts)[8] = (SpiceDouble(*)[8])StackAlloc(_n * sizeof(SpiceDouble[8]));
         for (int i = 0; i < _n; i++)
         {
             records[i].CopyToSubtype1(_sclkdp[i], __packts[i]);
@@ -1613,7 +1617,7 @@ void USpice::ckw05(
     }
     else if (subtyp == ES_CK05Subtype::Lagrange4)
     {
-        SpiceDouble(*__packts)[4] = (SpiceDouble(*)[4])_alloca(_n * sizeof(SpiceDouble[4]));
+        SpiceDouble(*__packts)[4] = (SpiceDouble(*)[4])StackAlloc(_n * sizeof(SpiceDouble[4]));
         for (int i = 0; i < _n; i++)
         {
             records[i].CopyToSubtype2(_sclkdp[i], __packts[i]);
@@ -1622,7 +1626,7 @@ void USpice::ckw05(
     }
     else if (subtyp == ES_CK05Subtype::Hermite14)
     {
-        SpiceDouble(*__packts)[14] = (SpiceDouble(*)[14])_alloca(_n * sizeof(SpiceDouble[14]));
+        SpiceDouble(*__packts)[14] = (SpiceDouble(*)[14])StackAlloc(_n * sizeof(SpiceDouble[14]));
         for (int i = 0; i < _n; i++)
         {
             records[i].CopyToSubtype3(_sclkdp[i], __packts[i]);
@@ -1631,7 +1635,7 @@ void USpice::ckw05(
     }
     else if (subtyp == ES_CK05Subtype::Lagrange7)
     {
-        SpiceDouble(*__packts)[7] = (SpiceDouble(*)[7])_alloca(_n * sizeof(SpiceDouble[7]));
+        SpiceDouble(*__packts)[7] = (SpiceDouble(*)[7])StackAlloc(_n * sizeof(SpiceDouble[7]));
         for (int i = 0; i < _n; i++)
         {
             records[i].CopyToSubtype4(_sclkdp[i], __packts[i]);
@@ -1766,7 +1770,7 @@ Exceptions
 void USpice::dafac(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle,
+    int handle,
     const TArray<FString>& comments
 )
 {
@@ -1778,7 +1782,7 @@ void USpice::dafac(
     }
     size_t bytesPerLine = maxCommentLineLength * sizeof(SpiceChar);
     size_t totalBytes = comments.Num() * bytesPerLine;
-    SpiceChar* _buffer = (SpiceChar*)_alloca(totalBytes);
+    SpiceChar* _buffer = (SpiceChar*)StackAlloc(totalBytes);
     memset(_buffer, 0, totalBytes);
 
     for (int32 i = 0; i < comments.Num(); ++i)
@@ -1814,7 +1818,7 @@ Exceptions
 void USpice::dafcls(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle
+    int handle
 )
 {
     // Input
@@ -1858,7 +1862,7 @@ Exceptions
 void USpice::dafec(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle,
+    int handle,
     TArray<FString>& comments
 )
 {
@@ -1879,7 +1883,7 @@ void USpice::dafec(
     SpiceBoolean _done = SPICEFALSE;
 
     size_t chafBufferSize = _bufsiz * _lenout * sizeof(SpiceChar);
-    _buffer = (SpiceChar*)_alloca(chafBufferSize);
+    _buffer = (SpiceChar*)StackAlloc(chafBufferSize);
 
     while (!_done)
     {
@@ -1946,7 +1950,7 @@ void USpice::dafopr(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& relativePath,
-    int64& handle
+    int& handle
 )
 {
     // Input
@@ -2016,7 +2020,7 @@ void USpice::dafopw(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& relativePath,
-    int64& handle
+    int& handle
 )
 {
     // Input
@@ -2234,7 +2238,7 @@ void USpice::et2lst(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FSEphemerisTime& et,
-    int64 body,
+    int body,
     const FSAngle& lon,
     ES_LongitudeType type,
     int& hr,
@@ -2511,9 +2515,9 @@ void USpice::frame(
 void USpice::gcpool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    TArray<FString>& cvals,
-    bool& found,
-    const FString& name,
+    TArray<FString>&    cvals,
+    bool&               found,
+    const FString&      name,
     int                 start,
     int                 room
 )
@@ -2526,7 +2530,7 @@ void USpice::gcpool(
     // Outputs
     SpiceInt        _n = 0;
     size_t buffer_size = _lenout * _room * sizeof(SpiceChar);
-    void* _cvals = _alloca(buffer_size);
+    void* _cvals = StackAlloc(buffer_size);
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
@@ -2562,7 +2566,7 @@ void USpice::gdpool(
     // Outputs
     SpiceInt        _n = 0;
     size_t buffer_size = _room * sizeof(SpiceDouble);
-    SpiceDouble* _values = (SpiceDouble*)_alloca(buffer_size);
+    SpiceDouble* _values = (SpiceDouble*)StackAlloc(buffer_size);
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
@@ -2749,7 +2753,7 @@ void USpice::georec(
 void USpice::getfov(
     ES_ResultCode& ResultCode,
     FString&    ErrorMessage,
-    int64       instid,
+    int       instid,
     FString&    shape,
     FString&    frame,
     FSDimensionlessVector&          bsight,
@@ -2798,7 +2802,7 @@ void USpice::getfov(
 void USpice::gipool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    TArray<int64>& ivals,
+    TArray<int>& ivals,
     bool& found,
     const FString& name,
     int             start,
@@ -2812,7 +2816,7 @@ void USpice::gipool(
     // Outputs
     SpiceInt        _n = 0;
     size_t buffer_size = _room * sizeof(SpiceInt);
-    SpiceInt* _ivals = (SpiceInt*)_alloca(buffer_size);
+    SpiceInt* _ivals = (SpiceInt*)StackAlloc(buffer_size);
     SpiceBoolean    _found = SPICEFALSE;
 
     // invocation
@@ -2820,10 +2824,10 @@ void USpice::gipool(
     gipool_c(_name, _start, _room, &_n, _ivals, &_found);
 
     // Return values
-    ivals = TArray<int64>();
+    ivals = TArray<int>();
     for (int i = 0; i < _n; ++i)
     {
-        ivals.Add((int64)*((SpiceInt*)_ivals + i));
+        ivals.Add((int)*((SpiceInt*)_ivals + i));
     }
 
     // Error Handling
@@ -2848,7 +2852,7 @@ void USpice::gnpool(
     // Outputs
     SpiceInt        _n = 0;
     size_t buffer_size = _lenout * _room * sizeof(SpiceChar);
-    void* _kvars = _alloca(buffer_size);
+    void* _kvars = StackAlloc(buffer_size);
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
@@ -3052,7 +3056,7 @@ void USpice::srfrec(
     FString& ErrorMessage,
     const FSLonLat& lonlat,
     FSDistanceVector&   rectan,
-    int64           body
+    int           body
 )
 {
     // Inputs
@@ -3496,10 +3500,10 @@ void USpice::hrmint(
 {
     // Inputs
     SpiceInt		_n = xvals.Num();
-    SpiceDouble* _xvals = (SpiceDouble*)_alloca(xvals.Num() * sizeof(SpiceDouble));
-    SpiceDouble* _yvals = (SpiceDouble*)_alloca(yvals.Num() * sizeof(SpiceDouble));
+    SpiceDouble* _xvals = (SpiceDouble*)StackAlloc(xvals.Num() * sizeof(SpiceDouble));
+    SpiceDouble* _yvals = (SpiceDouble*)StackAlloc(yvals.Num() * sizeof(SpiceDouble));
     SpiceDouble		_x = x;
-    SpiceDouble* _work = (SpiceDouble*)_alloca(4 * _n * sizeof(SpiceDouble));
+    SpiceDouble* _work = (SpiceDouble*)StackAlloc(4 * _n * sizeof(SpiceDouble));
     for (int i = 0; i < xvals.Num(); i++) _xvals[i] = xvals[i];
     for (int i = 0; i < yvals.Num(); i++) _yvals[i] = yvals[i];
     // Outputs
@@ -3610,7 +3614,7 @@ void USpice::inelpl(
 }
 
 
-void USpice::intmax(int64& int_max)
+void USpice::intmax(int& int_max)
 {
     SpiceInt _int_max = intmax_c();
 
@@ -3621,7 +3625,7 @@ void USpice::intmax(int64& int_max)
     int_max = _int_max;
 }
 
-void USpice::intmin(int64& int_min)
+void USpice::intmin(int& int_min)
 {
     SpiceInt _int_min = intmin_c();
 
@@ -3821,9 +3825,9 @@ void USpice::lgrind(
 {
     // Inputs
     SpiceInt		_n = xvals.Num();
-    SpiceDouble* _xvals = (SpiceDouble*)_alloca(xvals.Num() * sizeof(SpiceDouble));
-    SpiceDouble* _yvals = (SpiceDouble*)_alloca(xvals.Num() * sizeof(SpiceDouble));
-    SpiceDouble* _work = (SpiceDouble*)_alloca(2 * xvals.Num() * sizeof(SpiceDouble));
+    SpiceDouble* _xvals = (SpiceDouble*)StackAlloc(xvals.Num() * sizeof(SpiceDouble));
+    SpiceDouble* _yvals = (SpiceDouble*)StackAlloc(xvals.Num() * sizeof(SpiceDouble));
+    SpiceDouble* _work = (SpiceDouble*)StackAlloc(2 * xvals.Num() * sizeof(SpiceDouble));
     SpiceDouble		_x = x;
     for (int i = 0; i < xvals.Num(); i++) _xvals[i] = xvals[i];
     for (int i = 0; i < yvals.Num(); i++) _yvals[i] = yvals[i];
@@ -4011,7 +4015,7 @@ void USpice::namfrm(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& frname,
-    int64& frcode
+    int& frcode
 )
 {
     // Input
@@ -4023,7 +4027,7 @@ void USpice::namfrm(
     namfrm_c(_frname, &_frcode);
 
     // Return Value
-    frcode = int64(_frcode);
+    frcode = int(_frcode);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -4325,6 +4329,339 @@ void USpice::oscltx(
     UnexpectedErrorCheck();
 }
 
+void USpice::pckfrm(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& pckRelativePath,
+    TArray<int>& ids
+)
+{
+    const int MAXOBJ = 1000;
+
+    SPICEINT_CELL(idscell, MAXOBJ);
+
+    // Inputs
+    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
+    ConstSpiceChar* _pck = TCHAR_TO_ANSI(*(gameDir + pckRelativePath));
+
+    // Outputs
+    SpiceCell* _ids = &idscell;
+
+    // Invocation
+    spkobj_c(_pck, _ids);
+
+    ids = TArray<int>();
+    int count = card_c(_ids);
+    for (int i = 0; i < count; i++)
+    {
+        SpiceInt id = SPICE_CELL_ELEM_I(_ids, i);
+        ids.Add(int(id));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void checkcov(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& pckFileRelativePath,
+    int idcode,
+    const TArray<FSWindowSegment>& merge_to,
+    TArray<FSWindowSegment>& coverage,
+    void (*covfunction)(ConstSpiceChar* pck, SpiceInt idcode, SpiceCell* cover)
+)
+{
+    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
+    auto path = FPaths::Combine(gameDir, pckFileRelativePath);
+
+    const int smallCellSize = 100;
+    const int largeCellSize = 10000;
+
+    // Inputs
+    ConstSpiceChar* _pck = TCHAR_TO_ANSI(*path);
+    SpiceInt        _idcode = idcode;
+    SpiceCell* _cover;
+
+    SpiceBoolean haveData = false;
+    SPICEDOUBLE_CELL(_cover_small, smallCellSize);
+    _cover = &_cover_small;
+
+    if (merge_to.Num() <= smallCellSize / 2)
+    {
+        // Outputs
+        if (merge_to.Num() > 0)
+        {
+            for (int i = 0; i < merge_to.Num(); ++i)
+            {
+                appndd_c(merge_to[i].start, _cover);
+                appndd_c(merge_to[i].stop, _cover);
+            }
+        }
+
+        // Invocation
+        scard_c(0, _cover);
+        pckcov_c(_pck, _idcode, _cover);
+
+        haveData = !failed_c();
+    }
+
+    if (!haveData)
+    {
+        if (merge_to.Num() <= largeCellSize / 2)
+        {
+            reset_c();
+
+            SPICEDOUBLE_CELL(_cover_large, largeCellSize);
+            _cover = &_cover_large;
+
+            if (merge_to.Num() > 0)
+            {
+                for (int i = 0; i < merge_to.Num(); ++i)
+                {
+                    appndd_c(merge_to[i].start, _cover);
+                    appndd_c(merge_to[i].stop, _cover);
+                }
+            }
+
+            // Re-Invocation
+            scard_c(0, _cover);
+            pckcov_c(_pck, _idcode, _cover);
+
+            haveData = !failed_c();
+        }
+        else
+        {
+            setmsg_c("[in] Window Segment count = #; maximum allowed value is #");
+            errdp_c("#", merge_to.Num());
+            errdp_c("#", largeCellSize / 2);
+            sigerr_c("SPICE(VALUEOUTOFRANGE)");
+        }
+    }
+
+    // Return Values
+    coverage = TArray<FSWindowSegment>();
+    if (haveData)
+    {
+        int niv = wncard_c(_cover);
+        for (int i = 0; i < niv; ++i)
+        {
+            SpiceDouble _start, _stop;
+            wnfetd_c(_cover, i, &_start, &_stop);
+            coverage.Add(FSWindowSegment(_start, _stop));
+        }
+    }
+
+    // Error Handling
+   USpice::ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+/*
+Exceptions
+
+   1)  If the input file has transfer format, the error
+       SPICE(INVALIDFORMAT) is signaled.
+
+   2)  If the input file is not a transfer file but has architecture
+       other than DAF, the error SPICE(BADARCHTYPE) is signaled.
+
+   3)  If the input file is a binary DAF file of type other than
+       PCK, the error SPICE(BADFILETYPE) is signaled.
+
+   4)  If the PCK file cannot be opened or read, the error will
+       be diagnosed by routines called by this routine. The output
+       window will not be modified.
+
+   5)  If the size of the output window argument COVER is
+       insufficient to contain the actual number of intervals in the
+       coverage window for IDCODE, the error will be diagnosed by
+       routines called by this routine.
+
+   6)  The error SPICE(EMPTYSTRING) is signaled if the input
+       string `pck' does not contain at least one character, since the
+       input string cannot be converted to a Fortran-style string in
+       this case.
+
+   7)  The error SPICE(NULLPOINTER) is signaled if the input string
+       pointer `pck' is null.
+*/
+void USpice::pckcov(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& pckFileRelativePath,
+    int idcode,
+    const TArray<FSWindowSegment>& merge_to,
+    TArray<FSWindowSegment>& coverage
+)
+{
+    ::checkcov(ResultCode, ErrorMessage, pckFileRelativePath, idcode, merge_to, coverage, pckcov_c);
+}
+
+
+/*
+Exceptions
+
+   1) If name is already present in the kernel pool and there
+      is sufficient room to hold all values supplied in values,
+      the old values associated with name will be overwritten.
+
+   2) If there is not sufficient room to insert a new variable
+      into the kernel pool and name is not already present in
+      the kernel pool, the error SPICE(KERNELPOOLFULL) is
+      signaled by a routine in the call tree to this routine.
+
+   3) If there is not sufficient room to insert the values associated
+      with name, the error SPICE(NOMOREROOM) will be signaled.
+
+   4) If either input string pointer is null, the error
+      SPICE(NULLPOINTER) will be signaled.
+
+   5) If the input string name has length zero, the error
+      SPICE(EMPTYSTRING) will be signaled.
+
+   6) If the input cvals string length is less than 2, the error
+      SPICE(STRINGTOOSHORT) will be signaled.
+
+   7) The error 'SPICE(BADVARNAME)' signals if the kernel pool
+      variable name length exceeds 32.
+*/
+void USpice::pcpool_list(
+    ES_ResultCode&          ResultCode,
+    FString&                ErrorMessage,
+    const FString&          name,
+    const TArray<FString>&  cvals
+)
+{
+    int32 maxLen = 1;
+    for (auto It = cvals.CreateConstIterator(); It; ++It)
+    {
+        int thisLen = (*It).Len()+1;
+        maxLen = FMath::Max(thisLen, maxLen);
+    }
+
+    int count = cvals.Num();
+    size_t string_size = maxLen * sizeof(SpiceChar);
+    size_t buffer_size = count * string_size;
+    void* buffer = StackAlloc(buffer_size);
+    memset(buffer, 0, buffer_size);
+
+    for (int i = 0; i < count; ++i)
+    {
+        const FString& fstringValue = cvals[i];
+        const char* src = TCHAR_TO_ANSI(*fstringValue);
+        char* dest = (char*)buffer + i * string_size;
+        strcpy_s(dest, buffer_size, src);
+    }
+
+    // Inputs
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt        _n = (SpiceInt)count;
+    SpiceInt        _lenvals = (SpiceInt)maxLen;
+    const void*     _cvals = buffer;
+
+    pcpool_c(_name, _n, _lenvals, _cvals);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::pcpool(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name,
+    const FString& cval
+)
+{
+    // Inputs
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt        _n = 1;
+    SpiceInt        _lenvals = (SpiceInt)(cval.Len()+1);
+    const void* _cvals = TCHAR_TO_ANSI(*cval);
+
+    pcpool_c(_name, _n, _lenvals, _cvals);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+/*
+Exceptions
+
+   1) If name is already present in the kernel pool and there
+      is sufficient room to hold all values supplied in dvals,
+      the old values associated with name will be overwritten.
+
+   2) If there is not sufficient room to insert a new variable
+      into the kernel pool and name is not already present in
+      the kernel pool, the error SPICE(KERNELPOOLFULL) is
+      signaled by a routine in the call tree to this routine.
+
+   3) If there is not sufficient room to insert the values associated
+      with name, the error SPICE(NOMOREROOM) will be signaled.
+
+   4) If the input string pointer name is null, the error
+      SPICE(NULLPOINTER) will be signaled.
+
+   5) If the input string name has length zero, the error
+      SPICE(EMPTYSTRING) will be signaled.
+
+   6) The error 'SPICE(BADVARNAME)' signals if the kernel pool
+      variable name length exceeds 32.
+*/
+void USpice::pdpool_list(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name,
+    const TArray<double>& dvals
+)
+{
+    if (sizeof(double) == sizeof(ConstSpiceDouble))
+    {
+        // Inputs
+        ConstSpiceChar*     _name = TCHAR_TO_ANSI(*name);
+        SpiceInt            _n = dvals.Num();
+        ConstSpiceDouble*   _dvals = dvals.GetData();
+
+        // Invocation
+        pdpool_c(_name, _n, _dvals);
+    }
+    else
+    {
+        // In the unlikely event GetData() cannot be used for some platform signal an error.
+        // It is preferable to clearly call out the (unanticipated) situation for a future
+        // fix than insert untestable memberwise-copy logic.
+        setmsg_c("Size of double = #; Size of ConstSpiceDouble = #");
+        errdp_c("#", sizeof(double));
+        errdp_c("#", sizeof(ConstSpiceDouble));
+        sigerr_c("SPICE(NOTSUPPORTED)");
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::pdpool(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name,
+    double dval
+)
+{
+    // Inputs
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt            _n = 1;
+    SpiceDouble _dval = (SpiceDouble)dval;
+
+    // Invocation
+    pdpool_c(_name, _n, &_dval);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 /*
 Exceptions
@@ -4405,6 +4742,83 @@ void USpice::pi(double& pi)
 void USpice::pi_angle(FSAngle& _pi)
 {
     _pi = FSAngle(pi_c());
+}
+
+
+/*
+Exceptions
+
+   1) If name is already present in the kernel pool and there
+      is sufficient room to hold all values supplied in values,
+      the old values associated with name will be overwritten.
+
+   2) If there is not sufficient room to insert a new variable
+      into the kernel pool and name is not already present in
+      the kernel pool, the error SPICE(KERNELPOOLFULL) is
+      signaled by a routine in the call tree to this routine.
+
+   3) If there is not sufficient room to insert the values associated
+      with name, the error SPICE(NOMOREROOM) will be signaled.
+
+   4) If the input string pointer name is null, the error
+      SPICE(NULLPOINTER) will be signaled.
+
+   5) If the input string name has length zero, the error
+      SPICE(EMPTYSTRING) will be signaled.
+
+   6) The error 'SPICE(BADVARNAME)' signals if the kernel pool
+      variable name length exceeds 32.
+*/
+void USpice::pipool_list(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name,
+    const TArray<int>& ivals
+)
+{
+    if (sizeof(int) == sizeof(SpiceInt))
+    {
+        // Inputs
+        ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+        SpiceInt          _n = ivals.Num();
+        ConstSpiceInt* _ivals = (SpiceInt*)ivals.GetData();
+
+        // Invocation
+        pipool_c(_name, _n, _ivals);
+    }
+    else
+    {
+        // In the unlikely event GetData() cannot be used for some platform signal an error.
+        // It is preferable to clearly call out the (unanticipated) situation for a future
+        // fix than insert untestable memberwise-copy logic.
+        setmsg_c("Size of int = #; Size of SpiceInt = #");
+        errdp_c("#", sizeof(int));
+        errdp_c("#", sizeof(SpiceInt));
+        sigerr_c("SPICE(NOTSUPPORTED)");
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::pipool(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name,
+    int ival
+)
+{
+    // Inputs
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt        _n = 1;
+    SpiceInt        _ival = (SpiceInt)ival;
+
+    // Invocation
+    pipool_c(_name, _n, &_ival);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
 }
 
 /*
@@ -5065,7 +5479,7 @@ Exceptions
 void USpice::scdecd(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     double sclkdp,
     FString& sclkch
 )
@@ -5128,7 +5542,7 @@ Exceptions
 void USpice::sce2c(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     const FSEphemerisTime& et,
     double& sclkdp
 )
@@ -5187,7 +5601,7 @@ Exceptions
 void USpice::sce2s(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     const FSEphemerisTime& et,
     FString& sclkch
 )
@@ -5251,7 +5665,7 @@ Exceptions
 void USpice::sce2t(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     const FSEphemerisTime& et,
     double& clkdp
 )
@@ -5311,7 +5725,7 @@ Exceptions
 void USpice::scencd(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     const FString& sclkch,
     double& sclkdp
 )
@@ -5362,7 +5776,7 @@ Exceptions
 void USpice::scfmt(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     double ticks,
     FString& clkstr
 )
@@ -5401,7 +5815,7 @@ Exceptions
 void USpice::scpart(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     TArray<double>& pstart,
     TArray<double>& pstop
 )
@@ -5466,7 +5880,7 @@ Exceptions
 void USpice::scs2e(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     const FString& sclkch,
     FSEphemerisTime& et
 )
@@ -5525,7 +5939,7 @@ Exceptions
 void USpice::sct2e(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     double sclkdp,
     FSEphemerisTime& et
 )
@@ -5562,7 +5976,7 @@ Exceptions
 void USpice::sctiks(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 sc,
+    int sc,
     const FString& clkstr,
     double& ticks
 )
@@ -5833,7 +6247,7 @@ Exceptions
 void USpice::spkcls(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle
+    int handle
 )
 {
     // Inputs
@@ -5881,94 +6295,13 @@ Exceptions
 void USpice::spkcov(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FString& spk_relative_path,
-    int64 idcode,
+    const FString& spkFileRelativePath,
+    int idcode,
     const TArray<FSWindowSegment>& merge_to,
     TArray<FSWindowSegment>& coverage
 )
 {
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    auto path = FPaths::Combine(gameDir, spk_relative_path);
-
-    const int smallCellSize = 100;
-    const int largeCellSize = 10000;
-
-    // Inputs
-    ConstSpiceChar* _spk = TCHAR_TO_ANSI(*path);
-    SpiceInt        _idcode = idcode;
-    SpiceCell* _cover;
-
-    SpiceBoolean haveData = false;
-    SPICEDOUBLE_CELL(_cover_small, smallCellSize);
-    _cover = &_cover_small;
-
-    if (merge_to.Num() <= smallCellSize / 2)
-    {
-        // Outputs
-        if (merge_to.Num() > 0)
-        {
-            for (int i = 0; i < merge_to.Num(); ++i)
-            {
-               appndd_c(merge_to[i].start, _cover);
-               appndd_c(merge_to[i].stop, _cover);
-            }
-        }
-
-        // Invocation
-        scard_c(0, _cover);
-        spkcov_c(_spk, _idcode, _cover);
-
-        haveData = !failed_c();
-    }
-
-    if (!haveData)
-    {
-        if (merge_to.Num() <= largeCellSize / 2)
-        {
-            reset_c();
-
-            SPICEDOUBLE_CELL(_cover_large, largeCellSize);
-            _cover = &_cover_large;
-
-            if (merge_to.Num() > 0)
-            {
-                for (int i = 0; i < merge_to.Num(); ++i)
-                {
-                    appndd_c(merge_to[i].start, _cover);
-                    appndd_c(merge_to[i].stop, _cover);
-                }
-            }
-
-            // Re-Invocation
-            scard_c(0, _cover);
-            spkcov_c(_spk, _idcode, _cover);
-
-            haveData = !failed_c();
-        }
-        else
-        {
-            setmsg_c("[in] Window Segment count = #; maximum allowed value is #");
-            errdp_c("#", merge_to.Num());
-            errdp_c("#", largeCellSize / 2);
-            sigerr_c("SPICE(VALUEOUTOFRANGE)");
-        }
-    }
-
-    // Return Values
-    coverage = TArray<FSWindowSegment>();
-    if (haveData)
-    {
-        int niv = wncard_c(_cover);
-        for (int i = 0; i < niv; ++i)
-        {
-            SpiceDouble _start, _stop;
-            wnfetd_c(_cover, i, &_start, &_stop);
-            coverage.Add(FSWindowSegment(_start, _stop));
-        }
-    }
-
-    // Error Handling
-    ErrorCheck(ResultCode, ErrorMessage);
+    ::checkcov(ResultCode, ErrorMessage, spkFileRelativePath, idcode, merge_to, coverage, spkcov_c);
 }
 
 
@@ -6348,8 +6681,8 @@ void USpice::spkezp(
     const FSEphemerisTime& et,
     FSDistanceVector& ptarg,
     FSEphemerisPeriod& lt,
-    int64 targ,
-    int64 obs,
+    int targ,
+    int obs,
     const FString& ref,
     ES_AberrationCorrectionWithNewtonians abcorr
 )
@@ -6422,9 +6755,9 @@ Exceptions
 void USpice::spkgeo(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 targ,
+    int targ,
     const FSEphemerisTime& et,
-    int64 obs,
+    int obs,
     FSStateVector& state,
     FSEphemerisPeriod& lt,
     const FString& ref
@@ -6452,9 +6785,9 @@ Exceptions
 void USpice::spkgps(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 targ,
+    int targ,
     const FSEphemerisTime& et,
-    int64 obs,
+    int obs,
     FSDistanceVector& pos,
     FSEphemerisPeriod& lt,
     const FString& ref
@@ -6534,7 +6867,7 @@ void USpice::spklef(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& relativePath,
-    int64& handle
+    int& handle
 )
 {
     // Input
@@ -6548,7 +6881,7 @@ void USpice::spklef(
     spklef_c(_filename, &_handle);
 
     // Return Value
-    handle = int64(_handle);
+    handle = int(_handle);
 
     // Error handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -6587,7 +6920,7 @@ void USpice::spkobj(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& relativePath,
-    TArray<int64>& ids
+    TArray<int>& ids
 )
 {
     const int MAXOBJ = 1000;
@@ -6604,12 +6937,12 @@ void USpice::spkobj(
     // Invocation
     spkobj_c(_fname, _ids);
 
-    ids = TArray<int64>();
+    ids = TArray<int>();
     int count = card_c(_ids);
     for (int i = 0; i < count; i++)
     {
         SpiceInt id = SPICE_CELL_ELEM_I(_ids, i);
-        ids.Add(int64(id));
+        ids.Add(int(id));
     }
 
     // Error Handling
@@ -6640,7 +6973,7 @@ void USpice::spkopa(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FString& relativePath,
-    int64& handle
+    int& handle
 )
 {
     // Inputs
@@ -6654,7 +6987,7 @@ void USpice::spkopa(
     spkopa_c(_file, &_handle);
 
     // Return Value
-    handle = int64(_handle);
+    handle = int(_handle);
 
     // Error handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -6682,7 +7015,7 @@ void USpice::spkopn(
     const FString& relativePath,
     const FString& ifname,
     int         ncomch,
-    int64& handle
+    int& handle
 )
 {
     // Inputs
@@ -6698,7 +7031,7 @@ void USpice::spkopn(
     spkopn_c(_file, _ifname, _ncomch, &_handle);
 
     // Return Value
-    handle = int64(_handle);
+    handle = int(_handle);
 
     // Error handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -6712,7 +7045,7 @@ Exceptions
    None.
 */
 void USpice::spkuef(
-    int64 handle
+    int handle
 )
 {
     // Input
@@ -6726,9 +7059,9 @@ void USpice::spkuef(
 void USpice::spkw05(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    int64 handle,
-    int64 body,
-    int64 center,
+    int handle,
+    int body,
+    int center,
     const FString& frame,
     const FSEphemerisTime& first,
     const FSEphemerisTime& last,
@@ -6748,8 +7081,8 @@ void USpice::spkw05(
     SpiceDouble      _gm = gm.AsDouble();
     SpiceInt         _n = states.Num();
 
-    SpiceDouble(*_states)[6] = (SpiceDouble(*)[6])_alloca(_n * sizeof(SpiceDouble[6]));
-    SpiceDouble* _epochs = (SpiceDouble*)_alloca(_n * sizeof(SpiceDouble));
+    SpiceDouble(*_states)[6] = (SpiceDouble(*)[6])StackAlloc(_n * sizeof(SpiceDouble[6]));
+    SpiceDouble* _epochs = (SpiceDouble*)StackAlloc(_n * sizeof(SpiceDouble));
 
     for (int i = 0; i < states.Num(); ++i)
     {
