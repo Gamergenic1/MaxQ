@@ -1254,22 +1254,33 @@ public:
     );
 
 
-#if 0
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "GF, find occultation",
+            ToolTip = "Determine time intervals when an observer sees one target occulted by, or in transit across, another",
+            AutoCreateRefTerm = "frontShapeSurfaces, backShapeSurfaces"
+            ))
     static void gfoclt(
-        ConstSpiceChar* occtyp,
-        ConstSpiceChar* front,
-        ConstSpiceChar* fshape,
-        ConstSpiceChar* fframe,
-        ConstSpiceChar* back,
-        ConstSpiceChar* bshape,
-        ConstSpiceChar* bframe,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble        step,
-        SpiceCell* cnfine,
-        SpiceCell* result
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const FSEphemerisTime& start,
+        const FSEphemerisTime& stop,
+        const FSEphemerisPeriod& step,
+        const TArray<FString>& frontShapeSurfaces,
+        const TArray<FString>& backShapeSurfaces,
+        ES_OccultationType occtyp = ES_OccultationType::ANY,
+        const FString& front = TEXT("MOON"),
+        ES_GeometricModel frontShape = ES_GeometricModel::ELLIPSOID,
+        const FString& frontframe = TEXT("IAU_MOON"),
+        const FString& back = TEXT("SUN"),
+        ES_GeometricModel backShape = ES_GeometricModel::ELLIPSOID,
+        const FString& backFrame = TEXT("IAU_SUN"),
+        ES_AberrationCorrectionForOccultation abcorr = ES_AberrationCorrectionForOccultation::CN,
+        const FString& obsrvr = TEXT("EARTH")
     );
-#endif
 
     /// <summary>Get integers from the kernel pool</summary>
     /// <param name="name">[in] Name of the variable whose value is to be returned</param>

@@ -20,6 +20,67 @@ PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 // May need a little rewrite for any platforms that don't support stack allocations.
 #define StackAlloc _alloca
 
+ConstSpiceChar* toString(ES_AberrationCorrectionForOccultation abcorr)
+{
+    switch (abcorr)
+    {
+    case ES_AberrationCorrectionForOccultation::LT:
+        return "LT";
+        break;
+    case ES_AberrationCorrectionForOccultation::CN:
+        return "CN";
+        break;
+    case ES_AberrationCorrectionForOccultation::XLT:
+        return "XLT";
+        break;
+    case ES_AberrationCorrectionForOccultation::XCN:
+        return "XCN";
+        break;
+    }
+
+    return "NONE";
+}
+
+
+FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
+{
+
+    if (model == ES_GeometricModel::ELLIPSOID)
+    {
+        return FString(TEXT("ELLIPSOID"));
+    }
+    else if (model == ES_GeometricModel::POINT)
+    {
+        return FString(TEXT("POINT"));
+    }
+
+    // From the docs:
+    // "DSK/UNPRIORITIZED[/SURFACES = <surface list>]"
+    // Which makes it look like UPRIORITIZED isn't optional or mutually esclusive with a list of surfaces..
+    // Is that correct, though?
+
+    FString result = "DSK/UNPRIORITIZED";
+
+    if (shapeSurfaces.Num() > 0)
+    {
+        result += "/SURFACES = ";
+
+        int num = shapeSurfaces.Num();
+
+        for (int i = 0; i < num; ++i)
+        {
+            result += shapeSurfaces[i];
+
+            if (i + 1 < num)
+            {
+                result += ", ";
+            }
+        }
+    }
+
+    return result;
+}
+
 
 USpice::USpice()
 {
@@ -2799,24 +2860,90 @@ void USpice::getfov(
 }
 
 
-#if 0
 void USpice::gfoclt(
-    ConstSpiceChar* occtyp,
-    ConstSpiceChar* front,
-    ConstSpiceChar* fshape,
-    ConstSpiceChar* fframe,
-    ConstSpiceChar* back,
-    ConstSpiceChar* bshape,
-    ConstSpiceChar* bframe,
-    ConstSpiceChar* abcorr,
-    ConstSpiceChar* obsrvr,
-    SpiceDouble        step,
-    SpiceCell* cnfine,
-    SpiceCell* result
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const FSEphemerisTime& start,
+    const FSEphemerisTime& stop,
+    const FSEphemerisPeriod& step,
+    const TArray<FString>& frontShapeSurfaces,
+    const TArray<FString>& backShapeSurfaces,
+    ES_OccultationType occtyp,
+    const FString& front,
+    ES_GeometricModel frontShape,
+    const FString& frontframe,
+    const FString& back,
+    ES_GeometricModel backShape,
+    const FString& backFrame,
+    ES_AberrationCorrectionForOccultation abcorr,
+    const FString& obsrvr
 )
 {
+    const int MAXWIN = 200;
+
+    ConstSpiceChar* _occtyp;
+    ConstSpiceChar* _front = TCHAR_TO_ANSI(*front);
+    ConstSpiceChar* _fshape = TCHAR_TO_ANSI(*toFString(frontShape, frontShapeSurfaces));
+    ConstSpiceChar* _fframe = TCHAR_TO_ANSI(*frontframe);
+    ConstSpiceChar* _back = TCHAR_TO_ANSI(*back);
+    ConstSpiceChar* _bshape = TCHAR_TO_ANSI(*toFString(backShape, backShapeSurfaces));
+    ConstSpiceChar* _bframe = TCHAR_TO_ANSI(*backFrame);
+    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _step = step.AsDouble();
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    wninsd_c(start.AsDouble(), stop.AsDouble(), &_cnfine);
+
+    switch (occtyp)
+    {
+    case ES_OccultationType::FULL:
+        _occtyp = "FULL";
+        break;
+    case ES_OccultationType::ANNULAR:
+        _occtyp = "ANNULAR";
+        break;
+    case ES_OccultationType::PARTIAL:
+        _occtyp = "PARTIAL";
+        break;
+    case ES_OccultationType::ANY:
+    default:
+        _occtyp = "ANY";
+        break;
+    };
+
+    // Outputs
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gfoclt_c(
+        _occtyp,
+        _front,
+        _fshape,
+        _fframe,
+        _back,
+        _bshape,
+        _bframe,
+        _abcorr,
+        _obsrvr,
+        _step,
+        &_cnfine,
+        &_result
+    );
+
+    results.Empty();
+
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
 }
-#endif
 
 void USpice::gipool(
     ES_ResultCode& ResultCode,
@@ -4306,46 +4433,6 @@ void USpice::nvp2pl(
 }
 
 
-FString GeometricModelString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
-{
-
-    if (model == ES_GeometricModel::ELLIPSOID)
-    {
-        return FString(TEXT("ELLIPSOID"));
-    }
-    else if (model == ES_GeometricModel::POINT)
-    {
-        return FString(TEXT("POINT"));
-    }
-
-    // From the docs:
-    // "DSK/UNPRIORITIZED[/SURFACES = <surface list>]"
-    // Which makes it look like UPRIORITIZED isn't optional or mutually esclusive with a list of surfaces..
-    // Is that correct, though?
-
-    FString result = "DSK/UNPRIORITIZED";
-
-    if (shapeSurfaces.Num() > 0)
-    {
-        result += "/SURFACES = ";
-
-        int num = shapeSurfaces.Num();
-
-        for (int i = 0; i < num; ++i)
-        {
-            result += shapeSurfaces[i];
-
-            if (i + 1 < num)
-            {
-                result += ", ";
-            }
-        }
-    }
-
-    return result;
-}
-
-
 void USpice::occult(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
@@ -4367,33 +4454,14 @@ void USpice::occult(
 {
     // Inputs
     ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
-    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*GeometricModelString(shape1, shape1Surfaces));
+    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*toFString(shape1, shape1Surfaces));
     ConstSpiceChar* _frame1 = TCHAR_TO_ANSI(*frame1);
     ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
-    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*GeometricModelString(shape2, shape2Surfaces));
+    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*toFString(shape2, shape2Surfaces));
     ConstSpiceChar* _frame2 = TCHAR_TO_ANSI(*frame2);
-    ConstSpiceChar* _abcorr;
+    ConstSpiceChar* _abcorr = toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble        _et = et.AsDouble();
-
-    switch (abcorr)
-    {
-    case ES_AberrationCorrectionForOccultation::LT:
-        _abcorr = "LT";
-        break;
-    case ES_AberrationCorrectionForOccultation::CN:
-        _abcorr = "CN";
-        break;
-    case ES_AberrationCorrectionForOccultation::XLT:
-        _abcorr = "XLT";
-        break;
-    case ES_AberrationCorrectionForOccultation::XCN:
-        _abcorr = "XCN";
-        break;
-    case ES_AberrationCorrectionForOccultation::None:
-    default:
-        _abcorr = "NONE";
-    }
 
     // Output
     SpiceInt _ocltid = 0;
