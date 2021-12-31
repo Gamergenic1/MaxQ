@@ -131,12 +131,44 @@ enum class ES_Axis : uint8
 UENUM(BlueprintType)
 enum class ES_CoordinateSystem : uint8
 {
-    RECTANGULAR     UMETA(DisplayName = "Rectangular"),
-    CYLINDRICAL     UMETA(DisplayName = "Cylindrical"),
-    LATITUDINAL     UMETA(DisplayName = "Latitudinal"),
-    SPHERICAL       UMETA(DisplayName = "Spherical"),
-    GEODETIC        UMETA(DisplayName = "Geodetic"),
-    PLANETOGRAPHIC  UMETA(DisplayName = "Planetographic")
+    NONE            = 0 UMETA(Hidden),
+    RECTANGULAR     = 1 UMETA(DisplayName = "Rectangular"),
+    CYLINDRICAL     = 2 UMETA(DisplayName = "Cylindrical"),
+    LATITUDINAL     = 3 UMETA(DisplayName = "Latitudinal"),
+    SPHERICAL       = 4 UMETA(DisplayName = "Spherical"),
+    GEODETIC        = 5 UMETA(DisplayName = "Geodetic"),
+    PLANETOGRAPHIC  = 6 UMETA(DisplayName = "Planetographic")
+};
+
+UENUM(BlueprintType)
+enum class ES_CoordinateSystemInclRadec : uint8
+{
+    NONE            = 0 UMETA(Hidden),
+    RECTANGULAR     = 1 UMETA(DisplayName = "Rectangular"),
+    CYLINDRICAL     = 2 UMETA(DisplayName = "Cylindrical"),
+    LATITUDINAL     = 3 UMETA(DisplayName = "Latitudinal"),
+    SPHERICAL       = 4 UMETA(DisplayName = "Spherical"),
+    GEODETIC        = 5 UMETA(DisplayName = "Geodetic"),
+    PLANETOGRAPHIC  = 6 UMETA(DisplayName = "Planetographic"),
+    RADEC           = 7 UMETA(DisplayName = "Range/RA/Dec")
+};
+
+
+UENUM(BlueprintType)
+enum class ES_CoordinateName : uint8
+{
+    NONE UMETA(Hidden),
+    X               UMETA(DisplayName = "X"),
+    Y               UMETA(DisplayName = "Y"),
+    Z               UMETA(DisplayName = "Z"),
+    RADIUS          UMETA(DisplayName = "Radius"),
+    LONGITUDE       UMETA(DisplayName = "Longitude"),
+    LATITUDE        UMETA(DisplayName = "Latitude"),
+    RANGE           UMETA(DisplayName = "Range"),
+    RIGHT_ASCENSION UMETA(DisplayName = "Right Ascension"),
+    DECLINATION     UMETA(DisplayName = "Declination"),
+    COLATITUDE      UMETA(DisplayName = "Colatitude"),
+    ALTITUDE        UMETA(DisplayName = "Altitude")
 };
 
 
@@ -158,6 +190,21 @@ enum class ES_OccultationType : uint8
     PARTIAL UMETA(DisplayName = "Partial"),
     ANY     UMETA(DisplayName = "Any occultation/transit")
 };
+
+
+UENUM(BlueprintType)
+enum class ES_RelationalOperator : uint8
+{
+    None        UMETA(Hidden),
+    GreaterThan UMETA(DisplayName = ">"),
+    Equal       UMETA(DisplayName = "="),
+    LessThan    UMETA(DisplayName = "<"),
+    ABSMAX      UMETA(DisplayName = "Absolute Maximum"),
+    ABSMIN      UMETA(DisplayName = "Absolute Minimum"),
+    LOCMAX      UMETA(DisplayName = "Local Maximum"),
+    LOCMIN      UMETA(DisplayName = "Local Minimum")
+};
+
 
 
 UENUM(BlueprintType)
@@ -245,8 +292,6 @@ enum class ES_Items : uint8
 ENUM_CLASS_FLAGS(ES_Items);
 
 
-
-
 USTRUCT(BlueprintType)
 struct FSDimensionlessVector
 {
@@ -286,6 +331,7 @@ struct FSDimensionlessVector
 
     static SPICE_API const FSDimensionlessVector Zero;
 };
+
 
 USTRUCT(BlueprintType)
 struct FSDistance
@@ -736,6 +782,16 @@ inline static FSEphemerisTime operator+(const FSEphemerisTime& A, const FSEpheme
     return FSEphemerisTime(A.AsDouble() + B.AsDouble());
 }
 
+inline static bool operator>(const FSEphemerisTime& A, const FSEphemerisTime& B)
+{
+    return A.AsDouble() > B.AsDouble();
+}
+
+inline static bool operator<(const FSEphemerisTime& A, const FSEphemerisTime& B)
+{
+    return A.AsDouble() < B.AsDouble();
+}
+
 inline static FSEphemerisPeriod operator+(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return FSEphemerisPeriod(A.AsDouble() + B.AsDouble());
@@ -769,6 +825,16 @@ inline static double operator/(const FSEphemerisPeriod& A, const FSEphemerisPeri
 inline static FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, double B)
 {
     return FSEphemerisPeriod(A.AsDouble() / B);
+}
+
+inline static bool operator>(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+{
+    return A.AsDouble() > B.AsDouble();
+}
+
+inline static bool operator<(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+{
+    return A.AsDouble() < B.AsDouble();
 }
 
 
@@ -1580,8 +1646,8 @@ struct FSEphemerisTimeWindowSegment
 
     FSEphemerisTimeWindowSegment()
     {
-        start = 0.;
-        stop = 0.;
+        start = FSEphemerisTime::J2000;
+        stop = FSEphemerisTime::J2000;
     }
 
     FSEphemerisTimeWindowSegment(
@@ -1589,16 +1655,26 @@ struct FSEphemerisTimeWindowSegment
         double _stop
     )
     {
+        start = FSEphemerisTime(_start);
+        stop = FSEphemerisTime(_stop);
+    }
+
+    FSEphemerisTimeWindowSegment(
+        const FSEphemerisTime& _start,
+        const FSEphemerisTime& _stop
+    )
+    {
         start = _start;
         stop = _stop;
     }
+
 
     FSEphemerisTimeWindowSegment(
         const double(&_segment)[2]
     )
     {
-        start = _segment[0];
-        stop = _segment[1];
+        start = FSEphemerisTime(_segment[0]);
+        stop = FSEphemerisTime(_segment[1]);
     }
 
     void CopyTo(
@@ -2053,6 +2129,25 @@ public:
         const FSEphemerisTime& value
     );
 
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ShortToolTip = "String to Epheremis Time.",
+            ToolTip = "Converts a string to an Epheremis Time.  If the string fails to convert an error will remain signalled in SPICE, which the downstream computation will detect."
+            ))
+    static FSEphemerisTime Conv_StringToSEpheremisTime(const FString& time);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ShortToolTip = "String to Epheremis Time.",
+            ToolTip = "Converts a string to an Epheremis Time.  If the string fails to convert an error will remain signalled in SPICE, which the downstream computation will detect."
+            ))
+    static FString Conv_SEpheremisTimeToString(const FSEphemerisTime& et);
+
+
     /// <summary>Converts a double (sec past J2000) to an ephemeris time</summary>
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Types",
@@ -2382,6 +2477,26 @@ public:
     UFUNCTION(BlueprintPure, meta = (DisplayName = "velocity + velocity", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Velocity")
     static FSVelocityVector Add_SVelocityVectorSVelocityVector(const FSVelocityVector& A, const FSVelocityVector& B);
 
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Math|Time", meta = (ToolTip = "Creates a simple ephemeris time window"))
+    static void SingleEtWindow(
+        const FSEphemerisTime& et0,
+        const FSEphemerisTime& et1,
+        TArray<FSEphemerisTimeWindowSegment>& Window
+    );
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts degrees to an angle"))
+    static void Degrees2Angle(FSAngle& angle, double degrees = 0.);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts an angle to degrees"))
+    static void Angle2Degrees(const FSAngle& angle, double& degrees);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts radians to an angle"))
+    static void Radians2Angle(FSAngle& angle, double radians = 0.);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Math|Angle", meta = (ToolTip = "Converts an angle to radians"))
+    static void Angle2Radians(const FSAngle& angle, double& radians);
+    
     /*
     *
     * Swizzling Conversions

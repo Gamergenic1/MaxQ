@@ -1301,6 +1301,29 @@ public:
         Category = "Spice|Api|Geometry",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "adjust, refval",
+            ShortToolTip = "GF, distance search",
+            ToolTip = "Return the time window over which a specified constraint on observer - target distance is met"
+            ))
+    static void gfdist(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FSEphemerisPeriod& step,
+        const FSDistance& refval,
+        const FSDistance& adjust,
+        const FString& target = TEXT("MOON"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::None,
+        const FString& obsrvr = TEXT("EARTH"),
+        ES_RelationalOperator relate = ES_RelationalOperator::GreaterThan
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "GF, find occultation",
             ToolTip = "Determine time intervals when an observer sees one target occulted by, or in transit across, another",
             AutoCreateRefTerm = "frontShapeSurfaces, backShapeSurfaces"
@@ -1309,8 +1332,7 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FSEphemerisTimeWindowSegment>& results,
-        const FSEphemerisTime& start,
-        const FSEphemerisTime& stop,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
         const FSEphemerisPeriod& step,
         const TArray<FString>& frontShapeSurfaces,
         const TArray<FString>& backShapeSurfaces,
@@ -1324,6 +1346,41 @@ public:
         ES_AberrationCorrectionForOccultation abcorr = ES_AberrationCorrectionForOccultation::CN,
         const FString& obsrvr = TEXT("EARTH")
     );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AdvancedDisplay = "nintvls",
+            ShortToolTip = "GF, observer-target vector coordinate search",
+            ToolTip = "Determine time intervals for which a coordinate of an observer - target position vector satisfies a numerical constraint"
+            ))
+    static void gfposc(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const FSEphemerisPeriod& step,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FString& target = TEXT("SUN"),
+        const FString& frame = TEXT("IAU_EARTH"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::None,
+        const FString& obsrvr = TEXT("EARTH"),
+        ES_CoordinateSystemInclRadec crdsys = ES_CoordinateSystemInclRadec::LATITUDINAL,
+        ES_CoordinateName coord = ES_CoordinateName::LATITUDE,
+        ES_RelationalOperator relate = ES_RelationalOperator::ABSMAX,
+        double          refval = 0.,
+        double          adjust = 0.,
+        int nintvls = 750
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ShortToolTip = "GF, set a tolerance value for GF",
+            ToolTip = "Override the default GF convergence value used in the high level GF routines."
+            ))
+    static void gfstol(double value);
 
     /// <summary>Get integers from the kernel pool</summary>
     /// <param name="name">[in] Name of the variable whose value is to be returned</param>
@@ -3898,12 +3955,12 @@ public:
             ShortToolTip = "UTC to Ephemeris Time",
             ToolTip = "Convert an input time from Calendar or Julian Date format, UTC, to ephemeris seconds past J2000"
             ))
-        static void utc2et(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FString& utcstr,
-            FSEphemerisTime& et
-        );
+    static void utc2et(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& utcstr,
+        FSEphemerisTime& et
+    );
 
     /// <summary>Vector addition, 3 dimensional</summary>
     /// <param name="v1">[in] First vector to be added</param>
@@ -3916,44 +3973,44 @@ public:
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
-        static void vadd_distance(
-            const FSDistanceVector& v1,
-            const FSDistanceVector& v2,
-            FSDistanceVector& vout
-        );
+    static void vadd_distance(
+        const FSDistanceVector& v1,
+        const FSDistanceVector& v2,
+        FSDistanceVector& vout
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
-        static void vadd_velocity(
-            const FSVelocityVector& v1,
-            const FSVelocityVector& v2,
-            FSVelocityVector& vout
-        );
+    static void vadd_velocity(
+        const FSVelocityVector& v1,
+        const FSVelocityVector& v2,
+        FSVelocityVector& vout
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
-        static void vadd_angular_velocity(
-            const FSAngularVelocity& v1,
-            const FSAngularVelocity& v2,
-            FSAngularVelocity& vout
-        );
+    static void vadd_angular_velocity(
+        const FSAngularVelocity& v1,
+        const FSAngularVelocity& v2,
+        FSAngularVelocity& vout
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
-        static void vadd(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            FSDimensionlessVector& vout
-        );
+    static void vadd(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        FSDimensionlessVector& vout
+    );
 
     /// <summary>Vector cross product, 3 dimensions</summary>
     /// <param name="">[in] Left hand vector for cross product</param>
@@ -3966,11 +4023,11 @@ public:
             ShortToolTip = "Vector cross product, 3 dimensions",
             ToolTip = "Compute the cross product of two 3-dimensional vectors"
             ))
-        static void vcrss(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            FSDimensionlessVector& vout
-        );
+    static void vcrss(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        FSDimensionlessVector& vout
+    );
 
     /// <summary>Vector distance</summary>
     /// <param name="v1, v2">[in] Two 3-vectors</param>
@@ -3981,33 +4038,33 @@ public:
             ShortToolTip = "Vector distance",
             ToolTip = "Return the distance between two three-dimensional vectors"
             ))
-        static void vdist(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            double& out
-        );
+    static void vdist(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        double& out
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector distance",
             ToolTip = "Return the distance between two three-dimensional vectors"
             ))
-        static void vdist_distance(
-            const FSDistanceVector& v1,
-            const FSDistanceVector& v2,
-            FSDistance& out
-        );
+    static void vdist_distance(
+        const FSDistanceVector& v1,
+        const FSDistanceVector& v2,
+        FSDistance& out
+    );
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector distance",
             ToolTip = "Return the distance between two three-dimensional vectors"
             ))
-        static void vdist_velocity(
-            const FSVelocityVector& v1,
-            const FSVelocityVector& v2,
-            FSSpeed& out
-        );
+    static void vdist_velocity(
+        const FSVelocityVector& v1,
+        const FSVelocityVector& v2,
+        FSSpeed& out
+    );
 
     /// <summary>Vector dot product, 3 dimensions</summary>
     /// <param name="v1">First vector in the dot product</param>
@@ -4019,33 +4076,33 @@ public:
             ShortToolTip = "Vector dot product, 3 dimensions",
             ToolTip = "Compute the dot product of two double precision, 3-dimensional vectors"
             ))
-        static void vdot(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            double& out
-        );
+    static void vdot(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        double& out
+    );
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector dot product, 3 dimensions",
             ToolTip = "Compute the dot product of two double precision, 3-dimensional vectors"
             ))
-        static void dot_distance(
-            const FSDistanceVector& v1,
-            const FSDistanceVector& v2,
-            FSDistance& out
-        );
+    static void dot_distance(
+        const FSDistanceVector& v1,
+        const FSDistanceVector& v2,
+        FSDistance& out
+    );
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Vector dot product, 3 dimensions",
             ToolTip = "Compute the dot product of two double precision, 3-dimensional vectors"
             ))
-        static void dot_velocity(
-            const FSVelocityVector& v1,
-            const FSVelocityVector& v2,
-            FSSpeed& out
-        );
+    static void dot_velocity(
+        const FSVelocityVector& v1,
+        const FSVelocityVector& v2,
+        FSSpeed& out
+    );
 
     /// <summary>Copy one vector to another</summary>
     /// <param name="vin">[in] 3-dimensional double precision vector</param>
@@ -4190,13 +4247,13 @@ public:
             ShortToolTip = "Vector linear combination, 3 dimensions",
             ToolTip = "Compute a vector linear combination of two double precision, 3 - dimensional vectors"
             ))
-        static void vlcom(
-            double a,
-            const FSDimensionlessVector& v1,
-            double b,
-            const FSDimensionlessVector& v2,
-            FSDimensionlessVector& sum
-        );
+    static void vlcom(
+        double a,
+        const FSDimensionlessVector& v1,
+        double b,
+        const FSDimensionlessVector& v2,
+        FSDimensionlessVector& sum
+    );
 
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
@@ -4204,13 +4261,13 @@ public:
             ShortToolTip = "Vector linear combination, 3 dimensions",
             ToolTip = "Compute a vector linear combination of two double precision, 3 - dimensional vectors"
             ))
-        static void vlcom_distance(
-            double a,
-            const FSDistanceVector& v1,
-            double b,
-            const FSDistanceVector& v2,
-            FSDistanceVector& sum
-        );
+    static void vlcom_distance(
+        double a,
+        const FSDistanceVector& v1,
+        double b,
+        const FSDistanceVector& v2,
+        FSDistanceVector& sum
+    );
 
     /// <summary>Negation, 3 dimensions</summary>
     /// <param name="v1">[in] Vector to be negated</param>
@@ -4222,10 +4279,34 @@ public:
             ShortToolTip = "Minus V, \"-V\", 3 dimensions",
             ToolTip = "Negate a double precision 3-dimensional vector"
             ))
-        static void vminus(
-            const FSDimensionlessVector& v1,
-            FSDimensionlessVector& vout
-        );
+    static void vminus(
+        const FSDimensionlessVector& v1,
+        FSDimensionlessVector& vout
+    );
+
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Minus V, \"-V\", 3 dimensions",
+            ToolTip = "Negate a double precision 3-dimensional distance vector"
+            ))
+    static void vminus_distance(
+        const FSDistanceVector& v1,
+        FSDistanceVector& vout
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Minus V, \"-V\", 3 dimensions",
+            ToolTip = "Negate a double precision 3-dimensional velocity vector"
+            ))
+    static void vminus_velocity(
+        const FSVelocityVector& v1,
+        FSVelocityVector& vout
+    );
+
 
     /// <summary>Vector norm, 3 dimension</summary>
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
@@ -4236,10 +4317,10 @@ public:
             ShortToolTip = "Vector norm, 3 dimensions",
             ToolTip = "Compute the magnitude of a double precision, 3-dimensional vector"
             ))
-        static void vnorm(
-            const FSDimensionlessVector& v1,
-            double& out
-        );
+    static void vnorm(
+        const FSDimensionlessVector& v1,
+        double& out
+    );
 
     /// <summary>Vector norm, distance vector</summary>
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
@@ -4276,18 +4357,41 @@ public:
     /// <param name="z">[in] scalar z </param>
     /// <param name="v">[out] Equivalent 3-vector</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
-        meta = (
-            ShortToolTip = "Pack three scalar components into a vector",
-            ToolTip = "Pack three scalar components into a vector"
-            ))
-        static void vpack(
-            double x,
-            double y,
-            double z,
-            FSDimensionlessVector& v
-        );
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three RHS scalar components into a RHS dimensionless vector"))
+    static void vpack(
+        double x,
+        double y,
+        double z,
+        FSDimensionlessVector& v
+    );
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three RHS scalar components into a RHS distance vector"))
+    static void vpack_distance(
+        double x,
+        double y,
+        double z,
+        FSDistanceVector& km
+    );
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three RHS scalar components into a RHS velocity vector"))
+        
+    static void vpack_velocity(
+        double x,
+        double y,
+        double z,
+        FSVelocityVector& kmps
+    );
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three THS scalar components into a RHS state vector"))
+    static void vpack_state(
+        double x,
+        double y,
+        double z,
+        double dx,
+        double dy,
+        double dz,
+        FSStateVector& km_kmps
+    );
+
 
 
     /// <summary>Perpendicular component of a 3-vector</summary>
@@ -4389,11 +4493,37 @@ public:
             ShortToolTip = "Vector scaling, 3 dimensions",
             ToolTip = "Multiply a scalar and a 3-dimensional double precision vector"
             ))
-        static void vscl(
-            double s,
-            const FSDimensionlessVector& v1,
-            FSDimensionlessVector& vout
-        );
+    static void vscl(
+        double s,
+        const FSDimensionlessVector& v1,
+        FSDimensionlessVector& vout
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Vector scaling, 3 dimensions",
+            ToolTip = "Multiply a scalar and a 3-dimensional double precision distance vector"
+            ))
+    static void vscl_distance(
+        double s,
+        const FSDistanceVector& v1,
+        FSDistanceVector& vout
+    );
+
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Vector scaling, 3 dimensions",
+            ToolTip = "Multiply a scalar and a 3-dimensional double precision velocity vector"
+            ))
+    static void vscl_velocity(
+        double s,
+        const FSVelocityVector& v1,
+        FSVelocityVector& vout
+    );
+
 
     /// <summary>Angular separation of vectors, 3 dimensions</summary>
     /// <param name="v1">First vector</param>
@@ -4405,11 +4535,11 @@ public:
             ShortToolTip = "Angular separation of vectors, 3 dimensions",
             ToolTip = "Find the separation angle in radians between two double precision, 3 - dimensional vectors.This angle is defined as zero if either vector is zero"
             ))
-        static void vsep(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            FSAngle& out
-        );
+    static void vsep(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        FSAngle& out
+    );
 
     /// <summary>Vector subtraction, 3 dimensions</summary>
     /// <param name="v1">[in] First vector (minuend)</param>
@@ -4426,6 +4556,40 @@ public:
         const FSDimensionlessVector& v1,
         const FSDimensionlessVector& v2,
         FSDimensionlessVector& vout
+    );
+
+    /// <summary>Vector subtraction, 3 dimensions</summary>
+    /// <param name="v1">[in] First vector (minuend)</param>
+    /// <param name="v2">[in] Second vector (subtrahend)</param>
+    /// <param name="vout">[out] Difference vector, v1 - v2</param>
+    /// <returns></returns>
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Vector subtraction, 3 dimensions",
+            ToolTip = "Compute the difference between two 3-dimensional, double precision vectors"
+            ))
+    static void vsub_distance(
+        const FSDistanceVector& v1,
+        const FSDistanceVector& v2,
+        FSDistanceVector& vout
+    );
+
+    /// <summary>Vector subtraction, 3 dimensions</summary>
+    /// <param name="v1">[in] First vector (minuend)</param>
+    /// <param name="v2">[in] Second vector (subtrahend)</param>
+    /// <param name="vout">[out] Difference vector, v1 - v2</param>
+    /// <returns></returns>
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Math",
+        meta = (
+            ShortToolTip = "Vector subtraction, 3 dimensions",
+            ToolTip = "Compute the difference between two 3-dimensional, double precision vectors"
+            ))
+    static void vsub_velocity(
+        const FSVelocityVector& v1,
+        const FSVelocityVector& v2,
+        FSVelocityVector& vout
     );
 
     UFUNCTION(BlueprintPure,
@@ -4445,18 +4609,43 @@ public:
     /// <param name="v">[in] 3-vector</param>
     /// <param name="x, y, z">[out] Scalar components of 3-vector</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
-        meta = (
-            ShortToolTip = "Unpack three scalar components from a vector",
-            ToolTip = "Unpack three scalar components from a vector"
-            ))
-        static void vupack(
-            const FSDimensionlessVector& v,
-            double& x,
-            double& y,
-            double& z
-        );
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three RHS scalar components from a RHS dimensionless vector"))
+    static void vupack(
+        const FSDimensionlessVector& v,
+        double& x,
+        double& y,
+        double& z
+    );
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three RHS scalar components from a RHS distance vector"))
+    static void vupack_distance(
+        const FSDistanceVector& v,
+        double& x,
+        double& y,
+        double& z
+    );
+
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three RHS scalar components from a RHS velocity vector"))
+    static void vupack_velocity(
+        const FSVelocityVector& v,
+        double& x,
+        double& y,
+        double& z
+    );
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three THS scalar components from a RHS state vector"))
+    static void vupack_state(
+        const FSStateVector& v,
+        double& x,
+        double& y,
+        double& z,
+        double& dx,
+        double& dy,
+        double& dz
+    );
+
+
 
     /// <summary></summary>
     /// <param name="v">[in] Vector to be tested</param>

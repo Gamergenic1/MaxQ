@@ -294,6 +294,32 @@ FSAngularRate USpiceTypes::Conv_DoubleToSAngularRate(
     return FSAngularRate(value);
 }
 
+FSEphemerisTime USpiceTypes::Conv_StringToSEpheremisTime(const FString& time)
+{
+    double et = 0.;
+    str2et_c(TCHAR_TO_ANSI(*time), &et);
+
+    // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
+    USpice::UnexpectedErrorCheck(false);
+
+    return FSEphemerisTime(et);
+}
+
+
+FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
+{
+    SpiceChar sz[WINDOWS_MAX_PATH];
+    memset(sz, 0, sizeof(sz));
+
+    et2utc_c(et.AsDouble(), "C", 3, WINDOWS_MAX_PATH, sz);
+    strcat_s(sz, " UTC");
+
+    // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
+    USpice::UnexpectedErrorCheck(false);
+
+    return FString(sz);
+}
+
 double USpiceTypes::Conv_SEphemerisTimeToDouble(
     const FSEphemerisTime& value
 )
@@ -429,6 +455,40 @@ FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& 
     USpice::mxm(lhs, rhs, result);
     return result;
 }
+
+
+void USpiceTypes::SingleEtWindow(
+    const FSEphemerisTime& et0,
+    const FSEphemerisTime& et1,
+    TArray<FSEphemerisTimeWindowSegment>& Window
+)
+{
+    Window.Empty();
+    FSEphemerisTimeWindowSegment segment = FSEphemerisTimeWindowSegment(et0, et1);
+    Window.Add(segment);
+}
+
+void USpiceTypes::Degrees2Angle(FSAngle& angle, double degrees)
+{
+    angle = FSAngle();
+    angle.degrees = degrees;
+}
+
+void USpiceTypes::Angle2Degrees(const FSAngle& angle, double& degrees)
+{
+    degrees = angle.degrees;
+}
+
+void USpiceTypes::Radians2Angle(FSAngle& angle, double radians)
+{
+    angle = FSAngle(radians);
+}
+
+void USpiceTypes::Angle2Radians(const FSAngle& angle, double& radians)
+{
+    radians = angle.AsDouble();
+}
+
 
 FSRotationMatrix USpiceTypes::Multiply_SRotationMatrixSRotationMatrix(const FSRotationMatrix& A, const FSRotationMatrix& B)
 {
@@ -731,7 +791,6 @@ FVector USpiceTypes::Conv_SDimensionlessToVector(
 {
     return Swizzle(value);
 }
-
 
 FVector USpiceTypes::Conv_SDistanceVectorToVector(
     const FSDistanceVector& value
