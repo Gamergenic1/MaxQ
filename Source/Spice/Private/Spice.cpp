@@ -75,6 +75,21 @@ ConstSpiceChar* toString(ES_AberrationCorrectionWithTransmissions abcorr)
 }
 
 
+ConstSpiceChar* toString(ES_GeometricModel model)
+{
+
+    if (model == ES_GeometricModel::ELLIPSOID)
+    {
+        return "ELLIPSOID";
+    }
+    else if (model == ES_GeometricModel::POINT)
+    {
+        return "POINT";
+    }
+
+    return "NONE";
+}
+
 FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
 {
 
@@ -169,6 +184,7 @@ ConstSpiceChar* toString(ES_CoordinateSystemInclRadec coords)
 
     return "NONE";
 }
+
 ConstSpiceChar* toString(ES_CoordinateSystem coords)
 {
     return toString((ES_CoordinateSystemInclRadec)coords);
@@ -2829,6 +2845,104 @@ void USpice::gcpool(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+
+
+void USpice::fovray(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    bool& visible,
+    const FSEphemerisTime& et,
+    const FSDimensionlessVector& raydir,
+    const FString& inst,
+    const FString& rframe,
+    ES_AberrationCorrectionFov abcorr,
+    const FString& observer
+)
+{
+    // Inputs
+    ConstSpiceChar* _inst = TCHAR_TO_ANSI(*inst);
+    SpiceDouble     _raydir[3]; raydir.CopyTo(_raydir);
+    ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
+    ConstSpiceChar*  _abcorr;
+    ConstSpiceChar* _observer = TCHAR_TO_ANSI(*observer);
+    SpiceDouble     _et = et.AsDouble();
+
+    switch (abcorr)
+    {
+    case ES_AberrationCorrectionFov::S:
+        _abcorr = "S";
+        break;
+    case ES_AberrationCorrectionFov::XS:
+        _abcorr = "XS";
+        break;
+    default:
+        _abcorr = "NONE";
+    }
+
+    // Output
+    SpiceBoolean       _visible = SPICEFALSE;
+
+    // Invocation
+    fovray_c(
+        _inst,
+        _raydir,
+        _rframe,
+        _abcorr,
+        _observer,
+        &_et,
+        &_visible
+    );
+
+    // Set output
+    visible = _visible != SPICEFALSE;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::fovtrg(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    bool& visible,
+    const FSEphemerisTime& et,
+    const FString& inst,
+    const FString& target,
+    ES_GeometricModel tshape,
+    const FString& tframe,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr
+    )
+{
+    // Inputs
+    ConstSpiceChar* _inst   = TCHAR_TO_ANSI(*inst);
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _tshape = toString(tshape);
+    ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*tframe);
+    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble    _et      = et.AsDouble();
+    
+    // Output
+    SpiceBoolean   _visible = SPICEFALSE;
+
+    // Invocation
+    fovtrg_c(
+        _inst,
+        _target,
+        _tshape,
+        _tframe,
+        _abcorr,
+        _obsrvr,
+        &_et,
+        &_visible
+    );
+
+    // Set output
+    visible = _visible != SPICEFALSE;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
 
 void USpice::gdpool(
     ES_ResultCode& ResultCode,
