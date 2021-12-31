@@ -1172,6 +1172,35 @@ public:
         FSDimensionlessVector& z
     );
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "found",
+            ShortToolTip = "Frame Information",
+            ToolTip = "Retrieve the minimal attributes associated with a frame needed for converting transformations to and from it"
+            ))
+    static void frinfo(
+        int  frcode,
+        int& cent,
+        int& frclss,
+        int& clssid,
+        ES_FoundCode& found
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Frame to Name",
+            ToolTip = "Retrieve the name of a reference frame associated with a SPICE ID code"
+            ))
+    static void frmnam(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int      frcode,
+        FString& frname
+    );
+
     /// <summary>Get character data from the kernel pool</summary>
     /// <param name="name">[in] Name of the variable whose value is to be returned</param>
     /// <param name="start">[in] Which component to start retrieving for name</param>

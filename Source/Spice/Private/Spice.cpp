@@ -2845,6 +2845,83 @@ void USpice::gcpool(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+/*
+Exceptions
+
+   None.
+*/
+void USpice::frinfo(
+    int  frcode,
+    int& cent,
+    int& frclss,
+    int& clssid,
+    ES_FoundCode& found
+)
+{
+    // Input
+    SpiceInt _frcode = (SpiceInt)frcode;
+    
+    // Outputs
+    SpiceInt _cent = 0;
+    SpiceInt _frclss = 0;
+    SpiceInt _clssid = 0;
+    SpiceBoolean _found = SPICEFALSE;
+
+    // Invocation
+    frinfo_c(_frcode, &_cent, &_frclss, &_clssid, &_found);
+
+    // Pack outputs
+    cent = (int)_cent;
+    frclss = (int)_frclss;
+    clssid = (int)_clssid;
+    found = _found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+}
+
+/*
+Exceptions
+
+   1) If frcode is not recognized as the name of a known reference
+      frame, frname will be returned as a blank.
+
+   2) If the output string pointer is null, the error SPICE(NULLPOINTER)
+      is signaled.
+
+   3) If the output string has length less than two characters, it
+      is too short to contain one character of output data plus a null
+      terminator, so it cannot be passed to the underlying Fortran
+      routine.  In this event, the error SPICE(STRINGTOOSHORT) is
+      signaled.
+
+   4) If the length of frname (indicated by lenout) is at least two
+      characters but not large enough to contain the output string,
+      the output string will be truncated on the right.
+*/
+void USpice::frmnam(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    int      frcode,
+    FString& frname
+)
+{
+    SpiceChar szBuffer[WINDOWS_MAX_PATH];
+    ZeroOut(szBuffer);
+
+    // Input
+    SpiceInt   _frcode = (SpiceInt)frcode;
+   
+    // Outputs
+    SpiceInt   _lenout = WINDOWS_MAX_PATH;
+    SpiceChar* _frname = szBuffer;
+
+    // Invocation
+    frmnam_c(_frcode, _lenout, _frname);
+
+    // Pack output
+    frname = FString(_frname);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
 
 
 void USpice::fovray(
