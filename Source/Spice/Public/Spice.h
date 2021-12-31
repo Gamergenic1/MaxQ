@@ -1113,6 +1113,47 @@ public:
         FSEulerAngularTransform& xform
     );
 
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Math",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Is target in FOV at time?",
+            ToolTip = "Determine if a specified ray is within the field-of-view (FOV) of a specified instrument at a given time"
+            ))
+    static void fovray(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        bool& visible,
+        const FSEphemerisTime& et,
+        const FSDimensionlessVector& raydir,
+        const FString& inst = TEXT("CASSINI_UVIS_FUV_OCC"),
+        const FString& rframe = TEXT("J2000"),
+        ES_AberrationCorrectionFov abcorr = ES_AberrationCorrectionFov::S,
+        const FString& observer = TEXT("Cassini")
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Math",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Is target in FOV at time?",
+            ToolTip = "Determine if a specified ephemeris object is within the field - of - view(FOV) of a specified instrument at a given time"
+            ))
+    static void fovtrg(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        bool& visible,
+        const FSEphemerisTime& et,
+        const FString& inst = TEXT("CASSINI_ISS_NAC"),
+        const FString& target = TEXT("ENCELADUS"),
+        ES_GeometricModel tshape = ES_GeometricModel::ELLIPSOID,
+        const FString& tframe = TEXT("IAU_ENCELADUS"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::CN_S,
+        const FString& obsrvr = TEXT("Cassini")
+    );
+
     /// <summary>Given a vector x, this routine builds a right handed orthonormal frame x, y, z where the output x is parallel to the input x</summary>
     /// <param name="x">[in/out]Input vector. A parallel unit vector on output</param>
     /// <param name="y">[out]Unit vector in the plane orthogonal to x</param>

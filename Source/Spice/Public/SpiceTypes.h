@@ -84,6 +84,14 @@ enum class ES_AberrationCorrectionForOccultation : uint8
 };
 
 UENUM(BlueprintType)
+enum class ES_AberrationCorrectionFov : uint8
+{
+    None = 0 UMETA(DisplayName = "None (No Correction)"),
+    S  = 1 UMETA(DisplayName = "S (Stellar aberration correction, reception case)"),
+    XS = 2 UMETA(DisplayName = "XS (Stellar aberration correction, transmission case)")
+};
+
+UENUM(BlueprintType)
 enum class ES_AberrationCorrection : uint8
 {
     None = 0 UMETA(DisplayName = "None (No Correction)"),
