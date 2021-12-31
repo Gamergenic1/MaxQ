@@ -41,6 +41,39 @@ ConstSpiceChar* toString(ES_AberrationCorrectionForOccultation abcorr)
     return "NONE";
 }
 
+ConstSpiceChar* toString(ES_AberrationCorrectionWithTransmissions abcorr)
+{
+    switch (abcorr)
+    {
+    case ES_AberrationCorrectionWithTransmissions::LT:
+        return "LT";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::LT_S:
+        return "LT+S";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::CN:
+        return "CN";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::CN_S:
+        return "CN+S";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XLT:
+        return "XLT";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XLT_S:
+        return "XLT+S";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XCN:
+        return "XCN";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XCN_S:
+        return "XCN+S";
+        break;
+    };
+
+    return "NONE";
+}
+
 
 FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
 {
@@ -82,37 +115,95 @@ FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
 }
 
 
-USpice::USpice()
+ConstSpiceChar* toString(ES_RelationalOperator relate)
 {
+    switch (relate)
+    {
+    case ES_RelationalOperator::GreaterThan:
+        return ">";
+        break;
+    case ES_RelationalOperator::Equal:
+        return "=";
+        break;
+    case ES_RelationalOperator::LessThan:
+        return "<";
+        break;
+    case ES_RelationalOperator::ABSMAX:
+        return "ABSMAX";
+        break;
+    case ES_RelationalOperator::ABSMIN:
+        return "ABSMIN";
+        break;
+    case ES_RelationalOperator::LOCMAX:
+        return "LOCMAX";
+        break;
+    case ES_RelationalOperator::LOCMIN:
+        return "LOCMIN";
+        break;
+    };
 
+    return "NONE";
 }
 
 
-void USpice::SwizzleToUE(const double(&v)[3], FVector& ue)
+
+ConstSpiceChar* toString(ES_CoordinateSystemInclRadec coords)
 {
-    ue = FVector(v[1], v[0], v[2]);
+    switch (coords)
+    {
+    case ES_CoordinateSystemInclRadec::RECTANGULAR:
+        return "RECTANGULAR";
+    case ES_CoordinateSystemInclRadec::CYLINDRICAL:
+        return "CYLINDRICAL";
+    case ES_CoordinateSystemInclRadec::LATITUDINAL:
+        return "LATITUDINAL";
+    case ES_CoordinateSystemInclRadec::SPHERICAL:
+        return "SPHERICAL";
+    case ES_CoordinateSystemInclRadec::GEODETIC:
+        return "GEODETIC";
+    case ES_CoordinateSystemInclRadec::PLANETOGRAPHIC:
+        return "PLANETOGRAPHIC";
+    case ES_CoordinateSystemInclRadec::RADEC:
+        return "RA/DEC";
+    };
+
+    return "NONE";
+}
+ConstSpiceChar* toString(ES_CoordinateSystem coords)
+{
+    return toString((ES_CoordinateSystemInclRadec)coords);
 }
 
-void USpice::SwizzleToSpice(const FVector& ue, double(&v)[3])
+ConstSpiceChar* toString(ES_CoordinateName coord)
 {
-    v[0] = ue.Y;
-    v[1] = ue.X;
-    v[2] = ue.Z;
-}
+    switch (coord)
+    {
+    case ES_CoordinateName::X:
+        return "X";
+    case ES_CoordinateName::Y:
+        return "Y";
+    case ES_CoordinateName::Z:
+        return "Z";
+    case ES_CoordinateName::RADIUS:
+        return "RADIUS";
+    case ES_CoordinateName::LONGITUDE:
+        return "LONGITUDE";
+    case ES_CoordinateName::LATITUDE:
+        return "LATITUDE";
+    case ES_CoordinateName::RANGE:
+        return "RANGE";
+    case ES_CoordinateName::RIGHT_ASCENSION:
+        return "RIGHT ASCENSION";
+    case ES_CoordinateName::DECLINATION:
+        return "DECLINATION";
+    case ES_CoordinateName::COLATITUDE:
+        return "COLATITUDE";
+    case ES_CoordinateName::ALTITUDE:
+        return "ALTITUDE";
+    };
 
-void USpice::SwizzleToUE(const double(&q)[4], FQuat& ue)
-{
-    ue = FQuat(-q[2], -q[1], -q[3], q[0]);
+    return "NONE";
 }
-
-void USpice::SwizzleToSpice(const FQuat& ue, double(&q)[4])
-{
-    q[0] = ue.W;
-    q[1] = -ue.Y;
-    q[2] = -ue.X;
-    q[3] = -ue.Z;
-}
-
 
 
 template<class T>
@@ -188,6 +279,44 @@ void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse)
     // Ensure a failure in cgv2el is logged
     // ...but let the caller pick up the signal and determine what to do
     USpice::UnexpectedErrorCheck(false);
+}
+
+
+USpice::USpice()
+{
+    // (Due to shared implementations)
+    check((uint8)ES_CoordinateSystem::RECTANGULAR == (uint8)ES_CoordinateSystemInclRadec::RECTANGULAR);
+    check((uint8)ES_CoordinateSystem::CYLINDRICAL == (uint8)ES_CoordinateSystemInclRadec::CYLINDRICAL);
+    check((uint8)ES_CoordinateSystem::LATITUDINAL == (uint8)ES_CoordinateSystemInclRadec::LATITUDINAL);
+    check((uint8)ES_CoordinateSystem::SPHERICAL == (uint8)ES_CoordinateSystemInclRadec::SPHERICAL);
+    check((uint8)ES_CoordinateSystem::GEODETIC == (uint8)ES_CoordinateSystemInclRadec::GEODETIC);
+    check((uint8)ES_CoordinateSystem::PLANETOGRAPHIC == (uint8)ES_CoordinateSystemInclRadec::PLANETOGRAPHIC);
+}
+
+
+void USpice::SwizzleToUE(const double(&v)[3], FVector& ue)
+{
+    ue = FVector(v[1], v[0], v[2]);
+}
+
+void USpice::SwizzleToSpice(const FVector& ue, double(&v)[3])
+{
+    v[0] = ue.Y;
+    v[1] = ue.X;
+    v[2] = ue.Z;
+}
+
+void USpice::SwizzleToUE(const double(&q)[4], FQuat& ue)
+{
+    ue = FQuat(-q[2], -q[1], -q[3], q[0]);
+}
+
+void USpice::SwizzleToSpice(const FQuat& ue, double(&q)[4])
+{
+    q[0] = ue.W;
+    q[1] = -ue.Y;
+    q[2] = -ue.X;
+    q[3] = -ue.Z;
 }
 
 
@@ -2951,12 +3080,99 @@ void USpice::getfov(
 }
 
 
+void USpice::gfdist(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FSEphemerisPeriod& step,
+    const FSDistance& refval,
+    const FSDistance& adjust,
+    const FString& target,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr,
+    ES_RelationalOperator relate
+    )
+{
+    const int MAXWIN = 200;
+    if (2 * cnfine.Num() > MAXWIN)
+    {
+        setmsg_c("[cnfine] Window Segment count = #; maximum allowed value is #");
+        errdp_c("#", cnfine.Num());
+        errdp_c("#", MAXWIN / 2);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+        return;
+    }
+
+    // Inputs
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    ConstSpiceChar* _relate = toString(relate);
+    SpiceDouble     _refval = refval.AsDouble();
+    SpiceDouble     _adjust = adjust.AsDouble();
+    SpiceDouble     _step   = step.AsDouble();
+    
+    // Unpack the confinement window array..
+    FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        FSEphemerisTime et0 = (*It).start;
+        FSEphemerisTime et1 = (*It).stop;
+        
+        FSEphemerisPeriod thisWindow = et1 - et0;
+        if (thisWindow > maxWindow)
+        {
+            maxWindow = thisWindow;
+        }
+        
+        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+    }
+    // 
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+
+    // Output
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gfdist_c(
+        _target,
+        _abcorr,
+        _obsrvr,
+        _relate,
+        _refval,
+        _adjust,
+        _step,
+        _nintvls,
+        &_cnfine,
+        &_result    
+    );
+
+    // Pack up the output...
+    results.Empty();
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
 void USpice::gfoclt(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     TArray<FSEphemerisTimeWindowSegment>& results,
-    const FSEphemerisTime& start,
-    const FSEphemerisTime& stop,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
     const FSEphemerisPeriod& step,
     const TArray<FString>& frontShapeSurfaces,
     const TArray<FString>& backShapeSurfaces,
@@ -2972,6 +3188,17 @@ void USpice::gfoclt(
 )
 {
     const int MAXWIN = 200;
+    if (2 * cnfine.Num() > MAXWIN)
+    {
+        setmsg_c("[cnfine] Window Segment count = #; maximum allowed value is #");
+        errdp_c("#", cnfine.Num());
+        errdp_c("#", MAXWIN / 2);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+        return;
+    }
 
     ConstSpiceChar* _occtyp;
     ConstSpiceChar* _front = TCHAR_TO_ANSI(*front);
@@ -2983,8 +3210,13 @@ void USpice::gfoclt(
     ConstSpiceChar* _abcorr = toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _step = step.AsDouble();
+    
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
-    wninsd_c(start.AsDouble(), stop.AsDouble(), &_cnfine);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+    }
+   
 
     switch (occtyp)
     {
@@ -3034,6 +3266,102 @@ void USpice::gfoclt(
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::gfposc(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const FSEphemerisPeriod& step,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FString& target,
+    const FString& frame,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr,
+    ES_CoordinateSystemInclRadec crdsys,
+    ES_CoordinateName coord,
+    ES_RelationalOperator relate,
+    double          refval,
+    double          adjust,
+    int nintvls
+)
+{
+    const int MAXWIN = 200;
+    if (2 * cnfine.Num() > MAXWIN)
+    {
+        setmsg_c("[cnfine] Window Segment count = #; maximum allowed value is #");
+        errdp_c("#", cnfine.Num());
+        errdp_c("#", MAXWIN / 2);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+        return;
+    }
+
+
+    // Inputs
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _frame  = TCHAR_TO_ANSI(*frame);
+    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    ConstSpiceChar* _crdsys = toString(crdsys);
+    ConstSpiceChar* _coord  = toString(coord);
+    ConstSpiceChar* _relate = toString(relate);
+    SpiceDouble     _refval = refval;
+    SpiceDouble     _adjust = adjust;
+    SpiceDouble     _step   = step.AsDouble();
+    SpiceInt        _nintvls = (SpiceInt)nintvls;
+
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+    }
+
+    // Outputs
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gfposc_c(
+        _target,
+        _frame,
+        _abcorr,
+        _obsrvr,
+        _crdsys,
+        _coord,
+        _relate,
+        _refval,
+        _adjust,
+        _step,
+        _nintvls,
+        &_cnfine,
+        &_result
+    );
+
+    // Pack output
+    results.Empty();
+
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::gfstol(double value)
+{
+    gfstol_c((SpiceDouble)value);
+
+    // Error Handling
+    UnexpectedErrorCheck(false);
 }
 
 void USpice::gipool(
@@ -3208,7 +3536,7 @@ void USpice::ilumin(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr;
+    ConstSpiceChar* _abcorr = toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
 
@@ -3219,35 +3547,7 @@ void USpice::ilumin(
     SpiceDouble     _incdnc = 0.;
     SpiceDouble     _emissn = 0.;
 
-    switch (abcorr)
-    {
-    case ES_AberrationCorrectionWithTransmissions::LT:
-        _abcorr = "LT";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::LT_S:
-        _abcorr = "LT+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::CN:
-        _abcorr = "CN";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::CN_S:
-        _abcorr = "CN+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XLT:
-        _abcorr = "XLT";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XLT_S:
-        _abcorr = "XLT+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XCN:
-        _abcorr = "XCN";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XCN_S:
-        _abcorr = "XCN+S";
-        break;
-    default:
-        _abcorr = "NONE";
-    };
+
 
     // invocation
     ilumin_c(
@@ -6517,40 +6817,10 @@ void USpice::sincpt(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr;
+    ConstSpiceChar* _abcorr = toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _dref   = TCHAR_TO_ANSI(*dref);
     SpiceDouble    _dvec[3];  dvec.CopyTo(_dvec);
-
-    switch (abcorr)
-    {
-    case ES_AberrationCorrectionWithTransmissions::LT:
-        _abcorr = "LT";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::LT_S:
-        _abcorr = "LT+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::CN:
-        _abcorr = "CN";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::CN_S:
-        _abcorr = "CN+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XLT:
-        _abcorr = "XLT";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XLT_S:
-        _abcorr = "XLT+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XCN:
-        _abcorr = "XCN";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XCN_S:
-        _abcorr = "XCN+S";
-        break;
-    default:
-        _abcorr = "NONE";
-    }
     
     // Outputs
     SpiceDouble  _spoint[3];    ZeroOut(_spoint);
@@ -8494,9 +8764,10 @@ void USpice::vlcom_distance(
 Exceptions
    Error free.
 */
-void USpice::vminus(
-    const FSDimensionlessVector& v1,
-    FSDimensionlessVector& vout
+template<typename T>
+void vminus(
+    const T& v1,
+    T& vout
 )
 {
     // Input
@@ -8508,8 +8779,36 @@ void USpice::vminus(
     vminus_c(_v1, _vout);
 
     // Return Value
-    vout = FSDimensionlessVector(_vout);
+    vout = T(_vout);
 }
+
+
+void USpice::vminus(
+    const FSDimensionlessVector& v1,
+    FSDimensionlessVector& vout
+)
+{
+    ::vminus(v1, vout);
+}
+
+
+void USpice::vminus_distance(
+    const FSDistanceVector& v1,
+    FSDistanceVector& vout
+)
+{
+    ::vminus(v1, vout);
+}
+
+
+void USpice::vminus_velocity(
+    const FSVelocityVector& v1,
+    FSVelocityVector& vout
+)
+{
+    ::vminus(v1, vout);
+}
+
 
 /*
 Exceptions
@@ -8579,11 +8878,12 @@ void USpice::vnorm_velocity(
 Exceptions
    Error free.
 */
-void USpice::vpack(
+template<typename T>
+void vpack(
     double x,
     double y,
     double z,
-    FSDimensionlessVector& v
+    T& v
 )
 {
     // Input
@@ -8597,7 +8897,30 @@ void USpice::vpack(
     vpack_c(_x, _y, _z, _v);
 
     // Return Value
-    v = FSDimensionlessVector(_v);
+    v = T(_v);
+}
+
+
+void USpice::vpack( double x, double y, double z, FSDimensionlessVector& v)
+{
+    ::vpack(x, y, z, v);
+}
+
+void USpice::vpack_distance(double x, double y, double z, FSDistanceVector& v)
+{
+    ::vpack(x, y, z, v);
+}
+
+void USpice::vpack_velocity(double x, double y, double z, FSVelocityVector& v)
+{
+    ::vpack(x, y, z, v);
+}
+
+void USpice::vpack_state(double x, double y, double z, double dx, double dy, double dz, FSStateVector& v)
+{
+    v = FSStateVector();
+    ::vpack(x, y, z, v.r);
+    ::vpack(dx, dy, dz, v.v);
 }
 
 void USpice::vperp(
@@ -8731,10 +9054,11 @@ void USpice::vrotv(
 Exceptions
    Error free.
 */
-void USpice::vscl(
+template<typename T>
+void vscl(
     double s,
-    const FSDimensionlessVector& v1,
-    FSDimensionlessVector& vout
+    const T& v1,
+    T& vout
 )
 {
     // Inputs
@@ -8747,8 +9071,36 @@ void USpice::vscl(
     vscl_c(_s, _v1, _vout);
 
     // Return Value
-    vout = FSDimensionlessVector(_vout);
+    vout = T(_vout);
 }
+
+void USpice::vscl(
+    double s,
+    const FSDimensionlessVector& v1,
+    FSDimensionlessVector& vout
+)
+{
+    ::vscl(s, v1, vout);
+}
+
+void USpice::vscl_distance(
+    double s,
+    const FSDistanceVector& v1,
+    FSDistanceVector& vout
+)
+{
+    ::vscl(s, v1, vout);
+}
+
+void USpice::vscl_velocity(
+    double s,
+    const FSVelocityVector& v1,
+    FSVelocityVector& vout
+)
+{
+    ::vscl(s, v1, vout);
+}
+
 
 /*
 Exceptions
@@ -8777,10 +9129,11 @@ void USpice::vsep(
 Exceptions
    Error free.
 */
-void USpice::vsub(
-    const FSDimensionlessVector& v1,
-    const FSDimensionlessVector& v2,
-    FSDimensionlessVector& vout
+template<typename T>
+void vsub(
+    const T& v1,
+    const T& v2,
+    T& vout
 )
 {
     // Inputs
@@ -8793,7 +9146,34 @@ void USpice::vsub(
     vsub_c(_v1, _v2, _vout);
 
     // Return Value
-    vout = FSDimensionlessVector(_vout);
+    vout = T(_vout);
+}
+
+void USpice::vsub(
+    const FSDimensionlessVector& v1,
+    const FSDimensionlessVector& v2,
+    FSDimensionlessVector& vout
+)
+{
+    ::vsub(v1, v2, vout);
+}
+
+void USpice::vsub_distance(
+    const FSDistanceVector& v1,
+    const FSDistanceVector& v2,
+    FSDistanceVector& vout
+)
+{
+    ::vsub(v1, v2, vout);
+}
+
+void USpice::vsub_velocity(
+    const FSVelocityVector& v1,
+    const FSVelocityVector& v2,
+    FSVelocityVector& vout
+)
+{
+    ::vsub(v1, v2, vout);
 }
 
 
@@ -8817,8 +9197,9 @@ double  USpice::vtmv(
 Exceptions
    Error free.
 */
-void USpice::vupack(
-    const FSDimensionlessVector& v,
+template<typename T>
+void vupack(
+    const T& v,
     double& x,
     double& y,
     double& z
@@ -8838,6 +9219,28 @@ void USpice::vupack(
     x = _x;
     y = _y;
     z = _z;
+}
+
+
+void USpice::vupack(const FSDimensionlessVector& v, double& x, double& y, double& z)
+{
+    ::vupack(v, x, y, z);
+}
+
+void USpice::vupack_distance(const FSDistanceVector& v, double& x, double& y, double& z)
+{
+    ::vupack(v, x, y, z);
+}
+
+void USpice::vupack_velocity(const FSVelocityVector& v, double& x, double& y, double& z)
+{
+    ::vupack(v, x, y, z);
+}
+
+void USpice::vupack_state(const FSStateVector& v, double& x, double& y, double& z, double& dx, double& dy, double& dz)
+{
+    ::vupack(v.r, x, y, z);
+    ::vupack(v.v, dx, dy, dz);
 }
 
 
@@ -8945,28 +9348,6 @@ void USpice::xf2rav(
 }
 
 
-ConstSpiceChar* CoordsToStr(ES_CoordinateSystem coords)
-{
-    switch (coords)
-    {
-    case ES_CoordinateSystem::RECTANGULAR:
-        return "RECTANGULAR";
-    case ES_CoordinateSystem::CYLINDRICAL:
-        return "CYLINDRICAL";
-    case ES_CoordinateSystem::LATITUDINAL:
-        return "LATITUDINAL";
-    case ES_CoordinateSystem::SPHERICAL:
-        return "SPHERICAL";
-    case ES_CoordinateSystem::GEODETIC:
-        return "GEODETIC";
-    case ES_CoordinateSystem::PLANETOGRAPHIC:
-        return "PLANETOGRAPHIC";
-    }
-
-    return "NONE";
-}
-
-
 /*
 Exceptions
    1)  If either the input or output coordinate system is not
@@ -9035,8 +9416,8 @@ void USpice::xfmsta(
     _input_state[3] = in2.x;
     _input_state[4] = in2.y;
     _input_state[5] = in2.z;
-    ConstSpiceChar* _input_coord_sys = CoordsToStr(input_coord_sys);
-    ConstSpiceChar* _output_coord_sys = CoordsToStr(output_coord_sys);
+    ConstSpiceChar* _input_coord_sys = toString(input_coord_sys);
+    ConstSpiceChar* _output_coord_sys = toString(output_coord_sys);
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
     // Output
     SpiceDouble _output_state[6];       ZeroOut(_output_state);

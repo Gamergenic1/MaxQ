@@ -295,5 +295,5 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
         DrawDebugLine(world, p1, p2, color, false, -1.f, 0, thickness);
     }
-
 }
+

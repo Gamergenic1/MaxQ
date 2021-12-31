@@ -27,7 +27,6 @@ public:
         Category = "Spice|Api|Orbits",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
-            AutoCreateRefTerm = "et",
             ToolTip = "Evaluates an orbit, while transforming frames if needed"
             ))
     static void EvaluateOrbit(
@@ -45,7 +44,6 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Orbits",
         meta = (
-            AutoCreateRefTerm = "et",
             ToolTip = "Computes an ellipse from Conic elements"
             ))
     static void ComputeConic(
@@ -61,7 +59,7 @@ public:
     // For staic orbits this better than rendering orbits, slightly, because
     // you can cache the ellipse and forget about it.
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Orbits", 
+        Category = "Spice|Debug|Orbits", 
         meta = (
             DevelopmentOnly,
             ToolTip = "Renders an ellipse in debug lines",
@@ -78,7 +76,7 @@ public:
 
     /// <summary>Renders an orbit in debug lines</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Orbits",
+        Category = "Spice|Debug|Orbits",
         meta = (
             AutoCreateRefTerm = "et",
             DevelopmentOnly,
