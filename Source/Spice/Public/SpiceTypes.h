@@ -700,6 +700,8 @@ struct FSAngularRate
         radiansPerSecond = _radiansPerSecond;
     }
 
+    double degreesPerSecond() const;
+
 
     /// <summary>Returns value in Radians/Second</summary>
     /// <returns>Radians/Second</returns>
@@ -3044,9 +3046,17 @@ class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 
 public:
     USpiceTypes();
-    static const char* UnitsToChar(ES_Units units);
-    static const char* _toString(ES_AberrationCorrectionWithNewtonians abcorr);
-    static const char* TimeScaleToChar(ES_TimeScale timeScale);
+    static const char* toString(ES_Units units);
+    static const char* toString(ES_AberrationCorrectionWithNewtonians abcorr);
+    static const char* toString(ES_AberrationCorrectionForOccultation abcorr);
+    static const char* toString(ES_TimeScale timeScale);
+    static const char* toString(ES_AberrationCorrectionWithTransmissions abcorr);
+    static const char* toString(ES_GeometricModel model);
+    static const char* toString(ES_RelationalOperator relate);
+    static const char* toString(ES_CoordinateSystemInclRadec coords);
+    static const char* toString(ES_CoordinateSystem coords);
+    static const char* toString(ES_CoordinateName coord);
+    static FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces);
 
 public:
     /// <summary>Converts a distance to a double (kilometers)</summary>
@@ -3170,10 +3180,19 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            ShortToolTip = "String to Epheremis Time.",
-            ToolTip = "Converts a string to an Epheremis Time.  If the string fails to convert an error will remain signalled in SPICE, which the downstream computation will detect."
+            CompactNodeTitle = "$",
+            ToolTip = "Converts an Epheremis Time to a String"
             ))
     static FString Conv_SEpheremisTimeToString(const FSEphemerisTime& et);
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ShortToolTip = "Mass Constant to string",
+            ToolTip = "Conversts a Mass Constant to a string"
+            ))
+        static FString Conv_SMassConstantToString(const FSMassConstant& gm);
 
 
     /// <summary>Converts a double (sec past J2000) to an ephemeris time</summary>
@@ -3448,6 +3467,85 @@ public:
     static FSDimensionlessStateVector Conv_FSPlanetographicStateVectorToSDimensionlessStateVector(
         const FSPlanetographicStateVector& value
     );
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SAngleToString (const FSAngle& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SDistanceToString(const FSDistance& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SDistanceVectorToString(const FSDistanceVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SVelocityVectorToString(const FSVelocityVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SStateVectorToString(const FSStateVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SLonLatToString(const FSLonLat& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SSpeedToString(const FSSpeed& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SAngularRateToString(const FSAngularRate& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SDimensionlessVectorToString(const FSDimensionlessVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString Conv_SDimensionlessStateVectorToString(const FSDimensionlessStateVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString SGeodeticStateVectorToString(const FSGeodeticStateVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString SSphericalStateVectorToString(const FSSphericalStateVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString SCylindricalStateVectorToString(const FSCylindricalStateVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+    static FString SPlanetographicVectorToString(const FSPlanetographicVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SGeodeticVectorToString(const FSGeodeticVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SSphericalVectorToString(const FSSphericalVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SLatitudinalVectorToString(const FSLatitudinalVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SCylindricalVectorToString(const FSCylindricalVector& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SSphericalVectoRatesrToString(const FSSphericalVectorRates& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
+        static FString SConicElementsToString(const FSConicElements& value);
+
 
 
     /* Multiplication (A * B) */

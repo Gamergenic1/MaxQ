@@ -39,7 +39,7 @@ SPICE_API const FSDimensionlessVector FSDimensionlessVector::Zero = FSDimensionl
 FSAngle::FSAngle()
 {
     // See notes about cachedPi in its declaration
-    cachedDpr = 360. / twopi_c();
+    cachedDpr = dpr_c();
 
     degrees = 0.;
 }
@@ -47,10 +47,16 @@ FSAngle::FSAngle()
 FSAngle::FSAngle(double __radians)
 {
     // See notes about cachedPi in its declaration
-    cachedDpr = 360. / twopi_c();
+    cachedDpr = dpr_c();
 
     degrees = __radians * cachedDpr;
 }
+
+double FSAngularRate::degreesPerSecond() const
+{
+    return radiansPerSecond * dpr_c();
+}
+
 
 
 USpiceTypes::USpiceTypes()
@@ -58,7 +64,7 @@ USpiceTypes::USpiceTypes()
 }
 
 
-const char* USpiceTypes::UnitsToChar(ES_Units units)
+const char* USpiceTypes::toString(ES_Units units)
 {
     const char* result;
 
@@ -153,7 +159,7 @@ const char* USpiceTypes::UnitsToChar(ES_Units units)
     return result;
 }
 
-const char* USpiceTypes::_toString(ES_AberrationCorrectionWithNewtonians abcorr)
+const char* USpiceTypes::toString(ES_AberrationCorrectionWithNewtonians abcorr)
 {
     const char* _abcorr;
     switch (abcorr)
@@ -177,7 +183,7 @@ const char* USpiceTypes::_toString(ES_AberrationCorrectionWithNewtonians abcorr)
     return _abcorr;
 }
 
-const char* USpiceTypes::TimeScaleToChar(ES_TimeScale timeScale)
+const char* USpiceTypes::toString(ES_TimeScale timeScale)
 {
     switch (timeScale)
     {
@@ -199,6 +205,208 @@ const char* USpiceTypes::TimeScaleToChar(ES_TimeScale timeScale)
 
     return "";
 }
+
+const char* USpiceTypes::toString(ES_AberrationCorrectionForOccultation abcorr)
+{
+    switch (abcorr)
+    {
+    case ES_AberrationCorrectionForOccultation::LT:
+        return "LT";
+        break;
+    case ES_AberrationCorrectionForOccultation::CN:
+        return "CN";
+        break;
+    case ES_AberrationCorrectionForOccultation::XLT:
+        return "XLT";
+        break;
+    case ES_AberrationCorrectionForOccultation::XCN:
+        return "XCN";
+        break;
+    }
+
+    return "NONE";
+}
+
+const char* USpiceTypes::toString(ES_AberrationCorrectionWithTransmissions abcorr)
+{
+    switch (abcorr)
+    {
+    case ES_AberrationCorrectionWithTransmissions::LT:
+        return "LT";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::LT_S:
+        return "LT+S";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::CN:
+        return "CN";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::CN_S:
+        return "CN+S";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XLT:
+        return "XLT";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XLT_S:
+        return "XLT+S";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XCN:
+        return "XCN";
+        break;
+    case ES_AberrationCorrectionWithTransmissions::XCN_S:
+        return "XCN+S";
+        break;
+    };
+
+    return "NONE";
+}
+
+
+const char* USpiceTypes::toString(ES_GeometricModel model)
+{
+
+    if (model == ES_GeometricModel::ELLIPSOID)
+    {
+        return "ELLIPSOID";
+    }
+    else if (model == ES_GeometricModel::POINT)
+    {
+        return "POINT";
+    }
+
+    return "NONE";
+}
+
+FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
+{
+
+    if (model == ES_GeometricModel::ELLIPSOID)
+    {
+        return FString(TEXT("ELLIPSOID"));
+    }
+    else if (model == ES_GeometricModel::POINT)
+    {
+        return FString(TEXT("POINT"));
+    }
+
+    // From the docs:
+    // "DSK/UNPRIORITIZED[/SURFACES = <surface list>]"
+    // Which makes it look like UPRIORITIZED isn't optional or mutually esclusive with a list of surfaces..
+    // Is that correct, though?
+
+    FString result = "DSK/UNPRIORITIZED";
+
+    if (shapeSurfaces.Num() > 0)
+    {
+        result += "/SURFACES = ";
+
+        int num = shapeSurfaces.Num();
+
+        for (int i = 0; i < num; ++i)
+        {
+            result += shapeSurfaces[i];
+
+            if (i + 1 < num)
+            {
+                result += ", ";
+            }
+        }
+    }
+
+    return result;
+}
+
+
+const char* USpiceTypes::toString(ES_RelationalOperator relate)
+{
+    switch (relate)
+    {
+    case ES_RelationalOperator::GreaterThan:
+        return ">";
+        break;
+    case ES_RelationalOperator::Equal:
+        return "=";
+        break;
+    case ES_RelationalOperator::LessThan:
+        return "<";
+        break;
+    case ES_RelationalOperator::ABSMAX:
+        return "ABSMAX";
+        break;
+    case ES_RelationalOperator::ABSMIN:
+        return "ABSMIN";
+        break;
+    case ES_RelationalOperator::LOCMAX:
+        return "LOCMAX";
+        break;
+    case ES_RelationalOperator::LOCMIN:
+        return "LOCMIN";
+        break;
+    };
+
+    return "NONE";
+}
+
+
+
+const char* USpiceTypes::toString(ES_CoordinateSystemInclRadec coords)
+{
+    switch (coords)
+    {
+    case ES_CoordinateSystemInclRadec::RECTANGULAR:
+        return "RECTANGULAR";
+    case ES_CoordinateSystemInclRadec::CYLINDRICAL:
+        return "CYLINDRICAL";
+    case ES_CoordinateSystemInclRadec::LATITUDINAL:
+        return "LATITUDINAL";
+    case ES_CoordinateSystemInclRadec::SPHERICAL:
+        return "SPHERICAL";
+    case ES_CoordinateSystemInclRadec::GEODETIC:
+        return "GEODETIC";
+    case ES_CoordinateSystemInclRadec::PLANETOGRAPHIC:
+        return "PLANETOGRAPHIC";
+    case ES_CoordinateSystemInclRadec::RADEC:
+        return "RA/DEC";
+    };
+
+    return "NONE";
+}
+
+const char* USpiceTypes::toString(ES_CoordinateSystem coords)
+{
+    return toString((ES_CoordinateSystemInclRadec)coords);
+}
+
+const char* USpiceTypes::toString(ES_CoordinateName coord)
+{
+    switch (coord)
+    {
+    case ES_CoordinateName::X:
+        return "X";
+    case ES_CoordinateName::Y:
+        return "Y";
+    case ES_CoordinateName::Z:
+        return "Z";
+    case ES_CoordinateName::RADIUS:
+        return "RADIUS";
+    case ES_CoordinateName::LONGITUDE:
+        return "LONGITUDE";
+    case ES_CoordinateName::LATITUDE:
+        return "LATITUDE";
+    case ES_CoordinateName::RANGE:
+        return "RANGE";
+    case ES_CoordinateName::RIGHT_ASCENSION:
+        return "RIGHT ASCENSION";
+    case ES_CoordinateName::DECLINATION:
+        return "DECLINATION";
+    case ES_CoordinateName::COLATITUDE:
+        return "COLATITUDE";
+    case ES_CoordinateName::ALTITUDE:
+        return "ALTITUDE";
+    };
+
+    return "NONE";
+}
+
 
 
 FSEulerAngles::FSEulerAngles(const FSDimensionlessVector& value)
@@ -951,5 +1159,152 @@ FSQuaternion USpiceTypes::Conv_QuatToSQuaternion(
 /* 
  * -----------------------------------------------------------------------------------------
  */
+
+
+FString USpiceTypes::Conv_SAngleToString(const FSAngle& value)
+{
+    return FString::Printf(TEXT("%f"), value.degrees);
+}
+
+FString USpiceTypes::Conv_SDistanceToString(const FSDistance& value)
+{
+    return FString::Printf(TEXT("%f"), value.km);
+}
+
+FString USpiceTypes::Conv_SDistanceVectorToString(const FSDistanceVector& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.x.km, value.y.km, value.z.km);
+}
+
+FString USpiceTypes::Conv_SVelocityVectorToString(const FSVelocityVector& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.dx.kmps, value.dy.kmps, value.dz.kmps);
+}
+
+FString USpiceTypes::Conv_SStateVectorToString(const FSStateVector& value)
+{
+    return FString::Printf(TEXT("[(%f, %f, %f); (%f, %f, %f)]"), value.r.x.km, value.r.y.km, value.r.z.km, value.v.dx.kmps, value.v.dy.kmps, value.v.dz.kmps);
+}
+
+
+FString USpiceTypes::Conv_SLonLatToString(const FSLonLat& value)
+{
+    return FString::Printf(TEXT("(%f, %f)"), value.longitude.degrees, value.latitude.degrees);
+}
+
+FString USpiceTypes::Conv_SSpeedToString(const FSSpeed& value)
+{
+    return FString::Printf(TEXT("%f"), value.kmps);
+}
+
+FString USpiceTypes::Conv_SAngularRateToString(const FSAngularRate& value)
+{
+    return FString::Printf(TEXT("%f"), value.degreesPerSecond() );
+}
+
+FString USpiceTypes::Conv_SDimensionlessVectorToString(const FSDimensionlessVector& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.x, value.y, value.z);
+}
+
+
+FString USpiceTypes::Conv_SDimensionlessStateVectorToString(const FSDimensionlessStateVector& value)
+{
+    return FString::Printf(TEXT("[(%f, %f, %f); (%f, %f, %f)]"), value.r.x, value.r.y, value.r.z, value.dr.x, value.dr.y, value.dr.z);
+}
+
+FString USpiceTypes::SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value)
+{
+    return FString::Printf(TEXT("[(%f, %f), %f; (%f, %f, %f)]"), value.r.lonlat.longitude.degrees, value.r.lonlat.latitude.degrees, value.r.alt.km, value.dr.dlon.degreesPerSecond(), value.dr.dlat.degreesPerSecond(), value.dr.dalt.kmps);
+}
+
+FString USpiceTypes::SGeodeticStateVectorToString(const FSGeodeticStateVector& value)
+{
+    return FString::Printf(TEXT("[(%f, %f), %f; (%f, %f, %f)]"), value.r.lonlat.longitude.degrees, value.r.lonlat.latitude.degrees, value.r.alt.km, value.dr.dlon.degreesPerSecond(), value.dr.dlat.degreesPerSecond(), value.dr.dalt.kmps);
+}
+
+FString USpiceTypes::SSphericalStateVectorToString(const FSSphericalStateVector& value)
+{
+    return FString::Printf(TEXT("[(%f, %f, %f); (%f, %f, %f)]"), value.r.r.km, value.r.colat.degrees, value.r.lon.degrees, value.dr.dr.kmps, value.dr.dcolat.degreesPerSecond(), value.dr.dlon.degreesPerSecond());
+}
+
+FString USpiceTypes::SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value)
+{
+    return FString::Printf(TEXT("[%f, (%f, %f); (%f, %f, %f)]"), value.r.r.km, value.r.lonlat.longitude.degrees, value.r.lonlat.latitude.degrees, value.dr.dr.kmps, value.dr.dlon.degreesPerSecond(), value.dr.dlat.degreesPerSecond());
+}
+
+FString USpiceTypes::SCylindricalStateVectorToString(const FSCylindricalStateVector& value)
+{
+    return FString::Printf(TEXT("[(%f, %f, %f); (%f, %f, %f)]"), value.r.r.km, value.r.lon.degrees, value.r.z.km, value.dr.dr.kmps, value.dr.dlon.degreesPerSecond(), value.dr.dz.kmps);
+}
+
+FString USpiceTypes::SPlanetographicVectorToString(const FSPlanetographicVector& value)
+{
+    return FString::Printf(TEXT("(%f, %f; %f)"), value.lonlat.longitude.degrees, value.lonlat.latitude.degrees, value.alt.km);
+}
+
+FString USpiceTypes::SGeodeticVectorToString(const FSGeodeticVector& value)
+{
+    return FString::Printf(TEXT("(%f, %f; %f)"), value.lonlat.longitude.degrees, value.lonlat.latitude.degrees, value.alt.km);
+}
+
+FString USpiceTypes::SSphericalVectorToString(const FSSphericalVector& value)
+{
+    return FString::Printf(TEXT("(%f; %f, %f)"), value.r.km, value.colat.degrees, value.lon.degrees);
+}
+
+FString USpiceTypes::SLatitudinalVectorToString(const FSLatitudinalVector& value)
+{
+    return FString::Printf(TEXT("(%f; %f, %f)"), value.r.km, value.lonlat.longitude.degrees, value.lonlat.latitude.degrees);
+}
+
+FString USpiceTypes::SCylindricalVectorToString(const FSCylindricalVector& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.r.km, value.lon.degrees, value.z.km);
+}
+
+FString USpiceTypes::SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.dlon.degreesPerSecond(), value.dlat.degreesPerSecond(), value.dalt.kmps);
+}
+
+FString USpiceTypes::SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.dlon.degreesPerSecond(), value.dlat.degreesPerSecond(), value.dalt.kmps);
+}
+
+FString USpiceTypes::SSphericalVectoRatesrToString(const FSSphericalVectorRates& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.dr.kmps, value.dcolat.degreesPerSecond(), value.dlon.degreesPerSecond());
+}
+
+FString USpiceTypes::SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.dr.kmps, value.dlon.degreesPerSecond(), value.dlat.degreesPerSecond());
+}
+
+FString USpiceTypes::SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value)
+{
+    return FString::Printf(TEXT("(%f, %f, %f)"), value.dr.kmps, value.dlon.degreesPerSecond(), value.dz.kmps);
+}
+
+FString USpiceTypes::SConicElementsToString(const FSConicElements& value)
+{
+    return FString::Printf(
+        TEXT("(%f; %f, %f, %f; %f %f; %f)"),
+        value.PerifocalDistance.km,
+        value.Inclination.degrees,
+        value.LongitudeOfAscendingNode.degrees,
+        value.ArgumentOfPeriapse.degrees,
+        value.MeanAnomalyAtEpoch.degrees,
+        value.Epoch.seconds,
+        value.GravitationalParameter.GM
+        );
+}
+
+FString USpiceTypes::Conv_SMassConstantToString(const FSMassConstant& value)
+{
+    return FString::Printf(TEXT("%f"), value.GM);
+}
 
 

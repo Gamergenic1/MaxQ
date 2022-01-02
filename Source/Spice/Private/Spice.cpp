@@ -21,208 +21,6 @@ PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 // May need a little rewrite for any platforms that don't support stack allocations.
 #define StackAlloc _alloca
 
-ConstSpiceChar* toString(ES_AberrationCorrectionForOccultation abcorr)
-{
-    switch (abcorr)
-    {
-    case ES_AberrationCorrectionForOccultation::LT:
-        return "LT";
-        break;
-    case ES_AberrationCorrectionForOccultation::CN:
-        return "CN";
-        break;
-    case ES_AberrationCorrectionForOccultation::XLT:
-        return "XLT";
-        break;
-    case ES_AberrationCorrectionForOccultation::XCN:
-        return "XCN";
-        break;
-    }
-
-    return "NONE";
-}
-
-ConstSpiceChar* toString(ES_AberrationCorrectionWithTransmissions abcorr)
-{
-    switch (abcorr)
-    {
-    case ES_AberrationCorrectionWithTransmissions::LT:
-        return "LT";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::LT_S:
-        return "LT+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::CN:
-        return "CN";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::CN_S:
-        return "CN+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XLT:
-        return "XLT";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XLT_S:
-        return "XLT+S";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XCN:
-        return "XCN";
-        break;
-    case ES_AberrationCorrectionWithTransmissions::XCN_S:
-        return "XCN+S";
-        break;
-    };
-
-    return "NONE";
-}
-
-
-ConstSpiceChar* toString(ES_GeometricModel model)
-{
-
-    if (model == ES_GeometricModel::ELLIPSOID)
-    {
-        return "ELLIPSOID";
-    }
-    else if (model == ES_GeometricModel::POINT)
-    {
-        return "POINT";
-    }
-
-    return "NONE";
-}
-
-FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
-{
-
-    if (model == ES_GeometricModel::ELLIPSOID)
-    {
-        return FString(TEXT("ELLIPSOID"));
-    }
-    else if (model == ES_GeometricModel::POINT)
-    {
-        return FString(TEXT("POINT"));
-    }
-
-    // From the docs:
-    // "DSK/UNPRIORITIZED[/SURFACES = <surface list>]"
-    // Which makes it look like UPRIORITIZED isn't optional or mutually esclusive with a list of surfaces..
-    // Is that correct, though?
-
-    FString result = "DSK/UNPRIORITIZED";
-
-    if (shapeSurfaces.Num() > 0)
-    {
-        result += "/SURFACES = ";
-
-        int num = shapeSurfaces.Num();
-
-        for (int i = 0; i < num; ++i)
-        {
-            result += shapeSurfaces[i];
-
-            if (i + 1 < num)
-            {
-                result += ", ";
-            }
-        }
-    }
-
-    return result;
-}
-
-
-ConstSpiceChar* toString(ES_RelationalOperator relate)
-{
-    switch (relate)
-    {
-    case ES_RelationalOperator::GreaterThan:
-        return ">";
-        break;
-    case ES_RelationalOperator::Equal:
-        return "=";
-        break;
-    case ES_RelationalOperator::LessThan:
-        return "<";
-        break;
-    case ES_RelationalOperator::ABSMAX:
-        return "ABSMAX";
-        break;
-    case ES_RelationalOperator::ABSMIN:
-        return "ABSMIN";
-        break;
-    case ES_RelationalOperator::LOCMAX:
-        return "LOCMAX";
-        break;
-    case ES_RelationalOperator::LOCMIN:
-        return "LOCMIN";
-        break;
-    };
-
-    return "NONE";
-}
-
-
-
-ConstSpiceChar* toString(ES_CoordinateSystemInclRadec coords)
-{
-    switch (coords)
-    {
-    case ES_CoordinateSystemInclRadec::RECTANGULAR:
-        return "RECTANGULAR";
-    case ES_CoordinateSystemInclRadec::CYLINDRICAL:
-        return "CYLINDRICAL";
-    case ES_CoordinateSystemInclRadec::LATITUDINAL:
-        return "LATITUDINAL";
-    case ES_CoordinateSystemInclRadec::SPHERICAL:
-        return "SPHERICAL";
-    case ES_CoordinateSystemInclRadec::GEODETIC:
-        return "GEODETIC";
-    case ES_CoordinateSystemInclRadec::PLANETOGRAPHIC:
-        return "PLANETOGRAPHIC";
-    case ES_CoordinateSystemInclRadec::RADEC:
-        return "RA/DEC";
-    };
-
-    return "NONE";
-}
-
-ConstSpiceChar* toString(ES_CoordinateSystem coords)
-{
-    return toString((ES_CoordinateSystemInclRadec)coords);
-}
-
-ConstSpiceChar* toString(ES_CoordinateName coord)
-{
-    switch (coord)
-    {
-    case ES_CoordinateName::X:
-        return "X";
-    case ES_CoordinateName::Y:
-        return "Y";
-    case ES_CoordinateName::Z:
-        return "Z";
-    case ES_CoordinateName::RADIUS:
-        return "RADIUS";
-    case ES_CoordinateName::LONGITUDE:
-        return "LONGITUDE";
-    case ES_CoordinateName::LATITUDE:
-        return "LATITUDE";
-    case ES_CoordinateName::RANGE:
-        return "RANGE";
-    case ES_CoordinateName::RIGHT_ASCENSION:
-        return "RIGHT ASCENSION";
-    case ES_CoordinateName::DECLINATION:
-        return "DECLINATION";
-    case ES_CoordinateName::COLATITUDE:
-        return "COLATITUDE";
-    case ES_CoordinateName::ALTITUDE:
-        return "ALTITUDE";
-    };
-
-    return "NONE";
-}
-
-
 FString toPath(const FString& file)
 {
     auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
@@ -1962,8 +1760,8 @@ void USpice::convrt(
 {
     // Inputs
     SpiceDouble		_x = in_value;
-    ConstSpiceChar* _in = USpiceTypes::UnitsToChar(in);
-    ConstSpiceChar* _out = USpiceTypes::UnitsToChar(out);
+    ConstSpiceChar* _in = USpiceTypes::toString(in);
+    ConstSpiceChar* _out = USpiceTypes::toString(out);
     // Outputs
     SpiceDouble		_y = 0;
 
@@ -3039,9 +2837,9 @@ void USpice::fovtrg(
     // Inputs
     ConstSpiceChar* _inst   = TCHAR_TO_ANSI(*inst);
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _tshape = toString(tshape);
+    ConstSpiceChar* _tshape = USpiceTypes::toString(tshape);
     ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*tframe);
-    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble    _et      = et.AsDouble();
     
@@ -3420,9 +3218,9 @@ void USpice::gfdist(
 
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _relate = toString(relate);
+    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
     SpiceDouble     _refval = refval.AsDouble();
     SpiceDouble     _adjust = adjust.AsDouble();
     SpiceDouble     _step   = step.AsDouble();
@@ -3513,12 +3311,12 @@ void USpice::gfoclt(
 
     ConstSpiceChar* _occtyp;
     ConstSpiceChar* _front = TCHAR_TO_ANSI(*front);
-    ConstSpiceChar* _fshape = TCHAR_TO_ANSI(*toFString(frontShape, frontShapeSurfaces));
+    ConstSpiceChar* _fshape = TCHAR_TO_ANSI(*USpiceTypes::toFString(frontShape, frontShapeSurfaces));
     ConstSpiceChar* _fframe = TCHAR_TO_ANSI(*frontframe);
     ConstSpiceChar* _back = TCHAR_TO_ANSI(*back);
-    ConstSpiceChar* _bshape = TCHAR_TO_ANSI(*toFString(backShape, backShapeSurfaces));
+    ConstSpiceChar* _bshape = TCHAR_TO_ANSI(*USpiceTypes::toFString(backShape, backShapeSurfaces));
     ConstSpiceChar* _bframe = TCHAR_TO_ANSI(*backFrame);
-    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _step = step.AsDouble();
     
@@ -3615,11 +3413,11 @@ void USpice::gfposc(
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _frame  = TCHAR_TO_ANSI(*frame);
-    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    ConstSpiceChar* _crdsys = toString(crdsys);
-    ConstSpiceChar* _coord  = toString(coord);
-    ConstSpiceChar* _relate = toString(relate);
+    ConstSpiceChar* _crdsys = USpiceTypes::toString(crdsys);
+    ConstSpiceChar* _coord  = USpiceTypes::toString(coord);
+    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
     SpiceDouble     _refval = refval;
     SpiceDouble     _adjust = adjust;
     SpiceDouble     _step   = step.AsDouble();
@@ -3847,7 +3645,7 @@ void USpice::ilumin(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
 
@@ -5241,12 +5039,12 @@ void USpice::occult(
 {
     // Inputs
     ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
-    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*toFString(shape1, shape1Surfaces));
+    ConstSpiceChar* _shape1 = TCHAR_TO_ANSI(*USpiceTypes::toFString(shape1, shape1Surfaces));
     ConstSpiceChar* _frame1 = TCHAR_TO_ANSI(*frame1);
     ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
-    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*toFString(shape2, shape2Surfaces));
+    ConstSpiceChar* _shape2 = TCHAR_TO_ANSI(*USpiceTypes::toFString(shape2, shape2Surfaces));
     ConstSpiceChar* _frame2 = TCHAR_TO_ANSI(*frame2);
-    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble        _et = et.AsDouble();
 
@@ -7143,7 +6941,7 @@ void USpice::sincpt(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
-    ConstSpiceChar* _abcorr = toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _dref   = TCHAR_TO_ANSI(*dref);
     SpiceDouble    _dvec[3];  dvec.CopyTo(_dvec);
@@ -7406,7 +7204,7 @@ void USpice::spkcpo(
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::_toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     SpiceDouble     _obspos[3]; obspos.CopyTo(_obspos);
     ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
     ConstSpiceChar* _obsref = TCHAR_TO_ANSI(*obsref);
@@ -7495,7 +7293,7 @@ void USpice::spkcpt(
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::_toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
@@ -7581,7 +7379,7 @@ void USpice::spkcvo(
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::_toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     SpiceDouble     _obssta[6]; obssta.CopyTo(_obssta);
     SpiceDouble     _obsepc = obsepc.AsDouble();
     ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
@@ -7673,7 +7471,7 @@ void USpice::spkcvt(
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
-    ConstSpiceChar* _abcorr = USpiceTypes::_toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
@@ -7736,7 +7534,7 @@ void USpice::spkezp(
     SpiceDouble _ptarg[3];
     ZeroOut(_ptarg);
 
-    ConstSpiceChar* _abcorr = USpiceTypes::_toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
 
     spkezp_c(targ, et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, obs, _ptarg, &_lt);
 
@@ -7779,7 +7577,7 @@ void USpice::spkezr(
     SpiceDouble _state[6];
     ZeroOut(_state);
 
-    ConstSpiceChar* _abcorr = USpiceTypes::_toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
 
     spkezr_c(TCHAR_TO_ANSI(*targ), et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, TCHAR_TO_ANSI(*obs), _state, &_lt);
 
@@ -7884,7 +7682,7 @@ void USpice::spkpos(
     SpiceDouble _ptarg[3];
     ZeroOut(_ptarg);
 
-    ConstSpiceChar* _abcorr = USpiceTypes::_toString(abcorr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
 
     spkpos_c(TCHAR_TO_ANSI(*targ), et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, TCHAR_TO_ANSI(*obs), _ptarg, &_lt);
 
@@ -8483,8 +8281,8 @@ void USpice::unitim(
 {
     // Inputs
     SpiceDouble     _epoch = epoch;
-    ConstSpiceChar* _insys = USpiceTypes::TimeScaleToChar(insys);
-    ConstSpiceChar* _outsys = USpiceTypes::TimeScaleToChar(outsys);
+    ConstSpiceChar* _insys = USpiceTypes::toString(insys);
+    ConstSpiceChar* _outsys = USpiceTypes::toString(outsys);
 
     // Output 
     SpiceDouble _out;
@@ -9768,8 +9566,8 @@ void USpice::xfmsta(
     SpiceDouble     _input_state[6];
     in.CopyTo(_input_state);
 
-    ConstSpiceChar* _input_coord_sys = toString(input_coord_sys);
-    ConstSpiceChar* _output_coord_sys = toString(output_coord_sys);
+    ConstSpiceChar* _input_coord_sys = USpiceTypes::toString(input_coord_sys);
+    ConstSpiceChar* _output_coord_sys = USpiceTypes::toString(output_coord_sys);
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
     // Output
     SpiceDouble _output_state[6];       ZeroOut(_output_state);
