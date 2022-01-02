@@ -316,6 +316,13 @@ struct FSDimensionlessVector
         z = 0.;
     }
 
+    FSDimensionlessVector(const FSDimensionlessVector& other)
+    {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+    }
+
     FSDimensionlessVector(const double(&xyz)[3])
     {
         x = xyz[0];
@@ -409,12 +416,12 @@ inline FSDistance operator*(const FSDistance& lhs, double rhs)
 
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular coordinates (X, Y, Z)"))
 struct FSDistanceVector
 {
     GENERATED_BODY()
 
-        UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance x;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance x;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance y;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance z;
 
@@ -621,6 +628,12 @@ public:
     inline double radians() const
     {
         return degrees / cachedDpr;
+    }
+
+    FSAngle(const FSAngle& other)
+    {
+        degrees = other.degrees;
+        cachedDpr = other.cachedDpr;
     }
 
     // FOR CONSISTENCY
@@ -846,62 +859,62 @@ inline static bool operator<(const FSEphemerisPeriod& A, const FSEphemerisPeriod
 }
 
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular  coordinates (DX, DY, DZ)"))
 struct FSVelocityVector
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed x;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed y;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed z;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dx;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dy;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dz;
 
     FSVelocityVector()
     {
-        x = FSSpeed::Zero;
-        y = FSSpeed::Zero;
-        z = FSSpeed::Zero;
+        dx = FSSpeed::Zero;
+        dy = FSSpeed::Zero;
+        dz = FSSpeed::Zero;
     }
 
     FSVelocityVector(const double(&xyz)[3])
     {
-        x = FSSpeed(xyz[0]);
-        y = FSSpeed(xyz[1]);
-        z = FSSpeed(xyz[2]);
+        dx = FSSpeed(xyz[0]);
+        dy = FSSpeed(xyz[1]);
+        dz = FSSpeed(xyz[2]);
     }
 
-    FSVelocityVector(double _x, double _y, double _z)
+    FSVelocityVector(double _dx, double _dy, double _dz)
     {
-        x = FSSpeed(_x);
-        y = FSSpeed(_y);
-        z = FSSpeed(_z);
+        dx = FSSpeed(_dx);
+        dy = FSSpeed(_dy);
+        dz = FSSpeed(_dz);
     }
 
-    FSVelocityVector(const FSSpeed& _x, const FSSpeed& _y, const FSSpeed& _z)
+    FSVelocityVector(const FSSpeed& _dx, const FSSpeed& _dy, const FSSpeed& _dz)
     {
-        x = FSSpeed(_x);
-        y = FSSpeed(_y);
-        z = FSSpeed(_z);
+        dx = FSSpeed(_dx);
+        dy = FSSpeed(_dy);
+        dz = FSSpeed(_dz);
     }
 
     FSVelocityVector(const FSDimensionlessVector& value)
     {
-        x = FSSpeed(value.x);
-        y = FSSpeed(value.y);
-        z = FSSpeed(value.z);
+        dx = FSSpeed(value.x);
+        dy = FSSpeed(value.y);
+        dz = FSSpeed(value.z);
     }
 
     void AsDimensionlessVector(FSDimensionlessVector& vector) const
     {
-        vector.x = x.AsDouble();
-        vector.y = y.AsDouble();
-        vector.z = z.AsDouble();
+        vector.x = dx.AsDouble();
+        vector.y = dy.AsDouble();
+        vector.z = dz.AsDouble();
     }
 
     void CopyTo(double(&xyz)[3]) const
     {
-        xyz[0] = x.kmps;
-        xyz[1] = y.kmps;
-        xyz[2] = z.kmps;
+        xyz[0] = dx.kmps;
+        xyz[1] = dy.kmps;
+        xyz[2] = dz.kmps;
     }
 
     static SPICE_API const FSVelocityVector Zero;
@@ -920,43 +933,43 @@ inline FSDistance operator*(const FSSpeed& lhs, const FSEphemerisPeriod& rhs)
 
 inline FSVelocityVector operator+(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
-    return FSVelocityVector(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+    return FSVelocityVector(lhs.dx + rhs.dx, lhs.dy + rhs.dy, lhs.dz + rhs.dz);
 }
 
 inline FSVelocityVector operator-(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
-    return FSVelocityVector(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+    return FSVelocityVector(lhs.dx - rhs.dx, lhs.dy - rhs.dy, lhs.dz - rhs.dz);
 }
 
 inline FSVelocityVector operator/(const FSVelocityVector& lhs, double rhs)
 {
-    return FSVelocityVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
+    return FSVelocityVector(lhs.dx / rhs, lhs.dy / rhs, lhs.dz / rhs);
 }
 
 inline FSDimensionlessVector operator/(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
-    return FSDimensionlessVector(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
+    return FSDimensionlessVector(lhs.dx / rhs.dx, lhs.dy / rhs.dy, lhs.dz / rhs.dz);
 }
 
 inline FSVelocityVector operator*(double lhs, const FSVelocityVector& rhs)
 {
-    return FSVelocityVector(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
+    return FSVelocityVector(lhs * rhs.dx, lhs * rhs.dy, lhs * rhs.dz);
 }
 
 
 inline FSVelocityVector operator*(const FSVelocityVector& lhs, double rhs)
 {
-    return FSVelocityVector(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
+    return FSVelocityVector(lhs.dx * rhs, lhs.dy * rhs, lhs.dz * rhs);
 }
 
 inline FSDistanceVector operator*(const FSEphemerisPeriod& lhs, const FSVelocityVector& rhs)
 {
-    return FSDistanceVector(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
+    return FSDistanceVector(lhs * rhs.dx, lhs * rhs.dy, lhs * rhs.dz);
 }
 
 inline FSDistanceVector operator*(const FSVelocityVector& lhs, const FSEphemerisPeriod& rhs)
 {
-    return FSDistanceVector(rhs * lhs.x, rhs * lhs.y, rhs * lhs.z);
+    return FSDistanceVector(rhs * lhs.dx, rhs * lhs.dy, rhs * lhs.dz);
 }
 
 
@@ -976,14 +989,14 @@ struct FSLonLat
 
     FSLonLat(double lon, double lat)
     {
-        longitude = lon;
-        latitude = lat;
+        longitude = FSAngle(lon);
+        latitude = FSAngle(lat);
     }
 
     FSLonLat(const FSAngle& lon, const FSAngle& lat)
     {
-        longitude = lon;
-        latitude = lat;
+        longitude = FSAngle(lon);
+        latitude = FSAngle(lat);
     }
 
     void AsAngles(FSAngle& lon, FSAngle& lat) const
@@ -1213,6 +1226,47 @@ struct FSMassConstant
 
 
 USTRUCT(BlueprintType)
+struct FSDimensionlessStateVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDimensionlessVector r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDimensionlessVector dr;
+
+    FSDimensionlessStateVector()
+    {
+        r = FSDimensionlessVector();
+        dr = FSDimensionlessVector();
+    }
+
+    FSDimensionlessStateVector(const double(&state)[6])
+    {
+        r = FSDimensionlessVector(state[0], state[1], state[2]);
+        dr = FSDimensionlessVector(state[3], state[4], state[5]);
+    }
+
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[0] = r.x;
+        state[1] = r.y;
+        state[2] = r.z;
+        state[3] = dr.x;
+        state[4] = dr.y;
+        state[5] = dr.z;
+    }
+
+
+    FSDimensionlessStateVector(const FSDimensionlessVector& _r, const FSDimensionlessVector& _dr)
+    {
+        r = FSDimensionlessVector(_r);
+        dr = FSDimensionlessVector(_dr);
+    }
+};
+
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular  coordinates (X, Y, Z, DX, DY, DZ)"))
 struct FSStateVector
 {
     GENERATED_BODY()
@@ -1243,9 +1297,826 @@ struct FSStateVector
         state[0] = r.x.km;
         state[1] = r.y.km;
         state[2] = r.z.km;
-        state[3] = v.x.kmps;
-        state[4] = v.y.kmps;
-        state[5] = v.z.kmps;
+        state[3] = v.dx.kmps;
+        state[4] = v.dy.kmps;
+        state[5] = v.dz.kmps;
+    }
+
+    FSStateVector(const FSDimensionlessStateVector& _v)
+    {
+        r = FSDistanceVector(_v.r);
+        v = FSVelocityVector(_v.dr);
+    }
+
+    void AsDimensionlessVectors(FSDimensionlessStateVector& _v) const
+    {
+        r.AsDimensionlessVector(_v.r);
+        v.AsDimensionlessVector(_v.dr);
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Cylindrical coordinates (R, LONG, Z)"))
+struct FSCylindricalVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngle lon;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance z;
+
+    FSCylindricalVector()
+    {
+        r = FSDistance();
+        lon = FSAngle();
+        z = FSDistance();
+    }
+
+    FSCylindricalVector(const double(&v)[3])
+    {
+        r = FSDistance(v[0]);
+        lon = FSAngle(v[1]);
+        z = FSDistance(v[2]);
+    }
+
+    FSCylindricalVector(const double(&state)[6])
+    {
+        r = FSDistance(state[0]);
+        lon = FSAngle(state[1]);
+        z = FSDistance(state[2]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = r.AsDouble();
+        v[1] = lon.AsDouble();
+        v[2] = z.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[0] = r.AsDouble();
+        state[1] = lon.AsDouble();
+        state[2] = z.AsDouble();
+    }
+
+    FSCylindricalVector(const FSDimensionlessVector& v)
+    {
+        r = FSDistance(v.x);
+        lon = FSAngle(v.y);
+        z = FSDistance(v.z);
+    }
+
+    FSCylindricalVector(const FSDistance& _r, const FSAngle& _lon, const FSDistance& _z)
+    {
+        r = FSDistance(_r);
+        lon = FSAngle(_lon);
+        z = FSDistance(_z);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = r.AsDouble();
+        v.y = lon.AsDouble();
+        v.z = z.AsDouble();
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Cylindrical coordinates (DR, DLONG, DZ)"))
+struct FSCylindricalVectorRates
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlon;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dz;
+
+    FSCylindricalVectorRates()
+    {
+        dr = FSSpeed();
+        dlon = FSAngularRate();
+        dz = FSSpeed();
+    }
+
+    FSCylindricalVectorRates(const double(&v)[3])
+    {
+        dr = FSSpeed(v[0]);
+        dlon = FSAngularRate(v[1]);
+        dz = FSSpeed(v[2]);
+    }
+
+    FSCylindricalVectorRates(const double(&state)[6])
+    {
+        dr = FSSpeed(state[3]);
+        dlon = FSAngularRate(state[4]);
+        dz = FSSpeed(state[5]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = dr.AsDouble();
+        v[1] = dlon.AsDouble();
+        v[2] = dz.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[3] = dr.AsDouble();
+        state[4] = dlon.AsDouble();
+        state[5] = dz.AsDouble();
+    }
+
+    FSCylindricalVectorRates(const FSDimensionlessVector& v)
+    {
+        dr = FSSpeed(v.x);
+        dlon = FSAngularRate(v.y);
+        dz = FSSpeed(v.z);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = dr.AsDouble();
+        v.y = dlon.AsDouble();
+        v.z = dz.AsDouble();
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Cylindrical coordinates (R, LONG, Z, DR, DLONG, DZ)"))
+struct FSCylindricalStateVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSCylindricalVector r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSCylindricalVectorRates dr;
+
+    FSCylindricalStateVector()
+    {
+        r = FSCylindricalVector();
+        dr = FSCylindricalVectorRates();
+    }
+
+    FSCylindricalStateVector(const double(&state)[6])
+    {
+        r = FSCylindricalVector(state);
+        dr = FSCylindricalVectorRates(state);
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        r.CopyTo(state);
+        dr.CopyTo(state);
+    }
+
+    FSCylindricalStateVector(const FSDimensionlessStateVector& v)
+    {
+        r = FSCylindricalVector(v.r);
+        dr = FSCylindricalVectorRates(v.dr);
+    }
+
+    void AsDimensionlessVectors(FSDimensionlessStateVector& v) const
+    {
+        r.AsDimensionlessVector(v.r);
+        dr.AsDimensionlessVector(v.dr);
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Latitudinal coordinates (R, LONGLAT"))
+struct FSLatitudinalVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSLonLat lonlat;
+
+    FSLatitudinalVector()
+    {
+        r = FSDistance();
+        lonlat = FSLonLat();
+    }
+
+    FSLatitudinalVector(const double(&v)[3])
+    {
+        r = FSDistance(v[0]);
+        lonlat = FSLonLat(v[1], v[2]);
+    }
+
+    FSLatitudinalVector(const double(&state)[6])
+    {
+        r = FSDistance(state[0]);
+        lonlat = FSLonLat(state[1], state[2]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = r.AsDouble();
+        lonlat.CopyTo(v[1], v[2]);
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[0] = r.AsDouble();
+        lonlat.CopyTo(state[1], state[2]);
+    }
+
+    FSLatitudinalVector(const FSDistance& _r, const FSLonLat& _lonlat)
+    {
+        r = FSDistance(_r);
+        lonlat = FSLonLat(_lonlat);
+    }
+
+    FSLatitudinalVector(const FSDimensionlessVector& v)
+    {
+        r = FSDistance(v.x);
+        lonlat = FSLonLat(v.y, v.z);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = r.AsDouble();
+        lonlat.CopyTo(v.y, v.z);
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Latitudinal coordinates (DR, DLONG, DLAT)"))
+struct FSLatitudinalVectorRates
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlon;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlat;
+
+    FSLatitudinalVectorRates()
+    {
+        dr = FSSpeed();
+        dlon = FSAngularRate();
+        dlat = FSAngularRate();
+    }
+
+    FSLatitudinalVectorRates(const double(&v)[3])
+    {
+        dr = FSSpeed(v[0]);
+        dlon = FSAngularRate(v[1]);
+        dlat = FSAngularRate(v[2]);
+    }
+
+    FSLatitudinalVectorRates(const double(&state)[6])
+    {
+        dr = FSSpeed(state[3]);
+        dlon = FSAngularRate(state[4]);
+        dlat = FSAngularRate(state[5]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = dr.AsDouble();
+        v[1] = dlon.AsDouble();
+        v[2] = dlat.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[3] = dr.AsDouble();
+        state[4] = dlon.AsDouble();
+        state[5] = dlat.AsDouble();
+    }
+
+    FSLatitudinalVectorRates(const FSDimensionlessVector& v)
+    {
+        dr = FSSpeed(v.x);
+        dlon = FSAngularRate(v.y);
+        dlat = FSAngularRate(v.z);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = dr.AsDouble();
+        v.y = dlon.AsDouble();
+        v.z = dlat.AsDouble();
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Latitudinal coordinates (R, LONGLAT, DR, DLONG, DLAT)"))
+struct FSLatitudinalStateVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSLatitudinalVector r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSLatitudinalVectorRates dr;
+
+    FSLatitudinalStateVector()
+    {
+        r = FSLatitudinalVector();
+        dr = FSLatitudinalVectorRates();
+    }
+
+    FSLatitudinalStateVector(const double(&state)[6])
+    {
+        r = FSLatitudinalVector(state);
+        dr = FSLatitudinalVectorRates(state);
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        r.CopyTo(state);
+        dr.CopyTo(state);
+    }
+
+    FSLatitudinalStateVector(const FSDimensionlessStateVector& v)
+    {
+        r = FSLatitudinalVector(v.r);
+        dr = FSLatitudinalVectorRates(v.dr);
+    }
+
+    void AsDimensionlessVectors(FSDimensionlessStateVector& v) const
+    {
+        r.AsDimensionlessVector(v.r);
+        dr.AsDimensionlessVector(v.dr);
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Spherical coordinates (R, COLAT, LONG)"))
+struct FSSphericalVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngle colat;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngle lon;
+
+    FSSphericalVector()
+    {
+        r = FSDistance();
+        colat = FSAngle();
+        lon = FSAngle();
+    }
+
+    FSSphericalVector(const double(&v)[3])
+    {
+        r = FSDistance(v[0]);
+        colat = FSAngle(v[1]);
+        lon = FSAngle(v[2]);
+    }
+
+    FSSphericalVector(const double(&state)[6])
+    {
+        r = FSDistance(state[0]);
+        colat = FSAngle(state[1]);
+        lon = FSAngle(state[2]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = r.AsDouble();
+        v[1] = colat.AsDouble();
+        v[2] = lon.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[0] = r.AsDouble();
+        state[1] = colat.AsDouble();
+        state[2] = lon.AsDouble();
+    }
+
+    FSSphericalVector(const FSDimensionlessVector& v)
+    {
+        r = FSDistance(v.x);
+        colat = FSAngle(v.y);
+        lon = FSAngle(v.z);
+    }
+
+    FSSphericalVector(const FSDistance& _r, const FSAngle& _colat, const FSAngle& _lon)
+    {
+        r = FSDistance(_r);
+        colat = FSAngle(_colat);
+        lon = FSAngle(_lon);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = r.AsDouble();
+        v.y = colat.AsDouble();
+        v.z = lon.AsDouble();
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Spherical coordinates (DR, DCOLAT, DLONG)"))
+struct FSSphericalVectorRates
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dcolat;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlon;
+
+    FSSphericalVectorRates()
+    {
+        dr = FSSpeed();
+        dcolat = FSAngularRate();
+        dlon = FSAngularRate();
+    }
+
+    FSSphericalVectorRates(const double(&v)[3])
+    {
+        dr = FSSpeed(v[0]);
+        dcolat = FSAngularRate(v[1]);
+        dlon = FSAngularRate(v[2]);
+    }
+
+    FSSphericalVectorRates(const double(&state)[6])
+    {
+        dr = FSSpeed(state[3]);
+        dcolat = FSAngularRate(state[4]);
+        dlon = FSAngularRate(state[5]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = dr.AsDouble();
+        v[1] = dcolat.AsDouble();
+        v[2] = dlon.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[3] = dr.AsDouble();
+        state[4] = dcolat.AsDouble();
+        state[5] = dlon.AsDouble();
+    }
+
+    FSSphericalVectorRates(const FSDimensionlessVector& v)
+    {
+        dr = FSSpeed(v.x);
+        dcolat = FSAngularRate(v.y);
+        dlon = FSAngularRate(v.z);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = dr.AsDouble();
+        v.y = dcolat.AsDouble();
+        v.z = dlon.AsDouble();
+    }
+};
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Spherical coordinates (R, COLAT, LONG, DR, DCOLAT, DLONG)"))
+struct FSSphericalStateVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSphericalVector r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSphericalVectorRates dr;
+
+    FSSphericalStateVector()
+    {
+        r = FSSphericalVector();
+        dr = FSSphericalVectorRates();
+    }
+
+    FSSphericalStateVector(const double(&state)[6])
+    {
+        r = FSSphericalVector(state);
+        dr = FSSphericalVectorRates(state);
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        r.CopyTo(state);
+        dr.CopyTo(state);
+    }
+
+    FSSphericalStateVector(const FSDimensionlessStateVector& v)
+    {
+        r = FSSphericalVector(v.r);
+        dr = FSSphericalVectorRates(v.dr);
+    }
+
+    void AsDimensionlessVectors(FSDimensionlessStateVector& v) const
+    {
+        r.AsDimensionlessVector(v.r);
+        dr.AsDimensionlessVector(v.dr);
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Geodetic coordinates (LONG, LAT, ALT)"))
+struct FSGeodeticVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSLonLat lonlat;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance alt;
+
+    FSGeodeticVector()
+    {
+        lonlat = FSLonLat();
+        alt = FSDistance();
+    }
+
+    FSGeodeticVector(const double(&v)[3])
+    {
+        lonlat = FSLonLat(v[0], v[1]);
+        alt = FSDistance(v[2]);
+    }
+
+    FSGeodeticVector(const double(&state)[6])
+    {
+        lonlat = FSLonLat(state[0], state[1]);
+        alt = FSDistance(state[2]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        lonlat.CopyTo(v[0], v[1]);
+        v[2] = alt.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        lonlat.CopyTo(state[0], state[1]);
+        state[2] = alt.AsDouble();
+    }
+
+    FSGeodeticVector(const FSDimensionlessVector& v)
+    {
+        lonlat = FSLonLat(v.x, v.y);
+        alt = FSDistance(v.z);
+    }
+
+    FSGeodeticVector(const FSLonLat& _lonlat, const FSDistance& _alt)
+    {
+        lonlat = FSLonLat(_lonlat);
+        alt = FSDistance(_alt);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        lonlat.CopyTo(v.x, v.y);
+        v.z = alt.AsDouble();
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Geodetic coordinates (DLONG, DLAT, DALT"))
+struct FSGeodeticVectorRates
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlon;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlat;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dalt;
+
+    FSGeodeticVectorRates()
+    {
+        dlon = FSAngularRate();
+        dlat = FSAngularRate();
+        dalt = FSSpeed();
+    }
+
+    FSGeodeticVectorRates(const double(&v)[3])
+    {
+        dlon = FSAngularRate(v[0]);
+        dlat = FSAngularRate(v[1]);
+        dalt = FSSpeed(v[2]);
+    }
+
+    FSGeodeticVectorRates(const double(&state)[6])
+    {
+        dlon = FSAngularRate(state[3]);
+        dlat = FSAngularRate(state[4]);
+        dalt = FSSpeed(state[5]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = dlon.AsDouble();
+        v[1] = dlat.AsDouble();
+        v[2] = dalt.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[3] = dlon.AsDouble();
+        state[4] = dlat.AsDouble();
+        state[5] = dalt.AsDouble();
+    }
+
+    FSGeodeticVectorRates(const FSDimensionlessVector& v)
+    {
+        dlon = FSAngularRate(v.x);
+        dlat = FSAngularRate(v.y);
+        dalt = FSSpeed(v.z);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = dlon.AsDouble();
+        v.y = dlat.AsDouble();
+        v.z = dalt.AsDouble();
+    }
+};
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Geodetic coordinates (LONG, LAT, ALT, DLONG, DLAT, DALT"))
+struct FSGeodeticStateVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSGeodeticVector r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSGeodeticVectorRates dr;
+
+    FSGeodeticStateVector()
+    {
+        r = FSGeodeticVector();
+        dr = FSGeodeticVectorRates();
+    }
+
+    FSGeodeticStateVector(const double(&state)[6])
+    {
+        r = FSGeodeticVector(state);
+        dr = FSGeodeticVectorRates(state);
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        r.CopyTo(state);
+        dr.CopyTo(state);
+    }
+
+    FSGeodeticStateVector(const FSDimensionlessStateVector& v)
+    {
+        r = FSGeodeticVector(v.r);
+        dr = FSGeodeticVectorRates(v.dr);
+    }
+
+    void AsDimensionlessVectors(FSDimensionlessStateVector& v) const
+    {
+        r.AsDimensionlessVector(v.r);
+        dr.AsDimensionlessVector(v.dr);
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Planetographic coordinates (LONG, LAT, ALT)"))
+struct FSPlanetographicVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSLonLat lonlat;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance alt;
+
+    FSPlanetographicVector()
+    {
+        lonlat = FSLonLat();
+        alt = FSDistance();
+    }
+
+    FSPlanetographicVector(const double(&v)[3])
+    {
+        lonlat = FSLonLat(v[0], v[1]);
+        alt = FSDistance(v[2]);
+    }
+
+    FSPlanetographicVector(const double(&state)[6])
+    {
+        lonlat = FSLonLat(state[0], state[1]);
+        alt = FSDistance(state[2]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        lonlat.CopyTo(v[0], v[1]);
+        v[2] = alt.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        lonlat.CopyTo(state[0], state[1]);
+        state[2] = alt.AsDouble();
+    }
+
+    FSPlanetographicVector(const FSDimensionlessVector& v)
+    {
+        lonlat = FSLonLat(v.x, v.y);
+        alt = FSDistance(v.z);
+    }
+
+    FSPlanetographicVector(const FSLonLat& _lonlat, const FSDistance& _alt)
+    {
+        lonlat = FSLonLat(_lonlat);
+        alt = FSDistance(_alt);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        lonlat.CopyTo(v.x, v.y);
+        v.z = alt.AsDouble();
+    }
+};
+
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Planetographic coordinates (DLONG, DLAT, DALT)"))
+struct FSPlanetographicVectorRates
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlon;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSAngularRate dlat;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dalt;
+
+    FSPlanetographicVectorRates()
+    {
+        dlon = FSAngularRate();
+        dlat = FSAngularRate();
+        dalt = FSSpeed();
+    }
+
+    FSPlanetographicVectorRates(const double(&v)[3])
+    {
+        dlon = FSAngularRate(v[0]);
+        dlat = FSAngularRate(v[1]);
+        dalt = FSSpeed(v[2]);
+    }
+
+    FSPlanetographicVectorRates(const double(&state)[6])
+    {
+        dlon = FSAngularRate(state[3]);
+        dlat = FSAngularRate(state[4]);
+        dalt = FSSpeed(state[5]);
+    }
+
+    void CopyTo(double(&v)[3]) const
+    {
+        v[0] = dlon.AsDouble();
+        v[1] = dlat.AsDouble();
+        v[2] = dalt.AsDouble();
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        state[3] = dlon.AsDouble();
+        state[4] = dlat.AsDouble();
+        state[5] = dalt.AsDouble();
+    }
+
+    FSPlanetographicVectorRates(const FSDimensionlessVector& v)
+    {
+        dlon = FSAngularRate(v.x);
+        dlat = FSAngularRate(v.y);
+        dalt = FSSpeed(v.z);
+    }
+
+    void AsDimensionlessVector(FSDimensionlessVector& v) const
+    {
+        v.x = dlon.AsDouble();
+        v.y = dlat.AsDouble();
+        v.z = dalt.AsDouble();
+    }
+};
+
+USTRUCT(BlueprintType, Meta = (ToolTip = "Planetographic coordinates (LONG, LAT, ALT, DLONG, DLAT, DALT)"))
+struct FSPlanetographicStateVector
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSPlanetographicVector r;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSPlanetographicVectorRates dr;
+
+    FSPlanetographicStateVector()
+    {
+        r = FSPlanetographicVector();
+        dr = FSPlanetographicVectorRates();
+    }
+
+    FSPlanetographicStateVector(const double(&state)[6])
+    {
+        r = FSPlanetographicVector(state);
+        dr = FSPlanetographicVectorRates(state);
+    }
+
+    void CopyTo(double(&state)[6]) const
+    {
+        r.CopyTo(state);
+        dr.CopyTo(state);
+    }
+
+    FSPlanetographicStateVector(const FSDimensionlessStateVector& v)
+    {
+        r = FSPlanetographicVector(v.r);
+        dr = FSPlanetographicVectorRates(v.dr);
+    }
+
+    void AsDimensionlessVectors(FSDimensionlessStateVector& v) const
+    {
+        r.AsDimensionlessVector(v.r);
+        dr.AsDimensionlessVector(v.dr);
     }
 };
 
@@ -1284,7 +2155,6 @@ USTRUCT(BlueprintType,
         ShortToolTip = "C-Matrix",
         ToolTip = "3x3 Rotation Matrix (AKA C-Matrix, or Camera-Matrix)"
         ))
-
 struct FSRotationMatrix
 {
     GENERATED_BODY()
@@ -2017,6 +2887,156 @@ struct FSPKType5Observation
 };
 
 
+USTRUCT(BlueprintType)
+struct FSPKType15Observation
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSEphemerisTime epoch;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDimensionlessVector tp;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDimensionlessVector pa;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance p;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double ecc;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double j2flg;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDimensionlessVector pv;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSMassConstant gm;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double j2;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance radius;
+
+    FSPKType15Observation()
+    {
+        epoch = FSEphemerisTime();
+        tp = FSDimensionlessVector();
+        pa = FSDimensionlessVector();
+        p = FSDistance();
+        ecc = 0.;
+        j2flg = 0.;
+        pv = FSDimensionlessVector();
+        gm = FSMassConstant();
+        j2 = 0.;
+        radius = FSDistance();
+    }
+
+
+    FSPKType15Observation(
+        const FSEphemerisTime& _epoch,
+        const FSDimensionlessVector& _tp,
+        const FSDimensionlessVector& _pa,
+        const FSDistance& _p,
+        double _ecc,
+        double _j2flg,
+        const FSDimensionlessVector& _pv,
+        const FSMassConstant& _gm,
+        double _j2,
+        const FSDistance& _radius
+        )
+    {
+        epoch = _epoch;
+        tp = _tp;
+        pa = pa;
+        p = _p;
+        ecc = _ecc;
+        j2flg = _j2flg;
+        pv = _pv;
+        gm = _gm;
+        j2 = _j2;
+        radius = _radius;
+    }
+
+    void CopyTo(
+        double& _epoch,
+        double(&_tp)[3],
+        double(&_pa)[3],
+        double& _p,
+        double& _ecc,
+        double& _j2flg,
+        double(&_pv)[3],
+        double& _gm,
+        double& _j2,
+        double& _radius
+        ) const
+    {
+        _epoch = epoch.AsDouble();
+        tp.CopyTo(_tp);
+        pa.CopyTo(_pa);
+        _ecc = ecc;
+        _j2flg = j2flg;
+        pv.CopyTo(_pv);
+        _gm = gm.AsDouble();
+        _j2 = j2;
+        _radius = radius.AsDouble();
+    }
+};
+
+
+USTRUCT(BlueprintType)
+struct FSTwoLineElements
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) TArray<double> elems;
+
+public:
+
+    FSTwoLineElements()
+    {
+        elems.Init(0., 10);
+    }
+
+    FSTwoLineElements(
+        double(_elems)[10]
+    )
+    {
+        elems.Init(0., 10);
+
+        memcpy(elems.GetData(), _elems, 10 * sizeof(double));
+    }
+
+    void CopyTo(double(_elems)[10]) const
+    {
+        memcpy(_elems, elems.GetData(), 10 * sizeof(double));
+    }
+};
+
+USTRUCT(BlueprintType)
+struct FSTwoLineGeophs
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) TArray<double> geophs;
+
+public:
+
+    FSTwoLineGeophs()
+    {
+        geophs.Init(0., 8);
+
+        const int  J2 = 0;
+        const int  J3 = 1;
+        const int  J4 = 2;
+        const int  KE = 3;
+        const int  QO = 4;
+        const int  SO = 5;
+        const int  ER = 6;
+        const int  AE = 7;
+
+        geophs[J2] = 1.082616e-3;
+        geophs[J3] = -2.53881e-6;
+        geophs[J4] = -1.65597e-6;
+        geophs[KE] = 7.43669161e-2;
+        geophs[QO] = 120.0;
+        geophs[SO] = 78.0;
+        geophs[ER] = 6378.135;
+        geophs[AE] = 1.0;
+    }
+
+    void CopyTo(double(_geophs)[8]) const
+    {
+        memcpy(_geophs, geophs.GetData(), 8 * sizeof(double));
+    }
+};
+
+
 UCLASS(BlueprintType, Blueprintable)
 class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 {
@@ -2221,7 +3241,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to dimensionless vector (in km/sec)",
+            CompactNodeTitle = "to dim'less (km/sec)",
             ToolTip = "Converts a velocity vector to a dimensionless vector (km/sec)"
             ))
         static FSDimensionlessVector Conv_SVelocityVectorToSDimensionlessVector(
@@ -2233,7 +3253,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from dimensionless vector (in km/sec)",
+            CompactNodeTitle = "from dim'less (km/sec)",
             ToolTip = "Converts a dimensionless vector to a velocity vector (km/sec)"
             ))
         static FSVelocityVector Conv_SDimensionlessVectorToSVelocityVector(
@@ -2289,7 +3309,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "to dimensionless vector (in km)",
+            CompactNodeTitle = "to dim'less (km)",
             ToolTip = "Converts a distance vector to a dimensionless vector (km)"
             ))
         static FSDimensionlessVector Conv_SDistanceVectorToSDimensionlessVector(
@@ -2301,12 +3321,134 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "from dimensionless vector (in km)",
+            CompactNodeTitle = "from dim'less (km)",
             ToolTip = "Converts a dimensionless vector (double precision) to a distance vector"
             ))
     static FSDistanceVector Conv_SDimensionlessVectorToSDistanceVector(
         const FSDimensionlessVector& value
     );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a dimensionless vector (double precision) to a rectangular state vector"
+            ))
+    static FSStateVector Conv_SDimensionlessStateVectorToSStateVector(
+        const FSDimensionlessStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a dimensionless vector (double precision) to a cylindrical state vector"
+            ))
+    static FSCylindricalStateVector Conv_SDimensionlessStateVectorToSCylindricalStateVector(
+        const FSDimensionlessStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a dimensionless vector (double precision) to a latitudinal state vector"
+            ))
+    static FSLatitudinalStateVector Conv_SDimensionlessStateVectorToSLatitudinalStateVector(
+        const FSDimensionlessStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a dimensionless vector (double precision) to a spherical state vector"
+            ))
+    static FSSphericalStateVector Conv_SDimensionlessStateVectorToSSphericalStateVector(
+        const FSDimensionlessStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a dimensionless vector (double precision) to a geodetic state vector"
+            ))
+    static FSGeodeticStateVector Conv_SDimensionlessStateVectorToSGeodeticStateVector(
+        const FSDimensionlessStateVector& value
+    );
+
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a dimensionless vector (double precision) to a planetographic state vector"
+            ))
+    static FSPlanetographicStateVector Conv_SDimensionlessStateVectorToSPlanetographicStateVector(
+        const FSDimensionlessStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a rectangular state vector to a dimensionless vector (double precision)"
+            ))
+    static FSDimensionlessStateVector Conv_SStateVectorToSDimensionlessStateVector(
+        const FSStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a cylindrical  state vector to a dimensionless vector (double precision)"
+            ))
+    static FSDimensionlessStateVector Conv_SCylindricalStateVectorToSDimensionlessStateVector(
+        const FSCylindricalStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a latitudinal state vector to a dimensionless vector (double precision)"
+            ))
+    static FSDimensionlessStateVector Conv_SLatitudinalStateVectorToSDimensionlessStateVector(
+        const FSLatitudinalStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a spherical state vector to a dimensionless vector (double precision)"
+            ))
+    static FSDimensionlessStateVector Conv_SSphericalStateVectorToSDimensionlessStateVector(
+        const FSSphericalStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a geodetic state vector to a dimensionless vector (double precision)"
+            ))
+    static FSDimensionlessStateVector Conv_FSGeodeticStateVectorToSDimensionlessStateVector(
+        const FSGeodeticStateVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            ToolTip = "Converts a planetographic state vector to a dimensionless vector (double precision)"
+            ))
+    static FSDimensionlessStateVector Conv_FSPlanetographicStateVectorToSDimensionlessStateVector(
+        const FSPlanetographicStateVector& value
+    );
+
 
     /* Multiplication (A * B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "matrix * matrix", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Rotation")
@@ -2533,7 +3675,7 @@ public:
 
     template<> static FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
     {
-        return FVector(value.y.kmps, value.x.kmps, value.z.kmps);
+        return FVector(value.dy.kmps, value.dx.kmps, value.dz.kmps);
     }
 
     // From UE to SPICE
@@ -2576,7 +3718,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "To UE Vector",
+            CompactNodeTitle = "To UE Vec",
             ToolTip = "Converts a Spice dimensionless vector (double precision, RHS) to a UE Vector (single precision, LHS)"
             ))
         static FVector Conv_SDimensionlessToVector(
@@ -2587,7 +3729,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "To UE Vector",
+            CompactNodeTitle = "To UE Vec",
             ToolTip = "Converts a Spice distance vector (double precision, RHS) to a UE Vector (km, single precision, LHS)"
             ))
         static FVector Conv_SDistanceVectorToVector(
@@ -2598,7 +3740,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "To UE Vector",
+            CompactNodeTitle = "To UE Vec",
             ToolTip = "Converts a Spice velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
             ))
         static FVector Conv_SVelocityVectorToVector(
@@ -2609,7 +3751,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "From UE Vector",
+            CompactNodeTitle = "From UE Vec",
             ToolTip = "Converts a UE Vector (single precision, LHS) to a Spice dimensionless vector (double precision, RHS)"
             ))
         static FSDimensionlessVector Conv_VectorToSDimensionless(
@@ -2620,7 +3762,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "From UE Vector",
+            CompactNodeTitle = "From UE Vec",
             ToolTip = "Converts a UE Vector (km, single precision, LHS) to a Spice distance vector (double precision, RHS)"
             ))
         static FSDistanceVector Conv_VectorToSDistanceVector(
@@ -2631,7 +3773,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "From UE Vector",
+            CompactNodeTitle = "From UE Vec",
             ToolTip = "Converts a UE Vector (kmps, single precision, LHS) to a Spice velocity vector (double precision, RHS)"
             ))
         static FSVelocityVector Conv_VectorToSVelocityVector(

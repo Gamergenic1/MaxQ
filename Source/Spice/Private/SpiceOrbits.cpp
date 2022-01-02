@@ -183,6 +183,45 @@ void USpiceOrbits::ComputeConic(
 }
 
 
+void USpiceOrbits::MakeSPKObservation(
+    const FSConicElements& orbit,
+    const FSDimensionlessVector& poleVectorOfCentralBody,
+    const FSDistance& equatorialRadiusOfCentralBody,
+    FSPKType15Observation& observation
+)
+{
+    double q, ecc, inc, lnode, argp;
+
+    q = orbit.PerifocalDistance.AsDouble();
+    ecc = orbit.Eccentricity;
+    inc = orbit.Inclination.AsDouble();
+    lnode = orbit.LongitudeOfAscendingNode.AsDouble();
+    argp = orbit.ArgumentOfPeriapse.AsDouble();
+
+    double r[3][3];
+
+    // Orbit's rotation matrix is a ZXZ euler multiplication
+    eul2m_c(argp, inc, lnode, 3, 1, 3, r);
+
+    double a = q / (1 - ecc);
+
+    double gm = orbit.GravitationalParameter.AsDouble();
+
+    double timeSincePeriapsis = orbit.MeanAnomalyAtEpoch.AsDouble() * sqrt(a * a * a / gm);
+
+    observation = FSPKType15Observation();
+    observation.epoch = FSEphemerisTime(orbit.Epoch.AsDouble() - timeSincePeriapsis);
+    observation.tp = FSDimensionlessVector(r[1][0], r[1][1], r[1][2]);
+    observation.pa = FSDimensionlessVector(r[0][0], r[0][1], r[0][2]);
+    observation.p = (1. + ecc) * orbit.PerifocalDistance;
+    observation.ecc = ecc;
+    observation.j2flg = 3;
+    observation.pv = poleVectorOfCentralBody;
+    observation.gm = orbit.GravitationalParameter;
+    observation.j2 = 0;
+    observation.radius = equatorialRadiusOfCentralBody;
+}
+
 
 void USpiceOrbits::RenderDebugEllipse(const UWorld* world, const FSEllipse& ellipse, const FTransform& localTransform, const FColor& color, float thickness)
 {
