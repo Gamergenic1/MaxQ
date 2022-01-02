@@ -12,6 +12,7 @@ PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
 {
 #include "SpiceUsr.h"
+#include "SpiceZfc.h" // for ev2lin
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
@@ -219,6 +220,13 @@ ConstSpiceChar* toString(ES_CoordinateName coord)
     };
 
     return "NONE";
+}
+
+
+FString toPath(const FString& file)
+{
+    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
+    return FPaths::Combine(gameDir, file);
 }
 
 
@@ -431,12 +439,8 @@ void USpice::furnsh(
     const FString& file
 )
 {
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-
-    auto path = FPaths::Combine(gameDir, file);
-    auto path_cstr = TCHAR_TO_ANSI(*path);
-    
-    furnsh_c(path_cstr);
+    auto path = TCHAR_TO_ANSI(*toPath(file));
+    furnsh_c(path);
 
     ErrorCheck(ResultCode, ErrorMessage);
 }
@@ -1313,14 +1317,11 @@ void USpice::ckcov(
     ES_TimeSystem                   timsys
 )
 {
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    auto path = FPaths::Combine(gameDir, ck_relative_path);
-
     const int smallCellSize = 100;
     const int largeCellSize = 10000;
 
     // Inputs
-    ConstSpiceChar* _ck = TCHAR_TO_ANSI(*path);
+    ConstSpiceChar* _ck = TCHAR_TO_ANSI(*toPath(ck_relative_path));
     SpiceInt        _idcode = idcode;
     SpiceBoolean    _needav = need_av ? SPICETRUE : SPICEFALSE;
     SpiceDouble     _tol = tol;
@@ -1509,8 +1510,7 @@ void USpice::cklpf(
     int& handle
 )
 {
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Outputs
     SpiceInt _handle = 0;
@@ -1565,8 +1565,7 @@ void USpice::ckobj(
     SPICEINT_CELL(idscell, MAXOBJ);
 
     // Inputs
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Outputs
     SpiceCell* _ids = &idscell;
@@ -1606,8 +1605,7 @@ void USpice::ckopn(
 )
 {
     // Inputs
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
     ConstSpiceChar* _ifname = TCHAR_TO_ANSI(*ifname);
     SpiceInt        _ncomch = ncomch;
     // Outputs
@@ -1921,18 +1919,14 @@ Exceptions
    Error free.
 */
 void USpice::cyllat(
-    const FSDistance& r,
-    const FSAngle&    lonc,
-    const FSDistance& z,
-    FSDistance& radius,
-    FSAngle& lon,
-    FSAngle& lat
+    const FSCylindricalVector& veccyl,
+    FSLatitudinalVector& veclat
 )
 {
     // Inputs
-    SpiceDouble  _r = r.AsDouble();
-    SpiceDouble  _lonc = lonc.AsDouble();
-    SpiceDouble  _z = z.AsDouble();
+    SpiceDouble  _r = veccyl.r.AsDouble();
+    SpiceDouble  _lonc = veccyl.lon.AsDouble();
+    SpiceDouble  _z = veccyl.z.AsDouble();
     
     // Outputs
     SpiceDouble _radius = 0.;
@@ -1942,9 +1936,9 @@ void USpice::cyllat(
     // Invocation
     cyllat_c(_r, _lonc, _z, &_radius, &_lon, &_lat);
 
-    radius = FSDistance(_radius);
-    lon = FSAngle(_lon);
-    lat = FSAngle(_lat);
+    auto radius = FSDistance(_radius);
+    auto lonlat = FSLonLat(_lon, _lat);
+    veclat = FSLatitudinalVector(radius, lonlat);
 }
 
 /*
@@ -1988,16 +1982,14 @@ Exceptions
    Error free.
 */
 void USpice::cylrec(
-    const FSDistance& r,
-    const FSAngle& lon,
-    const FSDistance& z,
+    const FSCylindricalVector& veccyl,
     FSDistanceVector& rectan
 )
 {
     // Inputs
-    SpiceDouble _r      = r.AsDouble();
-    SpiceDouble _lon    = lon.AsDouble();
-    SpiceDouble _z      = z.AsDouble();
+    SpiceDouble _r      = veccyl.r.AsDouble();
+    SpiceDouble _lon    = veccyl.lon.AsDouble();
+    SpiceDouble _z      = veccyl.z.AsDouble();
     // Output
     SpiceDouble _rectan[3]; ZeroOut(_rectan);
 
@@ -2015,18 +2007,14 @@ Exceptions
    Error free.
 */
 void USpice::cylsph(
-    const FSDistance& r,
-    const FSAngle& lonc,
-    const FSAngle& z,
-    FSDistance& radius,
-    FSAngle& colat,
-    FSAngle& lon
+    const FSCylindricalVector& veccyl,
+    FSSphericalVector& sphvec
 )
 {
     // Inputs
-    SpiceDouble _r = r.AsDouble();
-    SpiceDouble _lonc = lonc.AsDouble();
-    SpiceDouble _z = z.AsDouble();
+    SpiceDouble _r = veccyl.r.AsDouble();
+    SpiceDouble _lonc = veccyl.lon.AsDouble();
+    SpiceDouble _z = veccyl.z.AsDouble();
     // Outputs
     SpiceDouble _radius = 0.;
     SpiceDouble _colat = 0.;
@@ -2036,9 +2024,10 @@ void USpice::cylsph(
     cylsph_c(_r, _lonc, _z, &_radius, &_colat, &_lon);
 
     // Copy output
-    radius = FSDistance(_radius);
-    colat = FSAngle(_colat);
-    lon = FSAngle(_lon);
+    auto radius = FSDistance(_radius);
+    auto colat = FSAngle(_colat);
+    auto lon = FSAngle(_lon);
+    sphvec = FSSphericalVector(radius, colat, lon);
 }
 
 /*
@@ -2251,8 +2240,7 @@ void USpice::dafopr(
 )
 {
     // Input
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
     // Output
     SpiceInt        _handle = 0;
 
@@ -2321,8 +2309,7 @@ void USpice::dafopw(
 )
 {
     // Input
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
     // Output
     SpiceInt        _handle = 0;
 
@@ -2777,6 +2764,65 @@ void USpice::eul2xf(
 }
 
 
+void USpice::getgeophs(FSTwoLineGeophs& geophs)
+{
+    geophs = FSTwoLineGeophs();
+}
+
+
+void USpice::getelm(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSEphemerisTime& epoch,
+    FSTwoLineElements& elems,
+    const FString& firstLine,
+    const FString& secondLine,
+    int         frstyr
+    )
+{
+    SpiceInt     _frstyr = frstyr;
+    SpiceInt     _lineln = WINDOWS_MAX_PATH;
+    SpiceChar    _lines[2][WINDOWS_MAX_PATH];
+    strcpy_s(_lines[0], TCHAR_TO_ANSI(*firstLine));
+    strcpy_s(_lines[1], TCHAR_TO_ANSI(*secondLine));
+
+    SpiceDouble _epoch = 0;
+    SpiceDouble _elems[10]; ZeroOut(_elems);
+
+    getelm_c(_frstyr, _lineln, _lines, &_epoch, _elems);
+
+    epoch = FSEphemerisTime(_epoch);
+    elems = FSTwoLineElements(_elems);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+int USpice::ev2lin(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FSEphemerisTime& et,
+    const FSTwoLineGeophs& geophs,
+    const FSTwoLineElements& elems,
+    FSStateVector& state
+)
+{
+    SpiceDouble _et = et.AsDouble();
+    SpiceDouble _geophs[8]; geophs.CopyTo(_geophs);
+    SpiceDouble _elems[10]; elems.CopyTo(_elems);
+    SpiceDouble _state[6];
+
+    int returnValue = ev2lin_(&_et, _geophs, _elems, _state);
+
+    state = FSStateVector(_state);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+
+    return returnValue;
+}
+
 
 /*
 Exceptions
@@ -3199,8 +3245,7 @@ Exceptions
 void USpice::georec(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSLonLat& lonlat,
-    const FSDistance& alt,
+    const FSGeodeticVector& geovec,
     const FSDistance& re,
     FSDistanceVector& rectan,
     double f
@@ -3209,11 +3254,86 @@ void USpice::georec(
     SpiceDouble _rectan[3];
     ZeroOut(_rectan);
 
-    georec_c(lonlat.longitude.radians(), lonlat.latitude.radians(), alt.km, re.km, f, _rectan);
+    georec_c(geovec.lonlat.longitude.radians(), geovec.lonlat.latitude.radians(), geovec.alt.km, re.km, f, _rectan);
     rectan = FSDistanceVector(_rectan);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+
+/*
+Exceptions
+
+   1)  The underlying code translated to C from Fortran effectively
+       performs a Fortran INQUIRE on the specified file.  If this
+       operation fails for some reason, the error SPICE(INQUIREERROR)
+       will be signaled.
+
+   2)  If the file specified by FILE is already open, the error
+       SPICE(FILECURRENTLYOPEN) will be signaled.
+
+   3)  If the file specified by FILE does not exist, the error
+       SPICE(NOSUCHFILE) will be signaled.
+
+   4)  If the attempt to open the file specified by FILE fails, the
+       error SPICE(FILEOPENFAILED) will be signaled.
+
+   5)  If all attempts to open the file specified by FILE fail, the
+       error SPICE(FILEOPENFAILED) will be signaled.
+
+   6)  If all attempts to read from the file specified be FILE
+       fail, the error SPICE(FILEREADFAILED) will be signaled.
+
+   7)  The error SPICE(EMPTYSTRING) is signaled if the input
+       string does not contain at least one character, since the
+       input string cannot be converted to a Fortran-style string
+       in this case.
+
+   8)  The error SPICE(NULLPOINTER) is signaled if the input string
+       pointer is null.
+
+   9)  If either output string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   10) If an output string has length less than two characters, it
+       is too short to contain one character of output data plus a null
+       terminator, so it cannot be passed to the underlying Fortran
+       routine.  In this event, the error SPICE(STRINGTOOSHORT) is
+       signaled.
+*/
+void USpice::getfat(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FString& arch,
+    FString& type,
+    const FString& fileRelativePath
+)
+{
+    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(fileRelativePath));
+    
+    SpiceChar szArchBuffer[WINDOWS_MAX_PATH];
+    ZeroOut(szArchBuffer);
+    
+    SpiceChar szTypeBuffer[WINDOWS_MAX_PATH];
+    ZeroOut(szTypeBuffer);
+    
+    SpiceInt        _arclen = WINDOWS_MAX_PATH;
+    SpiceInt        _typlen = WINDOWS_MAX_PATH;
+    SpiceChar*      _arch = szArchBuffer;
+    SpiceChar*      _type = szTypeBuffer;
+
+    getfat_c(
+        _file,
+        _arclen,
+        _typlen,
+        _arch,
+        _type
+    );
+
+    arch = FString(_arch);
+    type = FString(_type);
 }
 
 
@@ -3938,17 +4058,14 @@ Exceptions
    Error free.
 */
 void USpice::latcyl(
-    const FSDistance& radius,
-    const FSLonLat& lonlat,
-    FSDistance& r,
-    FSAngle& lonc,
-    FSDistance& z
+    const FSLatitudinalVector& latvec,
+    FSCylindricalVector& cylvec
 )
 {
     // Input
-    SpiceDouble _radius = radius.AsDouble();
-    SpiceDouble _lon = lonlat.longitude.AsDouble();
-    SpiceDouble _lat = lonlat.latitude.AsDouble();
+    SpiceDouble _radius = latvec.r.AsDouble();
+    SpiceDouble _lon = latvec.lonlat.longitude.AsDouble();
+    SpiceDouble _lat = latvec.lonlat.latitude.AsDouble();
     
     // Outputs
     SpiceDouble _r = 0.;
@@ -3959,9 +4076,11 @@ void USpice::latcyl(
     latcyl_c(_radius, _lon, _lat, &_r, &_lonc, &_z);
 
     // Copy Output
-    r = FSDistance(_r);
-    lonc = FSAngle(_lonc);
-    z = FSDistance(_z);
+    auto r = FSDistance(_r);
+    auto lonc = FSAngle(_lonc);
+    auto z = FSDistance(_z);
+
+    cylvec = FSCylindricalVector(r, lonc, z);
 }
 
 /*
@@ -3969,16 +4088,15 @@ Exceptions
    Error free.
 */
 void USpice::latrec(
-    const FSDistance&    radius,
-    const FSLonLat& lonlat,
+    const FSLatitudinalVector& latvec,
     FSDistanceVector& rectan
 )
 {
     // Inputs
-    SpiceDouble    _radius = radius.AsDouble();
+    SpiceDouble    _radius = latvec.r.AsDouble();
     SpiceDouble    _longitude;
     SpiceDouble    _latitude;
-    lonlat.CopyTo(_longitude, _latitude);
+    latvec.lonlat.CopyTo(_longitude, _latitude);
 
     // Outputs
     SpiceDouble    _rectan[3];
@@ -3996,17 +4114,14 @@ Exceptions
    Error free.
 */
 void USpice::latsph(
-    const FSDistance& radius,
-    const FSLonLat& lonlat,
-    FSDistance& rho,
-    FSAngle& colat,
-    FSAngle& lons
+    const FSLatitudinalVector& latvec,
+    FSSphericalVector& sphvec
 )
 {
     // Inputs
-    SpiceDouble _radius = radius.AsDouble();
-    SpiceDouble _lon = lonlat.longitude.AsDouble();
-    SpiceDouble _lat = lonlat.latitude.AsDouble();
+    SpiceDouble _radius = latvec.r.AsDouble();
+    SpiceDouble _lon = latvec.lonlat.longitude.AsDouble();
+    SpiceDouble _lat = latvec.lonlat.latitude.AsDouble();
     // Outputs
     SpiceDouble _rho = 0.;
     SpiceDouble _colat = 0.;
@@ -4016,9 +4131,11 @@ void USpice::latsph(
     latsph_c(_radius, _lon, _lat, &_rho, &_colat, &_lons);
 
     // Copy outputs
-    rho = FSDistance(_rho);
-    colat = FSAngle(_colat);
-    lons = FSAngle(_lons);
+    auto rho = FSDistance(_rho);
+    auto colat = FSAngle(_colat);
+    auto lons = FSAngle(_lons);
+
+    sphvec = FSSphericalVector(rho, colat, lons);
 }
 
 
@@ -4791,6 +4908,30 @@ void USpice::mxv(
     vout = FSDimensionlessVector(_vout);
 }
 
+
+void USpice::mxv_state(
+    const FSStateTransform& m,
+    const FSStateVector& statein,
+    FSStateVector& stateout
+)
+{
+    // Input
+    double _m1[6][6];       m.CopyTo(_m1);
+    double _v2[6];          statein.CopyTo(_v2);
+    SpiceInt    _nrow1 = 6;
+    SpiceInt    _nc1r2 = 6;
+    
+    // Output
+    double _vout[6];
+
+    // Invocation
+    mxvg_c( _m1, _v2, _nrow1, _nc1r2, _vout);
+
+    // Pack outputs
+    stateout = FSStateVector(_vout);
+}
+
+
 /*
 Exceptions
 
@@ -5222,8 +5363,7 @@ void USpice::pckfrm(
     SPICEINT_CELL(idscell, MAXOBJ);
 
     // Inputs
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _pck = TCHAR_TO_ANSI(*(gameDir + pckRelativePath));
+    auto _pck = TCHAR_TO_ANSI(*toPath(pckRelativePath));
 
     // Outputs
     SpiceCell* _ids = &idscell;
@@ -5254,14 +5394,11 @@ void checkcov(
     void (*covfunction)(ConstSpiceChar* pck, SpiceInt idcode, SpiceCell* cover)
 )
 {
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    auto path = FPaths::Combine(gameDir, pckFileRelativePath);
-
     const int smallCellSize = 100;
     const int largeCellSize = 10000;
 
     // Inputs
-    ConstSpiceChar* _pck = TCHAR_TO_ANSI(*path);
+    ConstSpiceChar* _pck = TCHAR_TO_ANSI(*toPath(pckFileRelativePath));
     SpiceInt        _idcode = idcode;
     SpiceCell* _cover;
 
@@ -5586,8 +5723,7 @@ Exceptions
 void USpice::pgrrec(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSLonLat&       lonlat,
-    const FSDistance& alt,
+    const FSPlanetographicVector& planetographicVec,
     const FSDistance& re,
     FSDistanceVector& rectan,
     const FString& body,
@@ -5596,9 +5732,9 @@ void USpice::pgrrec(
 {
     // Inputs
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
-    SpiceDouble     _lon = lonlat.longitude.AsDouble();
-    SpiceDouble     _lat = lonlat.latitude.AsDouble();
-    SpiceDouble     _alt = alt.AsDouble();
+    SpiceDouble     _lon = planetographicVec.lonlat.longitude.AsDouble();
+    SpiceDouble     _lat = planetographicVec.lonlat.latitude.AsDouble();
+    SpiceDouble     _alt = planetographicVec.alt.AsDouble();
     SpiceDouble     _re  = re.AsDouble();
     SpiceDouble     _f   = (SpiceDouble)f;
     
@@ -6037,9 +6173,7 @@ void USpice::raxisa(
 */
 void USpice::reccyl(
     const FSDistanceVector& rectan,
-    FSDistance& r,
-    FSAngle& lon,
-    FSDistance& z
+    FSCylindricalVector& cylvec
 )
 {
     // Input
@@ -6055,16 +6189,16 @@ void USpice::reccyl(
     reccyl_c(_rectan, &_r, &_lon, &_z);
 
     // Copy outputs
-    r = FSDistance(_r);
-    lon = FSAngle(_lon);
-    z = FSDistance(_z);
+    auto r = FSDistance(_r);
+    auto lon = FSAngle(_lon);
+    auto z = FSDistance(_z);
+    cylvec = FSCylindricalVector(r, lon, z);
 }
 
 void USpice::recgeo(
     const FSDistanceVector& rectan,
     const FSDistance& re,
-    FSLonLat& lonlat,
-    FSDistance& alt,
+    FSGeodeticVector& vec,
     double f
     )
 {
@@ -6075,16 +6209,16 @@ void USpice::recgeo(
 
     recgeo_c(_rectan, re.km, f, &_lon, &_lat, &_alt);
 
-    lonlat = FSLonLat(_lon, _lat);
-    alt = FSDistance(_alt);
+    auto lonlat = FSLonLat(_lon, _lat);
+    auto alt = FSDistance(_alt);
+    vec = FSGeodeticVector(lonlat, alt);
 
     UnexpectedErrorCheck();
 }
 
 void USpice::reclat(
     const FSDistanceVector& rectan,
-    FSDistance& radius,
-    FSLonLat& lonlat
+    FSLatitudinalVector& latvec
 )
 {
     SpiceDouble _rectan[3];
@@ -6094,8 +6228,10 @@ void USpice::reclat(
 
     reclat_c(_rectan, &_radius, &_longitude, &_latitude);
 
-    radius = FSDistance(_radius);
-    lonlat = FSLonLat(_longitude, _latitude);
+    auto radius = FSDistance(_radius);
+    auto lonlat = FSLonLat(_longitude, _latitude);
+
+    latvec = FSLatitudinalVector(radius, lonlat);
 
     UnexpectedErrorCheck();
 }
@@ -6150,8 +6286,7 @@ void USpice::recpgr(
     FString& ErrorMessage,
     const FSDistanceVector& rectan,
     const FSDistance&       re,
-    FSLonLat&               lonlat,
-    FSDistance&             alt,
+    FSPlanetographicVector& vec,
     const FString&          body,
     double                  f
 )
@@ -6171,8 +6306,9 @@ void USpice::recpgr(
     recpgr_c(_body, _rectan, _re, _f, &_lon, &_lat, &_alt);
 
     // Copy outputs
-    lonlat = FSLonLat(_lon, _lat);
-    alt = FSDistance(_alt);
+    auto lonlat = FSLonLat(_lon, _lat);
+    auto alt = FSDistance(_alt);
+    vec = FSPlanetographicVector(lonlat, alt);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -6202,9 +6338,7 @@ void USpice::recrad(
 
 void USpice::recsph(
     const FSDistanceVector& rectan,
-    FSDistance& r,
-    FSAngle& colat,
-    FSAngle& lon
+    FSSphericalVector& vec
 )
 {
     SpiceDouble _rectan[3];
@@ -6214,9 +6348,10 @@ void USpice::recsph(
 
     recsph_c(_rectan, &_r, &_colat, &_lon);
 
-    r = FSDistance(_r);
-    colat = FSAngle(_colat);
-    lon = FSAngle(_lon);
+    auto r = FSDistance(_r);
+    auto colat = FSAngle(_colat);
+    auto lon = FSAngle(_lon);
+    vec = FSSphericalVector(r, colat, lon);
 
     UnexpectedErrorCheck();
 }
@@ -7070,18 +7205,14 @@ Exceptions
    Error free.
 */
 void USpice::sphcyl(
-    const FSDistance& radius,
-    const FSAngle& colat,
-    const FSAngle& slon,
-    FSDistance& r,
-    FSAngle& lon,
-    FSDistance& z
+    const FSSphericalVector& sphvec,
+    FSCylindricalVector& cylvec
 )
 {
     // Inputs
-    SpiceDouble _radius = radius.AsDouble();
-    SpiceDouble _colat = colat.AsDouble();
-    SpiceDouble _slon = slon.AsDouble();
+    SpiceDouble _radius = sphvec.r.AsDouble();
+    SpiceDouble _colat = sphvec.colat.AsDouble();
+    SpiceDouble _slon = sphvec.lon.AsDouble();
     // Outputs
     SpiceDouble _r = 0.;
     SpiceDouble _lon = 0.;
@@ -7091,9 +7222,11 @@ void USpice::sphcyl(
     sphcyl_c(_radius, _colat, _slon, &_r, &_lon, &_z);
 
     // Copy Outputs
-    r = FSDistance(_r);
-    lon = FSAngle(_lon);
-    z = FSDistance(_z);
+    auto r = FSDistance(_r);
+    auto lon = FSAngle(_lon);
+    auto z = FSDistance(_z);
+
+    cylvec = FSCylindricalVector(r, lon, z);
 }
 
 
@@ -7103,28 +7236,28 @@ Exceptions
    Error free.
 */
 void USpice::sphlat(
-    const FSDistance& r,
-    const FSAngle& colat,
-    const FSAngle& lons,
-    FSDistance& radius,
-    FSLonLat& lonlat
+    const FSSphericalVector& sphvec,
+    FSLatitudinalVector& latvec
 )
 {
     // Input
-    SpiceDouble _r = r.AsDouble();
-    SpiceDouble _colat = colat.AsDouble();
-    SpiceDouble _lons = lons.AsDouble();
+    SpiceDouble _radius = sphvec.r.AsDouble();
+    SpiceDouble _colat = sphvec.colat.AsDouble();
+    SpiceDouble _lons = sphvec.lon.AsDouble();
+
     // Output
-    SpiceDouble _radius;
+    SpiceDouble _r;
     SpiceDouble _lon;
     SpiceDouble _lat;
 
     // Invocation
-    sphlat_c(_r, _colat, _lons, &_radius, &_lon, &_lat);
+    sphlat_c(_radius, _colat, _lons, &_r, &_lon, &_lat);
 
     // Return Values
-    radius = FSDistance(_radius);
-    lonlat = FSLonLat(_lon, _lat);
+    auto r = FSDistance(_r);
+    auto lonlat = FSLonLat(_lon, _lat);
+
+    latvec = FSLatitudinalVector(r, lonlat);
 }
 
 /*
@@ -7133,16 +7266,14 @@ Exceptions
    Error free.
 */
 void USpice::sphrec(
-    const FSDistance& r,
-    const FSAngle& colat,
-    const FSAngle& lon,
+    const FSSphericalVector& sphvec,
     FSDistanceVector& rectan
 )
 {
     // Input
-    SpiceDouble _r = r.AsDouble();
-    SpiceDouble _colat = colat.AsDouble();
-    SpiceDouble _lon = lon.AsDouble();
+    SpiceDouble _r = sphvec.r.AsDouble();
+    SpiceDouble _colat = sphvec.colat.AsDouble();
+    SpiceDouble _lon = sphvec.lon.AsDouble();
     // Output
     SpiceDouble _rectan[3];
 
@@ -7785,8 +7916,7 @@ void USpice::spklef(
 )
 {
     // Input
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _filename = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _filename = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Output
     SpiceInt        _handle = 0;
@@ -7842,8 +7972,7 @@ void USpice::spkobj(
     SPICEINT_CELL(idscell, MAXOBJ);
 
     // Inputs
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Outputs
     SpiceCell* _ids = &idscell;
@@ -7891,8 +8020,7 @@ void USpice::spkopa(
 )
 {
     // Inputs
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _file = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(relativePath));
 
     // Output
     SpiceInt _handle = 0;
@@ -7933,8 +8061,7 @@ void USpice::spkopn(
 )
 {
     // Inputs
-    auto gameDir = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir());
-    ConstSpiceChar* _file = TCHAR_TO_ANSI(*(gameDir + relativePath));
+    ConstSpiceChar* _file = TCHAR_TO_ANSI(*toPath(relativePath));
 
     ConstSpiceChar* _ifname = TCHAR_TO_ANSI(*ifname);
     SpiceInt        _ncomch = ncomch;
@@ -8018,6 +8145,46 @@ void USpice::spkw05(
         _states,
         _epochs
     );
+
+    // Error handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::spkw15(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    int handle,
+    int body,
+    int center,
+    const FString& frame,
+    const FSEphemerisTime& first,
+    const FSEphemerisTime& last,
+    const FString& segid,
+    const FSPKType15Observation& state
+)
+{
+    // Inputs
+    SpiceInt         _handle = handle;
+    SpiceInt         _body = body;
+    SpiceInt         _center = center;
+    ConstSpiceChar*  _frame = TCHAR_TO_ANSI(*frame);
+    SpiceDouble      _first = first.AsDouble();
+    SpiceDouble      _last = last.AsDouble();
+    ConstSpiceChar*  _segid = TCHAR_TO_ANSI(*segid);
+
+    SpiceDouble _epoch;
+    SpiceDouble _tp[3];
+    SpiceDouble _pa[3];
+    SpiceDouble _p;
+    SpiceDouble _ecc;
+    SpiceDouble _j2flg;
+    SpiceDouble _pv[3];
+    SpiceDouble _gm;
+    SpiceDouble _j2;
+    SpiceDouble _radius;
+    state.CopyTo(_epoch, _tp, _pa, _p, _ecc, _j2flg, _pv, _gm, _j2, _radius);
+
+    spkw15_c(_handle, _body, _center, _frame, _first, _last, _segid, _epoch, _tp, _pa, _p, _ecc, _j2flg, _pv, _gm, _j2, _radius);
 
     // Error handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -9590,10 +9757,8 @@ Exceptions
 void USpice::xfmsta(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSDimensionlessVector& in1,
-    const FSDimensionlessVector& in2,
-    FSDimensionlessVector& out1,
-    FSDimensionlessVector& out2,
+    const FSDimensionlessStateVector& in,
+    FSDimensionlessStateVector& out,
     ES_CoordinateSystem input_coord_sys,
     ES_CoordinateSystem output_coord_sys,
     const FString& body
@@ -9601,12 +9766,8 @@ void USpice::xfmsta(
 {
     // Inputs
     SpiceDouble     _input_state[6];
-    _input_state[0] = in1.x;
-    _input_state[1] = in1.y;
-    _input_state[2] = in1.z;
-    _input_state[3] = in2.x;
-    _input_state[4] = in2.y;
-    _input_state[5] = in2.z;
+    in.CopyTo(_input_state);
+
     ConstSpiceChar* _input_coord_sys = toString(input_coord_sys);
     ConstSpiceChar* _output_coord_sys = toString(output_coord_sys);
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
@@ -9617,8 +9778,7 @@ void USpice::xfmsta(
     xfmsta_c(_input_state, _input_coord_sys, _output_coord_sys, _body, _output_state);
 
     // Return Value
-    out1 = FSDimensionlessVector(_output_state[0], _output_state[1], _output_state[2]);
-    out2 = FSDimensionlessVector(_output_state[3], _output_state[4], _output_state[5]);
+    out = FSDimensionlessStateVector(_output_state);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);

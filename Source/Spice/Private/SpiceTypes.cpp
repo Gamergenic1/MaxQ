@@ -241,7 +241,6 @@ void FSEulerAngles::AsDimensionlessVector(FSDimensionlessVector& vector) const
     }
 }
 
-
 double USpiceTypes::Conv_SDistanceToDouble(const FSDistance& value)
 {
     return value.AsDouble();
@@ -447,6 +446,103 @@ FSQuaternion USpiceTypes::Conv_SRotationMatrixToSQuaternion(const FSRotationMatr
     
     return ResultCode == ES_ResultCode::Success ? result : FSQuaternion::Identity;
 }
+
+FSStateVector USpiceTypes::Conv_SDimensionlessStateVectorToSStateVector(
+    const FSDimensionlessStateVector& value
+)
+{
+    return FSStateVector(value);
+}
+
+FSCylindricalStateVector USpiceTypes::Conv_SDimensionlessStateVectorToSCylindricalStateVector(
+    const FSDimensionlessStateVector& value
+)
+{
+    return FSCylindricalStateVector(value);
+}
+
+FSLatitudinalStateVector USpiceTypes::Conv_SDimensionlessStateVectorToSLatitudinalStateVector(
+    const FSDimensionlessStateVector& value
+)
+{
+    return FSLatitudinalStateVector(value);
+}
+
+FSSphericalStateVector USpiceTypes::Conv_SDimensionlessStateVectorToSSphericalStateVector(
+    const FSDimensionlessStateVector& value
+)
+{
+    return FSSphericalStateVector(value);
+}
+
+FSGeodeticStateVector USpiceTypes::Conv_SDimensionlessStateVectorToSGeodeticStateVector(
+    const FSDimensionlessStateVector& value
+)
+{
+    return FSGeodeticStateVector(value);
+}
+
+FSPlanetographicStateVector USpiceTypes::Conv_SDimensionlessStateVectorToSPlanetographicStateVector(
+    const FSDimensionlessStateVector& value
+)
+{
+    return FSPlanetographicStateVector(value);
+}
+
+FSDimensionlessStateVector USpiceTypes::Conv_SStateVectorToSDimensionlessStateVector(
+    const FSStateVector& value
+)
+{
+    FSDimensionlessStateVector result;
+    value.AsDimensionlessVectors(result);
+    return result;
+}
+
+FSDimensionlessStateVector USpiceTypes::Conv_SCylindricalStateVectorToSDimensionlessStateVector(
+    const FSCylindricalStateVector& value
+)
+{
+    FSDimensionlessStateVector result;
+    value.AsDimensionlessVectors(result);
+    return result;
+}
+
+FSDimensionlessStateVector USpiceTypes::Conv_SLatitudinalStateVectorToSDimensionlessStateVector(
+    const FSLatitudinalStateVector& value
+)
+{
+    FSDimensionlessStateVector result;
+    value.AsDimensionlessVectors(result);
+    return result;
+}
+
+FSDimensionlessStateVector USpiceTypes::Conv_SSphericalStateVectorToSDimensionlessStateVector(
+    const FSSphericalStateVector& value
+)
+{
+    FSDimensionlessStateVector result;
+    value.AsDimensionlessVectors(result);
+    return result;
+}
+
+FSDimensionlessStateVector USpiceTypes::Conv_FSGeodeticStateVectorToSDimensionlessStateVector(
+    const FSGeodeticStateVector& value
+)
+{
+    FSDimensionlessStateVector result;
+    value.AsDimensionlessVectors(result);
+    return result;
+}
+
+FSDimensionlessStateVector USpiceTypes::Conv_FSPlanetographicStateVectorToSDimensionlessStateVector(
+    const FSPlanetographicStateVector& value
+)
+{
+    FSDimensionlessStateVector result;
+    value.AsDimensionlessVectors(result);
+    return result;
+}
+
 
 // Operators that lean on SPICE's CSPICE implementations instead of implement themselves...
 FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs)

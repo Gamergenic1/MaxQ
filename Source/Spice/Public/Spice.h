@@ -744,12 +744,8 @@ public:
             ToolTip = "Convert from cylindrical to latitudinal coordinates"
             ))
         static void cyllat(
-            const FSDistance& r,
-            const FSAngle& lonc,
-            const FSDistance& z,
-            FSDistance& radius,
-            FSAngle& lon,
-            FSAngle& lat
+            const FSCylindricalVector& cylvec,
+            FSLatitudinalVector& latvec
         );
 
     /// <summary>Take a measurement X, the units associated with X, and units to which X should be converted; return Y-- -the value of the measurement in the output units.  Google cspice+convrt for units</summary>
@@ -802,9 +798,7 @@ public:
             ToolTip = "Convert from cylindrical to rectangular coordinates"
             ))
     static void cylrec(
-        const FSDistance& r,
-        const FSAngle& lon,
-        const FSDistance& z,
+        const FSCylindricalVector& cylvec,
         FSDistanceVector& rectan
     );
 
@@ -815,12 +809,8 @@ public:
             ToolTip = "Convert from cylindrical to spherical coordinates"
             ))
     static void cylsph(
-        const FSDistance& r,
-        const FSAngle& lonc,
-        const FSAngle& z,
-        FSDistance& radius,
-        FSAngle& colat,
-        FSAngle& lon
+        const FSCylindricalVector& cylvec,
+        FSSphericalVector& sphvec
     );
 
     /// <summary>DAF, close</summary>
@@ -1315,6 +1305,48 @@ public:
         const FString& name = TEXT("BODY399_GM")
     );
 
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|State",
+        meta = (
+            ToolTip = ""
+            ))
+    static void getgeophs(FSTwoLineGeophs& geophs);
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|State",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AdvancedDisplay = "frstyr",
+            ShortToolTip = "Get the components from two-line elements",
+            ToolTip = "Given a the \"lines\" of a two-line element set, parse the lines and return the elements in units suitable for use in SPICE software"
+            ))
+    static void getelm(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSEphemerisTime& epoch,
+        FSTwoLineElements& elems,
+        const FString& firstLine,
+        const FString& secondLine,
+        int         frstyr = 1957
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|State",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ToolTip = ""
+            ))
+    static int ev2lin(
+            ES_ResultCode& ResultCode,
+            FString& ErrorMessage,
+            const FSEphemerisTime& et,
+            const FSTwoLineGeophs& geophs,
+            const FSTwoLineElements& elems,
+            FSStateVector& state
+        );
+
     /// <summary>Convert geodetic coordinates to rectangular coordinates</summary>
     /// <param name="lon">[in] Geodetic longitude of point (radians)</param>
     /// <param name="lat">[in] Geodetic latitude  of point (radians)</param>
@@ -1327,14 +1359,13 @@ public:
         Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
-            ShortToolTip = " Geodetic to rectangular coordinates",
+            ShortToolTip = "Geodetic to rectangular coordinates",
             ToolTip = "Convert geodetic coordinates to rectangular coordinates"
             ))
     static void georec(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FSLonLat& lonlat,
-        const FSDistance& alt,
+        const FSGeodeticVector& geovec,
         const FSDistance& re,
         FSDistanceVector& rectan,
         double f = 0.00335281066474748071984552861852
@@ -1364,6 +1395,21 @@ public:
         FString&        frame,
         FSDimensionlessVector&          bsight,
         TArray<FSDimensionlessVector>&   bounds
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Get file architecture and type",
+            ToolTip = "Determine the file architecture and file type of most SPICE kernel files"
+            ))
+    static void getfat(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FString& arch,
+        FString& fype,
+        const FString& fileRelativePath = TEXT("Content/Spice/Kernels/pck00010.tpc")
     );
 
 
@@ -1763,13 +1809,10 @@ public:
             ShortToolTip = "Latitudinal to cylindrical coordinates",
             ToolTip = "Convert from latitudinal coordinates to cylindrical coordinates"
             ))
-        static void latcyl(
-            const FSDistance& radius,
-            const FSLonLat& lonlat,
-            FSDistance& r,
-            FSAngle& lonc,
-            FSDistance& z
-        );
+    static void latcyl(
+        const FSLatitudinalVector& latvec,
+        FSCylindricalVector& cylvec
+    );
 
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
@@ -1778,8 +1821,7 @@ public:
             ToolTip = "Convert from latitudinal coordinates to rectangular coordinates"
             ))
     static void latrec(
-        const FSDistance& radius,
-        const FSLonLat& lonlat,
+        const FSLatitudinalVector& vec,
         FSDistanceVector& rectan
     );
 
@@ -1790,11 +1832,8 @@ public:
             ToolTip = "Convert from latitudinal coordinates to spherical coordinates"
             ))
     static void latsph(
-        const FSDistance& radius,
-        const FSLonLat& lonlat,
-        FSDistance& rho,
-        FSAngle& colat,
-        FSAngle& lons
+        const FSLatitudinalVector& latvec,
+        FSSphericalVector& sphVec
     );
 
 
@@ -1878,6 +1917,14 @@ public:
             void* vout
         );
 #endif
+
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "multiplies state by state transform"))
+    static void mxv_state(
+        const FSStateTransform& m,
+        const FSStateVector& statein,
+        FSStateVector&  stateout
+    );
 
     /// <summary>Find a unit quaternion corresponding to a specified rotation matrix</summary>
     /// <param name="r">[in] Rotation matrix</param>
@@ -2418,8 +2465,7 @@ public:
     static void pgrrec(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FSLonLat& lonlat,
-        const FSDistance& alt,
+        const FSPlanetographicVector& planetographicVec,
         const FSDistance& re,
         FSDistanceVector& rectan,
         const FString& body = TEXT("EARTH"),
@@ -2743,9 +2789,7 @@ public:
             ))
     static void reccyl(
         const FSDistanceVector& rectan,
-        FSDistance& r,
-        FSAngle& lon,
-        FSDistance& z
+        FSCylindricalVector& vec
     );
 
     /// <summary>Convert from rectangular coordinates to geodetic coordinates</summary>
@@ -2765,8 +2809,7 @@ public:
     static void recgeo(
         const FSDistanceVector& rectan,
         const FSDistance& re,
-        FSLonLat& lonlat,
-        FSDistance& alt,
+        FSGeodeticVector& vec,
         double f = 0.00335281066474748071984552861852
     );
 
@@ -2784,8 +2827,7 @@ public:
             ))
     static void reclat(
         const FSDistanceVector& rectan,
-        FSDistance& radius,
-        FSLonLat& lonlat
+        FSLatitudinalVector& latvec
     );
 
 
@@ -2801,8 +2843,7 @@ public:
         FString& ErrorMessage,
         const FSDistanceVector& rectan,
         const FSDistance& re,
-        FSLonLat& lonlat,
-        FSDistance& alt,
+        FSPlanetographicVector& vec,
         const FString& body = TEXT("EARTH"),
         double f = 0.00335281066474748071984552861852
     );
@@ -2842,9 +2883,7 @@ public:
             ))
         static void recsph(
             const FSDistanceVector& rectan,
-            FSDistance& r,
-            FSAngle& colat,
-            FSAngle& lon
+            FSSphericalVector& vec
         );
 
     /// <summary>Generate a rotation matrix</summary>
@@ -3610,19 +3649,39 @@ public:
             ShortToolTip = "Write SPK segment, type 5",
             ToolTip = "Write an SPK segment of type 5 given a time-ordered set of discrete states and epochs, and the gravitational parameter of a central body"
             ))
-        static void spkw05(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int handle,
-            int body,
-            int center,
-            const FString& frame,
-            const FSEphemerisTime& first,
-            const FSEphemerisTime& last,
-            const FString& segid,
-            const FSMassConstant& gm,
-            const TArray<FSPKType5Observation>& states
-        );
+    static void spkw05(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int handle,
+        int body,
+        int center,
+        const FString& frame,
+        const FSEphemerisTime& first,
+        const FSEphemerisTime& last,
+        const FString& segid,
+        const FSMassConstant& gm,
+        const TArray<FSPKType5Observation>& states
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Spk",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "SPK, write a type 15 segment",
+            ToolTip = "Write an SPK segment of type 15 given a type 15 data record"
+            ))
+    static void spkw15(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int handle,
+        int body,
+        int center,
+        const FString& frame,
+        const FSEphemerisTime& first,
+        const FSEphemerisTime& last,
+        const FString& segid,
+        const FSPKType15Observation& state
+    );
 
     /// <summary>Seconds in a day</summary>
     /// <returns>Seconds.  Per day.</returns>
@@ -3651,12 +3710,8 @@ public:
             ToolTip = "This routine converts from spherical coordinates to cylindrical coordinates"
             ))
     static void sphcyl(
-        const FSDistance& radius,
-        const FSAngle& colat,
-        const FSAngle& slon,
-        FSDistance& r,
-        FSAngle& lon,
-        FSDistance& z
+        const FSSphericalVector& sphvec,
+        FSCylindricalVector& cylvec
     );
 
     /// <summary>Spherical to latitudinal coordinates</summary>
@@ -3674,11 +3729,8 @@ public:
             ToolTip = "Convert from spherical coordinates to latitudinal coordinates"
             ))
     static void sphlat(
-        const FSDistance& r,
-        const FSAngle& colat,
-        const FSAngle& lons,
-        FSDistance& radius,
-        FSLonLat& lonlat
+        const FSSphericalVector& sphvec,
+        FSLatitudinalVector& latvec
     );
 
     /// <summary>Spherical to rectangular coordinates</summary>
@@ -3694,9 +3746,7 @@ public:
             ToolTip = "Convert from spherical coordinates to rectangular coordinates"
             ))
     static void sphrec(
-        const FSDistance& r,
-        const FSAngle& colat,
-        const FSAngle& lon,
+        const FSSphericalVector& sphvec,
         FSDistanceVector& rectan
     );
 
@@ -3799,15 +3849,14 @@ public:
             ShortToolTip = "State Transformation Matrix",
             ToolTip = "Return the state transformation matrix from one frame to another at a specified epoch"
             ))
-        static void sxform(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSEphemerisTime& et,
-            FSStateTransform& xform,
-            const FString& from = TEXT("IAU_EARTH"),
-            const FString& to = TEXT("J2000")
-
-        );
+    static void sxform(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSEphemerisTime& et,
+        FSStateTransform& xform,
+        const FString& from = TEXT("IAU_EARTH"),
+        const FString& to = TEXT("J2000")
+    );
 
     /// <summary>Time Output</summary>
     /// <param name="et">[in] An epoch in seconds past the ephemeris epoch J2000</param>
@@ -4794,10 +4843,8 @@ public:
     static void xfmsta(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FSDimensionlessVector& in1,
-        const FSDimensionlessVector& in2,
-        FSDimensionlessVector& out1,
-        FSDimensionlessVector& out2,
+        const FSDimensionlessStateVector& in,
+        FSDimensionlessStateVector& out,
         ES_CoordinateSystem input_coord_sys = ES_CoordinateSystem::RECTANGULAR,
         ES_CoordinateSystem output_coord_sys = ES_CoordinateSystem::RECTANGULAR,
         const FString& body = TEXT("")
@@ -5184,52 +5231,6 @@ public:
         SpiceDouble     left,
         SpiceDouble     right,
         SpiceCell* window
-    );
-
-
-    static void sphcyl(
-        SpiceDouble     radius,
-        SpiceDouble     colat,
-        SpiceDouble     slon,
-        SpiceDouble* r,
-        SpiceDouble* lon,
-        SpiceDouble* z
-    );
-
-    static void cylsph(
-        SpiceDouble    r,
-        SpiceDouble    lonc,
-        SpiceDouble    z,
-        SpiceDouble* radius,
-        SpiceDouble* colat,
-        SpiceDouble* lon
-    );
-
-    static void latsph(
-        SpiceDouble    radius,
-        SpiceDouble    lon,
-        SpiceDouble    lat,
-        SpiceDouble* rho,
-        SpiceDouble* colat,
-        SpiceDouble* lons
-    );
-
-    static void cyllat(
-        SpiceDouble    r,
-        SpiceDouble    lonc,
-        SpiceDouble    z,
-        SpiceDouble* radius,
-        SpiceDouble* lon,
-        SpiceDouble* lat
-    );
-
-    static void latcyl(
-        SpiceDouble    radius,
-        SpiceDouble    lon,
-        SpiceDouble    lat,
-        SpiceDouble* r,
-        SpiceDouble* lonc,
-        SpiceDouble* z
     );
 #endif
 

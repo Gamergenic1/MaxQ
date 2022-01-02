@@ -94,6 +94,18 @@ public:
         float thickness = 10.f
     );
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Debug|Orbits",
+        meta = (
+            ToolTip = "Creates an SPK Observation from an orbit"
+            ))
+    static void MakeSPKObservation(
+        const FSConicElements& orbit,
+        const FSDimensionlessVector& poleVectorOfCentralBody,
+        const FSDistance& equatorialRadiusOfCentralBody,
+        FSPKType15Observation& observation
+    );
+
 private:
    static  void RenderDebugEllipse(const UWorld* world, const FSEllipse& ellipse, const FTransform& localTransform, const FColor& color = FColor::White, float thickness = 10.f);
    static  void RenderDebugHyperbola(const UWorld* world, const FSEllipse& ellipse, const FTransform& localTransform, const FColor& color = FColor::White, float thickness = 10.f);
