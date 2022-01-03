@@ -2562,9 +2562,18 @@ void USpice::eul2xf(
 }
 
 
-void USpice::getgeophs(FSTwoLineGeophs& geophs)
+void USpice::getgeophs(FSTLEGeophysicalConstants& geophs, const FString& id)
 {
-    geophs = FSTwoLineGeophs();
+    if (id.Equals(TEXT("EARTH"), ESearchCase::Type::IgnoreCase))
+    {
+        geophs = FSTLEGeophysicalConstants();
+    }
+    else
+    {
+        setmsg_c("getgeophs [id] Could not find constants for = $");
+        errch_c("$", TCHAR_TO_ANSI(*id));
+        sigerr_c("SPICE(NOTFOUND)");
+    }
 }
 
 
@@ -2601,7 +2610,7 @@ int USpice::ev2lin(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     const FSEphemerisTime& et,
-    const FSTwoLineGeophs& geophs,
+    const FSTLEGeophysicalConstants& geophs,
     const FSTwoLineElements& elems,
     FSStateVector& state
 )
@@ -7987,6 +7996,215 @@ void USpice::spkw15(
     // Error handling
     ErrorCheck(ResultCode, ErrorMessage);
 }
+
+
+
+void USpice::srfc2s(
+    FString& srfstr,
+    ES_FoundCode& isname,
+    int   code,
+    int   bodyid
+)
+{
+    // Buffer
+    SpiceChar szBuffer[SPICE_SRF_SFNMLN];
+    ZeroOut(szBuffer);
+
+    // Inputs
+    SpiceInt        _code = (SpiceInt)code;
+    SpiceInt        _bodyid = (SpiceInt)bodyid;
+
+    // Output
+    SpiceInt        _srflen = SPICE_SRF_SFNMLN;
+    SpiceChar*      _srfstr = szBuffer;
+    SpiceBoolean    _isname = SPICEFALSE;
+
+    // Invocation
+    srfc2s_c(
+        _code,
+        _bodyid,
+        _srflen,
+        _srfstr,
+        &_isname 
+    );
+
+    // Bundle outputs
+    srfstr = FString(_srfstr);
+    isname = (_isname == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+
+    // Clear any minor errors (empty string on input, etc)
+    UnexpectedErrorCheck(true);
+}
+
+/*
+Exceptions
+
+   1)  If the input body string cannot be mapped to a body name, the
+       output `srfstr' is set to a string representation of the surface
+       ID code. The output `isname' is set to SPICEFALSE.
+
+       This case is not treated as an error.
+
+   2)  If the input surface code cannot be mapped to a surface name,
+       the output `srfstr' is set to a string representation of the
+       surface ID code. The input body string is ignored. The output
+       `isname' is set to SPICEFALSE.
+
+       This case is not treated as an error.
+
+
+   3)  The error SPICE(NULLPOINTER) is signaled if the input body
+       string pointer is null.
+
+   4)  The error SPICE(EMPTYSTRING) is signaled if the input body
+       string has length zero.
+
+   5)  The error SPICE(NULLPOINTER) is signaled if the output surface
+       string pointer is null.
+
+   6)  The caller must pass a value indicating the length of the output
+       surface string. If this value is not at least 2, the error
+       SPICE(STRINGTOOSHORT) is signaled.
+*/
+void USpice::srfcss(
+    FString& srfstr,
+    ES_FoundCode& isname,
+    int code,
+    const FString& bodstr
+    )
+{
+    // Buffer
+    SpiceChar szBuffer[SPICE_SRF_SFNMLN];
+    ZeroOut(szBuffer);
+
+    // Inputs
+    SpiceInt            _code = (SpiceInt)code;
+    ConstSpiceChar*     _bodstr = TCHAR_TO_ANSI(*bodstr);
+
+    // Output
+    SpiceInt            _srflen = SPICE_SRF_SFNMLN;
+    SpiceChar*          _srfstr = szBuffer;
+    SpiceBoolean        _isname = SPICEFALSE;
+
+    // Invocation
+    srfcss_c(
+        _code,
+        _bodstr,
+        _srflen,
+        _srfstr,
+        &_isname
+    );
+
+    srfstr = FString(_srfstr);
+    isname = (_isname == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+
+    // Clear any minor errors (empty string on input, etc)
+    UnexpectedErrorCheck(true);
+}
+
+/*
+Exceptions
+
+   1)  If the input surface string does not map to an ID code
+       and does not represent an integer, the output `code' is
+       undefined and the output `found' is set to SPICEFALSE.
+
+       This case is not treated as an error.
+
+   2)  If the input body string does not map to an ID code and does
+       not represent an integer, the output `code' is undefined and
+       the output `found' is set to SPICEFALSE.
+
+       This case is not treated as an error.
+
+   3)  The error SPICE(EMPTYSTRING) is signaled if either input string
+       does not contain at least one character, since such an input
+       string cannot be converted to a Fortran-style string in this
+       case.
+
+   4)  The error SPICE(NULLPOINTER) is signaled if either input string
+       pointer is null.
+*/
+void USpice::srfs2c(
+    int& code,
+    ES_FoundCode& found,
+    const FString& srfstr,
+    const FString& bodstr
+)
+{
+    // Inputs
+    ConstSpiceChar* _srfstr = TCHAR_TO_ANSI(*srfstr);
+    ConstSpiceChar* _bodstr = TCHAR_TO_ANSI(*bodstr);
+    
+    // Output buffers
+    SpiceInt        _code = 0;
+    SpiceBoolean    _found = SPICEFALSE;
+
+    // Invocation
+    srfs2c_c(
+        _srfstr,
+        _bodstr,
+        &_code,
+        &_found
+    );
+
+    // Copy output
+    code = (int)_code;
+    found = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+
+    // Clear any minor errors (empty string on input, etc)
+    UnexpectedErrorCheck(true);
+}
+
+
+/*
+Exceptions
+
+   1)  If the input surface string does not map to an ID code
+       and does not represent an integer, the output `code' is
+       undefined and the output `found' is set to SPICEFALSE.
+
+       This case is not treated as an error.
+
+   2)  The error SPICE(EMPTYSTRING) is signaled if the input string
+       does not contain at least one character, since such an input
+       string cannot be converted to a Fortran-style string in this
+       case.
+
+   3)  The error SPICE(NULLPOINTER) is signaled if the input string
+       pointer is null.
+*/
+void USpice::srfscc(
+    int& code,
+    ES_FoundCode& found,
+    const FString& srfstr,
+    int bodyid
+)
+{
+    // Input
+    ConstSpiceChar* _srfstr = TCHAR_TO_ANSI(*srfstr);
+    SpiceInt        _bodyid = (SpiceInt)bodyid;
+    
+    // Output
+    SpiceInt        _code = 0;
+    SpiceBoolean    _found = SPICEFALSE;
+
+    // Invocation
+    srfscc_c(
+        _srfstr,
+        _bodyid,
+        &_code,
+        &_found
+    );
+
+    code = (int)_code;
+    found = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+
+    // Clear any minor errors (empty string on input, etc)
+    UnexpectedErrorCheck(true);
+}
+
+
 
 /*
 Exceptions

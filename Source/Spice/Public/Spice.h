@@ -1311,7 +1311,7 @@ public:
         meta = (
             ToolTip = ""
             ))
-    static void getgeophs(FSTwoLineGeophs& geophs);
+    static void getgeophs(FSTLEGeophysicalConstants& geophs, const FString& id = TEXT("EARTH"));
 
 
     UFUNCTION(BlueprintCallable,
@@ -1342,7 +1342,7 @@ public:
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
             const FSEphemerisTime& et,
-            const FSTwoLineGeophs& geophs,
+            const FSTLEGeophysicalConstants& geophs,
             const FSTwoLineElements& elems,
             FSStateVector& state
         );
@@ -3765,6 +3765,63 @@ public:
         int           body = 399
         );
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "isname",
+            ShortToolTip = "Surface and body ID codes to surface string",
+            ToolTip = "Translate a surface ID code, together with a body ID code, to the corresponding surface name.If no such name exists, return a string representation of the surface ID code"
+            ))
+        static void srfc2s(
+            FString& srfstr,
+            ES_FoundCode& isname,
+            int   code = 1,
+            int   bodyid = 499
+        );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "isname",
+            ShortToolTip = "Surface ID and body string to surface string",
+            ToolTip = "Translate a surface ID code, together with a body string, to the corresponding surface name.If no such surface name exists, return a string representation of the surface ID code"
+            ))
+    static void srfcss(
+        FString& srfstr,
+        ES_FoundCode& isname,
+        int code = 1,
+        const FString& bodstr = TEXT("MARS")
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "found",
+            ShortToolTip = "Surface and body strings to surface ID code",
+            ToolTip = "Translate a surface string, together with a body string, to the corresponding surface ID code.The input strings may contain names or integer ID codes"
+            ))
+    static void srfs2c(
+        int& code,
+        ES_FoundCode& found,
+        const FString& srfstr = TEXT("MGS MOLA 128 pixel/deg"),
+        const FString& bodstr = TEXT("MARS")
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "found",
+            ShortToolTip = "Surface and body strings to surface ID code",
+            ToolTip = "Translate a surface string, together with a body ID code, to the corresponding surface ID code.The input surface string may contain a name or an integer ID code."
+            ))
+        static void srfscc(
+            int& code,
+            ES_FoundCode& found,
+            const FString& srfstr = TEXT("PHOBOS GASKELL Q512"),
+            int bodyid = 401
+        );
+
+
     /// <summary>String to ET</summary>
     /// <param name="str">[in] A string representing an epoch</param>
     /// <param name="et">[out] The equivalent value in seconds past J2000</param>
@@ -3776,12 +3833,12 @@ public:
             ShortToolTip = "String to ET",
             ToolTip = "Convert a string representing an epoch to a double precision value representing the number of TDB seconds past the J2000 epoch corresponding to the input epoch"
             ))
-        static void str2et(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            FSEphemerisTime& et,
-            const FString& str = TEXT("2021 October 1  15:37:60.5 (PST)")
-        );
+    static void str2et(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSEphemerisTime& et,
+        const FString& str = TEXT("2021 October 1  15:37:60.5 (PST)")
+    );
 
 
     /// <summary>Map surface points to outward normal vectors</summary>
