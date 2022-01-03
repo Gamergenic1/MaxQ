@@ -2793,21 +2793,9 @@ void USpice::fovray(
     ConstSpiceChar* _inst = TCHAR_TO_ANSI(*inst);
     SpiceDouble     _raydir[3]; raydir.CopyTo(_raydir);
     ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
-    ConstSpiceChar*  _abcorr;
+    ConstSpiceChar*  _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _observer = TCHAR_TO_ANSI(*observer);
     SpiceDouble     _et = et.AsDouble();
-
-    switch (abcorr)
-    {
-    case ES_AberrationCorrectionFov::S:
-        _abcorr = "S";
-        break;
-    case ES_AberrationCorrectionFov::XS:
-        _abcorr = "XS";
-        break;
-    default:
-        _abcorr = "NONE";
-    }
 
     // Output
     SpiceBoolean       _visible = SPICEFALSE;
@@ -3473,6 +3461,134 @@ void USpice::gfposc(
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
 }
+
+void USpice::gfrfov(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const FSDimensionlessVector& raydir,
+    const FSEphemerisPeriod& step,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FString& inst,
+    const FString& rframe,
+    ES_AberrationCorrectionFov abcorr,
+    const FString& obsrvr
+    )
+{
+    const int MAXWIN = 200;
+
+    ConstSpiceChar* _inst   = TCHAR_TO_ANSI(*inst);
+    SpiceDouble     _raydir[3];  raydir.CopyTo(_raydir);
+    ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _step   = step.AsDouble();
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+    }
+
+    // Outputs
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gfrfov_c(
+        _inst,
+        _raydir,
+        _rframe,
+        _abcorr,
+        _obsrvr,
+        _step,
+        &_cnfine,
+        &_result
+    );
+
+    // Pack output
+    results.Empty();
+
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+/*
+Exceptions 
+    ... a lot
+*/
+
+void USpice::gftfov(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const FSEphemerisPeriod& step,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FString& inst,
+    const FString& target,
+    ES_GeometricModel tshape,
+    const FString& tframe,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr
+    )
+{
+    const int MAXWIN = 200;
+
+    // Inputs
+    ConstSpiceChar* _inst = TCHAR_TO_ANSI(*inst);
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*inst);
+    ConstSpiceChar* _tshape = USpiceTypes::toString(tshape);
+    ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*inst);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*inst);
+    SpiceDouble     _step = step.AsDouble();
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+    }
+
+    // Outputs
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gftfov_c(
+        _inst,
+        _target,
+        _tshape,
+        _tframe,
+        _abcorr,
+        _obsrvr,
+        _step,
+        &_cnfine,
+        &_result
+    );
+
+    // Pack output
+    results.Empty();
+
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
 
 void USpice::gfstol(double value)
 {

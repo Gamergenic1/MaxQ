@@ -1490,6 +1490,50 @@ public:
         int nintvls = 750
     );
 
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "GF, is target in FOV?",
+            ToolTip = "Determine time intervals when a specified ephemeris object intersects the space bounded by the field - of - view(FOV) of a specified instrument."
+            ))
+    static void gftfov(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const FSEphemerisPeriod& step,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FString& inst = TEXT("CASSINI_ISS_NAC"),
+        const FString& target = TEXT("PHOEBE"),
+        ES_GeometricModel tshape = ES_GeometricModel::ELLIPSOID,
+        const FString& tframe = TEXT("IAU_PHOEBE"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::LT_S,
+        const FString& obsrvr = TEXT("CASSINI")
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "GF, is ray in FOV?",
+            ToolTip = "Determine time intervals when a specified ray intersects the space bounded by the field - of - view(FOV) of a specified instrument."
+            ))
+    static void gfrfov(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const FSDimensionlessVector& raydir,
+        const FSEphemerisPeriod& step,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FString& inst = TEXT("CASSINI_ISS_NAC"),
+        const FString& rframe = TEXT("IAU_PHOEBE"),
+        ES_AberrationCorrectionFov abcorr = ES_AberrationCorrectionFov::S,
+        const FString& obsrvr = TEXT("CASSINI")
+    );
+
+
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Geometry",
         meta = (
