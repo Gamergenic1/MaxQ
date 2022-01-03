@@ -3927,6 +3927,52 @@ public:
         const FString& str = TEXT("2021 October 1  15:37:60.5 (PST)")
     );
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "surfaces",
+            ShortToolTip = "Sub-observer point",
+            ToolTip = "Compute the rectangular coordinates of the sub-observer point on a target body at a specified epoch, optionally corrected for light timeand stellar aberration. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
+            ))
+    static void subpnt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSDistanceVector& spoint,
+        FSEphemerisTime& trgepc,
+        FSDistanceVector& srfvec,
+        const FSEphemerisTime& et,
+        const TArray<FString>& surfaces,
+        ES_ComputationMethod method = ES_ComputationMethod::NEAR_POINT_ELLIPSOID,
+        const FString& target = TEXT("MARS"),
+        const FString& fixref = TEXT("IAU_MARS"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::LT_S,
+        const FString& obsrvr = TEXT("MGS")
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "surfaces",
+            ShortToolTip = "Sub-solar point",
+            ToolTip = "Compute the rectangular coordinates of the sub-solar point on a target body at a specified epoch, optionally corrected for light timeand stellar aberration.  The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
+            ))
+    static void subslr(
+        FSDistanceVector& spoint,
+        FSEphemerisTime& trgepc,
+        FSDistanceVector& srfvec,
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSEphemerisTime& et,
+        const TArray<FString>& surfaces,
+        ES_ComputationMethod method = ES_ComputationMethod::NEAR_POINT_ELLIPSOID,
+        const FString& target = TEXT("MARS"),
+        const FString& fixref = TEXT("IAU_MARS"),
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::LT_S,
+        const FString& obsrvr = TEXT("MGS")
+    );
+
 
     /// <summary>Map surface points to outward normal vectors</summary>
     /// <param name="a">[in] Length of the ellisoid semi-axis along the x-axis</param>

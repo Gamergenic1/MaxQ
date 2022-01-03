@@ -7331,6 +7331,8 @@ void USpice::sphrec(
     // Return Values
     rectan = FSDistanceVector(_rectan);
 }
+
+
 /*
 Exceptions
 
@@ -8563,6 +8565,113 @@ void USpice::srfscc(
     UnexpectedErrorCheck(true);
 }
 
+
+/*
+Exceptions
+
+...A lot.
+*/
+void USpice::subpnt(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSDistanceVector& spoint,
+    FSEphemerisTime& trgepc,
+    FSDistanceVector& srfvec,
+    const FSEphemerisTime& et,
+    const TArray<FString>& surfaces,
+    ES_ComputationMethod method,
+    const FString& target,
+    const FString& fixref,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr
+)
+{
+    // Input
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    
+    // Output
+    SpiceDouble    _spoint[3];  ZeroOut(_spoint);
+    SpiceDouble    _trgepc = 0.;
+    SpiceDouble    _srfvec[3]; ZeroOut(_srfvec);
+
+    // Invocation
+    subpnt_c(
+        _method,
+        _target,
+        _et,
+        _fixref,
+        _abcorr,
+        _obsrvr,
+        _spoint,
+        &_trgepc,
+        _srfvec
+    );
+
+    // Bundle up the outputs...
+    spoint = FSDistanceVector(_spoint);
+    trgepc = FSEphemerisTime(_trgepc);
+    srfvec = FSDistanceVector(_srfvec);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+/*
+Exceptions
+
+...A lot.
+*/
+void USpice::subslr(
+    FSDistanceVector& spoint,
+    FSEphemerisTime& trgepc,
+    FSDistanceVector& srfvec,
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FSEphemerisTime& et,
+    const TArray<FString>& surfaces,
+    ES_ComputationMethod method,
+    const FString& target,
+    const FString& fixref,
+    ES_AberrationCorrectionWithNewtonians abcorr,
+    const FString& obsrvr
+)
+{
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _spoint[3]; ZeroOut(_spoint);
+    SpiceDouble    _trgepc = 0.;
+    SpiceDouble     _srfvec[3]; ZeroOut(_srfvec);
+
+    subslr_c(
+        _method,
+        _target,
+        _et,
+        _fixref,
+        _abcorr,
+        _obsrvr,
+        _spoint,
+        &_trgepc,
+        _srfvec
+    );
+
+
+    // Bundle up the outputs...
+    spoint = FSDistanceVector(_spoint);
+    trgepc = FSEphemerisTime(_trgepc);
+    srfvec = FSDistanceVector(_srfvec);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
 
 
 /*
