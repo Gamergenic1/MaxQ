@@ -3001,7 +3001,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSTwoLineGeophs
+struct FSTLEGeophysicalConstants
 {
     GENERATED_BODY()
 
@@ -3009,7 +3009,7 @@ struct FSTwoLineGeophs
 
 public:
 
-    FSTwoLineGeophs()
+    FSTLEGeophysicalConstants()
     {
         geophs.Init(0., 8);
 
