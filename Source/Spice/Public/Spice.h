@@ -1837,6 +1837,27 @@ public:
     );
 
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "shapeSurfaces",
+            ShortToolTip = "Latitudinal grid to surface points",
+            ToolTip = "Map array of planetocentric longitude/latitude coordinate pairs to surface points on a specified target body. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
+            ))
+    static void latsrf(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSDistanceVector>& srfpts,
+        const FSEphemerisTime& et,
+        const TArray<FSLonLat>& lonlat,
+        const TArray<FString>& shapeSurfaces,
+        ES_GeometricModel method = ES_GeometricModel::DSK,
+        const FString& target = TEXT("PHOBOS"),
+        const FString& fixref = TEXT("IAU_PHOBOS")
+    );
+
+
     /// <summary>Evaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value. Return the value of both polynomialand derivative</summary>
     /// <param name="n">[in] Number of points defining the polynomial</param>
     /// <param name="[in] xvals">Abscissa values</param>
@@ -3796,6 +3817,26 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Surface",
         meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "shapeSurfaces",
+            ShortToolTip = "Map surface points to outward normal vectors",
+            ToolTip = "Map array of surface points on a specified target body to the corresponding unit length outward surface normal vectors. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
+            ))
+    static void srfnrm(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSDimensionlessVector>& normls,
+        const FSEphemerisTime& et,
+        const TArray<FSDistanceVector>& srfpts,
+        const TArray<FString>& shapeSurfaces,
+        ES_GeometricModel method = ES_GeometricModel::DSK,
+        const FString& target = TEXT("PHOBOS"),
+        const FString& fixref = TEXT("IAU_PHOBOS")
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
             ExpandEnumAsExecs = "found",
             ShortToolTip = "Surface and body strings to surface ID code",
             ToolTip = "Translate a surface string, together with a body string, to the corresponding surface ID code.The input strings may contain names or integer ID codes"
@@ -3814,12 +3855,12 @@ public:
             ShortToolTip = "Surface and body strings to surface ID code",
             ToolTip = "Translate a surface string, together with a body ID code, to the corresponding surface ID code.The input surface string may contain a name or an integer ID code."
             ))
-        static void srfscc(
-            int& code,
-            ES_FoundCode& found,
-            const FString& srfstr = TEXT("PHOBOS GASKELL Q512"),
-            int bodyid = 401
-        );
+    static void srfscc(
+        int& code,
+        ES_FoundCode& found,
+        const FString& srfstr = TEXT("PHOBOS GASKELL Q512"),
+        int bodyid = 401
+    );
 
 
     /// <summary>String to ET</summary>

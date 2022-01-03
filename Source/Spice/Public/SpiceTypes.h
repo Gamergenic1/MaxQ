@@ -213,8 +213,6 @@ enum class ES_RelationalOperator : uint8
     LOCMIN      UMETA(DisplayName = "Local Minimum")
 };
 
-
-
 UENUM(BlueprintType)
 enum class ES_Units : uint8
 {
@@ -246,6 +244,7 @@ enum class ES_Units : uint8
     TROPICAL_YEARS UMETA(DisplayName = "Tropical Years"),
     YEARS UMETA(DisplayName = "Years (same as Julian Years)")
 };
+
 
 UENUM(BlueprintType)
 enum class ES_TimeScale : uint8
