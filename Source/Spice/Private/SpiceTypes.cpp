@@ -202,6 +202,41 @@ const char* USpiceTypes::toString(ES_AberrationCorrectionFov abcorr)
     return _abcorr;
 }
 
+const char* USpiceTypes::toString(ES_AberrationCorrectionLocus corloc)
+{
+    switch (corloc)
+    {
+    case ES_AberrationCorrectionLocus::CENTER:
+        return "CENTER";
+    case ES_AberrationCorrectionLocus::ELLIPSOID_LIMB:
+        return "ELLIPSOID LIMB";
+    }
+
+    setmsg_c("Unrecognized Computation Aberration Correction Locus: #");
+    errint_c("#", (SpiceInt)corloc);
+    sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+    return "";
+}
+
+
+const char* toString(ES_AberrationCorrectionLocusTerminator corloc)
+{
+    switch (corloc)
+    {
+    case ES_AberrationCorrectionLocusTerminator::CENTER:
+        return "CENTER";
+    case ES_AberrationCorrectionLocusTerminator::ELLIPSOID_TERMINATOR:
+        return "ELLIPSOID TERMINATOR";
+    }
+
+    setmsg_c("Unrecognized Computation Aberration Correction Locus: #");
+    errint_c("#", (SpiceInt)corloc);
+    sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+    return "";
+}
+
 const char* USpiceTypes::toString(ES_TimeScale timeScale)
 {
     switch (timeScale)
@@ -358,6 +393,117 @@ FString USpiceTypes::toFString(ES_ComputationMethod method, const TArray<FString
     else
     {
         setmsg_c("Unrecognized Computation Method: #");
+        errint_c("#", (SpiceInt)method);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+    }
+
+    if (shapeSurfaces.Num() > 0)
+    {
+        result += "/SURFACES = ";
+
+        int num = shapeSurfaces.Num();
+
+        for (int i = 0; i < num; ++i)
+        {
+            result += shapeSurfaces[i];
+
+            if (i + 1 < num)
+            {
+                result += ", ";
+            }
+        }
+    }
+
+    return result;
+}
+
+FString USpiceTypes::toFString(ES_LimbComputationMethod method, const TArray<FString>& shapeSurfaces)
+{
+    if (method == ES_LimbComputationMethod::TANGENT_ELLIPSOID)
+    {
+        return FString(TEXT("TANGENT/ELLIPSOID"));
+    }
+    else if (method == ES_LimbComputationMethod::GUIDED_ELLIPSOID)
+    {
+        return FString(TEXT("GUIDED/ELLIPSOID"));
+    }
+
+    FString result;
+
+    if (method == ES_LimbComputationMethod::TANGENT_DSK)
+    {
+        result = FString(TEXT("TANGENT/DSK/UNPRIORITIZED"));
+    }
+    else if (method == ES_LimbComputationMethod::GUIDED_DSK)
+    {
+        result = FString(TEXT("GUIDED/DSK/UNPRIORITIZED"));
+    }
+    else
+    {
+        setmsg_c("Unrecognized Limb Computation Method: #");
+        errint_c("#", (SpiceInt)method);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+    }
+
+    if (shapeSurfaces.Num() > 0)
+    {
+        result += "/SURFACES = ";
+
+        int num = shapeSurfaces.Num();
+
+        for (int i = 0; i < num; ++i)
+        {
+            result += shapeSurfaces[i];
+
+            if (i + 1 < num)
+            {
+                result += ", ";
+            }
+        }
+    }
+
+    return result;
+}
+
+FString USpiceTypes::toFString(ES_Shadow shadow, ES_CurveType curveType, ES_GeometricModel method, const TArray<FString>& shapeSurfaces)
+{
+    FString result = "";
+
+    if (shadow == ES_Shadow::UMBRAL)
+    {
+        result += FString(TEXT("UMBRAL/"));
+    }
+    else if (shadow == ES_Shadow::PENUMBRAL)
+    {
+        result += FString(TEXT("PENUMBRAL/"));
+    }
+
+    if (curveType == ES_CurveType::TANGENT)
+    {
+        result += FString(TEXT("TANGENT/"));
+    }
+    else if (curveType == ES_CurveType::GUIDED)
+    {
+        result += FString(TEXT("GUIDED/"));
+    }
+
+    if (method == ES_GeometricModel::DSK)
+    {
+        result += FString(TEXT("DSK/UNPRIORITIZED"));
+    }
+    else if (method == ES_GeometricModel::ELLIPSOID)
+    {
+        result += FString(TEXT("ELLIPSOID"));
+        return result;
+    }
+    else if (method == ES_GeometricModel::POINT)
+    {
+        setmsg_c("Geometric Model POINT is not allowable here.");
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+    }
+    else
+    {
+        setmsg_c("Unrecognized Geometric Model: #");
         errint_c("#", (SpiceInt)method);
         sigerr_c("SPICE(VALUEOUTOFRANGE)");
     }
