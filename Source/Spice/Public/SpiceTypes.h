@@ -185,7 +185,17 @@ enum class ES_GeometricModel : uint8
 {
     ELLIPSOID     UMETA(DisplayName = "Ellipsoid"),
     POINT         UMETA(DisplayName = "Point"),
-    DSK           UMETA(DisplayName = "DSK")
+    DSK           UMETA(DisplayName = "DSK/Unprioritized")
+};
+
+
+UENUM(BlueprintType)
+enum class ES_ComputationMethod : uint8
+{
+    NEAR_POINT_ELLIPSOID    UMETA(DisplayName = "Near Point/Ellipsoid"),
+    INTERCEPT_ELLIPSOID     UMETA(DisplayName = "Intercept/Ellipsoid"),
+    NADIR_DSK               UMETA(DisplayName = "Nadir/DSK/Unprioritized"),
+    INTERCEPT_DSK           UMETA(DisplayName = "Intercept/DSK/Unprioritized")
 };
 
 
@@ -3057,6 +3067,7 @@ public:
     static const char* toString(ES_CoordinateSystem coords);
     static const char* toString(ES_CoordinateName coord);
     static FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces);
+    static FString toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces);
 
 public:
     /// <summary>Converts a distance to a double (kilometers)</summary>

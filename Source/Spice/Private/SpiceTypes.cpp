@@ -334,6 +334,54 @@ FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& s
     return result;
 }
 
+FString USpiceTypes::toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces)
+{
+    if (method == ES_ComputationMethod::NEAR_POINT_ELLIPSOID)
+    {
+        return FString(TEXT("NEAR POINT/ELLIPSOID"));
+    }
+    else if (method == ES_ComputationMethod::INTERCEPT_ELLIPSOID)
+    {
+        return FString(TEXT("INTERCEPT/ELLIPSOID"));
+    }
+
+    FString result;
+
+    if (method == ES_ComputationMethod::NADIR_DSK)
+    {
+        result = FString(TEXT("NADIR/DSK/UNPRIORITIZED"));
+    }
+    else if (method == ES_ComputationMethod::INTERCEPT_DSK)
+    {
+        result = FString(TEXT("INTERCEPT/DSK/UNPRIORITIZED"));
+    }
+    else
+    {
+        setmsg_c("Unrecognized Computation Method: #");
+        errint_c("#", (SpiceInt)method);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+    }
+
+    if (shapeSurfaces.Num() > 0)
+    {
+        result += "/SURFACES = ";
+
+        int num = shapeSurfaces.Num();
+
+        for (int i = 0; i < num; ++i)
+        {
+            result += shapeSurfaces[i];
+
+            if (i + 1 < num)
+            {
+                result += ", ";
+            }
+        }
+    }
+
+    return result;
+}
+
 
 const char* USpiceTypes::toString(ES_RelationalOperator relate)
 {
