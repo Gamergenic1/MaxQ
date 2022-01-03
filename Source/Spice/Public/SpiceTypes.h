@@ -99,6 +99,19 @@ enum class ES_AberrationCorrection : uint8
     LT_S = 2 UMETA(DisplayName = "LT+S (Planetary + Stellar Abberation, Newtonian)"),
 };
 
+UENUM(BlueprintType)
+enum class ES_AberrationCorrectionLocus : uint8
+{
+    CENTER          UMETA(DisplayName = "Center"),
+    ELLIPSOID_LIMB  UMETA(DisplayName = "Ellipsoid Limb")
+};
+
+UENUM(BlueprintType)
+enum class ES_AberrationCorrectionLocusTerminator : uint8
+{
+    CENTER                  UMETA(DisplayName = "Center"),
+    ELLIPSOID_TERMINATOR    UMETA(DisplayName = "Ellipsoid Terminator")
+};
 
 UENUM(BlueprintType)
 enum class ES_EpochType : uint8
@@ -198,6 +211,30 @@ enum class ES_ComputationMethod : uint8
     INTERCEPT_DSK           UMETA(DisplayName = "Intercept/DSK/Unprioritized")
 };
 
+
+UENUM(BlueprintType)
+enum class ES_LimbComputationMethod : uint8
+{
+    TANGENT_ELLIPSOID   UMETA(DisplayName = "Tangent/Ellipsoid"),
+    GUIDED_ELLIPSOID    UMETA(DisplayName = "Guided/Ellipsoid"),
+    TANGENT_DSK         UMETA(DisplayName = "Tangent/DSK/Unprioritized"),
+    GUIDED_DSK          UMETA(DisplayName = "Guided/DSK/Unprioritized")
+};
+
+
+UENUM(BlueprintType)
+enum class ES_Shadow : uint8
+{
+    UMBRAL     UMETA(DisplayName = "Umbral"),
+    PENUMBRAL  UMETA(DisplayName = "Penumbral")
+};
+
+UENUM(BlueprintType)
+enum class ES_CurveType : uint8
+{
+    TANGENT UMETA(DisplayName = "Tangent"),
+    GUIDED  UMETA(DisplayName = "Guided")
+};
 
 UENUM(BlueprintType)
 enum class ES_OccultationType : uint8
@@ -3048,6 +3085,121 @@ public:
 };
 
 
+USTRUCT(BlueprintType)
+struct FSLimptPoint
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistanceVector point;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSEphemerisTime epoch;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistanceVector tangt;
+
+public:
+
+    FSLimptPoint()
+    {
+        point = FSDistanceVector();
+        epoch = FSEphemerisTime();
+        tangt = FSDistanceVector();
+    }
+
+    FSLimptPoint(
+        const double (&_point)[3],
+        double _epoch,
+        const double (&_tangt)[3]
+    )
+    {
+        point = FSDistanceVector(_point);
+        epoch = FSEphemerisTime(_epoch);
+        tangt = FSDistanceVector(_tangt);
+    }
+
+    void CopyTo(
+        double(&_point)[3],
+        double &_epoch,
+        double(&_tangt)[3]
+    ) const
+    {
+        point.CopyTo(_point);
+        _epoch = epoch.AsDouble();
+        tangt.CopyTo(_tangt);
+    }
+};
+
+
+USTRUCT(BlueprintType)
+struct FSLimptCut
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) TArray<FSLimptPoint> points;
+
+public:
+
+    FSLimptCut()
+    {
+    }
+};
+
+
+
+USTRUCT(BlueprintType)
+struct FSTermptPoint
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistanceVector point;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSEphemerisTime epoch;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistanceVector trmvc;
+
+public:
+
+    FSTermptPoint()
+    {
+        point = FSDistanceVector();
+        epoch = FSEphemerisTime();
+        trmvc = FSDistanceVector();
+    }
+
+    FSTermptPoint(
+        const double(&_point)[3],
+        double _epoch,
+        const double(&_trmvc)[3]
+    )
+    {
+        point = FSDistanceVector(_point);
+        epoch = FSEphemerisTime(_epoch);
+        trmvc = FSDistanceVector(_trmvc);
+    }
+
+    void CopyTo(
+        double(&_point)[3],
+        double& _epoch,
+        double(&_trmvc)[3]
+    ) const
+    {
+        point.CopyTo(_point);
+        _epoch = epoch.AsDouble();
+        trmvc.CopyTo(_trmvc);
+    }
+};
+
+
+USTRUCT(BlueprintType)
+struct FSTermptCut
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) TArray<FSTermptPoint> points;
+
+public:
+
+    FSTermptCut()
+    {
+    }
+};
+
+
 UCLASS(BlueprintType, Blueprintable)
 class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 {
@@ -3060,6 +3212,8 @@ public:
     static const char* toString(ES_AberrationCorrectionWithNewtonians abcorr);
     static const char* toString(ES_AberrationCorrectionForOccultation abcorr);
     static const char* toString(ES_AberrationCorrectionWithTransmissions abcorr);
+    static const char* toString(ES_AberrationCorrectionLocus corloc);
+    static const char* toString(ES_AberrationCorrectionLocusTerminator corloc);
     static const char* toString(ES_TimeScale timeScale);
     static const char* toString(ES_GeometricModel model);
     static const char* toString(ES_RelationalOperator relate);
@@ -3068,6 +3222,8 @@ public:
     static const char* toString(ES_CoordinateName coord);
     static FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces);
+    static FString toFString(ES_LimbComputationMethod method, const TArray<FString>& shapeSurfaces);
+    static FString toFString(ES_Shadow shadow, ES_CurveType curveType, ES_GeometricModel method, const TArray<FString>& shapeSurfaces);
 
 public:
     /// <summary>Converts a distance to a double (kilometers)</summary>

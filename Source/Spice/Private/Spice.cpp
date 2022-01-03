@@ -4184,6 +4184,111 @@ void USpice::latsrf(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+/*
+Exceptions
+
+26 of them.
+*/
+void USpice::limbpt(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSLimptCut>& cuts,
+    const FSEphemerisTime& et,
+    const FSDimensionlessVector& refvec,
+    const FSAngle& rolstp,
+    int        ncuts,
+    const FSAngle& schstp,
+    const FSAngle& soltol,
+    const TArray<FString>& shapeSurfaces,
+    ES_LimbComputationMethod method,
+    const FString& target,
+    const FString& fixref,
+    ES_AberrationCorrectionWithNewtonians abcorr,
+    ES_AberrationCorrectionLocus corloc,
+    const FString& obsrvr,
+    int maxn
+    )
+{
+    // Inputs
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _corloc = USpiceTypes::toString(corloc);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
+    SpiceDouble     _rolstp = rolstp.AsDouble();
+    SpiceInt        _ncuts = ncuts;
+    SpiceDouble     _schstp = schstp.AsDouble();
+    SpiceDouble     _soltol = soltol.AsDouble();
+
+    // Outputs
+    SpiceInt        _maxn = maxn;
+    // Use heap, not stack.  It's unbounded, it's a long operation, etc etc.
+    SpiceInt*       _npts = new SpiceInt[_ncuts];
+    SpiceDouble     (*_points)[3] = new SpiceDouble[maxn][3];
+    SpiceDouble*     _epochs = new SpiceDouble[maxn];
+    SpiceDouble     (*_tangts)[3] = new SpiceDouble[maxn][3];
+
+    //SpiceDouble(*_srfpts)[3] = (SpiceDouble(*)[3]) new uint8[_npts * sizeof(SpiceDouble[3])];
+
+    // Invocation
+    limbpt_c(
+        _method,
+        _target,
+        _et,
+        _fixref,
+        _abcorr,
+        _corloc,
+        _obsrvr,
+        _refvec,
+        _rolstp,
+        _ncuts,
+        _schstp,
+        _soltol,
+        _maxn,
+        _npts,
+        _points,
+        _epochs,
+        _tangts
+    );
+
+    // Bundle up output
+    int pointIndex = 0;
+    for (int cut = 0; cut < ncuts; ++cut)
+    {
+        FSLimptCut cutrecord = FSLimptCut();
+
+        // How many poins are part of this cut?
+        int pointCount = _npts[cut];
+
+        // Great!  Initialize the point array to the right # of points
+        cutrecord.points.Init(FSLimptPoint(), pointCount);
+        
+        // Add each point from the arrays of results...
+        for (int point = 0; point < pointCount; ++point)
+        {
+            // But only add if we haven't overflowed the read buffers.
+            if (pointIndex < maxn)
+            {
+                cutrecord.points[point] = FSLimptPoint(_points[pointIndex], _epochs[pointIndex], _tangts[pointIndex]);
+                pointIndex++;
+            }
+        }
+
+        cuts.Add(cutrecord);
+    }
+
+    delete[] _npts;
+    delete[] _points;
+    delete[] _epochs;
+    delete[] _tangts;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 
 #if 0
@@ -8786,6 +8891,118 @@ void USpice::sxform(
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
 }
+
+
+/*
+Exceptions
+
+...21 of 'em
+*/
+void USpice::termpt(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSTermptCut>& cuts,
+    const FSEphemerisTime& et,
+    const FSDimensionlessVector& refvec,
+    const FSAngle& rolstp,
+    int              ncuts,
+    const FSAngle& schstp,
+    const FSAngle& soltol,
+    const TArray<FString>& shapeSurfaces,
+    ES_Shadow shadow ,
+    ES_CurveType curveType,
+    ES_GeometricModel method,
+    const FString& ilusrc,
+    const FString& target,
+    const FString& fixref,
+    ES_AberrationCorrectionWithNewtonians abcorr,
+    ES_AberrationCorrectionLocusTerminator corloc,
+    const FString& obsrvr,
+    int              maxn
+)
+{
+    // Inputs
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(shadow, curveType, method, shapeSurfaces));
+    ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _corloc = USpiceTypes::toString(abcorr);;
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
+    SpiceDouble     _rolstp = rolstp.AsDouble();
+    SpiceInt        _ncuts = ncuts;
+    SpiceDouble     _schstp = schstp.AsDouble();
+    SpiceDouble     _soltol = soltol.AsDouble();
+    SpiceInt        _maxn = maxn;
+
+    // Outputs
+    // Use heap, not stack.  It's unbounded, it's a long operation, etc etc.
+    SpiceInt* _npts = new SpiceInt[_ncuts];
+    SpiceDouble(*_points)[3] = new SpiceDouble[maxn][3];
+    SpiceDouble* _epochs = new SpiceDouble[maxn];
+    SpiceDouble(*_trmvcs)[3] = new SpiceDouble[maxn][3];
+
+    // Invocation
+    termpt_c(
+        _method,
+        _ilusrc,
+        _target,
+        _et,
+        _fixref,
+        _abcorr,
+        _corloc,
+        _obsrvr,
+        _refvec,
+        _rolstp,
+        _ncuts,
+        _schstp,
+        _soltol,
+        _maxn,
+        _npts,
+        _points,
+        _epochs,
+        _trmvcs
+    );
+
+    // Bundle up output
+    int pointIndex = 0;
+    for (int cut = 0; cut < ncuts; ++cut)
+    {
+        FSTermptCut cutrecord = FSTermptCut();
+
+        // How many poins are part of this cut?
+        int pointCount = _npts[cut];
+
+        // Great!  Initialize the point array to the right # of points
+        cutrecord.points.Init(FSTermptPoint(), pointCount);
+
+        // Add each point from the arrays of results...
+        for (int point = 0; point < pointCount; ++point)
+        {
+            // But only add if we haven't overflowed the read buffers.
+            if (pointIndex < maxn)
+            {
+                cutrecord.points[point] = FSTermptPoint(_points[pointIndex], _epochs[pointIndex], _trmvcs[pointIndex]);
+                pointIndex++;
+            }
+        }
+
+        cuts.Add(cutrecord);
+    }
+
+
+    delete[] _npts;
+    delete[] _points;
+    delete[] _epochs;
+    delete[] _trmvcs;
+
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 /*
 Exceptions

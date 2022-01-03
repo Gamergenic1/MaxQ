@@ -1928,6 +1928,35 @@ public:
         double& dp
     );
 
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AdvancedDisplay = "maxn",
+            ShortToolTip = "Limb points on an extended object",
+            ToolTip = "Find limb points on a target body. The limb is the set of points of tangency on the target of rays emanating from the observer. The caller specifies half - planes bounded by the observer - target center vector in which to search for limb points. The surface of the target body may be represented either by a triaxial ellipsoid or by topographic data."
+            ))
+    static void limbpt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSLimptCut>& cuts,
+        const FSEphemerisTime& et,
+        const FSDimensionlessVector& refvec,
+        const FSAngle& rolstp,
+        int        ncuts,
+        const FSAngle& schstp,
+        const FSAngle& soltol,
+        const TArray<FString>& shapeSurfaces,
+        ES_LimbComputationMethod method = ES_LimbComputationMethod::TANGENT_DSK,
+        const FString& target = TEXT("PHOBOS"),
+        const FString& fixref = TEXT("IAU_PHOBOS"),
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::CN_S,
+        ES_AberrationCorrectionLocus corloc = ES_AberrationCorrectionLocus::CENTER,
+        const FString& obsrvr = TEXT("MARS"),
+        int maxn = 10000
+    );
+
     /// <summary>Compute L_s, the planetocentric longitude of the sun, as seen from a specified body</summary>
     /// <param name="body">[in] Name of central body</param>
     /// <param name="et">[in] Epoch in seconds past J2000 TDB</param>
@@ -1940,14 +1969,14 @@ public:
             ShortToolTip = "Longitude of the sun, planetocentric",
             ToolTip = "Compute L_s, the planetocentric longitude of the sun, as seen from a specified body"
             ))
-        static void lspcn(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FString& body,
-            const FSEphemerisTime& et,
-            ES_AberrationCorrection abcorr,
-            FSAngle& lon
-        );
+    static void lspcn(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& body,
+        const FSEphemerisTime& et,
+        ES_AberrationCorrection abcorr,
+        FSAngle& lon
+    );
 
     /// <summary>Set one double precision 3x3 matrix equal to another</summary>
     /// <param name="m1">[in] Input matrix</param>
@@ -1960,10 +1989,10 @@ public:
             ShortToolTip = "Matrix equal to another, 3x3",
             ToolTip = "Set one double precision 3x3 matrix equal to another"
             ))
-        static void mequ(
-            const FSRotationMatrix& m1,
-            FSRotationMatrix& mout
-        );
+    static void mequ(
+        const FSRotationMatrix& m1,
+        FSRotationMatrix& mout
+    );
 
 #if 0
     /// <summary>Multiply a matrix and a vector of arbitrary size</summary>
@@ -3988,15 +4017,15 @@ public:
             ShortToolTip = "Surface normal vector on an ellipsoid",
             ToolTip = "computes the outward-pointing, unit normal vector from a point on the surface of an ellipsoid"
             ))
-        static void surfnm(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSDistance& a,
-            const FSDistance& b,
-            const FSDistance& c,
-            const FSDistanceVector& point,
-            FSDimensionlessVector& normal
-        );
+    static void surfnm(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDistance& a,
+        const FSDistance& b,
+        const FSDistance& c,
+        const FSDistanceVector& point,
+        FSDimensionlessVector& normal
+    );
 
     /// <summary>Determine the intersection of a line-of-sight vector with the surface of an ellipsoid</summary>
     /// <param name="positn">[in] Position of the observer in body-fixed frame</param>
@@ -4014,17 +4043,17 @@ public:
             ShortToolTip = "Surface point on an ellipsoid",
             ToolTip = "Determine the intersection of a line-of-sight vector with the surface of an ellipsoid"
             ))
-        static void surfpt(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSDistanceVector& positn,
-            const FSDimensionlessVector& u,
-            const FSDistance& a,
-            const FSDistance& b,
-            const FSDistance& c,
-            FSDistanceVector& point,
-            bool& found
-        );
+    static void surfpt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDistanceVector& positn,
+        const FSDimensionlessVector& u,
+        const FSDistance& a,
+        const FSDistance& b,
+        const FSDistance& c,
+        FSDistanceVector& point,
+        bool& found
+    );
 
     /// <summary>Return the state transformation matrix from one frame to another at a specified epoch</summary>
     /// <param name="from">[in] Name of the frame to transform from</param>
@@ -4046,6 +4075,38 @@ public:
         FSStateTransform& xform,
         const FString& from = TEXT("IAU_EARTH"),
         const FString& to = TEXT("J2000")
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AdvancedDisplay = "maxn",
+            ShortToolTip = "Terminator points on an extended object",
+            ToolTip = "Find terminator points on a target body. The caller specifies half - planes, bounded by the illumination source center - target center vector, in which to search for terminator points. The terminator can be either umbral or penumbral.The umbral terminator is the boundary of the region on the target surface where no light from the source is visible.The penumbral terminator is the boundary of the region on the target surface where none of the light from the source is blocked by the target itself."
+            ))
+    void termpt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSTermptCut>& cuts,
+        const FSEphemerisTime& et,
+        const FSDimensionlessVector& refvec,
+        const FSAngle& rolstp,
+        int              ncuts,
+        const FSAngle& schstp,
+        const FSAngle& soltol,
+        const TArray<FString>& shapeSurfaces,
+        ES_Shadow shadow = ES_Shadow::UMBRAL,
+        ES_CurveType curveType = ES_CurveType::TANGENT,
+        ES_GeometricModel method = ES_GeometricModel::ELLIPSOID,
+        const FString& ilusrc = TEXT("SUN"),
+        const FString& target = TEXT("MARS"),
+        const FString& fixref = TEXT("IAU_MARS"),
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::CN_S,
+        ES_AberrationCorrectionLocusTerminator corloc = ES_AberrationCorrectionLocusTerminator::ELLIPSOID_TERMINATOR,
+        const FString& obsrvr = TEXT("EARTH"),
+        int              maxn = 10000
     );
 
     /// <summary>Time Output</summary>
@@ -5070,360 +5131,6 @@ public:
             ToolTip = "Approximate current ephemeris time, based on clock of local and sketchy CRT conversion"
             ))
     static void et_now(FSEphemerisTime& Now);
-
-
-#if defined(IN_PROGRESS)
-
-    static void latsrf(
-        ConstSpiceChar* method,
-        ConstSpiceChar* target,
-        SpiceDouble          et,
-        ConstSpiceChar* fixref,
-        SpiceInt             npts,
-        ConstSpiceDouble     lonlat[][2],
-        SpiceDouble          srfpts[][3]
-    );
-
-    static void dsksrf(
-        ConstSpiceChar* dsk,
-        SpiceInt          bodyid,
-        SpiceCell* srfids
-    );
-
-    static void dskobj(
-        ConstSpiceChar* dsk,
-        SpiceCell* bodids
-    );
-
-    static void dskz02(
-        SpiceInt               handle,
-        ConstSpiceDLADescr* dladsc,
-        SpiceInt* nv,
-        SpiceInt* np
-    );
-
-    static void srfcss(
-        SpiceInt          code,
-        ConstSpiceChar* bodstr,
-        SpiceInt          srflen,
-        SpiceChar* srfstr,
-        SpiceBoolean* isname
-    );
-
-    static void srfs2c(
-        ConstSpiceChar* srfstr,
-        ConstSpiceChar* bodstr,
-        SpiceInt* code,
-        SpiceBoolean* found
-    );
-
-    static void srfc2s(
-        SpiceInt        code,
-        SpiceInt        bodyid,
-        SpiceInt        srflen,
-        SpiceChar* srfstr,
-        SpiceBoolean* isname
-    );
-
-    static void srfscc(
-        ConstSpiceChar* srfstr,
-        SpiceInt          bodyid,
-        SpiceInt* code,
-        SpiceBoolean* found
-    );
-
-    static void srfscc(
-        ConstSpiceChar* srfstr,
-        SpiceInt          bodyid,
-        SpiceInt* code,
-        SpiceBoolean* found
-    );
-
-
-    static void dskxv(
-        SpiceBoolean         pri,
-        ConstSpiceChar* target,
-        SpiceInt             nsurf,
-        ConstSpiceInt        srflst[],
-        SpiceDouble          et,
-        ConstSpiceChar* fixref,
-        SpiceInt             nrays,
-        ConstSpiceDouble     vtxarr[][3],
-        ConstSpiceDouble     dirarr[][3],
-        SpiceDouble          xptarr[][3],
-        SpiceBoolean         fndarr[]
-    );
-
-    static void dskxsi(
-        SpiceBoolean         pri,
-        ConstSpiceChar* target,
-        SpiceInt             nsurf,
-        ConstSpiceInt        srflst[],
-        SpiceDouble          et,
-        ConstSpiceChar* fixref,
-        ConstSpiceDouble     vertex[3],
-        ConstSpiceDouble     raydir[3],
-        SpiceInt             maxd,
-        SpiceInt             maxi,
-        SpiceDouble          xpt[3],
-        SpiceInt* handle,
-        SpiceDLADescr* dladsc,
-        SpiceDSKDescr* dskdsc,
-        SpiceDouble          dc[],
-        SpiceInt             ic[],
-        SpiceBoolean* found
-    );
-
-    static void subpnt(
-        ConstSpiceChar* method,
-        ConstSpiceChar* target,
-        SpiceDouble            et,
-        ConstSpiceChar* fixref,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble            spoint[3],
-        SpiceDouble* trgepc,
-        SpiceDouble            srfvec[3]
-    );
-
-    static void subslr(
-        ConstSpiceChar* method,
-        ConstSpiceChar* target,
-        SpiceDouble            et,
-        ConstSpiceChar* fixref,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble            spoint[3],
-        SpiceDouble* trgepc,
-        SpiceDouble            srfvec[3]
-    );
-
-    static SpiceDouble phaseq(
-        SpiceDouble       et,
-        ConstSpiceChar* target,
-        ConstSpiceChar* illmn,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* abcorr
-    );
-
-    static void limbpt(
-        ConstSpiceChar* method,
-        ConstSpiceChar* target,
-        SpiceDouble         et,
-        ConstSpiceChar* fixref,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* corloc,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceDouble    refvec[3],
-        SpiceDouble         rolstp,
-        SpiceInt            ncuts,
-        SpiceDouble         schstp,
-        SpiceDouble         soltol,
-        SpiceInt            maxn,
-        SpiceInt            npts[],
-        SpiceDouble         points[][3],
-        SpiceDouble         epochs[],
-        SpiceDouble         tangts[][3]
-    );
-
-    static void termpt(
-        ConstSpiceChar* method,
-        ConstSpiceChar* ilusrc,
-        ConstSpiceChar* target,
-        SpiceDouble           et,
-        ConstSpiceChar* fixref,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* corloc,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceDouble      refvec[3],
-        SpiceDouble           rolstp,
-        SpiceInt              ncuts,
-        SpiceDouble           schstp,
-        SpiceDouble           soltol,
-        SpiceInt              maxn,
-        SpiceInt              npts[],
-        SpiceDouble           points[][3],
-        SpiceDouble           epochs[],
-        SpiceDouble           trmvcs[][3]
-    );
-
-    static void fovray(
-        ConstSpiceChar* inst,
-        ConstSpiceDouble   raydir[3],
-        ConstSpiceChar* rframe,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* observer,
-        SpiceDouble* et,
-        SpiceBoolean* visible
-    );
-
-    static void fovtrg(
-        ConstSpiceChar* inst,
-        ConstSpiceChar* target,
-        ConstSpiceChar* tshape,
-        ConstSpiceChar* tframe,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble* et,
-        SpiceBoolean* visible
-    );
-
-    static void gfdist(
-        ConstSpiceChar* target,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gfilum(
-        ConstSpiceChar* method,
-        ConstSpiceChar* angtyp,
-        ConstSpiceChar* target,
-        ConstSpiceChar* illmn,
-        ConstSpiceChar* fixref,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceDouble     spoint[3],
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gfpa(ConstSpiceChar* target,
-        ConstSpiceChar* illmn,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result);
-
-    static void gfposc(
-        ConstSpiceChar* target,
-        ConstSpiceChar* frame,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* crdsys,
-        ConstSpiceChar* coord,
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gfrr(
-        ConstSpiceChar* target,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gfsep(
-        ConstSpiceChar* targ1,
-        ConstSpiceChar* shape1,
-        ConstSpiceChar* frame1,
-        ConstSpiceChar* targ2,
-        ConstSpiceChar* shape2,
-        ConstSpiceChar* frame2,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gfsntc(
-        ConstSpiceChar* target,
-        ConstSpiceChar* fixref,
-        ConstSpiceChar* method,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* dref,
-        ConstSpiceDouble     dvec[3],
-        ConstSpiceChar* crdsys,
-        ConstSpiceChar* coord,
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gfsubc(
-        ConstSpiceChar* target,
-        ConstSpiceChar* fixref,
-        ConstSpiceChar* method,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        ConstSpiceChar* crdsys,
-        ConstSpiceChar* coord,
-        ConstSpiceChar* relate,
-        SpiceDouble          refval,
-        SpiceDouble          adjust,
-        SpiceDouble          step,
-        SpiceInt             nintvls,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gfrfov(
-        ConstSpiceChar* inst,
-        ConstSpiceDouble     raydir[3],
-        ConstSpiceChar* rframe,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble          step,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void gftfov(
-        ConstSpiceChar* inst,
-        ConstSpiceChar* target,
-        ConstSpiceChar* tshape,
-        ConstSpiceChar* tframe,
-        ConstSpiceChar* abcorr,
-        ConstSpiceChar* obsrvr,
-        SpiceDouble          step,
-        SpiceCell* cnfine,
-        SpiceCell* result
-    );
-
-    static void wninsd(
-        SpiceDouble     left,
-        SpiceDouble     right,
-        SpiceCell* window
-    );
-#endif
-
 
 public:
     static uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage);
