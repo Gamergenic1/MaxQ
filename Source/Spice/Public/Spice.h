@@ -3253,6 +3253,7 @@ public:
         Category = "Spice|Api|Geometry",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "shapeSurfaces",
             ShortToolTip = "Surface intercept",
             ToolTip = "Given an observer and a direction vector defining a ray, compute the surface intercept of the ray on a target body at a specified epoch, optionally corrected for light timeand stellar aberration"
             ))
@@ -3266,7 +3267,8 @@ public:
         FSEphemerisTime& trgepc,
         FSDistanceVector& srfvec,
         bool& found,
-        const FString& method = TEXT("ELLIPSOID"),
+        const TArray<FString>& shapeSurfaces,
+        ES_GeometricModel method = ES_GeometricModel::ELLIPSOID,
         const FString& target = TEXT("EARTH"),
         const FString& fixref = TEXT("IAU_EARTH"),
         const FString& obsrvr = TEXT("EARTH"),

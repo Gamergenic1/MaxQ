@@ -7178,7 +7178,8 @@ void USpice::sincpt(
     FSEphemerisTime& trgepc,
     FSDistanceVector& srfvec,
     bool& found,
-    const FString& method,
+    const TArray<FString>& shapeSurfaces,
+    ES_GeometricModel method,
     const FString& target,
     const FString& fixref,
     const FString& obsrvr,
@@ -7186,7 +7187,7 @@ void USpice::sincpt(
 )
 {
     // Inputs
-    ConstSpiceChar* _method = TCHAR_TO_ANSI(*method);
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et     = et.AsDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
