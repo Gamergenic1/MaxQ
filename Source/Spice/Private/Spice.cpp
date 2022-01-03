@@ -2572,7 +2572,7 @@ void USpice::getgeophs(FSTLEGeophysicalConstants& geophs, const FString& id)
     {
         setmsg_c("getgeophs [id] Could not find constants for = $");
         errch_c("$", TCHAR_TO_ANSI(*id));
-        sigerr_c("SPICE(NOTFOUND)");
+        sigerr_c("SPICE(IDCODENOTFOUND)");
     }
 }
 
@@ -3944,6 +3944,130 @@ void USpice::latsph(
 
     sphvec = FSSphericalVector(rho, colat, lons);
 }
+
+/*
+Exceptions
+
+   1)  If the target body name
+       input string cannot be converted to an integer ID code, the
+       error SPICE(IDCODENOTFOUND) is signaled.
+
+   2)  If the input target body-fixed frame `fixref' is not
+       recognized, the error SPICE(NOFRAME) is signaled. A frame
+       name may fail to be recognized because a required frame
+       specification kernel has not been loaded; another cause is a
+       misspelling of the frame name.
+
+   3)  If the input frame `fixref' is not centered at the target body,
+       the error SPICE(INVALIDFRAME) is signaled.
+
+   4)  If data are not available to convert between the frame
+       `fixref' and the frame of a DSK segment of interest, the error
+       will be signaled by a routine in the call tree of this
+       routine.
+
+   5)  If the input argument `method' cannot be parsed, the error
+       will be signaled either by this routine or by a routine in
+       the call tree of this routine.
+
+   6)  If the computation method specifies an ellipsoidal target
+       model, and if triaxial radii of the target body have not been
+       loaded into the kernel pool prior to calling latsrf_c, the
+       error will be diagnosed and signaled by a routine in the call
+       tree of this routine.
+
+   7)  The target must be an extended body: if the computation
+       method specifies an ellipsoidal target model, and if any of
+       the radii of the target body are non-positive, the error will
+       be signaled by routines in the call tree of this routine.
+
+   8)  If `method' specifies that the target surface is represented by
+       DSK data, and no DSK files are loaded for the specified
+       target, the error is signaled by a routine in the call tree
+       of this routine.
+
+   9)  If `method' specifies that the target surface is represented
+       by DSK data, and data representing the portion of the surface
+       corresponding to the coordinates provided in `lonlat' are not
+       available, an error will be signaled by a routine in the call
+       tree of this routine.
+
+  10)  If a surface point cannot be computed because the ray
+       corresponding to a longitude/latitude pair fails to intersect
+       the target surface as defined by the plate model, the error
+       SPICE(NOINTERCEPT) is signaled.
+
+  11)  If the surface point corresponding to a longitude/latitude
+       pair in `lonlat' does not have matching longitude and latitude
+       (because it is on the opposite side of the origin), the error
+       SPICE(SHAPENOTSUPPORTED) is signaled.
+
+  12)  If any input string argument pointer is null, the error
+       SPICE(NULLPOINTER) will be signaled.
+
+  13)  If any input string argument is empty, the error
+       SPICE(EMPTYSTRING) will be signaled.
+
+*/
+void USpice::latsrf(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSDistanceVector>& srfpts,
+    const FSEphemerisTime& et,
+    const TArray<FSLonLat>& lonlat,
+    const TArray<FString>& shapeSurfaces,
+    ES_GeometricModel method,
+    const FString& target,
+    const FString& fixref
+
+    )
+{
+    // Input
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    SpiceDouble     _et     = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+
+    // lonlat.GetData() would work if the ONLY data in the SLonLat structures are the members we declared.
+    // But, even if that were to be true now, it may not always be.  So, we copy.
+    // Use heap mem not stack mem as this is an unbounded request for a lengthy operation
+    SpiceInt        _npts = lonlat.Num();
+    SpiceDouble     (*_lonlat)[2] = (SpiceDouble(*)[2]) new uint8[_npts * sizeof(SpiceDouble[2])];
+    for (int i = 0; i < _npts; ++i)
+    {
+        _lonlat[i][0] = lonlat[i].longitude.AsDouble();
+        _lonlat[i][1] = lonlat[i].latitude.AsDouble();
+    }
+
+    // Output
+    SpiceDouble     (*_srfpts)[3] = (SpiceDouble(*)[3]) new uint8[_npts * sizeof(SpiceDouble[3])];
+    memset(_srfpts, 0, _npts * sizeof(SpiceDouble[3]));
+
+    // Invocation
+    latsrf_c(
+        _method,
+        _target,
+        _et,
+        _fixref,
+        _npts,
+        _lonlat,    
+        _srfpts
+    );
+
+    // Copy output
+    srfpts.Init(FSDistanceVector::Zero, _npts);
+    for (int i = 0; i < _npts; ++i)
+    {
+        srfpts[i] = FSDistanceVector(_srfpts[i][0], _srfpts[i][1], _srfpts[i][2]);
+    }
+
+    delete[] _lonlat;
+    delete[] _srfpts;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 
 #if 0
@@ -8100,6 +8224,124 @@ void USpice::srfcss(
 
     // Clear any minor errors (empty string on input, etc)
     UnexpectedErrorCheck(true);
+}
+
+
+/*
+Exceptions
+
+   1)  If the target body name specified in the input string cannot
+       be converted to an integer ID code, the error
+       SPICE(IDCODENOTFOUND) is signaled.
+
+   2)  If the input target body-fixed frame `fixref' is not
+       recognized, the error SPICE(NOFRAME) is signaled. A frame
+       name may fail to be recognized because a required frame
+       specification kernel has not been loaded; another cause is a
+       misspelling of the frame name.
+
+   3)  If the input frame `fixref' is not centered at the target body,
+       the error SPICE(INVALIDFRAME) is signaled.
+
+   4)  If data are not available to convert between the frame
+       `fixref' and the frame of a DSK segment of interest, the error
+       will be signaled by a routine in the call tree of this
+       routine.
+
+   5)  If the input argument `method' cannot be parsed, the error
+       will be signaled either by this routine or by a routine in
+       the call tree of this routine.
+
+   6)  If the computation method specifies an ellipsoidal target
+       model, and if triaxial radii of the target body have not been
+       loaded into the kernel pool prior to calling srfnrm_c, the
+       error will be diagnosed and signaled by a routine in the call
+       tree of this routine.
+
+   7)  The target must be an extended body: if the computation
+       method specifies an ellipsoidal target model, and if any of
+       the radii of the target body are non-positive, the error will
+       be signaled by routines in the call tree of this routine.
+
+   8)  If `method' specifies that the target surface is represented by
+       DSK data, and no DSK files are loaded for the specified
+       target, the error is signaled by a routine in the call tree
+       of this routine.
+
+   9)  If `method' specifies that the target surface is represented by
+       DSK data, and data representing the portion of the surface
+       corresponding to the surface points provided in `srfpts' are
+       not available, an error will be signaled by a routine in the
+       call tree of this routine.
+
+  10)  If an input surface point is not within a small tolerance
+       of the specified surface, the error SPICE(POINTNOTONSURFACE)
+       is signaled. See the Parameters section for details.
+
+  11)  If any input string argument pointer is null, the error
+       SPICE(NULLPOINTER) will be signaled.
+
+  12)  If any input string argument is empty, the error
+       SPICE(EMPTYSTRING) will be signaled.
+*/
+void USpice::srfnrm(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSDimensionlessVector>& normls,
+    const FSEphemerisTime& et,
+    const TArray<FSDistanceVector>& srfpts,
+    const TArray<FString>& shapeSurfaces,
+    ES_GeometricModel method,
+    const FString& target,
+    const FString& fixref
+    )
+{
+    // Input
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    SpiceInt        _npts = srfpts.Num();
+
+    // Use the heap instead of a stack alloc... This is an unbounded memory request for a very lengthy operation.
+    // It would be better if we could avoid the intermediate buffers of course and just work the the array buffers
+    // directly, but we can't control whether or not UE stuffs additional members/data in between the structs.
+    SpiceDouble(*_srfpts)[3] = (SpiceDouble(*)[3]) new uint8[_npts * sizeof(SpiceDouble[3])];
+    for (int i = 0; i < _npts; ++i)
+    {
+        _srfpts[i][0] = srfpts[i].x.AsDouble();
+        _srfpts[i][1] = srfpts[i].y.AsDouble();
+        _srfpts[i][2] = srfpts[i].z.AsDouble();
+    }
+
+    // Output
+    SpiceDouble(*_normls)[3] = (SpiceDouble(*)[3]) new uint8[_npts * sizeof(SpiceDouble[3])];
+    memset(_normls, 0, _npts * sizeof(SpiceDouble[3]));
+
+    // Invocation
+    srfnrm_c(
+        _method,
+        _target,
+        _et,
+        _fixref,
+        _npts,
+        _srfpts,
+        _normls
+    );
+
+    // Copy output
+    normls.Init(FSDimensionlessVector::Zero, _npts);
+    for (int i = 0; i < _npts; ++i)
+    {
+        normls[i] = FSDimensionlessVector(_normls[i][0], _normls[i][1], _normls[i][2]);
+    }
+
+    // Go ahead and release the buffers instead of caching the workspaces.
+    delete[] _srfpts;
+    delete[] _normls;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
 }
 
 /*
