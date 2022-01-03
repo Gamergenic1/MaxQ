@@ -3046,10 +3046,11 @@ class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 public:
     USpiceTypes();
     static const char* toString(ES_Units units);
+    static const char* toString(ES_AberrationCorrectionFov abcorr);
     static const char* toString(ES_AberrationCorrectionWithNewtonians abcorr);
     static const char* toString(ES_AberrationCorrectionForOccultation abcorr);
-    static const char* toString(ES_TimeScale timeScale);
     static const char* toString(ES_AberrationCorrectionWithTransmissions abcorr);
+    static const char* toString(ES_TimeScale timeScale);
     static const char* toString(ES_GeometricModel model);
     static const char* toString(ES_RelationalOperator relate);
     static const char* toString(ES_CoordinateSystemInclRadec coords);

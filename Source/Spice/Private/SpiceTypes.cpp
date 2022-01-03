@@ -183,6 +183,25 @@ const char* USpiceTypes::toString(ES_AberrationCorrectionWithNewtonians abcorr)
     return _abcorr;
 }
 
+
+const char* USpiceTypes::toString(ES_AberrationCorrectionFov abcorr)
+{
+    const char* _abcorr;
+    switch (abcorr)
+    {
+    case ES_AberrationCorrectionFov::S:
+        _abcorr = "S";
+        break;
+    case ES_AberrationCorrectionFov::XS:
+        _abcorr = "XS";
+        break;
+    default:
+        _abcorr = "NONE";
+        break;
+    }
+    return _abcorr;
+}
+
 const char* USpiceTypes::toString(ES_TimeScale timeScale)
 {
     switch (timeScale)
