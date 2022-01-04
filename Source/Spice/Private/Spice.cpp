@@ -706,6 +706,35 @@ void USpice::bodn2c(
     }
     else
     {
+        // For some reason this seems to expose a bug in UE5EA,
+        // ... The caller acts as if the Found exec branch should be taken.
+        found = ES_FoundCode::NotFound;
+    }
+
+    // Reset the current spice error in case a spice exception happened.
+    UnexpectedErrorCheck(true);
+}
+
+
+void USpice::bods2c(
+    ES_FoundCode& found,
+    int& code,
+    const FString& name
+)
+{
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt _code = 0;
+    SpiceBoolean _found = SPICEFALSE;
+
+    bods2c_c(_name, &_code, &_found);
+
+    if (_found != SPICEFALSE)
+    {
+        code = (int)_code;
+        found = ES_FoundCode::Found;
+    }
+    else
+    {
         found = ES_FoundCode::NotFound;
     }
 
