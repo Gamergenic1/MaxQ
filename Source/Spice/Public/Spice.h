@@ -218,14 +218,28 @@ public:
         Category = "Spice|Api|Data",
         meta = (
             ExpandEnumAsExecs = "found",
-            ShortToolTip = "Body name to ID code translation",
-            ToolTip = "Translate the name of a body or object to the corresponding SPICE integer ID code"
+            ShortToolTip = "Body string to ID code translation",
+            ToolTip = "Translate a string containing a body name or ID code to an integer code"
             ))
-    static void bodn2c(
+    static void bods2c(
         ES_FoundCode& found,
         int& code,
         const FString& name = TEXT("EARTH")
     );
+
+    /// <summary>Body name to ID code translation</summary>
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Data",
+        meta = (
+            ExpandEnumAsExecs = "found",
+            ShortToolTip = "Body name to ID code translation",
+            ToolTip = "Translate the name of a body or object to the corresponding SPICE integer ID code"
+            ))
+        static void bodn2c(
+            ES_FoundCode& found,
+            int& code,
+            const FString& name = TEXT("EARTH")
+        );
 
     /// <summary>Fetch from the kernel pool the double precision values of an item associated with a body</summary>
     /// <param name="bodyid">[in] Body ID code</param>

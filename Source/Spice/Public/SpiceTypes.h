@@ -21,7 +21,7 @@ UENUM(BlueprintType)
 enum class ES_FoundCode : uint8
 {
     Found UMETA(DisplayName = "Found"),
-    NotFound UMETA(DisplayName = "No Found")
+    NotFound UMETA(DisplayName = "Not Found")
 };
 
 UENUM(BlueprintType)
@@ -300,7 +300,7 @@ enum class ES_TimeScale : uint8
     TAI UMETA(DisplayName = "International Atomic Time"),
     TDB UMETA(DisplayName = "Barycentric Dynamical Time"),
     TDT UMETA(DisplayName = "Terrestrial Dynamical Time"),
-    ET UMETA(DisplayName = "Ephemeris time (TBD)"),
+    ET UMETA(DisplayName = "Ephemeris time (TDB)"),
     JDTDB UMETA(DisplayName = "Julian Date relative to TDB"),
     JDTDT UMETA(DisplayName = "Julian Date relative to TDT"),
     JED UMETA(DisplayName = "Julian Ephemeris date (JDTDB)"),
