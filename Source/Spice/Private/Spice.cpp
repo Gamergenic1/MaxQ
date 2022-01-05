@@ -12,7 +12,9 @@ PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
 {
 #include "SpiceUsr.h"
-#include "SpiceZfc.h" // for ev2lin
+
+// for ev2lin, dpspce
+#include "SpiceZfc.h"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
@@ -2591,18 +2593,43 @@ void USpice::eul2xf(
 }
 
 
-void USpice::getgeophs(FSTLEGeophysicalConstants& geophs, const FString& id)
+void USpice::getgeophs(FSTLEGeophysicalConstants& geophs, const FString& body)
 {
-    if (id.Equals(TEXT("EARTH"), ESearchCase::Type::IgnoreCase))
+    SpiceDouble _geophs[8];
+    memset(_geophs, 0, sizeof(_geophs));
+
+    SpiceInt dim = 0;
+
+    static ConstSpiceChar* Items[8] = {
+        "J2",
+        "J3",
+        "J4",
+        "KE",
+        "QO",
+        "SO",
+        "ER",
+        "AE"
+    };
+
+    for (int i = 0; i < 8; ++i)
     {
-        geophs = FSTLEGeophysicalConstants();
+        bodvrd_c(TCHAR_TO_ANSI(*body), Items[i], 1, &dim, &_geophs[i]);
+
+        if (failed_c() == SPICETRUE)
+        {
+            break;
+        }
+
+        if (dim != 1)
+        {
+            setmsg_c("bodvrd_c returned nonsensical dimension: #");
+            errint_c("#", dim);
+            sigerr_c("SPICE(VALUEOUTOFRANGE)");
+            break;
+        }
     }
-    else
-    {
-        setmsg_c("getgeophs [id] Could not find constants for = $");
-        errch_c("$", TCHAR_TO_ANSI(*id));
-        sigerr_c("SPICE(IDCODENOTFOUND)");
-    }
+
+    geophs = FSTLEGeophysicalConstants(_geophs);
 }
 
 
@@ -2649,7 +2676,49 @@ int USpice::ev2lin(
     SpiceDouble _elems[10]; elems.CopyTo(_elems);
     SpiceDouble _state[6];
 
-    int returnValue = ev2lin_(&_et, _geophs, _elems, _state);
+    // Did geophs.CopyTo or elems.CopyTo signal an error?  
+    // If so, dpspce can infinitely loop waiting for something to
+    // converge that will never converge because the elems are zero's.
+    ErrorCheck(ResultCode, ErrorMessage);
+    if (ResultCode != ES_ResultCode::Success) return 0;
+
+
+    int returnValue;
+
+    // Both periods are in seconds...
+    const double nearEarthThreshold = 225. * 60.;
+
+    double angularRate = elems.N().AsDouble();
+    double orbitPeriod = 2. * twopi_c() / angularRate;
+
+    // note ev2lin and dpspce have been superceded
+    // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/FORTRAN/spicelib/evsgp4.html
+    // This is wrapped as:
+    // extern int zzsgp4_(doublereal *geophs, doublereal *elems, integer *opmode, doublereal *t, doublereal *state);
+    // (But no info on test/validation status, etc)
+    if (orbitPeriod < nearEarthThreshold)
+    {
+        returnValue = ev2lin_(&_et, _geophs, _elems, _state);
+    }
+    else
+    {
+        // dpspce_ appears to have a problem with the optimizer or a similar issue.
+        // (would have to examine the optimized disassembly a little closer.)
+        // Note: the math in ev2lin_ blows up, at least for the current TLE values for JWST it does.
+        //       so, forcing that path is not an alternative.
+        bool allowDeepSpacePropogator = false;
+
+        if (allowDeepSpacePropogator)
+        {
+            returnValue = dpspce_(&_et, _geophs, _elems, _state);
+        }
+        else
+        {
+            setmsg_c("Three line elements are not a near earth orbit! (period # mins) deep space propogation is disabled");
+            errdp_c("#", orbitPeriod/60);
+            sigerr_c("SPICE(VALUEOUTOFRANGE)");
+        }
+    }
 
     state = FSStateVector(_state);
 

@@ -620,6 +620,37 @@ const char* USpiceTypes::toString(ES_CoordinateName coord)
     return "NONE";
 }
 
+void FSTwoLineElements::CopyTo(double(_elems)[10]) const
+{
+    if (elems.Num() == 10)
+    {
+        memcpy(_elems, elems.GetData(), 8 * sizeof(double));
+    }
+    else
+    {
+        setmsg_c("FSTwoLineElements uninitialized.  Array Length: #");
+        errint_c("#", elems.Num());
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+    }
+
+    memcpy(_elems, elems.GetData(), 10 * sizeof(double));
+}
+
+
+void FSTLEGeophysicalConstants::CopyTo(double(_geophs)[8]) const
+{
+    if (geophs.Num() == 8)
+    {
+        memcpy(_geophs, geophs.GetData(), 8 * sizeof(double));
+    }
+    else
+    {
+        setmsg_c("FSTLEGeophysicalConstants uninitialized.  Array Length: #");
+        errint_c("#", geophs.Num());
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+    }
+}
+
 
 
 FSEulerAngles::FSEulerAngles(const FSDimensionlessVector& value)
