@@ -3024,6 +3024,17 @@ struct FSTwoLineElements
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite) TArray<double> elems;
 
+    const static int XNDT2O = 0;
+    const static int XNDD6O = 1;
+    const static int BSTAR  = 2;
+    const static int XINCL  = 3;
+    const static int XNODEO = 4;
+    const static int EO     = 5;
+    const static int OMEGAO = 6;
+    const static int XMO    = 7;
+    const static int XNO    = 8;
+    const static int EPOCH  = 9;
+
 public:
 
     FSTwoLineElements()
@@ -3040,10 +3051,11 @@ public:
         memcpy(elems.GetData(), _elems, 10 * sizeof(double));
     }
 
-    void CopyTo(double(_elems)[10]) const
-    {
-        memcpy(_elems, elems.GetData(), 10 * sizeof(double));
-    }
+    void CopyTo(double(_elems)[10]) const;
+
+    FSAngle M0() const { return FSAngle(elems[XMO]); }
+    FSAngularRate N() const { return FSAngularRate(elems[XNO]/60.); }
+    FSEphemerisTime ET() const { return FSEphemerisTime(elems[EPOCH]); }
 };
 
 USTRUCT(BlueprintType)
@@ -3057,31 +3069,15 @@ public:
 
     FSTLEGeophysicalConstants()
     {
-        geophs.Init(0., 8);
-
-        const int  J2 = 0;
-        const int  J3 = 1;
-        const int  J4 = 2;
-        const int  KE = 3;
-        const int  QO = 4;
-        const int  SO = 5;
-        const int  ER = 6;
-        const int  AE = 7;
-
-        geophs[J2] = 1.082616e-3;
-        geophs[J3] = -2.53881e-6;
-        geophs[J4] = -1.65597e-6;
-        geophs[KE] = 7.43669161e-2;
-        geophs[QO] = 120.0;
-        geophs[SO] = 78.0;
-        geophs[ER] = 6378.135;
-        geophs[AE] = 1.0;
     }
 
-    void CopyTo(double(_geophs)[8]) const
+    FSTLEGeophysicalConstants(double(_geophs)[8])
     {
-        memcpy(_geophs, geophs.GetData(), 8 * sizeof(double));
+        geophs.Init(0., 8);
+        memcpy(geophs.GetData(), _geophs, 8 * sizeof(double));
     }
+
+    void CopyTo(double(_geophs)[8]) const;
 };
 
 
