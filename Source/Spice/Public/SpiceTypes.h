@@ -332,6 +332,17 @@ enum class ES_CK05Subtype : uint8
     Lagrange7 = 3 UMETA(DisplayName = "Lagrange interpolation, 7-element packets")
 };
 
+UENUM(BlueprintType)
+enum class ES_AngleFormat : uint8
+{
+    Turns UMETA(DisplayName = "Turns"),
+    DD UMETA(DisplayName = "Decimal Degrees"),
+    DR UMETA(DisplayName = "Decimal Radians"),
+    DMS UMETA(DisplayName = "Degrees, Arcminutes, Arcseconds"),
+    HMS UMETA(DisplayName = "Hours, Minutes, Seconds")
+};
+
+
 
 UENUM(BlueprintType, meta = (Bitflags, UseEnumValuesAsMaskValuesInEditor = "true"))
 enum class ES_Items : uint8
@@ -3201,6 +3212,11 @@ class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 
+private:
+    static double normalize180to180(double degrees);
+    static double normalize0to360(double degrees);
+    static FString formatAngle(const double degrees, ES_AngleFormat format);
+
 public:
     USpiceTypes();
     static const char* toString(ES_Units units);
@@ -3222,6 +3238,27 @@ public:
     static FString toFString(ES_Shadow shadow, ES_CurveType curveType, ES_GeometricModel method, const TArray<FString>& shapeSurfaces);
 
 public:
+
+    static int FloatFormatPrecision;
+
+    UFUNCTION(BlueprintCallable, Category = "Spice|Api|Stringifier", meta = (ToolTip = "Set precision used to format floating point values"))
+    static void SetFloatToStringPrecision(int _floatPrintPrecision);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "double to string (uses SetFloatToStringPrecision)", CompactNodeTitle = "$"))
+    static FString FormatDouble(double value);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "double to string", CompactNodeTitle = "$"))
+    static FString FormatDoublePrecisely(double value, int precision = 12);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "SAngle to string", CompactNodeTitle = "$"))
+    static FString FormatAngle(const FSAngle& value, ES_AngleFormat format = ES_AngleFormat::DD);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "SLongLat to string", CompactNodeTitle = "$"))
+    static FString FormatLonLat(const FSLonLat& valuee, const FString& separator = TEXT(", "), ES_AngleFormat format = ES_AngleFormat::DD);
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string", CompactNodeTitle = "$"))
+    static FString FormatRADec(const FSAngle& rightAscension, const FSAngle& declination, const FString& separator = TEXT(", "));
+
     /// <summary>Converts a distance to a double (kilometers)</summary>
     UFUNCTION(BlueprintPure, 
         Category = "Spice|Api|Types",
@@ -3680,35 +3717,34 @@ public:
     static FString SPlanetographicVectorToString(const FSPlanetographicVector& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SGeodeticVectorToString(const FSGeodeticVector& value);
+    static FString SGeodeticVectorToString(const FSGeodeticVector& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SSphericalVectorToString(const FSSphericalVector& value);
+    static FString SSphericalVectorToString(const FSSphericalVector& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SLatitudinalVectorToString(const FSLatitudinalVector& value);
+    static FString SLatitudinalVectorToString(const FSLatitudinalVector& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SCylindricalVectorToString(const FSCylindricalVector& value);
+    static FString SCylindricalVectorToString(const FSCylindricalVector& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value);
+    static FString SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value);
+    static FString SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SSphericalVectoRatesrToString(const FSSphericalVectorRates& value);
+    static FString SSphericalVectorRatesToString(const FSSphericalVectorRates& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value);
+    static FString SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value);
+    static FString SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Debug", meta = (ToolTip = "stringifier", Keywords = "string", CompactNodeTitle = "$"))
-        static FString SConicElementsToString(const FSConicElements& value);
-
+    static FString SConicElementsToString(const FSConicElements& value);
 
 
     /* Multiplication (A * B) */
