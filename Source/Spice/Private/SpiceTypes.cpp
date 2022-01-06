@@ -1602,10 +1602,12 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
     else if (format == ES_AngleFormat::DMS)
     {
         int frac_precision = floatFormatPrecision - 7;
-        double frac = degrees;
+        double frac = abs(degrees);
         
         long deg = floorl(frac);
+
         frac -= (double)deg;
+        if (degrees < 0.) deg *= -1;
         streamObj << deg;
         if (useDegreeSymbol) streamObj << L'\370';
         streamObj << L' ';
@@ -1631,10 +1633,12 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
     else if (format == ES_AngleFormat::HMS)
     {
         int frac_precision = floatFormatPrecision - 7;
-        double frac = degrees / 360. * 24;
+        double frac = abs(degrees / 360. * 24);
 
         long hour = floorl(frac);
         frac -= (double)hour;
+
+        if (degrees < 0.) hour *= -1;
         streamObj << hour << "h ";
 
         frac *= 60.;
