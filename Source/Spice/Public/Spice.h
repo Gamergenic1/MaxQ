@@ -1551,6 +1551,29 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Geometry",
         meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "adjust, refval",
+            ShortToolTip = "GF, range rate search",
+            ToolTip = "Determine time intervals for which a specified constraint on the observer - target range rate is met"
+            ))
+    static void gfrr(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FSEphemerisPeriod& step,
+        const FSSpeed& refval,
+        const FSSpeed& adjust,
+        const FString& target = TEXT("MOON"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::None,
+        const FString& obsrvr = TEXT("EARTH"),
+        ES_RelationalOperator relate = ES_RelationalOperator::GreaterThan
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
             ShortToolTip = "GF, set a tolerance value for GF",
             ToolTip = "Override the default GF convergence value used in the high level GF routines."
             ))
