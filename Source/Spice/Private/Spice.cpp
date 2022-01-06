@@ -2682,8 +2682,7 @@ int USpice::ev2lin(
     ErrorCheck(ResultCode, ErrorMessage);
     if (ResultCode != ES_ResultCode::Success) return 0;
 
-
-    int returnValue;
+    int returnValue = 0;
 
     // Both periods are in seconds...
     const double nearEarthThreshold = 225. * 60.;
