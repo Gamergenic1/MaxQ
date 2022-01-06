@@ -3618,6 +3618,93 @@ void USpice::gfrfov(
 }
 
 
+void USpice::gfrr(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FSEphemerisPeriod& step,
+    const FSSpeed& refval,
+    const FSSpeed& adjust,
+    const FString& target,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr,
+    ES_RelationalOperator relate
+)
+{
+    const int MAXWIN = 200;
+    if (2 * cnfine.Num() > MAXWIN)
+    {
+        setmsg_c("[cnfine] Window Segment count = #; maximum allowed value is #");
+        errdp_c("#", cnfine.Num());
+        errdp_c("#", MAXWIN / 2);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+        return;
+    }
+
+    // Inputs
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    SpiceDouble     _refval = refval.AsDouble();
+    SpiceDouble     _adjust = adjust.AsDouble();
+    SpiceDouble     _step = step.AsDouble();
+
+    // Unpack the confinement window array..
+    FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        FSEphemerisTime et0 = (*It).start;
+        FSEphemerisTime et1 = (*It).stop;
+
+        FSEphemerisPeriod thisWindow = et1 - et0;
+        if (thisWindow > maxWindow)
+        {
+            maxWindow = thisWindow;
+        }
+
+        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+    }
+    // 
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+
+    // Output
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gfrr_c(
+        _target,
+        _abcorr,
+        _obsrvr,
+        _relate,
+        _refval,
+        _adjust,
+        _step,
+        _nintvls,
+        &_cnfine,
+        &_result
+    );
+
+    // Pack up the output...
+    results.Empty();
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 /*
 Exceptions 
     ... a lot
