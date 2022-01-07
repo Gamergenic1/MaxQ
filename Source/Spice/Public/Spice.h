@@ -1572,6 +1572,33 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Geometry",
         meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "GF, surface intercept vector coordinate search",
+            ToolTip = "Determine time intervals for which a coordinate of an surface intercept position vector satisfies a numerical constraint"
+            ))
+    void gfsntc(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FSDimensionlessVector& dvec,
+        double refval,
+        double adjust,
+        const FSEphemerisPeriod& step,
+        const FString& target = TEXT("EARTH"),
+        const FString& fixref = TEXT("IAU_EARTH"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::None,
+        const FString& obsrvr = TEXT("SUN"),
+        const FString& dref = TEXT("SEM"),
+        ES_CoordinateSystemInclRadec crdsys = ES_CoordinateSystemInclRadec::LATITUDINAL,
+        ES_CoordinateName coord = ES_CoordinateName::LATITUDE,
+        ES_RelationalOperator relate = ES_RelationalOperator::Equal
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
             ShortToolTip = "GF, set a tolerance value for GF",
             ToolTip = "Override the default GF convergence value used in the high level GF routines."
             ))
