@@ -3238,6 +3238,108 @@ public:
 };
 
 
+USTRUCT(BlueprintType)
+struct FSRay
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistanceVector point;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDimensionlessVector direction;
+
+public:
+
+    FSRay()
+    {
+        point = FSDistanceVector();
+        direction = FSDimensionlessVector();
+    }
+
+    void CopyTo(double (&_point)[3], double (&_direction)[3]) const
+    {
+        point.CopyTo(_point);
+        direction.CopyTo(_direction);
+    }
+};
+
+USTRUCT(BlueprintType)
+struct FSDLADescr
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int bwdptr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int fwdptr;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int ibase;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int isize;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int dbase;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int dsize;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int cbase;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int csize;
+
+public:
+
+    FSDLADescr()
+    {
+        bwdptr = 0;
+        fwdptr = 0;
+        ibase = 0;
+        isize = 0;
+        dbase = 0;
+        dsize = 0;
+        cbase = 0;
+        csize = 0;
+    }
+
+    FSDLADescr(void* descr);
+};
+
+
+USTRUCT(BlueprintType)
+struct FSDSKDescr
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int surfce;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int center;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int dclass;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int dtype;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int frmcde;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int corsys;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) TArray<double> corpar;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double co1min;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double co1max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double co2min;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double co2max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double co3min;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double co3max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double start;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double stop;
+
+public:
+
+    FSDSKDescr()
+    {
+        surfce = 0;
+        center = 0;
+        dclass = 0;
+        dtype = 0;
+        frmcde = 0;
+        corsys = 0;
+        corpar = TArray<double>();
+        co1min = 0.;
+        co1max = 0.;
+        co2min = 0.;
+        co2max = 0.;
+        co3min = 0.;
+        co3max = 0.;
+        start = 0.;
+        stop = 0.;
+    }
+
+    FSDSKDescr(void* descr);
+};
+
+
+
 UCLASS(BlueprintType, Blueprintable)
 class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 {

@@ -803,6 +803,51 @@ public:
         const TArray<FString>& comments
     );
 
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, ray-surface intercept, vectorized",
+            ToolTip = "Compute ray-surface intercepts for a set of rays, using data provided by multiple loaded DSK segments"
+            ))
+    static void dskxv(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSDistanceVector>& xptarr,
+        TArray<bool>& fndarr,
+        const TArray<int>& srflst,
+        const FSEphemerisTime& et,
+        const TArray <FSRay>& rayarray,
+        const FString& target = TEXT("PHOBOS"),
+        const FString& fixref = TEXT("IAU_PHOBOS")
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, ray-surface intercept with source information",
+            ToolTip = "Compute a ray-surface intercept using data provided by multiple loaded DSK segments. Return information about the source of the data defining the surface on which the intercept was found : DSK handle, DLA and DSK descriptors, and DSK data type-dependent parameters"
+            ))
+    static void dskxsi(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSDistanceVector& xpt,
+        int& handle,
+        FSDLADescr& dladsc,
+        FSDSKDescr& dskdsc,
+        TArray<double> dc,
+        TArray<int> ic,
+        bool& found,
+        TArray<int> srflst,
+        const FSEphemerisTime& et,
+        const FSRay& ray,
+        const FString& target,
+        const FString& fixref
+    );
+
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
