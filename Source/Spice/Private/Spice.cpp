@@ -2323,6 +2323,124 @@ void USpice::dsksrf(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+void USpice::dskz02(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    int& nv,
+    int& np,
+    int handle,
+    const FSDSKDescr& dladsc
+)
+{
+    // Inputs
+    SpiceInt      _handle = (SpiceInt)handle;
+    SpiceDLADescr _dladsc;  dladsc.CopyTo(&_dladsc);
+    // Outputs
+    SpiceInt _nv = 0;
+    SpiceInt _np = 0;
+
+    // Invocation
+    dskz02_c(
+        _handle,
+        &_dladsc,
+        &_nv,
+        &_np
+    );
+
+    // Bundle outputs
+    nv = (int)_nv;
+    np = (int)_np;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::dskp02(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSPlateIndices>& plates,
+    int               handle,
+    const FSDSKDescr& dladsc,
+    int               start
+)
+{
+    const int MAXID = 10000;
+
+    // Inputs
+    SpiceInt      _handle = (SpiceInt)handle;
+    SpiceDLADescr _dladsc;  dladsc.CopyTo(&_dladsc);
+    SpiceInt      _start = (SpiceInt) start;
+    SpiceInt      _room = MAXID;
+    
+    // Outputs
+    SpiceInt      _n = 0;
+    SpiceInt      _plates[MAXID][3];
+
+    // Invocation
+    dskp02_c(
+        _handle,
+        &_dladsc,
+        _start,
+        _room,
+        &_n,
+        _plates
+    );
+
+    // Pack output
+    plates.Init(FSPlateIndices(), _n);
+    for (int i = 0; i < _n; ++i)
+    {
+        plates.Add(FSPlateIndices(_plates[i][0], _plates[i][1], _plates[i][2]));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::dskv02(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSDistanceVector>& vrtces,
+    int               handle,
+    const FSDSKDescr& dladsc,
+    int               start
+)
+{
+    const int MAXID = 10000;
+
+    // Inputs
+    SpiceInt      _handle = (SpiceInt)handle;
+    SpiceDLADescr _dladsc;  dladsc.CopyTo(&_dladsc);
+    SpiceInt      _start = (SpiceInt)start;
+    SpiceInt      _room = MAXID;
+
+    // Outputs
+    SpiceInt      _n = 0;
+    SpiceDouble   _vrtces[MAXID][3];
+
+    // Invocation
+    dskv02_c(
+        _handle,
+        &_dladsc,
+        _start,
+        _room,
+        &_n,
+        _vrtces
+    );
+
+
+    // Pack output
+    vrtces.Init(FSDistanceVector(), _n);
+    for (int i = 0; i < _n; ++i)
+    {
+        vrtces.Add(FSDistanceVector(_vrtces[i]));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 void USpice::dskxsi(
     ES_ResultCode& ResultCode,
