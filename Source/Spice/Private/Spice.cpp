@@ -106,18 +106,6 @@ void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse)
 }
 
 
-USpice::USpice()
-{
-    // (Due to shared implementations)
-    check((uint8)ES_CoordinateSystem::RECTANGULAR == (uint8)ES_CoordinateSystemInclRadec::RECTANGULAR);
-    check((uint8)ES_CoordinateSystem::CYLINDRICAL == (uint8)ES_CoordinateSystemInclRadec::CYLINDRICAL);
-    check((uint8)ES_CoordinateSystem::LATITUDINAL == (uint8)ES_CoordinateSystemInclRadec::LATITUDINAL);
-    check((uint8)ES_CoordinateSystem::SPHERICAL == (uint8)ES_CoordinateSystemInclRadec::SPHERICAL);
-    check((uint8)ES_CoordinateSystem::GEODETIC == (uint8)ES_CoordinateSystemInclRadec::GEODETIC);
-    check((uint8)ES_CoordinateSystem::PLANETOGRAPHIC == (uint8)ES_CoordinateSystemInclRadec::PLANETOGRAPHIC);
-}
-
-
 void USpice::SwizzleToUE(const double(&v)[3], FVector& ue)
 {
     ue = FVector(v[1], v[0], v[2]);
@@ -3782,6 +3770,84 @@ void USpice::gfstol(double value)
     UnexpectedErrorCheck(false);
 }
 
+
+void USpice::gfsubc(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    double     refval,
+    double     adjust,
+    const FSEphemerisPeriod& step,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FString& target,
+    const FString& fixref,
+    ES_SubpointComputationMethod method,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr,
+    ES_CoordinateSystemInclRadec crdsys,
+    ES_CoordinateName coord,
+    ES_RelationalOperator relate,
+    int nintvls
+)
+{
+    const int MAXWIN = 200;
+
+    // Inputs
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _method = USpiceTypes::toString(method);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    ConstSpiceChar* _crdsys = USpiceTypes::toString(crdsys);
+    ConstSpiceChar* _coord = USpiceTypes::toString(coord);
+    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    SpiceDouble     _refval = (SpiceDouble)refval;
+    SpiceDouble     _adjust = (SpiceDouble)adjust;
+    SpiceDouble     _step = step.AsDouble();
+    SpiceInt        _nintvls = (SpiceInt)nintvls;
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+    }
+
+    // Outputs
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gfsubc_c(
+        _target,
+        _fixref,
+        _method,
+        _abcorr,
+        _obsrvr,
+        _crdsys,
+        _coord,
+        _relate,
+        _refval,
+        _adjust,
+        _step,
+        _nintvls,
+        &_cnfine,
+        &_result
+    );
+
+    // Pack output
+    results.Empty();
+
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 void USpice::gipool(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
@@ -5635,7 +5701,7 @@ void USpice::occult(
             break;
     case 0:
     default:
-        ocltid = ES_OccultationType::None;
+        ocltid = ES_OccultationType::NONE;
             break;
     }
 

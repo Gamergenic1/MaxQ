@@ -196,6 +196,7 @@ enum class ES_CoordinateName : uint8
 UENUM(BlueprintType)
 enum class ES_GeometricModel : uint8
 {
+    NONE UMETA(Hidden),
     ELLIPSOID     UMETA(DisplayName = "Ellipsoid"),
     POINT         UMETA(DisplayName = "Point"),
     DSK           UMETA(DisplayName = "DSK/Unprioritized")
@@ -205,16 +206,25 @@ enum class ES_GeometricModel : uint8
 UENUM(BlueprintType)
 enum class ES_ComputationMethod : uint8
 {
-    NEAR_POINT_ELLIPSOID    UMETA(DisplayName = "Near Point/Ellipsoid"),
-    INTERCEPT_ELLIPSOID     UMETA(DisplayName = "Intercept/Ellipsoid"),
-    NADIR_DSK               UMETA(DisplayName = "Nadir/DSK/Unprioritized"),
-    INTERCEPT_DSK           UMETA(DisplayName = "Intercept/DSK/Unprioritized")
+    NONE = 0 UMETA(Hidden),
+    NEAR_POINT_ELLIPSOID    = 1  UMETA(DisplayName = "Near Point/Ellipsoid"),
+    INTERCEPT_ELLIPSOID     = 2  UMETA(DisplayName = "Intercept/Ellipsoid"),
+    NADIR_DSK               = 3  UMETA(DisplayName = "Nadir/DSK/Unprioritized"),
+    INTERCEPT_DSK           = 4  UMETA(DisplayName = "Intercept/DSK/Unprioritized")
 };
 
+UENUM(BlueprintType)
+enum class ES_SubpointComputationMethod : uint8
+{
+    NONE = 0 UMETA(Hidden),
+    NEAR_POINT_ELLIPSOID    = 1  UMETA(DisplayName = "Near Point/Ellipsoid"),
+    INTERCEPT_ELLIPSOID     = 2  UMETA(DisplayName = "Intercept/Ellipsoid")
+};
 
 UENUM(BlueprintType)
 enum class ES_LimbComputationMethod : uint8
 {
+    NONE UMETA(Hidden),
     TANGENT_ELLIPSOID   UMETA(DisplayName = "Tangent/Ellipsoid"),
     GUIDED_ELLIPSOID    UMETA(DisplayName = "Guided/Ellipsoid"),
     TANGENT_DSK         UMETA(DisplayName = "Tangent/DSK/Unprioritized"),
@@ -225,6 +235,7 @@ enum class ES_LimbComputationMethod : uint8
 UENUM(BlueprintType)
 enum class ES_Shadow : uint8
 {
+    NONE UMETA(Hidden),
     UMBRAL     UMETA(DisplayName = "Umbral"),
     PENUMBRAL  UMETA(DisplayName = "Penumbral")
 };
@@ -232,6 +243,7 @@ enum class ES_Shadow : uint8
 UENUM(BlueprintType)
 enum class ES_CurveType : uint8
 {
+    NONE UMETA(Hidden),
     TANGENT UMETA(DisplayName = "Tangent"),
     GUIDED  UMETA(DisplayName = "Guided")
 };
@@ -239,7 +251,7 @@ enum class ES_CurveType : uint8
 UENUM(BlueprintType)
 enum class ES_OccultationType : uint8
 {
-    None    UMETA(DisplayName = "No occultation/transit"),
+    NONE    UMETA(DisplayName = "No occultation/transit"),
     FULL    UMETA(DisplayName = "Total"),
     ANNULAR UMETA(DisplayName = "Annular"),
     PARTIAL UMETA(DisplayName = "Partial"),
@@ -263,6 +275,7 @@ enum class ES_RelationalOperator : uint8
 UENUM(BlueprintType)
 enum class ES_Units : uint8
 {
+    NONE UMETA(Hidden),
     RADIANS UMETA(DisplayName = "Radians"),
     DEGREES UMETA(DisplayName = "Degrees"),
     ARCMINUTES UMETA(DisplayName = "ArcMinutes"),
@@ -3218,7 +3231,6 @@ private:
     static FString formatAngle(const double degrees, ES_AngleFormat format);
 
 public:
-    USpiceTypes();
     static const char* toString(ES_Units units);
     static const char* toString(ES_AberrationCorrectionFov abcorr);
     static const char* toString(ES_AberrationCorrectionWithNewtonians abcorr);
@@ -3232,6 +3244,7 @@ public:
     static const char* toString(ES_CoordinateSystemInclRadec coords);
     static const char* toString(ES_CoordinateSystem coords);
     static const char* toString(ES_CoordinateName coord);
+    static const char* toString(ES_SubpointComputationMethod method);
     static FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_LimbComputationMethod method, const TArray<FString>& shapeSurfaces);
