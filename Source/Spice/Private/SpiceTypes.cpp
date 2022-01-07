@@ -65,12 +65,6 @@ double FSAngularRate::degreesPerSecond() const
 }
 
 
-
-USpiceTypes::USpiceTypes()
-{
-}
-
-
 const char* USpiceTypes::toString(ES_Units units)
 {
     const char* result;
@@ -376,6 +370,27 @@ FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& s
     return result;
 }
 
+const char* USpiceTypes::toString(ES_SubpointComputationMethod method)
+{
+    if (method == ES_SubpointComputationMethod::NEAR_POINT_ELLIPSOID)
+    {
+        return "NEAR POINT/ELLIPSOID";
+    }
+    else if (method == ES_SubpointComputationMethod::INTERCEPT_ELLIPSOID)
+    {
+        return "INTERCEPT/ELLIPSOID";
+    }
+    else
+    {
+        setmsg_c("Unrecognized Subpoint Computation Method: #");
+        errint_c("#", (SpiceInt)method);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+    }
+
+    return "";
+}
+
+
 FString USpiceTypes::toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces)
 {
     if (method == ES_ComputationMethod::NEAR_POINT_ELLIPSOID)
@@ -570,6 +585,13 @@ const char* USpiceTypes::toString(ES_RelationalOperator relate)
 
 const char* USpiceTypes::toString(ES_CoordinateSystemInclRadec coords)
 {
+    check((uint8)ES_CoordinateSystem::RECTANGULAR == (uint8)ES_CoordinateSystemInclRadec::RECTANGULAR);
+    check((uint8)ES_CoordinateSystem::CYLINDRICAL == (uint8)ES_CoordinateSystemInclRadec::CYLINDRICAL);
+    check((uint8)ES_CoordinateSystem::LATITUDINAL == (uint8)ES_CoordinateSystemInclRadec::LATITUDINAL);
+    check((uint8)ES_CoordinateSystem::SPHERICAL == (uint8)ES_CoordinateSystemInclRadec::SPHERICAL);
+    check((uint8)ES_CoordinateSystem::GEODETIC == (uint8)ES_CoordinateSystemInclRadec::GEODETIC);
+    check((uint8)ES_CoordinateSystem::PLANETOGRAPHIC == (uint8)ES_CoordinateSystemInclRadec::PLANETOGRAPHIC);
+
     switch (coords)
     {
     case ES_CoordinateSystemInclRadec::RECTANGULAR:
@@ -590,6 +612,7 @@ const char* USpiceTypes::toString(ES_CoordinateSystemInclRadec coords)
 
     return "NONE";
 }
+
 
 const char* USpiceTypes::toString(ES_CoordinateSystem coords)
 {
@@ -820,7 +843,7 @@ FSMassConstant USpiceTypes::Conv_DoubleToSMassConstant(
     return FSMassConstant(value);
 }
 
-FSDimensionlessVector USpiceTypes::USpiceTypes::Conv_SVelocityVectorToSDimensionlessVector(
+FSDimensionlessVector USpiceTypes::Conv_SVelocityVectorToSDimensionlessVector(
     const FSVelocityVector& value
 )
 {

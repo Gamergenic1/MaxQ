@@ -45,8 +45,6 @@ class SPICE_API USpice : public UBlueprintFunctionLibrary
     static void SwizzleToSpice(const FQuat& ue, double(&q)[4]);
 
 public:
-    USpice();
-
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Data",
         meta = (
@@ -1578,6 +1576,34 @@ public:
             ToolTip = "Override the default GF convergence value used in the high level GF routines."
             ))
     static void gfstol(double value);
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AdvancedDisplay = "nintvls",
+            ShortToolTip = "GF, subpoint vector coordinate search",
+            ToolTip = "Determine time intervals for which a coordinate of an subpoint position vector satisfies a numerical constraint"
+            ))
+    void gfsubc(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        double     refval,
+        double     adjust,
+        const FSEphemerisPeriod& step,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FString& target = TEXT("EARTH"),
+        const FString& fixref = TEXT("IAU_EARTH"),
+        ES_SubpointComputationMethod method = ES_SubpointComputationMethod::NEAR_POINT_ELLIPSOID,
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::None,
+        const FString& obsrvr = TEXT("SUN"),
+        ES_CoordinateSystemInclRadec crdsys = ES_CoordinateSystemInclRadec::GEODETIC,
+        ES_CoordinateName coord = ES_CoordinateName::LATITUDE,
+        ES_RelationalOperator relate = ES_RelationalOperator::GreaterThan,
+        int nintvls = 100
+    );
 
     /// <summary>Get integers from the kernel pool</summary>
     /// <param name="name">[in] Name of the variable whose value is to be returned</param>
