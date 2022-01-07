@@ -2234,6 +2234,95 @@ void USpice::dpr(double& ReturnValue)
     ReturnValue = dpr_c();
 }
 
+/*
+Exceptions
+   1)  If the input file has transfer format, the error
+       SPICE(INVALIDFORMAT) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If the input file is not a transfer file but has architecture
+       other than DAS, the error SPICE(INVALIDARCHTYPE) is signaled
+       by a routine in the call tree of this routine.
+
+   3)  If the input file is a binary DAS file of type other than DSK,
+       the error SPICE(INVALIDFILETYPE) is signaled by a routine in
+       the call tree of this routine.
+
+   4)  If the DSK file cannot be opened or read, an error is signaled
+       by a routine in the call tree of this routine.
+
+   5)  If the size of the output set argument `bodids' is insufficient
+       to contain the actual number of ID codes of objects covered by
+       the indicated DSK file, the error SPICE(CELLTOOSMALL) is
+       signaled by a routine in the call tree of this routine.
+
+   6)  If the `dskfnm' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   7)  If the `dskfnm' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   8)  If the `bodids' cell argument has a type other than SpiceInt,
+       the error SPICE(TYPEMISMATCH) is signaled.
+*/
+void USpice::dskobj(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<int>& bodids,
+    const FString& fileRelativePath
+)
+{
+    const int MAXID = 10000;
+
+    // Input
+    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
+    // Output
+    SPICEINT_CELL(_bodids, MAXID);
+
+    // Invocation
+    dskobj_c(_dskfnm, &_bodids);
+
+    // Pack outputs
+    bodids = TArray<int>();
+    for (int i = 0; i < card_c(&_bodids); ++i)
+    {
+        bodids.Add(SPICE_CELL_ELEM_I(&_bodids, i));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::dsksrf(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<int>& srfids,
+    const FString& fileRelativePath,
+    int bodyid
+)
+{
+    const int MAXID = 10000;
+
+    // Input
+    ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
+    SpiceInt        _bodyid = (SpiceInt)bodyid;
+    // Output
+    SPICEINT_CELL(_srfids, MAXID);
+
+    // Invocation
+    dsksrf_c(_dskfnm, _bodyid, &_srfids);
+
+    // Pack outputs
+    srfids = TArray<int>();
+    for (int i = 0; i < card_c(&_srfids); ++i)
+    {
+        srfids.Add(SPICE_CELL_ELEM_I(&_srfids, i));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 void USpice::dskxsi(
     ES_ResultCode& ResultCode,
