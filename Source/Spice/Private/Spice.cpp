@@ -2140,6 +2140,57 @@ void USpice::dafopw(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+
+void USpice::dasopr(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& relativePath,
+    int& handle
+)
+{
+    // Input
+    ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
+    // Output
+    SpiceInt        _handle = 0;
+
+    // Invocation
+    dasopr_c(_fname, &_handle);
+
+    // Return Value
+    handle = _handle;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+void USpice::dlabfs(
+    int          handle,
+    FSDLADescr& dladsc,
+    ES_FoundCode& found
+)
+{
+    // Input
+    SpiceInt _handle = (SpiceInt)handle;
+    
+    // Outputs
+    SpiceDLADescr _dladsc;  ZeroOut(_dladsc);
+    SpiceBoolean  _found = SPICEFALSE;
+    
+    // Invocation
+    dlabfs_c(
+        handle,
+        &_dladsc,
+        &_found
+    );
+
+    // Pack output
+    dladsc = FSDLADescr(&_dladsc);
+    found = (_found == SPICETRUE ? ES_FoundCode::Found : ES_FoundCode::NotFound);
+
+    // Error Handling
+    UnexpectedErrorCheck(false);
+}
+
 /*
 Exceptions
 
@@ -2329,7 +2380,7 @@ void USpice::dskz02(
     int& nv,
     int& np,
     int handle,
-    const FSDSKDescr& dladsc
+    const FSDLADescr& dladsc
 )
 {
     // Inputs
@@ -2360,7 +2411,7 @@ void USpice::dskp02(
     FString& ErrorMessage,
     TArray<FSPlateIndices>& plates,
     int               handle,
-    const FSDSKDescr& dladsc,
+    const FSDLADescr& dladsc,
     int               start
 )
 {
@@ -2403,7 +2454,7 @@ void USpice::dskv02(
     FString& ErrorMessage,
     TArray<FSDistanceVector>& vrtces,
     int               handle,
-    const FSDSKDescr& dladsc,
+    const FSDLADescr& dladsc,
     int               start
 )
 {

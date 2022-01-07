@@ -699,6 +699,20 @@ FSDLADescr::FSDLADescr(void* descr)
     csize = dla->csize;
 }
 
+void FSDLADescr::CopyTo(void* descr) const
+{
+    SpiceDLADescr* dla = (SpiceDLADescr*)descr;
+
+    dla->bwdptr = bwdptr;
+    dla->fwdptr = fwdptr;
+    dla->ibase = ibase;
+    dla->isize = isize;
+    dla->dbase = dbase;
+    dla->dsize = dsize;
+    dla->cbase = cbase;
+    dla->csize = csize;
+}
+
 FSDSKDescr::FSDSKDescr(void* descr)
 {
     SpiceDSKDescr* dsk = (SpiceDSKDescr*)descr;

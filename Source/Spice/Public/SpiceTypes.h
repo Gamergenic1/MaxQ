@@ -3290,6 +3290,8 @@ public:
     }
 
     FSDLADescr(void* descr);
+    
+    void CopyTo(void* descr) const;
 };
 
 
