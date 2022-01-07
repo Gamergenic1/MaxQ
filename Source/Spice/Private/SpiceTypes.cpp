@@ -220,16 +220,12 @@ const char* USpiceTypes::toString(ES_AberrationCorrectionForOccultation abcorr)
     {
     case ES_AberrationCorrectionForOccultation::LT:
         return "LT";
-        break;
     case ES_AberrationCorrectionForOccultation::CN:
         return "CN";
-        break;
     case ES_AberrationCorrectionForOccultation::XLT:
         return "XLT";
-        break;
     case ES_AberrationCorrectionForOccultation::XCN:
         return "XCN";
-        break;
     }
 
     return "NONE";
@@ -241,28 +237,20 @@ const char* USpiceTypes::toString(ES_AberrationCorrectionWithTransmissions abcor
     {
     case ES_AberrationCorrectionWithTransmissions::LT:
         return "LT";
-        break;
     case ES_AberrationCorrectionWithTransmissions::LT_S:
         return "LT+S";
-        break;
     case ES_AberrationCorrectionWithTransmissions::CN:
         return "CN";
-        break;
     case ES_AberrationCorrectionWithTransmissions::CN_S:
         return "CN+S";
-        break;
     case ES_AberrationCorrectionWithTransmissions::XLT:
         return "XLT";
-        break;
     case ES_AberrationCorrectionWithTransmissions::XLT_S:
         return "XLT+S";
-        break;
     case ES_AberrationCorrectionWithTransmissions::XCN:
         return "XCN";
-        break;
     case ES_AberrationCorrectionWithTransmissions::XCN_S:
         return "XCN+S";
-        break;
     };
 
     return "NONE";
@@ -287,7 +275,6 @@ const char* USpiceTypes::toString(ES_GeometricModel model)
 
 const char* USpiceTypes::toString(ES_OtherGeometricModel model)
 {
-
     if (model == ES_OtherGeometricModel::SPHERE)
     {
         return "SPHERE";
@@ -300,8 +287,21 @@ const char* USpiceTypes::toString(ES_OtherGeometricModel model)
     return "NONE";
 }
 
+const char* USpiceTypes::toString(ES_IlluminationAngleType angleType)
+{
+    switch (angleType)
+    {
+    case ES_IlluminationAngleType::PHASE:
+        return "PHASE";
+    case ES_IlluminationAngleType::INCIDENCE:
+        return "INCIDENCE";
+    case ES_IlluminationAngleType::EMISSION:
+        return "EMISSION";
+    }
 
+    return "NONE";
 
+}
 
 FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
 {
