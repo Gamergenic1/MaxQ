@@ -1573,10 +1573,34 @@ public:
         Category = "Spice|Api|Geometry",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "GF, angular separation search",
+            ToolTip = "Determine time intervals when the angular separation between the position vectors of two target bodies relative to an observer satisfies a numerical relationship"
+            ))
+    static void gfsep(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& result,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FSAngle& refval,
+        const FSAngle& adjust,
+        const FSEphemerisPeriod& step,
+        const FString& targ1 = TEXT("SUN"),
+        ES_OtherGeometricModel shape1 = ES_OtherGeometricModel::POINT,
+        const FString& targ2 = TEXT("MOON"),
+        ES_OtherGeometricModel shape2 = ES_OtherGeometricModel::POINT,
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::LT,
+        const FString& obsrvr = TEXT("EARTH"),
+        ES_RelationalOperator relate = ES_RelationalOperator::LessThan
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "GF, surface intercept vector coordinate search",
             ToolTip = "Determine time intervals for which a coordinate of an surface intercept position vector satisfies a numerical constraint"
             ))
-    void gfsntc(
+    static void gfsntc(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FSEphemerisTimeWindowSegment>& results,
@@ -1613,7 +1637,7 @@ public:
             ShortToolTip = "GF, subpoint vector coordinate search",
             ToolTip = "Determine time intervals for which a coordinate of an subpoint position vector satisfies a numerical constraint"
             ))
-    void gfsubc(
+    static void gfsubc(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FSEphemerisTimeWindowSegment>& results,

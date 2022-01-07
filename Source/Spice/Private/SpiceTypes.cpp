@@ -65,142 +65,103 @@ double FSAngularRate::degreesPerSecond() const
 }
 
 
+/*
+*  NOTE: 
+     See comments in SpiceTypes.h (EnumAsString)
+     Yes, we really want to hardcode these toString's vs pulling values from UE reflection.
+*/
 const char* USpiceTypes::toString(ES_Units units)
 {
-    const char* result;
-
     switch (units)
     {
     case ES_Units::RADIANS:
-        result = "RADIANS";
-        break;
+        return "RADIANS";
     case ES_Units::DEGREES:
-        result = "DEGREES";
-        break;
+        return "DEGREES";
     case ES_Units::ARCMINUTES:
-        result = "ARCMINUTES";
-        break;
+        return "ARCMINUTES";
     case ES_Units::ARCSECONDS:
-        result = "ARCSECONDS";
-        break;
+        return "ARCSECONDS";
     case ES_Units::HOURANGLE:
-        result = "HOURANGLE";
-        break;
+        return "HOURANGLE";
     case ES_Units::MINUTEANGLE:
-        result = "MINUTEANGLE";
-        break;
+        return "MINUTEANGLE";
     case ES_Units::SECONDANGLE:
-        result = "SECONDANGLE";
-        break;
+        return "SECONDANGLE";
     case ES_Units::METERS:
-        result = "METERS";
-        break;
+        return "METERS";
     case ES_Units::KILOMETERS:
-        result = "KILOMETERS";
-        break;
+        return "KILOMETERS";
     case ES_Units::CENTIMETERS:
-        result = "CENTIMETERS";
-        break;
+        return "CENTIMETERS";
     case ES_Units::MILLIMETERS:
-        result = "MILLIMETERS";
-        break;
+        return "MILLIMETERS";
     case ES_Units::FEET:
-        result = "FEET";
-        break;
+        return "FEET";
     case ES_Units::INCHES:
-        result = "INCHES";
-        break;
+        return "INCHES";
     case ES_Units::YARDS:
-        result = "YARDS";
-        break;
+        return "YARDS";
     case ES_Units::STATUTE_MILES:
-        result = "STATUTE_MILES";
-        break;
+        return "STATUTE_MILES";
     case ES_Units::NAUTICAL_MILES:
-        result = "NAUTICAL_MILES";
-        break;
+        return "NAUTICAL_MILES";
     case ES_Units::AU:
-        result = "AU";
-        break;
+        return "AU";
     case ES_Units::PARSECS:
-        result = "PARSECS";
-        break;
+        return "PARSECS";
     case ES_Units::LIGHTSECS:
-        result = "LIGHTSECS";
-        break;
+        return "LIGHTSECS";
     case ES_Units::LIGHTYEARS:
-        result = "LIGHTYEARS";
-        break;
+        return "LIGHTYEARS";
     case ES_Units::SECONDS:
-        result = "SECONDS";
-        break;
+        return "SECONDS";
     case ES_Units::MINUTES:
-        result = "MINUTES";
-        break;
+        return "MINUTES";
     case ES_Units::HOURS:
-        result = "HOURS";
-        break;
+        return "HOURS";
     case ES_Units::DAYS:
-        result = "DAYS";
-        break;
+        return "DAYS";
     case ES_Units::JULIAN_YEARS:
-        result = "JULIAN_YEARS";
-        break;
+        return "JULIAN_YEARS";
     case ES_Units::TROPICAL_YEARS:
-        result = "TROPICAL_YEARS";
-        break;
+        return "TROPICAL_YEARS";
     case ES_Units::YEARS:
-        result = "YEARS";
-        break;
-    default:
-        result = "";
-        break;
+        return "YEARS";
     }
 
-    return result;
+    return "NONE";
 }
 
 const char* USpiceTypes::toString(ES_AberrationCorrectionWithNewtonians abcorr)
 {
-    const char* _abcorr;
     switch (abcorr)
     {
     case ES_AberrationCorrectionWithNewtonians::LT:
-        _abcorr = "LT";
-        break;
+        return "LT";
     case ES_AberrationCorrectionWithNewtonians::LT_S:
-        _abcorr = "LT+S";
-        break;
+        return "LT+S";
     case ES_AberrationCorrectionWithNewtonians::CN:
-        _abcorr = "CN";
-        break;
+        return "CN";
     case ES_AberrationCorrectionWithNewtonians::CN_S:
-        _abcorr = "CN+S";
-        break;
-    default:
-        _abcorr = "NONE";
-        break;
+        return "CN+S";
     }
-    return _abcorr;
+
+    return "NONE";
 }
 
 
 const char* USpiceTypes::toString(ES_AberrationCorrectionFov abcorr)
 {
-    const char* _abcorr;
     switch (abcorr)
     {
     case ES_AberrationCorrectionFov::S:
-        _abcorr = "S";
-        break;
+        return "S";
     case ES_AberrationCorrectionFov::XS:
-        _abcorr = "XS";
-        break;
-    default:
-        _abcorr = "NONE";
-        break;
+        return "XS";
     }
-    return _abcorr;
+
+    return "NONE";
 }
 
 const char* USpiceTypes::toString(ES_AberrationCorrectionLocus corloc)
@@ -213,11 +174,7 @@ const char* USpiceTypes::toString(ES_AberrationCorrectionLocus corloc)
         return "ELLIPSOID LIMB";
     }
 
-    setmsg_c("Unrecognized Computation Aberration Correction Locus: #");
-    errint_c("#", (SpiceInt)corloc);
-    sigerr_c("SPICE(VALUEOUTOFRANGE)");
-
-    return "";
+    return "NONE";
 }
 
 
@@ -231,11 +188,7 @@ const char* toString(ES_AberrationCorrectionLocusTerminator corloc)
         return "ELLIPSOID TERMINATOR";
     }
 
-    setmsg_c("Unrecognized Computation Aberration Correction Locus: #");
-    errint_c("#", (SpiceInt)corloc);
-    sigerr_c("SPICE(VALUEOUTOFRANGE)");
-
-    return "";
+    return "NONE";
 }
 
 const char* USpiceTypes::toString(ES_TimeScale timeScale)
@@ -258,7 +211,7 @@ const char* USpiceTypes::toString(ES_TimeScale timeScale)
         return "JED";
     }
 
-    return "";
+    return "NONE";
 }
 
 const char* USpiceTypes::toString(ES_AberrationCorrectionForOccultation abcorr)
@@ -331,6 +284,25 @@ const char* USpiceTypes::toString(ES_GeometricModel model)
     return "NONE";
 }
 
+
+const char* USpiceTypes::toString(ES_OtherGeometricModel model)
+{
+
+    if (model == ES_OtherGeometricModel::SPHERE)
+    {
+        return "SPHERE";
+    }
+    else if (model == ES_OtherGeometricModel::POINT)
+    {
+        return "POINT";
+    }
+
+    return "NONE";
+}
+
+
+
+
 FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
 {
 
@@ -380,14 +352,8 @@ const char* USpiceTypes::toString(ES_SubpointComputationMethod method)
     {
         return "INTERCEPT/ELLIPSOID";
     }
-    else
-    {
-        setmsg_c("Unrecognized Subpoint Computation Method: #");
-        errint_c("#", (SpiceInt)method);
-        sigerr_c("SPICE(VALUEOUTOFRANGE)");
-    }
-
-    return "";
+    
+    return "NONE";
 }
 
 
@@ -414,9 +380,7 @@ FString USpiceTypes::toFString(ES_ComputationMethod method, const TArray<FString
     }
     else
     {
-        setmsg_c("Unrecognized Computation Method: #");
-        errint_c("#", (SpiceInt)method);
-        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+        result = "NONE";
     }
 
     if (shapeSurfaces.Num() > 0)
@@ -462,9 +426,7 @@ FString USpiceTypes::toFString(ES_LimbComputationMethod method, const TArray<FSt
     }
     else
     {
-        setmsg_c("Unrecognized Limb Computation Method: #");
-        errint_c("#", (SpiceInt)method);
-        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+        result = "NONE";
     }
 
     if (shapeSurfaces.Num() > 0)
@@ -520,14 +482,14 @@ FString USpiceTypes::toFString(ES_Shadow shadow, ES_CurveType curveType, ES_Geom
     }
     else if (method == ES_GeometricModel::POINT)
     {
-        setmsg_c("Geometric Model POINT is not allowable here.");
-        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+        // Technically, POINT is not not valid in this case.... But:
+        // CSPICE validates its inputs perfectly well, we don't have to.
+        result += FString(TEXT("POINT"));
+        return result;
     }
     else
     {
-        setmsg_c("Unrecognized Geometric Model: #");
-        errint_c("#", (SpiceInt)method);
-        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+        result += FString(TEXT("NONE"));
     }
 
     if (shapeSurfaces.Num() > 0)
@@ -649,6 +611,7 @@ const char* USpiceTypes::toString(ES_CoordinateName coord)
 
     return "NONE";
 }
+
 
 void FSTwoLineElements::CopyTo(double(_elems)[10]) const
 {

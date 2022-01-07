@@ -204,6 +204,15 @@ enum class ES_GeometricModel : uint8
 
 
 UENUM(BlueprintType)
+enum class ES_OtherGeometricModel : uint8
+{
+    NONE UMETA(Hidden),
+    SPHERE     UMETA(DisplayName = "Sphere"),
+    POINT      UMETA(DisplayName = "Point")
+};
+
+
+UENUM(BlueprintType)
 enum class ES_ComputationMethod : uint8
 {
     NONE = 0 UMETA(Hidden),
@@ -3231,6 +3240,7 @@ private:
     static FString formatAngle(const double degrees, ES_AngleFormat format);
 
 public:
+    // See notes below regarding EnumAsString.
     static const char* toString(ES_Units units);
     static const char* toString(ES_AberrationCorrectionFov abcorr);
     static const char* toString(ES_AberrationCorrectionWithNewtonians abcorr);
@@ -3240,6 +3250,7 @@ public:
     static const char* toString(ES_AberrationCorrectionLocusTerminator corloc);
     static const char* toString(ES_TimeScale timeScale);
     static const char* toString(ES_GeometricModel model);
+    static const char* toString(ES_OtherGeometricModel model);
     static const char* toString(ES_RelationalOperator relate);
     static const char* toString(ES_CoordinateSystemInclRadec coords);
     static const char* toString(ES_CoordinateSystem coords);
@@ -3249,6 +3260,27 @@ public:
     static FString toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_LimbComputationMethod method, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_Shadow shadow, ES_CurveType curveType, ES_GeometricModel method, const TArray<FString>& shapeSurfaces);
+
+    // ---------------------------------------------------------------------------
+    // NOTE:
+    // For API invocation, use the above (toString), not EnumAsString!
+    // 
+    // EnumAsString is lower maintenance, for sure.  But, it's an exchange of developer time
+    // for end-user safety.  Using EnumAsString means renaming an enum, however innocently,
+    // can break functionality and it's NOT caught at compile time.
+    // It also breaks end-user code which may have already been tested etc etc.
+    // EnumAsString is suitable for diagnostic messages etc etc.
+    template<typename T> inline static const FString EnumAsString(const char* EnumName, T EnumValue)
+    {
+        static const FString InvalidEnum("Invalid");
+
+        const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, UTF8_TO_TCHAR(EnumName), true);
+        if (!EnumPtr)
+        {
+            return InvalidEnum;
+        }
+        return EnumPtr->GetNameStringByIndex(static_cast<int32>(EnumValue));
+    }
 
 public:
 
