@@ -4348,6 +4348,143 @@ void USpice::gnpool(
 }
 
 
+void USpice::illumf(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSEphemerisTime& trgepc,
+    FSDistanceVector& srfvec,
+    FSAngle& phase,
+    FSAngle& incdnc,
+    FSAngle& emissn,
+    bool& visibl,
+    bool& lit,
+    const FSEphemerisTime& et,
+    const FSDistanceVector& spoint,
+    const TArray<FString>& surfaces,
+    ES_GeometricModel method,
+    const FString& target,
+    const FString& ilusrc,
+    const FString& fixref,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr
+)
+{
+    // Inputs
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
+
+    // Outputs
+    SpiceDouble _trgepc = 0.;
+    SpiceDouble _srfvec[3];  ZeroOut(_srfvec);
+    SpiceDouble _phase = 0.;
+    SpiceDouble _incdnc = 0.;
+    SpiceDouble _emissn = 0.;
+    SpiceBoolean _visibl = SPICEFALSE;
+    SpiceBoolean _lit = SPICEFALSE;
+
+    // Invocation
+    illumf_c(
+        _method,
+        _target,
+        _ilusrc,
+        _et,
+        _fixref,
+        _abcorr,
+        _obsrvr,
+        _spoint,
+        &_trgepc,
+        _srfvec,
+        &_phase,
+        &_incdnc,
+        &_emissn,
+        &_visibl,
+        &_lit
+    );
+
+    // Bundle outputs
+    trgepc = FSEphemerisTime(_trgepc);
+    srfvec = FSDistanceVector(_srfvec);
+    phase = FSAngle(_phase);
+    incdnc = FSAngle(_incdnc);
+    emissn = FSAngle(_emissn);
+    visibl = _visibl == SPICETRUE ? true : false;
+    lit = _lit == SPICETRUE ? true : false;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::illumg(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSEphemerisTime& trgepc,
+    FSDistanceVector& srfvec,
+    FSAngle& phase,
+    FSAngle& incdnc,
+    FSAngle& emissn,
+    const FSEphemerisTime& et,
+    const FSDistanceVector& spoint,
+    const TArray<FString>& surfaces,
+    ES_GeometricModel method,
+    const FString& target,
+    const FString& ilusrc,
+    const FString& fixref,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr
+)
+{
+    // Inputs
+    ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
+    
+    // Outputs
+    SpiceDouble _trgepc = 0.;
+    SpiceDouble _srfvec[3];  ZeroOut(_srfvec);
+    SpiceDouble _phase = 0.;
+    SpiceDouble _incdnc = 0.;
+    SpiceDouble _emissn = 0.;
+
+    // Invocation
+    illumg_c(
+        _method,
+        _target,
+        _ilusrc,
+        _et,
+        _fixref,
+        _abcorr,
+        _obsrvr,
+        _spoint,
+        &_trgepc,
+        _srfvec,
+        &_phase,
+        &_incdnc,
+        &_emissn
+    );
+
+    // Bundle outputs
+    trgepc = FSEphemerisTime(_trgepc);
+    srfvec = FSDistanceVector(_srfvec);
+    phase = FSAngle(_phase);
+    incdnc = FSAngle(_incdnc);
+    emissn = FSAngle(_emissn);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 /*
 Exceptions
@@ -6580,6 +6717,41 @@ void USpice::pgrrec(
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
 }
+
+
+FSAngle USpice::phaseq(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FSEphemerisTime&  et,
+    const FString& target,
+    const FString& illmn,
+    const FString& obsrvr,
+    ES_AberrationCorrectionWithNewtonians abcorr
+)
+{
+    // Inputs
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _illmn = TCHAR_TO_ANSI(*illmn);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+
+    // Invocation
+    SpiceDouble result = phaseq_c(
+        _et,
+        _target,
+        _illmn,
+        _obsrvr,
+        _abcorr
+    );
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+
+    // Returh the result!
+    return result;
+}
+
 
 void USpice::pi(double& pi)
 {
