@@ -848,7 +848,7 @@ public:
         int& nv,
         int& np,
         int handle,
-        const FSDSKDescr& dladsc
+        const FSDLADescr& dladsc
     );
 
     UFUNCTION(
@@ -864,7 +864,7 @@ public:
         FString& ErrorMessage,
         TArray<FSPlateIndices>& plates,
         int               handle,
-        const FSDSKDescr& dladsc,
+        const FSDLADescr& dladsc,
         int               start = 0
     );
 
@@ -881,7 +881,7 @@ public:
         FString& ErrorMessage,
         TArray<FSDistanceVector>& vrtces,
         int               handle,
-        const FSDSKDescr& dladsc,
+        const FSDLADescr& dladsc,
         int               start = 0
     );
 
@@ -1011,7 +1011,7 @@ public:
             int& handle
         );
 
-    /// <summary>DAF, open for write</summary>
+     /// <summary>DAF, open for write</summary>
     /// <param name="fname">[in] Name of DAF to be opened</param>
     /// <param name="handle">[in] Handle assigned to DAF</param>
     /// <returns></returns>
@@ -1021,13 +1021,46 @@ public:
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "DAF, open for write",
-            ToolTip = ""
+            ToolTip = "Open a DAF file for writing"
             ))
     static void dafopw(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         const FString& relativePath,
         int& handle
+    );
+
+    /// <summary>DAF, open for write</summary>
+    /// <param name="fname">[in] Name of DAF to be opened</param>
+    /// <param name="handle">[in] Handle assigned to DAF</param>
+    /// <returns></returns>
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|DAS",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DAS, open for read",
+            ToolTip = "Open a DAS file for reading"
+            ))
+    static void dasopr(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& relativePath,
+        int& handle
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|DLS",
+        meta = (
+            ExpandEnumAsExecs = "found",
+            ShortToolTip = "DLA, begin forward search",
+            ToolTip = "Begin a forward segment search in a DLA file"
+            ))
+    static void dlabfs(
+        int          handle,
+        FSDLADescr& dladsc,
+        ES_FoundCode& found
     );
 
     /// <summary>Return the value of Delta ET (ET-UTC) for an input epoch</summary>
