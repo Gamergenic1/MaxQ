@@ -839,6 +839,57 @@ public:
         Category = "Spice|Api|Surface",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, fetch type 2 model size parameters",
+            ToolTip = "Return plate model size parameters---plate count and vertex count-- - for a type 2 DSK segment"
+            ))
+    static void dskz02(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int& nv,
+        int& np,
+        int handle,
+        const FSDSKDescr& dladsc
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, fetch type 2 plate data",
+            ToolTip = "Fetch triangular plates from a type 2 DSK segment"
+            ))
+    static void dskp02(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSPlateIndices>& plates,
+        int               handle,
+        const FSDSKDescr& dladsc,
+        int               start = 0
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, fetch type 2 vertex data",
+            ToolTip = "Fetch vertices from a type 2 DSK segment"
+            ))
+    static void dskv02(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSDistanceVector>& vrtces,
+        int               handle,
+        const FSDSKDescr& dladsc,
+        int               start = 0
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "DSK, ray-surface intercept, vectorized",
             ToolTip = "Compute ray-surface intercepts for a set of rays, using data provided by multiple loaded DSK segments"
             ))

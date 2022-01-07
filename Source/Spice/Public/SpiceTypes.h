@@ -3336,8 +3336,41 @@ public:
     }
 
     FSDSKDescr(void* descr);
+
+    void CopyTo(void* descr) const;
 };
 
+
+USTRUCT(BlueprintType)
+struct FSPlateIndices
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int i0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int i1;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int i2;
+
+public:
+
+    FSPlateIndices()
+    {
+        i0 = i1 = i2 = 0;
+    }
+
+    FSPlateIndices(int(&_plate)[3])
+    {
+        i0 = _plate[0];
+        i1 = _plate[1];
+        i2 = _plate[2];
+    }
+
+    FSPlateIndices(int _i0, int _i1, int _i2)
+    {
+        i0 = _i0;
+        i1 = _i1;
+        i2 = _i2;
+    }
+};
 
 
 UCLASS(BlueprintType, Blueprintable)

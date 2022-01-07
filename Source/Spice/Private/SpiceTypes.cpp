@@ -723,6 +723,28 @@ FSDSKDescr::FSDSKDescr(void* descr)
     stop = dsk->stop;
 }
 
+void FSDSKDescr::CopyTo(void* descr) const
+{
+    SpiceDSKDescr* dsk = (SpiceDSKDescr*)descr;
+
+    dsk->surfce = surfce;
+    dsk->center = center;
+    dsk->dclass = dclass;
+    dsk->dtype = dtype;
+    dsk->frmcde = frmcde;
+    dsk->corsys = corsys;
+    check(sizeof(double) == sizeof(SpiceDouble));
+    memcpy(dsk->corpar, corpar.GetData(), SPICE_DSK_NSYPAR * sizeof(SpiceDouble));
+    dsk->co1min = co1min;
+    dsk->co1max = co1max;
+    dsk->co2min = co2min;
+    dsk->co2max = co2max;
+    dsk->co3min = co3min;
+    dsk->co3max = co3max;
+    dsk->start = start;
+    dsk->stop = stop;
+}
+
 
 double USpiceTypes::Conv_SDistanceToDouble(const FSDistance& value)
 {
