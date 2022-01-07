@@ -808,6 +808,37 @@ public:
         Category = "Spice|Api|Surface",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, get object IDs",
+            ToolTip = "Find the set of body ID codes of all objects for which topographic data are provided in a specified DSK file"
+            ))
+    static void dskobj(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<int>& bodids,
+        const FString& fileRelativePath = TEXT("Content/Spice/Kernels/phobos512.bds")
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, get surface IDs for body",
+            ToolTip = "Find the set of surface ID codes for all surfaces associated with a given body in a specified DSK file"
+            ))
+    static void dsksrf(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<int>& srfids,
+        const FString& fileRelativePath = TEXT("Content/Spice/Kernels/phobos512.bds"),
+        int bodyid = 401
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "DSK, ray-surface intercept, vectorized",
             ToolTip = "Compute ray-surface intercepts for a set of rays, using data provided by multiple loaded DSK segments"
             ))
