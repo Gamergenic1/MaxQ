@@ -3695,6 +3695,124 @@ void USpice::gfrr(
 }
 
 
+void USpice::gfsep(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& result,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FSAngle& refval,
+    const FSAngle& adjust,
+    const FSEphemerisPeriod& step,
+    const FString& targ1,
+    ES_OtherGeometricModel shape1,
+    const FString& targ2,
+    ES_OtherGeometricModel shape2,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    const FString& obsrvr,
+    ES_RelationalOperator relate
+)
+{
+    // Since SPICEDOUBLE_CELL allocates a fixed size on the stack and it's
+    // unappealing to mimic it with alloca.
+    // But, I guess I could see it it would be easy to go over the limit
+    // when 'chaining' multiple queries...
+    // Like,
+    // 1. Query Full Moon events over the next 101 months
+    // 2. gfsep using the results of 1.
+    const int MAXWIN = 200;
+    if (2 * cnfine.Num() > MAXWIN)
+    {
+        setmsg_c("[cnfine] Window Segment count = #; maximum allowed value is #");
+        errdp_c("#", cnfine.Num());
+        errdp_c("#", MAXWIN / 2);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+        return;
+    }
+
+    ConstSpiceChar* _targ1 = TCHAR_TO_ANSI(*targ1);
+    ConstSpiceChar* _shape1 = USpiceTypes::toString(shape1);
+    /*
+    * From the docs:
+        gfsep_c does not currently use
+        this argument's value, its use is reserved for future
+        shape models. The value "NULL" will suffice for
+        "POINT" and "SPHERE" shaped bodies.
+    */
+    ConstSpiceChar* _frame1 = "NULL";
+    ConstSpiceChar* _targ2 = TCHAR_TO_ANSI(*targ2);
+    ConstSpiceChar* _shape2 = USpiceTypes::toString(shape2);
+    /*
+    * (comments from _frame1 apply)
+    */
+    ConstSpiceChar* _frame2 = "NULL";
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    SpiceDouble     _refval = refval.AsDouble();
+    SpiceDouble     _adjust = adjust.AsDouble();
+    SpiceDouble     _step = step.AsDouble();
+
+    // Unpack the confinement window array..
+    FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        FSEphemerisTime et0 = (*It).start;
+        FSEphemerisTime et1 = (*It).stop;
+
+        FSEphemerisPeriod thisWindow = et1 - et0;
+        if (thisWindow > maxWindow)
+        {
+            maxWindow = thisWindow;
+        }
+
+        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+    }
+
+    // 
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+
+    // Output
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    // Invocation
+    gfsep_c(
+        _targ1,
+        _shape1,
+        _frame1,
+        _targ2,
+        _shape2,
+        _frame2,
+        _abcorr,
+        _obsrvr,
+        _relate,
+        _refval,
+        _adjust,
+        _step,
+        _nintvls,
+        &_cnfine,
+        &_result
+    );
+
+    // Pack up the output...
+    result.Empty();
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        result.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
 void USpice::gfsntc(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
