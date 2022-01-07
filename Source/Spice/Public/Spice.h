@@ -1814,6 +1814,63 @@ public:
         FSRotationMatrix& identity
     );
 
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Illumination",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "surfaces",
+            ShortToolTip = "Illumination angles, general source, return flags",
+            ToolTip = "Compute the illumination angles -phase, incidence, and emission- at a specified point on a target body.Return logical flags indicating whether the surface point is visible from the observer's position and whether the surface point is illuminated"
+            ))
+    static void illumf(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSEphemerisTime& trgepc,
+        FSDistanceVector& srfvec,
+        FSAngle& phase,
+        FSAngle& incdnc,
+        FSAngle& emissn,
+        bool& visibl,
+        bool& lit,
+        const FSEphemerisTime& et,
+        const FSDistanceVector& spoint,
+        const TArray<FString>& surfaces,
+        ES_GeometricModel method = ES_GeometricModel::ELLIPSOID,
+        const FString& target = TEXT("MARS"),
+        const FString& ilusrc = TEXT("SUN"),
+        const FString& fixref = TEXT("IAU_MARS"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::CN_S,
+        const FString& obsrvr = TEXT("MGS")
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Illumination",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "surfaces",
+            ShortToolTip = "Illumination angles, general source",
+            ToolTip = "Find the illumination angles (phase, incidence, and emission) at a specified surface point of a target body"
+            ))
+    static void illumg(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSEphemerisTime& trgepc,
+        FSDistanceVector& srfvec,
+        FSAngle& phase,
+        FSAngle& incdnc,
+        FSAngle& emissn,
+        const FSEphemerisTime& et,
+        const FSDistanceVector& spoint,
+        const TArray<FString>& surfaces,
+        ES_GeometricModel method = ES_GeometricModel::ELLIPSOID,
+        const FString& target = TEXT("MARS"),
+        const FString& ilusrc = TEXT("SUN"),
+        const FString& fixref = TEXT("IAU_MARS"),
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::CN_S,
+        const FString& obsrvr = TEXT("MGS")
+    );
+
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Geometry",
         meta = (
@@ -2729,6 +2786,22 @@ public:
         double f = 0.00335281066474748071984552861852
     );
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "Phase angle quantity between bodies centers",
+            ToolTip = "Compute the apparent phase angle for a target, observer, illuminator set of ephemeris objects"
+            ))
+    static FSAngle phaseq(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSEphemerisTime& et,
+        const FString& target = TEXT("MOON"),
+        const FString& illmn = TEXT("SUN"),
+        const FString& obsrvr = TEXT("EARTH"),
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::LT_S
+    );
 
     /// <summary>the value of pi</summary>
     /// <returns>pi</returns>
