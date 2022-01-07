@@ -300,7 +300,6 @@ const char* USpiceTypes::toString(ES_IlluminationAngleType angleType)
     }
 
     return "NONE";
-
 }
 
 FString USpiceTypes::toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces)
@@ -685,6 +684,45 @@ void FSEulerAngles::AsDimensionlessVector(FSDimensionlessVector& vector) const
         m2eul_c(_r, _axis3, _axis2, _axis1, &vector.x, &vector.y, &vector.z);
     }
 }
+
+
+FSDLADescr::FSDLADescr(void* descr)
+{
+    SpiceDLADescr* dla = (SpiceDLADescr*)descr;
+    bwdptr = dla->bwdptr;
+    fwdptr = dla->fwdptr;
+    ibase = dla->ibase;
+    isize = dla->isize;
+    dbase = dla->dbase;
+    dsize = dla->dsize;
+    cbase = dla->cbase;
+    csize = dla->csize;
+}
+
+FSDSKDescr::FSDSKDescr(void* descr)
+{
+    SpiceDSKDescr* dsk = (SpiceDSKDescr*)descr;
+
+    surfce = dsk->surfce;
+    center = dsk->center;
+    dclass = dsk->dclass;
+    dtype = dsk->dtype;
+    frmcde = dsk->frmcde;
+    corsys = dsk->corsys;
+    corpar = TArray<double>();
+    corpar.Init(0., SPICE_DSK_NSYPAR);
+    check(sizeof(double) == sizeof(SpiceDouble));
+    memcpy(corpar.GetData(), dsk->corpar, SPICE_DSK_NSYPAR * sizeof(SpiceDouble));
+    co1min = dsk->co1min;
+    co1max = dsk->co1max;
+    co2min = dsk->co2min;
+    co2max = dsk->co2max;
+    co3min = dsk->co3min;
+    co3max = dsk->co3max;
+    start = dsk->start;
+    stop = dsk->stop;
+}
+
 
 double USpiceTypes::Conv_SDistanceToDouble(const FSDistance& value)
 {

@@ -2235,6 +2235,149 @@ void USpice::dpr(double& ReturnValue)
 }
 
 
+void USpice::dskxsi(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSDistanceVector& xpt,
+    int& handle,
+    FSDLADescr& dladsc,
+    FSDSKDescr& dskdsc,
+    TArray<double> dc,
+    TArray<int> ic,
+    bool& found,
+    TArray<int> srflst,
+    const FSEphemerisTime& et,
+    const FSRay& ray,
+    const FString& target,
+    const FString& fixref
+)
+{
+    // Inputs
+    // pri - "In the N0066 SPICE Toolkit, this is the only allowed value."
+    SpiceBoolean    _pri = SPICEFALSE;
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    SpiceInt        _nsurf = srflst.Num();
+    SpiceInt*       _srflst = (SpiceInt*)srflst.GetData();
+    SpiceDouble     _et = et.AsDouble();
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    SpiceDouble     _vertex[3];
+    SpiceDouble     _raydir[3]; ray.CopyTo(_vertex, _raydir);
+
+    // Outputs
+    SpiceInt      _maxd = SPICE_DSKXSI_DCSIZE;
+    SpiceInt      _maxi = SPICE_DSKXSI_ICSIZE;
+    SpiceDouble   _xpt[3]; ZeroOut(_xpt);
+    SpiceInt      _handle = 0;
+    SpiceDLADescr _dladsc; ZeroOut(_dladsc);
+    SpiceDSKDescr _dskdsc; ZeroOut(_dskdsc);
+    SpiceDouble   _dc[SPICE_DSKXSI_DCSIZE]; ZeroOut(_dc);
+    SpiceInt      _ic[SPICE_DSKXSI_ICSIZE]; ZeroOut(_ic);
+    SpiceBoolean  _found = SPICEFALSE;
+
+    // Invocation
+    dskxsi_c(
+        _pri,
+        _target,
+        _nsurf,
+        _srflst,
+        _et,
+        _fixref,
+        _vertex,
+        _raydir,
+        _maxd,
+        _maxi,
+        _xpt,
+        &_handle,
+        &_dladsc,
+        &_dskdsc,
+        _dc,
+        _ic,
+        &_found
+    );
+
+    // Package Outputs
+    xpt = FSDistanceVector();
+    handle = (int)_handle;
+    dladsc = FSDLADescr(&_dladsc);
+    dskdsc = FSDSKDescr(&_dskdsc);
+    dc.Init(0., SPICE_DSKXSI_DCSIZE);
+    memcpy(dc.GetData(), _dc, sizeof(_dc));
+    dc.Init(0, SPICE_DSKXSI_DCSIZE);
+    memcpy(ic.GetData(), _ic, sizeof(_ic));
+    found = _found == SPICETRUE ? true : false;
+    dladsc = FSDLADescr(&_dladsc);
+    dskdsc = FSDSKDescr(&_dskdsc);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::dskxv(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSDistanceVector>& xptarr,
+    TArray<bool>& fndarr,
+    const TArray<int>& srflst,
+    const FSEphemerisTime& et,
+    const TArray <FSRay>& rayarray,
+    const FString& target,
+    const FString& fixref
+)
+{
+    // Inputs
+    // pri - "In the N0066 SPICE Toolkit, this is the only allowed value"
+    SpiceBoolean        _pri = SPICEFALSE;
+    ConstSpiceChar*     _target = TCHAR_TO_ANSI(*target);
+    SpiceInt            _nsurf = srflst.Num();
+    SpiceInt*           _srflst = (SpiceInt*)srflst.GetData();
+    SpiceDouble         _et = et.AsDouble();
+    ConstSpiceChar*     _fixref = TCHAR_TO_ANSI(*fixref);
+    SpiceInt            _nrays = rayarray.Num();
+    SpiceDouble(*_vtxarr)[3] = (SpiceDouble(*)[3])StackAlloc(_nrays * sizeof(SpiceDouble[3]));
+    SpiceDouble(*_dirarr)[3] = (SpiceDouble(*)[3])StackAlloc(_nrays * sizeof(SpiceDouble[3]));
+
+    for (int i = 0; i < rayarray.Num(); ++i)
+    {
+        rayarray[i].CopyTo(_vtxarr[i], _dirarr[i]);
+    }
+
+    // Outputs
+    SpiceDouble(*_xptarr)[3] = (SpiceDouble(*)[3])StackAlloc(_nrays * sizeof(SpiceDouble[3]));
+    SpiceBoolean    *_fndarr = (SpiceBoolean*)StackAlloc(_nrays * sizeof(SpiceBoolean));
+
+    // Invocation
+    dskxv_c(
+        _pri,
+        _target,
+        _nsurf,
+        _srflst,
+        _et,
+        _fixref,
+        _nrays,
+        _vtxarr,
+        _dirarr,
+        _xptarr,
+        _fndarr
+    );
+
+    // Pack up the outputs...
+    xptarr.Init(FSDistanceVector(), _nrays);
+    fndarr.Init(false, _nrays);
+
+    for(int i = 0; i < _nrays; ++i)
+    {
+        fndarr[i] = (_fndarr[i] == SPICETRUE ? true : false);
+        if (fndarr[i])
+        {
+            xptarr[i] = FSDistanceVector(_xptarr[i]);
+        }
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
 
 /*
 Exceptions
