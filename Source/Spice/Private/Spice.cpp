@@ -3359,6 +3359,112 @@ void USpice::gfdist(
 }
 
 
+void USpice::gfilum(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FSDistanceVector& spoint,
+    const FSAngle& refval,
+    const FSAngle& adjust,
+    const FSEphemerisPeriod& step,
+    ES_IlluminationAngleType angtyp,
+    const FString& target,
+    const FString& illmn,
+    const FString& fixref,
+    ES_AberrationCorrectionWithNewtonians abcorr,
+    const FString& obsrvr,
+    ES_RelationalOperator relate
+)
+{
+    const int MAXWIN = 200;
+    if (2 * cnfine.Num() > MAXWIN)
+    {
+        setmsg_c("[cnfine] Window Segment count = #; maximum allowed value is #");
+        errdp_c("#", cnfine.Num());
+        errdp_c("#", MAXWIN / 2);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+        return;
+    }
+
+    // The docs:
+    // "The only choice currently supported is 'Ellipsoid'"
+    ConstSpiceChar* _method = "Ellipsoid";
+    ConstSpiceChar* _angtyp = USpiceTypes::toString(angtyp);
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _illmn  = TCHAR_TO_ANSI(*illmn);
+    ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
+    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    SpiceDouble     _refval = refval.AsDouble();
+    SpiceDouble     _adjust = adjust.AsDouble();
+    SpiceDouble     _step   = step.AsDouble();
+
+
+    // Unpack the confinement window array..
+    FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        FSEphemerisTime et0 = (*It).start;
+        FSEphemerisTime et1 = (*It).stop;
+
+        FSEphemerisPeriod thisWindow = et1 - et0;
+        if (thisWindow > maxWindow)
+        {
+            maxWindow = thisWindow;
+        }
+
+        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+    }
+
+
+    // 
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+
+    // Output
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    gfilum_c(
+        _method,
+        _angtyp,
+        _target,
+        _illmn,
+        _fixref,
+        _abcorr,
+        _obsrvr,
+        _spoint,
+        _relate,
+        _refval,
+        _adjust,
+        _step,
+        _nintvls,
+        &_cnfine,
+        &_result
+    );
+
+    // Pack the results...
+    results.Empty();
+
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
 void USpice::gfoclt(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
@@ -3444,6 +3550,98 @@ void USpice::gfoclt(
         &_cnfine,
         &_result
     );
+
+    results.Empty();
+
+    int resultsCount = wncard_c(&_result);
+    for (int i = 0; i < resultsCount; ++i)
+    {
+        double et1, et2;
+        wnfetd_c(&_result, i, &et1, &et2);
+        results.Add(FSEphemerisTimeWindowSegment(et1, et2));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+
+void USpice::gfpa(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    TArray<FSEphemerisTimeWindowSegment>& results,
+    const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    const FSAngle& refval,
+    const FSAngle& adjust,
+    const FSEphemerisPeriod& step,
+    const FString& target,
+    const FString& illmn,
+    ES_AberrationCorrectionWithNewtonians abcorr,
+    const FString& obsrvr,
+    ES_RelationalOperator relate
+)
+{
+    const int MAXWIN = 200;
+    if (2 * cnfine.Num() > MAXWIN)
+    {
+        setmsg_c("[cnfine] Window Segment count = #; maximum allowed value is #");
+        errdp_c("#", cnfine.Num());
+        errdp_c("#", MAXWIN / 2);
+        sigerr_c("SPICE(VALUEOUTOFRANGE)");
+
+        // Error Handling
+        ErrorCheck(ResultCode, ErrorMessage);
+        return;
+    }
+
+    ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
+    ConstSpiceChar* _illmn = TCHAR_TO_ANSI(*illmn);
+    ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
+    ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
+    ConstSpiceChar* _relate = USpiceTypes::toString(relate);
+    SpiceDouble     _refval = refval.AsDouble();
+    SpiceDouble     _adjust = adjust.AsDouble();
+    SpiceDouble     _step = step.AsDouble();
+
+    // Unpack the confinement window array..
+    FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
+
+    SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    for (auto It = cnfine.CreateConstIterator(); It; ++It)
+    {
+        FSEphemerisTime et0 = (*It).start;
+        FSEphemerisTime et1 = (*It).stop;
+
+        FSEphemerisPeriod thisWindow = et1 - et0;
+        if (thisWindow > maxWindow)
+        {
+            maxWindow = thisWindow;
+        }
+
+        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+    }
+
+    // 
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+
+    // Output
+    SPICEDOUBLE_CELL(_result, MAXWIN);
+
+    gfpa_c(
+        _target,
+        _illmn,
+        _abcorr,
+        _obsrvr,
+        _relate,
+        _refval,
+        _adjust,
+        _step,
+        _nintvls,
+        &_cnfine,
+        &_result
+    );
+
 
     results.Empty();
 
@@ -3819,9 +4017,9 @@ void USpice::gfsntc(
     TArray<FSEphemerisTimeWindowSegment>& results,
     const TArray<FSEphemerisTimeWindowSegment>& cnfine,
     const FSDimensionlessVector& dvec,
+    const FSEphemerisPeriod& step,
     double refval,
     double adjust,
-    const FSEphemerisPeriod& step,
     const FString& target,
     const FString& fixref,
     ES_AberrationCorrectionWithTransmissions abcorr,
@@ -4005,10 +4203,10 @@ void USpice::gfsubc(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
     TArray<FSEphemerisTimeWindowSegment>& results,
-    double     refval,
-    double     adjust,
     const FSEphemerisPeriod& step,
     const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+    double     refval,
+    double     adjust,
     const FString& target,
     const FString& fixref,
     ES_SubpointComputationMethod method,

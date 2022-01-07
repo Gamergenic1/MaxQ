@@ -250,6 +250,15 @@ enum class ES_Shadow : uint8
 };
 
 UENUM(BlueprintType)
+enum class ES_IlluminationAngleType : uint8
+{
+    NONE UMETA(Hidden),
+    PHASE     UMETA(DisplayName = "Phase"),
+    INCIDENCE UMETA(DisplayName = "Incidence"),
+    EMISSION  UMETA(DisplayName = "Emission")
+};
+
+UENUM(BlueprintType)
 enum class ES_CurveType : uint8
 {
     NONE UMETA(Hidden),
@@ -3256,6 +3265,7 @@ public:
     static const char* toString(ES_CoordinateSystem coords);
     static const char* toString(ES_CoordinateName coord);
     static const char* toString(ES_SubpointComputationMethod method);
+    static const char* toString(ES_IlluminationAngleType);
     static FString toFString(ES_GeometricModel model, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_ComputationMethod method, const TArray<FString>& shapeSurfaces);
     static FString toFString(ES_LimbComputationMethod method, const TArray<FString>& shapeSurfaces);

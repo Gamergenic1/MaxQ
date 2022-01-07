@@ -1447,6 +1447,54 @@ public:
         ES_RelationalOperator relate = ES_RelationalOperator::GreaterThan
     );
 
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "adjust, refval",
+            ShortToolTip = "GF, illumination angle search",
+            ToolTip = "Return the time window over which a specified constraint on the observed phase, solar incidence, or emission angle at a specified target body surface point is met"
+            ))
+    static void gfilum(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FSDistanceVector& spoint,
+        const FSAngle& refval,
+        const FSAngle& adjust,
+        const FSEphemerisPeriod& step,
+        ES_IlluminationAngleType angtyp = ES_IlluminationAngleType::INCIDENCE,
+        const FString& target = TEXT("MARS"),
+        const FString& illmn = TEXT("SUN"),
+        const FString& fixref = TEXT("IAU_MARS"),
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::CN_S,
+        const FString& obsrvr = TEXT("MRO"),
+        ES_RelationalOperator relate = ES_RelationalOperator::LessThan
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Geometry",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "GF, phase angle search",
+            ToolTip = "Determine time intervals for which a specified constraint on the phase angle between an illumination source, a target, and observer body centers is met",
+            AutoCreateRefTerm = "refval, adjust"
+            ))
+    static void gfpa(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        TArray<FSEphemerisTimeWindowSegment>& results,
+        const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        const FSAngle& refval,
+        const FSAngle& adjust,
+        const FSEphemerisPeriod& step,
+        const FString& target = TEXT("MOON"),
+        const FString& illmn = TEXT("SUN"),
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::LT_S,
+        const FString& obsrvr = TEXT("EARTH"),
+        ES_RelationalOperator relate = ES_RelationalOperator::Equal
+    );
 
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Geometry",
@@ -1573,6 +1621,7 @@ public:
         Category = "Spice|Api|Geometry",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            AutoCreateRefTerm = "adjust, refval",
             ShortToolTip = "GF, angular separation search",
             ToolTip = "Determine time intervals when the angular separation between the position vectors of two target bodies relative to an observer satisfies a numerical relationship"
             ))
@@ -1606,9 +1655,9 @@ public:
         TArray<FSEphemerisTimeWindowSegment>& results,
         const TArray<FSEphemerisTimeWindowSegment>& cnfine,
         const FSDimensionlessVector& dvec,
-        double refval,
-        double adjust,
         const FSEphemerisPeriod& step,
+        double refval = 0.,
+        double adjust = 0.,
         const FString& target = TEXT("EARTH"),
         const FString& fixref = TEXT("IAU_EARTH"),
         ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::None,
@@ -1641,10 +1690,10 @@ public:
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
         TArray<FSEphemerisTimeWindowSegment>& results,
-        double     refval,
-        double     adjust,
         const FSEphemerisPeriod& step,
         const TArray<FSEphemerisTimeWindowSegment>& cnfine,
+        double     refval = 0.,
+        double     adjust = 0.,
         const FString& target = TEXT("EARTH"),
         const FString& fixref = TEXT("IAU_EARTH"),
         ES_SubpointComputationMethod method = ES_SubpointComputationMethod::NEAR_POINT_ELLIPSOID,
