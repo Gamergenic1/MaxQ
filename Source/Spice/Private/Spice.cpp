@@ -2163,6 +2163,27 @@ void USpice::dasopr(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+
+/*
+Exceptions
+   Error free.
+
+   1)  If `handle' is not the handle of an open DAS file, no error
+       is signaled.
+*/
+
+void USpice::dascls(
+    int handle
+)
+{
+    // Input
+    SpiceInt        _handle = (SpiceInt)handle;
+
+    // Invocation
+    dascls_c(_handle);
+}
+
+
 void USpice::dlabfs(
     int          handle,
     FSDLADescr& dladsc,
@@ -2412,20 +2433,24 @@ void USpice::dskp02(
     TArray<FSPlateIndices>& plates,
     int               handle,
     const FSDLADescr& dladsc,
+    int               count,
     int               start
 )
 {
-    const int MAXID = 10000;
-
     // Inputs
     SpiceInt      _handle = (SpiceInt)handle;
     SpiceDLADescr _dladsc;  dladsc.CopyTo(&_dladsc);
     SpiceInt      _start = (SpiceInt) start;
-    SpiceInt      _room = MAXID;
+    SpiceInt      _room = count;
     
     // Outputs
     SpiceInt      _n = 0;
-    SpiceInt      _plates[MAXID][3];
+
+    // Can consider filling straight into TArray if the following holds true.
+    check(sizeof(SpiceInt[3]) == sizeof(FSPlateIndices));
+
+    SpiceInt      (*_plates)[3] = (SpiceInt(*)[3])new SpiceInt[count][3];
+
 
     // Invocation
     dskp02_c(
@@ -2441,8 +2466,10 @@ void USpice::dskp02(
     plates.Init(FSPlateIndices(), _n);
     for (int i = 0; i < _n; ++i)
     {
-        plates.Add(FSPlateIndices(_plates[i][0], _plates[i][1], _plates[i][2]));
+        plates[i] = FSPlateIndices(_plates[i][0], _plates[i][1], _plates[i][2]);
     }
+
+    delete[] _plates;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -2455,20 +2482,24 @@ void USpice::dskv02(
     TArray<FSDistanceVector>& vrtces,
     int               handle,
     const FSDLADescr& dladsc,
+    int               count,
     int               start
 )
 {
-    const int MAXID = 10000;
-
     // Inputs
     SpiceInt      _handle = (SpiceInt)handle;
     SpiceDLADescr _dladsc;  dladsc.CopyTo(&_dladsc);
     SpiceInt      _start = (SpiceInt)start;
-    SpiceInt      _room = MAXID;
+    SpiceInt      _room = count;
 
     // Outputs
     SpiceInt      _n = 0;
-    SpiceDouble   _vrtces[MAXID][3];
+
+    // Can consider filling straight into TArray if the following holds true.
+    check(sizeof(SpiceDouble[3]) == sizeof(FSDistanceVector));
+
+    // Don't use stack memory, it's an unbounded request and could be enough verts to blow the stack
+    SpiceDouble   (*_vrtces)[3] = (SpiceDouble(*)[3])new SpiceDouble[count][3];
 
     // Invocation
     dskv02_c(
@@ -2485,8 +2516,44 @@ void USpice::dskv02(
     vrtces.Init(FSDistanceVector(), _n);
     for (int i = 0; i < _n; ++i)
     {
-        vrtces.Add(FSDistanceVector(_vrtces[i]));
+        vrtces[i] = FSDistanceVector(_vrtces[i]);
     }
+
+    delete[] _vrtces;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::dskn02(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSDimensionlessVector& normal,
+    int               handle,
+    const FSDLADescr& dladsc,
+    int               plid
+)
+{
+    // Inputs
+    SpiceInt      _handle = (SpiceInt)handle;
+    SpiceDLADescr _dladsc;  dladsc.CopyTo(&_dladsc);
+    SpiceInt      _plid = (SpiceInt)plid;
+
+    // Outputs
+    SpiceDouble   _normal[3];
+
+    // Invocation
+    dskn02_c(
+        _handle,
+        &_dladsc,
+        _plid,
+        _normal
+    );
+
+
+    // Pack output
+    normal = FSDimensionlessVector(_normal);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);

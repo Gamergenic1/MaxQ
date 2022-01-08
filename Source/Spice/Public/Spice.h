@@ -865,7 +865,25 @@ public:
         TArray<FSPlateIndices>& plates,
         int               handle,
         const FSDLADescr& dladsc,
-        int               start = 0
+        int               count,
+        int               start = 1
+    );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|Surface",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            ShortToolTip = "DSK, type 2, compute normal vector for plate",
+            ToolTip = "Compute the unit normal vector for a specified plate from a type 2 DSK segment"
+            ))
+    static void dskn02(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSDimensionlessVector& normal,
+        int               handle,
+        const FSDLADescr& dladsc,
+        int               plid
     );
 
     UFUNCTION(
@@ -882,7 +900,8 @@ public:
         TArray<FSDistanceVector>& vrtces,
         int               handle,
         const FSDLADescr& dladsc,
-        int               start = 0
+        int               count,
+        int               start = 1
     );
 
     UFUNCTION(
@@ -1048,6 +1067,17 @@ public:
         const FString& relativePath,
         int& handle
     );
+
+    UFUNCTION(
+        BlueprintCallable,
+        Category = "Spice|Api|DAS",
+        meta = (
+            ToolTip = "Close a DAS file"
+            ))
+    static void dascls(
+        int handle
+    );
+
 
     UFUNCTION(
         BlueprintCallable,
