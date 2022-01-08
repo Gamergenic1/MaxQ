@@ -46,8 +46,9 @@ class SPICE_API USpice : public UBlueprintFunctionLibrary
 
 public:
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Utility|Kernel",
         meta = (
+            Keywords = "UTILITY",
             ExpandEnumAsExecs = "ResultCode",
             ToolTip = "List files at given relative directory"
             ))
@@ -59,8 +60,9 @@ public:
         );
 
     UFUNCTION(BlueprintCallable, Exec,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
+            Keywords = "UTILITY",
             ExpandEnumAsExecs = "ResultCode",
             ToolTip = "Load a kernel file (relative path)"
             ))
@@ -71,9 +73,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "UTILITY",
             ToolTip = "Load a list of kernel files (relative paths)"
             ))
     static void furnsh_list(
@@ -83,8 +86,9 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Utility|Kernel",
         meta = (
+            Keywords = "UTILITY",
             ToolTip = "Join a path to a list of paths"
             ))
     static void combine_paths(
@@ -94,16 +98,18 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, Exec,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
+            Keywords = "UTILITY",
             ToolTip = "Clear all kernel file / kernel pool"
             ))
     static void clear_all();
 
     UFUNCTION(BlueprintCallable, Exec,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "UTILITY",
             ToolTip = "Clear unload kernel file"
             ))
     static void unload(
@@ -113,22 +119,25 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, Exec,
-        Category = "Spice|Api|Control",
+        Category = "Spice|Api|Kernel",
         meta = (
+            Keywords = "UTILITY",
             ToolTip = "reset/init cspice"
             ))
     static void init_all();
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error Handling",
+        Category = "Spice|Api|Error",
         meta = (
+            Keywords = "ERROR",
             ToolTip = "Get Default Error Action"
             ))
     static void get_erract(ES_ErrorAction& Result);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error Handling",
+        Category = "Spice|Api|Error",
         meta = (
+            Keywords = "ERROR",
             ToolTip = "Get Error Output Device Name"
             ))
     static void get_errdev(ES_ErrorDevice& device);
@@ -136,6 +145,7 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Error Handling",
         meta = (
+            Keywords = "ERROR",
             ToolTip = "Get Error Output Items"
             ))
     static void get_errprt(FString& OutMessage);
@@ -143,26 +153,31 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Error Handling",
         meta = (
-            ToolTip = "Set Default Error Action"
+            Keywords = "ERROR",
+            ToolTip = "Set Default Error"
             ))
     static void set_erract(ES_ErrorAction actionToSet);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error Handling",
+        Category = "Spice|Api|Error",
         meta = (
+            Keywords = "ERROR",
             ToolTip = "Set Error Output Device Name"
             ))
     static void set_errdev(ES_ErrorDevice Device, const FString& LogFilePath);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error Handling",
-        meta = (ToolTip = "Set Error Output Items"
+        Category = "Spice|Api|Error",
+        meta = (
+            Keywords = "ERROR",
+            ToolTip = "Set Error Output Items"
             ))
     static void set_errprt(ES_Items items);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error Handling",
+        Category = "Spice|Api|Error",
         meta = (
+            Keywords = "ERROR",
             ToolTip = "Reset Error Status"
             ))
     static void reset();
@@ -174,8 +189,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "MATRIX, ROTATION",
             ShortToolTip = "Axis and angle to rotation",
             ToolTip = "Construct a rotation matrix that rotates vectors by a specified angle about a specified axis"
             ))
@@ -187,8 +203,9 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
+            Keywords = "CONSTANTS",
             ExpandEnumAsExecs = "found",
             ToolTip = "Determine whether values exist for some item for any body in the kernel pool"
             ))
@@ -200,8 +217,9 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|NAIF IDs",
         meta = (
+            Keywords = "BODY, CONVERSION",
             ExpandEnumAsExecs = "found",
             ToolTip = "Translate the SPICE integer code of a body into a common name for that body"
             ))
@@ -213,9 +231,10 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|NAIF IDs",
         meta = (
             ExpandEnumAsExecs = "found",
+            Keywords = "BODY, CONVERSION, ID, NAME, UTILITY",
             ShortToolTip = "Body string to ID code translation",
             ToolTip = "Translate a string containing a body name or ID code to an integer code"
             ))
@@ -227,9 +246,10 @@ public:
 
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|NAIF IDs",
         meta = (
             ExpandEnumAsExecs = "found",
+            Keywords = "BODY, CONVERSION, ID, NAME",
             ShortToolTip = "Body name to ID code translation",
             ToolTip = "Translate the name of a body or object to the corresponding SPICE integer ID code"
             ))
@@ -247,9 +267,10 @@ public:
     /// <param name="values">[out] Values</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body, where the body is specified by an integer ID code"
             ))
@@ -262,9 +283,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double vector3) Fetch from the kernel pool the double precision values of an item associated with a body, where the body is specified by an integer ID code"
             ))
@@ -277,9 +299,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body, where the body is specified by an integer ID code"
             ))
@@ -292,9 +315,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body, where the body is specified by an integer ID code"
             ))
@@ -314,9 +338,10 @@ public:
     /// <param name="values">[out] Values</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body"
             ))
@@ -329,9 +354,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double vector3) Fetch from the kernel pool the double precision values of an item associated with a body"
             ))
@@ -344,9 +370,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body"
             ))
@@ -359,9 +386,10 @@ public:
     );
     
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body"
             ))
@@ -378,9 +406,10 @@ public:
     /// <param name="handle">[in] Handle of the CK file to be closed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSE, GEOMETRY",
             ShortToolTip = "Center and generating vectors to ellipse",
             ToolTip = "Form a CSPICE ellipse from a center vector and two generating vectors"
             ))
@@ -398,9 +427,10 @@ public:
     /// <param name="handle">[in] Handle of the CK file to be closed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CK",
             ShortToolTip = "CK, Close file",
             ToolTip = "Close an open CK file"
             ))
@@ -420,9 +450,10 @@ public:
     /// <param name="cover">[out] Window giving coverage for `idcode'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             AutoCreateRefTerm = "merge_to",
+            Keywords = "POINTING, TIME, UTILITY",
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "CK coverage",
             ToolTip = "Find the coverage window for a specified object in a specified CK file"
@@ -451,9 +482,10 @@ public:
     /// <param name="found">[out] True when requested pointing is available</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING",
             ShortToolTip = "C-kernel, get pointing",
             ToolTip = "Get pointing (attitude) for a specified spacecraft clock time"
             ))
@@ -480,9 +512,10 @@ public:
     /// <param name="found">[out] True when requested pointing is available</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING",
             ShortToolTip = "C-kernel, get pointing and angular velocity",
             ToolTip = "Get pointing (attitude) and angular velocity for a specified spacecraft clock time"
             ))
@@ -505,9 +538,10 @@ public:
     /// <param name="handle">[out] Loaded file's handle</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING",
             ShortToolTip = "C-kernel, load pointing file",
             ToolTip = "Load a CK pointing file for use by the CK readers"
             ))
@@ -523,9 +557,10 @@ public:
     /// <param name="ids">[in/out] Set of ID codes of objects in CK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING, UTILITY",
             ShortToolTip = "CK objects",
             ToolTip = "Find the set of ID codes of all objects in a specified CK file"
             ))
@@ -543,9 +578,10 @@ public:
     /// <param name="handle">[out] The handle of the opened CK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING",
             ShortToolTip = "CK, open new file",
             ToolTip = "Open a new CK file, returning the handle of the opened file"
             ))
@@ -562,8 +598,9 @@ public:
     /// <param name="handle">[in] Handle of CK file to be unloaded</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
+            Keywords = "POINTING",
             ShortToolTip = "C-kernel, Unload pointing file",
             ToolTip = "Unload a CK pointing file so that it will no longer be searched by the readers"
             ))
@@ -585,9 +622,10 @@ public:
     /// <param name="avvs">[in] Angular velocity vectors</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING, UTILITY",
             ShortToolTip = "C-Kernel, write segment to C-kernel, data type 1",
             ToolTip = "Add a type 1 segment to a C-kernel"
             ))
@@ -620,9 +658,10 @@ public:
     /// <param name="rates">[in] Number of seconds per tick for each interval</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING, UTILITY",
             ShortToolTip = "C-Kernel, write segment to C-kernel, data type 2",
             ToolTip = "Write a type 2 segment to a C-kernel"
             ))
@@ -654,9 +693,10 @@ public:
     /// <param name="starts">[in] Encoded SCLK interval start times</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING, UTILITY",
             ShortToolTip = "C-Kernel, write segment to C-kernel, data type 3",
             ToolTip = "Add a type 3 segment to a C-kernel"
             ))
@@ -693,9 +733,10 @@ public:
     /// <param name="starts">[in] Encoded SCLK interval start times</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Pointing",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POINTING, UTILITY",
             ShortToolTip = "Write CK segment, type 5",
             ToolTip = "Write a type 5 segment to a CK file"
             ))
@@ -721,6 +762,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "C, Speed of light in a vacuum",
             ToolTip = "Return the speed of light in a vacuum (IAU official value, in km / sec)"
             ))
@@ -735,9 +777,10 @@ public:
       */
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Conics",
+        Category = "Spice|Api|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONIC, EPHEMERIS",
             ShortToolTip = "Determine state from conic elements",
             ToolTip = "Determine the state (position, velocity) of an orbiting body from a set of elliptic, hyperbolic, or parabolic orbital elements"
             ))
@@ -752,6 +795,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Cylindrical to latitudinal",
             ToolTip = "Convert from cylindrical to latitudinal coordinates"
             ))
@@ -768,8 +812,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Utility",
+        Category = "Spice|Api|Units",
         meta = (
+            Keywords = "CONVERSION, UNITS",
             ExpandEnumAsExecs = "ResultCode",
             ToolTip = "Convert Units"
             ))
@@ -793,6 +838,7 @@ public:
         Category = "Spice|Api|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FILES, UTILITY",
             ShortToolTip = "DAF add comments",
             ToolTip = "Add comments from a buffer of character strings to the comment area of a binary DAF file, appending them to any comments which are already present in the file's comment area"
             ))
@@ -805,9 +851,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "COVERAGE, TOPOGRAPHY",
             ShortToolTip = "DSK, get object IDs",
             ToolTip = "Find the set of body ID codes of all objects for which topographic data are provided in a specified DSK file"
             ))
@@ -820,9 +867,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "COVERAGE, SURFACE, TOPOGRAPHY",
             ShortToolTip = "DSK, get surface IDs for body",
             ToolTip = "Find the set of surface ID codes for all surfaces associated with a given body in a specified DSK file"
             ))
@@ -836,9 +884,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAS, DSK, FILES",
             ShortToolTip = "DSK, fetch type 2 model size parameters",
             ToolTip = "Return plate model size parameters---plate count and vertex count-- - for a type 2 DSK segment"
             ))
@@ -853,9 +902,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAS, DSK, FILES",
             ShortToolTip = "DSK, fetch type 2 plate data",
             ToolTip = "Fetch triangular plates from a type 2 DSK segment"
             ))
@@ -871,9 +921,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAS, DSK, FILES",
             ShortToolTip = "DSK, type 2, compute normal vector for plate",
             ToolTip = "Compute the unit normal vector for a specified plate from a type 2 DSK segment"
             ))
@@ -888,9 +939,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAS, DSK, FILES",
             ShortToolTip = "DSK, fetch type 2 vertex data",
             ToolTip = "Fetch vertices from a type 2 DSK segment"
             ))
@@ -906,9 +958,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, INTERCEPT, SURFACE, TOPOGRAPHY",
             ShortToolTip = "DSK, ray-surface intercept, vectorized",
             ToolTip = "Compute ray-surface intercepts for a set of rays, using data provided by multiple loaded DSK segments"
             ))
@@ -926,9 +979,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, INTERCEPT, SURFACE, TOPOGRAPHY",
             ShortToolTip = "DSK, ray-surface intercept with source information",
             ToolTip = "Compute a ray-surface intercept using data provided by multiple loaded DSK segments. Return information about the source of the data defining the surface on which the intercept was found : DSK handle, DLA and DSK descriptors, and DSK data type-dependent parameters"
             ))
@@ -952,6 +1006,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Cylindrical to rectangular",
             ToolTip = "Convert from cylindrical to rectangular coordinates"
             ))
@@ -963,6 +1018,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Cylindrical to spherical",
             ToolTip = "Convert from cylindrical to spherical coordinates"
             ))
@@ -979,6 +1035,7 @@ public:
         Category = "Spice|Api|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAF, FILES",
             ShortToolTip = "DAF, close",
             ToolTip = "Close the DAF associated with a given handle"
             ))
@@ -1001,6 +1058,7 @@ public:
         Category = "Spice|Api|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FILES, UTILITY",
             ShortToolTip = "Extract comments from the comment area of a binary DAF",
             ToolTip = "Close the DAF associated with a given handle"
             ))
@@ -1020,6 +1078,7 @@ public:
         Category = "Spice|Api|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAF, FILES",
             ShortToolTip = "DAF, open for read",
             ToolTip = ""
             ))
@@ -1039,6 +1098,7 @@ public:
         Category = "Spice|Api|DAF",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAF, FILES",
             ShortToolTip = "DAF, open for write",
             ToolTip = "Open a DAF file for writing"
             ))
@@ -1058,6 +1118,7 @@ public:
         Category = "Spice|Api|DAS",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "DAS, FILES",
             ShortToolTip = "DAS, open for read",
             ToolTip = "Open a DAS file for reading"
             ))
@@ -1072,6 +1133,7 @@ public:
         BlueprintCallable,
         Category = "Spice|Api|DAS",
         meta = (
+            Keywords = "DAS, FILES",
             ToolTip = "Close a DAS file"
             ))
     static void dascls(
@@ -1081,9 +1143,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|DLS",
+        Category = "Spice|Api|DAS",
         meta = (
             ExpandEnumAsExecs = "found",
+            Keywords = "DAS, DLA, FILES",
             ShortToolTip = "DLA, begin forward search",
             ToolTip = "Begin a forward segment search in a DLA file"
             ))
@@ -1100,9 +1163,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Utility",
+        Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
             ShortToolTip = "Delta ET, ET - UTC",
             ToolTip = "Return the value of Delta ET (ET-UTC) for an input epoch"
             ))
@@ -1122,6 +1186,7 @@ public:
         Category = "Spice|Api|Math",
         meta = (
             ShortToolTip = "Determinant of a double precision 3x3 matrix",
+            Keywords = "MATH, MATRIX",
             ToolTip = "Compute the determinant of a double precision 3x3 matrix"
             ))
     static void det(const FSRotationMatrix& m1, double& ReturnValue);
@@ -1133,6 +1198,7 @@ public:
         Category = "Spice|Api|Constants",
         meta = (
             ShortToolTip = "Largest DP number",
+            Keywords = "CONSTANTS",
             ToolTip = "Return the value of the largest (positive) number representable in a double precision variable"
             ))
     static void dpmax(double& doublePrecisionMax);
@@ -1143,6 +1209,7 @@ public:
         BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Smallest DP number",
             ToolTip = "Return the value of the smallest (negative) number representable in a double precision variable"
             ))
@@ -1154,6 +1221,7 @@ public:
         BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Degrees per radian",
             ToolTip = "Return the number of degrees per radian"
             ))
@@ -1171,8 +1239,9 @@ public:
     /// 
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|State",
+        Category = "Spice|Api|SPK",
         meta = (
+            Keywords = "EPHEMERIS",
             ShortToolTip = "Equinoctial Elements to position and velocity",
             ToolTip = "Compute the state (position and velocity of an object whose trajectory is described via equinoctial elements relative to some fixed plane(usually the equatorial plane of some planet)"
             ))
@@ -1201,9 +1270,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|State",
+        Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
             ShortToolTip = "ET to Local Solar Time",
             ToolTip = "Given an ephemeris epoch, compute the local solar time for an object on the surface of a body at a specified longitude"
             ))
@@ -1234,6 +1304,7 @@ public:
         Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
             ShortToolTip = "Ephemeris Time to UTC",
             ToolTip = "Convert an input time from ephemeris seconds past J2000 to Calendar, Day - of - Year, or Julian Date format, UTC"
             ))
@@ -1253,6 +1324,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Time",
         meta = (
+            Keywords = "TIME",
             ShortToolTip = "Convert ET to Calendar format",
             ToolTip = "Convert from an ephemeris epoch measured in seconds past the epoch of J2000 to a calendar string format using a formal calendar free of leapseconds"
             ))
@@ -1265,9 +1337,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "MATRIX, ROTATION, TRANSFORMATION",
             ShortToolTip = "Euler angles to matrix",
             ToolTip = "Construct a rotation matrix from a set of Euler angles"
             ))
@@ -1292,9 +1365,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ANGLES, DERIVATIVES, STATE",
             ShortToolTip = "Euler angles and derivative to transformation",
             ToolTip = "computes a state transformation from an Euler angle factorization of a rotation and the derivatives of those Euler angles"
             ))
@@ -1307,9 +1381,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT",
             ShortToolTip = "Is target in FOV at time?",
             ToolTip = "Determine if a specified ray is within the field-of-view (FOV) of a specified instrument at a given time"
             ))
@@ -1327,9 +1402,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|CK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT",
             ShortToolTip = "Is target in FOV at time?",
             ToolTip = "Determine if a specified ephemeris object is within the field - of - view(FOV) of a specified instrument at a given time"
             ))
@@ -1352,8 +1428,9 @@ public:
     /// <param name="z">[out]Unit vector given by x X y</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Frames",
         meta = (
+            Keywords = "AXES, FRAMES",
             ShortToolTip = "Build a right handed coordinate frame",
             ToolTip = "Given a vector x, this routine builds a right handed orthonormal frame x, y, z where the output x is parallel to the input x"
             ))
@@ -1365,9 +1442,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Frames",
         meta = (
             ExpandEnumAsExecs = "found",
+            Keywords = "FRAMES",
             ShortToolTip = "Frame Information",
             ToolTip = "Retrieve the minimal attributes associated with a frame needed for converting transformations to and from it"
             ))
@@ -1380,9 +1458,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FRAMES",
             ShortToolTip = "Frame to Name",
             ToolTip = "Retrieve the name of a reference frame associated with a SPICE ID code"
             ))
@@ -1403,9 +1482,10 @@ public:
     /// <param name="found">[out] True if variable is in pool</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get character data from the kernel pool",
             ToolTip = "Return the character value of a kernel variable from the kernel pool"
             ))
@@ -1428,9 +1508,10 @@ public:
     /// <param name="found">[out] True if variable is in pool</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get d.p. values from the kernel pool",
             ToolTip = "Return the d.p. value of a kernel variable from the kernel pool"
             ))
@@ -1445,9 +1526,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SDistance values from the kernel pool",
             ToolTip = "Return the SDistance value of a kernel variable from the kernel pool"
             ))
@@ -1461,9 +1543,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SDistance values from the kernel pool",
             ToolTip = "Return the SDistance value of a kernel variable from the kernel pool"
             ))
@@ -1477,9 +1560,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SDistanceVector values from the kernel pool",
             ToolTip = "Return the SDistanceVector value of a kernel variable from the kernel pool"
             ))
@@ -1493,9 +1577,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SMassConstant values from the kernel pool",
             ToolTip = "Return the SMassConstant value of a kernel variable from the kernel pool"
             ))
@@ -1509,17 +1594,19 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|State",
+        Category = "Spice|Api|Ephemeris",
         meta = (
-            ToolTip = ""
+            Keywords = "EPHEMERIS",
+            ToolTip = "Get geophysical constants for TLE"
             ))
     static void getgeophs(FSTLEGeophysicalConstants& geophs, const FString& id = TEXT("EARTH"));
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|State",
+        Category = "Spice|Api|Parsing",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "PARSING, EPHEMERIS",
             AdvancedDisplay = "frstyr",
             ShortToolTip = "Get the components from two-line elements",
             ToolTip = "Given a the \"lines\" of a two-line element set, parse the lines and return the elements in units suitable for use in SPICE software"
@@ -1535,10 +1622,11 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|State",
+        Category = "Spice|Api|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
-            ToolTip = ""
+            Keywords = "EPHEMERIS",
+            ToolTip = "Get state from TLE"
             ))
     static int ev2lin(
             ES_ResultCode& ResultCode,
@@ -1561,6 +1649,7 @@ public:
         Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Geodetic to rectangular coordinates",
             ToolTip = "Convert geodetic coordinates to rectangular coordinates"
             ))
@@ -1584,9 +1673,10 @@ public:
     /// <param name="bsight"></param>
     /// <param name="bounds"></param>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|NAIF IDs",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FOV, INSTRUMENT",
             ToolTip = "Get instrument FOV parameters"
             ))
     static void getfov(
@@ -1600,9 +1690,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "KERNEL, UTILITY",
             ShortToolTip = "Get file architecture and type",
             ToolTip = "Determine the file architecture and file type of most SPICE kernel files"
             ))
@@ -1616,9 +1707,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS, EVENT, GEOMETRY, SEARCH, WINDOW",
             AutoCreateRefTerm = "adjust, refval",
             ShortToolTip = "GF, distance search",
             ToolTip = "Return the time window over which a specified constraint on observer - target distance is met"
@@ -1638,9 +1730,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ANGLE, EPHEMERIS, ILLUMINATION, LIGHTING, SEARCH",
             AutoCreateRefTerm = "adjust, refval",
             ShortToolTip = "GF, illumination angle search",
             ToolTip = "Return the time window over which a specified constraint on the observed phase, solar incidence, or emission angle at a specified target body surface point is met"
@@ -1664,9 +1757,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS, EVENT, GEOMETRY, SEARCH, WINDOW",
             ShortToolTip = "GF, phase angle search",
             ToolTip = "Determine time intervals for which a specified constraint on the phase angle between an illumination source, a target, and observer body centers is met",
             AutoCreateRefTerm = "refval, adjust"
@@ -1687,9 +1781,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EVENT, GEOMETRY, SEARCH, WINDOW",
             ShortToolTip = "GF, find occultation",
             ToolTip = "Determine time intervals when an observer sees one target occulted by, or in transit across, another",
             AutoCreateRefTerm = "frontShapeSurfaces, backShapeSurfaces"
@@ -1715,9 +1810,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EVENT, GEOMETRY, SEARCH, SEPARATION",
             AdvancedDisplay = "nintvls",
             ShortToolTip = "GF, observer-target vector coordinate search",
             ToolTip = "Determine time intervals for which a coordinate of an observer - target position vector satisfies a numerical constraint"
@@ -1742,9 +1838,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT, SEARCH, WINDOW",
             ShortToolTip = "GF, is target in FOV?",
             ToolTip = "Determine time intervals when a specified ephemeris object intersects the space bounded by the field - of - view(FOV) of a specified instrument."
             ))
@@ -1764,9 +1861,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EVENT, FOV, GEOMETRY, INSTRUMENT, SEARCH, WINDOW",
             ShortToolTip = "GF, is ray in FOV?",
             ToolTip = "Determine time intervals when a specified ray intersects the space bounded by the field - of - view(FOV) of a specified instrument."
             ))
@@ -1785,10 +1883,11 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "adjust, refval",
+            Keywords = "EPHEMERIS, EVENT, GEOMETRY, SEARCH, WINDOW",
             ShortToolTip = "GF, range rate search",
             ToolTip = "Determine time intervals for which a specified constraint on the observer - target range rate is met"
             ))
@@ -1808,10 +1907,11 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "adjust, refval",
+            Keywords = "EVENT, GEOMETRY, SEARCH, SEPARATION",
             ShortToolTip = "GF, angular separation search",
             ToolTip = "Determine time intervals when the angular separation between the position vectors of two target bodies relative to an observer satisfies a numerical relationship"
             ))
@@ -1833,9 +1933,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EVENT, GEOMETRY, SEARCH, SEPARATION",
             ShortToolTip = "GF, surface intercept vector coordinate search",
             ToolTip = "Determine time intervals for which a coordinate of an surface intercept position vector satisfies a numerical constraint"
             ))
@@ -1860,8 +1961,9 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
+            Keywords = "GEOMETRY",
             ShortToolTip = "GF, set a tolerance value for GF",
             ToolTip = "Override the default GF convergence value used in the high level GF routines."
             ))
@@ -1869,10 +1971,11 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Geometry Finder",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AdvancedDisplay = "nintvls",
+            Keywords = "COORDINATE, EVENT, GEOMETRY, SEARCH",
             ShortToolTip = "GF, subpoint vector coordinate search",
             ToolTip = "Determine time intervals for which a coordinate of an subpoint position vector satisfies a numerical constraint"
             ))
@@ -1905,9 +2008,10 @@ public:
     /// <returns></returns>
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get integers from the kernel pool",
             ToolTip = "Return the integer value of a kernel variable from the kernel pool"
             ))
@@ -1931,9 +2035,10 @@ public:
     /// <param name="found">[out] True if there is at least one match</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get names of kernel pool variables",
             ToolTip = "Return names of kernel variables matching a specified template"
             ))
@@ -1957,9 +2062,10 @@ public:
     /// <param name="df">Interpolated function's derivative at x</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Polynomial",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "INTERPOLATION, POLYNOMIAL",
             ShortToolTip = "Hermite polynomial interpolation",
             ToolTip = "Evaluate a Hermite interpolating polynomial at a specified abscissa value"
             ))
@@ -1978,6 +2084,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Half the value of pi",
             ToolTip = "Return half the value of pi"
             ))
@@ -1986,6 +2093,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Angle of half the value of pi",
             ToolTip = "Return angle of half the value of pi"
             ))
@@ -1995,8 +2103,9 @@ public:
     /// <summary>This routine returns the 3x3 identity matrix</summary>
     /// <returns>the 3x3 Identity matrix</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX",
             ShortToolTip = "Return the 3x3 identity matrix",
             ToolTip = "Returns the 3x3 identity matrix"
             ))
@@ -2010,6 +2119,7 @@ public:
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
+            Keywords = "ANGLES, GEOMETRY, ILLUMINATION",
             ShortToolTip = "Illumination angles, general source, return flags",
             ToolTip = "Compute the illumination angles -phase, incidence, and emission- at a specified point on a target body.Return logical flags indicating whether the surface point is visible from the observer's position and whether the surface point is illuminated"
             ))
@@ -2039,6 +2149,7 @@ public:
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
+            Keywords = "ANGLES, GEOMETRY, ILLUMINATION",
             ShortToolTip = "Illumination angles, general source",
             ToolTip = "Find the illumination angles (phase, incidence, and emission) at a specified surface point of a target body"
             ))
@@ -2062,9 +2173,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Illumination",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ANGLES, GEOMETRY, ILLUMINATION",
             ShortToolTip = "Illumination angles",
             ToolTip = "Find the illumination angles (phase, solar incidence, and emission) at a specified surface point of a target body"
             ))
@@ -2086,9 +2198,10 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSE, GEOMETRY, MATH",
             ShortToolTip = "Intersection of ellipse and plane",
             ToolTip = "Find the intersection of an ellipse and a plane"
             ))
@@ -2106,6 +2219,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Largest integer number",
             ToolTip = "Value of the largest (positive) number representable in a SpiceInt variable"
             ))
@@ -2116,6 +2230,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Smallest integer number",
             ToolTip = "Value of the smallest(negative) number representable in a SpiceInt variable"
             ))
@@ -2127,9 +2242,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "MATH, MATRIX",
             ShortToolTip = "Invert a 3x3 matrix",
             ToolTip = "Generate the inverse of a 3x3 matrix"
             ))
@@ -2147,9 +2263,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "MATRIX",
             ShortToolTip = "Invert nearly orthogonal matrices",
             ToolTip = "Given a matrix, construct the matrix whose rows are the columns of the first divided by the length squared of the the corresponding columns of the input matrix"
             ))
@@ -2164,6 +2281,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Besselian Date 1900.0",
             ToolTip = "Return the Julian Date corresponding to Besselian Date 1900.0"
             ))
@@ -2174,6 +2292,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Besselian Date 1950.0",
             ToolTip = "Return the Julian Date corresponding to Besselian Date 1950.0"
             ))
@@ -2186,6 +2305,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 1900.0 JAN 0.5",
             ToolTip = "Return the Julian Date of 1899 DEC 31 12:00:00 (1900 JAN 0.5)"
             ))
@@ -2198,6 +2318,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 1950.0 JAN 1.0",
             ToolTip = "Return the Julian Date of 1950 JAN 01 00:00:00 (1950 JAN 1.0)"
             ))
@@ -2208,6 +2329,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 2000 JAN 1.5",
             ToolTip = "Return the Julian Date of 2000 JAN 01 12:00:00 (2000 JAN 1.5)"
             ))
@@ -2218,6 +2340,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Julian Date of 2100 JAN 1.5",
             ToolTip = "Return the Julian Date of 2100 JAN 01 12:00:00 (2100 JAN 1.5)"
             ))
@@ -2228,6 +2351,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per julian year",
             ToolTip = "Return the number of seconds in a julian year"
             ))
@@ -2236,6 +2360,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per tropical year",
             ToolTip = "Return the number of seconds in a tropical year"
             ))
@@ -2244,6 +2369,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Ephemeris Period of one julian year",
             ToolTip = "Return the number of seconds in a julian year"
             ))
@@ -2252,6 +2378,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Ephemeris Period of one tropical year",
             ToolTip = "Return the number of seconds in a tropical year"
             ))
@@ -2260,6 +2387,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Latitudinal to cylindrical coordinates",
             ToolTip = "Convert from latitudinal coordinates to cylindrical coordinates"
             ))
@@ -2271,6 +2399,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Latitudinal to rectangular coordinates",
             ToolTip = "Convert from latitudinal coordinates to rectangular coordinates"
             ))
@@ -2282,6 +2411,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Latitudinal to spherical coordinates",
             ToolTip = "Convert from latitudinal coordinates to spherical coordinates"
             ))
@@ -2292,9 +2422,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "COORDINATES, DSK, GEOMETRY, SURFACE",
             AutoCreateRefTerm = "shapeSurfaces",
             ShortToolTip = "Latitudinal grid to surface points",
             ToolTip = "Map array of planetocentric longitude/latitude coordinate pairs to surface points on a specified target body. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
@@ -2322,9 +2453,10 @@ public:
     /// <param name="dp">[out] Polynomial derivative at x</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Polynomial",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "INTERPOLATION, POLYNOMIAL",
             ShortToolTip = "Lagrange polynomial interpolation with derivative",
             ToolTip = "Evaluate a Lagrange interpolating polynomial for a specified set of coordinate pairs, at a specified abscissa value.Return the value of both polynomialand derivative"
             ))
@@ -2340,10 +2472,11 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AdvancedDisplay = "maxn",
+            Keywords = "GEOMETRY",
             ShortToolTip = "Limb points on an extended object",
             ToolTip = "Find limb points on a target body. The limb is the set of points of tangency on the target of rays emanating from the observer. The caller specifies half - planes bounded by the observer - target center vector in which to search for limb points. The surface of the target body may be represented either by a triaxial ellipsoid or by topographic data."
             ))
@@ -2373,9 +2506,10 @@ public:
     /// <param name="abcorr">[in] Aberration correction ["NONE", "LT", "LT+S"]</param>
     /// <returns>the value of L_s for the specified body at the specified time</returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Utility",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, TIME",
             ShortToolTip = "Longitude of the sun, planetocentric",
             ToolTip = "Compute L_s, the planetocentric longitude of the sun, as seen from a specified body"
             ))
@@ -2394,8 +2528,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "ASSIGNMENT, MATRIX",
             ShortToolTip = "Matrix equal to another, 3x3",
             ToolTip = "Set one double precision 3x3 matrix equal to another"
             ))
@@ -2435,9 +2570,10 @@ public:
     /// <param name="q">[out] unit quaternion representing 'r'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix to quaternion",
             ToolTip = "Find a unit quaternion corresponding to a specified rotation matrix"
             ))
@@ -2454,8 +2590,9 @@ public:
     /// <param name="mout">[out] 3x3 double precision matrix. mout is the product m1* m2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX",
             ShortToolTip = "Matrix times matrix, 3x3",
             ToolTip = "Multiply two 3x3 matrices"
             ))
@@ -2472,8 +2609,9 @@ public:
     /// <param name="mout">[out] The product m1 times m2 transpose</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX",
             ShortToolTip = "Matrix times matrix transpose, 3x3",
             ToolTip = "multiplies a 3x3 matrix and the transpose of another 3x3 matrix"
             ))
@@ -2491,8 +2629,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix transpose times vector, 3x3",
             ToolTip = "mtxv multiplies the transpose of a 3x3 matrix on the left with a vector below"
             ))
@@ -2510,8 +2649,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix transpose times vector, 3x3",
             ToolTip = "mtxv multiplies the transpose of a 3x3 matrix on the left with a vector below"
             ))
@@ -2529,8 +2669,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix transpose times vector, 3x3",
             ToolTip = "mtxv multiplies the transpose of a 3x3 matrix on the left with a vector below"
             ))
@@ -2546,8 +2687,9 @@ public:
     /// <param name="mout">[out] The produce m1 transpose times m2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX",
             ShortToolTip = "Matrix transpose times matrix, 3x3",
             ToolTip = "Multiply the transpose of a 3x3 matrix and a 3x3 matrix"
             ))
@@ -2563,9 +2705,10 @@ public:
     /// <param name="[out] angle1, angle2, angle3">Third, second, and first Euler angles, in radians</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ANGLE, MATRIX, ROTATION, TRANSFORMATION",
             ShortToolTip = "Matrix to Euler angles",
             ToolTip = "Factor a rotation matrix as a product of three rotations about specified coordinate axes"
             ))
@@ -2587,8 +2730,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix times vector, 3x3",
             ToolTip = "Multiply a 3x3 double precision matrix with a 3-dimensional double precision vector"
             ))
@@ -2605,8 +2749,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix times vector, 3x3",
             ToolTip = "Multiply a 3x3 double precision matrix with a 3-dimensional double precision vector"
             ))
@@ -2623,8 +2768,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Matrix times vector, 3x3",
             ToolTip = "Multiply a 3x3 double precision matrix with a 3-dimensional double precision vector"
             ))
@@ -2642,9 +2788,10 @@ public:
     /// <param name="frcode">[out] The SPICE ID code of the frame</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FRAMES",
             ShortToolTip = "Name to frame",
             ToolTip = "Look up the frame ID code associated with a string"
             ))
@@ -2662,9 +2809,10 @@ public:
     /// <param name="dist">[out] Distance of input point to ellipse</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONIC, ELLIPSE, GEOMETRY, MATH",
             ShortToolTip = "Nearest point on ellipse to point",
             ToolTip = "Find the nearest point on an ellipse to a specified point, both in three - dimensional space, and find the distance between the ellipse and the point"
             ))
@@ -2686,9 +2834,10 @@ public:
     /// <param name="alt">[out] Altitude of positn above the ellipsoid</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Ellipsoid",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSOID, GEOMETRY",
             ShortToolTip = "Nearest point on an ellipsoid",
             ToolTip = "Locates the point on the surface of an ellipsoid that is nearest to a specified position.It also returns the altitude of the position above the ellipsoid"
             ))
@@ -2713,9 +2862,10 @@ public:
     /// <param name="dist">[out] Distance of ellipsoid from line</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSOID, GEOMETRY, MATH",
             ShortToolTip = "Nearest point on ellipsoid to line",
             ToolTip = "Find nearest point on a triaxial ellipsoid to a specified line, and the distance from the ellipsoid to the line"
             ))
@@ -2742,8 +2892,9 @@ public:
         Category = "Spice|Api|Math",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, MATH, VECTOR",
             ShortToolTip = "Nearest point on line to point",
-            ToolTip = ""
+            ToolTip = "Find the nearest point on a line to a specified point, and find the distance between the two points"
             ))
         static void nplnpt(
             ES_ResultCode& ResultCode,
@@ -2761,9 +2912,10 @@ public:
     /// <param name="plane">[out] A CSPICE plane structure representing the plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Normal vector and constant to plane",
             ToolTip = "Make a plane from a normal vector and a constant"
             ))
@@ -2781,9 +2933,10 @@ public:
     /// <param name="">[out] A CSPICE plane structure representing the plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Normal vector and point to plane",
             ToolTip = "Make a plane from a normal vector and a point"
             ))
@@ -2797,9 +2950,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Occultation",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSOID, GEOMETRY, OCCULTATION",
             ShortToolTip = "Normal vector and point to plane",
             ToolTip = "Make a plane from a normal vector and a point",
             AutoCreateRefTerm = "shape1Surfaces, shape2Surfaces"
@@ -2833,8 +2987,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Conics",
+        Category = "Spice|Api|Ephemeris",
         meta = (
+            Keywords = "CONIC, ELEMENTS, EPHEMERIS",
             ShortToolTip = "Determine conic elements from state",
             ToolTip = "Determine the set of osculating conic orbital elements that corresponds to the state(position, velocity) of a body at some epoch"
             ))
@@ -2854,8 +3009,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Conics",
+        Category = "Spice|Api|Ephemeris",
         meta = (
+            Keywords = "CONIC, ELEMENTS, EPHEMERIS",
             ShortToolTip = "Extended osculating elements from state",
             ToolTip = "Determine the set of osculating conic orbital elements that corresponds to the state(position, velocity) of a body at some epoch.  In additional to the classical elements, return the true anomaly, semi - major axis, and period, if applicable"
             ))
@@ -2872,8 +3028,9 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Pck",
+        Category = "Spice|Api|PCK",
         meta = (
+            Keywords = "ORIENTATION, TIME, UTILITY",
             ExpandEnumAsExecs = "ResultCode",
             ShortToolTip = "PCK coverage",
             ToolTip = "Find the coverage window for a specified reference frame in a specified binary PCK file"
@@ -2889,9 +3046,10 @@ public:
 
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Pck",
+        Category = "Spice|Api|PCK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ORIENTATION, UTILITY",
             ShortToolTip = "PCK reference frame class ID set",
             ToolTip = "Find the set of reference frame class ID codes of all frames in a specified binary PCK file"
             ))
@@ -2904,9 +3062,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POOL",
             ShortToolTip = "Put character strings into the kernel pool",
             ToolTip = "Provides a method for programmatically inserting character data into the kernel pool"
             ))
@@ -2918,9 +3077,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POOL",
             ShortToolTip = "Put character strings into the kernel pool",
             ToolTip = "Provides a method for programmatically inserting character data into the kernel pool"
             ))
@@ -2932,9 +3092,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POOL",
             ShortToolTip = "Put d.p.'s into the kernel pool",
             ToolTip = "Provides a method for programmatically inserting double precision data into the kernel pool"
             ))
@@ -2946,9 +3107,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POOL",
             ShortToolTip = "Put d.p.'s into the kernel pool",
             ToolTip = "Provides a method for programmatically inserting double precision data into the kernel pool"
             ))
@@ -2960,9 +3122,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, COORDINATES, GEOMETRY, MATH",
             ShortToolTip = "Planetographic to rectangular",
             ToolTip = "Convert planetographic coordinates to rectangular coordinates"
             ))
@@ -2977,9 +3140,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS, GEOMETRY, PHASE ANGLE, SEARCH",
             ShortToolTip = "Phase angle quantity between bodies centers",
             ToolTip = "Compute the apparent phase angle for a target, observer, illuminator set of ephemeris objects"
             ))
@@ -2999,6 +3163,7 @@ public:
         BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Value of pi",
             ToolTip = "Return the value of pi (the ratio of the circumference of a circle to its diameter)"
             ))
@@ -3008,6 +3173,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Angle of value pi",
             ToolTip = "Return angle with the value of pi"
             ))
@@ -3015,9 +3181,10 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POOL",
             ShortToolTip = "Put integers into the kernel pool",
             ToolTip = "Provides a method for programmatically inserting integer data into the kernel pool"
             ))
@@ -3029,9 +3196,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Data",
+        Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "POOL",
             ShortToolTip = "Put integers into the kernel pool",
             ToolTip = "Provides a method for programmatically inserting integer data into the kernel pool"
             ))
@@ -3050,9 +3218,10 @@ public:
     /// <param name="elout">A CSPICE ellipse resulting from the projection</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Ellipses",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSE, GEOMETRY, MATH",
             ShortToolTip = "Project ellipse onto plane",
             ToolTip = "Project an ellipse onto a plane, orthogonally"
             ))
@@ -3070,8 +3239,9 @@ public:
     /// <param name="normal, constant">[out] A normal vector and constant defining the geometric plane represented by plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Planes",
         meta = (
+            Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Plane to normal vector and constant",
             ToolTip = "Return a unit normal vector and constant that define a specified plane"
             ))
@@ -3086,9 +3256,10 @@ public:
     /// <param name="normal, point">[out] A unit normal vector and point that define plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Plane to normal vector and point",
             ToolTip = "Return a unit normal vector and point that define a specified plane"
             ))
@@ -3107,8 +3278,9 @@ public:
     /// <param name="span2>[out] A vector spanning the input plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Planes",
         meta = (
+            Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Plane to point and spanning vectors",
             ToolTip = "Return a point and two orthogonal spanning vectors that generate a specified plane"
             ))
@@ -3126,9 +3298,10 @@ public:
     /// <param name="pvprop">[out] The propagated state</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|State",
+        Category = "Spice|Api|Ephemeris",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONIC, EPHEMERIS, UTILITY",
             ShortToolTip = "Propagate a two-body solution",
             ToolTip = "Given a central mass and the state of massless body at time t_0, this routine determines the state as predicted by a two - body force model at time t_0 + dt"
             ))
@@ -3148,9 +3321,10 @@ public:
     /// <param name="plane">[out] A CSPICE plane representing the plane</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, MATH, PLANE",
             ShortToolTip = "Point and spanning vectors to plane",
             ToolTip = "Make a plane from a point and two spanning vectors"
             ))
@@ -3171,9 +3345,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|PX",
+        Category = "Spice|Api|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FRAMES, TRANSFORM",
             ShortToolTip = "Position Transformation Matrix",
             ToolTip = "Return the matrix that transforms position vectors from one specified frame to another at a specified epoch"
             ))
@@ -3195,9 +3370,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|PX",
+        Category = "Spice|Api|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FRAMES, TRANSFORM",
             ShortToolTip = "Position Transform Matrix, Different Epochs",
             ToolTip = "Return the 3x3 matrix that transforms position vectors from one specified frame at a specified epoch to another specified frame at another specified epoch"
             ))
@@ -3216,8 +3392,9 @@ public:
     /// <param name="r">[out] rotation matrix corresponding to 'q'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "MATH, MATRIX, ROTATION",
             ShortToolTip = "Quaternion to matrix",
             ToolTip = "Find the rotation matrix corresponding to a specified unit quaternion"
             ))
@@ -3232,8 +3409,9 @@ public:
     /// <param name="qout">[out] Product of 'q1' and 'q2'</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "MATH, POINTING, ROTATION",
             ShortToolTip = "Quaternion times quaternion",
             ToolTip = "Multiply two quaternions"
             ))
@@ -3253,6 +3431,7 @@ public:
         BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Convert from range, right ascension, and declination to rectangular coordinates",
             ToolTip = "Convert from range, right ascension, and declination to rectangular coordinates"
             ))
@@ -3270,8 +3449,9 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "FRAMES",
             ShortToolTip = "Rotation and angular velocity to transform",
             ToolTip = "Determines a state transformation matrix from a rotation matrix and the angular velocity of the rotation"
             ))
@@ -3287,9 +3467,10 @@ public:
     /// <param name="angle">[out] Angle through which the rotation is performed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ANGLE, MATRIX, ROTATION",
             ShortToolTip = "Rotation axis of a matrix",
             ToolTip = "Compute the axis of the rotation given by an input matrix and the angle of the rotation about that axis"
             ))
@@ -3304,6 +3485,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to cylindrical coordinates",
             ToolTip = "Convert from rectangular to cylindrical coordinates"
             ))
@@ -3323,6 +3505,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to geodetic",
             ToolTip = "Convert from rectangular coordinates to geodetic coordinates"
             ))
@@ -3342,6 +3525,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to latitudinal coordinates",
             ToolTip = "Convert from rectangular coordinates to latitudinal coordinates"
             ))
@@ -3355,6 +3539,7 @@ public:
         Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, COORDINATES, GEOMETRY, MATH",
             ShortToolTip = "Rectangular to planetographic",
             ToolTip = "Convert rectangular coordinates to planetographic coordinates"
             ))
@@ -3379,6 +3564,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular coordinates to RA and DEC",
             ToolTip = "Convert rectangular coordinates to range, right ascension, and declination"
             ))
@@ -3398,6 +3584,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Rectangular to spherical coordinates",
             ToolTip = "Convert from rectangular coordinates to spherical coordinates"
             ))
@@ -3412,8 +3599,9 @@ public:
     /// <param name="mout">[out] Resulting rotation matrix [angle]</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "MATRIX, ROTATION",
             ShortToolTip = "Generate a rotation matrix",
             ToolTip = "Calculate the 3x3 rotation matrix generated by a rotation of a specified angle about a specified axis. This rotation is thought of as rotating the coordinate system"
             ))
@@ -3430,8 +3618,9 @@ public:
     /// <param name="mout">[out] Resulting rotated matrix</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "MATRIX, ROTATION",
             ShortToolTip = "Rotate a matrix",
             ToolTip = "Applies a rotation of angle radians about axis iaxis to a matrix.This rotation is thought of as rotating the coordinate system."
             ))
@@ -3449,8 +3638,9 @@ public:
     /// <param name="vout">[out] Resulting vector</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "ROTATION, VECTOR",
             ShortToolTip = "Transform a vector via a rotation",
             ToolTip = "Transform a vector to a new coordinate system rotated by angle radians about axis iaxis.This transformation rotates v1 by - angle radians about the specified axis"
             ))
@@ -3466,6 +3656,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Radians per degree",
             ToolTip = "Return the number of radians per degree"
             ))
@@ -3482,21 +3673,22 @@ public:
     /// <param name="root2">[out] Root built from negative discriminant term</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Polynomial",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "MATH, POLYNOMIAL, ROOT",
             ShortToolTip = "Roots of a quadratic equation",
             ToolTip = "Find the roots of a quadratic equation"
             ))
-        static void rquad(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            double a,
-            double b,
-            double c,
-            FSComplexScalar& root1,
-            FSComplexScalar& root2
-        );
+    static void rquad(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        double a,
+        double b,
+        double c,
+        FSComplexScalar& root1,
+        FSComplexScalar& root2
+    );
 
     /// <summary>Decode spacecraft clock</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3505,19 +3697,20 @@ public:
     /// <param name="sclkch">[out] Character representation of a clock count</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "Decode spacecraft clock",
             ToolTip = "Convert double precision encoding of spacecraft clock time into a character representation."
             ))
-        static void scdecd(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            double sclkdp,
-            FString& sclkch
-        );
+    static void scdecd(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        double sclkdp,
+        FString& sclkch
+    );
 
     /// <summary>ET to continuous SCLK ticks</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3525,19 +3718,20 @@ public:
     /// <param name="sclkdp">[out] SCLK, encoded as ticks since spacecraft clock start. sclkdp need not be integral</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "ET to continuous SCLK ticks",
             ToolTip = "Convert ephemeris seconds past J2000 (ET) to continuous encoded spacecraft clock(`ticks'). Non - integral tick values may be returned"
             ))
-        static void sce2c(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            const FSEphemerisTime& et,
-            double& sclkdp
-        );
+    static void sce2c(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        const FSEphemerisTime& et,
+        double& sclkdp
+    );
 
     /// <summary>ET to SCLK string</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3546,19 +3740,20 @@ public:
     /// <param name="b">[out] An SCLK string</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "ET to SCLK string",
             ToolTip = "Convert an epoch specified as ephemeris seconds past J2000 (ET) to a character string representation of a spacecraft clock value(SCLK)"
             ))
-        static void sce2s(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            const FSEphemerisTime& et,
-            FString& sclkch
-        );
+    static void sce2s(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        const FSEphemerisTime& et,
+        FString& sclkch
+    );
 
     /// <summary>ET to SCLK ticks</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3566,9 +3761,10 @@ public:
     /// <param name="sclkdp">[out] SCLK, encoded as ticks since spacecraft clock start</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "ET to SCLK ticks",
             ToolTip = "Convert ephemeris seconds past J2000 (ET) to integral encoded spacecraft clock('ticks').For conversion to fractional ticks, (required for C - kernel production), see the function 'sce2c'"
             ))
@@ -3586,19 +3782,20 @@ public:
     /// <param name="sclkdp">[out] Encoded representation of the clock count</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "Encode spacecraft clock",
             ToolTip = "Encode character representation of spacecraft clock time into a double precision number"
             ))
-        static void scencd(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            const FString& sclkch,
-            double& sclkdp
-        );
+    static void scencd(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        const FString& sclkch,
+        double& sclkdp
+    );
 
     /// <summary>Convert SCLK "ticks" to character clock format</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3607,19 +3804,20 @@ public:
     /// <param name="clkstr">[out] Character representation of a clock count</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "Convert SCLK \"ticks\" to character clock format",
             ToolTip = "Convert encoded spacecraft clock ticks to character clock format"
             ))
-        static void scfmt(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            double ticks,
-            FString& clkstr
-        );
+    static void scfmt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        double ticks,
+        FString& clkstr
+    );
 
     /// <summary>Spacecraft Clock Partition Information</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3628,19 +3826,20 @@ public:
     /// <param name="pstop">[out] Array of partition stop times</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
             ShortToolTip = "Spacecraft Clock Partition Information",
             ToolTip = "Get spacecraft clock partition information from a spacecraft clock kernel file"
             ))
-        static void scpart(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            TArray<double>& pstart,
-            TArray<double>& pstop
-        );
+    static void scpart(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        TArray<double>& pstart,
+        TArray<double>& pstop
+    );
 
     /// <summary>SCLK string to ET</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3648,19 +3847,20 @@ public:
     /// <param name="et">[out] Ephemeris time, seconds past J2000</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "SCLK string to ET",
             ToolTip = "Convert a spacecraft clock string to ephemeris seconds past J2000(ET)"
             ))
-        static void scs2e(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            const FString& sclkch,
-            FSEphemerisTime& et
-        );
+    static void scs2e(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        const FString& sclkch,
+        FSEphemerisTime& et
+    );
 
     /// <summary>SCLK ticks to ET</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3668,19 +3868,20 @@ public:
     /// <param name="et">[out] Ephemeris time, seconds past J2000</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "SCLK ticks to ET",
             ToolTip = "Convert encoded spacecraft clock (`ticks') to ephemeris seconds past J2000(ET)"
             ))
-        static void sct2e(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int sc,
-            double sclkdp,
-            FSEphemerisTime& et
-        );
+    static void sct2e(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int sc,
+        double sclkdp,
+        FSEphemerisTime& et
+    );
 
     /// <summary>Convert spacecraft clock string to ticks</summary>
     /// <param name="sc">[in] NAIF spacecraft identification code</param>
@@ -3688,9 +3889,10 @@ public:
     /// <param name="ticks">[out] Number of ticks represented by the clock string</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Time Conversion",
+        Category = "Spice|Api|SCLK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME",
             ShortToolTip = "Convert spacecraft clock string to ticks",
             ToolTip = "Convert a spacecraft clock format string to number of \"ticks\""
             ))
@@ -3705,10 +3907,11 @@ public:
     /// <summary>Convert spacecraft clock string to ticks</summary>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "shapeSurfaces",
+            Keywords = "GEOMETRY",
             ShortToolTip = "Surface intercept",
             ToolTip = "Given an observer and a direction vector defining a ray, compute the surface intercept of the ray on a target body at a specified epoch, optionally corrected for light timeand stellar aberration"
             ))
@@ -3734,17 +3937,18 @@ public:
     /// <param name="handle">[in] Handle of the SPK file to be closed</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "SPK",
             ShortToolTip = "SPK, Close file",
             ToolTip = "The handle of the SPK file that is to be closed"
             ))
-        static void spkcls(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int handle
-        );
+    static void spkcls(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int handle
+    );
 
 
     /// <summary>SPK coverage</summary>
@@ -3753,10 +3957,11 @@ public:
     /// <param name="cover">[out] Window giving coverage in `spk' for `idcode''</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             AutoCreateRefTerm = "merge_to",
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS, TIME, UTILITY",
             ShortToolTip = "SPK coverage",
             ToolTip = "Find the coverage window for a specified ephemeris object in a specified SPK file"
             ))
@@ -3789,27 +3994,28 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "SPK, constant position observer state",
             ToolTip = "Return the state of a specified target relative to an 'observer', where the observer has constant position in a specified referencevframe.The observer's position is provided by the calling program rather than by loaded SPK files."
             ))
-        static void spkcpo(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FString& target,
-            const FSEphemerisPeriod& et,
-            const FString& outref,
-            const FString& refloc,
-            const FSDistanceVector& obspos,
-            const FString& obsctr,
-            const FString& obsref,
-            FSStateVector& state,
-            FSEphemerisPeriod& lt,
-            ES_AberrationCorrectionWithNewtonians
-            abcorr = ES_AberrationCorrectionWithNewtonians::None
-        );
+    static void spkcpo(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& target,
+        const FSEphemerisPeriod& et,
+        const FString& outref,
+        const FString& refloc,
+        const FSDistanceVector& obspos,
+        const FString& obsctr,
+        const FString& obsref,
+        FSStateVector& state,
+        FSEphemerisPeriod& lt,
+        ES_AberrationCorrectionWithNewtonians
+        abcorr = ES_AberrationCorrectionWithNewtonians::None
+    );
 
     /// <summary>SPK, constant position target state</summary>
     /// <param name="trgpos">[in] Target position relative to center of motion</param>
@@ -3824,27 +4030,28 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "SPK, constant position target state",
             ToolTip = "Return the state, relative to a specified observer, of a target having constant position in a specified reference frame. The target's position is provided by the calling program rather than by loaded SPK files"
             ))
-        static void spkcpt(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSDistanceVector& trgpos,
-            const FString& trgctr,
-            const FString& trgref,
-            const FSEphemerisPeriod& et,
-            const FString& outref,
-            const FString& refloc,
-            const FString& obsrvr,
-            FSStateVector& state,
-            FSEphemerisPeriod& lt,
-            ES_AberrationCorrectionWithNewtonians
-            abcorr = ES_AberrationCorrectionWithNewtonians::None
-        );
+    static void spkcpt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDistanceVector& trgpos,
+        const FString& trgctr,
+        const FString& trgref,
+        const FSEphemerisPeriod& et,
+        const FString& outref,
+        const FString& refloc,
+        const FString& obsrvr,
+        FSStateVector& state,
+        FSEphemerisPeriod& lt,
+        ES_AberrationCorrectionWithNewtonians
+        abcorr = ES_AberrationCorrectionWithNewtonians::None
+    );
 
     /// <summary>SPK, constant velocity observer state</summary>
     /// <param name="target">[in] Name of target ephemeris object</param>
@@ -3860,28 +4067,29 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "SPK, constant velocity observer state",
             ToolTip = "Return the state, relative to a specified observer, of a target having constant position in a specified reference frame.The target's position is provided by the calling program rather than by loaded SPK files."
             ))
-        static void spkcvo(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FString& target,
-            const FSEphemerisTime& et,
-            const FString& outref,
-            const FString& refloc,
-            const FSStateVector& obssta,
-            const FSEphemerisTime& obsepc,
-            const FString& obsctr,
-            const FString& obsref,
-            FSStateVector& state,
-            FSEphemerisPeriod& lt,
-            ES_AberrationCorrectionWithNewtonians
-            abcorr = ES_AberrationCorrectionWithNewtonians::None
-        );
+    static void spkcvo(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& target,
+        const FSEphemerisTime& et,
+        const FString& outref,
+        const FString& refloc,
+        const FSStateVector& obssta,
+        const FSEphemerisTime& obsepc,
+        const FString& obsctr,
+        const FString& obsref,
+        FSStateVector& state,
+        FSEphemerisPeriod& lt,
+        ES_AberrationCorrectionWithNewtonians
+        abcorr = ES_AberrationCorrectionWithNewtonians::None
+    );
 
     /// <summary>SPK, constant velocity target state</summary>
     /// <param name="trgsta">[in] Target state relative to center of motion</param>
@@ -3897,28 +4105,29 @@ public:
     /// <param name="lt">   [out] One way light time between target and observer</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "SPK, constant velocity target state",
             ToolTip = "Return the state of a specified target relative to an 'observer', where the observer has constant velocity in a specified reference frame.The observer's state is provided by the calling program rather than by loaded SPK files"
             ))
-        static void spkcvt(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSStateVector& trgsta,
-            const FSEphemerisTime& trgepc,
-            const FString& trgctr,
-            const FString& trgref,
-            const FSEphemerisTime& et,
-            const FString& outref,
-            const FString& refloc,
-            const FString& obsrvr,
-            FSStateVector& state,
-            FSEphemerisPeriod& lt,
-            ES_AberrationCorrectionWithNewtonians
-            abcorr = ES_AberrationCorrectionWithNewtonians::None
-        );
+    static void spkcvt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSStateVector& trgsta,
+        const FSEphemerisTime& trgepc,
+        const FString& trgctr,
+        const FString& trgref,
+        const FSEphemerisTime& et,
+        const FString& outref,
+        const FString& refloc,
+        const FString& obsrvr,
+        FSStateVector& state,
+        FSEphemerisPeriod& lt,
+        ES_AberrationCorrectionWithNewtonians
+        abcorr = ES_AberrationCorrectionWithNewtonians::None
+    );
 
     /// <summary>S/P Kernel, easy position</summary>
     /// <param name="targ">[in] Target body NAIF ID code</param>
@@ -3930,23 +4139,24 @@ public:
     /// <param name="lt">[out] One way light time between observer and target</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "S/P Kernel, easy position",
             ToolTip = "Return the position of a target body relative to an observing body, optionally corrected for light time(planetary aberration) and stellar aberration"
             ))
-        static void spkezp(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSEphemerisTime& et,
-            FSDistanceVector& ptarg,
-            FSEphemerisPeriod& lt,
-            int targ,
-            int obs,
-            const FString& ref,
-            ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::None
-        );
+    static void spkezp(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSEphemerisTime& et,
+        FSDistanceVector& ptarg,
+        FSEphemerisPeriod& lt,
+        int targ,
+        int obs,
+        const FString& ref,
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::None
+    );
 
     /// <summary>S/P Kernel, easier reader</summary>
 /// <param name="targ">[in] Target body name</param>
@@ -3958,23 +4168,24 @@ public:
 /// <param name="lt">[out] One way light time between observer and target</param>
 /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "S/P Kernel, easier reader",
             ToolTip = "Return the state (position and velocity) of a target body relative to an observing body, optionally corrected for light time(planetary aberration) and stellar aberration"
             ))
-        static void spkezr(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSEphemerisTime& et,
-            FSStateVector& state,
-            FSEphemerisPeriod& lt,
-            const FString& targ = TEXT("MOON"),
-            const FString& obs = TEXT("EARTH BARYCENTER"),
-            const FString& ref = TEXT("ECLIPJ2000"),
-            ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::None
-        );
+    static void spkezr(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSEphemerisTime& et,
+        FSStateVector& state,
+        FSEphemerisPeriod& lt,
+        const FString& targ = TEXT("MOON"),
+        const FString& obs = TEXT("EARTH BARYCENTER"),
+        const FString& ref = TEXT("ECLIPJ2000"),
+        ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::None
+    );
 
 
     /// <summary>S/P Kernel, geometric state</summary>
@@ -3986,22 +4197,23 @@ public:
     /// <param name="lt">[out] Light time</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "S/P Kernel, geometric state",
             ToolTip = "Compute the geometric state (position and velocity) of a target body relative to an observing body"
             ))
-        static void spkgeo(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            int targ,
-            const FSEphemerisTime& et,
-            int obs,
-            FSStateVector& state,
-            FSEphemerisPeriod& lt,
-            const FString& ref = TEXT("ECLIPJ2000")
-        );
+    static void spkgeo(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int targ,
+        const FSEphemerisTime& et,
+        int obs,
+        FSStateVector& state,
+        FSEphemerisPeriod& lt,
+        const FString& ref = TEXT("ECLIPJ2000")
+    );
 
 
     /// <summary>S/P Kernel, geometric position</summary>
@@ -4013,9 +4225,10 @@ public:
     /// <param name="lt">[out] Light time</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "S/P Kernel, geometric position",
             ToolTip = "Compute the geometric position of a target body relative to an observing body"
             ))
@@ -4040,9 +4253,10 @@ public:
     /// <param name="lt">[out] Light time</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "S/P Kernel, position",
             ToolTip = "Return the position of a target body relative to an observing body"
             ))
@@ -4064,57 +4278,60 @@ public:
     /// <param name="handle">[out] Loaded file's handle</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS, FILES",
             ShortToolTip = "S/P Kernel, Load ephemeris file",
             ToolTip = "Load an ephemeris file for use by the readers"
             ))
-        static void spklef(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            UPARAM(meta = (DisplayName = "project-relative file path"))
-            const FString& filename,
-            int& handle
-        );
+    static void spklef(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        UPARAM(meta = (DisplayName = "project-relative file path"))
+        const FString& filename,
+        int& handle
+    );
 
     /// <summary>Find the set of ID codes of all objects in a specified SPK file</summary>
     /// <param name="spk">[in] Name of SPK file</param>
     /// <param name="ids">[out] Set of ID codes of objects in SPK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS, UTILITY",
             ShortToolTip = "SPK objects",
             ToolTip = "Find the set of ID codes of all objects in a specified SPK file"
             ))
-        static void spkobj(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            UPARAM(meta = (DisplayName = "project-relative file path"))
-            const FString& relative_path,
-            TArray<int>& ids
-        );
+    static void spkobj(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        UPARAM(meta = (DisplayName = "project-relative file path"))
+        const FString& relative_path,
+        TArray<int>& ids
+    );
 
     /// <summary>SPK open for addition</summary>
     /// <param name="file">[in] The name of an existing SPK file</param>
     /// <param name="handle">[out] A handle attached to the SPK file opened to append</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "SPK",
             ShortToolTip = "SPK open for addition",
             ToolTip = "Open an existing SPK file for subsequent write"
             ))
-        static void spkopa(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            UPARAM(meta = (DisplayName = "project-relative file path"))
-            const FString& file,
-            int& handle
-        );
+    static void spkopa(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        UPARAM(meta = (DisplayName = "project-relative file path"))
+        const FString& file,
+        int& handle
+    );
 
     /// <summary>SPK, open new file</summary>
     /// <param name="name">[in] The name of the new SPK file to be created</param>
@@ -4123,33 +4340,35 @@ public:
     /// <param name="handle">[out] The handle of the opened SPK file</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "SPK",
             ShortToolTip = "SPK, open new file",
             ToolTip = "Create a new SPK file, returning the handle of the opened file"
             ))
-        static void spkopn(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FString& name,
-            const FString& ifname,
-            int         ncomch,
-            int& handle
-        );
+    static void spkopn(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        const FString& ifname,
+        int         ncomch,
+        int& handle
+    );
 
     /// <summary>S/P Kernel, Unload ephemeris file</summary>
     /// <param name="handle">[in] Handle of file to be unloaded</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
+            Keywords = "EPHEMERIS, FILES",
             ShortToolTip = "S/P Kernel, Unload ephemeris file",
             ToolTip = "Unload an ephemeris file so that it will no longer be searched by the readers"
             ))
-        static void spkuef(
-            int handle
-        );
+    static void spkuef(
+        int handle
+    );
 
     /// <summary>Write SPK segment, type 5</summary>
     /// <param name="handle">[in] Handle of an SPK file open for writing</param>
@@ -4165,9 +4384,10 @@ public:
     /// <param name="epochs">[in] Epochs</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "Write SPK segment, type 5",
             ToolTip = "Write an SPK segment of type 5 given a time-ordered set of discrete states and epochs, and the gravitational parameter of a central body"
             ))
@@ -4186,9 +4406,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Spk",
+        Category = "Spice|Api|SPK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
             ShortToolTip = "SPK, write a type 15 segment",
             ToolTip = "Write an SPK segment of type 15 given a type 15 data record"
             ))
@@ -4210,6 +4431,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Seconds per day",
             ToolTip = "The number of seconds in a day"
             ))
@@ -4220,6 +4442,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "One Day",
             ToolTip = "Ephemeris period of one day"
             ))
@@ -4228,6 +4451,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Spherical to cylindrical coordinates",
             ToolTip = "This routine converts from spherical coordinates to cylindrical coordinates"
             ))
@@ -4247,6 +4471,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Spherical to latitudinal coordinates",
             ToolTip = "Convert from spherical coordinates to latitudinal coordinates"
             ))
@@ -4264,6 +4489,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
         meta = (
+            Keywords = "CONVERSION, COORDINATES",
             ShortToolTip = "Spherical to rectangular coordinates",
             ToolTip = "Convert from spherical coordinates to rectangular coordinates"
             ))
@@ -4276,6 +4502,7 @@ public:
         Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, COORDINATES, TRANSFORMATION",
             ShortToolTip = "Surface to rectangular coordinates",
             ToolTip = "Convert planetocentric latitude and longitude of a surface point on a specified body to rectangular coordinates"
             ))
@@ -4288,23 +4515,25 @@ public:
         );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "isname",
+            Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
             ShortToolTip = "Surface and body ID codes to surface string",
             ToolTip = "Translate a surface ID code, together with a body ID code, to the corresponding surface name.If no such name exists, return a string representation of the surface ID code"
             ))
-        static void srfc2s(
-            FString& srfstr,
-            ES_FoundCode& isname,
-            int   code = 1,
-            int   bodyid = 499
-        );
+    static void srfc2s(
+        FString& srfstr,
+        ES_FoundCode& isname,
+        int   code = 1,
+        int   bodyid = 499
+    );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "isname",
+            Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
             ShortToolTip = "Surface ID and body string to surface string",
             ToolTip = "Translate a surface ID code, together with a body string, to the corresponding surface name.If no such surface name exists, return a string representation of the surface ID code"
             ))
@@ -4316,10 +4545,11 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "shapeSurfaces",
+            Keywords = "COORDINATES, DSK, GEOMETRY, SURFACE",
             ShortToolTip = "Map surface points to outward normal vectors",
             ToolTip = "Map array of surface points on a specified target body to the corresponding unit length outward surface normal vectors. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
             ))
@@ -4336,9 +4566,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "found",
+            Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
             ShortToolTip = "Surface and body strings to surface ID code",
             ToolTip = "Translate a surface string, together with a body string, to the corresponding surface ID code.The input strings may contain names or integer ID codes"
             ))
@@ -4350,9 +4581,10 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Surface",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "found",
+            Keywords = "CONVERSION, DSK, ID, NAME, STRING, SURFACE",
             ShortToolTip = "Surface and body strings to surface ID code",
             ToolTip = "Translate a surface string, together with a body ID code, to the corresponding surface ID code.The input surface string may contain a name or an integer ID code."
             ))
@@ -4372,6 +4604,7 @@ public:
         Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
             ShortToolTip = "String to ET",
             ToolTip = "Convert a string representing an epoch to a double precision value representing the number of TDB seconds past the J2000 epoch corresponding to the input epoch"
             ))
@@ -4383,10 +4616,11 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
+            Keywords = "GEOMETRY",
             ShortToolTip = "Sub-observer point",
             ToolTip = "Compute the rectangular coordinates of the sub-observer point on a target body at a specified epoch, optionally corrected for light timeand stellar aberration. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
             ))
@@ -4406,11 +4640,12 @@ public:
     );
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AutoCreateRefTerm = "surfaces",
             ShortToolTip = "Sub-solar point",
+            Keywords = "GEOMETRY",
             ToolTip = "Compute the rectangular coordinates of the sub-solar point on a target body at a specified epoch, optionally corrected for light timeand stellar aberration.  The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
             ))
     static void subslr(
@@ -4437,9 +4672,10 @@ public:
     /// <param name="normal">[out] Outward pointing unit normal to ellipsoid at point</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Ellipsoid",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSOID, GEOMETRY",
             ShortToolTip = "Surface normal vector on an ellipsoid",
             ToolTip = "computes the outward-pointing, unit normal vector from a point on the surface of an ellipsoid"
             ))
@@ -4463,9 +4699,10 @@ public:
     /// <param name="found">[out] </param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|Ellipsoid",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ELLIPSOID, GEOMETRY, INTERSECTION",
             ShortToolTip = "Surface point on an ellipsoid",
             ToolTip = "Determine the intersection of a line-of-sight vector with the surface of an ellipsoid"
             ))
@@ -4488,9 +4725,10 @@ public:
     /// <param name="xform">[out] A state transformation matrix</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|State",
+        Category = "Spice|Api|Frames",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FRAMES",
             ShortToolTip = "State Transformation Matrix",
             ToolTip = "Return the state transformation matrix from one frame to another at a specified epoch"
             ))
@@ -4505,10 +4743,11 @@ public:
 
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Geometry",
+        Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             AdvancedDisplay = "maxn",
+            Keywords = "DSK, GEOMETRY, SHADOW, TERMINATOR",
             ShortToolTip = "Terminator points on an extended object",
             ToolTip = "Find terminator points on a target body. The caller specifies half - planes, bounded by the illumination source center - target center vector, in which to search for terminator points. The terminator can be either umbral or penumbral.The umbral terminator is the boundary of the region on the target surface where no light from the source is visible.The penumbral terminator is the boundary of the region on the target surface where none of the light from the source is blocked by the target itself."
             ))
@@ -4545,6 +4784,7 @@ public:
         Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
             ShortToolTip = "Time Output",
             ToolTip = "Converts an input epoch represented in TDB seconds past the TDB epoch of J2000 to a character string formatted to the specifications of a user's format picture"
             ))
@@ -4566,6 +4806,7 @@ public:
         Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "PARSING, TIME",
             ShortToolTip = "Parse a UTC time string",
             ToolTip = "Parse a time string and return seconds past the J2000 epoch on a formal calendar"
             ))
@@ -4580,20 +4821,22 @@ public:
     /// <param name="matrix">3x3 matrix of double precision numbers</param>
     /// <returns>trace of matrix, i.e. it is the sum of the diagonal elements of matrix</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX",
             ShortToolTip = "Trace of a 3x3 matrix",
             ToolTip = "Return the trace of a 3x3 matrix"
             ))
-        static void trace(
-            const FSRotationMatrix& matrix,
-            double& trace
-        );
+    static void trace(
+        const FSRotationMatrix& matrix,
+        double& trace
+    );
 
     /// <summary>Twice the value of pi</summary>
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Twice the value of pi",
             ToolTip = "Return twice the value of pi"
             ))
@@ -4604,6 +4847,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
+            Keywords = "CONSTANTS",
             ShortToolTip = "Angle of twice the value pi",
             ToolTip = "Return angle with twice the value of pi"
             ))
@@ -4617,21 +4861,22 @@ public:
     /// <param name="mout">[out] Output rotation matrix</param>
     /// <returns></returns>
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "AXES. FRAME, ROTATION, TRANSFORMATION",
             ShortToolTip = "Two vectors defining an orthonormal frame",
             ToolTip = "Find the transformation to the right-handed frame having a given vector as a specified axis and having a second given vector lying in a specified coordinate plane"
             ))
-        static void twovec(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSDimensionlessVector& axdef,
-            ES_Axis                         indexa,
-            const FSDimensionlessVector& plndef,
-            ES_Axis                         indexp,
-            FSRotationMatrix& mout
-        );
+    static void twovec(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDimensionlessVector& axdef,
+        ES_Axis                         indexa,
+        const FSDimensionlessVector& plndef,
+        ES_Axis                         indexp,
+        FSRotationMatrix& mout
+    );
 
     /// <summary>Compute the normalized cross product of two 3-vectors</summary>
     /// <param name="v1">[in] Left vector for cross product</param>
@@ -4639,16 +4884,17 @@ public:
     /// <param name="vout">[out] Normalized cross product (v1xv2) / |v1xv2|</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Unitized cross product, 3x3",
             ToolTip = "Compute the normalized cross product of two 3-vectors"
             ))
-        static void ucrss(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            FSDimensionlessVector& vout
-        );
+    static void ucrss(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        FSDimensionlessVector& vout
+    );
 
     /// <summary>First derivative of a function, df(x)/dx</summary>
     /// <param name="udfunc">[in] Name of the routine</param>
@@ -4659,6 +4905,7 @@ public:
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Math",
         meta = (
+            Keywords = "DERIVATIVE, MATH",
             ShortToolTip = "First derivative of a function, df(x)/dx",
             ToolTip = "Calculate the first derivative of a caller-specified function using a three - point estimation"
             ))
@@ -4678,6 +4925,7 @@ public:
         Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, TIME, UTILITY",
             ShortToolTip = "Uniform time scale transformation",
             ToolTip = "Transform time from one uniform scale to another.  The uniform time scales are TAI, TDT, TDB, ET, JED, JDTDB, JDTDT"
             ))
@@ -4696,49 +4944,53 @@ public:
     /// <param name="vmag">[out] Magnitude of v1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
             ToolTip = "Normalize a double precision 3-vector and return its magnitude"
             ))
-        static void unorm_distance(
-            const FSDistanceVector& v1,
-            FSDimensionlessVector& vout,
-            FSDistance& vmag
-        );
+    static void unorm_distance(
+        const FSDistanceVector& v1,
+        FSDimensionlessVector& vout,
+        FSDistance& vmag
+    );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
             ToolTip = "Normalize a double precision 3-vector and return its magnitude"
             ))
-        static void unorm_velocity(
-            const FSVelocityVector& v1,
-            FSDimensionlessVector& vout,
-            FSSpeed& vmag
-        );
+    static void unorm_velocity(
+        const FSVelocityVector& v1,
+        FSDimensionlessVector& vout,
+        FSSpeed& vmag
+    );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
             ToolTip = "Normalize a double precision 3-vector and return its magnitude"
             ))
-        static void unorm_angular_velocity(
-            const FSAngularVelocity& v1,
-            FSDimensionlessVector& vout,
-            FSAngularRate& vmag
-        );
+    static void unorm_angular_velocity(
+        const FSAngularVelocity& v1,
+        FSDimensionlessVector& vout,
+        FSAngularRate& vmag
+    );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Unit vector and norm, 3 dimensional",
             ToolTip = "Normalize a double precision 3-vector and return its magnitude"
             ))
-        static void unorm(
-            const FSDimensionlessVector& v1,
-            FSDimensionlessVector& vout,
-            double& vmag
-        );
+    static void unorm(
+        const FSDimensionlessVector& v1,
+        FSDimensionlessVector& vout,
+        double& vmag
+    );
 
     /// <summary>UTC to Ephemeris Time</summary>
     /// <param name="utcstr">[in] Input time string, UTC</param>
@@ -4748,6 +5000,7 @@ public:
         Category = "Spice|Api|Time",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
             ShortToolTip = "UTC to Ephemeris Time",
             ToolTip = "Convert an input time from Calendar or Julian Date format, UTC, to ephemeris seconds past J2000"
             ))
@@ -4766,6 +5019,7 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Math",
         meta = (
+            Keywords = "TIME",
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
@@ -4775,8 +5029,9 @@ public:
         FSDistanceVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
@@ -4786,8 +5041,9 @@ public:
         FSVelocityVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
@@ -4797,8 +5053,9 @@ public:
         FSAngularVelocity& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector addition, 3 dimensional",
             ToolTip = "Add two 3 dimensional vectors"
             ))
@@ -4814,8 +5071,9 @@ public:
     /// <param name="">[out] Cross product v1xv2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector cross product, 3 dimensions",
             ToolTip = "Compute the cross product of two 3-dimensional vectors"
             ))
@@ -4829,8 +5087,9 @@ public:
     /// <param name="v1, v2">[in] Two 3-vectors</param>
     /// <returns>distance between v1 and v2</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector distance",
             ToolTip = "Return the distance between two three-dimensional vectors"
             ))
@@ -4840,8 +5099,9 @@ public:
         double& out
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector distance",
             ToolTip = "Return the distance between two three-dimensional vectors"
             ))
@@ -4851,8 +5111,9 @@ public:
         FSDistance& out
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector distance",
             ToolTip = "Return the distance between two three-dimensional vectors"
             ))
@@ -4867,8 +5128,9 @@ public:
     /// <param name="v2">Second vector in the dot product</param>
     /// <returns>dot product of v1 and v2</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector dot product, 3 dimensions",
             ToolTip = "Compute the dot product of two double precision, 3-dimensional vectors"
             ))
@@ -4878,23 +5140,25 @@ public:
         double& out
     );
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector dot product, 3 dimensions",
             ToolTip = "Compute the dot product of two double precision, 3-dimensional vectors"
             ))
-    static void dot_distance(
+    static void vdot_distance(
         const FSDistanceVector& v1,
         const FSDistanceVector& v2,
         FSDistance& out
     );
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector dot product, 3 dimensions",
             ToolTip = "Compute the dot product of two double precision, 3-dimensional vectors"
             ))
-    static void dot_velocity(
+    static void vdot_velocity(
         const FSVelocityVector& v1,
         const FSVelocityVector& v2,
         FSSpeed& out
@@ -4905,8 +5169,9 @@ public:
     /// <param name="vout">[out] value of vin</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
@@ -4915,8 +5180,9 @@ public:
         FSDimensionlessVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
@@ -4925,8 +5191,9 @@ public:
         FSDistanceVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
@@ -4935,8 +5202,9 @@ public:
         FSVelocityVector& vout
     );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector equality, 3 dimensions",
             ToolTip = "Make one double precision 3-dimensional vector equal to another"
             ))
@@ -4950,45 +5218,49 @@ public:
     /// <param name="vout">[out] Unit vector</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
-            ShortToolTip = "",
-            ToolTip = ""
+            Keywords = "VECTOR",
+            ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
+            ToolTip = "Find the unit vector along a double precision 3-dimensional vector"
             ))
-        static void vhat(
-            const FSDimensionlessVector& v1,
-            FSDimensionlessVector& vout
-        );
+    static void vhat(
+        const FSDimensionlessVector& v1,
+        FSDimensionlessVector& vout
+    );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
-            ShortToolTip = "",
-            ToolTip = ""
+            Keywords = "VECTOR",
+            ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
+            ToolTip = "Find the unit vector along a double precision 3-dimensional vector"
             ))
-        static void vhat_distance(
-            const FSDistanceVector& v1,
-            FSDimensionlessVector& vout
-        );
+    static void vhat_distance(
+        const FSDistanceVector& v1,
+        FSDimensionlessVector& vout
+    );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
-            ShortToolTip = "",
-            ToolTip = ""
+            Keywords = "VECTOR",
+            ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
+            ToolTip = "Find the unit vector along a double precision 3-dimensional vector"
             ))
-        static void vhat_velocity(
-            const FSVelocityVector& v1,
-            FSDimensionlessVector& vout
-        );
+    static void vhat_velocity(
+        const FSVelocityVector& v1,
+        FSDimensionlessVector& vout
+    );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
-            ShortToolTip = "",
-            ToolTip = ""
+            Keywords = "VECTOR",
+            ShortToolTip = "\"V - Hat\", unit vector along V, 3 dimensions",
+            ToolTip = "Find the unit vector along a double precision 3-dimensional vector"
             ))
-        static void vhat_angular_velocity(
-            const FSAngularVelocity& v1,
-            FSDimensionlessVector& vout
-        );
+    static void vhat_angular_velocity(
+        const FSAngularVelocity& v1,
+        FSDimensionlessVector& vout
+    );
 
     /// <summary>Vector linear combination, 3 dimensions</summary>
     /// <param name="a">[in] Coefficient of v1</param>
@@ -5000,35 +5272,37 @@ public:
     /// <param name="sum">[out] Linear Vector Combination a*v1 + b*v2 + c*v3</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
             ToolTip = "Computes the vector linear combination a * v1 + b * v2 + c * v3 of double precision, 3 - dimensional vectors"
             ))
-        static void vlcom3(
-            double a,
-            const FSDimensionlessVector& v1,
-            double b,
-            const FSDimensionlessVector& v2,
-            double c,
-            const FSDimensionlessVector& v3,
-            FSDimensionlessVector& sum
-        );
+    static void vlcom3(
+        double a,
+        const FSDimensionlessVector& v1,
+        double b,
+        const FSDimensionlessVector& v2,
+        double c,
+        const FSDimensionlessVector& v3,
+        FSDimensionlessVector& sum
+    );
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
             ToolTip = "Computes the vector linear combination a * v1 + b * v2 + c * v3 of double precision, 3 - dimensional vectors"
             ))
-        static void vlcom3_distance(
-            double a,
-            const FSDistanceVector& v1,
-            double b,
-            const FSDistanceVector& v2,
-            double c,
-            const FSDistanceVector& v3,
-            FSDistanceVector& sum
-        );
+    static void vlcom3_distance(
+        double a,
+        const FSDistanceVector& v1,
+        double b,
+        const FSDistanceVector& v2,
+        double c,
+        const FSDistanceVector& v3,
+        FSDistanceVector& sum
+    );
 
     /// <summary>Vector linear combination, 3 dimensions</summary>
     /// <param name="a">[in] Coefficient of v1</param>
@@ -5038,8 +5312,9 @@ public:
     /// <param name="sum">[out] Linear Vector Combination a*v1 + b*v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
             ToolTip = "Compute a vector linear combination of two double precision, 3 - dimensional vectors"
             ))
@@ -5052,8 +5327,9 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector linear combination, 3 dimensions",
             ToolTip = "Compute a vector linear combination of two double precision, 3 - dimensional vectors"
             ))
@@ -5070,8 +5346,9 @@ public:
     /// <param name="vout">[out] Negated vector -v1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Minus V, \"-V\", 3 dimensions",
             ToolTip = "Negate a double precision 3-dimensional vector"
             ))
@@ -5082,8 +5359,9 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Minus V, \"-V\", 3 dimensions",
             ToolTip = "Negate a double precision 3-dimensional distance vector"
             ))
@@ -5093,8 +5371,9 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Minus V, \"-V\", 3 dimensions",
             ToolTip = "Negate a double precision 3-dimensional velocity vector"
             ))
@@ -5108,8 +5387,9 @@ public:
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
     /// <returns>magnitude of v1 calculated in a numerically stable way</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector norm, 3 dimensions",
             ToolTip = "Compute the magnitude of a double precision, 3-dimensional vector"
             ))
@@ -5122,8 +5402,9 @@ public:
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
     /// <returns>magnitude of v1 calculated in a numerically stable way</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector norm, distance vector",
             ToolTip = "Compute the magnitude of a distance vector"
             ))
@@ -5136,8 +5417,9 @@ public:
     /// <param name="v1">[in] Vector whose magnitude is to be found</param>
     /// <returns>magnitude of v1 calculated in a numerically stable way</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector norm, velocity vector",
             ToolTip = "Compute the magnitude of a velocity vector"
             ))
@@ -5153,7 +5435,11 @@ public:
     /// <param name="z">[in] scalar z </param>
     /// <param name="v">[out] Equivalent 3-vector</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three RHS scalar components into a RHS dimensionless vector"))
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", 
+        meta = (
+            Keywords = "VECTOR",
+            ToolTip = "Pack three RHS scalar components into a RHS dimensionless vector"
+            ))
     static void vpack(
         double x,
         double y,
@@ -5161,15 +5447,23 @@ public:
         FSDimensionlessVector& v
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three RHS scalar components into a RHS distance vector"))
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector",
+        meta = (
+            Keywords = "VECTOR",
+            ToolTip = "Pack three RHS scalar components into a RHS distance vector"
+            ))
     static void vpack_distance(
         double x,
         double y,
         double z,
         FSDistanceVector& km
     );
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three RHS scalar components into a RHS velocity vector"))
-        
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector",
+        meta = (
+            Keywords = "VECTOR",
+            ToolTip = "Pack three RHS scalar components into a RHS velocity vector"
+            ))
     static void vpack_velocity(
         double x,
         double y,
@@ -5177,7 +5471,11 @@ public:
         FSVelocityVector& kmps
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Pack three THS scalar components into a RHS state vector"))
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector",
+        meta = (
+            Keywords = "VECTOR",
+            ToolTip = "Pack three RHS scalar components into a RHS State vector"
+            ))
     static void vpack_state(
         double x,
         double y,
@@ -5196,16 +5494,17 @@ public:
     /// <param name="">[out] The component of a orthogonal to b</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Perpendicular component of a 3-vector",
             ToolTip = "Find the component of a vector that is perpendicular to a second vector"
             ))
-        static void vperp(
-            const FSDimensionlessVector& a,
-            const FSDimensionlessVector& b,
-            FSDimensionlessVector& p
-        );
+    static void vperp(
+        const FSDimensionlessVector& a,
+        const FSDimensionlessVector& b,
+        FSDimensionlessVector& p
+    );
 
     /// <summary>Project a vector onto a specified plane, orthogonally</summary>
     /// <param name="vin">[in] Vector to be projected</param>
@@ -5213,19 +5512,20 @@ public:
     /// <param name="vout">[out] Vector resulting from projection</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Planes",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "GEOMETRY, MATH, PLAN, VECTOR",
             ShortToolTip = "Vector projection onto plane",
             ToolTip = "Project a vector onto a specified plane, orthogonally"
             ))
-        static void vprjp(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            const FSDimensionlessVector& vin,
-            const FSPlane& plane,
-            FSDimensionlessVector& vout
-        );
+    static void vprjp(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FSDimensionlessVector& vin,
+        const FSPlane& plane,
+        FSDimensionlessVector& vout
+    );
 
     /// <summary>Vector projection, 3 dimensions</summary>
     /// <param name="a">[in] The vector to be projected</param>
@@ -5233,31 +5533,33 @@ public:
     /// <param name="p">[out] The projection of a onto b</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector projection, 3 dimensions",
             ToolTip = "Finds the projection of one vector onto another vector. All vectors are 3 - dimensional"
             ))
-        static void vproj(
-            const FSDimensionlessVector& a,
-            const FSDimensionlessVector& b,
-            FSDimensionlessVector& p
-        );
+    static void vproj(
+        const FSDimensionlessVector& a,
+        const FSDimensionlessVector& b,
+        FSDimensionlessVector& p
+    );
 
     /// <summary>Vector relative difference (scalar)</summary>
     /// <param name="v1, v2">[in] Input vectors</param>
     /// <returns>relative difference between V1 and V2</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "MATH, VECTOR",
             ShortToolTip = "Vector relative difference, 3 dimensions",
             ToolTip = "Return the relative difference between two 3-dimensional vectors"
             ))
-        static void vrel(
-            const FSDimensionlessVector& v1,
-            const FSDimensionlessVector& v2,
-            double& out
-        );
+    static void vrel(
+        const FSDimensionlessVector& v1,
+        const FSDimensionlessVector& v2,
+        double& out
+    );
 
     /// <summary>Vector rotation about an axis</summary>
     /// <param name="v">[in] Vector to be rotated</param>
@@ -5266,17 +5568,18 @@ public:
     /// <param name="r">[out] Result of rotating v about axis by theta</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "ROTATION, VECTOR",
             ShortToolTip = "Vector rotation about an axis",
             ToolTip = "Rotate a vector about a specified axis vector by a specified angle and return the rotated vector"
             ))
-        static void vrotv(
-            const FSDimensionlessVector& v,
-            const FSDimensionlessVector& axis,
-            const FSAngle& theta,
-            FSDimensionlessVector& r
-        );
+    static void vrotv(
+        const FSDimensionlessVector& v,
+        const FSDimensionlessVector& axis,
+        const FSAngle& theta,
+        FSDimensionlessVector& r
+    );
 
     /// <summary>Vector scaling, 3 dimensions</summary>
     /// <param name="s">[in] Scalar to multiply a vector</param>
@@ -5284,8 +5587,9 @@ public:
     /// <param name="vout">[out] Product vector, s*v1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector scaling, 3 dimensions",
             ToolTip = "Multiply a scalar and a 3-dimensional double precision vector"
             ))
@@ -5296,8 +5600,9 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector scaling, 3 dimensions",
             ToolTip = "Multiply a scalar and a 3-dimensional double precision distance vector"
             ))
@@ -5309,8 +5614,9 @@ public:
 
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Vector scaling, 3 dimensions",
             ToolTip = "Multiply a scalar and a 3-dimensional double precision velocity vector"
             ))
@@ -5326,8 +5632,9 @@ public:
     /// <param name="v2">Second vector</param>
     /// <returns>is the angle between v1 and v2 expressed in radians</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "VECTOR",
             ShortToolTip = "Angular separation of vectors, 3 dimensions",
             ToolTip = "Find the separation angle in radians between two double precision, 3 - dimensional vectors.This angle is defined as zero if either vector is zero"
             ))
@@ -5343,8 +5650,9 @@ public:
     /// <param name="vout">[out] Difference vector, v1 - v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "ANGLE, VECTOR",
             ShortToolTip = "Vector subtraction, 3 dimensions",
             ToolTip = "Compute the difference between two 3-dimensional, double precision vectors"
             ))
@@ -5360,8 +5668,9 @@ public:
     /// <param name="vout">[out] Difference vector, v1 - v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "ANGLE, VECTOR",
             ShortToolTip = "Vector subtraction, 3 dimensions",
             ToolTip = "Compute the difference between two 3-dimensional, double precision vectors"
             ))
@@ -5377,8 +5686,9 @@ public:
     /// <param name="vout">[out] Difference vector, v1 - v2</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "ANGLE, VECTOR",
             ShortToolTip = "Vector subtraction, 3 dimensions",
             ToolTip = "Compute the difference between two 3-dimensional, double precision vectors"
             ))
@@ -5389,8 +5699,9 @@ public:
     );
 
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX, VECTOR",
             ShortToolTip = "Vector transpose times matrix times vector, 3 dim",
             ToolTip = "Multiply the transpose of a 3-dimensional column vector, a 3x3 matrix, and a 3 - dimensional column vector"
             ))
@@ -5405,7 +5716,7 @@ public:
     /// <param name="v">[in] 3-vector</param>
     /// <param name="x, y, z">[out] Scalar components of 3-vector</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three RHS scalar components from a RHS dimensionless vector"))
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS dimensionless vector"))
     static void vupack(
         const FSDimensionlessVector& v,
         double& x,
@@ -5413,7 +5724,7 @@ public:
         double& z
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three RHS scalar components from a RHS distance vector"))
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS distance vector"))
     static void vupack_distance(
         const FSDistanceVector& v,
         double& x,
@@ -5422,7 +5733,7 @@ public:
     );
 
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three RHS scalar components from a RHS velocity vector"))
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three RHS scalar components from a RHS velocity vector"))
     static void vupack_velocity(
         const FSVelocityVector& v,
         double& x,
@@ -5430,7 +5741,7 @@ public:
         double& z
     );
 
-    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "Unpack three THS scalar components from a RHS state vector"))
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Vector", meta = (Keywords = "VECTOR", ToolTip = "Unpack three THS scalar components from a RHS state vector"))
     static void vupack_state(
         const FSStateVector& v,
         double& x,
@@ -5447,8 +5758,9 @@ public:
     /// <param name="v">[in] Vector to be tested</param>
     /// <returns>The function returns the value SPICETRUE if and only if v is the zero vector</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Vector",
         meta = (
+            Keywords = "MATH, VECTOR",
             ShortToolTip = "Is a vector the zero vector?",
             ToolTip = "Indicate whether a 3-vector is the zero vector"
             ))
@@ -5468,9 +5780,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ANGLES, DERIVATIVES, STATE",
             ShortToolTip = "State transformation to Euler angles",
             ToolTip = "Convert a state transformation matrix to Euler angles and their derivatives with respect to a specified set of axes"
             ))
@@ -5491,8 +5804,9 @@ public:
     /// <param name="av">[out] angular velocity associated with xform</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Rotation",
         meta = (
+            Keywords = "FRAMES",
             ShortToolTip = "Transform to rotation and angular velocity",
             ToolTip = "Determines the rotation matrix and angular velocity of the rotation from a state transformation matrix"
             ))
@@ -5512,9 +5826,10 @@ public:
     /// <returns></returns>
     UFUNCTION(
         BlueprintCallable,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Coordinates",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
+            Keywords = "CONVERSION, COORDINATE, EPHEMERIS, STATE",
             ToolTip = "Transform a state between coordinate systems"
             ))
     static void xfmsta(
@@ -5533,8 +5848,9 @@ public:
     /// <param name="mout">[out] Transpose of m1.  mout can overwrite m1</param>
     /// <returns></returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Math",
+        Category = "Spice|Api|Matrix",
         meta = (
+            Keywords = "MATRIX",
             ShortToolTip = "Transpose a matrix, 3x3",
             ToolTip = "Indicate whether a 3-vector is the zero vector"
             ))
@@ -5553,7 +5869,8 @@ public:
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Time",
         meta = (
-            ShortToolTip = "Approximate current et (only suitable for visualizations)",
+            Keywords = "TIME",
+            ShortToolTip = "Approximate current et (suitable for visualizations)",
             ToolTip = "Approximate current ephemeris time, based on clock of local and sketchy CRT conversion"
             ))
     static void et_now(FSEphemerisTime& Now);
