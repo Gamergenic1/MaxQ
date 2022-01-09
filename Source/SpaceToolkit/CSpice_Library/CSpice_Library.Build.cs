@@ -17,7 +17,7 @@ public class CSpice_Library : ModuleRules
 
         string cspiceDir = Path.Combine(ModuleDirectory, "cspice/");
         string includeDir = Path.Combine(cspiceDir, "include/");
-        string libFile = SpiceEditorTarget.CSpiceLibPath(Target);
+        string libFile = SpiceTarget.CSpiceLibPath(Target);
 
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
