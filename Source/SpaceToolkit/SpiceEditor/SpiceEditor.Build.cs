@@ -10,11 +10,18 @@ using UnrealBuildTool;
 
 public class SpiceEditor : ModuleRules
 {
-	public SpiceEditor(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    public SpiceEditor(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine" });
-		PrivateDependencyModuleNames.AddRange(new string[] { "CSpice_Library"});
-	}
+        PublicDependencyModuleNames.AddRange(new string[] {
+                    "Core", "CoreUObject", "Engine",
+                    "InputBlueprintNodes",
+                    "InputCore",
+                    "KismetCompiler",
+                    "PropertyEditor",
+        });
+
+        PrivateDependencyModuleNames.AddRange(new string[] { "CSpice_Library"});
+    }
 }
