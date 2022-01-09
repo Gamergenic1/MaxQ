@@ -10,11 +10,26 @@ using UnrealBuildTool;
 
 public class SpiceUncooked : ModuleRules
 {
-	public SpiceUncooked(ReadOnlyTargetRules Target) : base(Target)
-	{
-		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    public SpiceUncooked(ReadOnlyTargetRules Target) : base(Target)
+    {
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine" });
-		PrivateDependencyModuleNames.AddRange(new string[] { "CSpice_Library"});
-	}
+        PrivateDependencyModuleNames.AddRange(
+            new string[] {
+                    "BlueprintGraph",
+                    "Core",
+                    "CoreUObject",
+                    "Engine",
+                    "EnhancedInput",
+                    "GraphEditor",
+                    "InputCore",
+                    "KismetCompiler",
+                    "PropertyEditor",
+                    "Slate",
+                    "SlateCore",
+                    "UnrealEd"
+            });
+
+            PrivateDependencyModuleNames.AddRange(new string[] { "CSpice_Library", "Spice" });
+    }
 }

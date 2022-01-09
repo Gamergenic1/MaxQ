@@ -143,7 +143,7 @@ public:
     static void get_errdev(ES_ErrorDevice& device);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error Handling",
+        Category = "Spice|Api|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Get Error Output Items"
@@ -151,7 +151,7 @@ public:
     static void get_errprt(FString& OutMessage);
 
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Error Handling",
+        Category = "Spice|Api|Error",
         meta = (
             Keywords = "ERROR",
             ToolTip = "Set Default Error"
