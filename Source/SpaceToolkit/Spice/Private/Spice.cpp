@@ -105,7 +105,6 @@ void CopyTo(const FSEllipse& src, SpiceEllipse& _ellipse)
     USpice::UnexpectedErrorCheck(false);
 }
 
-
 void USpice::SwizzleToUE(const double(&v)[3], FVector& ue)
 {
     ue = FVector(v[1], v[0], v[2]);

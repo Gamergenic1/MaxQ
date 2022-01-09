@@ -59,7 +59,7 @@ public:
         const FString& relativeDirectory = TEXT("Content/Spice/Kernels/Core")
         );
 
-    UFUNCTION(BlueprintCallable, Exec,
+    UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Kernel",
         meta = (
             Keywords = "UTILITY",
@@ -97,7 +97,7 @@ public:
         TArray<FString>& joinedPaths
     );
 
-    UFUNCTION(BlueprintCallable, Exec,
+    UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Kernel",
         meta = (
             Keywords = "UTILITY",
@@ -105,7 +105,7 @@ public:
             ))
     static void clear_all();
 
-    UFUNCTION(BlueprintCallable, Exec,
+    UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Kernel",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
@@ -118,7 +118,7 @@ public:
         const FString& absolutePath
     );
 
-    UFUNCTION(BlueprintCallable, Exec,
+    UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Kernel",
         meta = (
             Keywords = "UTILITY",
@@ -2082,7 +2082,7 @@ public:
     /// <summary>Return half the value of pi</summary>
     /// <returns>half the value of pi</returns>
     UFUNCTION(BlueprintPure,
-        Category = "Spice|Api|Constants",
+        Category = "Spice|Api|Constants", Exec,
         meta = (
             Keywords = "CONSTANTS",
             ShortToolTip = "Half the value of pi",
