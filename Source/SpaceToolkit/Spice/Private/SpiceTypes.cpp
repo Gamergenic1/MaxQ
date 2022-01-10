@@ -1522,82 +1522,82 @@ FString USpiceTypes::Conv_SDimensionlessStateVectorToString(const FSDimensionles
     return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.x), *FormatDouble(value.r.y), *FormatDouble(value.r.z), *FormatDouble(value.dr.x), *FormatDouble(value.dr.y), *FormatDouble(value.dr.z));
 }
 
-FString USpiceTypes::SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value)
+FString USpiceTypes::Conv_SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value)
 {
     return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dlat.degreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
 }
 
-FString USpiceTypes::SGeodeticStateVectorToString(const FSGeodeticStateVector& value)
+FString USpiceTypes::Conv_SGeodeticStateVectorToString(const FSGeodeticStateVector& value)
 {
     return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dlat.degreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
 }
 
-FString USpiceTypes::SSphericalStateVectorToString(const FSSphericalStateVector& value)
+FString USpiceTypes::Conv_SSphericalStateVectorToString(const FSSphericalStateVector& value)
 {
     return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.colat.degrees), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dcolat.degreesPerSecond()), *FormatDouble(value.dr.dlon.degreesPerSecond()));
 }
 
-FString USpiceTypes::SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value)
+FString USpiceTypes::Conv_SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value)
 {
     return FString::Printf(TEXT("[%s, (%s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lonlat.longitude.degrees), *FormatDouble(value.r.lonlat.latitude.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dlat.degreesPerSecond()));
 }
 
-FString USpiceTypes::SCylindricalStateVectorToString(const FSCylindricalStateVector& value)
+FString USpiceTypes::Conv_SCylindricalStateVectorToString(const FSCylindricalStateVector& value)
 {
     return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.r.z.km), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dz.kmps));
 }
 
-FString USpiceTypes::SPlanetographicVectorToString(const FSPlanetographicVector& value)
+FString USpiceTypes::Conv_SPlanetographicVectorToString(const FSPlanetographicVector& value)
 {
     return FString::Printf(TEXT("(%s; %s)"), *FormatLonLat(value.lonlat), *FormatDouble(value.alt.km));
 }
 
-FString USpiceTypes::SGeodeticVectorToString(const FSGeodeticVector& value)
+FString USpiceTypes::Conv_SGeodeticVectorToString(const FSGeodeticVector& value)
 {
     return FString::Printf(TEXT("(%s; %s)"), *FormatLonLat(value.lonlat), *FormatDouble(value.alt.km));
 }
 
-FString USpiceTypes::SSphericalVectorToString(const FSSphericalVector& value)
+FString USpiceTypes::Conv_SSphericalVectorToString(const FSSphericalVector& value)
 {
     return FString::Printf(TEXT("(%s; %s, %s)"), *FormatDouble(value.r.km), *FormatDouble(value.colat.degrees), *FormatDouble(value.lon.degrees));
 }
 
-FString USpiceTypes::SLatitudinalVectorToString(const FSLatitudinalVector& value)
+FString USpiceTypes::Conv_SLatitudinalVectorToString(const FSLatitudinalVector& value)
 {
     return FString::Printf(TEXT("(%s; %s)"), *FormatDouble(value.r.km), *FormatLonLat(value.lonlat));
 }
 
-FString USpiceTypes::SCylindricalVectorToString(const FSCylindricalVector& value)
+FString USpiceTypes::Conv_SCylindricalVectorToString(const FSCylindricalVector& value)
 {
     return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.r.km), *FormatDouble(value.lon.degrees), *FormatDouble(value.z.km));
 }
 
-FString USpiceTypes::SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value)
+FString USpiceTypes::Conv_SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value)
 {
     return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dlat.degreesPerSecond()), *FormatDouble(value.dalt.kmps));
 }
 
-FString USpiceTypes::SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value)
+FString USpiceTypes::Conv_SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value)
 {
     return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dlat.degreesPerSecond()), *FormatDouble(value.dalt.kmps));
 }
 
-FString USpiceTypes::SSphericalVectorRatesToString(const FSSphericalVectorRates& value)
+FString USpiceTypes::Conv_SSphericalVectorRatesToString(const FSSphericalVectorRates& value)
 {
     return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dcolat.degreesPerSecond()), *FormatDouble(value.dlon.degreesPerSecond()));
 }
 
-FString USpiceTypes::SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value)
+FString USpiceTypes::Conv_SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value)
 {
     return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dlat.degreesPerSecond()));
 }
 
-FString USpiceTypes::SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value)
+FString USpiceTypes::Conv_SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value)
 {
     return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dz.kmps));
 }
 
-FString USpiceTypes::SConicElementsToString(const FSConicElements& value)
+FString USpiceTypes::Conv_SConicElementsToString(const FSConicElements& value)
 {
     return FString::Printf(
         TEXT("(%s; %s, %s, %s; %s %s; %s)"),

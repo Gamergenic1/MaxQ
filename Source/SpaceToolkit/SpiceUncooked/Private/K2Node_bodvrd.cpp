@@ -1,4 +1,4 @@
-// Copyright 2021 Gamergenic.  See full copyright notice in SpiceK2.h.
+// Copyright 2021 Gamergenic.  See full copyright notice in Spice.h.
 // Author: chucknoble@gamergenic.com | https://www.gamergenic.com
 // 
 // Implementation of:
@@ -6,6 +6,7 @@
 // https://gamedevtricks.com/post/third-party-libs-1/
 
 #include "K2Node_bodvrd.h"
+#include "K2Node_OperationNOutput.h"
 #include "K2Utilities.h"
 #include "SpiceK2.h"
 
@@ -16,25 +17,31 @@
 #include "BlueprintNodeSpawner.h"
 #include "K2Node_CallFunction.h"
 
-PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
-extern "C"
-{
-#include "SpiceUsr.h"
-
-// for ev2lin, dpspce
-#include "SpiceZfc.h"
-}
-PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 using namespace ENodeTitleType;
 
+
 #define LOCTEXT_NAMESPACE "K2Node_bodvrd"
+
 
 UK2Node_bodvrd::UK2Node_bodvrd()
 {
-    bodynm_Value = FString(bodynm_DefaultValue.ToString());
-    item_Value = FString(item_DefaultValue.ToString());
+    OperationsMap = TMap<FName, FK2OperationNOutput>();
+
+    auto op = DoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = ArrayDoubleOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDimensionlessVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SMassConstantOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDegreesOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SVelocityVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = WildcardOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+
+    CurrentOperation = op;
+    CurrentOperation.FullName = CurrentOperation.ShortName.ToString() + "\nReturn d.p. values from the kernel pool";
 }
+
 
 FText UK2Node_bodvrd::GetNodeTitle(Type TitleType) const
 {
@@ -42,44 +49,16 @@ FText UK2Node_bodvrd::GetNodeTitle(Type TitleType) const
     {
     case FullTitle:
         /** The full title, may be multiple lines. */
-        return LOCTEXT("FullTitle", "bodvrd\nReturn d.p. values from the kernel pool");
+        return FText::FromString(CurrentOperation.FullName);
     case ListView:
         /** More concise, single line title. */
-        return LOCTEXT("ListView", "bodvrd (read kernel pool)");
+        return LOCTEXT("ListViewTitle", "bodvrd - fetch value from kernel pool");
     case MenuTitle:
         /** Menu Title for context menus to be displayed in context menus referencing the node. */
         return LOCTEXT("MenuTitle", "bodvrd");
     }
 
-    if (TitleType == EditableTitle)
-    {
-        FString title;
-        
-        if (!bodynm_Value.IsEmpty())
-        {
-            title += bodynm_Value;
-        }
-        else
-        {
-            title += "BODY";
-        }
-
-        title += "_";
-
-        if (!item_Value.IsEmpty())
-        {
-            title += item_Value;
-        }
-        else
-        {
-            title += "ITEM";
-        }
-        
-        /** Returns the editable title (which might not be a title at all). */
-        return FText::FromString(title);
-    }
-
-    return LOCTEXT("bodvrd", "bodvrd");
+    return LOCTEXT("ShortTitle", "bodvrd");
 }
 
 
@@ -101,15 +80,24 @@ FText UK2Node_bodvrd::GetTooltipText() const
 }
 
 
-bool UK2Node_bodvrd::IsNodeSafeToIgnore() const {
-    return true;
-}
-
 
 void UK2Node_bodvrd::GetMenuActions(FBlueprintActionDatabaseRegistrar& ActionRegistrar) const
 {
     RegisterAction(ActionRegistrar, GetClass());
 }
+
+void UK2Node_bodvrd::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
+{
+    Super::NotifyPinConnectionListChanged(Pin);
+
+    if (Pin->LinkedTo.Num() != 1)
+    {
+        CurrentOperation = WildcardOp();
+        const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
+        K2Schema->ForceVisualizationCacheClear();
+    }
+}
+
 
 
 void UK2Node_bodvrd::AllocateDefaultPins()
@@ -118,18 +106,7 @@ void UK2Node_bodvrd::AllocateDefaultPins()
 
     const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
 
-    UEdGraphPin* successPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, success_Field);
-    successPin->PinToolTip = TEXT("Exit, if the action succeeds");
-
-    UEdGraphPin* OutputPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Wildcard, FName(), value_Field);
-    OutputPin->PinToolTip = "Kernal Value";
-
-    // Exec pins
-    CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Exec, UEdGraphSchema_K2::PN_Execute);
-
-    UEdGraphPin* errorPin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_Exec, error_Field);
-    errorPin->PinToolTip = TEXT("Exit, if the action fails");
-
+    // Inputs - Body/Item
     UEdGraphPin* bodyPin = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_String, bodynm_Field);
     K2Schema->SetPinAutogeneratedDefaultValue(bodyPin, bodynm_Value);
     bodyPin->PinToolTip = TEXT("Body name");
@@ -139,244 +116,87 @@ void UK2Node_bodvrd::AllocateDefaultPins()
     K2Schema->SetPinAutogeneratedDefaultValue(itemPin, item_Value);
     itemPin->PinToolTip = TEXT("Item for which values are desired. (\"RADII\", \"NUT_PREC_ANGLES\", etc.)");
     itemPin->DefaultValue = item_DefaultValue.ToString();
-
-    // Output pins
-    UEdGraphPin* errorMessagePin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_String, errorMessage_Field);
-    errorMessagePin->PinToolTip = TEXT("An error message, if the action fails");
 }
 
 
-void UK2Node_bodvrd::ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
+void UK2Node_bodvrd::ReconstructNode()
 {
-    Super::ExpandNode(CompilerContext, SourceGraph);
+    Super::ReconstructNode();
 
+    if (returnValuePin()->LinkedTo.Num() != 1)
+    {
+        CurrentOperation = WildcardOp();
+        CurrentOperation.FullName = CurrentOperation.ShortName.ToString() + "\nReturn d.p. values from the kernel pool";
+    }
+}
+
+void UK2Node_bodvrd::ExpandOperationNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph, UK2Node* operationNode)
+{
     auto Schema = Cast< UEdGraphSchema_K2 >(GetSchema());
 
-    if (CheckForErrors(CompilerContext))
-    {
-        BreakAllNodeLinks();
-        return;
-    }
-
-
-    FName BodvrdFunctionName;
-    FName ConvFunctionName = "";
-
-    auto returnValue = returnValuePin();
-    UEdGraphPin* link = nullptr;
-
-    if (returnValue->LinkedTo.Num() == 1)
-    {
-        link = returnValue->LinkedTo[0];
-    }
-
-    if (link)
-    {
-        if (link->PinType.PinCategory == UEdGraphSchema_K2::PC_Double)
-        {
-            bool isArray = (link->PinType.ContainerType == EPinContainerType::Array);
-
-            if (!isArray)
-            {
-                BodvrdFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, bodvrd_double_K2);
-            }
-            else
-            {
-                BodvrdFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, bodvrd_array_K2);
-            }
-        }
-        else if (link->PinType.PinCategory == UEdGraphSchema_K2::PC_Struct)
-        {
-            FName structName = link->PinType.PinSubCategoryObject->GetFName();
-
-            if (structName == FName(TEXT("SMassConstant")))
-            {
-                BodvrdFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, bodvrd_double_K2);
-                ConvFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, Conv_DoubleToSMassConstant_K2);
-            }
-            else if (structName == FName(TEXT("SDimensionlessVector")))
-            {
-                BodvrdFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, bodvrd_vector_K2);
-            }
-            else if (structName == FName(TEXT("SDistanceVector")))
-            {
-                BodvrdFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, bodvrd_vector_K2);
-                ConvFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, Conv_FSDimensionlessVectorToSDistanceVector_K2);
-            }
-            else
-            {
-                CompilerContext.MessageLog.Error(*LOCTEXT("Error", "Node @@ had an output type error.").ToString(), this);
-                BreakAllNodeLinks();
-                return;
-            }
-        }
-        else
-        {
-            CompilerContext.MessageLog.Error(*LOCTEXT("Error", "Node @@ had an output type error.").ToString(), this);
-            BreakAllNodeLinks();
-            return;
-        }
-    }
-
-    if (!link)
-    {
-        // no output link, let's run the node anyways... and make it a double
-        BodvrdFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, bodvrd_double_K2);
-    }
-
-
-    auto InternalNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-    InternalNode->FunctionReference.SetExternalMember(BodvrdFunctionName, USpiceK2::StaticClass());
-    InternalNode->AllocateDefaultPins();
-
-    CompilerContext.MessageLog.NotifyIntermediateObjectCreation(InternalNode, this);
-
-
-    if(link){
-        // Wire the return value up first... it may need to go through a type converter
-        if (ConvFunctionName != "")
-        {
-            auto ConversionNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(this, SourceGraph);
-            ConversionNode->FunctionReference.SetExternalMember(ConvFunctionName, USpiceK2::StaticClass());
-            ConversionNode->AllocateDefaultPins();
-
-            CompilerContext.MessageLog.NotifyIntermediateObjectCreation(ConversionNode, this);
-
-            auto internalReturn = getReturnValuePin(InternalNode);
-            auto conversionInput = InternalNode->FindPinChecked(value_Field);
-            auto conversionReturn = getReturnValuePin(ConversionNode);
-            auto myReturn = returnValuePin();
-
-            Schema->TryCreateConnection(internalReturn, conversionInput);
-            MovePinLinksOrCopyDefaults(CompilerContext, internalReturn, conversionInput);
-
-            Schema->TryCreateConnection(conversionReturn, myReturn);
-            MovePinLinksOrCopyDefaults(CompilerContext, conversionReturn, myReturn);
-        }
-        else
-        {
-            auto internalReturn = getReturnValuePin(InternalNode);
-            auto myReturn = returnValuePin();
-
-            Schema->TryCreateConnection(myReturn, internalReturn);
-            MovePinLinksOrCopyDefaults(CompilerContext, myReturn, internalReturn);
-        }
-    }
-
- 
     // Now the body and item pins...
-    auto thisBodynm = bodynmPin();   auto thatBodynm = InternalNode->FindPinChecked(bodynm_Field);
-    auto thisItem = itemPin();   auto thatItem = InternalNode->FindPinChecked(item_Field);
+    auto thisBodynm = bodynmPin();   auto thatBodynm = operationNode->FindPinChecked(bodynm_Field);
+    auto thisItem = itemPin();   auto thatItem = operationNode->FindPinChecked(item_Field);
 
-    Schema->TryCreateConnection(thisBodynm, thatBodynm);
     MovePinLinksOrCopyDefaults(CompilerContext, thisBodynm, thatBodynm);
-
-    Schema->TryCreateConnection(thisItem, thatItem);
     MovePinLinksOrCopyDefaults(CompilerContext, thisItem, thatItem);
-
-    // Exec nodes....
-    UEdGraphPin* NodeExec = GetExecPin();
-    UEdGraphPin* NodeSuccess = successPin();
-    UEdGraphPin* NodeError = errorPin();
-
-    UEdGraphPin* InternalExec = InternalNode->GetExecPin();
-    Schema->TryCreateConnection(NodeExec, InternalExec);
-    MovePinLinksOrCopyDefaults(CompilerContext, NodeExec, InternalExec);
-
-    UEdGraphPin* InternalSuccess = InternalNode->FindPinChecked(success_Field);
-    check(InternalSuccess != nullptr);
-    Schema->TryCreateConnection(NodeSuccess, InternalSuccess);
-    MovePinLinksOrCopyDefaults(CompilerContext, NodeSuccess, InternalSuccess);
-
-    UEdGraphPin* InternalError = InternalNode->FindPinChecked(error_Field);
-    check(InternalError != nullptr);
-    Schema->TryCreateConnection(NodeError, InternalError);
-    MovePinLinksOrCopyDefaults(CompilerContext, NodeError, InternalError);
-
-    UEdGraphPin* InternalNodeErrorMessage = InternalNode->FindPinChecked(errorMessage_Field);
-    Schema->TryCreateConnection(errorMessagePin(), InternalNodeErrorMessage);
-    MovePinLinksOrCopyDefaults(CompilerContext, errorMessagePin(), InternalNodeErrorMessage);
-
-    BreakAllNodeLinks();
 }
 
-
-bool UK2Node_bodvrd::CheckForErrors(FKismetCompilerContext& CompilerContext)
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::WildcardOp()
 {
-    bool bError = false;
-
-    if (false)
-    {
-        CompilerContext.MessageLog.Error(*LOCTEXT("Error", "Node @@ had an input error.").ToString(), this);
-        bError = true;
-    }
-
-    return bError;
+    static auto v = FK2OperationNOutput(FName("bodvrd"), FName("bodvrd_double_K2"), FK2Type::Wildcard());
+    return v;
 }
 
-
-bool UK2Node_bodvrd::IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::DoubleOp()
 {
-    if (OtherPin)
-    {
-        if ((MyPin->Direction == EGPD_Output) && (MyPin->GetName() == returnValuePin()->GetName()))
-        {
-            if (OtherPin->PinType.IsContainer() && OtherPin->PinType.PinCategory != UEdGraphSchema_K2::PC_Double)
-            {
-                OutReason = LOCTEXT("ArrayConnectionDisallowed", "Cannot connect with container pin unless type is Double.").ToString();
-                return true;
-            }
-
-            bool compatible = IsOutputCompatible(OtherPin);
-
-            if (!compatible)
-            {
-                OutReason = LOCTEXT("TypeDisallowed", "Must be type Double, SDistanceVector, or SMassConstant").ToString();
-                return true;
-            }
-        }
-    }
-
-    return Super::IsConnectionDisallowed(MyPin, OtherPin, OutReason);
+    static auto v = FK2OperationNOutput(FName("bodvrd Double"), FName("bodvrd_double_K2"), FK2Type::Double());
+    return v;
 }
 
-bool UK2Node_bodvrd::IsOutputCompatible(const UEdGraphPin* ThePin) const
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::ArrayDoubleOp()
 {
-    if (ThePin)
-    {
-        bool isRecognized = false;
-
-        isRecognized |= ThePin->PinType.PinCategory == UEdGraphSchema_K2::PC_Double;
-
-        if (!isRecognized && ThePin->PinType.PinCategory == UEdGraphSchema_K2::PC_Struct)
-        {
-            FName structName = ThePin->PinType.PinSubCategoryObject->GetFName();
-            isRecognized |= (structName == FName(TEXT("SDistanceVector")));
-            isRecognized |= (structName == FName(TEXT("SMassConstant")));
-            isRecognized |= (structName == FName(TEXT("SDimensionlessVector")));
-        }
-
-        if (isRecognized)
-        {
-            return true;
-        }
-    }
-
-    return false;
+    static auto v = FK2OperationNOutput(FName("bodvrd Array(Double)"), FName("bodvrd_array_K2"), FK2Type::DoubleArray());
+    return v;
 }
 
-UEdGraphPin* UK2Node_bodvrd::getReturnValuePin(UK2Node_CallFunction* other) const
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDimensionlessVectorOp()
 {
-    for (auto pin : other->Pins)
-    {
-        if (pin->Direction == EEdGraphPinDirection::EGPD_Output && pin->PinType.PinCategory != UEdGraphSchema_K2::PC_Exec)
-        {
-            return pin;
-        }
-    }
-
-    return nullptr;
+    static auto v = FK2OperationNOutput(FName("bodvrd SDimensionlessVector"), FName("bodvrd_vector_K2"), FK2Type::SDimensionlessVector());
+    return v;
 }
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SMassConstantOp()
+{
+    static auto v = FK2OperationNOutput(FName("bodvrd SMassConstant"), FName("bodvrd_double_K2"), FK2Conversion::DoubleToSMassConstant());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceOp()
+{
+    static auto v = FK2OperationNOutput(FName("bodvrd SDistance"), FName("bodvrd_double_K2"), FK2Conversion::DoubleToSDistance());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDegreesOp()
+{
+    static auto v = FK2OperationNOutput(FName("bodvrd SAngle(Degrees)"), FName("bodvrd_double_K2"), FK2Conversion::DegreesToSAngle());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceVectorOp()
+{
+
+    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorToSDistanceVector());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SVelocityVectorOp()
+{
+    static auto v = FK2OperationNOutput(FName("bodvrd SVelocityVector"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorToSVelocityVector());
+    return v;
+}
+
 
 
 #undef LOCTEXT_NAMESPACE

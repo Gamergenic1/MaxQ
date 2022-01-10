@@ -330,6 +330,7 @@ public:
         const FString& item = TEXT("GM")
     );
 
+
     /// <summary>Fetch from the kernel pool the double precision values of an item associated with a body</summary>
     /// <param name="bodynm">[in] Body name</param>
     /// <param name="item">[in] Item for which values are desired. ("RADII", "NUT_PREC_ANGLES", etc. )</param>
@@ -337,9 +338,11 @@ public:
     /// <param name="dim">[out] Number of values returned</param>
     /// <param name="values">[out] Values</param>
     /// <returns></returns>
+    // Bodvrd is obolete, in favor of K2Node_bodvrd
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -353,14 +356,16 @@ public:
         const FString& item = TEXT("RADII")
     );
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, 
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double vector3) Fetch from the kernel pool the double precision values of an item associated with a body"
             ))
+    // Bodvrd is obolete, in favor of K2Node_bodvrd
     static void bodvrd_vector(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -369,14 +374,16 @@ public:
         const FString& item = TEXT("RADII")
     );
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, 
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body"
             ))
+    // Bodvrd is obolete, in favor of K2Node_bodvrd
     static void bodvrd_mass(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
@@ -385,14 +392,16 @@ public:
         const FString& item = TEXT("GM")
     );
     
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, 
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
             ToolTip = "(double) Fetch from the kernel pool the double precision values of an item associated with a body"
             ))
+    // Bodvrd is obolete, in favor of K2Node_bodvrd
     static void bodvrd_distance_vector(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,

@@ -1,4 +1,4 @@
-// Copyright 2021 Gamergenic.  See full copyright notice in SpiceK2.h.
+// Copyright 2021 Gamergenic.  See full copyright notice in Spice.h.
 // Author: chucknoble@gamergenic.com | https://www.gamergenic.com
 // 
 // Implementation of:
