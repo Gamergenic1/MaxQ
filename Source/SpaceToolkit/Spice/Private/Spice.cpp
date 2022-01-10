@@ -3143,7 +3143,7 @@ int USpice::ev2lin(
     const double nearEarthThreshold = 225. * 60.;
 
     double angularRate = elems.N().AsDouble();
-    double orbitPeriod = 2. * twopi_c() / angularRate;
+    double orbitPeriod = twopi_c() / angularRate;
 
     // note ev2lin and dpspce have been superceded
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/FORTRAN/spicelib/evsgp4.html

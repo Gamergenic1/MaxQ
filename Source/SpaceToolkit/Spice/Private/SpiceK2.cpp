@@ -85,8 +85,6 @@ TArray<double> USpiceK2::bodvrd_array_K2(
 {
     UE_LOG(LogTemp, Warning, TEXT("bodvrd_array_K2: %s_%s"), *bodynm, *item);
 
-    UE_LOG(LogTemp, Warning, TEXT("bodvrd_vector_K2: %s_%s"), *bodynm, *item);
-
     SpiceDouble _result[256];
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
@@ -129,16 +127,57 @@ FSMassConstant USpiceK2::Conv_DoubleToSMassConstant_K2(double value)
     return FSMassConstant(value);
 }
 
-FSDistanceVector USpiceK2::Conv_FSDimensionlessVectorToSDistanceVector_K2(const FSDimensionlessVector& value)
+FSDistance USpiceK2::Conv_DoubleToSDistance_K2(double value)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Conv_FSDimensionlessVectorToSDistanceVector_K2"));
+    UE_LOG(LogTemp, Warning, TEXT("Conv_DoubleToSDistance_K2"));
+
+    return FSDistance(value);
+}
+
+FSAngle USpiceK2::Conv_DegreesToSAngle_K2(double value)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Conv_DegreesToSAngle_K2"));
+    return FSAngle(value * dpr_c());
+}
+
+FSAngle USpiceK2::Conv_RadiansToSAngle_K2(double value)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Conv_RadiansToSAngle_K2"));
+    return FSAngle(value);
+}
+
+
+FSAngularRate USpiceK2::Conv_DegreesPersecondToSAngularRate_K2(double value)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Conv_DegreesPersecondToSAngularRate_K2"));
+    return FSAngularRate(value * dpr_c());
+}
+
+
+FSAngularRate USpiceK2::Conv_RadiansPersecondToSAngularRate_K2(double value)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Conv_RadiansPersecondToSAngularRate_K2"));
+    return FSAngularRate(value);
+}
+
+
+FSAngularRate USpiceK2::Conv_MinutesPerTurnToSAngularRate_K2(double value)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Conv_MinutesPerTurnToSAngularRate_K2"));
+    return FSAngularRate(twopi_c() * 60. / value);
+}
+
+
+FSDistanceVector USpiceK2::Conv_SDimensionlessVectorToSDistanceVector_K2(const FSDimensionlessVector& value)
+{
+    UE_LOG(LogTemp, Warning, TEXT("Conv_SDimensionlessVectorToSDistanceVector_K2"));
 
     return FSDistanceVector(value);
 }
 
-FSVelocityVector USpiceK2::Conv_FSDimensionlessVectorToSVelocityVector_K2(const FSDimensionlessVector& value)
+FSVelocityVector USpiceK2::Conv_SDimensionlessVectorToSVelocityVector_K2(const FSDimensionlessVector& value)
 {
-    UE_LOG(LogTemp, Warning, TEXT("Conv_FSDimensionlessVectorToSVelocityVector_K2"));
+    UE_LOG(LogTemp, Warning, TEXT("Conv_SDimensionlessVectorToSVelocityVector_K2"));
 
     return FSVelocityVector(value);
 }
