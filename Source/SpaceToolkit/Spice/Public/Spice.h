@@ -266,9 +266,10 @@ public:
     /// <param name="dim">[out] Number of values returned</param>
     /// <param name="values">[out] Values</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -282,9 +283,10 @@ public:
         const FString& item = TEXT("RADII")
     );
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -298,9 +300,10 @@ public:
         const FString& item = TEXT("RADII")
     );
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -314,9 +317,10 @@ public:
         const FString& item = TEXT("GM")
     );
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -340,7 +344,7 @@ public:
     /// <returns></returns>
     // Bodvrd is obolete, in favor of K2Node_bodvrd
     UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Deprecated",
+        Category = "Spice|Api|Deprecated", BlueprintInternalUseOnly,
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -357,7 +361,7 @@ public:
     );
 
     UFUNCTION(BlueprintCallable, 
-        Category = "Spice|Api|Deprecated",
+        Category = "Spice|Api|Deprecated", BlueprintInternalUseOnly,
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
             ExpandEnumAsExecs = "ResultCode",
@@ -374,7 +378,7 @@ public:
         const FString& item = TEXT("RADII")
     );
 
-    UFUNCTION(BlueprintCallable, 
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "Spice|Api|Deprecated",
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
@@ -392,7 +396,7 @@ public:
         const FString& item = TEXT("GM")
     );
     
-    UFUNCTION(BlueprintCallable, 
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "Spice|Api|Deprecated",
         meta = (
             DeprecationMessage = "Bodvrd is obolete, use the K2Node_bodvrd (bodvrd) instead",
@@ -409,7 +413,6 @@ public:
         const FString& bodynm = TEXT("EARTH"),
         const FString& item = TEXT("RADII")
     );
-
     
     /// <summary>CK, Close file</summary>
     /// <param name="handle">[in] Handle of the CK file to be closed</param>
@@ -5883,10 +5886,6 @@ public:
             ToolTip = "Approximate current ephemeris time, based on clock of local and sketchy CRT conversion"
             ))
     static void et_now(FSEphemerisTime& Now);
-
-public:
-    static uint8 ErrorCheck(ES_ResultCode& ResultCode, FString& ErrorMessage);
-    static uint8 UnexpectedErrorCheck(bool bReset = true);
 };
 
 

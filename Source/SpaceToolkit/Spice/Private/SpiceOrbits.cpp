@@ -7,6 +7,8 @@
 
 #include "SpiceOrbits.h"
 #include "DrawDebugHelpers.h"
+#include "SpiceUtilities.h"
+using namespace SpiceUtilities;
 
 PRAGMA_PUSH_PLATFORM_DEFAULT_PACKING
 extern "C"
@@ -15,10 +17,6 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
-double pi = (double)pi_c();
-double twopi = (double)twopi_c();
-double deg2rad = twopi / 360.;
-float deg2radf = (float)deg2rad;
 
 USpiceOrbits::USpiceOrbits()
 {
@@ -50,7 +48,7 @@ void USpiceOrbits::EvaluateOrbit(
         pxform_c(TCHAR_TO_ANSI(*orbitReferenceFrame), TCHAR_TO_ANSI(*observerReferenceFrame), et.AsDouble(), m);
 
         // Clear any errors if necessary
-        USpice::ErrorCheck(ResultCode, ErrorMessage);
+        ErrorCheck(ResultCode, ErrorMessage);
 
         if (ResultCode == ES_ResultCode::Success)
         {
@@ -73,7 +71,7 @@ void USpiceOrbits::EvaluateOrbit(
     state = FSStateVector(_state);
 
     // Error Handling
-    USpice::ErrorCheck(ResultCode, ErrorMessage);
+    ErrorCheck(ResultCode, ErrorMessage);
 }
 
 void USpiceOrbits::RenderDebugConic(
@@ -144,7 +142,7 @@ void USpiceOrbits::ComputeConic(
         // Clear any errors if necessary
         ES_ResultCode ResultCode;
         FString ErrorMessage;
-        USpice::ErrorCheck(ResultCode, ErrorMessage);
+        ErrorCheck(ResultCode, ErrorMessage);
 
         if (ResultCode == ES_ResultCode::Success)
         {
@@ -227,7 +225,7 @@ void USpiceOrbits::RenderDebugEllipse(const UWorld* world, const FSEllipse& elli
 {
     for (float theta = 0.f; theta <= 360.f; )
     {
-        float rads = deg2radf * theta;
+        float rads = rpdf * theta;
         double _cos = cos(rads);
         double _sin = sin(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -237,7 +235,7 @@ void USpiceOrbits::RenderDebugEllipse(const UWorld* world, const FSEllipse& elli
 
         theta += 0.25f;
 
-        rads = deg2radf * theta;
+        rads = rpdf * theta;
         _cos = cos(rads);
         _sin = sin(rads);
 
@@ -259,7 +257,7 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
     for (float theta =-360.f; theta <= 360.f; )
     {
-        float rads = deg2radf * theta;
+        float rads = rpdf * theta;
         double _cosh = sign * cosh(rads);
         double _sinh = sign * sinh(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -271,7 +269,7 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
         // It's not efficient to recalculate since we just calculated it last iteration...
         // ...But this is a debug function anyways
-        rads = deg2radf * theta;
+        rads = rpdf * theta;
         _cosh = sign * cosh(rads);
         _sinh = sign * sinh(rads);
 
@@ -285,7 +283,7 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
     {
         float theta = -30000;
-        float rads = deg2radf * theta;
+        float rads = rpdf * theta;
         double _cosh = sign * cosh(rads);
         double _sinh = sign * sinh(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -297,7 +295,7 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
         // It's not efficient to recalculate since we just calculated it last iteration...
         // ...But this is a debug function anyways
-        rads = deg2radf * theta;
+        rads = rpdf * theta;
         _cosh = sign * cosh(rads);
         _sinh = sign * sinh(rads);
 
@@ -311,7 +309,7 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
     {
         float theta = 360.f;
-        float rads = deg2radf * theta;
+        float rads = rpdf * theta;
         double _cosh = sign * cosh(rads);
         double _sinh = sign * sinh(rads);
         FVector  p1 = localTransform.TransformPosition(
@@ -323,7 +321,7 @@ void USpiceOrbits::RenderDebugHyperbola(const UWorld* world, const FSEllipse& el
 
         // It's not efficient to recalculate since we just calculated it last iteration...
         // ...But this is a debug function anyways
-        rads = deg2radf * theta;
+        rads = rpdf * theta;
         _cosh = sign * cosh(rads);
         _sinh = sign * sinh(rads);
 
