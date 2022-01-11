@@ -39,7 +39,6 @@ UK2Node_bodvcd::UK2Node_bodvcd()
     op = WildcardOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
 
     CurrentOperation = op;
-    CurrentOperation.FullName = CurrentOperation.ShortName.ToString() + "\nReturn d.p. values from the kernel pool";
 }
 
 
@@ -126,7 +125,6 @@ void UK2Node_bodvcd::ReconstructNode()
     if (returnValuePin()->LinkedTo.Num() != 1)
     {
         CurrentOperation = WildcardOp();
-        CurrentOperation.FullName = CurrentOperation.ShortName.ToString() + "\nReturn d.p. values from the kernel pool";
     }
 }
 
@@ -145,6 +143,7 @@ void UK2Node_bodvcd::ExpandOperationNode(FKismetCompilerContext& CompilerContext
 SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::WildcardOp()
 {
     static auto v = FK2OperationNOutput(FName("bodvcd"), FName("bodvcd_double_K2"), FK2Type::Wildcard());
+    v.FullName = v.ShortName.ToString() + "\nReturn value from the kernel pool";
     return v;
 }
 

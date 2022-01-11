@@ -70,6 +70,28 @@ public:
         const FString& item
     );
 
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    static double gdpool_double_K2(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name
+    );
+
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    static FSDimensionlessVector gdpool_vector_K2(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name
+    );
+
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    static TArray<double> gdpool_array_K2(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        const FString& name,
+        int start = 0
+    );
+
     // output converters
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     static FSEphemerisTime Conv_DoubleToSEphemerisTime_K2(double value);

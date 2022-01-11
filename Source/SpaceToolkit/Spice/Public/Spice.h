@@ -269,7 +269,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "Spice|Api|Deprecated",
         meta = (
-            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodcrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -286,7 +286,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "Spice|Api|Deprecated",
         meta = (
-            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodvcd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -303,7 +303,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "Spice|Api|Deprecated",
         meta = (
-            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvcd (bodvcd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -320,7 +320,7 @@ public:
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "Spice|Api|Deprecated",
         meta = (
-            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodvrd (bodvrd) instead",
+            DeprecationMessage = "Bodvcd is obolete, use the K2Node_bodcrd (bodcrd) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS",
             ShortToolTip = "Return d.p. values from the kernel pool",
@@ -1519,9 +1519,10 @@ public:
     /// <param name="values">[out] Values associated with name</param>
     /// <param name="found">[out] True if variable is in pool</param>
     /// <returns></returns>
-    UFUNCTION(BlueprintCallable,
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
         Category = "Spice|Api|Kernel",
         meta = (
+            DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get d.p. values from the kernel pool",
@@ -1537,9 +1538,10 @@ public:
         int                 room = 7
     );
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SDistance values from the kernel pool",
@@ -1554,9 +1556,10 @@ public:
     );
 
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SDistance values from the kernel pool",
@@ -1571,9 +1574,10 @@ public:
     );
 
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SDistanceVector values from the kernel pool",
@@ -1588,9 +1592,10 @@ public:
     );
 
 
-    UFUNCTION(BlueprintCallable,
-        Category = "Spice|Api|Kernel",
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly,
+        Category = "Spice|Api|Deprecated",
         meta = (
+            DeprecationMessage = "gdpool is obolete, use the K2Node_gdpool (gdpool) instead",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONSTANTS, FILES",
             ShortToolTip = "Get SMassConstant values from the kernel pool",
