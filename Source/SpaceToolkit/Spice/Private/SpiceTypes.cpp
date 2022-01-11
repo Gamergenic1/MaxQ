@@ -7,6 +7,7 @@
 
 #include "SpiceTypes.h"
 #include "Spice.h"
+#include "SpiceUtilities.h"
 
 #include <iomanip>
 #include <sstream>
@@ -818,7 +819,7 @@ FSEphemerisTime USpiceTypes::Conv_StringToSEpheremisTime(const FString& time)
     str2et_c(TCHAR_TO_ANSI(*time), &et);
 
     // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
-    USpice::UnexpectedErrorCheck(false);
+    UnexpectedErrorCheck(false);
 
     return FSEphemerisTime(et);
 }
@@ -833,7 +834,7 @@ FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
     strcat_s(sz, " UTC");
 
     // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
-    USpice::UnexpectedErrorCheck(false);
+    UnexpectedErrorCheck(false);
 
     return FString(sz);
 }

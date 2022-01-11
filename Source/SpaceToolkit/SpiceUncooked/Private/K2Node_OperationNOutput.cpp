@@ -18,7 +18,7 @@
 
 using namespace ENodeTitleType;
 
-#define LOCTEXT_NAMESPACE "OperationNOutput_bodvrd"
+#define LOCTEXT_NAMESPACE "K2Node_OperationNOutput"
 
 
 UK2Node_OperationNOutput::UK2Node_OperationNOutput()
@@ -144,7 +144,7 @@ void UK2Node_OperationNOutput::ExpandNode(FKismetCompilerContext& CompilerContex
     else
     {
         // no output link, let's run the node anyways... and make it a double
-        OperationFunctionName = GET_FUNCTION_NAME_CHECKED(USpiceK2, bodvrd_double_K2);
+        OperationFunctionName = CurrentOperation.K2NodeName;
     }
 
 

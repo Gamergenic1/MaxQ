@@ -20,6 +20,7 @@ class SPICE_API USpiceK2 : public UBlueprintFunctionLibrary
 
 public:
 
+    // bodvrd support
     UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
     static double bodvrd_double_K2(
         ES_ResultCode& ResultCode,
@@ -44,6 +45,32 @@ public:
         const FString& item
     );
 
+    // bodvcd support
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    static double bodvcd_double_K2(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int bodyid,
+        const FString& item
+    );
+
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    static FSDimensionlessVector bodvcd_vector_K2(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int bodyid,
+        const FString& item
+    );
+
+    UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly, meta = (ExpandEnumAsExecs = "ResultCode"))
+    static TArray<double> bodvcd_array_K2(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        int bodyid,
+        const FString& item
+    );
+
+    // output converters
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     static FSEphemerisTime Conv_DoubleToSEphemerisTime_K2(double value);
 
