@@ -16,6 +16,8 @@ extern "C"
 }
 PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
+#define StackAlloc _alloca
+
 
 double USpiceK2::bodvrd_double_K2(
     ES_ResultCode& ResultCode,
@@ -170,6 +172,114 @@ TArray<double> USpiceK2::bodvcd_array_K2(
     return ReturnValue;
 }
 
+TArray<double> USpiceK2::gdpool_array_K2(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name,
+    int start
+)
+{
+    // Inputs
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt        _start = 0;
+    SpiceInt        _room = 200;
+    // Outputs
+    SpiceInt        _n = 0;
+    size_t buffer_size = _room * sizeof(SpiceDouble);
+    SpiceDouble* _values = (SpiceDouble*)StackAlloc(buffer_size);
+    SpiceBoolean    _found = SPICEFALSE;
+
+    // Invocation
+    memset(_values, 0, buffer_size);
+    gdpool_c(_name, _start, _room, &_n, _values, &_found);
+
+    // Return values
+    TArray<double> value = TArray<double>();
+
+    if (_found == SPICETRUE)
+    {
+        value.Init(0, _n);
+        
+        check(sizeof(SpiceDouble) == sizeof(double));
+        memcpy(value.GetData(), _values, _n * sizeof(double));
+    }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+
+    if (_found != SPICETRUE)
+    {
+        ResultCode = ES_ResultCode::Error;
+    }
+
+    return value;
+}
+
+FSDimensionlessVector USpiceK2::gdpool_vector_K2(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name
+)
+{
+    // Inputs
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt        _start = 0;
+    SpiceInt        _room = 3;
+    // Outputs
+    SpiceInt        _n = 0;
+    SpiceDouble     _value[3];  ZeroOut(_value);
+    SpiceBoolean    _found = SPICEFALSE;
+
+    // Invocation
+    gdpool_c(_name, _start, _room, &_n, _value, &_found);
+
+    // Return values
+    FSDimensionlessVector value = FSDimensionlessVector(_value);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+
+    if (_found != SPICETRUE)
+    {
+        ResultCode = ES_ResultCode::Error;
+    }
+
+    return value;
+}
+
+
+double USpiceK2::gdpool_double_K2(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    const FString& name
+)
+{
+    // Inputs
+    ConstSpiceChar* _name = TCHAR_TO_ANSI(*name);
+    SpiceInt        _start = 0;
+    SpiceInt        _room = 1;
+    // Outputs
+    SpiceInt        _n = 0;
+    SpiceDouble     _value = 0;
+    SpiceBoolean    _found = SPICEFALSE;
+
+    // Invocation
+    gdpool_c(_name, _start, _room, &_n, &_value, &_found);
+
+    // Return values
+    double value = _value;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+
+    if (_found != SPICETRUE)
+    {
+        ResultCode = ES_ResultCode::Error;
+    }
+
+    return value;
+}
+
 
 FSEphemerisTime USpiceK2::Conv_DoubleToSEphemerisTime_K2(double value)
 {
@@ -230,3 +340,4 @@ FSVelocityVector USpiceK2::Conv_SDimensionlessVectorToSVelocityVector_K2(const F
     return FSVelocityVector(value);
 }
 
+#undef StackAlloc
