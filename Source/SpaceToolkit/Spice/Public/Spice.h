@@ -2443,7 +2443,7 @@ public:
         meta = (
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "COORDINATES, DSK, GEOMETRY, SURFACE",
-            AutoCreateRefTerm = "shapeSurfaces",
+            AutoCreateRefTerm = "shapeSurfaces, et",
             ShortToolTip = "Latitudinal grid to surface points",
             ToolTip = "Map array of planetocentric longitude/latitude coordinate pairs to surface points on a specified target body. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
             ))
@@ -4565,7 +4565,7 @@ public:
         Category = "Spice|Api|DSK",
         meta = (
             ExpandEnumAsExecs = "ResultCode",
-            AutoCreateRefTerm = "shapeSurfaces",
+            AutoCreateRefTerm = "shapeSurfaces, et",
             Keywords = "COORDINATES, DSK, GEOMETRY, SURFACE",
             ShortToolTip = "Map surface points to outward normal vectors",
             ToolTip = "Map array of surface points on a specified target body to the corresponding unit length outward surface normal vectors. The surface of the target body may be represented by a triaxial ellipsoid or by topographic data provided by DSK files."
