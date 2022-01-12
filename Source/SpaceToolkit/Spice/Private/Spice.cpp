@@ -1025,6 +1025,10 @@ void USpice::ckcov(
 
     bool haveData = false;
     SPICEDOUBLE_CELL(_cover_small, smallCellSize);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cover_small);
+
     _cover = &_cover_small;
 
     if (merge_to.Num() <= smallCellSize / 2)
@@ -1052,6 +1056,8 @@ void USpice::ckcov(
             reset_c();
 
             SPICEDOUBLE_CELL(_cover_large, largeCellSize);
+            scard_c(0, &_cover_large);
+
             _cover = &_cover_large;
 
             if (merge_to.Num() > 0)
@@ -1238,6 +1244,8 @@ void USpice::ckobj(
     const int MAXOBJ = 1000;
 
     SPICEINT_CELL(idscell, MAXOBJ);
+    // Spice cells are static, so reinitialize.
+    scard_c(0, &idscell);
 
     // Inputs
     ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
@@ -2208,6 +2216,8 @@ void USpice::dskobj(
     ConstSpiceChar* _dskfnm = TCHAR_TO_ANSI(*toPath(fileRelativePath));
     // Output
     SPICEINT_CELL(_bodids, MAXID);
+    // Spice cells are static, so reinitialize.
+    scard_c(0, &_bodids);
 
     // Invocation
     dskobj_c(_dskfnm, &_bodids);
@@ -2238,6 +2248,8 @@ void USpice::dsksrf(
     SpiceInt        _bodyid = (SpiceInt)bodyid;
     // Output
     SPICEINT_CELL(_srfids, MAXID);
+    // Spice cells are static, so reinitialize.
+    scard_c(0, &_srfids);
 
     // Invocation
     dsksrf_c(_dskfnm, _bodyid, &_srfids);
@@ -3637,6 +3649,10 @@ void USpice::gfdist(
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
+
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         FSEphemerisTime et0 = (*It).start;
@@ -3655,6 +3671,7 @@ void USpice::gfdist(
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfdist_c(
@@ -3736,6 +3753,10 @@ void USpice::gfilum(
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
+
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         FSEphemerisTime et0 = (*It).start;
@@ -3756,6 +3777,7 @@ void USpice::gfilum(
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     gfilum_c(
         _method,
@@ -3835,6 +3857,10 @@ void USpice::gfoclt(
     SpiceDouble     _step = step.AsDouble();
     
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
+
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
@@ -3860,6 +3886,7 @@ void USpice::gfoclt(
 
     // Outputs
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfoclt_c(
@@ -3934,6 +3961,9 @@ void USpice::gfpa(
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         FSEphemerisTime et0 = (*It).start;
@@ -3953,6 +3983,7 @@ void USpice::gfpa(
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     gfpa_c(
         _target,
@@ -4031,6 +4062,9 @@ void USpice::gfposc(
 
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
@@ -4038,6 +4072,7 @@ void USpice::gfposc(
 
     // Outputs
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfposc_c(
@@ -4094,6 +4129,9 @@ void USpice::gfrfov(
     SpiceDouble     _step   = step.AsDouble();
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
@@ -4101,6 +4139,7 @@ void USpice::gfrfov(
 
     // Outputs
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfrfov_c(
@@ -4170,6 +4209,10 @@ void USpice::gfrr(
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
+
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         FSEphemerisTime et0 = (*It).start;
@@ -4189,6 +4232,7 @@ void USpice::gfrr(
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfrr_c(
@@ -4283,6 +4327,10 @@ void USpice::gfsep(
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
+
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         FSEphemerisTime et0 = (*It).start;
@@ -4302,6 +4350,7 @@ void USpice::gfsep(
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfsep_c(
@@ -4388,6 +4437,10 @@ void USpice::gfsntc(
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
+
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         FSEphemerisTime et0 = (*It).start;
@@ -4407,6 +4460,7 @@ void USpice::gfsntc(
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfsntc_c(
@@ -4473,6 +4527,9 @@ void USpice::gftfov(
     SpiceDouble     _step = step.AsDouble();
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
@@ -4480,6 +4537,7 @@ void USpice::gftfov(
 
     // Outputs
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gftfov_c(
@@ -4561,6 +4619,10 @@ void USpice::gfsubc(
     SpiceInt        _nintvls = (SpiceInt)nintvls;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cnfine);
+
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
         wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
@@ -4568,6 +4630,7 @@ void USpice::gfsubc(
 
     // Outputs
     SPICEDOUBLE_CELL(_result, MAXWIN);
+    scard_c(0, &_result);
 
     // Invocation
     gfsubc_c(
@@ -6654,6 +6717,8 @@ void USpice::pckfrm(
     const int MAXOBJ = 1000;
 
     SPICEINT_CELL(idscell, MAXOBJ);
+    // Spice cells are static, so reinitialize.
+    scard_c(0, &idscell);
 
     // Inputs
     auto _pck = TCHAR_TO_ANSI(*toPath(pckRelativePath));
@@ -6697,6 +6762,10 @@ void checkcov(
 
     SpiceBoolean haveData = false;
     SPICEDOUBLE_CELL(_cover_small, smallCellSize);
+    // Spice Cells are static.  They must reinitialized on every use or they
+    // may have data sticking around.
+    scard_c(0, &_cover_small);
+
     _cover = &_cover_small;
 
     if (merge_to.Num() <= smallCellSize / 2)
@@ -6725,6 +6794,8 @@ void checkcov(
             reset_c();
 
             SPICEDOUBLE_CELL(_cover_large, largeCellSize);
+            scard_c(0, &_cover_large);
+
             _cover = &_cover_large;
 
             if (merge_to.Num() > 0)
@@ -9301,6 +9372,8 @@ void USpice::spkobj(
     const int MAXOBJ = 1000;
 
     SPICEINT_CELL(idscell, MAXOBJ);
+    // Spice cells are static, so reinitialize.
+    scard_c(0, &idscell);
 
     // Inputs
     ConstSpiceChar* _fname = TCHAR_TO_ANSI(*toPath(relativePath));
