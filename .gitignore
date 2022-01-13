@@ -72,4 +72,12 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Project specific
+!Source/SpaceToolkit/CSpice_Library/lib/win64/cspice.lib
+
+# Branch specific
 Content/Spice/Simple/*
+Content/Spice/Common/*
+Content/Simple/*
+Content/Common/*
