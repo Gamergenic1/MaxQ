@@ -78,3 +78,4 @@ Content/Spice/Simple/phobos512.bds
 Content/Spice/Simple/pck00010.tpc
 Content/Spice/Common/Kernels/phobos512.bds
 Content/Spice/Simple/phobos/phobos512.bds
+!Source/SpaceToolkit/CSpice_Library/lib/win64/cspice.lib
