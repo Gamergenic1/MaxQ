@@ -876,6 +876,26 @@ void USpice::bodvrd_vector(
     }
 }
 
+/*
+Exceptions
+   Error free.
+
+   1)  If ndim < 1, the value of the function is -1.
+*/
+int USpice::bsrchd(
+    double value,
+    const TArray<double>& valueArray
+)
+{
+    check(sizeof(double) == sizeof(ConstSpiceDouble));
+
+    return (int) bsrchd_c(
+        (SpiceDouble) value,
+        (SpiceInt)valueArray.Num(),
+        (ConstSpiceDouble*) valueArray.GetData()
+    );
+}
+
 
 /*
 1)  If vec1 and vec2 are linearly dependent, ellips will be
@@ -8445,6 +8465,58 @@ void USpice::sctiks(
 
 
 /*
+Error free.
+
+   1)  If ndim < 2, this routine does not modify the array.
+*/
+void USpice::shelld(
+    TArray<double>& OutDoubleArray
+)
+{
+    // You know what they say about assumptions.
+    check(sizeof(double) == sizeof(SpiceDouble));
+    
+    SpiceInt       ndim = OutDoubleArray.Num();
+    SpiceDouble* array = OutDoubleArray.GetData();
+
+    shelld_c(ndim, array);
+}
+
+void USpice::shelld_ByIndex(
+    const TArray<double>& DoubleArray,
+    TArray<int>& Order
+)
+{
+    check(sizeof(double) == sizeof(SpiceDouble));
+
+    SpiceInt ndim = DoubleArray.Num();
+    
+    // And a sorted clone...
+    SpiceDouble* sortedArray = (SpiceDouble*)StackAlloc(ndim * sizeof(SpiceDouble));
+    memcpy(sortedArray, DoubleArray.GetData(), ndim * sizeof(SpiceDouble));
+
+    shelld_c(ndim, sortedArray);
+
+    Order.Init(0, ndim);
+    for (int i = 0; i < ndim; ++i)
+    {
+        // Search the clone for the index...
+        // After careful consideration... We're not going to handle dupes.
+        // It may return any one of the dupes.   If the caller is worried about
+        // it then they can handle it.
+        int indexInSortedArray = bsrchd_c(DoubleArray[i], ndim, sortedArray);
+
+        // Just in case there's some compiler flag or CPU that would allow
+        // a reduced precision.  No math is involved, only reads/writes so I am
+        // skeptical that this could ever be an issue.  But not enough to assume.
+        check(indexInSortedArray >= 0);
+
+        Order[indexInSortedArray] = i;
+    }
+}
+
+
+/*
 Exceptions
 
 
@@ -8519,7 +8591,6 @@ Exceptions
        in this case.
 
 */
-
 void USpice::sincpt(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,

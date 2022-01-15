@@ -1601,13 +1601,14 @@ FString USpiceTypes::Conv_SCylindricalVectorRatesToString(const FSCylindricalVec
 FString USpiceTypes::Conv_SConicElementsToString(const FSConicElements& value)
 {
     return FString::Printf(
-        TEXT("(%s; %s, %s, %s; %s %s; %s)"),
+        TEXT("(q %s km; e %s; i %s, node %s, peri %s; M %s Epoch %s; GM %s)"),
         *FormatDouble(value.PerifocalDistance.km),
-        *FormatDouble(value.Inclination.degrees),
-        *FormatDouble(value.LongitudeOfAscendingNode.degrees),
-        *FormatDouble(value.ArgumentOfPeriapse.degrees),
-        *FormatDouble(value.MeanAnomalyAtEpoch.degrees),
-        *FormatDouble(value.Epoch.seconds),
+        *FormatDouble(value.Eccentricity),
+        *FormatAngle(value.Inclination),
+        *FormatAngle(value.LongitudeOfAscendingNode),
+        *FormatAngle(value.ArgumentOfPeriapse),
+        *FormatAngle(value.MeanAnomalyAtEpoch),
+        *Conv_SEpheremisTimeToString(value.Epoch.seconds),
         *FormatDouble(value.GravitationalParameter.GM)
         );
 }

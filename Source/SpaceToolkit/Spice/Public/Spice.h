@@ -413,7 +413,19 @@ public:
         const FString& bodynm = TEXT("EARTH"),
         const FString& item = TEXT("RADII")
     );
-    
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Search",
+        meta = (
+            Keywords = "ARRAY, SEARCH",
+            ShortToolTip = "Binary search for a double precision value",
+            ToolTip = "Do a binary search for a given value within a double precision array, assumed to be in nondecreasing order.Return the index of the matching array entry, or -1 if the key value is not found"
+            ))
+    static int bsrchd(
+        double value,
+        const TArray<double>& valueArray
+    );
+
     /// <summary>CK, Close file</summary>
     /// <param name="handle">[in] Handle of the CK file to be closed</param>
     /// <returns></returns>
@@ -3920,6 +3932,30 @@ public:
         const FString& clkstr,
         double& ticks
     );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Sort",
+        meta = (
+            Keywords = "ARRAY, SORT",
+            ShortToolTip = "Shell sort a double precision array",
+            ToolTip = "Sort a double precision array using the Shell Sort algorithm.  Sorts DoubleArray in place (passed by reference, modified)"
+            ))
+    static void shelld(
+        UPARAM(ref) TArray<double>& DoubleArray
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Sort",
+        meta = (
+            Keywords = "ARRAY, SORT",
+            ShortToolTip = "Shell sort a double precision array",
+            ToolTip = "Sort a double precision array using the Shell Sort algorithm, returns array of int indices, does not modify original Array.  If the array has duplicates the results at those indices may be the indices of any of the matches or 0."
+            ))
+    static void shelld_ByIndex(
+        const TArray<double>& DoubleArray,
+        TArray<int>& Order
+    );
+
 
     /// <summary>Convert spacecraft clock string to ticks</summary>
     /// <returns></returns>
