@@ -64,6 +64,9 @@ private:
     static FK2OperationNOutput SDegreesOp();
     static FK2OperationNOutput SDistanceVectorOp();
     static FK2OperationNOutput SVelocityVectorOp();
+    static FK2OperationNOutput SDistanceX();
+    static FK2OperationNOutput SDistanceY();
+    static FK2OperationNOutput SDistanceZ();
 };
 
 

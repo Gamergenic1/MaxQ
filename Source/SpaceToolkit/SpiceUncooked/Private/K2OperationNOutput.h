@@ -21,6 +21,7 @@ struct FK2OperationNOutput
     UPROPERTY() FString FullName;
     UPROPERTY() FName K2NodeName;
     UPROPERTY() FK2Type Intermediate;
+    UPROPERTY() EK2_ComponentSelector Selector;
     UPROPERTY() FK2Type Final;
     UPROPERTY() FK2Conversion Conversion;
 
@@ -32,6 +33,7 @@ struct FK2OperationNOutput
         Intermediate = FK2Type();
         Final = FK2Type();
         Conversion = FK2Conversion();
+        Selector = EK2_ComponentSelector::All;
     }
 
     FK2OperationNOutput(FName _name, FName _k2NodeName, const FK2Type& _final)
@@ -42,6 +44,7 @@ struct FK2OperationNOutput
         Intermediate = _final;
         Final = _final;
         Conversion = FK2Conversion();
+        Selector = EK2_ComponentSelector::All;
     }
 
     FK2OperationNOutput(FName _name, FName _k2NodeName, const FK2Conversion& _conversion)
@@ -50,6 +53,7 @@ struct FK2OperationNOutput
         FullName = _name.ToString();;
         K2NodeName = _k2NodeName;
         Intermediate = _conversion.In;
+        Selector = _conversion.Selector;
         Final = _conversion.Out;
         Conversion = _conversion;
     }
@@ -62,6 +66,7 @@ struct FK2OperationNOutput
         Intermediate = FK2Type(other.Intermediate);
         Final = FK2Type(other.Final);
         Conversion = FK2Conversion(other.Conversion);
+        Selector = other.Selector;
     }
 
     FK2OperationNOutput& FK2OperationNOutput::operator= (const FK2OperationNOutput& other)
@@ -77,6 +82,7 @@ struct FK2OperationNOutput
         Intermediate = other.Intermediate;
         Final = other.Final;
         Conversion = other.Conversion;
+        Selector = other.Selector;
 
         // return the existing object so we can chain this operator
         return *this;

@@ -29,9 +29,11 @@ private:
     const FName value_Field = FName(TEXT("Value"));
     const FName success_Field = FName(TEXT("Success"));
     const FName error_Field = FName(TEXT("Error"));
+    const FName selector_Field = FName(TEXT("Select"));
     const FName errorMessage_Field = FName(TEXT("ErrorMessage"));
 
     bool CheckForErrors(FKismetCompilerContext& CompilerContext);
+    bool MatchMe(FK2OperationNOutput& operation, FEdGraphPinType CompilerContext, EK2_ComponentSelector selector) const;
 
 protected:
     TMap<FName, FK2OperationNOutput> OperationsMap;
@@ -49,10 +51,11 @@ public:
     virtual void AllocateDefaultPins();
     virtual void ExpandNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph);
     bool IsConnectionDisallowed(const UEdGraphPin* MyPin, const UEdGraphPin* OtherPin, FString& OutReason) const;
-    bool IsOutputCompatible(const UEdGraphPin* ThePin) const;
+    bool IsOutputCompatible(const UEdGraphPin* ThePin, EK2_ComponentSelector selector) const;
     void NotifyPinConnectionListChanged(UEdGraphPin* Pin);
     void PreloadRequiredAssets();
 
+    UEdGraphPin* selectorPin() const { return FindPin(selector_Field); }
     UEdGraphPin* successPin() const { return FindPinChecked(success_Field); }
     UEdGraphPin* errorPin() const { return FindPinChecked(error_Field); }
     UEdGraphPin* errorMessagePin() const { return FindPinChecked(errorMessage_Field); }
@@ -61,6 +64,8 @@ public:
 
 protected:
     virtual void ExpandOperationNode(FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph, UK2Node* operationNode) {}
+
+    EK2_ComponentSelector selectorPinValue() const;
 };
 
 

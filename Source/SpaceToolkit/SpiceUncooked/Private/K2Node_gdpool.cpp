@@ -36,6 +36,9 @@ UK2Node_gdpool::UK2Node_gdpool()
     op = SDegreesOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SDistanceVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SVelocityVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceX(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceY(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceZ(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = WildcardOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
 
     CurrentOperation = op;
@@ -206,6 +209,25 @@ SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SVelocityVectorOp()
     static auto v = FK2OperationNOutput(FName("gdpool SVelocityVector"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorToSVelocityVector());
     return v;
 }
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceX()
+{
+    static auto v = FK2OperationNOutput(FName("gdpool SDistanceVector.X"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorXToSDistance());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceY()
+{
+    static auto v = FK2OperationNOutput(FName("gdpool SDistanceVector.Y"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorYToSDistance());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_gdpool::SDistanceZ()
+{
+    static auto v = FK2OperationNOutput(FName("gdpool SDistanceVector.Z"), FName("gdpool_vector_K2"), FK2Conversion::SDimensionlessVectorZToSDistance());
+    return v;
+}
+
 
 
 

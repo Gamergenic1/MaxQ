@@ -38,3 +38,19 @@ SPICEUNCOOKED_API FK2Conversion FK2Conversion::SDimensionlessVectorToSVelocityVe
     FK2Conversion sdimensionlessvectortovelocityvector = FK2Conversion(FName("Conv_SDimensionlessVectorToSVelocityVector_K2"), FK2Type::SDimensionlessVector(), FK2Type::SVelocityVector());
     return sdimensionlessvectortovelocityvector;
 }
+
+SPICEUNCOOKED_API FK2Conversion FK2Conversion::SDimensionlessVectorXToSDistance() {
+    FK2Conversion sdimensionlessvectorxtodistance = FK2Conversion(FName("Conv_SDimensionlessVector_X_ToSDistance_K2"), FK2Type::SDimensionlessVector(), FK2Type::SDistance(), EK2_ComponentSelector::X);
+    return sdimensionlessvectorxtodistance;
+}
+
+SPICEUNCOOKED_API FK2Conversion FK2Conversion::SDimensionlessVectorYToSDistance() {
+    FK2Conversion sdimensionlessvectorytodistance = FK2Conversion(FName("Conv_SDimensionlessVector_Y_ToSDistance_K2"), FK2Type::SDimensionlessVector(), FK2Type::SDistance(), EK2_ComponentSelector::Y);
+    return sdimensionlessvectorytodistance;
+}
+
+SPICEUNCOOKED_API FK2Conversion FK2Conversion::SDimensionlessVectorZToSDistance() {
+    FK2Conversion sdimensionlessvectorztodistance = FK2Conversion(FName("Conv_SDimensionlessVector_Z_ToSDistance_K2"), FK2Type::SDimensionlessVector(), FK2Type::SDistance(), EK2_ComponentSelector::Z);
+    return sdimensionlessvectorztodistance;
+}
+

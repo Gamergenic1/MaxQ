@@ -34,6 +34,8 @@ void UK2Node_OperationNOutput::AllocateDefaultPins()
 {
     Super::AllocateDefaultPins();
 
+    static UEnum* ComponentSelectorEnum = FindObjectChecked<UEnum>(ANY_PACKAGE, TEXT("EK2_ComponentSelector"), /*ExactClass*/true);
+
     const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
 
     // Exec pins - In
@@ -55,6 +57,15 @@ void UK2Node_OperationNOutput::AllocateDefaultPins()
     // Error - return
     UEdGraphPin* errorMessagePin = CreatePin(EGPD_Output, UEdGraphSchema_K2::PC_String, errorMessage_Field);
     errorMessagePin->PinToolTip = TEXT("An error message, if the action fails");
+
+
+    auto selector = CreatePin(EGPD_Input, UEdGraphSchema_K2::PC_Byte, ComponentSelectorEnum, selector_Field);
+    selector->PinToolTip = TEXT("Selects all, or X/Y/Z subcomponents");
+    selector->PinType.PinSubCategoryObject = ComponentSelectorEnum;
+    selector->DefaultValue = ComponentSelectorEnum->GetNameStringByValue((int64)EK2_ComponentSelector::All);
+    selector->DefaultTextValue = FText::FromName(ComponentSelectorEnum->GetNameByValue((int64)EK2_ComponentSelector::All));
+    selector->bAdvancedView = true;
+    AdvancedPinDisplay = ENodeAdvancedPins::Hidden;
 }
 
 void UK2Node_OperationNOutput::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
@@ -75,20 +86,15 @@ void UK2Node_OperationNOutput::NotifyPinConnectionListChanged(UEdGraphPin* Pin)
         {
             const FEdGraphPinType& ConnectedPinType = Pin->LinkedTo[0]->PinType;
 
-            for (auto kvp : OperationsMap)
+            if(MatchMe(CurrentOperation, ConnectedPinType, selectorPinValue()))
             {
-                if (kvp.Value.Final.Matches(ConnectedPinType))
-                {
-                    CurrentOperation = kvp.Value;
+                ReturnValuePinType.PinCategory = CurrentOperation.Final.Category;
+                ReturnValuePinType.PinSubCategoryObject = CurrentOperation.Final.SubCategoryObject;
+//                  Pin->PinFriendlyName = FText::FromName(CurrentOperation.Final.TypeName);
 
-                    ReturnValuePinType.PinCategory = CurrentOperation.Final.Category;
-                    ReturnValuePinType.PinSubCategoryObject = CurrentOperation.Final.SubCategoryObject;
-  //                  Pin->PinFriendlyName = FText::FromName(CurrentOperation.Final.TypeName);
-
-                    const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
-                    K2Schema->ForceVisualizationCacheClear();
-                    return;
-                }
+                const UEdGraphSchema_K2* K2Schema = GetDefault<UEdGraphSchema_K2>();
+                K2Schema->ForceVisualizationCacheClear();
+                return;
             }
         }
     }
@@ -120,18 +126,13 @@ void UK2Node_OperationNOutput::ExpandNode(FKismetCompilerContext& CompilerContex
 
         auto pinType = link->PinType;
 
-        bool found = true;
-        for (auto kvp : OperationsMap)
+        bool found = MatchMe(CurrentOperation, pinType, selectorPinValue());
+        if (found)
         {
-            if (kvp.Value.Final.Matches(pinType))
-            {
-                CurrentOperation = kvp.Value;
-                link->PinType.PinCategory = CurrentOperation.Final.Category;
-                link->PinType.PinSubCategoryObject = CurrentOperation.Final.SubCategoryObject;
-            }
+            link->PinType.PinCategory = CurrentOperation.Final.Category;
+            link->PinType.PinSubCategoryObject = CurrentOperation.Final.SubCategoryObject;
         }
-
-        if (!found)
+        else
         {
             CompilerContext.MessageLog.Error(*LOCTEXT("Error", "Node @@ return value link is not supported.").ToString(), this);
             BreakAllNodeLinks();
@@ -242,7 +243,7 @@ bool UK2Node_OperationNOutput::IsConnectionDisallowed(const UEdGraphPin* MyPin, 
     {
         if ((MyPin->Direction == EGPD_Output) && (MyPin->GetName() == returnValuePin()->GetName()))
         {
-            bool compatible = IsOutputCompatible(OtherPin);
+            bool compatible = IsOutputCompatible(OtherPin, selectorPinValue());
 
             if (!compatible)
             {
@@ -255,26 +256,50 @@ bool UK2Node_OperationNOutput::IsConnectionDisallowed(const UEdGraphPin* MyPin, 
     return Super::IsConnectionDisallowed(MyPin, OtherPin, OutReason);
 }
 
-bool UK2Node_OperationNOutput::IsOutputCompatible(const UEdGraphPin* ThePin) const
+bool UK2Node_OperationNOutput::IsOutputCompatible(const UEdGraphPin* ThePin, EK2_ComponentSelector selector) const
 {
     if (ThePin)
     {
         // Loop through our operations and try to find a match
         auto pinType = ThePin->PinType;
 
-        for (auto kvp : OperationsMap)
+        FK2OperationNOutput dummyOperation;
+        return MatchMe(dummyOperation, pinType, selector);
+    }
+
+    return false;
+}
+
+bool UK2Node_OperationNOutput::MatchMe(FK2OperationNOutput& operation, FEdGraphPinType pinType, EK2_ComponentSelector selector) const
+{
+    for (auto kvp : OperationsMap)
+    {
+        if (kvp.Value.Final.Matches(pinType) && kvp.Value.Selector == selector)
         {
-            if (kvp.Value.Final.Matches(pinType))
-                return true;
+            operation = kvp.Value;
+            return true;
         }
     }
 
     return false;
 }
 
+
 UEdGraphPin* UK2Node_OperationNOutput::getReturnValuePin(UK2Node_CallFunction* other) const
 {
     return other->GetReturnValuePin();
 }
+
+EK2_ComponentSelector UK2Node_OperationNOutput::selectorPinValue() const
+{
+    static UEnum* ComponentSelectorEnum = FindObjectChecked<UEnum>(ANY_PACKAGE, TEXT("EK2_ComponentSelector"), /*ExactClass*/true);
+    EK2_ComponentSelector selector = EK2_ComponentSelector::All;
+    if (selectorPin() != nullptr)
+    {
+        selector = (EK2_ComponentSelector)ComponentSelectorEnum->GetValueByNameString(selectorPin()->DefaultValue);
+    }
+    return selector;
+}
+
 
 #undef LOCTEXT_NAMESPACE
