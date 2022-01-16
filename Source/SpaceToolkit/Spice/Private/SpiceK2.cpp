@@ -340,4 +340,19 @@ FSVelocityVector USpiceK2::Conv_SDimensionlessVectorToSVelocityVector_K2(const F
     return FSVelocityVector(value);
 }
 
+FSDistance USpiceK2::Conv_SDimensionlessVector_X_ToSDistance_K2(const FSDimensionlessVector& value)
+{
+    return value.x;
+}
+
+FSDistance USpiceK2::Conv_SDimensionlessVector_Y_ToSDistance_K2(const FSDimensionlessVector& value)
+{
+    return value.y;
+}
+
+FSDistance USpiceK2::Conv_SDimensionlessVector_Z_ToSDistance_K2(const FSDimensionlessVector& value)
+{
+    return value.z;
+}
+
 #undef StackAlloc

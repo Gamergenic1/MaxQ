@@ -36,6 +36,9 @@ UK2Node_bodvrd::UK2Node_bodvrd()
     op = SDegreesOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SDistanceVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SVelocityVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceX(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceY(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceZ(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = WildcardOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
 
     CurrentOperation = op;
@@ -193,6 +196,24 @@ SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceVectorOp()
 SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SVelocityVectorOp()
 {
     static auto v = FK2OperationNOutput(FName("bodvrd SVelocityVector"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorToSVelocityVector());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceX()
+{
+    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector.X"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorXToSDistance());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceY()
+{
+    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector.Y"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorYToSDistance());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvrd::SDistanceZ()
+{
+    static auto v = FK2OperationNOutput(FName("bodvrd SDistanceVector.Z"), FName("bodvrd_vector_K2"), FK2Conversion::SDimensionlessVectorZToSDistance());
     return v;
 }
 

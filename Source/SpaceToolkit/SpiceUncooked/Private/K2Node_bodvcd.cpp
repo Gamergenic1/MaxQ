@@ -36,6 +36,9 @@ UK2Node_bodvcd::UK2Node_bodvcd()
     op = SDegreesOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SDistanceVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = SVelocityVectorOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceX(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceY(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
+    op = SDistanceZ(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
     op = WildcardOp(); op.FullName = op.ShortName.ToString() + "\nReturn value from the kernel pool"; OperationsMap.Emplace(op.ShortName, op);
 
     CurrentOperation = op;
@@ -196,6 +199,23 @@ SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::SVelocityVectorOp()
     return v;
 }
 
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::SDistanceX()
+{
+    static auto v = FK2OperationNOutput(FName("bodvcd SDistanceVector.X"), FName("bodvcd_vector_K2"), FK2Conversion::SDimensionlessVectorXToSDistance());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::SDistanceY()
+{
+    static auto v = FK2OperationNOutput(FName("bodvcd SDistanceVector.Y"), FName("bodvcd_vector_K2"), FK2Conversion::SDimensionlessVectorYToSDistance());
+    return v;
+}
+
+SPICEUNCOOKED_API FK2OperationNOutput UK2Node_bodvcd::SDistanceZ()
+{
+    static auto v = FK2OperationNOutput(FName("bodvcd SDistanceVector.Z"), FName("bodvcd_vector_K2"), FK2Conversion::SDimensionlessVectorZToSDistance());
+    return v;
+}
 
 
 #undef LOCTEXT_NAMESPACE

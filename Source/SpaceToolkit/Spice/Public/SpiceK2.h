@@ -125,6 +125,13 @@ public:
 
     UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
     static FSVelocityVector Conv_SDimensionlessVectorToSVelocityVector_K2(const FSDimensionlessVector& value);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    static FSDistance Conv_SDimensionlessVector_X_ToSDistance_K2(const FSDimensionlessVector& value);
+    
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    static FSDistance Conv_SDimensionlessVector_Y_ToSDistance_K2(const FSDimensionlessVector& value);
+
+    UFUNCTION(BlueprintPure, BlueprintInternalUseOnly)
+    static FSDistance Conv_SDimensionlessVector_Z_ToSDistance_K2(const FSDimensionlessVector& value);
 };
-
-

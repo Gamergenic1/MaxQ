@@ -11,6 +11,17 @@
 #include "K2Type.h"
 #include "K2Conversion.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EK2_ComponentSelector : uint8
+{
+    All UMETA(DisplayName = "*"),
+    X UMETA(DisplayName = "X Only"),
+    Y UMETA(DisplayName = "Y Only"),
+    Z UMETA(DisplayName = "Z Only"),
+};
+
+
 USTRUCT()
 struct FK2Conversion
 {
@@ -18,6 +29,7 @@ struct FK2Conversion
 
     UPROPERTY() FName ConversionName;
     UPROPERTY() FK2Type In;
+    UPROPERTY() EK2_ComponentSelector Selector;
     UPROPERTY() FK2Type Out;
 
     FK2Conversion()
@@ -25,19 +37,22 @@ struct FK2Conversion
         ConversionName = FName();
         In = FK2Type();
         Out = FK2Type();
+        Selector = EK2_ComponentSelector::All;
     }
 
-    FK2Conversion(FName name, const FK2Type& _in, const FK2Type& _out)
+    FK2Conversion(FName name, const FK2Type& _in, const FK2Type& _out, EK2_ComponentSelector _selector = EK2_ComponentSelector::All)
     {
         ConversionName = name;
         In = _in;
         Out = _out;
+        Selector = _selector;
     }
 
     FK2Conversion(const FK2Conversion& other)
     {
         ConversionName = other.ConversionName;
         In = FK2Type(other.In);
+        Selector = other.Selector;
         Out = FK2Type(other.Out);
     }
 
@@ -50,6 +65,7 @@ struct FK2Conversion
         // do the copy
         ConversionName = other.ConversionName;
         In = other.In;
+        Selector = other.Selector;
         Out = other.Out;
 
         // return the existing object so we can chain this operator
@@ -60,6 +76,9 @@ struct FK2Conversion
     static SPICEUNCOOKED_API FK2Conversion DoubleToSMassConstant();
     static SPICEUNCOOKED_API FK2Conversion DegreesToSAngle();
     static SPICEUNCOOKED_API FK2Conversion DoubleToSDistance();
+    static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorXToSDistance();
+    static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorYToSDistance();
+    static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorZToSDistance();
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorToSDistanceVector();
     static SPICEUNCOOKED_API FK2Conversion SDimensionlessVectorToSVelocityVector();
 };
