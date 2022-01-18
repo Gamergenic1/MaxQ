@@ -14,8 +14,8 @@ using System.IO;
 
 public class SpiceTarget : TargetRules
 {
-    public const string RelativePathToCSpiceToolkit = "Source\\SpaceToolkit\\CSpice_Library\\cspice\\";
-    public const string RelativePathToCSpiceLib = "Source\\SpaceToolkit\\CSpice_Library\\lib\\Win64\\cspice.lib";
+    public const string RelativePathToCSpiceToolkit = "Source\\MaxQ\\CSpice_Library\\cspice\\";
+    public const string RelativePathToCSpiceLib = "Source\\MaxQ\\CSpice_Library\\lib\\Win64\\cspice.lib";
 
     public SpiceTarget(TargetInfo Target) : base(Target)
     {
@@ -28,7 +28,7 @@ public class SpiceTarget : TargetRules
 
     static public string CSpiceLibPath(ReadOnlyTargetRules targetRules)
     {
-        string relativePathToCSpiceLib = "Source\\SpaceToolkit\\CSpice_Library\\lib\\" + targetRules.Platform.ToString() + "\\cspice.lib";
+        string relativePathToCSpiceLib = "Source\\MaxQ\\CSpice_Library\\lib\\" + targetRules.Platform.ToString() + "\\cspice.lib";
 
         return Path.Combine(targetRules.ProjectFile.Directory.FullName, relativePathToCSpiceLib);
     }
