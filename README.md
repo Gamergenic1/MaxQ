@@ -1,15 +1,11 @@
 # MaxQ
-### Spaceflight Toolkit for Unreal Engine 5
+### A spaceflight Toolkit for Unreal Engine 5
 
-Gamergenic has integrated **NASA**'s **Spice** SPICE Toolkit for spaceflight with **Epic Games**' realtime content creation platform **Unreal Engine 5**.  The **MaxQ** Spaceflight Toolkit for Unreal Engine 5 empowers anyone to easily build exciting, authentic spaceflight visualizations or cutting edge space-based gameplay, no programming experience or astronautical engineering degree required.  The toolkit solves challenging space flight problems in a real-time visualization environment - opening up new opportunities across an exciting spectrum of applications.
+Gamergenic has integrated **NASA**'s **SPICE** Toolkit for with **Epic Games**' realtime content creation platform **Unreal Engine 5**.  The **MaxQ** Spaceflight Toolkit for Unreal Engine 5 empowers anyone to easily build exciting, authentic spaceflight visualizations or cutting edge space-based gameplay, no programming experience or astronautical engineering degree required.  The toolkit solves challenging space flight problems in a real-time visualization environment - opening up new opportunities across an exciting spectrum of applications.
 
-Content creators can choose from a wild range of features to simulate real-time celestial body and vehicles.  These models span from very simple and basic "2-body" orbital motion solutions, up through real-world highly advanced computations.  Advanced features include accurate n-body orbit solutions, orbit and spin axis precession, astronomical nutation.  The toolkit can even apply the relativistic effects of gravity and light abberation due to light travel time if desired.  The toolkit provides numerous options to quickly create the exact real-time experience a creator envisions.
+MaxQ features both a C++ and Unreal Engine Blueprints API, with 1:1 feature parity.
 
-All of this is available without writing a single line of code through **Unreal Engine 5**'s Blueprint Scripting System.  The toolkit's functionality is accessibly from both Blueprints and C++ with feature level parity between each.
-
-Because the toolkit is powered by **NASA**'s **Spice** toolkit, which is very well documented, users of **Spaceflight Toolkit for Unreal Engine 5** can readily find examples and help solving problems.  The names of all elementary operations are consistent between the two toolkits, enabling users to quickly find reference materials via web searches or by reviewing documentation produced by NASA/JPL.
-
-**MaxQ**, the Spaceflight Toolkit for Unreal Engine 5 is the first of several tools developed by Gamergenic in support of a planned game release [currently in development](/project/unannounced-1).  The toolkit is available to content creators under the MIT license, available from December 25, 2021.  The generous MIT license allows anyone to use these tools free of charge for all projects, commercial or otherwise.
+The toolkit is available to content creators under the MIT license, available as of December 25, 2021.  The MIT license allows anyone to use these tools free of charge for all projects, commercial or otherwise.
 
 ## About NASA's SPICE Toolkit
 
@@ -34,9 +30,14 @@ Unreal Engine Blueprints are a Visual Scripting System included in Unreal Engine
 
 For more information about Blueprints, see the [Unreal Engine "Blueprints - Essential Concepts" online learning course](https://www.unrealengine.com/en-US/onlinelearning-courses/blueprints---essential-concepts).
 
-## Toolkit Sample Application : Solar System Simulation
+## Additional MaxQ Information
 
-Simulation of a solar system celestial body or space vehicle based on real or synthesized data can be set up in just minutes.
+MaxQ documentation:
+https://maxq.gamergenic.com/
 
-For more information, see <https://gamedevtricks.com/tags/third-party-libs-series/>.
+MaxQ project page:
+https://www.gamergenic.com/project/maxq/
+
+Walkthrough of project development:
+https://gamedevtricks.com/tags/third-party-libs-series/
 
