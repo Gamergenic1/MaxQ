@@ -6069,7 +6069,7 @@ void USpice::tyear(double& secondsPerTropicalYear)
 Exceptions
    Error free
 */
-void USpice::jyear_year(FSEphemerisPeriod& oneJulianYear)
+void USpice::jyear_period(FSEphemerisPeriod& oneJulianYear)
 {
     SpiceDouble _jyear = jyear_c();
     oneJulianYear = FSEphemerisPeriod(_jyear);
@@ -6079,7 +6079,7 @@ void USpice::jyear_year(FSEphemerisPeriod& oneJulianYear)
 Exceptions
    Error free
 */
-void USpice::tyear_year(FSEphemerisPeriod& oneTropicalYear)
+void USpice::tyear_period(FSEphemerisPeriod& oneTropicalYear)
 {
     SpiceDouble _tyear = tyear_c();
     oneTropicalYear = FSEphemerisPeriod(_tyear);
@@ -8666,7 +8666,7 @@ void USpice::spd(double& value)
 Exceptions
    Error free.
 */
-void USpice::spd_day(FSEphemerisPeriod& oneDay)
+void USpice::day_period(FSEphemerisPeriod& oneDay)
 {
     oneDay = FSEphemerisPeriod::Day;
 }
@@ -8861,15 +8861,15 @@ Exceptions
 void USpice::spkcpo(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FString& target,
-    const FSEphemerisPeriod& et,
-    const FString& outref,
-    const FString& refloc,
-    const FSDistanceVector& obspos,
-    const FString& obsctr,
-    const FString& obsref,
     FSStateVector& state,
     FSEphemerisPeriod& lt,
+    const FSEphemerisTime& et,
+    const FSDistanceVector& obspos,
+    const FString& target,
+    const FString& outref,
+    ES_ReferenceFrameLocus refloc,
+    const FString& obsctr,
+    const FString& obsref,
     ES_AberrationCorrectionWithNewtonians
     abcorr
 )
@@ -8878,7 +8878,7 @@ void USpice::spkcpo(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
+    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     SpiceDouble     _obspos[3]; obspos.CopyTo(_obspos);
     ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
@@ -8948,15 +8948,15 @@ Exceptions
 void USpice::spkcpt(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSDistanceVector& trgpos,
-    const FString& trgctr,
-    const FString& trgref,
-    const FSEphemerisPeriod& et,
-    const FString& outref,
-    const FString& refloc,
-    const FString& obsrvr,
     FSStateVector& state,
     FSEphemerisPeriod& lt,
+    const FSDistanceVector& trgpos,
+    const FSEphemerisTime& et,
+    const FString& trgctr,
+    const FString& trgref,
+    const FString& outref,
+    ES_ReferenceFrameLocus refloc,
+    const FString& obsrvr,
     ES_AberrationCorrectionWithNewtonians
     abcorr
 )
@@ -8967,7 +8967,7 @@ void USpice::spkcpt(
     ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
+    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     // Outputs
@@ -9035,16 +9035,16 @@ Exceptions
 void USpice::spkcvo(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FString& target,
-    const FSEphemerisTime& et,
-    const FString& outref,
-    const FString& refloc,
-    const FSStateVector& obssta,
-    const FSEphemerisTime& obsepc,
-    const FString& obsctr,
-    const FString& obsref,
     FSStateVector& state,
     FSEphemerisPeriod& lt,
+    const FSEphemerisTime& et,
+    const FSStateVector& obssta,
+    const FSEphemerisTime& obsepc,
+    const FString& target,
+    const FString& outref,
+    ES_ReferenceFrameLocus refloc,
+    const FString& obsctr,
+    const FString& obsref,
     ES_AberrationCorrectionWithNewtonians
     abcorr
 )
@@ -9053,7 +9053,7 @@ void USpice::spkcvo(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
+    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     SpiceDouble     _obssta[6]; obssta.CopyTo(_obssta);
     SpiceDouble     _obsepc = obsepc.AsDouble();
@@ -9124,16 +9124,16 @@ Exceptions
 void USpice::spkcvt(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSStateVector& trgsta,
-    const FSEphemerisTime& trgepc,
-    const FString& trgctr,
-    const FString& trgref,
-    const FSEphemerisTime& et,
-    const FString& outref,
-    const FString& refloc,
-    const FString& obsrvr,
     FSStateVector& state,
     FSEphemerisPeriod& lt,
+    const FSStateVector& trgsta,
+    const FSEphemerisTime& trgepc,
+    const FSEphemerisTime& et,
+    const FString& trgctr,
+    const FString& trgref,
+    const FString& outref,
+    ES_ReferenceFrameLocus refloc,
+    const FString& obsrvr,
     ES_AberrationCorrectionWithNewtonians
     abcorr
 )
@@ -9145,7 +9145,7 @@ void USpice::spkcvt(
     ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
     SpiceDouble     _et = et.AsDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
-    ConstSpiceChar* _refloc = TCHAR_TO_ANSI(*refloc);
+    ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     // Outputs
@@ -10318,11 +10318,59 @@ void USpice::termpt(
     delete[] _epochs;
     delete[] _trmvcs;
 
-
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+
+void USpice::tpictr(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FString& pictur,
+    const FString& sample
+)
+{
+    // Buffers
+    SpiceChar szPictur[WINDOWS_MAX_PATH];
+    ZeroOut(szPictur);
+    SpiceChar szErrmsg[WINDOWS_MAX_PATH];
+    ZeroOut(szErrmsg);
+
+    // Input
+    ConstSpiceChar* _sample = TCHAR_TO_ANSI(*sample);
+    
+    // Outputs
+    SpiceInt         _pictln = WINDOWS_MAX_PATH;
+    SpiceInt         _errmln = WINDOWS_MAX_PATH;
+    SpiceChar* _pictur = szPictur;
+    SpiceBoolean _ok = SPICEFALSE;
+    SpiceChar* _errmsg = szErrmsg;
+
+    // Invocation
+    tpictr_c(
+        _sample,
+        _pictln,
+        _errmln,
+        _pictur,
+        &_ok,
+        _errmsg
+    );
+
+    // Bundle output
+    _pictur[_pictln-1] = '\0';
+    pictur = FString(_pictur);
+
+    // Error Handling #1
+    ErrorCheck(ResultCode, ErrorMessage);
+
+    // Error Handling #2
+    if (_ok != SPICETRUE)
+    {
+        ResultCode = ES_ResultCode::Error;
+        _errmsg[_errmln - 1] = '\0';
+        ErrorMessage = FString(_errmsg);
+    }
+}
 
 /*
 Exceptions

@@ -323,6 +323,13 @@ enum class ES_Units : uint8
     YEARS UMETA(DisplayName = "Years (same as Julian Years)")
 };
 
+UENUM(BlueprintType)
+enum class ES_ReferenceFrameLocus : uint8
+{
+    OBSERVER UMETA(DisplayName = "Observer"),
+    TARGET   UMETA(DisplayName = "Target"),
+    CENTER   UMETA(DisplayName = "Center")
+};
 
 UENUM(BlueprintType)
 enum class ES_TimeScale : uint8
@@ -3388,6 +3395,7 @@ private:
 public:
     // See notes below regarding EnumAsString.
     static const char* toString(ES_Units units);
+    static const char* toString(ES_ReferenceFrameLocus locus);
     static const char* toString(ES_AberrationCorrectionFov abcorr);
     static const char* toString(ES_AberrationCorrectionWithNewtonians abcorr);
     static const char* toString(ES_AberrationCorrectionForOccultation abcorr);
@@ -4303,7 +4311,7 @@ public:
         Category = "Spice|Api|Types",
         meta = (
             BlueprintAutocast,
-            CompactNodeTitle = "To SRotationMatrix",
+            CompactNodeTitle = "To SQuaternion",
             ToolTip = "Converts a Spice RotationMatrix to a Quaternion"
             ))
     static FSQuaternion Conv_SRotationMatrixToSQuaternion(const FSRotationMatrix& value);

@@ -2402,7 +2402,7 @@ public:
             ShortToolTip = "Ephemeris Period of one julian year",
             ToolTip = "Return the number of seconds in a julian year"
             ))
-    static void jyear_year(FSEphemerisPeriod& oneJulianYear);
+    static void jyear_period(FSEphemerisPeriod& oneJulianYear);
 
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
@@ -2411,7 +2411,7 @@ public:
             ShortToolTip = "Ephemeris Period of one tropical year",
             ToolTip = "Return the number of seconds in a tropical year"
             ))
-    static void tyear_year(FSEphemerisPeriod& oneTropicalYear);
+    static void tyear_period(FSEphemerisPeriod& oneTropicalYear);
 
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
@@ -4057,17 +4057,17 @@ public:
     static void spkcpo(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FString& target,
-        const FSEphemerisPeriod& et,
-        const FString& outref,
-        const FString& refloc,
-        const FSDistanceVector& obspos,
-        const FString& obsctr,
-        const FString& obsref,
         FSStateVector& state,
         FSEphemerisPeriod& lt,
+        const FSEphemerisTime& et,
+        const FSDistanceVector& obspos,
+        const FString& target = TEXT("SUN"),
+        const FString& outref = TEXT("DSS-14_TOPO"),
+        ES_ReferenceFrameLocus refloc = ES_ReferenceFrameLocus::OBSERVER,
+        const FString& obsctr = TEXT("EARTH"),
+        const FString& obsref = TEXT("ITRF93"),
         ES_AberrationCorrectionWithNewtonians
-        abcorr = ES_AberrationCorrectionWithNewtonians::None
+        abcorr = ES_AberrationCorrectionWithNewtonians::CN_S
     );
 
     /// <summary>SPK, constant position target state</summary>
@@ -4093,17 +4093,17 @@ public:
     static void spkcpt(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FSDistanceVector& trgpos,
-        const FString& trgctr,
-        const FString& trgref,
-        const FSEphemerisPeriod& et,
-        const FString& outref,
-        const FString& refloc,
-        const FString& obsrvr,
         FSStateVector& state,
         FSEphemerisPeriod& lt,
+        const FSDistanceVector& trgpos,
+        const FSEphemerisTime& et,
+        const FString& trgctr = TEXT("EARTH"),
+        const FString& trgref = TEXT("ITRF93"),
+        const FString& outref = TEXT("ITRF93"),
+        ES_ReferenceFrameLocus refloc = ES_ReferenceFrameLocus::TARGET,
+        const FString& obsrvr = TEXT("MGS"),
         ES_AberrationCorrectionWithNewtonians
-        abcorr = ES_AberrationCorrectionWithNewtonians::None
+        abcorr = ES_AberrationCorrectionWithNewtonians::CN_S
     );
 
     /// <summary>SPK, constant velocity observer state</summary>
@@ -4130,18 +4130,18 @@ public:
     static void spkcvo(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FString& target,
-        const FSEphemerisTime& et,
-        const FString& outref,
-        const FString& refloc,
-        const FSStateVector& obssta,
-        const FSEphemerisTime& obsepc,
-        const FString& obsctr,
-        const FString& obsref,
         FSStateVector& state,
         FSEphemerisPeriod& lt,
+        const FSEphemerisTime& et,
+        const FSStateVector& obssta,
+        const FSEphemerisTime& obsepc,
+        const FString& target = TEXT("MGS"),
+        const FString& outref = TEXT("ITRF93"),
+        ES_ReferenceFrameLocus refloc = ES_ReferenceFrameLocus::OBSERVER,
+        const FString& obsctr = TEXT("EARTH"),
+        const FString& obsref = TEXT("ITRF93"),
         ES_AberrationCorrectionWithNewtonians
-        abcorr = ES_AberrationCorrectionWithNewtonians::None
+        abcorr = ES_AberrationCorrectionWithNewtonians::CN_S
     );
 
     /// <summary>SPK, constant velocity target state</summary>
@@ -4168,18 +4168,18 @@ public:
     static void spkcvt(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FSStateVector& trgsta,
-        const FSEphemerisTime& trgepc,
-        const FString& trgctr,
-        const FString& trgref,
-        const FSEphemerisTime& et,
-        const FString& outref,
-        const FString& refloc,
-        const FString& obsrvr,
         FSStateVector& state,
         FSEphemerisPeriod& lt,
+        const FSStateVector& trgsta,
+        const FSEphemerisTime& trgepc,
+        const FSEphemerisTime& et,
+        const FString& trgctr = TEXT("MARS"),
+        const FString& trgref = TEXT("IAU_MARS"),
+        const FString& outref = TEXT("ITRF93"),
+        ES_ReferenceFrameLocus refloc = ES_ReferenceFrameLocus::OBSERVER,
+        const FString& obsrvr = TEXT("MGS"),
         ES_AberrationCorrectionWithNewtonians
-        abcorr = ES_AberrationCorrectionWithNewtonians::None
+        abcorr = ES_AberrationCorrectionWithNewtonians::CN_S
     );
 
     /// <summary>S/P Kernel, easy position</summary>
@@ -4499,7 +4499,7 @@ public:
             ShortToolTip = "One Day",
             ToolTip = "Ephemeris period of one day"
             ))
-    static void spd_day(FSEphemerisPeriod& oneDay);
+    static void day_period(FSEphemerisPeriod& oneDay);
 
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Coordinates",
@@ -4863,12 +4863,27 @@ public:
             ShortToolTip = "Parse a UTC time string",
             ToolTip = "Parse a time string and return seconds past the J2000 epoch on a formal calendar"
             ))
-        static void tparse(
-            ES_ResultCode& ResultCode,
-            FString& ErrorMessage,
-            FSEphemerisTime& ReturnValue,
-            const FString& string = TEXT("2021-10-01T22:46:52.18")
-        );
+    static void tparse(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSEphemerisTime& ReturnValue,
+        const FString& string = TEXT("2021-10-01T22:46:52.18")
+    );
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Time",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            Keywords = "TIME",
+            ShortToolTip = "Create a Time Format Picture",
+            ToolTip = "Create a time format picture suitable for use by the action timout from a given sample time string"
+            ))
+    static void tpictr(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FString& pictur,
+        const FString& sample = TEXT("Thu Oct 01 11:11:11 PDT 1111")
+    );
 
     /// <summary>trace of a 3x3 matrix</summary>
     /// <param name="matrix">3x3 matrix of double precision numbers</param>
