@@ -134,6 +134,21 @@ const char* USpiceTypes::toString(ES_Units units)
     return "NONE";
 }
 
+const char* USpiceTypes::toString(ES_ReferenceFrameLocus locus)
+{
+    switch (locus)
+    {
+    case ES_ReferenceFrameLocus::OBSERVER:
+        return "OBSERVER";
+    case ES_ReferenceFrameLocus::TARGET:
+        return "TARGET";
+    case ES_ReferenceFrameLocus::CENTER:
+        return "CENTER";
+    }
+
+    return "NONE";
+}
+
 const char* USpiceTypes::toString(ES_AberrationCorrectionWithNewtonians abcorr)
 {
     switch (abcorr)
