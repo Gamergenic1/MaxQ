@@ -1,10 +1,9 @@
 // Copyright 2021 Gamergenic.  See full copyright notice in MainModule.h.
 // Author: chucknoble@gamergenic.com | https://www.gamergenic.com
 // 
-// This is a sample application demonstrating usage of Module 'Spice',
-// an implementation of:
-// "Adding Third-Party Libraries to Unreal Engine : NASA's SPICE Toolkit"
-// https://gamedevtricks.com/post/third-party-libs-1/
+// Project page:   https://www.gamergenic.com/project/maxq/
+// Documentation:  https://maxq.gamergenic.com/
+// GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 
 using UnrealBuildTool;

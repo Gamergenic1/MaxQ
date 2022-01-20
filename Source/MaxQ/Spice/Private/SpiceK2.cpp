@@ -1,9 +1,9 @@
 // Copyright 2021 Gamergenic.  See full copyright notice in SpiceK2.h.
 // Author: chucknoble@gamergenic.com | https://www.gamergenic.com
 // 
-// Implementation of:
-// "Adding Third-Party Libraries to Unreal Engine : NASA's SPICE Toolkit"
-// https://gamedevtricks.com/post/third-party-libs-1/
+// Project page:   https://www.gamergenic.com/project/maxq/
+// Documentation:  https://maxq.gamergenic.com/
+// GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "SpiceK2.h"
 #include "Spice.h"

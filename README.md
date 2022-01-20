@@ -32,12 +32,12 @@ For more information about Blueprints, see the [Unreal Engine "Blueprints - Esse
 
 ## Additional MaxQ Information
 
-MaxQ documentation:
-https://maxq.gamergenic.com/
+MaxQ project page:  
+https://www.gamergenic.com/project/maxq/  
 
-MaxQ project page:
-https://www.gamergenic.com/project/maxq/
+MaxQ documentation:  
+https://maxq.gamergenic.com/  
 
-Walkthrough of project development:
-https://gamedevtricks.com/tags/third-party-libs-series/
+Walkthrough of project development:  
+https://gamedevtricks.com/tags/third-party-libs-series/  
 

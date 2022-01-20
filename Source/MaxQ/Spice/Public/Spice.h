@@ -19,7 +19,13 @@
 
 // Author: chucknoble@gamergenic.com | https://www.gamergenic.com
 // 
-// Implementation of:
+// Project page:
+// https://www.gamergenic.com/project/maxq/
+//
+// Documentation site:
+// https://maxq.gamergenic.com/
+// 
+// Implementation walkthrough:
 // "Adding Third-Party Libraries to Unreal Engine : NASA's SPICE Toolkit"
 // https://gamedevtricks.com/post/third-party-libs-1/
 
