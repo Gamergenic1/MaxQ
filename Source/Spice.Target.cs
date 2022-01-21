@@ -25,16 +25,9 @@ public class SpiceTarget : TargetRules
         BuildCSpiceLib(this);
     }
 
-    static public string CSpiceLibPath(ReadOnlyTargetRules targetRules)
-    {
-        string relativePathToCSpiceLib = "Source\\MaxQ\\CSpice_Library\\lib\\" + targetRules.Platform.ToString() + "\\cspice.lib";
-
-        return Path.Combine(targetRules.ProjectFile.Directory.FullName, relativePathToCSpiceLib);
-    }
-
     static public void BuildCSpiceLib(TargetRules targetRules)
     {
-        string pathToCSpiceLib = CSpiceLibPath(new ReadOnlyTargetRules(targetRules));
+        string pathToCSpiceLib = CSpice_Library.CSpiceLibPath(new ReadOnlyTargetRules(targetRules));
 
         if (!File.Exists(pathToCSpiceLib))
         {
