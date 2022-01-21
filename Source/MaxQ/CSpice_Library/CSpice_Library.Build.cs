@@ -11,13 +11,16 @@ using UnrealBuildTool;
 
 public class CSpice_Library : ModuleRules
 {
-	public CSpice_Library(ReadOnlyTargetRules Target) : base(Target)
+    public const string RelativePathToCSpiceToolkit = "Source\\MaxQ\\CSpice_Library\\cspice\\";
+    public const string RelativePathToCSpiceLib = "Source\\MaxQ\\CSpice_Library\\lib\\Win64\\cspice.lib";
+
+    public CSpice_Library(ReadOnlyTargetRules Target) : base(Target)
 	{
         bAddDefaultIncludePaths = false;
 
         string cspiceDir = Path.Combine(ModuleDirectory, "cspice/");
         string includeDir = Path.Combine(cspiceDir, "include/");
-        string libFile = SpiceTarget.CSpiceLibPath(Target);
+        string libFile = CSpiceLibPath(Target);
 
         if (Target.Platform == UnrealTargetPlatform.Win64)
         {
@@ -52,5 +55,12 @@ public class CSpice_Library : ModuleRules
         }
 
         PublicIncludePaths.Add(includeDir);
+    }
+
+    static public string CSpiceLibPath(ReadOnlyTargetRules targetRules)
+    {
+        string relativePathToCSpiceLib = "Source\\MaxQ\\CSpice_Library\\lib\\" + targetRules.Platform.ToString() + "\\cspice.lib";
+
+        return Path.Combine(targetRules.ProjectFile.Directory.FullName, relativePathToCSpiceLib);
     }
 }
