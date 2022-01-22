@@ -478,10 +478,16 @@ struct FSDistance
 };
 
 
+inline bool operator<(const FSDistance& lhs, const FSDistance& rhs)
+{
+    return lhs.km < rhs.km;
+}
+
 inline FSDistance operator+(const FSDistance& lhs, const FSDistance& rhs)
 {
     return FSDistance(lhs.km + rhs.km);
 }
+
 
 inline FSDistance operator-(const FSDistance& lhs, const FSDistance& rhs)
 {
@@ -4033,6 +4039,10 @@ public:
     /*  Addition (A + B) */
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance + distance", CompactNodeTitle = "+", Keywords = "+ add plus", CommutativeAssociativeBinaryOperator = "true"), Category = "Spice|Math|Distance")
     static FSDistance Add_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
+
+    /** Returns true if A is less than B (A < B) */
+    UFUNCTION(BlueprintPure, meta = (DisplayName = "SDistance < SDistance", CompactNodeTitle = "<", Keywords = "< less"), Category = "Spice|Math|DateTime")
+    static bool Less_SDistanceSDistance(const FSDistance& A, const FSDistance& B);
 
     //////////////////////
     UFUNCTION(BlueprintPure, meta = (DisplayName = "distance vector * double vector", CompactNodeTitle = "*", Keywords = "* multiply"), Category = "Spice|Math|Distance")
