@@ -1257,6 +1257,12 @@ FSDistance USpiceTypes::Add_SDistanceSDistance(const FSDistance& A, const FSDist
     return A + B;
 }
 
+bool USpiceTypes::Less_SDistanceSDistance(const FSDistance& A, const FSDistance& B)
+{
+    return A < B;
+}
+
+
 /* Multiplication (A * B) */
 FSDistance USpiceTypes::Multiply_DoubleSDistance(double A, const FSDistance& B)
 {
