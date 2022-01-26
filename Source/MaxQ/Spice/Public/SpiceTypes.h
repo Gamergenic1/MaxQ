@@ -440,6 +440,9 @@ struct FSDimensionlessVector
     }
 
     static SPICE_API const FSDimensionlessVector Zero;
+    static SPICE_API const FSDimensionlessVector X;
+    static SPICE_API const FSDimensionlessVector Y;
+    static SPICE_API const FSDimensionlessVector Z;
 };
 
 
@@ -481,6 +484,11 @@ struct FSDistance
 inline bool operator<(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km < rhs.km;
+}
+
+inline bool operator>(const FSDistance& lhs, const FSDistance& rhs)
+{
+    return lhs.km > rhs.km;
 }
 
 inline FSDistance operator+(const FSDistance& lhs, const FSDistance& rhs)
@@ -574,6 +582,20 @@ struct FSDistanceVector
         xyz[1] = y.km;
         xyz[2] = z.km;
     }
+
+    inline FSDistance Re() const
+    {
+        return x;
+    }
+    inline FSDistance Rp() const
+    {
+        return z;
+    }
+    inline double f() const
+    {
+        return (Re()-Rp())/Re();
+    }
+
 
     static SPICE_API const FSDistanceVector Zero;
 };
@@ -721,9 +743,9 @@ public:
     // Let's use the CSPICE version of pi.  Since this is a header file, and we
     // don't want other modules to require the spice headers to use this module,
     // we'll need to bounce the constructor definitions out to a cpp file.
-    FSAngle();
+    SPICE_API FSAngle();
 
-    FSAngle(double __radians);
+    SPICE_API FSAngle(double __radians);
 
     // FOR CLARITY
     inline double radians() const
