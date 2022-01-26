@@ -42,6 +42,9 @@ SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Zero = FSEphemerisPeriod();
 SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Day = FSEphemerisPeriod((double) spd_c());
 SPICE_API const FSRotationMatrix FSRotationMatrix::Identity = FSRotationMatrix();
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::Zero = FSDimensionlessVector();
+SPICE_API const FSDimensionlessVector FSDimensionlessVector::X = FSDimensionlessVector(1., 0., 0.);
+SPICE_API const FSDimensionlessVector FSDimensionlessVector::Y = FSDimensionlessVector(0., 1., 0.);
+SPICE_API const FSDimensionlessVector FSDimensionlessVector::Z = FSDimensionlessVector(0., 0., 1.);
 SPICE_API int USpiceTypes::FloatFormatPrecision = 8;
 
 FSAngle::FSAngle()
