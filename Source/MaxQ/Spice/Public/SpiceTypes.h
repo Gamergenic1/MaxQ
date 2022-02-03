@@ -396,7 +396,7 @@ ENUM_CLASS_FLAGS(ES_Items);
 
 
 USTRUCT(BlueprintType)
-struct FSDimensionlessVector
+struct SPICE_API FSDimensionlessVector
 {
     GENERATED_BODY()
 
@@ -404,46 +404,74 @@ struct FSDimensionlessVector
     UPROPERTY(EditAnywhere, BlueprintReadWrite) double y;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) double z;
 
-    FSDimensionlessVector()
+    inline FSDimensionlessVector()
     {
         x = 0.;
         y = 0.;
         z = 0.;
     }
 
-    FSDimensionlessVector(const FSDimensionlessVector& other)
+    inline FSDimensionlessVector(const FSDimensionlessVector& other)
     {
         x = other.x;
         y = other.y;
         z = other.z;
     }
 
-    FSDimensionlessVector(const double(&xyz)[3])
+    inline FSDimensionlessVector(const double(&xyz)[3])
     {
         x = xyz[0];
         y = xyz[1];
         z = xyz[2];
     }
 
-    FSDimensionlessVector(double _x, double _y, double _z)
+    inline FSDimensionlessVector(double _x, double _y, double _z)
     {
         x = _x;
         y = _y;
         z = _z;
     }
 
-    void CopyTo(double(&xyz)[3]) const
+    inline void CopyTo(double(&xyz)[3]) const
     {
         xyz[0] = x;
         xyz[1] = y;
         xyz[2] = z;
     }
 
-    static SPICE_API const FSDimensionlessVector Zero;
-    static SPICE_API const FSDimensionlessVector X;
-    static SPICE_API const FSDimensionlessVector Y;
-    static SPICE_API const FSDimensionlessVector Z;
+    inline FSDimensionlessVector& operator=(const FSDimensionlessVector& other)
+    {
+        // No self-assignment guard needed in this case.
+        x = other.x;
+        y = other.y;
+        z = other.z;
+
+        return *this;
+    }
+
+    void Normalize();
+    static void Normalize(FSDimensionlessVector& vector);
+    
+    FSDimensionlessVector Normalized() const;
+    void Normalized(FSDimensionlessVector& v) const;
+
+    static const FSDimensionlessVector Zero;
+    static const FSDimensionlessVector X_Axis;
+    static const FSDimensionlessVector Y_Axis;
+    static const FSDimensionlessVector Z_Axis;
 };
+
+inline FSDimensionlessVector operator-(const FSDimensionlessVector& value)
+{
+    return FSDimensionlessVector(-value.x, -value.y, -value.z);
+}
+
+// "exact", but probably not reliable depending on compiler flags, etc etc
+// Used in S/C for non-critical things like firing an OnChange event etc
+inline bool operator==(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
+{
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+}
 
 
 USTRUCT(BlueprintType)
@@ -470,7 +498,7 @@ struct FSDistance
         km = other.km;
     }
 
-    FSDistance operator=(const FSDistance& other)
+    FSDistance& operator=(const FSDistance& other)
     {
         km = other.km;
         return *this;
@@ -526,7 +554,7 @@ inline FSDistance operator*(const FSDistance& lhs, double rhs)
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular coordinates (X, Y, Z)"))
-struct FSDistanceVector
+struct SPICE_API FSDistanceVector
 {
     GENERATED_BODY()
 
@@ -534,54 +562,57 @@ struct FSDistanceVector
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance y;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FSDistance z;
 
-    FSDistanceVector()
+    inline FSDistanceVector()
     {
         x = FSDistance::Zero;
         y = FSDistance::Zero;
         z = FSDistance::Zero;
     }
 
-    FSDistanceVector(double _x, double _y, double _z)
+    inline FSDistanceVector(double _x, double _y, double _z)
     {
         x = FSDistance(_x);
         y = FSDistance(_y);
         z = FSDistance(_z);
     }
 
-    FSDistanceVector(const FSDistance& _x, const FSDistance& _y, const FSDistance& _z)
+    inline FSDistanceVector(const FSDistance& _x, const FSDistance& _y, const FSDistance& _z)
     {
         x = _x;
         y = _y;
         z = _z;
     }
 
-    FSDistanceVector(const double(&xyz)[3])
+    inline FSDistanceVector(const double(&xyz)[3])
     {
         x = FSDistance(xyz[0]);
         y = FSDistance(xyz[1]);
         z = FSDistance(xyz[2]);
     }
 
-    FSDistanceVector(const FSDimensionlessVector& value)
+    inline FSDistanceVector(const FSDimensionlessVector& value)
     {
         x = FSDistance(value.x);
         y = FSDistance(value.y);
         z = FSDistance(value.z);
     }
 
-    void AsDimensionlessVector(FSDimensionlessVector& vector) const
+    inline void AsDimensionlessVector(FSDimensionlessVector& vector) const
     {
         vector.x = x.AsDouble();
         vector.y = y.AsDouble();
         vector.z = z.AsDouble();
     }
 
-    void CopyTo(double(&xyz)[3]) const
+    inline void CopyTo(double(&xyz)[3]) const
     {
         xyz[0] = x.km;
         xyz[1] = y.km;
         xyz[2] = z.km;
     }
+
+    FSDimensionlessVector Normalized() const;
+    void Normalized(FSDimensionlessVector& v) const;
 
     inline FSDistance Re() const
     {
@@ -597,7 +628,7 @@ struct FSDistanceVector
     }
 
 
-    static SPICE_API const FSDistanceVector Zero;
+    static const FSDistanceVector Zero;
 };
 
 
@@ -663,7 +694,7 @@ struct FSSpeed
         kmps = other.kmps;
     }
 
-    FSSpeed operator=(const FSSpeed& other)
+    FSSpeed& operator=(const FSSpeed& other)
     {
         kmps = other.kmps;
         return *this;
@@ -724,7 +755,7 @@ inline FSSpeed operator*(const FSSpeed& lhs, double rhs)
  *  macro definition.
  */
 USTRUCT(BlueprintType)
-struct FSAngle
+struct SPICE_API FSAngle
 {
     GENERATED_BODY()
 
@@ -743,9 +774,9 @@ public:
     // Let's use the CSPICE version of pi.  Since this is a header file, and we
     // don't want other modules to require the spice headers to use this module,
     // we'll need to bounce the constructor definitions out to a cpp file.
-    SPICE_API FSAngle();
+    inline FSAngle();
 
-    SPICE_API FSAngle(double __radians);
+    inline FSAngle(double __radians);
 
     // FOR CLARITY
     inline double radians() const
@@ -753,7 +784,7 @@ public:
         return degrees / cachedDpr;
     }
 
-    FSAngle(const FSAngle& other)
+    inline FSAngle(const FSAngle& other)
     {
         degrees = other.degrees;
         cachedDpr = other.cachedDpr;
@@ -764,9 +795,21 @@ public:
     /// <returns>Radians</returns>
     inline double AsDouble() const { return radians(); }
 
+    bool operator==(const FSAngle& Other) const
+    {
+        return degrees == Other.degrees;
+    }
 
-    static SPICE_API const FSAngle _0;
-    static SPICE_API const FSAngle _360;
+    bool operator!=(const FSAngle& Other) const
+    {
+        return !(*this == Other);
+    }
+
+    static const FSAngle _0;
+    static const FSAngle _360;
+    static const double pi;
+    static const double twopi;
+    static const double dpr;
 };
 
 
@@ -867,7 +910,7 @@ struct FSComplexScalar
 
 
 USTRUCT(BlueprintType)
-struct FSEphemerisTime
+struct SPICE_API FSEphemerisTime
 {
     GENERATED_BODY()
 
@@ -888,8 +931,18 @@ struct FSEphemerisTime
     /// <returns>Seconds</returns>
     inline double AsDouble() const { return seconds; }
 
-    static SPICE_API const FSEphemerisTime J2000;
+    static const FSEphemerisTime J2000;
 };
+
+inline bool operator==(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+{
+    return lhs.seconds == rhs.seconds;
+}
+
+inline bool operator!=(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+{
+    return !(lhs == rhs);
+}
 
 
 USTRUCT(BlueprintType)
@@ -985,7 +1038,7 @@ inline static bool operator<(const FSEphemerisPeriod& A, const FSEphemerisPeriod
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular  coordinates (DX, DY, DZ)"))
-struct FSVelocityVector
+struct SPICE_API FSVelocityVector
 {
     GENERATED_BODY()
 
@@ -993,56 +1046,59 @@ struct FSVelocityVector
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dy;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) FSSpeed dz;
 
-    FSVelocityVector()
+    inline FSVelocityVector()
     {
         dx = FSSpeed::Zero;
         dy = FSSpeed::Zero;
         dz = FSSpeed::Zero;
     }
 
-    FSVelocityVector(const double(&xyz)[3])
+    inline FSVelocityVector(const double(&xyz)[3])
     {
         dx = FSSpeed(xyz[0]);
         dy = FSSpeed(xyz[1]);
         dz = FSSpeed(xyz[2]);
     }
 
-    FSVelocityVector(double _dx, double _dy, double _dz)
+    inline FSVelocityVector(double _dx, double _dy, double _dz)
     {
         dx = FSSpeed(_dx);
         dy = FSSpeed(_dy);
         dz = FSSpeed(_dz);
     }
 
-    FSVelocityVector(const FSSpeed& _dx, const FSSpeed& _dy, const FSSpeed& _dz)
+    inline FSVelocityVector(const FSSpeed& _dx, const FSSpeed& _dy, const FSSpeed& _dz)
     {
         dx = FSSpeed(_dx);
         dy = FSSpeed(_dy);
         dz = FSSpeed(_dz);
     }
 
-    FSVelocityVector(const FSDimensionlessVector& value)
+    inline FSVelocityVector(const FSDimensionlessVector& value)
     {
         dx = FSSpeed(value.x);
         dy = FSSpeed(value.y);
         dz = FSSpeed(value.z);
     }
 
-    void AsDimensionlessVector(FSDimensionlessVector& vector) const
+    inline void AsDimensionlessVector(FSDimensionlessVector& vector) const
     {
         vector.x = dx.AsDouble();
         vector.y = dy.AsDouble();
         vector.z = dz.AsDouble();
     }
 
-    void CopyTo(double(&xyz)[3]) const
+    inline void CopyTo(double(&xyz)[3]) const
     {
         xyz[0] = dx.kmps;
         xyz[1] = dy.kmps;
         xyz[2] = dz.kmps;
     }
 
-    static SPICE_API const FSVelocityVector Zero;
+    FSDimensionlessVector Normalized() const;
+    void Normalized(FSDimensionlessVector& v) const;
+
+    static const FSVelocityVector Zero;
 };
 
 
@@ -1054,6 +1110,27 @@ inline FSDistance operator*(const FSEphemerisPeriod& lhs, const FSSpeed& rhs)
 inline FSDistance operator*(const FSSpeed& lhs, const FSEphemerisPeriod& rhs)
 {
     return FSDistance(lhs.kmps * rhs.seconds);
+}
+
+
+inline bool operator==(const FSDistance& lhs, const FSDistance& rhs)
+{
+    return lhs.km == rhs.km;
+}
+
+inline bool operator==(const FSSpeed& lhs, const FSSpeed& rhs)
+{
+    return lhs.kmps == rhs.kmps;
+}
+
+inline bool operator!=(const FSDistance& lhs, const FSDistance& rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline bool operator!=(const FSSpeed& lhs, const FSSpeed& rhs)
+{
+    return !(lhs == rhs);
 }
 
 inline FSVelocityVector operator+(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
@@ -1095,6 +1172,26 @@ inline FSDistanceVector operator*(const FSEphemerisPeriod& lhs, const FSVelocity
 inline FSDistanceVector operator*(const FSVelocityVector& lhs, const FSEphemerisPeriod& rhs)
 {
     return FSDistanceVector(rhs * lhs.dx, rhs * lhs.dy, rhs * lhs.dz);
+}
+
+inline bool operator==(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+{
+    return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z);
+}
+
+inline bool operator==(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+{
+    return (lhs.dx == rhs.dx) && (lhs.dy == rhs.dy) && (lhs.dz == rhs.dz);
+}
+
+inline bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline bool operator!=(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+{
+    return !(lhs == rhs);
 }
 
 
@@ -1439,6 +1536,17 @@ struct FSStateVector
         v.AsDimensionlessVector(_v.dr);
     }
 };
+
+
+inline bool operator==(const FSStateVector& lhs, const FSStateVector& rhs)
+{
+    return (lhs.r == rhs.r) && (lhs.v == rhs.v);
+}
+
+inline bool operator!=(const FSStateVector& lhs, const FSStateVector& rhs)
+{
+    return !(lhs == rhs);
+}
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Cylindrical coordinates (R, LONG, Z)"))
@@ -3415,9 +3523,11 @@ class SPICE_API USpiceTypes : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 
-private:
+public:
     static double normalize180to180(double degrees);
     static double normalize0to360(double degrees);
+    static double normalizePiToPi(double radians);
+    static double normalizeZeroToTwoPi(double radians);
     static FString formatAngle(const double degrees, ES_AngleFormat format);
 
 public:
