@@ -6307,6 +6307,28 @@ void USpice::mxv_state(
     stateout = FSStateVector(_vout);
 }
 
+void USpice::mtxv_state(
+    const FSStateTransform& m,
+    const FSStateVector& statein,
+    FSStateVector& stateout
+)
+{
+    // Input
+    double _m1[6][6];       m.CopyTo(_m1);
+    double _v2[6];          statein.CopyTo(_v2);
+    SpiceInt    _nrow1 = 6;
+    SpiceInt    _nc1r2 = 6;
+
+    // Output
+    double _vout[6];
+
+    // Invocation
+    mtxvg_c(_m1, _v2, _nrow1, _nc1r2, _vout);
+
+    // Pack outputs
+    stateout = FSStateVector(_vout);
+}
+
 
 /*
 Exceptions
@@ -7477,9 +7499,9 @@ void USpice::psv2pl(
 void USpice::pxform(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FString& from,
-    const FSEphemerisTime& et,
     FSRotationMatrix& rotate,
+    const FSEphemerisTime& et,
+    const FString& from,
     const FString& to
 )
 {
@@ -10189,8 +10211,8 @@ Exceptions
 void USpice::sxform(
     ES_ResultCode& ResultCode,
     FString& ErrorMessage,
-    const FSEphemerisTime& et,
     FSStateTransform& xform,
+    const FSEphemerisTime& et,
     const FString& from,
     const FString& to
 )

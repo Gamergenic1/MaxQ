@@ -28,6 +28,9 @@ SPICE_API const FSSpeed FSSpeed::Zero = FSSpeed();
 SPICE_API const FSDistanceVector FSDistanceVector::Zero = FSDistanceVector();
 SPICE_API const FSVelocityVector FSVelocityVector::Zero = FSVelocityVector();
 SPICE_API const FSStateTransform FSStateTransform::Identity = FSStateTransform();
+SPICE_API const double FSAngle::pi = pi_c();
+SPICE_API const double FSAngle::twopi = twopi_c();
+SPICE_API const double FSAngle::dpr = dpr_c();
 SPICE_API const FSAngle FSAngle::_0 = FSAngle();
 SPICE_API const FSAngle FSAngle::_360 = FSAngle(twopi_c());
 SPICE_API const FSEulerAngles FSEulerAngles::Zero = FSEulerAngles();
@@ -42,9 +45,9 @@ SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Zero = FSEphemerisPeriod();
 SPICE_API const FSEphemerisPeriod FSEphemerisPeriod::Day = FSEphemerisPeriod((double) spd_c());
 SPICE_API const FSRotationMatrix FSRotationMatrix::Identity = FSRotationMatrix();
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::Zero = FSDimensionlessVector();
-SPICE_API const FSDimensionlessVector FSDimensionlessVector::X = FSDimensionlessVector(1., 0., 0.);
-SPICE_API const FSDimensionlessVector FSDimensionlessVector::Y = FSDimensionlessVector(0., 1., 0.);
-SPICE_API const FSDimensionlessVector FSDimensionlessVector::Z = FSDimensionlessVector(0., 0., 1.);
+SPICE_API const FSDimensionlessVector FSDimensionlessVector::X_Axis = FSDimensionlessVector(1., 0., 0.);
+SPICE_API const FSDimensionlessVector FSDimensionlessVector::Y_Axis = FSDimensionlessVector(0., 1., 0.);
+SPICE_API const FSDimensionlessVector FSDimensionlessVector::Z_Axis = FSDimensionlessVector(0., 0., 1.);
 SPICE_API int USpiceTypes::FloatFormatPrecision = 8;
 
 FSAngle::FSAngle()
@@ -66,6 +69,61 @@ FSAngle::FSAngle(double __radians)
 double FSAngularRate::degreesPerSecond() const
 {
     return radiansPerSecond * dpr_c();
+}
+
+
+void FSDimensionlessVector::Normalize()
+{
+    Normalize(*this);
+}
+
+void FSDimensionlessVector::Normalize(FSDimensionlessVector& v)
+{
+    SpiceDouble xyz[3];
+    v.CopyTo(xyz);
+    vhat_c(xyz, xyz);
+    v = FSDimensionlessVector(xyz);
+}
+
+
+FSDimensionlessVector FSDimensionlessVector::Normalized() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    vhat_c(xyz, xyz);
+    return FSDimensionlessVector(xyz);
+}
+
+void FSDimensionlessVector::Normalized(FSDimensionlessVector& v) const
+{
+    v = Normalized();
+}
+
+
+FSDimensionlessVector FSDistanceVector::Normalized() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    vhat_c(xyz, xyz);
+    return FSDimensionlessVector(xyz);
+}
+
+void FSDistanceVector::Normalized(FSDimensionlessVector& v) const
+{
+    v = Normalized();
+}
+
+FSDimensionlessVector FSVelocityVector::Normalized() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    vhat_c(xyz, xyz);
+    return FSDimensionlessVector(xyz);
+}
+
+void FSVelocityVector::Normalized(FSDimensionlessVector& v) const
+{
+    v = Normalized();
 }
 
 
@@ -1779,6 +1837,33 @@ double USpiceTypes::normalize180to180(double degrees)
     
     return degrees;
 }
+
+
+double USpiceTypes::normalizeZeroToTwoPi(double radians)
+{
+    // First, normalize 0-360
+    radians = std::fmod(radians, FSAngle::twopi);
+
+    // Pull up negative values
+    if (radians < 0.)
+    {
+        radians += FSAngle::twopi;
+    }
+
+    return radians;
+}
+
+double USpiceTypes::normalizePiToPi(double radians)
+{
+    // First normalize 0 - 360
+    radians = normalizeZeroToTwoPi(radians);
+
+    // Wrap around if need be.
+    if (radians > FSAngle::pi) radians -= FSAngle::twopi;
+
+    return radians;
+}
+
 
 FString USpiceTypes::FormatAngle(const FSAngle& value, ES_AngleFormat format)
 {

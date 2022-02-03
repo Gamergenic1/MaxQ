@@ -2600,6 +2600,14 @@ public:
         FSStateVector&  stateout
     );
 
+
+    UFUNCTION(BlueprintPure, Category = "Spice|Api|Math", meta = (ToolTip = "multiplies state by state transform transpose"))
+    static void mtxv_state(
+        const FSStateTransform& m,
+        const FSStateVector& statein,
+        FSStateVector& stateout
+    );
+
     /// <summary>Find a unit quaternion corresponding to a specified rotation matrix</summary>
     /// <param name="r">[in] Rotation matrix</param>
     /// <param name="q">[out] unit quaternion representing 'r'</param>
@@ -3390,9 +3398,9 @@ public:
         static void pxform(
             ES_ResultCode& ResultCode,
             FString& ErrorMessage,
-            const FString& from,
-            const FSEphemerisTime& et,
             FSRotationMatrix& rotate,
+            const FSEphemerisTime& et,
+            const FString& from = TEXT("J2000"),
             const FString& to = TEXT("ECLIPJ2000")
         );
 
@@ -4794,10 +4802,10 @@ public:
     static void sxform(
         ES_ResultCode& ResultCode,
         FString& ErrorMessage,
-        const FSEphemerisTime& et,
         FSStateTransform& xform,
-        const FString& from = TEXT("IAU_EARTH"),
-        const FString& to = TEXT("J2000")
+        const FSEphemerisTime& et,
+        const FString& from = TEXT("J2000"),
+        const FString& to = TEXT("ECLIPJ2000")
     );
 
 
