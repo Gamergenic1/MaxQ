@@ -108,6 +108,21 @@ FSDimensionlessVector FSDistanceVector::Normalized() const
     return FSDimensionlessVector(xyz);
 }
 
+double FSDimensionlessVector::Magnitude() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    return vnorm_c(xyz);
+}
+
+
+FSDistance FSDistanceVector::Magnitude() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    return FSDistance(vnorm_c(xyz));
+}
+
 void FSDistanceVector::Normalized(FSDimensionlessVector& v) const
 {
     v = Normalized();
@@ -125,6 +140,14 @@ void FSVelocityVector::Normalized(FSDimensionlessVector& v) const
 {
     v = Normalized();
 }
+
+FSSpeed FSVelocityVector::Magnitude() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    return FSSpeed(vnorm_c(xyz));
+}
+
 
 
 /*
