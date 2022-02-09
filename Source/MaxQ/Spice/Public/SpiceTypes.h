@@ -455,22 +455,50 @@ struct SPICE_API FSDimensionlessVector
     FSDimensionlessVector Normalized() const;
     void Normalized(FSDimensionlessVector& v) const;
 
+    double Magnitude() const;
+
     static const FSDimensionlessVector Zero;
     static const FSDimensionlessVector X_Axis;
     static const FSDimensionlessVector Y_Axis;
     static const FSDimensionlessVector Z_Axis;
 };
 
-inline FSDimensionlessVector operator-(const FSDimensionlessVector& value)
+inline static FSDimensionlessVector operator-(const FSDimensionlessVector& value)
 {
     return FSDimensionlessVector(-value.x, -value.y, -value.z);
 }
 
 // "exact", but probably not reliable depending on compiler flags, etc etc
 // Used in S/C for non-critical things like firing an OnChange event etc
-inline bool operator==(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
+inline static bool operator==(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
 {
     return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
+}
+
+inline static FSDimensionlessVector operator*(double scalar, const FSDimensionlessVector& vector)
+{
+    return FSDimensionlessVector(scalar * vector.x, scalar * vector.y, scalar * vector.z);
+}
+
+inline static FSDimensionlessVector operator*(const FSDimensionlessVector& vector, double scalar)
+{
+    return FSDimensionlessVector(scalar * vector.x, scalar * vector.y, scalar * vector.z);
+}
+
+inline static FSDimensionlessVector& operator+=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
+
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    lhs.z += rhs.z;
+    return lhs;
+}
+
+inline static FSDimensionlessVector& operator-=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
+
+    lhs.x -= rhs.x;
+    lhs.y -= rhs.y;
+    lhs.z -= rhs.z;
+    return lhs;
 }
 
 
@@ -509,48 +537,72 @@ struct FSDistance
 };
 
 
-inline bool operator<(const FSDistance& lhs, const FSDistance& rhs)
+inline static bool operator<(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km < rhs.km;
 }
 
-inline bool operator>(const FSDistance& lhs, const FSDistance& rhs)
+inline static bool operator>(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km > rhs.km;
 }
 
-inline FSDistance operator+(const FSDistance& lhs, const FSDistance& rhs)
+inline static FSDistance operator+(const FSDistance& lhs, const FSDistance& rhs)
 {
     return FSDistance(lhs.km + rhs.km);
 }
 
-
-inline FSDistance operator-(const FSDistance& lhs, const FSDistance& rhs)
+inline static FSDistance operator-(const FSDistance& lhs, const FSDistance& rhs)
 {
     return FSDistance(lhs.km - rhs.km);
 }
 
-inline double operator/(const FSDistance& lhs, const FSDistance& rhs)
+inline static FSDistance operator-(const FSDistance& rhs)
+{
+    return FSDistance(-rhs.km);
+}
+
+inline static double operator/(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km / rhs.km;
 }
 
-inline FSDistance operator/(const FSDistance& lhs, double rhs)
+inline static FSDistance operator/(const FSDistance& lhs, double rhs)
 {
     return lhs.km / rhs;
 }
 
-
-inline FSDistance operator*(double lhs, const FSDistance& rhs)
+inline static FSDistance operator*(double lhs, const FSDistance& rhs)
 {
     return FSDistance(lhs * rhs.km);
 }
 
-inline FSDistance operator*(const FSDistance& lhs, double rhs)
+inline static FSDistance operator*(const FSDistance& lhs, double rhs)
 {
     return FSDistance(lhs.km * rhs);
 }
 
+inline static bool operator==(const FSDistance& lhs, const FSDistance& rhs)
+{
+    return lhs.km == rhs.km;
+}
+
+inline static bool operator!=(const FSDistance& lhs, const FSDistance& rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline static FSDistance& operator+=(FSDistance& lhs, const FSDistance& rhs) {
+
+    lhs.km += rhs.km;
+    return lhs;
+}
+
+inline static FSDistance& operator-=(FSDistance& lhs, const FSDistance& rhs) {
+
+    lhs.km -= rhs.km;
+    return lhs;
+}
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular coordinates (X, Y, Z)"))
@@ -613,6 +665,7 @@ struct SPICE_API FSDistanceVector
 
     FSDimensionlessVector Normalized() const;
     void Normalized(FSDimensionlessVector& v) const;
+    FSDistance Magnitude() const;
 
     inline FSDistance Re() const
     {
@@ -632,37 +685,53 @@ struct SPICE_API FSDistanceVector
 };
 
 
-inline FSDistanceVector operator+(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+inline static FSDistanceVector operator+(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return FSDistanceVector(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 }
 
-inline FSDistanceVector operator-(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+inline static FSDistanceVector operator-(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return FSDistanceVector(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 }
 
-inline FSDistanceVector operator*(double lhs, const FSDistanceVector& rhs)
+inline static FSDistanceVector operator*(double lhs, const FSDistanceVector& rhs)
 {
     return FSDistanceVector(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
 }
 
-inline FSDistanceVector operator*(const FSDistanceVector& lhs, double rhs)
+inline static FSDistanceVector operator*(const FSDistanceVector& lhs, double rhs)
 {
     return FSDistanceVector(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }
 
-inline FSDistanceVector operator/(const FSDistanceVector& lhs, double rhs)
+inline static FSDistanceVector operator/(const FSDistanceVector& lhs, double rhs)
 {
     return FSDistanceVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
 
-inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, FSDistanceVector rhs)
+inline static FSDistanceVector& operator+=(FSDistanceVector& lhs, const FSDistanceVector& rhs) {
+
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    lhs.z += rhs.z;
+    return lhs;
+}
+
+inline static FSDistanceVector& operator-=(FSDistanceVector& lhs, const FSDistanceVector& rhs) {
+
+    lhs.x -= rhs.x;
+    lhs.y -= rhs.y;
+    lhs.z -= rhs.z;
+    return lhs;
+}
+
+inline static FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return FSDimensionlessVector(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
 }
 
-inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistance& rhs)
+inline static FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistance& rhs)
 {
     return FSDimensionlessVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
@@ -704,36 +773,74 @@ struct FSSpeed
     static SPICE_API const FSSpeed OneKmps;
 };
 
-inline FSSpeed operator+(const FSSpeed& lhs, const FSSpeed& rhs)
+inline static FSSpeed operator+(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return FSSpeed(lhs.kmps + rhs.kmps);
 }
 
-inline FSSpeed operator-(const FSSpeed& lhs, const FSSpeed& rhs)
+inline static FSSpeed operator-(const FSSpeed& rhs)
+{
+    return FSSpeed(-rhs.kmps);
+}
+
+inline static FSSpeed operator-(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return FSSpeed(lhs.kmps - rhs.kmps);
 }
 
-inline double operator/(const FSSpeed& lhs, const FSSpeed& rhs)
+inline static double operator/(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return lhs.kmps / rhs.kmps;
 }
 
-inline FSSpeed operator/(const FSSpeed& lhs, double rhs)
+inline static FSSpeed operator/(const FSSpeed& lhs, double rhs)
 {
     return lhs.kmps / rhs;
 }
 
+inline static bool operator>(const FSSpeed& lhs, const FSSpeed& rhs)
+{
+    return lhs.kmps > rhs.kmps;
+}
 
-inline FSSpeed operator*(double lhs, const FSSpeed& rhs)
+inline static bool operator<(const FSSpeed& lhs, const FSSpeed& rhs)
+{
+    return lhs.kmps < rhs.kmps;
+}
+
+inline static FSSpeed operator*(double lhs, const FSSpeed& rhs)
 {
     return FSSpeed(lhs * rhs.kmps);
 }
 
-inline FSSpeed operator*(const FSSpeed& lhs, double rhs)
+inline static FSSpeed operator*(const FSSpeed& lhs, double rhs)
 {
     return FSSpeed(lhs.kmps * rhs);
 }
+
+inline static bool operator==(const FSSpeed& lhs, const FSSpeed& rhs)
+{
+    return lhs.kmps == rhs.kmps;
+}
+
+inline static bool operator!=(const FSSpeed& lhs, const FSSpeed& rhs)
+{
+    return !(lhs == rhs);
+}
+
+inline static FSSpeed& operator+=(FSSpeed& lhs, const FSSpeed& rhs) {
+
+    lhs.kmps += rhs.kmps;
+    return lhs;
+}
+
+inline static FSSpeed& operator-=(FSSpeed& lhs, const FSSpeed& rhs) {
+
+    lhs.kmps -= rhs.kmps;
+    return lhs;
+}
+
+
 
 
 
@@ -814,33 +921,46 @@ public:
 
 
 
-inline FSAngle operator*(double lhs, const FSAngle& rhs)
+inline static FSAngle operator*(double lhs, const FSAngle& rhs)
 {
     return FSAngle(rhs.AsDouble() * lhs);
 }
-inline FSAngle operator*(const FSAngle& lhs,double rhs)
+
+inline static FSAngle operator*(const FSAngle& lhs,double rhs)
 {
     return FSAngle(lhs.AsDouble() * rhs);
 }
 
-inline FSAngle operator+(const FSAngle& lhs, const FSAngle& rhs)
+inline static FSAngle operator+(const FSAngle& lhs, const FSAngle& rhs)
 {
     return FSAngle(lhs.AsDouble() + rhs.AsDouble());
 }
 
-inline FSAngle operator-(const FSAngle& lhs, const FSAngle& rhs)
+inline static FSAngle operator-(const FSAngle& lhs, const FSAngle& rhs)
 {
     return FSAngle(lhs.AsDouble() - rhs.AsDouble());
 }
 
-inline FSAngle operator/(const FSAngle& lhs, double rhs)
+inline static FSAngle operator/(const FSAngle& lhs, double rhs)
 {
     return FSAngle(lhs.AsDouble() / rhs);
 }
 
-inline double operator/(const FSAngle& lhs, const FSAngle& rhs)
+inline static double operator/(const FSAngle& lhs, const FSAngle& rhs)
 {
     return lhs.AsDouble() / rhs.AsDouble();
+}
+
+inline static FSAngle& operator+=(FSAngle& lhs, const FSAngle& rhs) {
+
+    lhs = FSAngle(lhs.AsDouble() + rhs.AsDouble());
+    return lhs;
+}
+
+inline static FSAngle& operator-=(FSAngle& lhs, const FSAngle& rhs) {
+
+    lhs = FSAngle(lhs.AsDouble() - rhs.AsDouble());
+    return lhs;
 }
 
 
@@ -934,14 +1054,24 @@ struct SPICE_API FSEphemerisTime
     static const FSEphemerisTime J2000;
 };
 
-inline bool operator==(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+inline static bool operator==(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
 {
     return lhs.seconds == rhs.seconds;
 }
 
-inline bool operator!=(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+inline static bool operator!=(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
 {
     return !(lhs == rhs);
+}
+
+inline static bool operator<(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+{
+    return lhs.seconds < rhs.seconds;
+}
+
+inline static bool operator>(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+{
+    return lhs.seconds > rhs.seconds;
 }
 
 
@@ -971,6 +1101,16 @@ struct FSEphemerisPeriod
     static SPICE_API const FSEphemerisPeriod Day;
 };
 
+inline static FSEphemerisPeriod operator+(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+{
+    return FSEphemerisPeriod(A.AsDouble() + B.AsDouble());
+}
+
+inline static FSEphemerisPeriod operator-(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+{
+    return FSEphemerisPeriod(A.AsDouble() - B.AsDouble());
+}
+
 inline static FSEphemerisTime operator+(const FSEphemerisPeriod& A, const FSEphemerisTime& B)
 {
     return FSEphemerisTime(A.AsDouble() + B.AsDouble());
@@ -981,19 +1121,34 @@ inline static FSEphemerisTime operator+(const FSEphemerisTime& A, const FSEpheme
     return FSEphemerisTime(A.AsDouble() + B.AsDouble());
 }
 
-inline static bool operator>(const FSEphemerisTime& A, const FSEphemerisTime& B)
+inline static FSEphemerisTime operator-(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
 {
-    return A.AsDouble() > B.AsDouble();
+    return FSEphemerisTime(A.AsDouble() - B.AsDouble());
 }
 
-inline static bool operator<(const FSEphemerisTime& A, const FSEphemerisTime& B)
-{
-    return A.AsDouble() < B.AsDouble();
+
+inline static FSEphemerisPeriod& operator+=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
+
+    lhs = FSEphemerisPeriod(lhs.AsDouble() + rhs.AsDouble());
+    return lhs;
 }
 
-inline static FSEphemerisPeriod operator+(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
-{
-    return FSEphemerisPeriod(A.AsDouble() + B.AsDouble());
+inline static FSEphemerisPeriod& operator-=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
+
+    lhs = FSEphemerisPeriod(lhs.AsDouble() - rhs.AsDouble());
+    return lhs;
+}
+
+inline static FSEphemerisTime& operator+=(FSEphemerisTime& lhs, const FSEphemerisPeriod& rhs) {
+
+    lhs = lhs + rhs;
+    return lhs;
+}
+
+inline static FSEphemerisTime& operator-=(FSEphemerisTime& lhs, const FSEphemerisPeriod& rhs) {
+
+    lhs = lhs - rhs;
+    return lhs;
 }
 
 inline static FSEphemerisPeriod operator-(const FSEphemerisTime& A, const FSEphemerisTime& B)
@@ -1034,6 +1189,16 @@ inline static bool operator>(const FSEphemerisPeriod& A, const FSEphemerisPeriod
 inline static bool operator<(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return A.AsDouble() < B.AsDouble();
+}
+
+inline static FSDistance operator*(const FSEphemerisPeriod& lhs, const FSSpeed& rhs)
+{
+    return FSDistance(lhs.seconds * rhs.kmps);
+}
+
+inline static FSDistance operator*(const FSSpeed& lhs, const FSEphemerisPeriod& rhs)
+{
+    return FSDistance(lhs.kmps * rhs.seconds);
 }
 
 
@@ -1097,101 +1262,91 @@ struct SPICE_API FSVelocityVector
 
     FSDimensionlessVector Normalized() const;
     void Normalized(FSDimensionlessVector& v) const;
+    FSSpeed Magnitude() const;
 
     static const FSVelocityVector Zero;
 };
 
 
-inline FSDistance operator*(const FSEphemerisPeriod& lhs, const FSSpeed& rhs)
-{
-    return FSDistance(lhs.seconds * rhs.kmps);
-}
-
-inline FSDistance operator*(const FSSpeed& lhs, const FSEphemerisPeriod& rhs)
-{
-    return FSDistance(lhs.kmps * rhs.seconds);
-}
-
-
-inline bool operator==(const FSDistance& lhs, const FSDistance& rhs)
-{
-    return lhs.km == rhs.km;
-}
-
-inline bool operator==(const FSSpeed& lhs, const FSSpeed& rhs)
-{
-    return lhs.kmps == rhs.kmps;
-}
-
-inline bool operator!=(const FSDistance& lhs, const FSDistance& rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline bool operator!=(const FSSpeed& lhs, const FSSpeed& rhs)
-{
-    return !(lhs == rhs);
-}
-
-inline FSVelocityVector operator+(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+inline static FSVelocityVector operator+(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return FSVelocityVector(lhs.dx + rhs.dx, lhs.dy + rhs.dy, lhs.dz + rhs.dz);
 }
 
-inline FSVelocityVector operator-(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+inline static FSVelocityVector operator-(const FSVelocityVector& rhs)
+{
+    return FSVelocityVector(-rhs.dx, -rhs.dy, -rhs.dz);
+}
+
+inline static FSVelocityVector operator-(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return FSVelocityVector(lhs.dx - rhs.dx, lhs.dy - rhs.dy, lhs.dz - rhs.dz);
 }
 
-inline FSVelocityVector operator/(const FSVelocityVector& lhs, double rhs)
+inline static FSVelocityVector operator/(const FSVelocityVector& lhs, double rhs)
 {
     return FSVelocityVector(lhs.dx / rhs, lhs.dy / rhs, lhs.dz / rhs);
 }
 
-inline FSDimensionlessVector operator/(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+inline static FSDimensionlessVector operator/(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return FSDimensionlessVector(lhs.dx / rhs.dx, lhs.dy / rhs.dy, lhs.dz / rhs.dz);
 }
 
-inline FSVelocityVector operator*(double lhs, const FSVelocityVector& rhs)
+inline static FSVelocityVector operator*(double lhs, const FSVelocityVector& rhs)
 {
     return FSVelocityVector(lhs * rhs.dx, lhs * rhs.dy, lhs * rhs.dz);
 }
 
-
-inline FSVelocityVector operator*(const FSVelocityVector& lhs, double rhs)
+inline static FSVelocityVector operator*(const FSVelocityVector& lhs, double rhs)
 {
     return FSVelocityVector(lhs.dx * rhs, lhs.dy * rhs, lhs.dz * rhs);
 }
 
-inline FSDistanceVector operator*(const FSEphemerisPeriod& lhs, const FSVelocityVector& rhs)
+inline static FSDistanceVector operator*(const FSEphemerisPeriod& lhs, const FSVelocityVector& rhs)
 {
     return FSDistanceVector(lhs * rhs.dx, lhs * rhs.dy, lhs * rhs.dz);
 }
 
-inline FSDistanceVector operator*(const FSVelocityVector& lhs, const FSEphemerisPeriod& rhs)
+inline static FSDistanceVector operator*(const FSVelocityVector& lhs, const FSEphemerisPeriod& rhs)
 {
     return FSDistanceVector(rhs * lhs.dx, rhs * lhs.dy, rhs * lhs.dz);
 }
 
-inline bool operator==(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+inline static bool operator==(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z);
 }
 
-inline bool operator==(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+inline static bool operator==(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return (lhs.dx == rhs.dx) && (lhs.dy == rhs.dy) && (lhs.dz == rhs.dz);
 }
 
-inline bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+inline static bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return !(lhs == rhs);
 }
 
-inline bool operator!=(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+inline static bool operator!=(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return !(lhs == rhs);
+}
+
+inline static FSVelocityVector& operator+=(FSVelocityVector& lhs, const FSVelocityVector& rhs) {
+
+    lhs.dx += rhs.dx;
+    lhs.dy += rhs.dy;
+    lhs.dz += rhs.dz;
+    return lhs;
+}
+
+inline static FSVelocityVector& operator-=(FSVelocityVector& lhs, const FSVelocityVector& rhs) {
+
+    lhs.dx -= rhs.dx;
+    lhs.dy -= rhs.dy;
+    lhs.dz -= rhs.dz;
+    return lhs;
 }
 
 
@@ -1467,7 +1622,6 @@ struct FSDimensionlessStateVector
         dr = FSDimensionlessVector(state[3], state[4], state[5]);
     }
 
-
     void CopyTo(double(&state)[6]) const
     {
         state[0] = r.x;
@@ -1538,12 +1692,12 @@ struct FSStateVector
 };
 
 
-inline bool operator==(const FSStateVector& lhs, const FSStateVector& rhs)
+inline static bool operator==(const FSStateVector& lhs, const FSStateVector& rhs)
 {
     return (lhs.r == rhs.r) && (lhs.v == rhs.v);
 }
 
-inline bool operator!=(const FSStateVector& lhs, const FSStateVector& rhs)
+inline static bool operator!=(const FSStateVector& lhs, const FSStateVector& rhs)
 {
     return !(lhs == rhs);
 }
@@ -2404,10 +2558,23 @@ struct FSRotationMatrix
         memcpy(m, _m, sizeof(m));
     }
 
+    FSRotationMatrix(
+        const FSDimensionlessVector& x,
+        const FSDimensionlessVector& y,
+        const FSDimensionlessVector& z
+    )
+    {
+        x.CopyTo(m[0]);
+        y.CopyTo(m[1]);
+        z.CopyTo(m[2]);
+    }
+
+
     void CopyTo(double(&_m)[3][3]) const
     {
         memcpy(_m, m, sizeof(_m));
     }
+
 
     static SPICE_API const FSRotationMatrix Identity;
 };

@@ -10907,7 +10907,7 @@ void USpice::vdot(
     _out = vdot_c(_v1, _v2);
 
     // Return Value
-    out = double(out);
+    out = double(_out);
 }
 void USpice::vdot_distance(
     const FSDistanceVector& v1,
@@ -10925,7 +10925,7 @@ void USpice::vdot_distance(
     _out = vdot_c(_v1, _v2);
 
     // Return Value
-    out = FSDistance(out);
+    out = FSDistance(_out);
 }
 void USpice::vdot_velocity(
     const FSVelocityVector& v1,
@@ -10943,7 +10943,7 @@ void USpice::vdot_velocity(
     _out = vdot_c(_v1, _v2);
 
     // Return Value
-    out = FSSpeed(out);
+    out = FSSpeed(_out);
 }
 
 
