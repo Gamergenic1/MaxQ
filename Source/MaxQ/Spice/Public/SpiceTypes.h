@@ -695,6 +695,11 @@ inline static FSDistanceVector operator-(const FSDistanceVector& lhs, const FSDi
     return FSDistanceVector(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 }
 
+inline static FSDistanceVector operator-(const FSDistanceVector& rhs)
+{
+    return FSDistanceVector(-rhs.x, -rhs.y, -rhs.z);
+}
+
 inline static FSDistanceVector operator*(double lhs, const FSDistanceVector& rhs)
 {
     return FSDistanceVector(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
@@ -1700,6 +1705,36 @@ inline static bool operator==(const FSStateVector& lhs, const FSStateVector& rhs
 inline static bool operator!=(const FSStateVector& lhs, const FSStateVector& rhs)
 {
     return !(lhs == rhs);
+}
+
+
+inline static FSStateVector operator+(const FSStateVector& lhs, const FSStateVector& rhs)
+{
+    return FSStateVector(lhs.r + rhs.r, lhs.v + rhs.v);
+}
+
+inline static FSStateVector operator-(const FSStateVector& rhs)
+{
+    return FSStateVector(-rhs.r, -rhs.v);
+}
+
+inline static FSStateVector operator-(const FSStateVector& lhs, const FSStateVector& rhs)
+{
+    return FSStateVector(lhs.r - rhs.r, lhs.v - rhs.v);
+}
+
+inline static FSStateVector& operator+=(FSStateVector& lhs, const FSStateVector& rhs) {
+
+    lhs.r += rhs.r;
+    lhs.v += rhs.v;
+    return lhs;
+}
+
+inline static FSStateVector& operator-=(FSStateVector& lhs, const FSStateVector& rhs) {
+
+    lhs.r -= rhs.r;
+    lhs.v -= rhs.v;
+    return lhs;
 }
 
 
