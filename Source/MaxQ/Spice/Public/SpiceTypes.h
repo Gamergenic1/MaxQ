@@ -1002,6 +1002,55 @@ struct FSAngularRate
 };
 
 
+
+inline static FSAngularRate operator*(double lhs, const FSAngularRate& rhs)
+{
+    return FSAngularRate(rhs.AsDouble() * lhs);
+}
+
+inline static FSAngularRate operator*(const FSAngularRate& lhs, double rhs)
+{
+    return FSAngularRate(lhs.AsDouble() * rhs);
+}
+
+inline static FSAngularRate operator+(const FSAngularRate& lhs, const FSAngularRate& rhs)
+{
+    return FSAngularRate(lhs.AsDouble() + rhs.AsDouble());
+}
+
+inline static FSAngularRate operator-(const FSAngularRate& lhs, const FSAngularRate& rhs)
+{
+    return FSAngularRate(lhs.AsDouble() - rhs.AsDouble());
+}
+
+inline static FSAngularRate operator-(const FSAngularRate& rhs)
+{
+    return FSAngularRate(-rhs.AsDouble());
+}
+
+inline static FSAngularRate operator/(const FSAngularRate& lhs, double rhs)
+{
+    return FSAngularRate(lhs.AsDouble() / rhs);
+}
+
+inline static double operator/(const FSAngularRate& lhs, const FSAngularRate& rhs)
+{
+    return lhs.AsDouble() / rhs.AsDouble();
+}
+
+inline static FSAngularRate& operator+=(FSAngularRate& lhs, const FSAngularRate& rhs) {
+
+    lhs = FSAngularRate(lhs.AsDouble() + rhs.AsDouble());
+    return lhs;
+}
+
+inline static FSAngularRate& operator-=(FSAngularRate& lhs, const FSAngularRate& rhs) {
+
+    lhs = FSAngularRate(lhs.AsDouble() - rhs.AsDouble());
+    return lhs;
+}
+
+
 USTRUCT(BlueprintType)
 struct FSComplexScalar
 {
@@ -1448,7 +1497,7 @@ struct FSEulerAngles
 
 
 USTRUCT(BlueprintType)
-struct FSAngularVelocity
+struct SPICE_API FSAngularVelocity
 {
     GENERATED_BODY()
 
@@ -1468,6 +1517,13 @@ struct FSAngularVelocity
         x = FSAngularRate(_av[0]);
         y = FSAngularRate(_av[1]);
         z = FSAngularRate(_av[2]);
+    }
+
+    FSAngularVelocity(const FSAngularRate& _x, const FSAngularRate& _y, const FSAngularRate& _z)
+    {
+        x = _x;
+        y = _y;
+        z = _z;
     }
 
     FSAngularVelocity(const FSDimensionlessVector& value)
@@ -1491,9 +1547,66 @@ struct FSAngularVelocity
         _av[2] = z.radiansPerSecond;
     }
 
-    static SPICE_API const FSAngularVelocity Zero;
+    FSDimensionlessVector Normalized() const;
+    void Normalized(FSDimensionlessVector& v) const;
+
+    FSAngularRate Magnitude() const;
+
+    static const FSAngularVelocity Zero;
 };
 
+
+inline static FSAngularVelocity operator+(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
+{
+    return FSAngularVelocity(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
+}
+
+inline static FSAngularVelocity operator-(const FSAngularVelocity& rhs)
+{
+    return FSAngularVelocity(-rhs.x, -rhs.y, -rhs.z);
+}
+
+inline static FSAngularVelocity operator-(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
+{
+    return FSAngularVelocity(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+}
+
+inline static FSAngularVelocity operator/(const FSAngularVelocity& lhs, double rhs)
+{
+    return FSAngularVelocity(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
+}
+
+inline static FSDimensionlessVector operator/(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
+{
+    return FSDimensionlessVector(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
+}
+
+inline static FSAngularVelocity operator*(double lhs, const FSAngularVelocity& rhs)
+{
+    return FSAngularVelocity(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
+}
+
+inline static FSAngularVelocity operator*(const FSAngularVelocity& lhs, double rhs)
+{
+    return FSAngularVelocity(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
+}
+
+
+inline static FSAngularVelocity& operator+=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
+
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+    lhs.z += rhs.z;
+    return lhs;
+}
+
+inline static FSAngularVelocity& operator-=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
+
+    lhs.x -= rhs.x;
+    lhs.y -= rhs.y;
+    lhs.z -= rhs.z;
+    return lhs;
+}
 
 
 USTRUCT(BlueprintType)
@@ -4520,6 +4633,11 @@ public:
         return FVector(value.dy.kmps, value.dx.kmps, value.dz.kmps);
     }
 
+    template<> static FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
+    {
+        return FVector(value.x.radiansPerSecond, value.y.radiansPerSecond, value.z.radiansPerSecond);
+    }
+
     // From UE to SPICE
     template<typename T> static void Swizzle(const FVector& in, T& out);
     
@@ -4536,6 +4654,11 @@ public:
     template<> static void Swizzle<FSVelocityVector>(const FVector& in, FSVelocityVector& out)
     {
         out = FSVelocityVector(in.Y, in.X, in.Z);
+    }
+
+    template<> static void Swizzle<FSAngularVelocity>(const FVector& in, FSAngularVelocity& out)
+    {
+        out = FSAngularVelocity(FSAngularRate(in.Y), FSAngularRate(in.X), FSAngularRate(in.Z));
     }
 
 
@@ -4621,6 +4744,29 @@ public:
         static FSVelocityVector Conv_VectorToSVelocityVector(
             const FVector& value
         );
+
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "From UE Vec",
+            ToolTip = "Converts a UE Vector (kmps, single precision, LHS) to a Spice angular velocity vector (double precision, RHS)"
+            ))
+    static FSAngularVelocity Conv_VectorToSAngularVelocity(
+        const FVector& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "To UE Vec",
+            ToolTip = "Converts a Spice angular velocity vector (double precision, RHS) to a UE Vector (kmps, single precision, LHS)"
+            ))
+    static FVector Conv_SAngularVelocityToVector(
+        const FSAngularVelocity& value
+    );
 
 
     UFUNCTION(BlueprintPure,

@@ -5636,14 +5636,16 @@ void USpice::mtxm(
 }
 
 
+
 /*
 Exceptions
    Error free.
 */
-void USpice::mtxv(
+template<typename T>
+inline void mtxv_(
     const FSRotationMatrix& m1,
-    const FSDimensionlessVector& vin,
-    FSDimensionlessVector& vout
+    const T& vin,
+    T& vout
 )
 {
     // Inputs
@@ -5657,7 +5659,20 @@ void USpice::mtxv(
     mtxv_c(_m1, _vin, _vout);
 
     // Return Value
-    vout = FSDimensionlessVector(_vout);
+    vout = T(_vout);
+}
+
+/*
+Exceptions
+   Error free.
+*/
+void USpice::mtxv(
+    const FSRotationMatrix& m1,
+    const FSDimensionlessVector& vin,
+    FSDimensionlessVector& vout
+)
+{
+    mtxv_(m1, vin, vout);
 }
 
 
@@ -5672,18 +5687,7 @@ void USpice::mtxv_distance(
         FSDistanceVector& vout
     )
 {
-    // Inputs
-    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
-    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mtxv_c(_m1, _vin, _vout);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
+    mtxv_(m1, vin, vout);
 }
 
 
@@ -5697,20 +5701,19 @@ void USpice::mtxv_velocity(
     FSVelocityVector& vout
 )
 {
-    // Inputs
-    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
-    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mtxv_c(_m1, _vin, _vout);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
+    mtxv_(m1, vin, vout);
 }
 
+
+
+void USpice::mtxv_angular(
+    const FSRotationMatrix& m1,
+    const FSAngularVelocity& vin,
+    FSAngularVelocity& vout
+)
+{
+    mtxv_(m1, vin, vout);
+}
 
 /*
 Exceptions
@@ -5973,6 +5976,31 @@ void USpice::invort(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+// invstm_c doesn't exist!
+#if 0
+/*
+Exceptions
+   Error free
+*/
+void USpice::invstm(
+    FSStateTransform& invmat,
+    const FSStateTransform& mat
+)
+{
+    // Input
+    SpiceDouble _mat[6][6];     mat.CopyTo(_mat);
+    // Output
+    SpiceDouble _invmat[6][6];  ZeroOut(_invmat);
+
+    // Invocation
+    invstm_c(_mat, _invmat);
+
+    // Return Value
+    invmat = FSStateTransform(_invmat);
+}
+#endif
+
+
 /*
 Exceptions
    Error free
@@ -6223,11 +6251,11 @@ void USpice::mequ(
 Exceptions
    Error free.
 */
-
-void USpice::mxv_distance(
+template<typename T>
+inline void mxv_(
     const FSRotationMatrix& m1,
-    const FSDistanceVector& vin,
-    FSDistanceVector& vout
+    const T& vin,
+    T& vout
 )
 {
     // Inputs
@@ -6241,7 +6269,32 @@ void USpice::mxv_distance(
     mxv_c(_m1, _vin, _vout);
 
     // Return Value
-    vout = FSDistanceVector(_vout);
+    vout = T(_vout);
+}
+
+
+void USpice::mxv_angular(
+    const FSRotationMatrix& m1,
+    const FSAngularVelocity& vin,
+    FSAngularVelocity& vout
+)
+{
+    mxv_(m1, vin, vout);
+}
+
+
+/*
+Exceptions
+   Error free.
+*/
+
+void USpice::mxv_distance(
+    const FSRotationMatrix& m1,
+    const FSDistanceVector& vin,
+    FSDistanceVector& vout
+)
+{
+    mxv_(m1, vin, vout);
 }
 
 void USpice::mxv_velocity(
@@ -6250,18 +6303,7 @@ void USpice::mxv_velocity(
     FSVelocityVector& vout
 )
 {
-    // Inputs
-    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
-    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mxv_c(_m1, _vin, _vout);
-
-    // Return Value
-    vout = FSVelocityVector(_vout);
+    mxv_(m1, vin, vout);
 }
 
 void USpice::mxv(
@@ -6270,18 +6312,7 @@ void USpice::mxv(
     FSDimensionlessVector& vout
 )
 {
-    // Inputs
-    SpiceDouble    _m1[3][3];	m1.CopyTo(_m1);
-    SpiceDouble    _vin[3];		vin.CopyTo(_vin);
-
-    // Outputs
-    SpiceDouble    _vout[3];
-
-    // Invocation
-    mxv_c(_m1, _vin, _vout);
-
-    // Return Value
-    vout = FSDimensionlessVector(_vout);
+    mxv_(m1, vin, vout);
 }
 
 
@@ -10339,6 +10370,77 @@ void USpice::termpt(
     delete[] _points;
     delete[] _epochs;
     delete[] _trmvcs;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+/*
+
+ref         is the NAIF name for an inertial reference frame.
+    Acceptable names include :
+
+Name       Description
+    --------   --------------------------------
+    "J2000"    Earth mean equator, dynamical
+    equinox of J2000
+
+    "B1950"    Earth mean equator, dynamical
+    equinox of B1950
+
+    "FK4"      Fundamental Catalog(4)
+
+    "DE-118"   JPL Developmental Ephemeris(118)
+
+    "DE-96"    JPL Developmental Ephemeris(96)
+
+    "DE-102"   JPL Developmental Ephemeris(102)
+
+    "DE-108"   JPL Developmental Ephemeris(108)
+
+    "DE-111"   JPL Developmental Ephemeris(111)
+
+    "DE-114"   JPL Developmental Ephemeris(114)
+
+    "DE-122"   JPL Developmental Ephemeris(122)
+
+    "DE-125"   JPL Developmental Ephemeris(125)
+
+    "DE-130"   JPL Developmental Ephemeris(130)
+
+    "GALACTIC" Galactic System II
+
+    "DE-200"   JPL Developmental Ephemeris(200)
+
+    "DE-202"   JPL Developmental Ephemeris(202)
+    */
+
+void USpice::tisbod(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSStateTransform& tsipm,
+    const FSEphemerisTime& et,
+    int           body,
+    const FString& ref
+)
+{
+    // Input
+    ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
+    SpiceInt        _body = body;
+    SpiceDouble     _et = et.AsDouble();
+    // Output
+    SpiceDouble     _tsipm[6][6];   ZeroOut(_tsipm);
+
+    // Invocation
+    tisbod_c(
+        _ref,
+        _body,
+        _et,
+        _tsipm
+    );
+
+    // Return Value
+    tsipm = FSStateTransform(_tsipm);
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
