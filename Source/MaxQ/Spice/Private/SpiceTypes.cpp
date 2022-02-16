@@ -149,6 +149,27 @@ FSSpeed FSVelocityVector::Magnitude() const
 }
 
 
+void FSAngularVelocity::Normalized(FSDimensionlessVector& v) const
+{
+    v = Normalized();
+}
+
+FSDimensionlessVector FSAngularVelocity::Normalized() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    vhat_c(xyz, xyz);
+    return FSDimensionlessVector(xyz);
+}
+
+FSAngularRate FSAngularVelocity::Magnitude() const
+{
+    SpiceDouble xyz[3];
+    CopyTo(xyz);
+    return FSAngularRate(vnorm_c(xyz));
+}
+
+
 
 /*
 *  NOTE: 
@@ -1520,7 +1541,6 @@ FVector USpiceTypes::Conv_SDistanceVectorToVector(
     return Swizzle(value);
 }
 
-
 FVector USpiceTypes::Conv_SVelocityVectorToVector(
     const FSVelocityVector& value
 )
@@ -1535,6 +1555,23 @@ FSDimensionlessVector USpiceTypes::Conv_VectorToSDimensionless(
     FSDimensionlessVector converted_value;
     Swizzle(value, converted_value);
     return converted_value;
+}
+
+
+FSAngularVelocity USpiceTypes::Conv_VectorToSAngularVelocity(
+    const FVector& value
+)
+{
+    FSAngularVelocity converted_value;
+    Swizzle(value, converted_value);
+    return converted_value;
+}
+
+FVector USpiceTypes::Conv_SAngularVelocityToVector(
+    const FSAngularVelocity& value
+)
+{
+    return Swizzle(value);
 }
 
 

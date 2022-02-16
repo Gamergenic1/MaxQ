@@ -2312,7 +2312,6 @@ public:
         FSRotationMatrix& mit
     );
 
-
     UFUNCTION(BlueprintPure,
         Category = "Spice|Api|Constants",
         meta = (
@@ -2722,6 +2721,39 @@ public:
         const FSRotationMatrix& m1,
         const FSVelocityVector& vin,
         FSVelocityVector& vout
+    );
+
+    /// <summary>Matrix transpose times vector, 3x3</summary>
+    /// <param name="m1">[in] 3x3 double precision matrix</param>
+    /// <param name="vin">[in] 3-dimensional double precision vector</param>
+    /// <param name="vout">[out] -dimensional double precision vector. vout is the product m1** t* vin</param>
+    /// <returns></returns>
+    UFUNCTION(
+        BlueprintPure,
+        Category = "Spice|Api|Matrix",
+        meta = (
+            Keywords = "MATRIX, VECTOR",
+            ShortToolTip = "Matrix transpose times vector, 3x3",
+            ToolTip = "mtxv multiplies the transpose of a 3x3 matrix on the left with a vector below"
+            ))
+    static void mtxv_angular(
+        const FSRotationMatrix& m1,
+        const FSAngularVelocity& vin,
+        FSAngularVelocity& vout
+    );
+
+    UFUNCTION(
+        BlueprintPure,
+        Category = "Spice|Api|Matrix",
+        meta = (
+            Keywords = "MATRIX, VECTOR",
+            ShortToolTip = "Matrix times vector, 3x3",
+            ToolTip = "mtxv multiplies a 3x3 matrix on the left with a vector below"
+            ))
+    static void mxv_angular(
+        const FSRotationMatrix& m1,
+        const FSAngularVelocity& vin,
+        FSAngularVelocity& vout
     );
 
     /// <summary>Matrix transpose times matrix, 3x3</summary>
@@ -4862,6 +4894,24 @@ public:
             const FSEphemerisTime& et,
             const FString& pictur = TEXT("MON DD,YYYY  HR:MN:SC.#### (TDB)")
         );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Rotation",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            Keywords = "ROTATION, TRANSFORMATION, FRAMES, PCK",
+            ShortToolTip = "Transformation, inertial state to bodyfixed",
+            ToolTip = "Return a 6x6 matrix that transforms states in inertial coordinates to states in body - equator - and -prime - meridian coordinates"
+            ))
+    static void tisbod(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSStateTransform& tsipm,
+        const FSEphemerisTime& et,
+        int           body = 399,
+        const FString& ref = TEXT("GALACTIC")
+    );
 
     /// <summary></summary>
     /// <param name="string">Input time string, UTC</param>
