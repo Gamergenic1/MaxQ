@@ -10630,11 +10630,9 @@ void USpice::uddf(
     // Begin reckless, ugly static hack
     DerivativeDelegate = udfunc;
 
-    // Invoke
+    // Need to test this, I'd be surprised if it works.
+    // This should be moved into a K2Node that emits Unreal VM Bytecode or something
     uddf_c(_udfunc, _x, _dx, &_deriv);
-
-    // End ugly static hack
-    DerivativeDelegate.Unbind();
 
     // Return Value
     deriv = _deriv;

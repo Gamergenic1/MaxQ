@@ -502,11 +502,15 @@ inline static FSDimensionlessVector& operator-=(FSDimensionlessVector& lhs, cons
 }
 
 
+#define FSDistance_km_to_M (1000)
+#define FSDistance_M_to_km (1/FSDistance_km_to_M)
+
 USTRUCT(BlueprintType)
-struct FSDistance
+struct SPICE_API FSDistance
 {
     GENERATED_BODY()
 
+public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite) double km;
 
     FSDistance()
@@ -519,7 +523,14 @@ struct FSDistance
         km = _km;
     }
 
-    double AsDouble() const { return km; }
+    inline double AsDouble() const  { return km; }
+    inline double As_Km() const     { return km; }
+    inline double As_M() const      { return As_Km() * FSDistance_km_to_M; }
+    inline double As_Meters() const { return As_M(); }
+
+    inline static FSDistance From_Km(double _km)    { return FSDistance(_km); }
+    inline static FSDistance From_M(double _m)      { return From_Km(_m * FSDistance_M_to_km); }
+    inline static FSDistance From_Meters(double _m) { return From_M(_m); }
 
     FSDistance(const FSDistance& other)
     {
@@ -532,10 +543,14 @@ struct FSDistance
         return *this;
     }
 
-    static SPICE_API const FSDistance Zero;
-    static SPICE_API const FSDistance OneKm;
+    static const FSDistance Zero;
+    static const FSDistance OneKm;
+    static const FSDistance OneMeter;
 };
 
+// Don't leak preprocessor definitions, which may affect jumbo/unity builds.
+#undef FSDistance_km_to_M
+#undef FSDistance_M_to_km
 
 inline static bool operator<(const FSDistance& lhs, const FSDistance& rhs)
 {
