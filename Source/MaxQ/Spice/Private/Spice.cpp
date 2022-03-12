@@ -5542,7 +5542,7 @@ void USpice::q2m(
 )
 {
     SpiceDouble _r[3][3];
-    q2m_c(q.q, _r);
+    q2m_c(q.q.GetData(), _r);
 
     r = FSRotationMatrix(_r);
 }
@@ -5559,8 +5559,9 @@ void USpice::m2q(
     FSQuaternion& q
 )
 {
+    SpiceDouble _m1[3][3];  r.CopyTo(_m1);
     SpiceDouble _q[4];
-    m2q_c(r.m, _q);
+    m2q_c(_m1, _q);
 
     q = FSQuaternion(_q);
 
@@ -5579,7 +5580,7 @@ void USpice::qxq(
 )
 {
     SpiceDouble _qout[4];
-    qxq_c(q1.q, q2.q, _qout);
+    qxq_c(q1.q.GetData(), q2.q.GetData(), _qout);
     qout = FSQuaternion(_qout);
 }
 
@@ -5593,9 +5594,11 @@ void USpice::mxm(
     FSRotationMatrix& mout
 )
 {
+    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
+    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
     SpiceDouble _mout[3][3];
 
-    mxm_c(m1.m, m2.m, _mout);
+    mxm_c(_m1, _m2, _mout);
 
     mout = FSRotationMatrix(_mout);
 }
@@ -5610,9 +5613,11 @@ void  USpice::mxmt(
     FSRotationMatrix& mout
 )
 {
+    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
+    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
     SpiceDouble _mout[3][3];
 
-    mxmt_c(m1.m, m2.m, _mout);
+    mxmt_c(_m1, _m2, _mout);
 
     mout = FSRotationMatrix(_mout);
 }
@@ -5628,9 +5633,11 @@ void USpice::mtxm(
     FSRotationMatrix& mout
 )
 {
+    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
+    SpiceDouble _m2[3][3];  m2.CopyTo(_m2);
     SpiceDouble _mout[3][3];
 
-    mtxm_c(m1.m, m2.m, _mout);
+    mtxm_c(_m1, _m2, _mout);
 
     mout = FSRotationMatrix(_mout);
 }
@@ -5672,7 +5679,8 @@ void USpice::mtxv(
     FSDimensionlessVector& vout
 )
 {
-    mtxv_(m1, vin, vout);
+    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
+    mtxv_(_m1, vin, vout);
 }
 
 
@@ -5687,7 +5695,8 @@ void USpice::mtxv_distance(
         FSDistanceVector& vout
     )
 {
-    mtxv_(m1, vin, vout);
+    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
+    mtxv_(_m1, vin, vout);
 }
 
 
@@ -5701,7 +5710,8 @@ void USpice::mtxv_velocity(
     FSVelocityVector& vout
 )
 {
-    mtxv_(m1, vin, vout);
+    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
+    mtxv_(_m1, vin, vout);
 }
 
 
@@ -5712,7 +5722,8 @@ void USpice::mtxv_angular(
     FSAngularVelocity& vout
 )
 {
-    mtxv_(m1, vin, vout);
+    SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
+    mtxv_(_m1, vin, vout);
 }
 
 /*
