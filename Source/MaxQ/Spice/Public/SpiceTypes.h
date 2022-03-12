@@ -2676,22 +2676,34 @@ struct FSStateTransform
 {
     GENERATED_BODY()
 
-    double m[6][6];
+    TArray<FSDimensionlessStateVector> m;
 
     FSStateTransform()
     {
-        memset(m, 0, sizeof(m));
-        m[0][0] = m[1][1] = m[2][2] = m[3][3] = m[4][4] = m[5][5] = 1.;
+        m.Init(FSDimensionlessStateVector(), 6);
+        m[0].r.x = m[1].r.y = m[2].r.z = m[3].dr.x = m[4].dr.y = m[5].dr.z;
     }
 
     FSStateTransform(const double(&_m)[6][6])
     {
-        memcpy(m, _m, sizeof(m));
+        m = {
+            FSDimensionlessStateVector(_m[0]),
+            FSDimensionlessStateVector(_m[1]),
+            FSDimensionlessStateVector(_m[2]),
+            FSDimensionlessStateVector(_m[3]),
+            FSDimensionlessStateVector(_m[4]),
+            FSDimensionlessStateVector(_m[5])
+        };
     }
 
     void CopyTo(double (&_m)[6][6]) const
     {
-        memcpy(_m, m, sizeof(_m));
+        m[0].CopyTo(_m[0]);
+        m[1].CopyTo(_m[1]);
+        m[2].CopyTo(_m[2]);
+        m[3].CopyTo(_m[3]);
+        m[4].CopyTo(_m[4]);
+        m[5].CopyTo(_m[5]);
     }
 
     static SPICE_API const FSStateTransform Identity;
@@ -2709,16 +2721,25 @@ struct FSRotationMatrix
 {
     GENERATED_BODY()
 
-    double m[3][3];
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TArray<FSDimensionlessVector> m;
 
     FSRotationMatrix()
     {
-        memset(m, 0, sizeof(m));
+        m = {
+            FSDimensionlessVector::X_Axis,
+            FSDimensionlessVector::Y_Axis,
+            FSDimensionlessVector::Z_Axis
+        };
     }
 
     FSRotationMatrix(const double(&_m)[3][3])
     {
-        memcpy(m, _m, sizeof(m));
+        m = { 
+            FSDimensionlessVector(_m[0]),
+            FSDimensionlessVector(_m[1]),
+            FSDimensionlessVector(_m[2])
+        };
     }
 
     FSRotationMatrix(
@@ -2727,17 +2748,16 @@ struct FSRotationMatrix
         const FSDimensionlessVector& z
     )
     {
-        x.CopyTo(m[0]);
-        y.CopyTo(m[1]);
-        z.CopyTo(m[2]);
+        m = { x, y, z };
     }
 
 
     void CopyTo(double(&_m)[3][3]) const
     {
-        memcpy(_m, m, sizeof(_m));
+        m[0].CopyTo(_m[0]);
+        m[1].CopyTo(_m[1]);
+        m[2].CopyTo(_m[2]);
     }
-
 
     static SPICE_API const FSRotationMatrix Identity;
 };
@@ -2748,7 +2768,8 @@ struct FSQuaternion
     GENERATED_BODY()
 
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/q2m_c.html
-    double q[4];
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    TArray<double> q;
 
     inline void QSPICE(double& w, double& x, double& y, double& z) const
     {
@@ -2785,20 +2806,19 @@ struct FSQuaternion
 
     FSQuaternion()
     {
+        q.Init(0., 4);
         q[0] = 1.;  // w
-        q[1] = 0.;  // x
-        q[2] = 0.;  // y
-        q[3] = 0.;  // z
     }
 
     FSQuaternion(const double(&_q)[4])
     {
-        memcpy(q, _q, sizeof(q));
+        q.Init(0., 4);
+        memcpy(q.GetData(), _q, sizeof(q));
     }
 
     void CopyTo(double(&_q)[4]) const
     {
-        memcpy(_q, q, sizeof(_q));
+        memcpy(_q, q.GetData(), sizeof(_q));
     }
 
     static SPICE_API const FSQuaternion Identity;
@@ -4781,6 +4801,28 @@ public:
             ))
     static FVector Conv_SAngularVelocityToVector(
         const FSAngularVelocity& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "$",
+            ToolTip = "Converts a Spice angular velocity vector to a string"
+            ))
+    static FString Conv_SAngularVelocityToString(
+        const FSAngularVelocity& value
+    );
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Types",
+        meta = (
+            BlueprintAutocast,
+            CompactNodeTitle = "$",
+            ToolTip = "Converts a Spice quaternion to a string"
+            ))
+    static FString Conv_SQuaternionToString(
+        const FSQuaternion& value
     );
 
 

@@ -1576,6 +1576,34 @@ FVector USpiceTypes::Conv_SAngularVelocityToVector(
 }
 
 
+FString USpiceTypes::Conv_SAngularVelocityToString(const FSAngularVelocity& value)
+{
+    FSDimensionlessVector dimensionlessVector;
+    value.AsDimensionlessVector(dimensionlessVector);
+    return Conv_SDimensionlessVectorToString(dimensionlessVector);
+}
+
+FString USpiceTypes::Conv_SQuaternionToString(const FSQuaternion& value)
+{
+    FSRotationMatrix m;
+    USpice::q2m(value, m);
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
+    
+    FSDimensionlessVector RotationAxis;
+    FSAngle RotationAngle;
+    USpice::raxisa(ResultCode, ErrorMessage, m, RotationAxis, RotationAngle);
+
+    if (ResultCode == ES_ResultCode::Success)
+    {
+        return FString::Format(TEXT("{0} deg * [{1}]"), { FormatAngle(RotationAngle, ES_AngleFormat::DD), Conv_SDimensionlessVectorToString(RotationAxis) });
+    }
+    else
+    {
+        return ErrorMessage;
+    }
+}
+
 FSDistanceVector USpiceTypes::Conv_VectorToSDistanceVector(
     const FVector& value
 )
