@@ -460,7 +460,7 @@ void USpice::axisar(
 {
     // Inputs
     SpiceDouble	_axis[3];	axis.CopyTo(_axis);
-    SpiceDouble	_angle = angle.AsDouble();
+    SpiceDouble	_angle = angle.AsSpiceDouble();
     // Outputs
     SpiceDouble	_r[3][3];   ZeroOut(_r);
 
@@ -1627,9 +1627,9 @@ void USpice::cyllat(
 )
 {
     // Inputs
-    SpiceDouble  _r = veccyl.r.AsDouble();
-    SpiceDouble  _lonc = veccyl.lon.AsDouble();
-    SpiceDouble  _z = veccyl.z.AsDouble();
+    SpiceDouble  _r = veccyl.r.AsSpiceDouble();
+    SpiceDouble  _lonc = veccyl.lon.AsSpiceDouble();
+    SpiceDouble  _z = veccyl.z.AsSpiceDouble();
     
     // Outputs
     SpiceDouble _radius = 0.;
@@ -1690,9 +1690,9 @@ void USpice::cylrec(
 )
 {
     // Inputs
-    SpiceDouble _r      = veccyl.r.AsDouble();
-    SpiceDouble _lon    = veccyl.lon.AsDouble();
-    SpiceDouble _z      = veccyl.z.AsDouble();
+    SpiceDouble _r      = veccyl.r.AsSpiceDouble();
+    SpiceDouble _lon    = veccyl.lon.AsSpiceDouble();
+    SpiceDouble _z      = veccyl.z.AsSpiceDouble();
     // Output
     SpiceDouble _rectan[3]; ZeroOut(_rectan);
 
@@ -1715,9 +1715,9 @@ void USpice::cylsph(
 )
 {
     // Inputs
-    SpiceDouble _r = veccyl.r.AsDouble();
-    SpiceDouble _lonc = veccyl.lon.AsDouble();
-    SpiceDouble _z = veccyl.z.AsDouble();
+    SpiceDouble _r = veccyl.r.AsSpiceDouble();
+    SpiceDouble _lonc = veccyl.lon.AsSpiceDouble();
+    SpiceDouble _z = veccyl.z.AsSpiceDouble();
     // Outputs
     SpiceDouble _radius = 0.;
     SpiceDouble _colat = 0.;
@@ -2473,7 +2473,7 @@ void USpice::dskxsi(
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     SpiceInt        _nsurf = srflst.Num();
     SpiceInt*       _srflst = (SpiceInt*)srflst.GetData();
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     SpiceDouble     _vertex[3];
     SpiceDouble     _raydir[3]; ray.CopyTo(_vertex, _raydir);
@@ -2516,13 +2516,12 @@ void USpice::dskxsi(
     dladsc = FSDLADescr(&_dladsc);
     dskdsc = FSDSKDescr(&_dskdsc);
     dc.Init(0., SPICE_DSKXSI_DCSIZE);
-    memcpy(dc.GetData(), _dc, sizeof(_dc));
+    FMemory::Memcpy(dc.GetData(), _dc, sizeof(_dc));
     dc.Init(0, SPICE_DSKXSI_DCSIZE);
-    memcpy(ic.GetData(), _ic, sizeof(_ic));
+    FMemory::Memcpy(ic.GetData(), _ic, sizeof(_ic));
     found = _found == SPICETRUE ? true : false;
     dladsc = FSDLADescr(&_dladsc);
     dskdsc = FSDSKDescr(&_dskdsc);
-
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
 }
@@ -2546,7 +2545,7 @@ void USpice::dskxv(
     ConstSpiceChar*     _target = TCHAR_TO_ANSI(*target);
     SpiceInt            _nsurf = srflst.Num();
     SpiceInt*           _srflst = (SpiceInt*)srflst.GetData();
-    SpiceDouble         _et = et.AsDouble();
+    SpiceDouble         _et = et.AsSpiceDouble();
     ConstSpiceChar*     _fixref = TCHAR_TO_ANSI(*fixref);
     SpiceInt            _nrays = rayarray.Num();
     SpiceDouble(*_vtxarr)[3] = (SpiceDouble(*)[3])StackAlloc(_nrays * sizeof(SpiceDouble[3]));
@@ -2874,9 +2873,9 @@ void USpice::eul2m(
 )
 {
     // Inputs
-    SpiceDouble  _angle3 = angle3.AsDouble();
-    SpiceDouble  _angle2 = angle2.AsDouble();
-    SpiceDouble  _angle1 = angle1.AsDouble();
+    SpiceDouble  _angle3 = angle3.AsSpiceDouble();
+    SpiceDouble  _angle2 = angle2.AsSpiceDouble();
+    SpiceDouble  _angle1 = angle1.AsSpiceDouble();
     SpiceInt     _axis3 = (SpiceInt)axis3;
     SpiceInt     _axis2 = (SpiceInt)axis2;
     SpiceInt     _axis1 = (SpiceInt)axis1;
@@ -3017,7 +3016,7 @@ int USpice::ev2lin(
     FSStateVector& state
 )
 {
-    SpiceDouble _et = et.AsDouble();
+    SpiceDouble _et = et.AsSpiceDouble();
     SpiceDouble _geophs[8]; geophs.CopyTo(_geophs);
     SpiceDouble _elems[10]; elems.CopyTo(_elems);
     SpiceDouble _state[6];
@@ -3033,7 +3032,7 @@ int USpice::ev2lin(
     // Both periods are in seconds...
     const double nearEarthThreshold = 225. * 60.;
 
-    double angularRate = elems.N().AsDouble();
+    double angularRate = elems.N().AsSpiceDouble();
     double orbitPeriod = twopi_c() / angularRate;
 
     // note ev2lin and dpspce have been superceded
@@ -3238,7 +3237,7 @@ void USpice::fovray(
     ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
     ConstSpiceChar*  _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _observer = TCHAR_TO_ANSI(*observer);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
 
     // Output
     SpiceBoolean       _visible = SPICEFALSE;
@@ -3281,7 +3280,7 @@ void USpice::fovtrg(
     ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*tframe);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    SpiceDouble    _et      = et.AsDouble();
+    SpiceDouble    _et      = et.AsSpiceDouble();
     
     // Output
     SpiceBoolean   _visible = SPICEFALSE;
@@ -3661,9 +3660,9 @@ void USpice::gfdist(
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
-    SpiceDouble     _refval = refval.AsDouble();
-    SpiceDouble     _adjust = adjust.AsDouble();
-    SpiceDouble     _step   = step.AsDouble();
+    SpiceDouble     _refval = refval.AsSpiceDouble();
+    SpiceDouble     _adjust = adjust.AsSpiceDouble();
+    SpiceDouble     _step   = step.AsSpiceDouble();
     
     // Unpack the confinement window array..
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
@@ -3684,10 +3683,10 @@ void USpice::gfdist(
             maxWindow = thisWindow;
         }
         
-        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+        wninsd_c(et0.AsSpiceDouble(), et1.AsSpiceDouble(), &_cnfine);
     }
     // 
-    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsSpiceDouble() / step.AsSpiceDouble()) + 2;
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
@@ -3764,9 +3763,9 @@ void USpice::gfilum(
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _spoint[3]; spoint.CopyTo(_spoint);
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
-    SpiceDouble     _refval = refval.AsDouble();
-    SpiceDouble     _adjust = adjust.AsDouble();
-    SpiceDouble     _step   = step.AsDouble();
+    SpiceDouble     _refval = refval.AsSpiceDouble();
+    SpiceDouble     _adjust = adjust.AsSpiceDouble();
+    SpiceDouble     _step   = step.AsSpiceDouble();
 
 
     // Unpack the confinement window array..
@@ -3788,12 +3787,12 @@ void USpice::gfilum(
             maxWindow = thisWindow;
         }
 
-        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+        wninsd_c(et0.AsSpiceDouble(), et1.AsSpiceDouble(), &_cnfine);
     }
 
 
     // 
-    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsSpiceDouble() / step.AsSpiceDouble()) + 2;
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
@@ -3874,7 +3873,7 @@ void USpice::gfoclt(
     ConstSpiceChar* _bframe = TCHAR_TO_ANSI(*backFrame);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    SpiceDouble     _step = step.AsDouble();
+    SpiceDouble     _step = step.AsSpiceDouble();
     
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
     // Spice Cells are static.  They must reinitialized on every use or they
@@ -3883,7 +3882,7 @@ void USpice::gfoclt(
 
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
-        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+        wninsd_c((*It).start.AsSpiceDouble(), (*It).stop.AsSpiceDouble(), &_cnfine);
     }
    
 
@@ -3973,9 +3972,9 @@ void USpice::gfpa(
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
-    SpiceDouble     _refval = refval.AsDouble();
-    SpiceDouble     _adjust = adjust.AsDouble();
-    SpiceDouble     _step = step.AsDouble();
+    SpiceDouble     _refval = refval.AsSpiceDouble();
+    SpiceDouble     _adjust = adjust.AsSpiceDouble();
+    SpiceDouble     _step = step.AsSpiceDouble();
 
     // Unpack the confinement window array..
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
@@ -3995,11 +3994,11 @@ void USpice::gfpa(
             maxWindow = thisWindow;
         }
 
-        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+        wninsd_c(et0.AsSpiceDouble(), et1.AsSpiceDouble(), &_cnfine);
     }
 
     // 
-    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsSpiceDouble() / step.AsSpiceDouble()) + 2;
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
@@ -4077,7 +4076,7 @@ void USpice::gfposc(
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
     SpiceDouble     _refval = refval;
     SpiceDouble     _adjust = adjust;
-    SpiceDouble     _step   = step.AsDouble();
+    SpiceDouble     _step   = step.AsSpiceDouble();
     SpiceInt        _nintvls = (SpiceInt)nintvls;
 
 
@@ -4087,7 +4086,7 @@ void USpice::gfposc(
     scard_c(0, &_cnfine);
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
-        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+        wninsd_c((*It).start.AsSpiceDouble(), (*It).stop.AsSpiceDouble(), &_cnfine);
     }
 
     // Outputs
@@ -4146,7 +4145,7 @@ void USpice::gfrfov(
     ConstSpiceChar* _rframe = TCHAR_TO_ANSI(*rframe);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    SpiceDouble     _step   = step.AsDouble();
+    SpiceDouble     _step   = step.AsSpiceDouble();
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
     // Spice Cells are static.  They must reinitialized on every use or they
@@ -4154,7 +4153,7 @@ void USpice::gfrfov(
     scard_c(0, &_cnfine);
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
-        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+        wninsd_c((*It).start.AsSpiceDouble(), (*It).stop.AsSpiceDouble(), &_cnfine);
     }
 
     // Outputs
@@ -4221,9 +4220,9 @@ void USpice::gfrr(
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
-    SpiceDouble     _refval = refval.AsDouble();
-    SpiceDouble     _adjust = adjust.AsDouble();
-    SpiceDouble     _step = step.AsDouble();
+    SpiceDouble     _refval = refval.AsSpiceDouble();
+    SpiceDouble     _adjust = adjust.AsSpiceDouble();
+    SpiceDouble     _step = step.AsSpiceDouble();
 
     // Unpack the confinement window array..
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
@@ -4244,11 +4243,11 @@ void USpice::gfrr(
             maxWindow = thisWindow;
         }
 
-        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+        wninsd_c(et0.AsSpiceDouble(), et1.AsSpiceDouble(), &_cnfine);
     }
 
     // 
-    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsSpiceDouble() / step.AsSpiceDouble()) + 2;
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
@@ -4339,9 +4338,9 @@ void USpice::gfsep(
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
-    SpiceDouble     _refval = refval.AsDouble();
-    SpiceDouble     _adjust = adjust.AsDouble();
-    SpiceDouble     _step = step.AsDouble();
+    SpiceDouble     _refval = refval.AsSpiceDouble();
+    SpiceDouble     _adjust = adjust.AsSpiceDouble();
+    SpiceDouble     _step = step.AsSpiceDouble();
 
     // Unpack the confinement window array..
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
@@ -4362,11 +4361,11 @@ void USpice::gfsep(
             maxWindow = thisWindow;
         }
 
-        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+        wninsd_c(et0.AsSpiceDouble(), et1.AsSpiceDouble(), &_cnfine);
     }
 
     // 
-    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsSpiceDouble() / step.AsSpiceDouble()) + 2;
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
@@ -4451,7 +4450,7 @@ void USpice::gfsntc(
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
     SpiceDouble     _refval = refval;
     SpiceDouble     _adjust = adjust;
-    SpiceDouble     _step   = step.AsDouble();
+    SpiceDouble     _step   = step.AsSpiceDouble();
 
     // Unpack the confinement window array..
     FSEphemerisPeriod maxWindow = FSEphemerisPeriod::Zero;
@@ -4472,11 +4471,11 @@ void USpice::gfsntc(
             maxWindow = thisWindow;
         }
 
-        wninsd_c(et0.AsDouble(), et1.AsDouble(), &_cnfine);
+        wninsd_c(et0.AsSpiceDouble(), et1.AsSpiceDouble(), &_cnfine);
     }
 
     // 
-    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsDouble() / step.AsDouble()) + 2;
+    SpiceInt _nintvls = 2 * cnfine.Num() + (maxWindow.AsSpiceDouble() / step.AsSpiceDouble()) + 2;
 
     // Output
     SPICEDOUBLE_CELL(_result, MAXWIN);
@@ -4544,7 +4543,7 @@ void USpice::gftfov(
     ConstSpiceChar* _tframe = TCHAR_TO_ANSI(*inst);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*inst);
-    SpiceDouble     _step = step.AsDouble();
+    SpiceDouble     _step = step.AsSpiceDouble();
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
     // Spice Cells are static.  They must reinitialized on every use or they
@@ -4552,7 +4551,7 @@ void USpice::gftfov(
     scard_c(0, &_cnfine);
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
-        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+        wninsd_c((*It).start.AsSpiceDouble(), (*It).stop.AsSpiceDouble(), &_cnfine);
     }
 
     // Outputs
@@ -4635,7 +4634,7 @@ void USpice::gfsubc(
     ConstSpiceChar* _relate = USpiceTypes::toString(relate);
     SpiceDouble     _refval = (SpiceDouble)refval;
     SpiceDouble     _adjust = (SpiceDouble)adjust;
-    SpiceDouble     _step = step.AsDouble();
+    SpiceDouble     _step = step.AsSpiceDouble();
     SpiceInt        _nintvls = (SpiceInt)nintvls;
 
     SPICEDOUBLE_CELL(_cnfine, MAXWIN);
@@ -4645,7 +4644,7 @@ void USpice::gfsubc(
 
     for (auto It = cnfine.CreateConstIterator(); It; ++It)
     {
-        wninsd_c((*It).start.AsDouble(), (*It).stop.AsDouble(), &_cnfine);
+        wninsd_c((*It).start.AsSpiceDouble(), (*It).stop.AsSpiceDouble(), &_cnfine);
     }
 
     // Outputs
@@ -4782,7 +4781,7 @@ void USpice::illumf(
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
@@ -4853,7 +4852,7 @@ void USpice::illumg(
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
@@ -4992,7 +4991,7 @@ void USpice::ilumin(
     // Inputs
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*method);
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et     = et.AsDouble();
+    SpiceDouble     _et     = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
@@ -5210,9 +5209,9 @@ void USpice::latcyl(
 )
 {
     // Input
-    SpiceDouble _radius = latvec.r.AsDouble();
-    SpiceDouble _lon = latvec.lonlat.longitude.AsDouble();
-    SpiceDouble _lat = latvec.lonlat.latitude.AsDouble();
+    SpiceDouble _radius = latvec.r.AsSpiceDouble();
+    SpiceDouble _lon = latvec.lonlat.longitude.AsSpiceDouble();
+    SpiceDouble _lat = latvec.lonlat.latitude.AsSpiceDouble();
     
     // Outputs
     SpiceDouble _r = 0.;
@@ -5240,7 +5239,7 @@ void USpice::latrec(
 )
 {
     // Inputs
-    SpiceDouble    _radius = latvec.r.AsDouble();
+    SpiceDouble    _radius = latvec.r.AsSpiceDouble();
     SpiceDouble    _longitude;
     SpiceDouble    _latitude;
     latvec.lonlat.CopyTo(_longitude, _latitude);
@@ -5266,9 +5265,9 @@ void USpice::latsph(
 )
 {
     // Inputs
-    SpiceDouble _radius = latvec.r.AsDouble();
-    SpiceDouble _lon = latvec.lonlat.longitude.AsDouble();
-    SpiceDouble _lat = latvec.lonlat.latitude.AsDouble();
+    SpiceDouble _radius = latvec.r.AsSpiceDouble();
+    SpiceDouble _lon = latvec.lonlat.longitude.AsSpiceDouble();
+    SpiceDouble _lat = latvec.lonlat.latitude.AsSpiceDouble();
     // Outputs
     SpiceDouble _rho = 0.;
     SpiceDouble _colat = 0.;
@@ -5365,7 +5364,7 @@ void USpice::latsrf(
     // Input
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et     = et.AsDouble();
+    SpiceDouble     _et     = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
 
     // lonlat.GetData() would work if the ONLY data in the SLonLat structures are the members we declared.
@@ -5375,8 +5374,8 @@ void USpice::latsrf(
     SpiceDouble     (*_lonlat)[2] = (SpiceDouble(*)[2]) new uint8[_npts * sizeof(SpiceDouble[2])];
     for (int i = 0; i < _npts; ++i)
     {
-        _lonlat[i][0] = lonlat[i].longitude.AsDouble();
-        _lonlat[i][1] = lonlat[i].latitude.AsDouble();
+        _lonlat[i][0] = lonlat[i].longitude.AsSpiceDouble();
+        _lonlat[i][1] = lonlat[i].latitude.AsSpiceDouble();
     }
 
     // Output
@@ -5436,16 +5435,16 @@ void USpice::limbpt(
     // Inputs
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _corloc = USpiceTypes::toString(corloc);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
-    SpiceDouble     _rolstp = rolstp.AsDouble();
+    SpiceDouble     _rolstp = rolstp.AsSpiceDouble();
     SpiceInt        _ncuts = ncuts;
-    SpiceDouble     _schstp = schstp.AsDouble();
-    SpiceDouble     _soltol = soltol.AsDouble();
+    SpiceDouble     _schstp = schstp.AsSpiceDouble();
+    SpiceDouble     _soltol = soltol.AsSpiceDouble();
 
     // Outputs
     SpiceInt        _maxn = maxn;
@@ -6211,7 +6210,7 @@ void USpice::lspcn(
 {
     // Inputs
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
-    SpiceDouble		_et = et.AsDouble();
+    SpiceDouble		_et = et.AsSpiceDouble();
     ConstSpiceChar* _abcorr;
     switch (abcorr)
     {
@@ -6489,9 +6488,9 @@ void USpice::nearpt(
 {
     // Inputs
     SpiceDouble _positn[3]; positn.CopyTo(_positn);
-    SpiceDouble _a = a.AsDouble();
-    SpiceDouble _b = b.AsDouble();
-    SpiceDouble _c = c.AsDouble();
+    SpiceDouble _a = a.AsSpiceDouble();
+    SpiceDouble _b = b.AsSpiceDouble();
+    SpiceDouble _c = c.AsSpiceDouble();
     // Outputs
     SpiceDouble _npoint[3]; ZeroOut(_npoint);
     SpiceDouble _alt = 0;
@@ -6543,9 +6542,9 @@ void USpice::npedln(
 )
 {
     // Inputs
-    SpiceDouble       _a;       _a = a.AsDouble();
-    SpiceDouble       _b;       _b = b.AsDouble();
-    SpiceDouble       _c;       _c = c.AsDouble();
+    SpiceDouble       _a;       _a = a.AsSpiceDouble();
+    SpiceDouble       _b;       _b = b.AsSpiceDouble();
+    SpiceDouble       _c;       _c = c.AsSpiceDouble();
     SpiceDouble  _linept[3];    linept.CopyTo(_linept);
     SpiceDouble  _linedr[3];    linedr.CopyTo(_linedr);
     // Outputs
@@ -6614,7 +6613,7 @@ void USpice::nvc2pl(
 {
     // Inputs
     SpiceDouble	_normal[3]; normal.CopyTo(_normal);
-    SpiceDouble	_constant = constant.AsDouble();
+    SpiceDouble	_constant = constant.AsSpiceDouble();
     // Output
     SpicePlane	_plane;     ZeroOut(_plane);
 
@@ -6688,7 +6687,7 @@ void USpice::occult(
     ConstSpiceChar* _frame2 = TCHAR_TO_ANSI(*frame2);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
-    SpiceDouble        _et = et.AsDouble();
+    SpiceDouble        _et = et.AsSpiceDouble();
 
     // Output
     SpiceInt _ocltid = 0;
@@ -7180,10 +7179,10 @@ void USpice::pgrrec(
 {
     // Inputs
     ConstSpiceChar* _body = TCHAR_TO_ANSI(*body);
-    SpiceDouble     _lon = planetographicVec.lonlat.longitude.AsDouble();
-    SpiceDouble     _lat = planetographicVec.lonlat.latitude.AsDouble();
-    SpiceDouble     _alt = planetographicVec.alt.AsDouble();
-    SpiceDouble     _re  = re.AsDouble();
+    SpiceDouble     _lon = planetographicVec.lonlat.longitude.AsSpiceDouble();
+    SpiceDouble     _lat = planetographicVec.lonlat.latitude.AsSpiceDouble();
+    SpiceDouble     _alt = planetographicVec.alt.AsSpiceDouble();
+    SpiceDouble     _re  = re.AsSpiceDouble();
     SpiceDouble     _f   = (SpiceDouble)f;
     
     // Outputs
@@ -7211,7 +7210,7 @@ FSAngle USpice::phaseq(
 )
 {
     // Inputs
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
     ConstSpiceChar* _illmn = TCHAR_TO_ANSI(*illmn);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
@@ -7489,9 +7488,9 @@ void USpice::prop2b(
 )
 {
     // Inputs
-    SpiceDouble	_gm = gm.AsDouble();
+    SpiceDouble	_gm = gm.AsSpiceDouble();
     SpiceDouble	_pvinit[6]; pvinit.CopyTo(_pvinit);
-    SpiceDouble	_dt = dt.AsDouble();
+    SpiceDouble	_dt = dt.AsSpiceDouble();
     // Output
     SpiceDouble	_pvprop[6];	ZeroOut(_pvprop);
 
@@ -7777,7 +7776,7 @@ void USpice::recpgr(
     // Inputs
     ConstSpiceChar*  _body          = TCHAR_TO_ANSI(*body);;
     SpiceDouble      _rectan[3];    rectan.CopyTo(_rectan);
-    SpiceDouble     _re             = re.AsDouble();
+    SpiceDouble     _re             = re.AsSpiceDouble();
     SpiceDouble     _f              = (SpiceDouble)f;
 
     // Outputs
@@ -7854,7 +7853,7 @@ void USpice::rotate(
 )
 {
     // Inputs
-    SpiceDouble _angle = angle.AsDouble();
+    SpiceDouble _angle = angle.AsSpiceDouble();
     SpiceInt    _iaxis = (SpiceInt)iaxis;
     // Outputs
     SpiceDouble _mout[3][3];
@@ -7885,7 +7884,7 @@ void USpice::rotmat(
 {
     // Inputs
     SpiceDouble _m1[3][3];  m1.CopyTo(_m1);
-    SpiceDouble _angle;     _angle = angle.AsDouble();
+    SpiceDouble _angle;     _angle = angle.AsSpiceDouble();
     SpiceInt    _iaxis = (SpiceInt)iaxis;
     // Output
     SpiceDouble _mout[3][3];
@@ -7914,7 +7913,7 @@ void USpice::rotvec(
 {
     // Inputs
     SpiceDouble _v1[3]; v1.CopyTo(_v1);
-    SpiceDouble _angle = angle.AsDouble();
+    SpiceDouble _angle = angle.AsSpiceDouble();
     SpiceInt    _iaxis = (SpiceInt)iaxis;
     // Output
     SpiceDouble _vout[3];
@@ -8079,7 +8078,7 @@ void USpice::sce2c(
 {
     // Inputs
     SpiceInt    _sc = sc;
-    SpiceDouble _et = et.AsDouble();
+    SpiceDouble _et = et.AsSpiceDouble();
     // Outputs
     SpiceDouble _sclkdp = 0;
 
@@ -8141,7 +8140,7 @@ void USpice::sce2s(
 
     // Inputs
     SpiceInt    _sc = sc;
-    SpiceDouble _et = et.AsDouble();
+    SpiceDouble _et = et.AsSpiceDouble();
     SpiceInt    _lenout = sizeof(szBuffer);
     // Outputs
     SpiceChar* _sclkch = szBuffer;
@@ -8202,7 +8201,7 @@ void USpice::sce2t(
 {
     // Inputs
     SpiceInt    _sc = sc;
-    SpiceDouble _et = et.AsDouble();
+    SpiceDouble _et = et.AsSpiceDouble();
     // Outputs
     SpiceDouble _sclkdp = 0;
 
@@ -8557,7 +8556,7 @@ void USpice::shelld_ByIndex(
     
     // And a sorted clone...
     SpiceDouble* sortedArray = (SpiceDouble*)StackAlloc(ndim * sizeof(SpiceDouble));
-    memcpy(sortedArray, DoubleArray.GetData(), ndim * sizeof(SpiceDouble));
+    FMemory::Memcpy(sortedArray, DoubleArray.GetData(), ndim * sizeof(SpiceDouble));
 
     shelld_c(ndim, sortedArray);
 
@@ -8676,7 +8675,7 @@ void USpice::sincpt(
     // Inputs
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et     = et.AsDouble();
+    SpiceDouble     _et     = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
@@ -8745,9 +8744,9 @@ void USpice::sphcyl(
 )
 {
     // Inputs
-    SpiceDouble _radius = sphvec.r.AsDouble();
-    SpiceDouble _colat = sphvec.colat.AsDouble();
-    SpiceDouble _slon = sphvec.lon.AsDouble();
+    SpiceDouble _radius = sphvec.r.AsSpiceDouble();
+    SpiceDouble _colat = sphvec.colat.AsSpiceDouble();
+    SpiceDouble _slon = sphvec.lon.AsSpiceDouble();
     // Outputs
     SpiceDouble _r = 0.;
     SpiceDouble _lon = 0.;
@@ -8776,9 +8775,9 @@ void USpice::sphlat(
 )
 {
     // Input
-    SpiceDouble _radius = sphvec.r.AsDouble();
-    SpiceDouble _colat = sphvec.colat.AsDouble();
-    SpiceDouble _lons = sphvec.lon.AsDouble();
+    SpiceDouble _radius = sphvec.r.AsSpiceDouble();
+    SpiceDouble _colat = sphvec.colat.AsSpiceDouble();
+    SpiceDouble _lons = sphvec.lon.AsSpiceDouble();
 
     // Output
     SpiceDouble _r;
@@ -8806,9 +8805,9 @@ void USpice::sphrec(
 )
 {
     // Input
-    SpiceDouble _r = sphvec.r.AsDouble();
-    SpiceDouble _colat = sphvec.colat.AsDouble();
-    SpiceDouble _lon = sphvec.lon.AsDouble();
+    SpiceDouble _r = sphvec.r.AsSpiceDouble();
+    SpiceDouble _colat = sphvec.colat.AsSpiceDouble();
+    SpiceDouble _lon = sphvec.lon.AsSpiceDouble();
     // Output
     SpiceDouble _rectan[3];
 
@@ -8940,7 +8939,7 @@ void USpice::spkcpo(
 {
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
@@ -9029,7 +9028,7 @@ void USpice::spkcpt(
     SpiceDouble     _trgpos[3]; trgpos.CopyTo(_trgpos);
     ConstSpiceChar* _trgctr = TCHAR_TO_ANSI(*trgctr);
     ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
@@ -9115,12 +9114,12 @@ void USpice::spkcvo(
 {
     // Inputs
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     SpiceDouble     _obssta[6]; obssta.CopyTo(_obssta);
-    SpiceDouble     _obsepc = obsepc.AsDouble();
+    SpiceDouble     _obsepc = obsepc.AsSpiceDouble();
     ConstSpiceChar* _obsctr = TCHAR_TO_ANSI(*obsctr);
     ConstSpiceChar* _obsref = TCHAR_TO_ANSI(*obsref);
     // Outputs
@@ -9204,10 +9203,10 @@ void USpice::spkcvt(
 {
     // Inputs
     SpiceDouble     _trgsta[6]; trgsta.CopyTo(_trgsta);
-    SpiceDouble     _trgepc = trgepc.AsDouble();
+    SpiceDouble     _trgepc = trgepc.AsSpiceDouble();
     ConstSpiceChar* _trgctr = TCHAR_TO_ANSI(*trgctr);
     ConstSpiceChar* _trgref = TCHAR_TO_ANSI(*trgref);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _outref = TCHAR_TO_ANSI(*outref);
     ConstSpiceChar* _refloc = USpiceTypes::toString(refloc);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
@@ -9655,10 +9654,10 @@ void USpice::spkw05(
     SpiceInt         _body = body;
     SpiceInt         _center = center;
     ConstSpiceChar* _frame = TCHAR_TO_ANSI(*frame);
-    SpiceDouble      _first = first.AsDouble();
-    SpiceDouble      _last = last.AsDouble();
+    SpiceDouble      _first = first.AsSpiceDouble();
+    SpiceDouble      _last = last.AsSpiceDouble();
     ConstSpiceChar* _segid = TCHAR_TO_ANSI(*segid);
-    SpiceDouble      _gm = gm.AsDouble();
+    SpiceDouble      _gm = gm.AsSpiceDouble();
     SpiceInt         _n = states.Num();
 
     SpiceDouble(*_states)[6] = (SpiceDouble(*)[6])StackAlloc(_n * sizeof(SpiceDouble[6]));
@@ -9666,7 +9665,7 @@ void USpice::spkw05(
 
     for (int i = 0; i < states.Num(); ++i)
     {
-        _epochs[i] = states[i].et.AsDouble();
+        _epochs[i] = states[i].et.AsSpiceDouble();
         states[i].state.CopyTo(_states[i]);
     }
 
@@ -9707,8 +9706,8 @@ void USpice::spkw15(
     SpiceInt         _body = body;
     SpiceInt         _center = center;
     ConstSpiceChar*  _frame = TCHAR_TO_ANSI(*frame);
-    SpiceDouble      _first = first.AsDouble();
-    SpiceDouble      _last = last.AsDouble();
+    SpiceDouble      _first = first.AsSpiceDouble();
+    SpiceDouble      _last = last.AsSpiceDouble();
     ConstSpiceChar*  _segid = TCHAR_TO_ANSI(*segid);
 
     SpiceDouble _epoch;
@@ -9907,7 +9906,7 @@ void USpice::srfnrm(
     // Input
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, shapeSurfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     SpiceInt        _npts = srfpts.Num();
 
@@ -9917,9 +9916,9 @@ void USpice::srfnrm(
     SpiceDouble(*_srfpts)[3] = (SpiceDouble(*)[3]) new uint8[_npts * sizeof(SpiceDouble[3])];
     for (int i = 0; i < _npts; ++i)
     {
-        _srfpts[i][0] = srfpts[i].x.AsDouble();
-        _srfpts[i][1] = srfpts[i].y.AsDouble();
-        _srfpts[i][2] = srfpts[i].z.AsDouble();
+        _srfpts[i][0] = srfpts[i].x.AsSpiceDouble();
+        _srfpts[i][1] = srfpts[i].y.AsSpiceDouble();
+        _srfpts[i][2] = srfpts[i].z.AsSpiceDouble();
     }
 
     // Output
@@ -10078,7 +10077,7 @@ void USpice::subpnt(
     // Input
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
@@ -10132,7 +10131,7 @@ void USpice::subslr(
 {
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(method, surfaces));
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
@@ -10180,9 +10179,9 @@ void USpice::surfnm(
 )
 {
     // Input
-    SpiceDouble        _a = a.AsDouble();
-    SpiceDouble        _b = b.AsDouble();
-    SpiceDouble        _c = c.AsDouble();
+    SpiceDouble        _a = a.AsSpiceDouble();
+    SpiceDouble        _b = b.AsSpiceDouble();
+    SpiceDouble        _c = c.AsSpiceDouble();
     SpiceDouble _point[3];  point.CopyTo(_point);
     // Output
     SpiceDouble _normal[3]; ZeroOut(_normal);
@@ -10221,9 +10220,9 @@ void USpice::surfpt(
     // Input
     SpiceDouble _positn[3]; positn.CopyTo(_positn);
     SpiceDouble _u[3];      u.CopyTo(_u);
-    SpiceDouble _a = a.AsDouble();
-    SpiceDouble _b = b.AsDouble();
-    SpiceDouble _c = c.AsDouble();
+    SpiceDouble _a = a.AsSpiceDouble();
+    SpiceDouble _b = b.AsSpiceDouble();
+    SpiceDouble _c = c.AsSpiceDouble();
     // Output
     SpiceDouble _point[3];  ZeroOut(_point);
     SpiceBoolean* _found = false;
@@ -10262,7 +10261,7 @@ void USpice::sxform(
     // Input
     SpiceChar* _from = TCHAR_TO_ANSI(*from);
     SpiceChar* _to = TCHAR_TO_ANSI(*to);
-    SpiceDouble _et = et.AsDouble();
+    SpiceDouble _et = et.AsSpiceDouble();
     // Output
     SpiceDouble _xform[6][6];   ZeroOut(_xform);
 
@@ -10309,16 +10308,16 @@ void USpice::termpt(
     ConstSpiceChar* _method = TCHAR_TO_ANSI(*USpiceTypes::toFString(shadow, curveType, method, shapeSurfaces));
     ConstSpiceChar* _ilusrc = TCHAR_TO_ANSI(*ilusrc);
     ConstSpiceChar* _target = TCHAR_TO_ANSI(*target);
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     ConstSpiceChar* _fixref = TCHAR_TO_ANSI(*fixref);
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
     ConstSpiceChar* _corloc = USpiceTypes::toString(abcorr);;
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     SpiceDouble     _refvec[3];  refvec.CopyTo(_refvec);
-    SpiceDouble     _rolstp = rolstp.AsDouble();
+    SpiceDouble     _rolstp = rolstp.AsSpiceDouble();
     SpiceInt        _ncuts = ncuts;
-    SpiceDouble     _schstp = schstp.AsDouble();
-    SpiceDouble     _soltol = soltol.AsDouble();
+    SpiceDouble     _schstp = schstp.AsSpiceDouble();
+    SpiceDouble     _soltol = soltol.AsSpiceDouble();
     SpiceInt        _maxn = maxn;
 
     // Outputs
@@ -10438,7 +10437,7 @@ void USpice::tisbod(
     // Input
     ConstSpiceChar* _ref = TCHAR_TO_ANSI(*ref);
     SpiceInt        _body = body;
-    SpiceDouble     _et = et.AsDouble();
+    SpiceDouble     _et = et.AsSpiceDouble();
     // Output
     SpiceDouble     _tsipm[6][6];   ZeroOut(_tsipm);
 
@@ -11599,7 +11598,7 @@ void USpice::vrotv(
     // Inputs
     SpiceDouble _v[3];      v.CopyTo(_v);
     SpiceDouble _axis[3];   axis.CopyTo(_axis);
-    SpiceDouble _theta = theta.AsDouble();
+    SpiceDouble _theta = theta.AsSpiceDouble();
     // Output                
     SpiceDouble _r[3];
 

@@ -23,8 +23,8 @@ PRAGMA_POP_PLATFORM_DEFAULT_PACKING
 
 
 SPICE_API const FSDistance FSDistance::Zero = FSDistance(0.);
-SPICE_API const FSDistance FSDistance::OneKm = FSDistance::From_Km(1.);
-SPICE_API const FSDistance FSDistance::OneMeter = FSDistance::From_Meters(1.);
+SPICE_API const FSDistance FSDistance::OneKm = FSDistance::FromKm(1.);
+SPICE_API const FSDistance FSDistance::OneMeter = FSDistance::FromMeters(1.);
 SPICE_API const FSSpeed FSSpeed::Zero = FSSpeed();
 SPICE_API const FSDistanceVector FSDistanceVector::Zero = FSDistanceVector();
 SPICE_API const FSVelocityVector FSVelocityVector::Zero = FSVelocityVector();
@@ -67,7 +67,7 @@ FSAngle::FSAngle(double __radians)
     degrees = __radians * cachedDpr;
 }
 
-double FSAngularRate::degreesPerSecond() const
+double FSAngularRate::AsDegreesPerSecond() const
 {
     return radiansPerSecond * dpr_c();
 }
@@ -738,7 +738,7 @@ void FSTwoLineElements::CopyTo(double(_elems)[10]) const
 {
     if (elems.Num() == 10)
     {
-        memcpy(_elems, elems.GetData(), 8 * sizeof(double));
+        FMemory::Memcpy(_elems, elems.GetData(),sizeof(_elems));
     }
     else
     {
@@ -746,8 +746,6 @@ void FSTwoLineElements::CopyTo(double(_elems)[10]) const
         errint_c("#", elems.Num());
         sigerr_c("SPICE(VALUEOUTOFRANGE)");
     }
-
-    memcpy(_elems, elems.GetData(), 10 * sizeof(double));
 }
 
 
@@ -755,7 +753,7 @@ void FSTLEGeophysicalConstants::CopyTo(double(_geophs)[8]) const
 {
     if (geophs.Num() == 8)
     {
-        memcpy(_geophs, geophs.GetData(), 8 * sizeof(double));
+        FMemory::Memcpy(_geophs, geophs.GetData(), sizeof(double));
     }
     else
     {
@@ -782,17 +780,17 @@ void FSEulerAngles::AsDimensionlessVector(FSDimensionlessVector& vector) const
     if ((axis3 == ES_Axis::X) && (axis2 == ES_Axis::Y) && (axis1 == ES_Axis::Z))
     {
         // Already ZYX
-        vector.x = angle3.AsDouble();
-        vector.y = angle2.AsDouble();
-        vector.z = angle1.AsDouble();
+        vector.x = angle3.AsSpiceDouble();
+        vector.y = angle2.AsSpiceDouble();
+        vector.z = angle1.AsSpiceDouble();
     }
     else
     {
         // Convert the eulers into ZYX representation
         SpiceDouble _r[3][3];
-        SpiceDouble _eulang3 = angle3.AsDouble();
-        SpiceDouble _eulang2 = angle2.AsDouble();
-        SpiceDouble _eulang1 = angle1.AsDouble();
+        SpiceDouble _eulang3 = angle3.AsSpiceDouble();
+        SpiceDouble _eulang2 = angle2.AsSpiceDouble();
+        SpiceDouble _eulang1 = angle1.AsSpiceDouble();
         SpiceInt _axis3 = (SpiceInt)axis3;
         SpiceInt _axis2 = (SpiceInt)axis2;
         SpiceInt _axis1 = (SpiceInt)axis1;
@@ -848,7 +846,7 @@ FSDSKDescr::FSDSKDescr(void* descr)
     corpar = TArray<double>();
     corpar.Init(0., SPICE_DSK_NSYPAR);
     check(sizeof(double) == sizeof(SpiceDouble));
-    memcpy(corpar.GetData(), dsk->corpar, SPICE_DSK_NSYPAR * sizeof(SpiceDouble));
+    FMemory::Memcpy(corpar.GetData(), dsk->corpar, SPICE_DSK_NSYPAR * sizeof(SpiceDouble));
     co1min = dsk->co1min;
     co1max = dsk->co1max;
     co2min = dsk->co2min;
@@ -870,7 +868,7 @@ void FSDSKDescr::CopyTo(void* descr) const
     dsk->frmcde = frmcde;
     dsk->corsys = corsys;
     check(sizeof(double) == sizeof(SpiceDouble));
-    memcpy(dsk->corpar, corpar.GetData(), SPICE_DSK_NSYPAR * sizeof(SpiceDouble));
+    FMemory::Memcpy(dsk->corpar, corpar.GetData(), SPICE_DSK_NSYPAR * sizeof(SpiceDouble));
     dsk->co1min = co1min;
     dsk->co1max = co1max;
     dsk->co2min = co2min;
@@ -884,7 +882,7 @@ void FSDSKDescr::CopyTo(void* descr) const
 
 double USpiceTypes::Conv_SDistanceToDouble(const FSDistance& value)
 {
-    return value.AsDouble();
+    return value.AsSpiceDouble();
 }
 
 FSDistance USpiceTypes::Conv_DoubleToSDistance(double value)
@@ -896,7 +894,7 @@ double USpiceTypes::Conv_SSpeedToDouble(
     const FSSpeed& value
 )
 {
-    return value.AsDouble();
+    return value.AsSpiceDouble();
 }
 
 FSSpeed USpiceTypes::Conv_DoubleToSSpeed(
@@ -910,7 +908,7 @@ double USpiceTypes::Conv_SAngleToDouble(
     const FSAngle& value
 )
 {
-    return value.AsDouble();
+    return value.AsSpiceDouble();
 }
 
 FSAngle USpiceTypes::Conv_DoubleToSAngle(
@@ -924,7 +922,7 @@ double USpiceTypes::Conv_SAngularRateToDouble(
     const FSAngularRate& value
 )
 {
-    return value.AsDouble();
+    return value.AsSpiceDouble();
 }
 
 FSAngularRate USpiceTypes::Conv_DoubleToSAngularRate(
@@ -951,7 +949,7 @@ FString USpiceTypes::Conv_SEpheremisTimeToString(const FSEphemerisTime& et)
     SpiceChar sz[WINDOWS_MAX_PATH];
     memset(sz, 0, sizeof(sz));
 
-    et2utc_c(et.AsDouble(), "C", 3, WINDOWS_MAX_PATH, sz);
+    et2utc_c(et.AsSpiceDouble(), "C", 3, WINDOWS_MAX_PATH, sz);
     strcat_s(sz, " UTC");
 
     // Do not reset any error state, the downstream computation will detect the signal if the string failed to convert.
@@ -964,7 +962,7 @@ double USpiceTypes::Conv_SEphemerisTimeToDouble(
     const FSEphemerisTime& value
 )
 {
-    return value.AsDouble();
+    return value.AsSpiceDouble();
 }
 
 FSEphemerisTime USpiceTypes::Conv_DoubleToSEphemerisTime(
@@ -978,7 +976,7 @@ double USpiceTypes::Conv_SEphemerisPeriodToDouble(
     const FSEphemerisPeriod& value
 )
 {
-    return value.AsDouble();
+    return value.AsSpiceDouble();
 }
 
 FSEphemerisPeriod USpiceTypes::Conv_DoubleToSEphemerisPeriod(
@@ -992,7 +990,7 @@ double USpiceTypes::Conv_SMassConstantToDouble(
     const FSMassConstant& value
 )
 {
-    return value.AsDouble();
+    return value.AsSpiceDouble();
 }
 
 FSMassConstant USpiceTypes::Conv_DoubleToSMassConstant(
@@ -1223,7 +1221,7 @@ void USpiceTypes::Radians2Angle(FSAngle& angle, double radians)
 
 void USpiceTypes::Angle2Radians(const FSAngle& angle, double& radians)
 {
-    radians = angle.AsDouble();
+    radians = angle.AsSpiceDouble();
 }
 
 
@@ -1681,7 +1679,7 @@ FString USpiceTypes::Conv_SSpeedToString(const FSSpeed& value)
 
 FString USpiceTypes::Conv_SAngularRateToString(const FSAngularRate& value)
 {
-    return FormatDouble(value.degreesPerSecond());
+    return FormatDouble(value.AsDegreesPerSecond());
 }
 
 FString USpiceTypes::Conv_SDimensionlessVectorToString(const FSDimensionlessVector& value)
@@ -1696,27 +1694,27 @@ FString USpiceTypes::Conv_SDimensionlessStateVectorToString(const FSDimensionles
 
 FString USpiceTypes::Conv_SPlanetographicStateVectorToString(const FSPlanetographicStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dlat.degreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
+    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dlat.AsDegreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
 }
 
 FString USpiceTypes::Conv_SGeodeticStateVectorToString(const FSGeodeticStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dlat.degreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
+    return FString::Printf(TEXT("[(%s), %s; (%s, %s, %s)]"), *FormatLonLat(value.r.lonlat), *FormatDouble(value.r.alt.km), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dlat.AsDegreesPerSecond()), *FormatDouble(value.dr.dalt.kmps));
 }
 
 FString USpiceTypes::Conv_SSphericalStateVectorToString(const FSSphericalStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.colat.degrees), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dcolat.degreesPerSecond()), *FormatDouble(value.dr.dlon.degreesPerSecond()));
+    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.colat.degrees), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dcolat.AsDegreesPerSecond()), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()));
 }
 
 FString USpiceTypes::Conv_SLatitudinalStateVectorToString(const FSLatitudinalStateVector& value)
 {
-    return FString::Printf(TEXT("[%s, (%s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lonlat.longitude.degrees), *FormatDouble(value.r.lonlat.latitude.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dlat.degreesPerSecond()));
+    return FString::Printf(TEXT("[%s, (%s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lonlat.longitude.degrees), *FormatDouble(value.r.lonlat.latitude.degrees), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dlat.AsDegreesPerSecond()));
 }
 
 FString USpiceTypes::Conv_SCylindricalStateVectorToString(const FSCylindricalStateVector& value)
 {
-    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.r.z.km), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.degreesPerSecond()), *FormatDouble(value.dr.dz.kmps));
+    return FString::Printf(TEXT("[(%s, %s, %s); (%s, %s, %s)]"), *FormatDouble(value.r.r.km), *FormatDouble(value.r.lon.degrees), *FormatDouble(value.r.z.km), *FormatDouble(value.dr.dr.kmps), *FormatDouble(value.dr.dlon.AsDegreesPerSecond()), *FormatDouble(value.dr.dz.kmps));
 }
 
 FString USpiceTypes::Conv_SPlanetographicVectorToString(const FSPlanetographicVector& value)
@@ -1746,27 +1744,27 @@ FString USpiceTypes::Conv_SCylindricalVectorToString(const FSCylindricalVector& 
 
 FString USpiceTypes::Conv_SPlanetographicVectorRatesToString(const FSPlanetographicVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dlat.degreesPerSecond()), *FormatDouble(value.dalt.kmps));
+    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dlat.AsDegreesPerSecond()), *FormatDouble(value.dalt.kmps));
 }
 
 FString USpiceTypes::Conv_SGeodeticVectorRatesToString(const FSGeodeticVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dlat.degreesPerSecond()), *FormatDouble(value.dalt.kmps));
+    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dlat.AsDegreesPerSecond()), *FormatDouble(value.dalt.kmps));
 }
 
 FString USpiceTypes::Conv_SSphericalVectorRatesToString(const FSSphericalVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dcolat.degreesPerSecond()), *FormatDouble(value.dlon.degreesPerSecond()));
+    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dcolat.AsDegreesPerSecond()), *FormatDouble(value.dlon.AsDegreesPerSecond()));
 }
 
 FString USpiceTypes::Conv_SLatitudinaVectorRatesToString(const FSLatitudinalVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dlat.degreesPerSecond()));
+    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dlat.AsDegreesPerSecond()));
 }
 
 FString USpiceTypes::Conv_SCylindricalVectorRatesToString(const FSCylindricalVectorRates& value)
 {
-    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.degreesPerSecond()), *FormatDouble(value.dz.kmps));
+    return FString::Printf(TEXT("(%s, %s, %s)"), *FormatDouble(value.dr.kmps), *FormatDouble(value.dlon.AsDegreesPerSecond()), *FormatDouble(value.dz.kmps));
 }
 
 FString USpiceTypes::Conv_SConicElementsToString(const FSConicElements& value)
@@ -1828,9 +1826,21 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
 
     if (format == ES_AngleFormat::DD)
     {
-        streamObj << std::setprecision(floatFormatPrecision);
+        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << degrees;
         if(useDegreeSymbol) streamObj << L'\370';
+    }
+    else if (format == ES_AngleFormat::DD_180)
+    {
+        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << normalize180to180(degrees);
+        if (useDegreeSymbol) streamObj << L'\370';
+    }
+    else if (format == ES_AngleFormat::DD_360)
+    {
+        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << normalize0to360(degrees);
+        if (useDegreeSymbol) streamObj << L'\370';
     }
     else if (format == ES_AngleFormat::DMS)
     {
@@ -1892,9 +1902,19 @@ FString USpiceTypes::formatAngle(const double degrees, ES_AngleFormat format)
             streamObj << std::fixed << std::setprecision(frac_precision + 2) << sec << "s";
         }
     }
+    else if (format == ES_AngleFormat::DR_PI)
+    {
+        streamObj << std::setfill(L'0') << std::setfill(L'0') << std::setw(floatFormatPrecision+2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << normalizePiToPi(degrees / 360. * twopi_c());
+    }
+    else if (format == ES_AngleFormat::DR_2PI)
+    {
+        streamObj << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
+        streamObj << normalizeZeroToTwoPi(degrees / 360. * twopi_c());
+    }
     else
     {
-        streamObj << std::setprecision(floatFormatPrecision);
+        streamObj << std::setfill(L'0') << std::setw(floatFormatPrecision + 2) << std::fixed << std::setprecision(floatFormatPrecision);
         streamObj << (degrees / 360. * twopi_c());
     }
 

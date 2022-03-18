@@ -46,7 +46,7 @@ void CopyFrom(const SpicePlane& _plane, FSPlane& dest)
 
 void CopyTo(const FSPlane& src, SpicePlane& _plane)
 {
-    SpiceDouble _planeNormal[3], _planeConstant = (SpiceDouble)(src.constant.AsDouble());
+    SpiceDouble _planeNormal[3], _planeConstant = (SpiceDouble)(src.constant.AsSpiceDouble());
     src.normal.CopyTo(_planeNormal);
 
     memset(&_plane, 0, sizeof(_plane));
