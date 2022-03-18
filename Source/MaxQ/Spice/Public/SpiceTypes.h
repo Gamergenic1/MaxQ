@@ -377,7 +377,11 @@ enum class ES_AngleFormat : uint8
     DD UMETA(DisplayName = "Decimal Degrees"),
     DR UMETA(DisplayName = "Decimal Radians"),
     DMS UMETA(DisplayName = "Degrees, Arcminutes, Arcseconds"),
-    HMS UMETA(DisplayName = "Hours, Minutes, Seconds")
+    HMS UMETA(DisplayName = "Hours, Minutes, Seconds"),
+    DD_180 UMETA(DisplayName = "Decimal Degrees [-180,180]"),
+    DR_PI UMETA(DisplayName = "Decimal Radians [-pi,pi]"),
+    DD_360 UMETA(DisplayName = "Decimal Degrees [0,360]"),
+    DR_2PI UMETA(DisplayName = "Decimal Radians [0,2pi]")
 };
 
 
@@ -523,14 +527,29 @@ public:
         km = _km;
     }
 
-    inline double AsDouble() const  { return km; }
+    // "AsDouble()" means the units SPICE expects, so it should really be "AsSpiceDouble"
+    [[deprecated("Use AsKilometers() etc")]]
+    inline double AsDouble() const  { return AsKilometers(); }
+    [[deprecated("Use AsKilometers()")]]
     inline double As_Km() const     { return km; }
-    inline double As_M() const      { return As_Km() * FSDistance_km_to_M; }
-    inline double As_Meters() const { return As_M(); }
+    [[deprecated("Use AsMeters()")]]
+    inline double As_M() const      { return AsMeters(); }
+    [[deprecated("Use AsMeters()")]]
+    inline double As_Meters() const { return AsMeters(); }
 
-    inline static FSDistance From_Km(double _km)    { return FSDistance(_km); }
-    inline static FSDistance From_M(double _m)      { return From_Km(_m * FSDistance_M_to_km); }
-    inline static FSDistance From_Meters(double _m) { return From_M(_m); }
+    inline double AsSpiceDouble() const { return km; }
+    inline double AsKilometers() const { return km; }
+    inline double AsMeters() const { return AsKilometers() * FSDistance_km_to_M; }
+
+    [[deprecated("Use FromKm()")]]
+    inline static FSDistance From_Km(double _km)    { return FromKm(_km); }
+    [[deprecated("Use FromMeters()")]]
+    inline static FSDistance From_M(double _m)      { return FromMeters(_m * FSDistance_M_to_km); }
+    [[deprecated("Use FromMeters()")]]
+    inline static FSDistance From_Meters(double _m) { return FromMeters(_m); }
+    
+    inline static FSDistance FromKm(double _km)    { return FSDistance(_km); }
+    inline static FSDistance FromMeters(double _m) { return FromKm(_m * FSDistance_M_to_km); }
 
     FSDistance(const FSDistance& other)
     {
@@ -666,9 +685,9 @@ struct SPICE_API FSDistanceVector
 
     inline void AsDimensionlessVector(FSDimensionlessVector& vector) const
     {
-        vector.x = x.AsDouble();
-        vector.y = y.AsDouble();
-        vector.z = z.AsDouble();
+        vector.x = x.AsSpiceDouble();
+        vector.y = y.AsSpiceDouble();
+        vector.z = z.AsSpiceDouble();
     }
 
     inline void CopyTo(double(&xyz)[3]) const
@@ -774,9 +793,13 @@ struct FSSpeed
         kmps = _kmps;
     }
 
+    // "AsDouble()" means the units SPICE expects, so it should really be "AsSpiceDouble"
+    [[deprecated("Use AsKilometersPerSecond()")]]
+    inline double AsDouble() const { return AsKilometersPerSecond(); }
     /// <summary>Returns value in km/sec</summary>
     /// <returns>Kilometers Per Second</returns>
-    double AsDouble() const { return kmps; }
+    inline double AsSpiceDouble() const { return kmps; }
+    inline double AsKilometersPerSecond() const { return kmps; }
 
     FSSpeed(const FSSpeed& other)
     {
@@ -917,10 +940,14 @@ public:
         cachedDpr = other.cachedDpr;
     }
 
-    // FOR CONSISTENCY
+    // "AsDouble()" means "AsSpiceDouble()"
+    [[deprecated("Use AsRadians()")]]
+    inline double AsDouble() const { return AsRadians(); }
     /// <summary>Returns value in Radians</summary>
     /// <returns>Radians</returns>
-    inline double AsDouble() const { return radians(); }
+    inline double AsSpiceDouble() const { return radians(); }
+    inline double AsRadians() const { return radians(); }
+    inline double AsDegrees() const { return degrees; }
 
     bool operator==(const FSAngle& Other) const
     {
@@ -943,43 +970,43 @@ public:
 
 inline static FSAngle operator*(double lhs, const FSAngle& rhs)
 {
-    return FSAngle(rhs.AsDouble() * lhs);
+    return FSAngle(rhs.AsSpiceDouble() * lhs);
 }
 
 inline static FSAngle operator*(const FSAngle& lhs,double rhs)
 {
-    return FSAngle(lhs.AsDouble() * rhs);
+    return FSAngle(lhs.AsSpiceDouble() * rhs);
 }
 
 inline static FSAngle operator+(const FSAngle& lhs, const FSAngle& rhs)
 {
-    return FSAngle(lhs.AsDouble() + rhs.AsDouble());
+    return FSAngle(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
 }
 
 inline static FSAngle operator-(const FSAngle& lhs, const FSAngle& rhs)
 {
-    return FSAngle(lhs.AsDouble() - rhs.AsDouble());
+    return FSAngle(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
 }
 
 inline static FSAngle operator/(const FSAngle& lhs, double rhs)
 {
-    return FSAngle(lhs.AsDouble() / rhs);
+    return FSAngle(lhs.AsSpiceDouble() / rhs);
 }
 
 inline static double operator/(const FSAngle& lhs, const FSAngle& rhs)
 {
-    return lhs.AsDouble() / rhs.AsDouble();
+    return lhs.AsSpiceDouble() / rhs.AsSpiceDouble();
 }
 
 inline static FSAngle& operator+=(FSAngle& lhs, const FSAngle& rhs) {
 
-    lhs = FSAngle(lhs.AsDouble() + rhs.AsDouble());
+    lhs = FSAngle(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
     return lhs;
 }
 
 inline static FSAngle& operator-=(FSAngle& lhs, const FSAngle& rhs) {
 
-    lhs = FSAngle(lhs.AsDouble() - rhs.AsDouble());
+    lhs = FSAngle(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
     return lhs;
 }
 
@@ -1006,12 +1033,18 @@ struct FSAngularRate
         radiansPerSecond = _radiansPerSecond;
     }
 
-    double degreesPerSecond() const;
+    [[deprecated("Use AsDegreesPerSecond()")]]
+    double degreesPerSecond() const { return AsDegreesPerSecond(); }
 
 
+    [[deprecated("Use AsRadiansPerSecond()")]]
+    inline double AsDouble() const { return AsRadiansPerSecond(); }
     /// <summary>Returns value in Radians/Second</summary>
     /// <returns>Radians/Second</returns>
-    inline double AsDouble() const { return radiansPerSecond; }
+    inline double AsSpiceDouble() const { return radiansPerSecond; }
+    inline double AsRadiansPerSecond() const { return radiansPerSecond; }
+    inline double AsDegreesPerSecond() const;
+
 
     static SPICE_API const FSAngularRate Zero;
 };
@@ -1020,48 +1053,48 @@ struct FSAngularRate
 
 inline static FSAngularRate operator*(double lhs, const FSAngularRate& rhs)
 {
-    return FSAngularRate(rhs.AsDouble() * lhs);
+    return FSAngularRate(rhs.AsSpiceDouble() * lhs);
 }
 
 inline static FSAngularRate operator*(const FSAngularRate& lhs, double rhs)
 {
-    return FSAngularRate(lhs.AsDouble() * rhs);
+    return FSAngularRate(lhs.AsSpiceDouble() * rhs);
 }
 
 inline static FSAngularRate operator+(const FSAngularRate& lhs, const FSAngularRate& rhs)
 {
-    return FSAngularRate(lhs.AsDouble() + rhs.AsDouble());
+    return FSAngularRate(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
 }
 
 inline static FSAngularRate operator-(const FSAngularRate& lhs, const FSAngularRate& rhs)
 {
-    return FSAngularRate(lhs.AsDouble() - rhs.AsDouble());
+    return FSAngularRate(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
 }
 
 inline static FSAngularRate operator-(const FSAngularRate& rhs)
 {
-    return FSAngularRate(-rhs.AsDouble());
+    return FSAngularRate(-rhs.AsSpiceDouble());
 }
 
 inline static FSAngularRate operator/(const FSAngularRate& lhs, double rhs)
 {
-    return FSAngularRate(lhs.AsDouble() / rhs);
+    return FSAngularRate(lhs.AsSpiceDouble() / rhs);
 }
 
 inline static double operator/(const FSAngularRate& lhs, const FSAngularRate& rhs)
 {
-    return lhs.AsDouble() / rhs.AsDouble();
+    return lhs.AsSpiceDouble() / rhs.AsSpiceDouble();
 }
 
 inline static FSAngularRate& operator+=(FSAngularRate& lhs, const FSAngularRate& rhs) {
 
-    lhs = FSAngularRate(lhs.AsDouble() + rhs.AsDouble());
+    lhs = FSAngularRate(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
     return lhs;
 }
 
 inline static FSAngularRate& operator-=(FSAngularRate& lhs, const FSAngularRate& rhs) {
 
-    lhs = FSAngularRate(lhs.AsDouble() - rhs.AsDouble());
+    lhs = FSAngularRate(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
     return lhs;
 }
 
@@ -1116,9 +1149,12 @@ struct SPICE_API FSEphemerisTime
         seconds = _seconds;
     }
 
+    [[deprecated("Use AsSeconds()")]]
+    inline double AsDouble() const { return AsSeconds(); }
     /// <summary>Returns value in Seconds past J2000 Epoch</summary>
     /// <returns>Seconds</returns>
-    inline double AsDouble() const { return seconds; }
+    inline double AsSpiceDouble() const { return seconds; }
+    inline double AsSeconds() const { return seconds; }
 
     static const FSEphemerisTime J2000;
 };
@@ -1164,7 +1200,12 @@ struct FSEphemerisPeriod
 
     /// <summary>Ephemeris Period in seconds</summary>
     /// <returns>Seconds</returns>
-    inline double AsDouble() const { return seconds; }
+    [[deprecated("Use AsSeconds()")]]
+    inline double AsDouble() const { return AsSeconds(); }
+    /// <summary>Ephemeris Period in seconds</summary>
+    /// <returns>Seconds</returns>
+    inline double AsSpiceDouble() const { return seconds; }
+    inline double AsSeconds() const { return seconds; }
 
     static SPICE_API const FSEphemerisPeriod Zero;
     static SPICE_API const FSEphemerisPeriod Day;
@@ -1172,39 +1213,39 @@ struct FSEphemerisPeriod
 
 inline static FSEphemerisPeriod operator+(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
-    return FSEphemerisPeriod(A.AsDouble() + B.AsDouble());
+    return FSEphemerisPeriod(A.AsSpiceDouble() + B.AsSpiceDouble());
 }
 
 inline static FSEphemerisPeriod operator-(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
-    return FSEphemerisPeriod(A.AsDouble() - B.AsDouble());
+    return FSEphemerisPeriod(A.AsSpiceDouble() - B.AsSpiceDouble());
 }
 
 inline static FSEphemerisTime operator+(const FSEphemerisPeriod& A, const FSEphemerisTime& B)
 {
-    return FSEphemerisTime(A.AsDouble() + B.AsDouble());
+    return FSEphemerisTime(A.AsSpiceDouble() + B.AsSpiceDouble());
 }
 
 inline static FSEphemerisTime operator+(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
 {
-    return FSEphemerisTime(A.AsDouble() + B.AsDouble());
+    return FSEphemerisTime(A.AsSpiceDouble() + B.AsSpiceDouble());
 }
 
 inline static FSEphemerisTime operator-(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
 {
-    return FSEphemerisTime(A.AsDouble() - B.AsDouble());
+    return FSEphemerisTime(A.AsSpiceDouble() - B.AsSpiceDouble());
 }
 
 
 inline static FSEphemerisPeriod& operator+=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
 
-    lhs = FSEphemerisPeriod(lhs.AsDouble() + rhs.AsDouble());
+    lhs = FSEphemerisPeriod(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
     return lhs;
 }
 
 inline static FSEphemerisPeriod& operator-=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
 
-    lhs = FSEphemerisPeriod(lhs.AsDouble() - rhs.AsDouble());
+    lhs = FSEphemerisPeriod(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
     return lhs;
 }
 
@@ -1222,42 +1263,42 @@ inline static FSEphemerisTime& operator-=(FSEphemerisTime& lhs, const FSEphemeri
 
 inline static FSEphemerisPeriod operator-(const FSEphemerisTime& A, const FSEphemerisTime& B)
 {
-    return FSEphemerisPeriod(A.AsDouble() - B.AsDouble());
+    return FSEphemerisPeriod(A.AsSpiceDouble() - B.AsSpiceDouble());
 }
 
 inline static FSEphemerisPeriod operator*(double A, const FSEphemerisPeriod& B)
 {
-    return FSEphemerisPeriod(A * B.AsDouble());
+    return FSEphemerisPeriod(A * B.AsSpiceDouble());
 }
 
 inline static FSEphemerisPeriod operator*(const FSEphemerisPeriod& A, double B)
 {
-    return FSEphemerisPeriod(A.AsDouble() * B);
+    return FSEphemerisPeriod(A.AsSpiceDouble() * B);
 }
 
 inline static FSEphemerisPeriod operator/(const FSEphemerisPeriod& A, double B)
 {
-    return FSEphemerisPeriod(A.AsDouble() / B);
+    return FSEphemerisPeriod(A.AsSpiceDouble() / B);
 }
 
 inline static double operator/(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
-    return A.AsDouble() / B.AsDouble();
+    return A.AsSpiceDouble() / B.AsSpiceDouble();
 }
 
 inline static FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, double B)
 {
-    return FSEphemerisPeriod(A.AsDouble() / B);
+    return FSEphemerisPeriod(A.AsSpiceDouble() / B);
 }
 
 inline static bool operator>(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
-    return A.AsDouble() > B.AsDouble();
+    return A.AsSpiceDouble() > B.AsSpiceDouble();
 }
 
 inline static bool operator<(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
-    return A.AsDouble() < B.AsDouble();
+    return A.AsSpiceDouble() < B.AsSpiceDouble();
 }
 
 inline static FSDistance operator*(const FSEphemerisPeriod& lhs, const FSSpeed& rhs)
@@ -1317,9 +1358,9 @@ struct SPICE_API FSVelocityVector
 
     inline void AsDimensionlessVector(FSDimensionlessVector& vector) const
     {
-        vector.x = dx.AsDouble();
-        vector.y = dy.AsDouble();
-        vector.z = dz.AsDouble();
+        vector.x = dx.AsSpiceDouble();
+        vector.y = dy.AsSpiceDouble();
+        vector.z = dz.AsSpiceDouble();
     }
 
     inline void CopyTo(double(&xyz)[3]) const
@@ -1453,8 +1494,8 @@ struct FSLonLat
 
     void CopyTo(double& lon, double& lat) const
     {
-        lon = longitude.AsDouble();
-        lat = latitude.AsDouble();
+        lon = longitude.AsSpiceDouble();
+        lat = latitude.AsSpiceDouble();
     }
 };
 
@@ -1550,9 +1591,9 @@ struct SPICE_API FSAngularVelocity
 
     void AsDimensionlessVector(FSDimensionlessVector& vector) const
     {
-        vector.x = x.AsDouble();
-        vector.y = y.AsDouble();
-        vector.z = z.AsDouble();
+        vector.x = x.AsSpiceDouble();
+        vector.y = y.AsSpiceDouble();
+        vector.z = z.AsSpiceDouble();
     }
 
     void CopyTo(double(&_av)[3]) const
@@ -1694,12 +1735,12 @@ struct FSEulerAngularTransform
 
     FSEulerAngularTransform(const double(&_m)[6][6])
     {
-        memcpy(m, _m, sizeof(m));
+        FMemory::Memcpy(m, _m, sizeof(m));
     }
 
     void CopyTo(double(&_m)[6][6]) const
     {
-        memcpy(_m, m, sizeof(_m));
+        FMemory::Memcpy(_m, m, sizeof(_m));
     }
 
     static SPICE_API const FSEulerAngularTransform Identity;
@@ -1726,11 +1767,26 @@ struct FSMassConstant
         GM = _GM;
     }
 
+    [[deprecated("Use AsKm3perSec2()")]]
+    inline double AsDouble() const
+    {
+        return AsKm3perSec2();
+    }
     /// <summary>Returns value in km^3/sec^2/</summary>
     /// <returns>km^3/sec^2</returns>
-    double AsDouble() const
+    inline double AsSpiceDouble() const
     {
         return GM;
+    }
+
+    inline double AsKm3perSec2() const
+    {
+        return GM;
+    }
+
+    inline bool IsPositive() const
+    {
+        return GM > 0.;
     }
 };
 
@@ -1898,16 +1954,16 @@ struct FSCylindricalVector
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = r.AsDouble();
-        v[1] = lon.AsDouble();
-        v[2] = z.AsDouble();
+        v[0] = r.AsSpiceDouble();
+        v[1] = lon.AsSpiceDouble();
+        v[2] = z.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[0] = r.AsDouble();
-        state[1] = lon.AsDouble();
-        state[2] = z.AsDouble();
+        state[0] = r.AsSpiceDouble();
+        state[1] = lon.AsSpiceDouble();
+        state[2] = z.AsSpiceDouble();
     }
 
     FSCylindricalVector(const FSDimensionlessVector& v)
@@ -1926,9 +1982,9 @@ struct FSCylindricalVector
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = r.AsDouble();
-        v.y = lon.AsDouble();
-        v.z = z.AsDouble();
+        v.x = r.AsSpiceDouble();
+        v.y = lon.AsSpiceDouble();
+        v.z = z.AsSpiceDouble();
     }
 };
 
@@ -1965,16 +2021,16 @@ struct FSCylindricalVectorRates
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = dr.AsDouble();
-        v[1] = dlon.AsDouble();
-        v[2] = dz.AsDouble();
+        v[0] = dr.AsSpiceDouble();
+        v[1] = dlon.AsSpiceDouble();
+        v[2] = dz.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[3] = dr.AsDouble();
-        state[4] = dlon.AsDouble();
-        state[5] = dz.AsDouble();
+        state[3] = dr.AsSpiceDouble();
+        state[4] = dlon.AsSpiceDouble();
+        state[5] = dz.AsSpiceDouble();
     }
 
     FSCylindricalVectorRates(const FSDimensionlessVector& v)
@@ -1986,9 +2042,9 @@ struct FSCylindricalVectorRates
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = dr.AsDouble();
-        v.y = dlon.AsDouble();
-        v.z = dz.AsDouble();
+        v.x = dr.AsSpiceDouble();
+        v.y = dlon.AsSpiceDouble();
+        v.z = dz.AsSpiceDouble();
     }
 };
 
@@ -2061,13 +2117,13 @@ struct FSLatitudinalVector
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = r.AsDouble();
+        v[0] = r.AsSpiceDouble();
         lonlat.CopyTo(v[1], v[2]);
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[0] = r.AsDouble();
+        state[0] = r.AsSpiceDouble();
         lonlat.CopyTo(state[1], state[2]);
     }
 
@@ -2085,7 +2141,7 @@ struct FSLatitudinalVector
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = r.AsDouble();
+        v.x = r.AsSpiceDouble();
         lonlat.CopyTo(v.y, v.z);
     }
 };
@@ -2123,16 +2179,16 @@ struct FSLatitudinalVectorRates
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = dr.AsDouble();
-        v[1] = dlon.AsDouble();
-        v[2] = dlat.AsDouble();
+        v[0] = dr.AsSpiceDouble();
+        v[1] = dlon.AsSpiceDouble();
+        v[2] = dlat.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[3] = dr.AsDouble();
-        state[4] = dlon.AsDouble();
-        state[5] = dlat.AsDouble();
+        state[3] = dr.AsSpiceDouble();
+        state[4] = dlon.AsSpiceDouble();
+        state[5] = dlat.AsSpiceDouble();
     }
 
     FSLatitudinalVectorRates(const FSDimensionlessVector& v)
@@ -2144,9 +2200,9 @@ struct FSLatitudinalVectorRates
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = dr.AsDouble();
-        v.y = dlon.AsDouble();
-        v.z = dlat.AsDouble();
+        v.x = dr.AsSpiceDouble();
+        v.y = dlon.AsSpiceDouble();
+        v.z = dlat.AsSpiceDouble();
     }
 };
 
@@ -2223,16 +2279,16 @@ struct FSSphericalVector
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = r.AsDouble();
-        v[1] = colat.AsDouble();
-        v[2] = lon.AsDouble();
+        v[0] = r.AsSpiceDouble();
+        v[1] = colat.AsSpiceDouble();
+        v[2] = lon.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[0] = r.AsDouble();
-        state[1] = colat.AsDouble();
-        state[2] = lon.AsDouble();
+        state[0] = r.AsSpiceDouble();
+        state[1] = colat.AsSpiceDouble();
+        state[2] = lon.AsSpiceDouble();
     }
 
     FSSphericalVector(const FSDimensionlessVector& v)
@@ -2251,9 +2307,9 @@ struct FSSphericalVector
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = r.AsDouble();
-        v.y = colat.AsDouble();
-        v.z = lon.AsDouble();
+        v.x = r.AsSpiceDouble();
+        v.y = colat.AsSpiceDouble();
+        v.z = lon.AsSpiceDouble();
     }
 };
 
@@ -2290,16 +2346,16 @@ struct FSSphericalVectorRates
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = dr.AsDouble();
-        v[1] = dcolat.AsDouble();
-        v[2] = dlon.AsDouble();
+        v[0] = dr.AsSpiceDouble();
+        v[1] = dcolat.AsSpiceDouble();
+        v[2] = dlon.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[3] = dr.AsDouble();
-        state[4] = dcolat.AsDouble();
-        state[5] = dlon.AsDouble();
+        state[3] = dr.AsSpiceDouble();
+        state[4] = dcolat.AsSpiceDouble();
+        state[5] = dlon.AsSpiceDouble();
     }
 
     FSSphericalVectorRates(const FSDimensionlessVector& v)
@@ -2311,9 +2367,9 @@ struct FSSphericalVectorRates
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = dr.AsDouble();
-        v.y = dcolat.AsDouble();
-        v.z = dlon.AsDouble();
+        v.x = dr.AsSpiceDouble();
+        v.y = dcolat.AsSpiceDouble();
+        v.z = dlon.AsSpiceDouble();
     }
 };
 
@@ -2386,13 +2442,13 @@ struct FSGeodeticVector
     void CopyTo(double(&v)[3]) const
     {
         lonlat.CopyTo(v[0], v[1]);
-        v[2] = alt.AsDouble();
+        v[2] = alt.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
         lonlat.CopyTo(state[0], state[1]);
-        state[2] = alt.AsDouble();
+        state[2] = alt.AsSpiceDouble();
     }
 
     FSGeodeticVector(const FSDimensionlessVector& v)
@@ -2410,7 +2466,7 @@ struct FSGeodeticVector
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
         lonlat.CopyTo(v.x, v.y);
-        v.z = alt.AsDouble();
+        v.z = alt.AsSpiceDouble();
     }
 };
 
@@ -2447,16 +2503,16 @@ struct FSGeodeticVectorRates
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = dlon.AsDouble();
-        v[1] = dlat.AsDouble();
-        v[2] = dalt.AsDouble();
+        v[0] = dlon.AsSpiceDouble();
+        v[1] = dlat.AsSpiceDouble();
+        v[2] = dalt.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[3] = dlon.AsDouble();
-        state[4] = dlat.AsDouble();
-        state[5] = dalt.AsDouble();
+        state[3] = dlon.AsSpiceDouble();
+        state[4] = dlat.AsSpiceDouble();
+        state[5] = dalt.AsSpiceDouble();
     }
 
     FSGeodeticVectorRates(const FSDimensionlessVector& v)
@@ -2468,9 +2524,9 @@ struct FSGeodeticVectorRates
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = dlon.AsDouble();
-        v.y = dlat.AsDouble();
-        v.z = dalt.AsDouble();
+        v.x = dlon.AsSpiceDouble();
+        v.y = dlat.AsSpiceDouble();
+        v.z = dalt.AsSpiceDouble();
     }
 };
 
@@ -2543,13 +2599,13 @@ struct FSPlanetographicVector
     void CopyTo(double(&v)[3]) const
     {
         lonlat.CopyTo(v[0], v[1]);
-        v[2] = alt.AsDouble();
+        v[2] = alt.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
         lonlat.CopyTo(state[0], state[1]);
-        state[2] = alt.AsDouble();
+        state[2] = alt.AsSpiceDouble();
     }
 
     FSPlanetographicVector(const FSDimensionlessVector& v)
@@ -2567,7 +2623,7 @@ struct FSPlanetographicVector
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
         lonlat.CopyTo(v.x, v.y);
-        v.z = alt.AsDouble();
+        v.z = alt.AsSpiceDouble();
     }
 };
 
@@ -2604,16 +2660,16 @@ struct FSPlanetographicVectorRates
 
     void CopyTo(double(&v)[3]) const
     {
-        v[0] = dlon.AsDouble();
-        v[1] = dlat.AsDouble();
-        v[2] = dalt.AsDouble();
+        v[0] = dlon.AsSpiceDouble();
+        v[1] = dlat.AsSpiceDouble();
+        v[2] = dalt.AsSpiceDouble();
     }
 
     void CopyTo(double(&state)[6]) const
     {
-        state[3] = dlon.AsDouble();
-        state[4] = dlat.AsDouble();
-        state[5] = dalt.AsDouble();
+        state[3] = dlon.AsSpiceDouble();
+        state[4] = dlat.AsSpiceDouble();
+        state[5] = dalt.AsSpiceDouble();
     }
 
     FSPlanetographicVectorRates(const FSDimensionlessVector& v)
@@ -2625,9 +2681,9 @@ struct FSPlanetographicVectorRates
 
     void AsDimensionlessVector(FSDimensionlessVector& v) const
     {
-        v.x = dlon.AsDouble();
-        v.y = dlat.AsDouble();
-        v.z = dalt.AsDouble();
+        v.x = dlon.AsSpiceDouble();
+        v.y = dlat.AsSpiceDouble();
+        v.z = dalt.AsSpiceDouble();
     }
 };
 
@@ -2813,12 +2869,12 @@ struct FSQuaternion
     FSQuaternion(const double(&_q)[4])
     {
         q.Init(0., 4);
-        memcpy(q.GetData(), _q, sizeof(q));
+        FMemory::Memcpy(q.GetData(), _q, sizeof(q));
     }
 
     void CopyTo(double(&_q)[4]) const
     {
-        memcpy(_q, q.GetData(), sizeof(_q));
+        FMemory::Memcpy(_q, q.GetData(), sizeof(_q));
     }
 
     static SPICE_API const FSQuaternion Identity;
@@ -3143,16 +3199,16 @@ struct FSEphemerisTimeWindowSegment
         double& _stop
     ) const
     {
-        _start = start.AsDouble();
-        _stop = stop.AsDouble();
+        _start = start.AsSpiceDouble();
+        _stop = stop.AsSpiceDouble();
     }
 
     void CopyTo(
         double(&_segment)[2]
     ) const
     {
-        _segment[0] = start.AsDouble();
-        _segment[1] = stop.AsDouble();
+        _segment[0] = start.AsSpiceDouble();
+        _segment[1] = stop.AsSpiceDouble();
     }
 };
 
@@ -3339,8 +3395,8 @@ struct FSPointingType5Observation
     ) const
     {
         _sclkdp = sclkdp;
-        memcpy(&_packet[0], &quat.q, sizeof(double[4]));
-        memcpy(&_packet[4], &quatderiv.q, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[4], &quatderiv.q, sizeof(double[4]));
     }
 
     // ------------------------------------------------------------------------
@@ -3362,7 +3418,7 @@ struct FSPointingType5Observation
     ) const
     {
         _sclkdp = sclkdp;
-        memcpy(&_packet[0], &quat.q, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
     }
 
     // ------------------------------------------------------------------------
@@ -3396,10 +3452,10 @@ struct FSPointingType5Observation
         double _avvderiv_copy[3];
         avvderiv.CopyTo(_avvderiv_copy);
 
-        memcpy(&_packet[0], &quat.q, sizeof(double[4]));
-        memcpy(&_packet[4], &quatderiv.q, sizeof(double[4]));
-        memcpy(&_packet[8], _avv_copy, sizeof(double[3]));
-        memcpy(&_packet[11], _avvderiv_copy, sizeof(double[3]));
+        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[4], &quatderiv.q, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[8], _avv_copy, sizeof(double[3]));
+        FMemory::Memcpy(&_packet[11], _avvderiv_copy, sizeof(double[3]));
 
     }
 
@@ -3429,8 +3485,8 @@ struct FSPointingType5Observation
         double _avv_copy[3];
         avv.CopyTo(_avv_copy);
 
-        memcpy(&_packet[0], &quat.q, sizeof(double[4]));
-        memcpy(&_packet[4], _avv_copy, sizeof(double[3]));
+        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[4], _avv_copy, sizeof(double[3]));
     }
 };
 
@@ -3464,7 +3520,7 @@ struct FSPKType5Observation
         double(&_state)[6]
     ) const
     {
-        _et = et.AsDouble();
+        _et = et.AsSpiceDouble();
         state.CopyTo(_state);
     }
 };
@@ -3539,15 +3595,15 @@ struct FSPKType15Observation
         double& _radius
         ) const
     {
-        _epoch = epoch.AsDouble();
+        _epoch = epoch.AsSpiceDouble();
         tp.CopyTo(_tp);
         pa.CopyTo(_pa);
         _ecc = ecc;
         _j2flg = j2flg;
         pv.CopyTo(_pv);
-        _gm = gm.AsDouble();
+        _gm = gm.AsSpiceDouble();
         _j2 = j2;
-        _radius = radius.AsDouble();
+        _radius = radius.AsSpiceDouble();
     }
 };
 
@@ -3583,7 +3639,7 @@ public:
     {
         elems.Init(0., 10);
 
-        memcpy(elems.GetData(), _elems, 10 * sizeof(double));
+        FMemory::Memcpy(elems.GetData(), _elems, 10 * sizeof(double));
     }
 
     void CopyTo(double(_elems)[10]) const;
@@ -3609,7 +3665,7 @@ public:
     FSTLEGeophysicalConstants(double(_geophs)[8])
     {
         geophs.Init(0., 8);
-        memcpy(geophs.GetData(), _geophs, 8 * sizeof(double));
+        FMemory::Memcpy(geophs.GetData(), _geophs, 8 * sizeof(double));
     }
 
     void CopyTo(double(_geophs)[8]) const;
@@ -3652,7 +3708,7 @@ public:
     ) const
     {
         point.CopyTo(_point);
-        _epoch = epoch.AsDouble();
+        _epoch = epoch.AsSpiceDouble();
         tangt.CopyTo(_tangt);
     }
 };
@@ -3710,7 +3766,7 @@ public:
     ) const
     {
         point.CopyTo(_point);
-        _epoch = epoch.AsDouble();
+        _epoch = epoch.AsSpiceDouble();
         trmvc.CopyTo(_trmvc);
     }
 };
@@ -3942,7 +3998,7 @@ public:
     static FString FormatAngle(const FSAngle& value, ES_AngleFormat format = ES_AngleFormat::DD);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "SLongLat to string", CompactNodeTitle = "$"))
-    static FString FormatLonLat(const FSLonLat& valuee, const FString& separator = TEXT(", "), ES_AngleFormat format = ES_AngleFormat::DD);
+    static FString FormatLonLat(const FSLonLat& value, const FString& separator = TEXT(", "), ES_AngleFormat format = ES_AngleFormat::DD);
 
     UFUNCTION(BlueprintPure, Category = "Spice|Api|Stringifier", meta = (ToolTip = "Right Ascension, Declination to string", CompactNodeTitle = "$"))
     static FString FormatRADec(const FSAngle& rightAscension, const FSAngle& declination, const FString& separator = TEXT(", "));

@@ -45,7 +45,7 @@ void USpiceOrbits::EvaluateOrbit(
     if (orbitReferenceFrame.Compare(observerReferenceFrame, ESearchCase::IgnoreCase))
     {
         double m[3][3];
-        pxform_c(TCHAR_TO_ANSI(*orbitReferenceFrame), TCHAR_TO_ANSI(*observerReferenceFrame), et.AsDouble(), m);
+        pxform_c(TCHAR_TO_ANSI(*orbitReferenceFrame), TCHAR_TO_ANSI(*observerReferenceFrame), et.AsSpiceDouble(), m);
 
         // Clear any errors if necessary
         ErrorCheck(ResultCode, ErrorMessage);
@@ -122,11 +122,11 @@ void USpiceOrbits::ComputeConic(
 {
     double q, ecc, inc, lnode, argp;
 
-    q = orbit.PerifocalDistance.AsDouble();
+    q = orbit.PerifocalDistance.AsSpiceDouble();
     ecc = orbit.Eccentricity;
-    inc = orbit.Inclination.AsDouble();
-    lnode = orbit.LongitudeOfAscendingNode.AsDouble();
-    argp = orbit.ArgumentOfPeriapse.AsDouble();
+    inc = orbit.Inclination.AsSpiceDouble();
+    lnode = orbit.LongitudeOfAscendingNode.AsSpiceDouble();
+    argp = orbit.ArgumentOfPeriapse.AsSpiceDouble();
 
 
     double ae, a, b, r[3][3];
@@ -137,7 +137,7 @@ void USpiceOrbits::ComputeConic(
     if (!orbitReferenceFrame.Equals(observerReferenceFrame, ESearchCase::IgnoreCase))
     {
         double m[3][3];
-        pxform_c(TCHAR_TO_ANSI(*orbitReferenceFrame), TCHAR_TO_ANSI(*observerReferenceFrame), et.AsDouble(), m);
+        pxform_c(TCHAR_TO_ANSI(*orbitReferenceFrame), TCHAR_TO_ANSI(*observerReferenceFrame), et.AsSpiceDouble(), m);
 
         // Clear any errors if necessary
         ES_ResultCode ResultCode;
@@ -190,11 +190,11 @@ void USpiceOrbits::MakeSPKObservation(
 {
     double q, ecc, inc, lnode, argp;
 
-    q = orbit.PerifocalDistance.AsDouble();
+    q = orbit.PerifocalDistance.AsSpiceDouble();
     ecc = orbit.Eccentricity;
-    inc = orbit.Inclination.AsDouble();
-    lnode = orbit.LongitudeOfAscendingNode.AsDouble();
-    argp = orbit.ArgumentOfPeriapse.AsDouble();
+    inc = orbit.Inclination.AsSpiceDouble();
+    lnode = orbit.LongitudeOfAscendingNode.AsSpiceDouble();
+    argp = orbit.ArgumentOfPeriapse.AsSpiceDouble();
 
     double r[3][3];
 
@@ -203,12 +203,12 @@ void USpiceOrbits::MakeSPKObservation(
 
     double a = q / (1 - ecc);
 
-    double gm = orbit.GravitationalParameter.AsDouble();
+    double gm = orbit.GravitationalParameter.AsSpiceDouble();
 
-    double timeSincePeriapsis = orbit.MeanAnomalyAtEpoch.AsDouble() * sqrt(a * a * a / gm);
+    double timeSincePeriapsis = orbit.MeanAnomalyAtEpoch.AsSpiceDouble() * sqrt(a * a * a / gm);
 
     observation = FSPKType15Observation();
-    observation.epoch = FSEphemerisTime(orbit.Epoch.AsDouble() - timeSincePeriapsis);
+    observation.epoch = FSEphemerisTime(orbit.Epoch.AsSpiceDouble() - timeSincePeriapsis);
     observation.tp = FSDimensionlessVector(r[1][0], r[1][1], r[1][2]);
     observation.pa = FSDimensionlessVector(r[0][0], r[0][1], r[0][2]);
     observation.p = (1. + ecc) * orbit.PerifocalDistance;

@@ -88,8 +88,8 @@ TArray<double> USpiceK2::bodvrd_array_K2(
     {
         ReturnValue.Init(0., n_actual);
 
-        check(sizeof(double) == sizeof(SpiceDouble))
-        memcpy(ReturnValue.GetData(), _result, n_actual * sizeof(SpiceDouble));
+        check(sizeof(double) == sizeof(SpiceDouble));
+        FMemory::Memcpy(ReturnValue.GetData(), _result, n_actual * sizeof(SpiceDouble));
     }
 
     return ReturnValue;
@@ -165,8 +165,8 @@ TArray<double> USpiceK2::bodvcd_array_K2(
     {
         ReturnValue.Init(0., n_actual);
 
-        check(sizeof(double) == sizeof(SpiceDouble))
-            memcpy(ReturnValue.GetData(), _result, n_actual * sizeof(SpiceDouble));
+        check(sizeof(double) == sizeof(SpiceDouble));
+        FMemory::Memcpy(ReturnValue.GetData(), _result, n_actual * sizeof(SpiceDouble));
     }
 
     return ReturnValue;
@@ -201,7 +201,7 @@ TArray<double> USpiceK2::gdpool_array_K2(
         value.Init(0, _n);
         
         check(sizeof(SpiceDouble) == sizeof(double));
-        memcpy(value.GetData(), _values, _n * sizeof(double));
+        FMemory::Memcpy(value.GetData(), _values, _n * sizeof(double));
     }
 
     // Error Handling
