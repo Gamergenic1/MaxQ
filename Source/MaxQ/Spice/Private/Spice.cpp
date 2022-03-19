@@ -1772,7 +1772,7 @@ void USpice::dafac(
     size_t bytesPerLine = maxCommentLineLength * sizeof(SpiceChar);
     size_t totalBytes = comments.Num() * bytesPerLine;
     SpiceChar* _buffer = (SpiceChar*)StackAlloc(totalBytes);
-    memset(_buffer, 0, totalBytes);
+    FMemory::Memset(_buffer, 0, totalBytes);
 
     for (int32 i = 0; i < comments.Num(); ++i)
     {
@@ -1880,7 +1880,7 @@ void USpice::dafec(
         // Otherwise, catch a failure of our previous iteration
         if (failed_c()) break;
 
-        memset(_buffer, 0, chafBufferSize);
+        FMemory::Memset(_buffer, 0, chafBufferSize);
 
         dafec_c(_handle, _bufsiz, _lenout, &_n, _buffer, &_done);
 
@@ -2840,7 +2840,7 @@ void USpice::et2utc(
 
     // Outputs
     SpiceChar* _utcstr = szUtc;
-    SpiceInt		_lenout = sizeof(szUtc);
+    SpiceInt   _lenout = sizeof(szUtc);
 
     // Invocation
     et2utc_c(_et, _format, _prec, _lenout, _utcstr);
@@ -2941,7 +2941,7 @@ void USpice::eul2xf(
 void USpice::getgeophs(FSTLEGeophysicalConstants& geophs, const FString& body)
 {
     SpiceDouble _geophs[8];
-    memset(_geophs, 0, sizeof(_geophs));
+    FMemory::Memset(_geophs, 0, sizeof(_geophs));
 
     SpiceInt dim = 0;
 
@@ -3126,7 +3126,7 @@ void USpice::gcpool(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    memset(_cvals, 0, buffer_size);
+    FMemory::Memset(_cvals, 0, buffer_size);
     gcpool_c(_name, _start, _room, _lenout, &_n, _cvals, &_found);
 
     // Return Values
@@ -3325,7 +3325,7 @@ void USpice::gdpool(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    memset(_values, 0, buffer_size);
+    FMemory::Memset(_values, 0, buffer_size);
     gdpool_c(_name, _start, _room, &_n, _values, &_found);
 
     // Return values
@@ -3582,7 +3582,7 @@ void USpice::getfat(
 void USpice::getfov(
     ES_ResultCode& ResultCode,
     FString&    ErrorMessage,
-    int       instid,
+    int         instid,
     FString&    shape,
     FString&    frame,
     FSDimensionlessVector&          bsight,
@@ -4705,7 +4705,7 @@ void USpice::gipool(
     SpiceBoolean    _found = SPICEFALSE;
 
     // invocation
-    memset(_ivals, 0, buffer_size);
+    FMemory::Memset(_ivals, 0, buffer_size);
     gipool_c(_name, _start, _room, &_n, _ivals, &_found);
 
     // Return values
@@ -4741,7 +4741,7 @@ void USpice::gnpool(
     SpiceBoolean    _found = SPICEFALSE;
 
     // Invocation
-    memset(_kvars, 0, buffer_size);
+    FMemory::Memset(_kvars, 0, buffer_size);
     gnpool_c(_name, _start, _room, _lenout, &_n, _kvars, &_found);
 
     // Return Values
@@ -5380,7 +5380,7 @@ void USpice::latsrf(
 
     // Output
     SpiceDouble     (*_srfpts)[3] = (SpiceDouble(*)[3]) new uint8[_npts * sizeof(SpiceDouble[3])];
-    memset(_srfpts, 0, _npts * sizeof(SpiceDouble[3]));
+    FMemory::Memset(_srfpts, 0, _npts * sizeof(SpiceDouble[3]));
 
     // Invocation
     latsrf_c(
@@ -7010,7 +7010,7 @@ void USpice::pcpool_list(
     size_t string_size = maxLen * sizeof(SpiceChar);
     size_t buffer_size = count * string_size;
     void* buffer = StackAlloc(buffer_size);
-    memset(buffer, 0, buffer_size);
+    FMemory::Memset(buffer, 0, buffer_size);
 
     for (int i = 0; i < count; ++i)
     {
@@ -9923,7 +9923,7 @@ void USpice::srfnrm(
 
     // Output
     SpiceDouble(*_normls)[3] = (SpiceDouble(*)[3]) new uint8[_npts * sizeof(SpiceDouble[3])];
-    memset(_normls, 0, _npts * sizeof(SpiceDouble[3]));
+    FMemory::Memset(_normls, 0, _npts * sizeof(SpiceDouble[3]));
 
     // Invocation
     srfnrm_c(

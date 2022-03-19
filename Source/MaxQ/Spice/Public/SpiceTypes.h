@@ -1720,31 +1720,6 @@ struct FSEulerAngularState
 };
 
 
-USTRUCT(BlueprintType)
-struct FSEulerAngularTransform
-{
-    GENERATED_BODY()
-
-    double m[6][6];
-
-    FSEulerAngularTransform()
-    {
-        memset(m, 0, sizeof(m));
-        m[0][0] = m[1][1] = m[2][2] = m[3][3] = m[4][4] = m[5][5] = 1.;
-    }
-
-    FSEulerAngularTransform(const double(&_m)[6][6])
-    {
-        FMemory::Memcpy(m, _m, sizeof(m));
-    }
-
-    void CopyTo(double(&_m)[6][6]) const
-    {
-        FMemory::Memcpy(_m, m, sizeof(_m));
-    }
-
-    static SPICE_API const FSEulerAngularTransform Identity;
-};
 
 
 
@@ -2737,7 +2712,7 @@ struct FSStateTransform
     FSStateTransform()
     {
         m.Init(FSDimensionlessStateVector(), 6);
-        m[0].r.x = m[1].r.y = m[2].r.z = m[3].dr.x = m[4].dr.y = m[5].dr.z;
+        m[0].r.x = m[1].r.y = m[2].r.z = m[3].dr.x = m[4].dr.y = m[5].dr.z = 1.;
     }
 
     FSStateTransform(const double(&_m)[6][6])
@@ -2869,7 +2844,7 @@ struct FSQuaternion
     FSQuaternion(const double(&_q)[4])
     {
         q.Init(0., 4);
-        FMemory::Memcpy(q.GetData(), _q, sizeof(q));
+        FMemory::Memcpy(q.GetData(), _q, sizeof(_q));
     }
 
     void CopyTo(double(&_q)[4]) const
@@ -2968,6 +2943,48 @@ public:
         constant = FSDistance(_constant);
     }
 };
+
+USTRUCT(BlueprintType)
+struct FSEulerAngularTransform
+{
+    GENERATED_BODY()
+
+        // Must be a TArray of a serializable type to be serialized to/from network or disk,
+        // as C++ native arrays are not serializable.
+        TArray<FSDimensionlessStateVector> m;
+
+    FSEulerAngularTransform()
+    {
+        m.Init(FSDimensionlessStateVector(), 6);
+        m[0].r.x = m[1].r.y = m[2].r.z = m[3].dr.x = m[4].dr.y = m[5].dr.z = 1.;
+    }
+
+    FSEulerAngularTransform(const double(&_m)[6][6])
+    {
+        m = {
+            FSDimensionlessStateVector(_m[0]),
+            FSDimensionlessStateVector(_m[1]),
+            FSDimensionlessStateVector(_m[2]),
+            FSDimensionlessStateVector(_m[3]),
+            FSDimensionlessStateVector(_m[4]),
+            FSDimensionlessStateVector(_m[5])
+        };
+    }
+
+    void CopyTo(double(&_m)[6][6]) const
+    {
+        m[0].CopyTo(_m[0]);
+        m[1].CopyTo(_m[1]);
+        m[2].CopyTo(_m[2]);
+        m[3].CopyTo(_m[3]);
+        m[4].CopyTo(_m[4]);
+        m[5].CopyTo(_m[5]);
+    }
+
+    static SPICE_API const FSEulerAngularTransform Identity;
+
+};
+
 
 
 USTRUCT(BlueprintType)
