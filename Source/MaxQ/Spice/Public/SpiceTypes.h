@@ -1685,6 +1685,9 @@ struct FSEulerAngularState
         angle3 = FSAngle::_0;
         angle2 = FSAngle::_0;
         angle1 = FSAngle::_0;
+        rate3 = FSAngularRate::Zero;
+        rate2 = FSAngularRate::Zero;
+        rate1 = FSAngularRate::Zero;
         axis3 = ES_Axis::X;
         axis2 = ES_Axis::Y;
         axis1 = ES_Axis::Z;
@@ -2799,57 +2802,62 @@ struct FSQuaternion
     GENERATED_BODY()
 
     // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/q2m_c.html
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    TArray<double> q;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double w;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double x;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double y;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) double z;
 
-    inline void QSPICE(double& w, double& x, double& y, double& z) const
+    FSQuaternion(double _w, double _x, double _y, double _z)
     {
-        w = q[0];
-        x = q[1];
-        y = q[2];
-        z = q[3];
+        w = _w;
+        x = _x;
+        y = _y;
+        z = _z;
     }
-    inline void QENG(double& w, double& x, double& y, double& z) const
+
+    inline void QSPICE(double& _w, double& _x, double& _y, double& _z) const
     {
-        w = q[0];
-        x = -q[1];
-        y = -q[2];
-        z = -q[3];
+        _w = w;
+        _x = x;
+        _y = y;
+        _z = z;
     }
-    inline static FSQuaternion SPICE(double w, double x, double y, double z)
+    inline void QENG(double& _w, double& _x, double& _y, double& _z) const
     {
-        FSQuaternion value = FSQuaternion();
-        value.q[0] = w;
-        value.q[1] = x;
-        value.q[2] = y;
-        value.q[3] = z;
-        return value;
+        _w = w;
+        _x = -x;
+        _y = -y;
+        _z = -z;
     }
-    inline static FSQuaternion ENG(double w, double x, double y, double z)
+    inline static FSQuaternion SPICE(double _w, double _x, double _y, double _z)
     {
-        FSQuaternion value = FSQuaternion();
-        value.q[0] = w;
-        value.q[1] = -x;
-        value.q[2] = -y;
-        value.q[3] = -z;
-        return value;
+        return FSQuaternion(_w, _x, _y, _z);
+    }
+    inline static FSQuaternion ENG(double _w, double _x, double _y, double _z)
+    {
+        return FSQuaternion(_w, -_x, -_y, -_z);
     }
 
     FSQuaternion()
     {
-        q.Init(0., 4);
-        q[0] = 1.;  // w
+        w = 1.;
+        x = y = z = 0.;
     }
 
     FSQuaternion(const double(&_q)[4])
     {
-        q.Init(0., 4);
-        FMemory::Memcpy(q.GetData(), _q, sizeof(_q));
+        w = _q[0];
+        x = _q[1];
+        y = _q[2];
+        z = _q[3];
     }
 
     void CopyTo(double(&_q)[4]) const
     {
-        FMemory::Memcpy(_q, q.GetData(), sizeof(_q));
+        _q[0] = w;
+        _q[1] = x;
+        _q[2] = y;
+        _q[3] = z;
     }
 
     static SPICE_API const FSQuaternion Identity;
@@ -3412,8 +3420,15 @@ struct FSPointingType5Observation
     ) const
     {
         _sclkdp = sclkdp;
-        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
-        FMemory::Memcpy(&_packet[4], &quatderiv.q, sizeof(double[4]));
+
+        double _quat_copy[4];
+        quat.CopyTo(_quat_copy);
+
+        double _quatderiv_copy[4];
+        quatderiv.CopyTo(_quatderiv_copy);
+
+        FMemory::Memcpy(&_packet[0], _quat_copy, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[4], _quatderiv_copy, sizeof(double[4]));
     }
 
     // ------------------------------------------------------------------------
@@ -3435,7 +3450,11 @@ struct FSPointingType5Observation
     ) const
     {
         _sclkdp = sclkdp;
-        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
+
+        double _quat_copy[4];
+        quat.CopyTo(_quat_copy);
+
+        FMemory::Memcpy(&_packet[0], _quat_copy, sizeof(double[4]));
     }
 
     // ------------------------------------------------------------------------
@@ -3469,8 +3488,13 @@ struct FSPointingType5Observation
         double _avvderiv_copy[3];
         avvderiv.CopyTo(_avvderiv_copy);
 
-        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
-        FMemory::Memcpy(&_packet[4], &quatderiv.q, sizeof(double[4]));
+        double _quat_copy[4];
+        quat.CopyTo(_quat_copy);
+        double _quatderiv_copy[4];
+        quatderiv.CopyTo(_quatderiv_copy);
+
+        FMemory::Memcpy(&_packet[0], _quat_copy, sizeof(double[4]));
+        FMemory::Memcpy(&_packet[4], _quatderiv_copy, sizeof(double[4]));
         FMemory::Memcpy(&_packet[8], _avv_copy, sizeof(double[3]));
         FMemory::Memcpy(&_packet[11], _avvderiv_copy, sizeof(double[3]));
 
@@ -3502,7 +3526,10 @@ struct FSPointingType5Observation
         double _avv_copy[3];
         avv.CopyTo(_avv_copy);
 
-        FMemory::Memcpy(&_packet[0], &quat.q, sizeof(double[4]));
+        double _quat_copy[4];
+        quat.CopyTo(_quat_copy);
+
+        FMemory::Memcpy(&_packet[0], _quat_copy, sizeof(double[4]));
         FMemory::Memcpy(&_packet[4], _avv_copy, sizeof(double[3]));
     }
 };
@@ -4727,23 +4754,23 @@ public:
 
     template<> static FVector Swizzle<FSDimensionlessVector>(const FSDimensionlessVector& value)
     {
-        return FVector(value.y, value.x, value.z);
+        return FVector((float)value.y, (float)value.x, (float)value.z);
 
     }
 
     template<> static FVector Swizzle<FSDistanceVector>(const FSDistanceVector& value)
     {
-        return FVector(value.y.km, value.x.km, value.z.km);
+        return FVector((float)value.y.km, (float)value.x.km, (float)value.z.km);
     }
 
     template<> static FVector Swizzle<FSVelocityVector>(const FSVelocityVector& value)
     {
-        return FVector(value.dy.kmps, value.dx.kmps, value.dz.kmps);
+        return FVector((float)value.dy.kmps, (float)value.dx.kmps, (float)value.dz.kmps);
     }
 
     template<> static FVector Swizzle<FSAngularVelocity>(const FSAngularVelocity& value)
     {
-        return FVector(value.x.radiansPerSecond, value.y.radiansPerSecond, value.z.radiansPerSecond);
+        return FVector((float)value.x.radiansPerSecond, (float)value.y.radiansPerSecond, (float)value.z.radiansPerSecond);
     }
 
     // From UE to SPICE
@@ -4777,7 +4804,7 @@ public:
     {
         double x=0., y = 0., z = 0., w = 0.;
         value.QENG(w, x, y, z);
-        return FQuat(y, x, z, w);
+        return FQuat((float)y, (float)x, (float)z, (float)w);
     }
 
     // From UE to SPICE
