@@ -1,4 +1,4 @@
-# Visual Studio 2015 user specific files
+# Visual Studio 2015 user specific files 
 .vs/
 
 # Compiled Object files
@@ -81,3 +81,4 @@ Content/Spice/Simple/*
 Content/Spice/Common/*
 Content/Simple/*
 Content/Common/*
+ExternalTests/*
