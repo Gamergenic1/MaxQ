@@ -91,6 +91,20 @@ void USpice::furnsh(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+void USpice::raise_spice_error(const FString& ErrorMessage /*= TEXT("This is a test error.")*/, const FString& SpiceError /*= TEXT("SPICE(VALUEOUTOFRANGE)")*/)
+{
+    setmsg_c(TCHAR_TO_ANSI(*ErrorMessage));
+    sigerr_c(TCHAR_TO_ANSI(*SpiceError));
+}
+
+
+void USpice::furnsh_absolute(
+    const FString& absolutePath
+)
+{
+    furnsh_c(TCHAR_TO_ANSI(*absolutePath));
+}
+
 
 void USpice::furnsh_list(
     ES_ResultCode& ResultCode,
@@ -3334,6 +3348,7 @@ void USpice::gdpool(
     {
         values.Add(*((SpiceDouble*)_values + i));
     }
+    found = _found == SPICETRUE ? true : false;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3361,6 +3376,7 @@ void USpice::gdpool_scalar(
 
     // Return values
     value = _value;
+    found = _found == SPICETRUE ? true : false;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3388,6 +3404,7 @@ void USpice::gdpool_distance(
 
     // Return values
     value = FSDistance(_value);
+    found = _found == SPICETRUE ? true : false;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3415,6 +3432,7 @@ void USpice::gdpool_vector(
 
     // Return values
     value = FSDistanceVector(_value);
+    found = _found == SPICETRUE ? true : false;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3443,6 +3461,7 @@ void USpice::gdpool_mass(
 
     // Return values
     value = FSMassConstant(_value);
+    found = _found == SPICETRUE ? true : false;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -5541,7 +5560,10 @@ void USpice::q2m(
 )
 {
     SpiceDouble _r[3][3];
-    q2m_c(q.q.GetData(), _r);
+    SpiceDouble _q[4];
+    q.CopyTo(_q);
+
+    q2m_c(_q, _r);
 
     r = FSRotationMatrix(_r);
 }
@@ -5579,7 +5601,10 @@ void USpice::qxq(
 )
 {
     SpiceDouble _qout[4];
-    qxq_c(q1.q.GetData(), q2.q.GetData(), _qout);
+    SpiceDouble _q1[4];  q1.CopyTo(_q1);
+    SpiceDouble _q2[4];  q2.CopyTo(_q2);
+
+    qxq_c(_q1, _q2, _qout);
     qout = FSQuaternion(_qout);
 }
 
