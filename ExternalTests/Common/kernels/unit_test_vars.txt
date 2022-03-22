@@ -1,0 +1,11 @@
+KPL/PCK
+
+   \begindata
+
+     BODY9999_GM       = ( 123456789 )
+     BODY9999_SMA      = ( 123456789 )
+     BODY9999_RADII    = ( 12.34   56.78   91.01112 )
+
+   \begintext
+
+
