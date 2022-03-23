@@ -5,22 +5,16 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-class UScriptStruct;
+#include "pch.h"
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
-
-#include "Spice.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSAngleTest, DefaultConstruction_Is_Initialized) {
     FSAngle angle;
 
-    EXPECT_EQ(angle.degrees, 0.);
+    EXPECT_DOUBLE_EQ(angle.degrees, 0.);
 }
 
 TEST(FSAngleTest, StaticZero_Is_Zero) {
 
-    EXPECT_EQ(FSAngle::_0.degrees, 0.);
+    EXPECT_DOUBLE_EQ(FSAngle::_0.degrees, 0.);
 }

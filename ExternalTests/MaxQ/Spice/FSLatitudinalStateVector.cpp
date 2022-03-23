@@ -5,22 +5,17 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSLatitudinalStateVectorTest, DefaultConstruction_IsInitialized) {
     FSLatitudinalStateVector latitudinalStateVector;
 
-    EXPECT_EQ(latitudinalStateVector.r.lonlat.longitude, 0.);
-    EXPECT_EQ(latitudinalStateVector.r.lonlat.latitude, 0.);
-    EXPECT_EQ(latitudinalStateVector.r.r.km, 0.);
-    EXPECT_EQ(latitudinalStateVector.dr.dlon.radiansPerSecond, 0.);
-    EXPECT_EQ(latitudinalStateVector.dr.dlat.radiansPerSecond, 0.);
-    EXPECT_EQ(latitudinalStateVector.dr.dr.kmps, 0.);
+    EXPECT_DOUBLE_EQ(latitudinalStateVector.r.lonlat.longitude.degrees, 0.);
+    EXPECT_DOUBLE_EQ(latitudinalStateVector.r.lonlat.latitude.degrees, 0.);
+    EXPECT_DOUBLE_EQ(latitudinalStateVector.r.r.km, 0.);
+    EXPECT_DOUBLE_EQ(latitudinalStateVector.dr.dlon.radiansPerSecond, 0.);
+    EXPECT_DOUBLE_EQ(latitudinalStateVector.dr.dlat.radiansPerSecond, 0.);
+    EXPECT_DOUBLE_EQ(latitudinalStateVector.dr.dr.kmps, 0.);
 }
 

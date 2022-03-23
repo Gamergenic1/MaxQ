@@ -5,23 +5,18 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSAngularRateTest, DefaultConstruction_Is_Initialized) {
     FSAngularRate angularRate;
 
-    EXPECT_EQ(angularRate.radiansPerSecond, 0.);
+    EXPECT_DOUBLE_EQ(angularRate.radiansPerSecond, 0.);
 }
 
 TEST(FSAngularRateTest, StaticZero_Is_Zero) {
 
-    EXPECT_EQ(FSAngularRate::Zero.radiansPerSecond, 0.);
+    EXPECT_DOUBLE_EQ(FSAngularRate::Zero.radiansPerSecond, 0.);
 }
 
 

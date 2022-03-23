@@ -5,19 +5,14 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(USpiceTypesTest, normalize180to180_ZeroIsZero) {
     double input = 0.;
     double output = USpiceTypes::normalize180to180(input);
 
-    EXPECT_EQ(output, 0.);
+    EXPECT_DOUBLE_EQ(output, 0.);
 }
 
 
@@ -25,7 +20,7 @@ TEST(USpiceTypesTest, normalize0to360_ZeroIsZero) {
     double input = 0.;
     double output = USpiceTypes::normalize0to360(input);
 
-    EXPECT_EQ(output, 0.);
+    EXPECT_DOUBLE_EQ(output, 0.);
 }
 
 
@@ -33,13 +28,13 @@ TEST(USpiceTypesTest, normalizePiToPi_ZeroIsZero) {
     double input = 0.;
     double output = USpiceTypes::normalizePiToPi(input);
 
-    EXPECT_EQ(output, 0.);
+    EXPECT_DOUBLE_EQ(output, 0.);
 }
 
 TEST(USpiceTypesTest, normalizeZeroToTwoPi_ZeroIsZero) {
     double input = 0.;
     double output = USpiceTypes::normalizeZeroToTwoPi(input);
 
-    EXPECT_EQ(output, 0.);
+    EXPECT_DOUBLE_EQ(output, 0.);
 }
 
