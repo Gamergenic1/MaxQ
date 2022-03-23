@@ -43,12 +43,15 @@ TEST(init_all_test, Execution_ClearsError) {
 
     USpice::raise_spice_error();
 
-    USpice::get_errprt(errorOutput);
-
     USpice::init_all();
+    
+    ES_ResultCode ResultCode;
+    FString ErrorMessage;
 
-    USpice::get_errprt(errorOutput);
-    EXPECT_EQ(errorOutput.Len(), 0);
+    USpice::get_implied_result(ResultCode, ErrorMessage);
+
+    EXPECT_EQ(ResultCode, ES_ResultCode::Success);
+    EXPECT_EQ(ErrorMessage.Len(), 0);
 }
 
 

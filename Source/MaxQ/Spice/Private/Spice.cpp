@@ -91,20 +91,6 @@ void USpice::furnsh(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
-void USpice::raise_spice_error(const FString& ErrorMessage /*= TEXT("This is a test error.")*/, const FString& SpiceError /*= TEXT("SPICE(VALUEOUTOFRANGE)")*/)
-{
-    setmsg_c(TCHAR_TO_ANSI(*ErrorMessage));
-    sigerr_c(TCHAR_TO_ANSI(*SpiceError));
-}
-
-
-void USpice::furnsh_absolute(
-    const FString& absolutePath
-)
-{
-    furnsh_c(TCHAR_TO_ANSI(*absolutePath));
-}
-
 
 void USpice::furnsh_list(
     ES_ResultCode& ResultCode,
@@ -12033,8 +12019,29 @@ void USpice::xpose(
     mout = FSRotationMatrix(_mout);
 }
 
+void USpice::get_implied_result(
+    ES_ResultCode& impliedResultCode,
+    FString& impliedErrorMessage
+)
+{
+    ErrorCheck(impliedResultCode, impliedErrorMessage);
+}
+
+void USpice::raise_spice_error(const FString& ErrorMessage /*= TEXT("This is a test error.")*/, const FString& SpiceError /*= TEXT("SPICE(VALUEOUTOFRANGE)")*/)
+{
+    setmsg_c(TCHAR_TO_ANSI(*ErrorMessage));
+    sigerr_c(TCHAR_TO_ANSI(*SpiceError));
+}
+
+
+void USpice::furnsh_absolute(
+    const FString& absolutePath
+)
+{
+    furnsh_c(TCHAR_TO_ANSI(*absolutePath));
+}
 
 // Don't leak #define's
-// UE has Unity-build-acceleration which concatenates multiple source files
+// UE has Jumbo/Unity build-acceleration which concatenates multiple source files
 #undef LONG_MESSAGE_MAX_LENGTH 
 #undef StackAlloc 

@@ -78,17 +78,6 @@ public:
         const FString& relativePath = TEXT("Content/Spice/Kernels/")
     );
 
-    // Entry point to assist unit testing.
-    static void raise_spice_error(const FString& ErrorMessage = TEXT("This is a test error."), const FString& SpiceError = TEXT("SPICE(VALUEOUTOFRANGE)"));
-
-    
-    // Furnsh with an absolute path (provides support for unit tests, should not
-    // be used otherwise).  This ensures kernel files can be loaded without UE
-    // dependencies into the Spice module's memory space.
-    static void furnsh_absolute(
-        const FString& absolutePath
-    );
-
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Kernel",
         meta = (
@@ -6017,6 +6006,32 @@ public:
             ToolTip = "Approximate current ephemeris time, based on clock of local and sketchy CRT conversion"
             ))
     static void et_now(FSEphemerisTime& Now);
+
+
+    // ------------------------------------------------------------------------
+    // Unit Test Support
+    // Random things that make it easier to validate MaxQ.
+    // ------------------------------------------------------------------------
+        // Entry point to assist unit testing.
+    static void get_implied_result(
+        ES_ResultCode& impliedResultCode,
+        FString& impliedErrorMessage
+    );
+
+
+    // Entry point to assist unit testing.
+    static void raise_spice_error(
+        const FString& ErrorMessage = TEXT("This is a test error."),
+        const FString& SpiceError = TEXT("SPICE(VALUEOUTOFRANGE)")
+    );
+
+
+    // Furnsh with an absolute path (provides support for unit tests, should not
+    // be used otherwise).  This ensures kernel files can be loaded without UE
+    // dependencies into the Spice module's memory space.
+    static void furnsh_absolute(
+        const FString& absolutePath
+    );
 };
 
 
