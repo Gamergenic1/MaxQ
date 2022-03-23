@@ -3065,6 +3065,18 @@ struct FSConicElements
         elts[6] = Epoch.seconds;
         elts[7] = GravitationalParameter.GM;
     }
+
+    void CopyTo(double(&elts)[20]) const
+    {
+        elts[0] = PerifocalDistance.km;
+        elts[1] = Eccentricity;
+        elts[2] = Inclination.radians();
+        elts[3] = LongitudeOfAscendingNode.radians();
+        elts[4] = ArgumentOfPeriapse.radians();
+        elts[5] = MeanAnomalyAtEpoch.radians();
+        elts[6] = Epoch.seconds;
+        elts[7] = GravitationalParameter.GM;
+    }
 };
 
 USTRUCT(BlueprintType)
