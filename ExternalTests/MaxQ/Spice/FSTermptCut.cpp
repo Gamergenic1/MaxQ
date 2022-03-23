@@ -5,13 +5,8 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSTermptCutTest, DefaultConstruction_IsInitialized) {
     FSTermptCut termptCut;

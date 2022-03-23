@@ -25,6 +25,20 @@
     <LibraryPath>$(SolutionDir)..\Intermediate\Build\Win64\UnrealEditor\Development\Spice;C:\Program Files\Epic Games\UE_5.0EA\Engine\Intermediate\Build\Win64\UnrealEditor\Development\CoreUObject;C:\Program Files\Epic Games\UE_5.0EA\Engine\Intermediate\Build\Win64\UnrealEditor\Development\Core;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Common\kernels\conics.cpp" />
+    <ClCompile Include="..\..\Common\kernels\mxm.cpp" />
+    <ClCompile Include="..\..\Common\kernels\mxv.cpp" />
+    <ClCompile Include="..\..\Common\kernels\mxv_angular.cpp" />
+    <ClCompile Include="..\..\Common\kernels\mxv_distance.cpp" />
+    <ClCompile Include="..\..\Common\kernels\oscelt.cpp" />
+    <ClCompile Include="..\..\Common\kernels\prop2b.cpp" />
+    <ClCompile Include="..\..\Common\kernels\pxform.cpp" />
+    <ClCompile Include="..\..\Common\kernels\q2m.cpp" />
+    <ClCompile Include="..\..\Common\kernels\spkcvt.cpp" />
+    <ClCompile Include="..\..\Common\kernels\spkpos.cpp" />
+    <ClCompile Include="..\..\Common\kernels\vcrss.cpp" />
+    <ClCompile Include="bodvrd_distance_vector.cpp" />
+    <ClCompile Include="bodvrd_mass.cpp" />
     <ClCompile Include="clear_all.cpp" />
     <ClCompile Include="combine_paths.cpp" />
     <ClCompile Include="enumerate_kernels.cpp" />
@@ -88,8 +102,16 @@
     <ClCompile Include="furnsh.cpp" />
     <ClCompile Include="furnsh_list.cpp" />
     <ClCompile Include="init_all.cpp" />
+    <ClCompile Include="m2q.cpp" />
+    <ClCompile Include="mxv_state.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='UnrealEditor-Test|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="spkezr.cpp" />
+    <ClCompile Include="sxform.cpp" />
     <ClCompile Include="unload.cpp" />
     <ClCompile Include="USpiceTypes.cpp" />
+    <ClCompile Include="xf2rav.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="C:\Program Files\Epic Games\UE_5.0EA\Engine\Binaries\Win64\libfbxsdk.dll">
@@ -552,17 +574,48 @@
     <CopyFileToFolders Include="..\..\..\Binaries\Win64\UnrealEditor-Spice.pdb">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\naif0012.tls">
-      <FileType>Text</FileType>
+    <CopyFileToFolders Include="..\..\Common\kernels\maxq_unit_test_metakernel.tm">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\ck\04135_04171pc_psiv2.bc">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\dsk\phoebe_64q.bds">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\fk\cas_v37.tf">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\ik\cas_iss_v09.ti">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\lsk\naif0008.tls">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\pck\cpck05Mar2004.tpc">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\sclk\cas00084.tsc">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\spk\020514_SE_SAT105.bsp">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\spk\030201AP_SK_SM546_T45.bsp">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\..\Common\kernels\spk\981005_PLTEPH-DE405S.bsp">
+      <FileType>Document</FileType>
     </CopyFileToFolders>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Common\include\SpiceHostDefs.h" />
     <ClInclude Include="..\..\Common\include\UE5HostDefs.h" />
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\..\Common\kernels\unit_test_vars.txt" />
+    <CopyFileToFolders Include="..\..\Common\kernels\maxq_unit_test_vars.pck" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -571,10 +624,8 @@
   </ImportGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnrealEditor-Test|x64'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
-      <PrecompiledHeaderFile>
-      </PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PreprocessorDefinitions>X64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>

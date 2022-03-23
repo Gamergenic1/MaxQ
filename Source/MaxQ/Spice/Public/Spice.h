@@ -3061,14 +3061,17 @@ public:
     /// <param name="elts">[out] Equivalent conic elements</param>
     /// <returns></returns>
     UFUNCTION(
-        BlueprintPure,
+        BlueprintCallable,
         Category = "Spice|Api|Ephemeris",
         meta = (
+            ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONIC, ELEMENTS, EPHEMERIS",
             ShortToolTip = "Determine conic elements from state",
             ToolTip = "Determine the set of osculating conic orbital elements that corresponds to the state(position, velocity) of a body at some epoch"
             ))
     static void oscelt(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
         const FSStateVector& state,
         const FSEphemerisTime& et,
         const FSMassConstant& mu,
@@ -3083,14 +3086,17 @@ public:
     /// <param name="elts">[out] Extended set of classical conic elements</param>
     /// <returns></returns>
     UFUNCTION(
-        BlueprintPure,
+        BlueprintCallable,
         Category = "Spice|Api|Ephemeris",
         meta = (
+            ExpandEnumAsExecs = "ResultCode",
             Keywords = "CONIC, ELEMENTS, EPHEMERIS",
             ShortToolTip = "Extended osculating elements from state",
             ToolTip = "Determine the set of osculating conic orbital elements that corresponds to the state(position, velocity) of a body at some epoch.  In additional to the classical elements, return the true anomaly, semi - major axis, and period, if applicable"
             ))
     static void oscltx(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
         const FSStateVector& state,
         const FSEphemerisTime& et,
         const FSMassConstant& mu,

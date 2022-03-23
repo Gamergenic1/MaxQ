@@ -5,13 +5,8 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSTwoLineElementsTest, DefaultConstruction_IsInitialized) {
     FSTwoLineElements twoLineElements;
@@ -20,7 +15,7 @@ TEST(FSTwoLineElementsTest, DefaultConstruction_IsInitialized) {
 
     for (int i = 0; i < twoLineElements.elems.Num(); ++i)
     {
-        EXPECT_EQ(twoLineElements.elems[i], 0.);
+        EXPECT_DOUBLE_EQ(twoLineElements.elems[i], 0.);
     }
 }
 

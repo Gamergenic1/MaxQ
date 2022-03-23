@@ -5,24 +5,19 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSConicElementsTest, DefaultConstruction_IsInitialized) {
     FSConicElements conicElements;
 
-    EXPECT_EQ(conicElements.PerifocalDistance.km, 0.);
-    EXPECT_EQ(conicElements.Eccentricity, 0.);
-    EXPECT_EQ(conicElements.Inclination.degrees, 0.);
-    EXPECT_EQ(conicElements.LongitudeOfAscendingNode.degrees, 0.);
-    EXPECT_EQ(conicElements.ArgumentOfPeriapse.degrees, 0.);
-    EXPECT_EQ(conicElements.MeanAnomalyAtEpoch.degrees, 0.);
-    EXPECT_EQ(conicElements.Epoch.seconds, 0.);
-    EXPECT_EQ(conicElements.GravitationalParameter.GM, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.PerifocalDistance.km, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.Eccentricity, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.Inclination.degrees, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.LongitudeOfAscendingNode.degrees, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.ArgumentOfPeriapse.degrees, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.MeanAnomalyAtEpoch.degrees, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.Epoch.seconds, 0.);
+    EXPECT_DOUBLE_EQ(conicElements.GravitationalParameter.GM, 0.);
 }
 

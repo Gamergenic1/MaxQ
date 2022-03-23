@@ -5,13 +5,7 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
-
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
+#include "pch.h"
 
 TEST(FSDSKDescrTest, DefaultConstruction_IsInitialized) {
     FSDSKDescr DSKDescr;
@@ -23,13 +17,13 @@ TEST(FSDSKDescrTest, DefaultConstruction_IsInitialized) {
     EXPECT_EQ(DSKDescr.frmcde, 0);
     EXPECT_EQ(DSKDescr.corsys, 0);
     EXPECT_EQ(DSKDescr.corpar.Num(), 0);
-    EXPECT_EQ(DSKDescr.co1min, 0.);
-    EXPECT_EQ(DSKDescr.co1max, 0.);
-    EXPECT_EQ(DSKDescr.co2min, 0.);
-    EXPECT_EQ(DSKDescr.co2max, 0.);
-    EXPECT_EQ(DSKDescr.co3min, 0.);
-    EXPECT_EQ(DSKDescr.co3max, 0.);
-    EXPECT_EQ(DSKDescr.start, 0.);
-    EXPECT_EQ(DSKDescr.stop, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.co1min, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.co1max, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.co2min, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.co2max, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.co3min, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.co3max, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.start, 0.);
+    EXPECT_DOUBLE_EQ(DSKDescr.stop, 0.);
 }
 

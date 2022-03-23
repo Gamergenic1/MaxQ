@@ -5,19 +5,14 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSVelocityVectorTest, DefaultConstruction_IsInitialized) {
     FSVelocityVector velocityVector;
 
-    EXPECT_EQ(velocityVector.dx.kmps, 0.);
-    EXPECT_EQ(velocityVector.dy.kmps, 0.);
-    EXPECT_EQ(velocityVector.dz.kmps, 0.);
+    EXPECT_DOUBLE_EQ(velocityVector.dx.kmps, 0.);
+    EXPECT_DOUBLE_EQ(velocityVector.dy.kmps, 0.);
+    EXPECT_DOUBLE_EQ(velocityVector.dz.kmps, 0.);
 }
 

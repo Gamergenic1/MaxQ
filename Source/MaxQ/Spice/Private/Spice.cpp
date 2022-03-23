@@ -628,15 +628,14 @@ void USpice::bodvcd_scalar(
     const FString& item
 )
 {
-    SpiceDouble _result[1];
+    SpiceDouble _result[1]; _result[0] = ReturnValue;
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+    
     ReturnValue = _result[0];
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
@@ -651,15 +650,14 @@ void USpice::bodvcd_mass(
     const FString& item
 )
 {
-    SpiceDouble _result[1];
+    SpiceDouble _result[1]; _result[0] = ReturnValue.AsSpiceDouble();
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+
     ReturnValue = FSMassConstant(_result[0]);
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
@@ -674,15 +672,15 @@ void USpice::bodvcd_distance_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];
+    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
+
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+
     ReturnValue = FSDistanceVector(_result);
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
@@ -732,15 +730,14 @@ void USpice::bodvcd_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];
+    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvcd_c(bodyid, TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+
     ReturnValue = FSDimensionlessVector(_result);
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for BODY%ld_%s Expected double[%d] but proc returned double[%d]"), bodyid, *item, n_expected, n_actual);
@@ -791,15 +788,14 @@ void USpice::bodvrd_scalar(
     const FString& item
 )
 {
-    SpiceDouble _result[1];
+    SpiceDouble _result[1]; _result[0] = ReturnValue;
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+    
     ReturnValue = _result[0];
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
@@ -814,15 +810,14 @@ void USpice::bodvrd_mass(
     const FString& item
 )
 {
-    SpiceDouble _result[1];
+    SpiceDouble _result[1]; _result[0] = ReturnValue.AsSpiceDouble();
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+    
     ReturnValue = FSMassConstant(_result[0]);
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
@@ -837,15 +832,15 @@ void USpice::bodvrd_distance_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];
-    SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
+    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
+    SpiceInt n_actual = 0;
+    int n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+
     ReturnValue = FSDistanceVector(_result);
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if(!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
@@ -861,15 +856,14 @@ void USpice::bodvrd_vector(
     const FString& item
 )
 {
-    SpiceDouble _result[3];
+    SpiceDouble _result[3];  ReturnValue.CopyTo(_result);
     SpiceInt n_actual, n_expected = sizeof(_result) / sizeof(_result[0]);
 
-    ZeroOut(_result);
     bodvrd_c(TCHAR_TO_ANSI(*bodynm), TCHAR_TO_ANSI(*item), n_expected, &n_actual, _result);
+    
     ReturnValue = FSDimensionlessVector(_result);
 
-    ErrorCheck(ResultCode, ErrorMessage);
-    if (ResultCode == ES_ResultCode::Success && n_actual != n_expected)
+    if (!ErrorCheck(ResultCode, ErrorMessage) && n_actual != n_expected)
     {
         ResultCode = ES_ResultCode::Error;
         ErrorMessage = FString::Printf(TEXT("Blueprint request for %s_%s Expected double[%d] but proc returned double[%d]"), *bodynm, *item, n_expected, n_actual);
@@ -5567,7 +5561,7 @@ void USpice::m2q(
 )
 {
     SpiceDouble _m1[3][3];  r.CopyTo(_m1);
-    SpiceDouble _q[4];
+    SpiceDouble _q[4];  q.CopyTo(_q);
     m2q_c(_m1, _q);
 
     q = FSQuaternion(_q);
@@ -6760,24 +6754,28 @@ void USpice::occult(
 
 
 void USpice::oscelt(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
     const FSStateVector& state,
     const FSEphemerisTime& et,
     const FSMassConstant& gm,
     FSConicElements& elts
 )
 {
-    SpiceDouble _state[6];
-    SpiceDouble      _elts[8];
-
-    state.CopyTo(_state);
+    SpiceDouble _state[6]; state.CopyTo(_state);
+    SpiceDouble _elts[8];  elts.CopyTo(_elts);
+   
     oscelt_c(_state, et.seconds, gm.GM, _elts);
 
     elts = FSConicElements(_elts);
 
-    UnexpectedErrorCheck();
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
 }
 
 void USpice::oscltx(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
     const FSStateVector& state,
     const FSEphemerisTime& et,
     const FSMassConstant& gm,
@@ -6788,9 +6786,14 @@ void USpice::oscltx(
 )
 {
     SpiceDouble _state[6];
-    SpiceDouble _elts[SPICE_OSCLTX_NELTS];
-
     state.CopyTo(_state);
+
+    SpiceDouble _elts[SPICE_OSCLTX_NELTS];
+    elts.CopyTo(_elts);
+    _elts[8] = nu.AsSpiceDouble();
+    _elts[9] = a.AsSpiceDouble();
+    _elts[10] = tau.AsSpiceDouble();
+
     oscltx_c(_state, et.seconds, gm.GM, _elts);
 
     elts = FSConicElements(_elts);
@@ -6798,7 +6801,8 @@ void USpice::oscltx(
     a = FSDistance(_elts[9]);
     tau = FSEphemerisPeriod(_elts[10]);
 
-    UnexpectedErrorCheck();
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
 }
 
 void USpice::pckfrm(
@@ -7557,7 +7561,7 @@ void USpice::pxform(
     const FString& to
 )
 {
-    SpiceDouble _rotate[3][3];
+    SpiceDouble _rotate[3][3]; rotate.CopyTo(_rotate);
     pxform_c(TCHAR_TO_ANSI(*from), TCHAR_TO_ANSI(*to), et.seconds, _rotate);
     rotate = FSRotationMatrix(_rotate);
 
@@ -9224,7 +9228,7 @@ void USpice::spkcvt(
     ConstSpiceChar* _obsrvr = TCHAR_TO_ANSI(*obsrvr);
     // Outputs
     SpiceDouble     _state[6];  ZeroOut(_state);
-    SpiceDouble     _lt = 0;
+    SpiceDouble     _lt = lt.AsSpiceDouble();
 
     // Invocation
     spkcvt_c(
@@ -9322,18 +9326,20 @@ void USpice::spkezr(
     ES_AberrationCorrectionWithNewtonians abcorr
 )
 {
-    SpiceDouble _lt = 0;
-    SpiceDouble _state[6];
-    ZeroOut(_state);
+    // #Note (USpice, in general)
+    // Outputs, but initialize the values to whatever the caller passed in.
+    // We want to return whatever spice returns.  But if Spice doesn't change the value, we don't want to, either
+    SpiceDouble _lt = lt.AsSpiceDouble();
+    SpiceDouble _state[6];  state.CopyTo(_state);
 
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
 
     spkezr_c(TCHAR_TO_ANSI(*targ), et.seconds, TCHAR_TO_ANSI(*ref), _abcorr, TCHAR_TO_ANSI(*obs), _state, &_lt);
 
+    ErrorCheck(ResultCode, ErrorMessage);
+
     lt = FSEphemerisPeriod(_lt);
     state = FSStateVector(_state);
-
-    ErrorCheck(ResultCode, ErrorMessage);
 }
 
 
@@ -9427,8 +9433,8 @@ void USpice::spkpos(
     ES_AberrationCorrectionWithNewtonians abcorr
 )
 {
-    SpiceDouble _lt = 0;
-    SpiceDouble _ptarg[3];
+    SpiceDouble _lt = lt.AsSpiceDouble();
+    SpiceDouble _ptarg[3];  ptarg.CopyTo(_ptarg);
     ZeroOut(_ptarg);
 
     ConstSpiceChar* _abcorr = USpiceTypes::toString(abcorr);
@@ -10274,16 +10280,19 @@ void USpice::sxform(
     SpiceChar* _to = TCHAR_TO_ANSI(*to);
     SpiceDouble _et = et.AsSpiceDouble();
     // Output
-    SpiceDouble _xform[6][6];   ZeroOut(_xform);
+    SpiceDouble _xform[6][6];  xform.CopyTo(_xform);
 
     // Invocation
     sxform_c(_from, _to, _et, _xform);
 
-    // Return Value
-    xform = FSStateTransform(_xform);
-
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
+
+    if (ResultCode == ES_ResultCode::Success)
+    {
+        // Return Value
+        xform = FSStateTransform(_xform);
+    }
 }
 
 

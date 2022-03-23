@@ -5,18 +5,13 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSWindowSegmentTest, DefaultConstruction_IsInitialized) {
     FSWindowSegment windowSegment;
 
-    EXPECT_EQ(windowSegment.start, 0.);
-    EXPECT_EQ(windowSegment.stop, 0.);
+    EXPECT_DOUBLE_EQ(windowSegment.start, 0.);
+    EXPECT_DOUBLE_EQ(windowSegment.stop, 0.);
 }
 

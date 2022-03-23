@@ -5,19 +5,14 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSDistanceVectorTest, DefaultConstruction_IsInitialized) {
     FSDistanceVector distanceVector;
 
-    EXPECT_EQ(distanceVector.x.km, 0.);
-    EXPECT_EQ(distanceVector.y.km, 0.);
-    EXPECT_EQ(distanceVector.z.km, 0.);
+    EXPECT_DOUBLE_EQ(distanceVector.x.km, 0.);
+    EXPECT_DOUBLE_EQ(distanceVector.y.km, 0.);
+    EXPECT_DOUBLE_EQ(distanceVector.z.km, 0.);
 }
 

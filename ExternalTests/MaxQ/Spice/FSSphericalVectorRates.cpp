@@ -5,19 +5,14 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSSphericalVectorRatesTest, DefaultConstruction_IsInitialized) {
     FSSphericalVectorRates sphericalVectorRates;
 
-    EXPECT_EQ(sphericalVectorRates.dcolat.radiansPerSecond, 0.);
-    EXPECT_EQ(sphericalVectorRates.dlon.radiansPerSecond, 0.);
-    EXPECT_EQ(sphericalVectorRates.dr.kmps, 0.);
+    EXPECT_DOUBLE_EQ(sphericalVectorRates.dcolat.radiansPerSecond, 0.);
+    EXPECT_DOUBLE_EQ(sphericalVectorRates.dlon.radiansPerSecond, 0.);
+    EXPECT_DOUBLE_EQ(sphericalVectorRates.dr.kmps, 0.);
 }
 

@@ -5,13 +5,8 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(unload_test, DefaultsTestCase) {
     ES_ResultCode ResultCode = ES_ResultCode::Success;
@@ -21,6 +16,6 @@ TEST(unload_test, DefaultsTestCase) {
     USpice::unload(ResultCode, ErrorMessage, path);
 
     EXPECT_EQ(ResultCode, ES_ResultCode::Error);
-    EXPECT_TRUE(ErrorMessage.Len() > 0);
+    EXPECT_GT(ErrorMessage.Len(), 0);
 }
 

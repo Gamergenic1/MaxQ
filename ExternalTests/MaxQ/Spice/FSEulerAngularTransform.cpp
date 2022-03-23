@@ -5,13 +5,8 @@
 // Documentation:  https://maxq.gamergenic.com/
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
-#include "UE5HostDefs.h"
-#include "SpiceHostDefs.h"
+#include "pch.h"
 
-#include "Spice.h"
-#include "SpiceTypes.h"
-
-#include "gtest/gtest.h"
 
 TEST(FSEulerAngularTransformTest, DefaultConstruction_IsInitialized) {
     FSEulerAngularTransform eulerAngularTransform;
@@ -20,12 +15,12 @@ TEST(FSEulerAngularTransformTest, DefaultConstruction_IsInitialized) {
     
     for (int i = 0; i < eulerAngularTransform.m.Num(); ++i)
     {
-        EXPECT_EQ(eulerAngularTransform.m[i].r.x, i == 0 ? 1. : 0.);
-        EXPECT_EQ(eulerAngularTransform.m[i].r.y, i == 1 ? 1. : 0.);
-        EXPECT_EQ(eulerAngularTransform.m[i].r.z, i == 2 ? 1. : 0.);
-        EXPECT_EQ(eulerAngularTransform.m[i].dr.x, i == 3 ? 1. : 0.);
-        EXPECT_EQ(eulerAngularTransform.m[i].dr.y, i == 4 ? 1. : 0.);
-        EXPECT_EQ(eulerAngularTransform.m[i].dr.z, i == 5 ? 1. : 0.);
+        EXPECT_DOUBLE_EQ(eulerAngularTransform.m[i].r.x, i == 0 ? 1. : 0.);
+        EXPECT_DOUBLE_EQ(eulerAngularTransform.m[i].r.y, i == 1 ? 1. : 0.);
+        EXPECT_DOUBLE_EQ(eulerAngularTransform.m[i].r.z, i == 2 ? 1. : 0.);
+        EXPECT_DOUBLE_EQ(eulerAngularTransform.m[i].dr.x, i == 3 ? 1. : 0.);
+        EXPECT_DOUBLE_EQ(eulerAngularTransform.m[i].dr.y, i == 4 ? 1. : 0.);
+        EXPECT_DOUBLE_EQ(eulerAngularTransform.m[i].dr.z, i == 5 ? 1. : 0.);
     }
 }
 
