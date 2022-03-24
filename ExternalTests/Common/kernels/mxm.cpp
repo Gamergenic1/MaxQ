@@ -21,6 +21,5 @@ TEST(mxm_test, DefaultsTestCase) {
         EXPECT_DOUBLE_EQ(mout.m[i].x, i == 0 ? 1. : 0.);
         EXPECT_DOUBLE_EQ(mout.m[i].y, i == 1 ? 1. : 0.);
         EXPECT_DOUBLE_EQ(mout.m[i].z, i == 2 ? 1. : 0.);
-
     }
 }

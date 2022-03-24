@@ -49,7 +49,7 @@ TEST(mxv_state_test, ZeroMatrix_Is_ZeroState) {
 TEST(mxv_state_test, ZeroState_Is_ZeroState) {
 
     FSStateTransform m = FSStateTransform::Identity;
-    FSStateVector statein = FSStateVector(FSDistanceVector::Zero, FSVelocityVector::Zero);
+    FSStateVector statein(FSDistanceVector::Zero, FSVelocityVector::Zero);
     FSStateVector stateout;
 
     USpice::mxv_state(m, statein, stateout);
@@ -75,7 +75,7 @@ TEST(mxv_state_test, StateXp90_Is_Rotated) {
     m.m[4] = FSDimensionlessStateVector(FSDimensionlessVector(0, 0, 0), FSDimensionlessVector(1, 0, 0));
     m.m[5] = FSDimensionlessStateVector(FSDimensionlessVector(0, 0, 0), FSDimensionlessVector(0, 0, 1));
 
-    FSStateVector statein = FSStateVector(FSDistanceVector(1.5, -2.5, 3.5), FSVelocityVector(2.5, -3.5, 4.5));
+    FSStateVector statein(FSDistanceVector(1.5, -2.5, 3.5), FSVelocityVector(2.5, -3.5, 4.5));
     FSStateVector stateout;
 
     USpice::mxv_state(m, statein, stateout);

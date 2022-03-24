@@ -62,8 +62,8 @@ TEST(sxform_test, Earth_Was_Turning) {
     ErrorMessage.Empty();
 
     FSStateTransform stateTransform;
-    FString from = "J2000";
-    FString to = "IAU_EARTH";
+    FString from = TEXT("J2000");
+    FString to = TEXT("IAU_EARTH");
 
     USpice::sxform(ResultCode, ErrorMessage, stateTransform, et, from, to);
 

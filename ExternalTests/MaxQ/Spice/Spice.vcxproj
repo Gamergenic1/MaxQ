@@ -110,7 +110,10 @@
     <ClCompile Include="spkezr.cpp" />
     <ClCompile Include="sxform.cpp" />
     <ClCompile Include="unload.cpp" />
-    <ClCompile Include="USpiceTypes.cpp" />
+    <ClCompile Include="USpiceTypes_normalizeZeroToTwoPi.cpp" />
+    <ClCompile Include="USpiceTypes_normalize0to360.cpp" />
+    <ClCompile Include="USpiceTypes_normalize180to180.cpp" />
+    <ClCompile Include="USpiceTypes_normalizePiToPi.cpp" />
     <ClCompile Include="xf2rav.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -610,6 +613,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Common\include\MaxQTestDefinitions.h" />
     <ClInclude Include="..\..\Common\include\SpiceHostDefs.h" />
     <ClInclude Include="..\..\Common\include\UE5HostDefs.h" />
     <ClInclude Include="pch.h" />

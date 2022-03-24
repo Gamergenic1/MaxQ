@@ -70,7 +70,7 @@ TEST(spkezr_test, EMB_Is_OrbitingSun) {
     ErrorMessage.Empty();
 
     FSStateVector stateVector;
-    FSEphemerisPeriod lt = FSEphemerisPeriod(1.5);
+    FSEphemerisPeriod lt(1.5);
     FString targ = TEXT("EMB");
     FString obs = TEXT("SSB");
     FString ref = TEXT("ECLIPJ2000");
@@ -134,7 +134,7 @@ TEST(spkezr_test, EMB_IsNot_OrbitingTitan) {
     ErrorMessage.Empty();
 
     FSStateVector stateVector;
-    FSEphemerisPeriod lt = FSEphemerisPeriod(1.5);
+    FSEphemerisPeriod lt(1.5);
     FString targ = TEXT("EMB");
     FString obs = TEXT("TITAN");
     FString ref = TEXT("ECLIPJ2000");
@@ -207,7 +207,7 @@ TEST(spkezr_test, Cassini_Needs_TitanSpk) {
     ErrorMessage.Empty();
 
     FSStateVector stateVector;
-    FSEphemerisPeriod lt = FSEphemerisPeriod(1.5);
+    FSEphemerisPeriod lt(1.5);
     FString targ = TEXT("CASSINI");
     FString obs = TEXT("TITAN");
     FString ref = TEXT("ECLIPJ2000");
@@ -266,7 +266,7 @@ TEST(spkezr_test, Cassini_Is_AtTitan) {
     ErrorMessage.Empty();
 
     FSStateVector stateVector;
-    FSEphemerisPeriod lt = FSEphemerisPeriod(1.5);
+    FSEphemerisPeriod lt(1.5);
     FString targ = TEXT("CASSINI");
     FString obs = TEXT("TITAN");
     FString ref = TEXT("ECLIPJ2000");
@@ -327,7 +327,7 @@ TEST(spkezr_test, Cassini_IsNot_AtTitanALongTimeFromNow) {
     ErrorMessage.Empty();
 
     FSStateVector stateVector;
-    FSEphemerisPeriod lt = FSEphemerisPeriod(1.5);
+    FSEphemerisPeriod lt(1.5);
     FString targ = TEXT("CASSINI");
     FString obs = TEXT("TITAN");
     FString ref = TEXT("ECLIPJ2000");
@@ -387,7 +387,7 @@ TEST(spkezr_test, Cassini_IsNot_AtTitanALongTimeAgo) {
     ErrorMessage.Empty();
 
     FSStateVector stateVector;
-    FSEphemerisPeriod lt = FSEphemerisPeriod(1.5);
+    FSEphemerisPeriod lt(1.5);
     FString targ = TEXT("CASSINI");
     FString obs = TEXT("TITAN");
     FString ref = TEXT("ECLIPJ2000");
@@ -446,7 +446,7 @@ TEST(spkezr_test, Cassini_Has_AberrationToEarth) {
     ErrorMessage.Empty();
 
     FSStateVector stateVector;
-    FSEphemerisPeriod lt = FSEphemerisPeriod(1.5);
+    FSEphemerisPeriod lt(1.5);
     FString targ = TEXT("CASSINI");
     FString obs = TEXT("EMB");
     FString ref = TEXT("J2000");

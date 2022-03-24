@@ -12,7 +12,7 @@ TEST(bodvrd_mass_test, DefaultsTestCase) {
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage;
 
-    FSMassConstant ResultMass = FSMassConstant(1.5);
+    FSMassConstant ResultMass(1.5);
 
     FString Body, Item;
 

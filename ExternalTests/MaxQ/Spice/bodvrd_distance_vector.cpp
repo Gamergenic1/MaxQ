@@ -13,7 +13,7 @@ TEST(bodvrd_distance_vector_test, DefaultsTestCase) {
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage;
 
-    FSDistanceVector ResultVector = FSDistanceVector( 1., 2., 3.);
+    FSDistanceVector ResultVector( 1., 2., 3.);
 
     FString Body, Item;
 
@@ -42,7 +42,7 @@ TEST(bodvrd_distance_vector_test, BODY9999_RADII_Is_Correct) {
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage;
 
-    FSDistanceVector ResultVector = FSDistanceVector(1., 2., 3.);
+    FSDistanceVector ResultVector(1., 2., 3.);
 
     FString Body = TEXT("9999"), Item = TEXT("RADII");
 
