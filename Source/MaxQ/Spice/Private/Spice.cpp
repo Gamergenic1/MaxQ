@@ -10302,11 +10302,7 @@ void USpice::sxform(
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
 
-    if (ResultCode == ES_ResultCode::Success)
-    {
-        // Return Value
-        xform = FSStateTransform(_xform);
-    }
+    xform = FSStateTransform(_xform);
 }
 
 

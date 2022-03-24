@@ -506,8 +506,8 @@ inline static FSDimensionlessVector& operator-=(FSDimensionlessVector& lhs, cons
 }
 
 
-#define FSDistance_km_to_M (1000)
-#define FSDistance_M_to_km (1/FSDistance_km_to_M)
+#define FSDistance_km_to_M (1000.)
+#define FSDistance_M_to_km (1./FSDistance_km_to_M)
 
 USTRUCT(BlueprintType)
 struct SPICE_API FSDistance
