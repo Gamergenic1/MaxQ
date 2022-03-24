@@ -1043,8 +1043,7 @@ struct FSAngularRate
     /// <returns>Radians/Second</returns>
     inline double AsSpiceDouble() const { return radiansPerSecond; }
     inline double AsRadiansPerSecond() const { return radiansPerSecond; }
-    inline double AsDegreesPerSecond() const;
-
+    double SPICE_API AsDegreesPerSecond() const;
 
     static SPICE_API const FSAngularRate Zero;
 };
@@ -1286,10 +1285,22 @@ inline static double operator/(const FSEphemerisPeriod& A, const FSEphemerisPeri
     return A.AsSpiceDouble() / B.AsSpiceDouble();
 }
 
-inline static FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, double B)
+inline static FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
-    return FSEphemerisPeriod(A.AsSpiceDouble() / B);
+    return FSEphemerisPeriod( fmod(A.AsSpiceDouble(), B.AsSpiceDouble()) );
 }
+
+
+inline static bool operator==(const FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs)
+{
+    return lhs.seconds == rhs.seconds;
+}
+
+inline static bool operator!=(const FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs)
+{
+    return !(lhs == rhs);
+}
+
 
 inline static bool operator>(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {

@@ -26,6 +26,7 @@ SPICE_API const FSDistance FSDistance::Zero = FSDistance(0.);
 SPICE_API const FSDistance FSDistance::OneKm = FSDistance::FromKm(1.);
 SPICE_API const FSDistance FSDistance::OneMeter = FSDistance::FromMeters(1.);
 SPICE_API const FSSpeed FSSpeed::Zero = FSSpeed();
+SPICE_API const FSSpeed FSSpeed::OneKmps = FSSpeed(1.);
 SPICE_API const FSDistanceVector FSDistanceVector::Zero = FSDistanceVector();
 SPICE_API const FSVelocityVector FSVelocityVector::Zero = FSVelocityVector();
 SPICE_API const FSStateTransform FSStateTransform::Identity = FSStateTransform();
