@@ -19,6 +19,14 @@ TEST(FSQuaternionTest, DefaultConstruction_Is_Initialized) {
     EXPECT_DOUBLE_EQ(quaternion.z, 0.);
 }
 
+TEST(FSQuaternionTest, Identity_Is_Initialized) {
+    FSQuaternion quaternion;
+
+    EXPECT_DOUBLE_EQ(FSQuaternion::Identity.w, 1.);
+    EXPECT_DOUBLE_EQ(FSQuaternion::Identity.x, 0.);
+    EXPECT_DOUBLE_EQ(FSQuaternion::Identity.y, 0.);
+    EXPECT_DOUBLE_EQ(FSQuaternion::Identity.z, 0.);
+}
 
 TEST(FSQuaternionTest, DefaultConstructor_Is_Correct) {
 
@@ -64,3 +72,49 @@ TEST(FSQuaternionTest, DoubleCopy_Is_Correct) {
     EXPECT_DOUBLE_EQ(v4, q[3]);
 }
 
+TEST(FSQuaternionTest, SPICE_Is_Correct) {
+
+    FSQuaternion q = FSQuaternion::SPICE(v1, v2, v3, v4);
+
+    EXPECT_DOUBLE_EQ(v1, q.w);
+    EXPECT_DOUBLE_EQ(v2, q.x);
+    EXPECT_DOUBLE_EQ(v3, q.y);
+    EXPECT_DOUBLE_EQ(v4, q.z);
+}
+
+TEST(FSQuaternionTest, ENG_Is_Correct) {
+
+    FSQuaternion q = FSQuaternion::ENG(v1, v2, v3, v4);
+
+    EXPECT_DOUBLE_EQ(v1, q.w);
+    EXPECT_DOUBLE_EQ(-v2, q.x);
+    EXPECT_DOUBLE_EQ(-v3, q.y);
+    EXPECT_DOUBLE_EQ(-v4, q.z);
+}
+
+
+TEST(FSQuaternionTest, QSPICE_Is_Correct) {
+
+    FSQuaternion q(v1, v2, v3, v4);
+
+    double w = 1., x = 1., y = 1., z = 1.;
+    q.QSPICE(w, x, y, z);
+
+    EXPECT_DOUBLE_EQ(v1, w);
+    EXPECT_DOUBLE_EQ(v2, x);
+    EXPECT_DOUBLE_EQ(v3, y);
+    EXPECT_DOUBLE_EQ(v4, z);
+}
+
+TEST(FSQuaternionTest, QENG_Is_Correct) {
+
+    FSQuaternion q(v1, v2, v3, v4);
+
+    double w = 1., x = 1., y = 1., z = 1.;
+    q.QENG(w, x, y, z);
+
+    EXPECT_DOUBLE_EQ(v1, w);
+    EXPECT_DOUBLE_EQ(-v2, x);
+    EXPECT_DOUBLE_EQ(-v3, y);
+    EXPECT_DOUBLE_EQ(-v4, z);
+}

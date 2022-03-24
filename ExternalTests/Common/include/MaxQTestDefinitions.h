@@ -9,6 +9,9 @@
 
 extern const double pi;
 extern const double _pos0_as_radians;
+extern const double _pos1_as_radians;
+extern const double _pos2_as_radians;
+extern const double _pos3_as_radians;
 extern const double _pos90_as_radians;
 extern const double _pos180_as_radians;
 extern const double _pos270_as_radians;

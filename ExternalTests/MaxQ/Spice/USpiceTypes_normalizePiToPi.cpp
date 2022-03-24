@@ -13,6 +13,9 @@
 
 const double pi = (double)PI_MACRO;
 const double _pos0_as_radians = (double)(+0. * PI_MACRO);
+const double _pos1_as_radians = (double)(+1./180. * PI_MACRO);
+const double _pos2_as_radians = (double)(+2./180. * PI_MACRO);
+const double _pos3_as_radians = (double)(+3./180. * PI_MACRO);
 const double _pos90_as_radians = (double)(+0.5 * PI_MACRO);
 const double _pos180_as_radians = (double)(+1. * PI_MACRO);
 const double _pos270_as_radians = (double)(+1.5 * PI_MACRO);
