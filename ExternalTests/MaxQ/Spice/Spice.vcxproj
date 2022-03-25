@@ -25,18 +25,18 @@
     <LibraryPath>$(SolutionDir)..\Intermediate\Build\Win64\UnrealEditor\Development\Spice;C:\Program Files\Epic Games\UE_5.0EA\Engine\Intermediate\Build\Win64\UnrealEditor\Development\CoreUObject;C:\Program Files\Epic Games\UE_5.0EA\Engine\Intermediate\Build\Win64\UnrealEditor\Development\Core;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Common\kernels\conics.cpp" />
-    <ClCompile Include="..\..\Common\kernels\mxm.cpp" />
-    <ClCompile Include="..\..\Common\kernels\mxv.cpp" />
-    <ClCompile Include="..\..\Common\kernels\mxv_angular.cpp" />
-    <ClCompile Include="..\..\Common\kernels\mxv_distance.cpp" />
-    <ClCompile Include="..\..\Common\kernels\oscelt.cpp" />
-    <ClCompile Include="..\..\Common\kernels\prop2b.cpp" />
-    <ClCompile Include="..\..\Common\kernels\pxform.cpp" />
-    <ClCompile Include="..\..\Common\kernels\q2m.cpp" />
-    <ClCompile Include="..\..\Common\kernels\spkcvt.cpp" />
-    <ClCompile Include="..\..\Common\kernels\spkpos.cpp" />
-    <ClCompile Include="..\..\Common\kernels\vcrss.cpp" />
+    <ClCompile Include="conics.cpp" />
+    <ClCompile Include="mxm.cpp" />
+    <ClCompile Include="mxv.cpp" />
+    <ClCompile Include="mxv_angular.cpp" />
+    <ClCompile Include="mxv_distance.cpp" />
+    <ClCompile Include="oscelt.cpp" />
+    <ClCompile Include="prop2b.cpp" />
+    <ClCompile Include="pxform.cpp" />
+    <ClCompile Include="q2m.cpp" />
+    <ClCompile Include="spkcvt.cpp" />
+    <ClCompile Include="spkpos.cpp" />
+    <ClCompile Include="vcrss.cpp" />
     <ClCompile Include="bodvrd_distance_vector.cpp" />
     <ClCompile Include="bodvrd_mass.cpp" />
     <ClCompile Include="clear_all.cpp" />
