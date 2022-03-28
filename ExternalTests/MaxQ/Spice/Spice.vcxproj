@@ -26,6 +26,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="conics.cpp" />
+    <ClCompile Include="MaxQTestDefinitions.cpp" />
     <ClCompile Include="mxm.cpp" />
     <ClCompile Include="mxv.cpp" />
     <ClCompile Include="mxv_angular.cpp" />
@@ -577,37 +578,19 @@
     <CopyFileToFolders Include="..\..\..\Binaries\Win64\UnrealEditor-Spice.pdb">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\maxq_unit_test_metakernel.tm">
+    <CopyFileToFolders Include="..\..\Common\kernels\unit_test_only\maxq_unit_test_lsk.tls">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\ck\04135_04171pc_psiv2.bc">
+    <CopyFileToFolders Include="..\..\Common\kernels\unit_test_only\maxq_unit_test_spk.bsp">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\dsk\phoebe_64q.bds">
+    <CopyFileToFolders Include="..\..\Common\kernels\unit_test_only\maxq_unit_test_pck.tpc">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\fk\cas_v37.tf">
+    <CopyFileToFolders Include="..\..\Common\kernels\unit_test_only\maxq_unit_test_fk.tf">
       <FileType>Document</FileType>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\ik\cas_iss_v09.ti">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\lsk\naif0008.tls">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\pck\cpck05Mar2004.tpc">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\sclk\cas00084.tsc">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\spk\020514_SE_SAT105.bsp">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\spk\030201AP_SK_SM546_T45.bsp">
-      <FileType>Document</FileType>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\..\Common\kernels\spk\981005_PLTEPH-DE405S.bsp">
+    <CopyFileToFolders Include="..\..\Common\kernels\unit_test_only\maxq_unit_test_meta.tm">
       <FileType>Document</FileType>
     </CopyFileToFolders>
     <None Include="packages.config" />
@@ -617,9 +600,6 @@
     <ClInclude Include="..\..\Common\include\SpiceHostDefs.h" />
     <ClInclude Include="..\..\Common\include\UE5HostDefs.h" />
     <ClInclude Include="pch.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <CopyFileToFolders Include="..\..\Common\kernels\maxq_unit_test_vars.pck" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

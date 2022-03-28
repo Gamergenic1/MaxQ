@@ -31,17 +31,17 @@ TEST(bodvrd_mass_test, DefaultsTestCase) {
     EXPECT_DOUBLE_EQ(ResultMass.GM, 1.5);
 }
 
-TEST(bodvrd_mass_test, BODY9999_GM_Is_Correct) {
+TEST(bodvrd_mass_test, FAKEBODY9993_GM_Is_Correct) {
     // BODY9999_GM       = ( 123456789.1011 )
     USpice::init_all();
-    USpice::furnsh_absolute("maxq_unit_test_vars.pck");
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
 
-    ES_ResultCode ResultCode = ES_ResultCode::Success;
+    ES_ResultCode ResultCode = ES_ResultCode::Error;
     FString ErrorMessage;
 
     FSMassConstant ResultMass = FSMassConstant(1.5);
 
-    FString Body = TEXT("9999"), Item = TEXT("GM");
+    FString Body = TEXT("FAKEBODY9993"), Item = TEXT("GM");
 
     USpice::bodvrd_mass(
         ResultCode,
@@ -55,22 +55,22 @@ TEST(bodvrd_mass_test, BODY9999_GM_Is_Correct) {
     EXPECT_EQ(ErrorMessage.Len(), 0);
 
     // No mercy for ~=
-    EXPECT_DOUBLE_EQ(ResultMass.AsSpiceDouble(), 123456789.1011);
+    EXPECT_DOUBLE_EQ(ResultMass.AsSpiceDouble(), 0.001);
 }
 
 
 
-TEST(bodvrd_mass_test, BODY9997_RADII_2D_Is_Error) {
+TEST(bodvrd_mass_test, FAKEBODY9995_BADVALUE2_2D_Is_Error) {
     // BODY9997_GM       = ( 12.34   56.78 )
     USpice::init_all();
-    USpice::furnsh_absolute("maxq_unit_test_vars.pck");
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
 
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage;
 
     FSMassConstant ResultMass = FSMassConstant(1.5);
 
-    FString Body = TEXT("9997"), Item = TEXT("GM");
+    FString Body = TEXT("FAKEBODY9995"), Item = TEXT("BADVALUE2");
 
     USpice::bodvrd_mass(
         ResultCode,

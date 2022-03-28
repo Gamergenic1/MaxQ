@@ -34,17 +34,16 @@ TEST(bodvrd_distance_vector_test, DefaultsTestCase) {
     EXPECT_DOUBLE_EQ(ResultVector.z.km, 3.);
 }
 
-TEST(bodvrd_distance_vector_test, BODY9999_RADII_Is_Correct) {
-    // BODY9999_RADII    = ( 12.34   56.78   91.01112 )
+TEST(bodvrd_distance_vector_test, BODY9994_RADII_Is_Correct) {
     USpice::init_all();
-    USpice::furnsh_absolute("maxq_unit_test_vars.pck");
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
 
-    ES_ResultCode ResultCode = ES_ResultCode::Success;
+    ES_ResultCode ResultCode = ES_ResultCode::Error;
     FString ErrorMessage;
 
     FSDistanceVector ResultVector(1., 2., 3.);
 
-    FString Body = TEXT("9999"), Item = TEXT("RADII");
+    FString Body = TEXT("FAKEBODY9994"), Item = TEXT("RADII");
 
     USpice::bodvrd_distance_vector(
         ResultCode,
@@ -58,22 +57,22 @@ TEST(bodvrd_distance_vector_test, BODY9999_RADII_Is_Correct) {
     EXPECT_EQ(ErrorMessage.Len(), 0);
 
     // No mercy for ~=
-    EXPECT_DOUBLE_EQ(ResultVector.x.km, 12.34);
-    EXPECT_DOUBLE_EQ(ResultVector.y.km, 56.78);
-    EXPECT_DOUBLE_EQ(ResultVector.z.km, 91.01112);
+    EXPECT_DOUBLE_EQ(ResultVector.x.km, 123.45);
+    EXPECT_DOUBLE_EQ(ResultVector.y.km, 123.45);
+    EXPECT_DOUBLE_EQ(ResultVector.z.km, 123.);
 }
 
-TEST(bodvrd_distance_vector_test, BODY9998_RADII_4D_Is_Error) {
+TEST(bodvrd_distance_vector_test, BODY9995_RADII_4D_Is_Error) {
     // BODY9998_RADII    = ( 12.34   56.78   91.0   11.12 )
     USpice::init_all();
-    USpice::furnsh_absolute("maxq_unit_test_vars.pck");
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
 
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage;
 
     FSDistanceVector ResultVector = FSDistanceVector(1., 2., 3.);
 
-    FString Body = TEXT("9998"), Item = TEXT("RADII");
+    FString Body = TEXT("9995"), Item = TEXT("BADVALUE4");
 
     USpice::bodvrd_distance_vector(
         ResultCode,
@@ -93,17 +92,17 @@ TEST(bodvrd_distance_vector_test, BODY9998_RADII_4D_Is_Error) {
 }
 
 
-TEST(bodvrd_distance_vector_test, BODY9997_RADII_2D_Is_Error) {
-    // BODY9997_RADII    = ( 12.34   56.78 )
+TEST(bodvrd_distance_vector_test, BODY9995_GM_2D_Is_Error) {
+
     USpice::init_all();
-    USpice::furnsh_absolute("maxq_unit_test_vars.pck");
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
 
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage;
 
     FSDistanceVector ResultVector = FSDistanceVector(1., 2., 3.);
 
-    FString Body = TEXT("9997"), Item = TEXT("RADII");
+    FString Body = TEXT("9995"), Item = TEXT("BADVALUE2");
 
     USpice::bodvrd_distance_vector(
         ResultCode,
@@ -117,7 +116,7 @@ TEST(bodvrd_distance_vector_test, BODY9997_RADII_2D_Is_Error) {
     EXPECT_GT(ErrorMessage.Len(), 0);
 
     // No mercy for ~=
-    EXPECT_DOUBLE_EQ(ResultVector.x.km, 12.34);
-    EXPECT_DOUBLE_EQ(ResultVector.y.km, 56.78);
+    EXPECT_DOUBLE_EQ(ResultVector.x.km, 2001.);
+    EXPECT_DOUBLE_EQ(ResultVector.y.km, 2002.);
     EXPECT_DOUBLE_EQ(ResultVector.z.km, 3.);
 }

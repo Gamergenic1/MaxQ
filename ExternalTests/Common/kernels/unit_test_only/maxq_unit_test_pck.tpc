@@ -1,0 +1,48 @@
+KPL/PCK
+
+File name: maxq_unit_test_pck.pck
+PCK KERNEL FILE
+===========================================================================
+
+MAXQ UNIT TESTS ONLY - NOT FOR USE OR DISTRIBUTION FOR ANY OTHER PURPOSE.  
+
+This SPICE kernel is intended to support operation unit-
+texting MaxQ.  MaxQ is an integration of CSPICE with
+Unreal Engine 5.
+
+
+------- 'FAKEBODY9995'
+
+        \begindata
+        BODY9995_GM            = (      0.1                     )
+        BODY9995_RADII         = (   1000.     1000.    1000.   )
+        BODY9995_POLE_RA       = (      0.0       0.0      0.0  )
+        BODY9995_POLE_DEC      = (      0.0       0.0      0.0  )
+        BODY9995_PM            = (      0.0     360.0      0.0  )
+        BODY9995_LONG_AXIS     = (      0.0                     )
+        BODY9995_BADVALUE2     = (   2001.     2002.  )
+        BODY9995_BADVALUE4     = (   4001.     4002.    4003.   4004.  )
+        \begintext
+
+------- 'FAKEBODY9994'
+
+        \begindata
+        BODY9994_GM            = (      0.01                    )
+        BODY9994_RADII         = (    123.45    123.45   123.   )
+        BODY9994_POLE_RA       = (      0.0       0.0      0.0  )
+        BODY9994_POLE_DEC      = (     90.0       0.0      0.0  )
+        BODY9994_PM            = (     90.0    3600.0      0.0  )
+        BODY9994_LONG_AXIS     = (      0.0                     )
+        \begintext
+
+------- 'FAKEBODY9993'
+
+        \begindata
+        BODY9993_GM            = (      0.001                   )
+        BODY9993_RADII         = (     22.22     22.22   20.00  )
+        BODY9993_POLE_RA       = (     90.0       0.0      0.0  )
+        BODY9993_POLE_DEC      = (     90.0       0.0      0.0  )
+        BODY9993_PM            = (     90.0      36.0      0.0  )
+        BODY9993_LONG_AXIS     = (      0.0                     )
+        \begintext
+

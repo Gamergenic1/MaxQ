@@ -6,7 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "pch.h"
-
+#include "MaxQTestDefinitions.h"
 
 TEST(sxform_test, DefaultsTestCase) {
     ES_ResultCode ResultCode = ES_ResultCode::Success;
@@ -42,52 +42,35 @@ TEST(sxform_test, Earth_Was_Turning) {
 
     USpice::init_all();
 
-    USpice::furnsh_absolute("naif0008.tls");
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
     USpice::get_implied_result(ResultCode, ErrorMessage);
     EXPECT_EQ(ResultCode, ES_ResultCode::Success);
-    ResultCode = ES_ResultCode::Error;
-    ErrorMessage.Empty();
+    EXPECT_EQ(ErrorMessage.Len(), 0);
 
-    USpice::furnsh_absolute("cpck05Mar2004.tpc");
-    USpice::get_implied_result(ResultCode, ErrorMessage);
-    EXPECT_EQ(ResultCode, ES_ResultCode::Success);
-    ResultCode = ES_ResultCode::Error;
-    ErrorMessage.Empty();
-
-    FSEphemerisTime et;
-    USpice::str2et(ResultCode, ErrorMessage, et, TEXT("2004 JUN 11 12:00:00.000"));
-
-    EXPECT_EQ(ResultCode, ES_ResultCode::Success);
     ResultCode = ES_ResultCode::Error;
     ErrorMessage.Empty();
 
     FSStateTransform stateTransform;
-    FString from = TEXT("J2000");
-    FString to = TEXT("IAU_EARTH");
+    FString from = TEXT("ECLIPJ2000");
+    FString to = TEXT("IAU_FAKEBODY9995");
 
-    USpice::sxform(ResultCode, ErrorMessage, stateTransform, et, from, to);
+    USpice::sxform(ResultCode, ErrorMessage, stateTransform, et0, from, to);
 
-    EXPECT_NE(ResultCode, ES_ResultCode::Error);
-    EXPECT_EQ(ErrorMessage.Len(), 0);
+    EXPECT_EQ(ResultCode, ES_ResultCode::Success);
 
     EXPECT_EQ(stateTransform.m.Num(), 6);
-    for (int i = 0; i < stateTransform.m.Num(); ++i)
-    {
-        EXPECT_NE(stateTransform.m[i].r.x, 0.);
-        EXPECT_NE(stateTransform.m[i].r.y, 0.);
-        EXPECT_NE(stateTransform.m[i].r.z, 0.);
 
-        if (i < 3)
-        {
-            EXPECT_DOUBLE_EQ(stateTransform.m[i].dr.x, 0.);
-            EXPECT_DOUBLE_EQ(stateTransform.m[i].dr.y, 0.);
-            EXPECT_DOUBLE_EQ(stateTransform.m[i].dr.z, 0.);
-        }
-        else
-        {
-            EXPECT_NE(stateTransform.m[i].dr.x, 0.);
-            EXPECT_NE(stateTransform.m[i].dr.y, 0.);
-            EXPECT_NE(stateTransform.m[i].dr.z, 0.);
-        }
-    }
+
+    EXPECT_LT((stateTransform.m[0].r - FSDistanceVector(0, -1, 0)).Magnitude().AsKilometers(), 0.05);
+    EXPECT_LT((stateTransform.m[1].r - FSDistanceVector(0, 0, -1)).Magnitude().AsKilometers(), 0.05);
+    EXPECT_LT((stateTransform.m[2].r - FSDistanceVector(1, 0, 0)).Magnitude().AsKilometers(), 0.05);
+
+    EXPECT_LT((stateTransform.m[3].r - FSDistanceVector(0, 0, 0)).Magnitude().AsKilometers(), 0.05);
+    EXPECT_LT((stateTransform.m[4].r - FSDistanceVector(0, 0, 0)).Magnitude().AsKilometers(), 0.05);
+    EXPECT_LT((stateTransform.m[5].r - FSDistanceVector(0, 0, 0)).Magnitude().AsKilometers(), 0.05);
+
+
+    EXPECT_LT((stateTransform.m[3].dr - FSVelocityVector(0, -1, 0)).Magnitude().AsKilometersPerSecond(), 0.05);
+    EXPECT_LT((stateTransform.m[4].dr - FSVelocityVector(0, 0, -1)).Magnitude().AsKilometersPerSecond(), 0.05);
+    EXPECT_LT((stateTransform.m[5].dr - FSVelocityVector(1, 0, 0)).Magnitude().AsKilometersPerSecond(), 0.05);
 }

@@ -9,25 +9,6 @@
 
 #include "MaxQTestDefinitions.h"
 
-#define PI_MACRO 3.1415926535897932384626433832795028841971693993751058209749445923078164
-
-const double pi = (double)PI_MACRO;
-const double _pos0_as_radians = (double)(+0. * PI_MACRO);
-const double _pos1_as_radians = (double)(+1./180. * PI_MACRO);
-const double _pos2_as_radians = (double)(+2./180. * PI_MACRO);
-const double _pos3_as_radians = (double)(+3./180. * PI_MACRO);
-const double _pos90_as_radians = (double)(+0.5 * PI_MACRO);
-const double _pos180_as_radians = (double)(+1. * PI_MACRO);
-const double _pos270_as_radians = (double)(+1.5 * PI_MACRO);
-const double _pos360_as_radians = (double)(+2. * PI_MACRO);
-const double _pos540_as_radians = (double)(+3. * PI_MACRO);
-const double _neg0_as_radians = (double)(-0. * PI_MACRO);
-const double _neg90_as_radians = (double)(-0.5 * PI_MACRO);
-const double _neg180_as_radians = (double)(-1. * PI_MACRO);
-const double _neg270_as_radians = (double)(-1.5 * PI_MACRO);
-const double _neg360_as_radians = (double)(-2. * PI_MACRO);
-const double _neg540_as_radians = (double)(-3 * PI_MACRO);
-
 
 TEST(piTest, halfpi_Is_halfpi) {
     double _halfpi;

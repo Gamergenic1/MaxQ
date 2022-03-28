@@ -6,7 +6,7 @@
 // GitHub:         https://github.com/Gamergenic1/MaxQ/ 
 
 #include "pch.h"
-
+#include "MaxQTestDefinitions.h"
 
 TEST(spkpos_test, DefaultsTestCase) {
 
@@ -32,60 +32,31 @@ TEST(spkpos_test, DefaultsTestCase) {
 }
 
 
-TEST(spkpos_test, EMB_Is_OrbitingSun) {
-
-    // 981005_PLTEPH-DE405S.bsp validity range:
-    // 2004 JUN 11 05:01:04 - 2004 JUN 12 12:01:04
-    // Bodies: MERCURY BARYCENTER(1)  SATURN BARYCENTER(6)   MERCURY(199)
-    // VENUS BARYCENTER(2)    URANUS BARYCENTER(7)   VENUS(299)
-    // EARTH BARYCENTER(3)    NEPTUNE BARYCENTER(8)  MOON(301)
-    // MARS BARYCENTER(4)     PLUTO BARYCENTER(9)    EARTH(399)
-    // JUPITER BARYCENTER(5)  SUN(10)                MARS(499)
+TEST(spkpos_test, FAKEBODY9993_Is_OrbitingFAKEBODY9995) {
 
     USpice::init_all();
 
     ES_ResultCode ResultCode = ES_ResultCode::Success;
     FString ErrorMessage;
 
-    USpice::furnsh_absolute("naif0008.tls");
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
     USpice::get_implied_result(ResultCode, ErrorMessage);
-    EXPECT_EQ(ResultCode, ES_ResultCode::Success);
-    ResultCode = ES_ResultCode::Error;
-    ErrorMessage.Empty();
-
-    USpice::furnsh_absolute("981005_PLTEPH-DE405S.bsp");
-    USpice::get_implied_result(ResultCode, ErrorMessage);
-    EXPECT_EQ(ResultCode, ES_ResultCode::Success);
-    ResultCode = ES_ResultCode::Error;
-    ErrorMessage.Empty();
-
-    FSEphemerisTime et;
-    USpice::str2et(ResultCode, ErrorMessage, et, TEXT("2004 JUN 11 12:00:00.000"));
-
     EXPECT_EQ(ResultCode, ES_ResultCode::Success);
     ResultCode = ES_ResultCode::Error;
     ErrorMessage.Empty();
 
     FSDistanceVector ptarg;
     FSEphemerisPeriod lt(1.5);
-    FString targ = TEXT("EMB");
-    FString obs = TEXT("SSB");
-    FString ref = TEXT("ECLIPJ2000");
+    FString targ = TEXT("FAKEBODY9993");
+    FString obs = TEXT("FAKEBODY9995");
+    FString ref = TEXT("J2000");
     ES_AberrationCorrectionWithNewtonians abcorr = ES_AberrationCorrectionWithNewtonians::None;
 
-    USpice::spkpos(ResultCode, ErrorMessage, et, ptarg, lt, targ, obs, ref, abcorr);
+    USpice::spkpos(ResultCode, ErrorMessage, et0, ptarg, lt, targ, obs, ref, abcorr);
 
     EXPECT_EQ(ResultCode, ES_ResultCode::Success);
     EXPECT_EQ(ErrorMessage.Len(), 0);
     // SPICE populates something into lt... something non-zero... Even if we set it to ::None
     // EXPECT_DOUBLE_EQ(lt.seconds, 0.);
-
-    // On June 11, both x, y should be -
-    EXPECT_LT(ptarg.x.km, 0.);
-    EXPECT_LT(ptarg.y.km, 0.);
-    // Should be retively near zero, but not close enough to test...
-    EXPECT_NE(ptarg.z.km, 0.);
-
-    // It's nearing summer solstice, inferring:
-    EXPECT_LT(ptarg.y.km, ptarg.x.km);
+    EXPECT_LT((ptarg - state_target_9993_center_9995_j2000_et0.r).Magnitude(), 0.000001);
 }

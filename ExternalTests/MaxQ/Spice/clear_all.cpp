@@ -13,7 +13,8 @@ TEST(clear_all_test, DefaultsTestCase) {
 }
 
 TEST(clear_all_test, Execution_ClearsKernel) {
-    USpice::furnsh_absolute("maxq_unit_test_vars.pck");
+    // Note:  Does not clear body name assignments (by design, SPICE)
+    USpice::furnsh_absolute("maxq_unit_test_meta.tm");
     USpice::clear_all();
 
     ES_ResultCode ResultCode = ES_ResultCode::Error;
