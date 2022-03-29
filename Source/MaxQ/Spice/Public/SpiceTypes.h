@@ -467,29 +467,29 @@ struct SPICE_API FSDimensionlessVector
     static const FSDimensionlessVector Z_Axis;
 };
 
-inline static FSDimensionlessVector operator-(const FSDimensionlessVector& value)
+static inline FSDimensionlessVector operator-(const FSDimensionlessVector& value)
 {
     return FSDimensionlessVector(-value.x, -value.y, -value.z);
 }
 
 // "exact", but probably not reliable depending on compiler flags, etc etc
 // Used in S/C for non-critical things like firing an OnChange event etc
-inline static bool operator==(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
+static inline bool operator==(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
 {
     return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
 }
 
-inline static FSDimensionlessVector operator*(double scalar, const FSDimensionlessVector& vector)
+static inline FSDimensionlessVector operator*(double scalar, const FSDimensionlessVector& vector)
 {
     return FSDimensionlessVector(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 }
 
-inline static FSDimensionlessVector operator*(const FSDimensionlessVector& vector, double scalar)
+static inline FSDimensionlessVector operator*(const FSDimensionlessVector& vector, double scalar)
 {
     return FSDimensionlessVector(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 }
 
-inline static FSDimensionlessVector& operator+=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
+static inline FSDimensionlessVector& operator+=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
 
     lhs.x += rhs.x;
     lhs.y += rhs.y;
@@ -497,7 +497,7 @@ inline static FSDimensionlessVector& operator+=(FSDimensionlessVector& lhs, cons
     return lhs;
 }
 
-inline static FSDimensionlessVector& operator-=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
+static inline FSDimensionlessVector& operator-=(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs) {
 
     lhs.x -= rhs.x;
     lhs.y -= rhs.y;
@@ -571,68 +571,68 @@ public:
 #undef FSDistance_km_to_M
 #undef FSDistance_M_to_km
 
-inline static bool operator<(const FSDistance& lhs, const FSDistance& rhs)
+static inline bool operator<(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km < rhs.km;
 }
 
-inline static bool operator>(const FSDistance& lhs, const FSDistance& rhs)
+static inline bool operator>(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km > rhs.km;
 }
 
-inline static FSDistance operator+(const FSDistance& lhs, const FSDistance& rhs)
+static inline FSDistance operator+(const FSDistance& lhs, const FSDistance& rhs)
 {
     return FSDistance(lhs.km + rhs.km);
 }
 
-inline static FSDistance operator-(const FSDistance& lhs, const FSDistance& rhs)
+static inline FSDistance operator-(const FSDistance& lhs, const FSDistance& rhs)
 {
     return FSDistance(lhs.km - rhs.km);
 }
 
-inline static FSDistance operator-(const FSDistance& rhs)
+static inline FSDistance operator-(const FSDistance& rhs)
 {
     return FSDistance(-rhs.km);
 }
 
-inline static double operator/(const FSDistance& lhs, const FSDistance& rhs)
+static inline double operator/(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km / rhs.km;
 }
 
-inline static FSDistance operator/(const FSDistance& lhs, double rhs)
+static inline FSDistance operator/(const FSDistance& lhs, double rhs)
 {
     return lhs.km / rhs;
 }
 
-inline static FSDistance operator*(double lhs, const FSDistance& rhs)
+static inline FSDistance operator*(double lhs, const FSDistance& rhs)
 {
     return FSDistance(lhs * rhs.km);
 }
 
-inline static FSDistance operator*(const FSDistance& lhs, double rhs)
+static inline FSDistance operator*(const FSDistance& lhs, double rhs)
 {
     return FSDistance(lhs.km * rhs);
 }
 
-inline static bool operator==(const FSDistance& lhs, const FSDistance& rhs)
+static inline bool operator==(const FSDistance& lhs, const FSDistance& rhs)
 {
     return lhs.km == rhs.km;
 }
 
-inline static bool operator!=(const FSDistance& lhs, const FSDistance& rhs)
+static inline bool operator!=(const FSDistance& lhs, const FSDistance& rhs)
 {
     return !(lhs == rhs);
 }
 
-inline static FSDistance& operator+=(FSDistance& lhs, const FSDistance& rhs) {
+static inline FSDistance& operator+=(FSDistance& lhs, const FSDistance& rhs) {
 
     lhs.km += rhs.km;
     return lhs;
 }
 
-inline static FSDistance& operator-=(FSDistance& lhs, const FSDistance& rhs) {
+static inline FSDistance& operator-=(FSDistance& lhs, const FSDistance& rhs) {
 
     lhs.km -= rhs.km;
     return lhs;
@@ -719,37 +719,37 @@ struct SPICE_API FSDistanceVector
 };
 
 
-inline static FSDistanceVector operator+(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+static inline FSDistanceVector operator+(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return FSDistanceVector(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 }
 
-inline static FSDistanceVector operator-(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+static inline FSDistanceVector operator-(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return FSDistanceVector(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 }
 
-inline static FSDistanceVector operator-(const FSDistanceVector& rhs)
+static inline FSDistanceVector operator-(const FSDistanceVector& rhs)
 {
     return FSDistanceVector(-rhs.x, -rhs.y, -rhs.z);
 }
 
-inline static FSDistanceVector operator*(double lhs, const FSDistanceVector& rhs)
+static inline FSDistanceVector operator*(double lhs, const FSDistanceVector& rhs)
 {
     return FSDistanceVector(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
 }
 
-inline static FSDistanceVector operator*(const FSDistanceVector& lhs, double rhs)
+static inline FSDistanceVector operator*(const FSDistanceVector& lhs, double rhs)
 {
     return FSDistanceVector(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }
 
-inline static FSDistanceVector operator/(const FSDistanceVector& lhs, double rhs)
+static inline FSDistanceVector operator/(const FSDistanceVector& lhs, double rhs)
 {
     return FSDistanceVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
 
-inline static FSDistanceVector& operator+=(FSDistanceVector& lhs, const FSDistanceVector& rhs) {
+static inline FSDistanceVector& operator+=(FSDistanceVector& lhs, const FSDistanceVector& rhs) {
 
     lhs.x += rhs.x;
     lhs.y += rhs.y;
@@ -757,7 +757,7 @@ inline static FSDistanceVector& operator+=(FSDistanceVector& lhs, const FSDistan
     return lhs;
 }
 
-inline static FSDistanceVector& operator-=(FSDistanceVector& lhs, const FSDistanceVector& rhs) {
+static inline FSDistanceVector& operator-=(FSDistanceVector& lhs, const FSDistanceVector& rhs) {
 
     lhs.x -= rhs.x;
     lhs.y -= rhs.y;
@@ -765,19 +765,19 @@ inline static FSDistanceVector& operator-=(FSDistanceVector& lhs, const FSDistan
     return lhs;
 }
 
-inline static FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+static inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return FSDimensionlessVector(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
 }
 
-inline static FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistance& rhs)
+static inline FSDimensionlessVector operator/(const FSDistanceVector& lhs, const FSDistance& rhs)
 {
     return FSDimensionlessVector(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
 
 
 USTRUCT(BlueprintType)
-struct FSSpeed
+struct SPICE_API FSSpeed
 {
     GENERATED_BODY()
 
@@ -812,72 +812,72 @@ struct FSSpeed
         return *this;
     }
 
-    static SPICE_API const FSSpeed Zero;
-    static SPICE_API const FSSpeed OneKmps;
+    static const FSSpeed Zero;
+    static const FSSpeed OneKmps;
 };
 
-inline static FSSpeed operator+(const FSSpeed& lhs, const FSSpeed& rhs)
+static inline FSSpeed operator+(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return FSSpeed(lhs.kmps + rhs.kmps);
 }
 
-inline static FSSpeed operator-(const FSSpeed& rhs)
+static inline FSSpeed operator-(const FSSpeed& rhs)
 {
     return FSSpeed(-rhs.kmps);
 }
 
-inline static FSSpeed operator-(const FSSpeed& lhs, const FSSpeed& rhs)
+static inline FSSpeed operator-(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return FSSpeed(lhs.kmps - rhs.kmps);
 }
 
-inline static double operator/(const FSSpeed& lhs, const FSSpeed& rhs)
+static inline double operator/(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return lhs.kmps / rhs.kmps;
 }
 
-inline static FSSpeed operator/(const FSSpeed& lhs, double rhs)
+static inline FSSpeed operator/(const FSSpeed& lhs, double rhs)
 {
     return lhs.kmps / rhs;
 }
 
-inline static bool operator>(const FSSpeed& lhs, const FSSpeed& rhs)
+static inline bool operator>(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return lhs.kmps > rhs.kmps;
 }
 
-inline static bool operator<(const FSSpeed& lhs, const FSSpeed& rhs)
+static inline bool operator<(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return lhs.kmps < rhs.kmps;
 }
 
-inline static FSSpeed operator*(double lhs, const FSSpeed& rhs)
+static inline FSSpeed operator*(double lhs, const FSSpeed& rhs)
 {
     return FSSpeed(lhs * rhs.kmps);
 }
 
-inline static FSSpeed operator*(const FSSpeed& lhs, double rhs)
+static inline FSSpeed operator*(const FSSpeed& lhs, double rhs)
 {
     return FSSpeed(lhs.kmps * rhs);
 }
 
-inline static bool operator==(const FSSpeed& lhs, const FSSpeed& rhs)
+static inline bool operator==(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return lhs.kmps == rhs.kmps;
 }
 
-inline static bool operator!=(const FSSpeed& lhs, const FSSpeed& rhs)
+static inline bool operator!=(const FSSpeed& lhs, const FSSpeed& rhs)
 {
     return !(lhs == rhs);
 }
 
-inline static FSSpeed& operator+=(FSSpeed& lhs, const FSSpeed& rhs) {
+static inline FSSpeed& operator+=(FSSpeed& lhs, const FSSpeed& rhs) {
 
     lhs.kmps += rhs.kmps;
     return lhs;
 }
 
-inline static FSSpeed& operator-=(FSSpeed& lhs, const FSSpeed& rhs) {
+static inline FSSpeed& operator-=(FSSpeed& lhs, const FSSpeed& rhs) {
 
     lhs.kmps -= rhs.kmps;
     return lhs;
@@ -968,43 +968,43 @@ public:
 
 
 
-inline static FSAngle operator*(double lhs, const FSAngle& rhs)
+static inline FSAngle operator*(double lhs, const FSAngle& rhs)
 {
     return FSAngle(rhs.AsSpiceDouble() * lhs);
 }
 
-inline static FSAngle operator*(const FSAngle& lhs,double rhs)
+static inline FSAngle operator*(const FSAngle& lhs,double rhs)
 {
     return FSAngle(lhs.AsSpiceDouble() * rhs);
 }
 
-inline static FSAngle operator+(const FSAngle& lhs, const FSAngle& rhs)
+static inline FSAngle operator+(const FSAngle& lhs, const FSAngle& rhs)
 {
     return FSAngle(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
 }
 
-inline static FSAngle operator-(const FSAngle& lhs, const FSAngle& rhs)
+static inline FSAngle operator-(const FSAngle& lhs, const FSAngle& rhs)
 {
     return FSAngle(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
 }
 
-inline static FSAngle operator/(const FSAngle& lhs, double rhs)
+static inline FSAngle operator/(const FSAngle& lhs, double rhs)
 {
     return FSAngle(lhs.AsSpiceDouble() / rhs);
 }
 
-inline static double operator/(const FSAngle& lhs, const FSAngle& rhs)
+static inline double operator/(const FSAngle& lhs, const FSAngle& rhs)
 {
     return lhs.AsSpiceDouble() / rhs.AsSpiceDouble();
 }
 
-inline static FSAngle& operator+=(FSAngle& lhs, const FSAngle& rhs) {
+static inline FSAngle& operator+=(FSAngle& lhs, const FSAngle& rhs) {
 
     lhs = FSAngle(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
     return lhs;
 }
 
-inline static FSAngle& operator-=(FSAngle& lhs, const FSAngle& rhs) {
+static inline FSAngle& operator-=(FSAngle& lhs, const FSAngle& rhs) {
 
     lhs = FSAngle(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
     return lhs;
@@ -1012,7 +1012,7 @@ inline static FSAngle& operator-=(FSAngle& lhs, const FSAngle& rhs) {
 
 
 USTRUCT(BlueprintType)
-struct FSAngularRate
+struct SPICE_API FSAngularRate
 {
     GENERATED_BODY()
 
@@ -1043,55 +1043,55 @@ struct FSAngularRate
     /// <returns>Radians/Second</returns>
     inline double AsSpiceDouble() const { return radiansPerSecond; }
     inline double AsRadiansPerSecond() const { return radiansPerSecond; }
-    double SPICE_API AsDegreesPerSecond() const;
+    double AsDegreesPerSecond() const;
 
-    static SPICE_API const FSAngularRate Zero;
+    static const FSAngularRate Zero;
 };
 
 
 
-inline static FSAngularRate operator*(double lhs, const FSAngularRate& rhs)
+static inline FSAngularRate operator*(double lhs, const FSAngularRate& rhs)
 {
     return FSAngularRate(rhs.AsSpiceDouble() * lhs);
 }
 
-inline static FSAngularRate operator*(const FSAngularRate& lhs, double rhs)
+static inline FSAngularRate operator*(const FSAngularRate& lhs, double rhs)
 {
     return FSAngularRate(lhs.AsSpiceDouble() * rhs);
 }
 
-inline static FSAngularRate operator+(const FSAngularRate& lhs, const FSAngularRate& rhs)
+static inline FSAngularRate operator+(const FSAngularRate& lhs, const FSAngularRate& rhs)
 {
     return FSAngularRate(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
 }
 
-inline static FSAngularRate operator-(const FSAngularRate& lhs, const FSAngularRate& rhs)
+static inline FSAngularRate operator-(const FSAngularRate& lhs, const FSAngularRate& rhs)
 {
     return FSAngularRate(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
 }
 
-inline static FSAngularRate operator-(const FSAngularRate& rhs)
+static inline FSAngularRate operator-(const FSAngularRate& rhs)
 {
     return FSAngularRate(-rhs.AsSpiceDouble());
 }
 
-inline static FSAngularRate operator/(const FSAngularRate& lhs, double rhs)
+static inline FSAngularRate operator/(const FSAngularRate& lhs, double rhs)
 {
     return FSAngularRate(lhs.AsSpiceDouble() / rhs);
 }
 
-inline static double operator/(const FSAngularRate& lhs, const FSAngularRate& rhs)
+static inline double operator/(const FSAngularRate& lhs, const FSAngularRate& rhs)
 {
     return lhs.AsSpiceDouble() / rhs.AsSpiceDouble();
 }
 
-inline static FSAngularRate& operator+=(FSAngularRate& lhs, const FSAngularRate& rhs) {
+static inline FSAngularRate& operator+=(FSAngularRate& lhs, const FSAngularRate& rhs) {
 
     lhs = FSAngularRate(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
     return lhs;
 }
 
-inline static FSAngularRate& operator-=(FSAngularRate& lhs, const FSAngularRate& rhs) {
+static inline FSAngularRate& operator-=(FSAngularRate& lhs, const FSAngularRate& rhs) {
 
     lhs = FSAngularRate(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
     return lhs;
@@ -1099,7 +1099,7 @@ inline static FSAngularRate& operator-=(FSAngularRate& lhs, const FSAngularRate&
 
 
 USTRUCT(BlueprintType)
-struct FSComplexScalar
+struct SPICE_API FSComplexScalar
 {
     GENERATED_BODY()
 
@@ -1126,7 +1126,7 @@ struct FSComplexScalar
         _value[1] = imaginary;
     }
 
-    static SPICE_API const FSComplexScalar Zero;
+    static const FSComplexScalar Zero;
 };
 
 
@@ -1158,29 +1158,29 @@ struct SPICE_API FSEphemerisTime
     static const FSEphemerisTime J2000;
 };
 
-inline static bool operator==(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+static inline bool operator==(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
 {
     return lhs.seconds == rhs.seconds;
 }
 
-inline static bool operator!=(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+static inline bool operator!=(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
 {
     return !(lhs == rhs);
 }
 
-inline static bool operator<(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+static inline bool operator<(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
 {
     return lhs.seconds < rhs.seconds;
 }
 
-inline static bool operator>(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
+static inline bool operator>(const FSEphemerisTime& lhs, const FSEphemerisTime& rhs)
 {
     return lhs.seconds > rhs.seconds;
 }
 
 
 USTRUCT(BlueprintType)
-struct FSEphemerisPeriod
+struct SPICE_API FSEphemerisPeriod
 {
     GENERATED_BODY()
 
@@ -1206,118 +1206,118 @@ struct FSEphemerisPeriod
     inline double AsSpiceDouble() const { return seconds; }
     inline double AsSeconds() const { return seconds; }
 
-    static SPICE_API const FSEphemerisPeriod Zero;
-    static SPICE_API const FSEphemerisPeriod Day;
+    static const FSEphemerisPeriod Zero;
+    static const FSEphemerisPeriod Day;
 };
 
-inline static FSEphemerisPeriod operator+(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+static inline FSEphemerisPeriod operator+(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return FSEphemerisPeriod(A.AsSpiceDouble() + B.AsSpiceDouble());
 }
 
-inline static FSEphemerisPeriod operator-(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+static inline FSEphemerisPeriod operator-(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return FSEphemerisPeriod(A.AsSpiceDouble() - B.AsSpiceDouble());
 }
 
-inline static FSEphemerisTime operator+(const FSEphemerisPeriod& A, const FSEphemerisTime& B)
+static inline FSEphemerisTime operator+(const FSEphemerisPeriod& A, const FSEphemerisTime& B)
 {
     return FSEphemerisTime(A.AsSpiceDouble() + B.AsSpiceDouble());
 }
 
-inline static FSEphemerisTime operator+(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
+static inline FSEphemerisTime operator+(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
 {
     return FSEphemerisTime(A.AsSpiceDouble() + B.AsSpiceDouble());
 }
 
-inline static FSEphemerisTime operator-(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
+static inline FSEphemerisTime operator-(const FSEphemerisTime& A, const FSEphemerisPeriod& B)
 {
     return FSEphemerisTime(A.AsSpiceDouble() - B.AsSpiceDouble());
 }
 
 
-inline static FSEphemerisPeriod& operator+=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
+static inline FSEphemerisPeriod& operator+=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
 
     lhs = FSEphemerisPeriod(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
     return lhs;
 }
 
-inline static FSEphemerisPeriod& operator-=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
+static inline FSEphemerisPeriod& operator-=(FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs) {
 
     lhs = FSEphemerisPeriod(lhs.AsSpiceDouble() - rhs.AsSpiceDouble());
     return lhs;
 }
 
-inline static FSEphemerisTime& operator+=(FSEphemerisTime& lhs, const FSEphemerisPeriod& rhs) {
+static inline FSEphemerisTime& operator+=(FSEphemerisTime& lhs, const FSEphemerisPeriod& rhs) {
 
     lhs = lhs + rhs;
     return lhs;
 }
 
-inline static FSEphemerisTime& operator-=(FSEphemerisTime& lhs, const FSEphemerisPeriod& rhs) {
+static inline FSEphemerisTime& operator-=(FSEphemerisTime& lhs, const FSEphemerisPeriod& rhs) {
 
     lhs = lhs - rhs;
     return lhs;
 }
 
-inline static FSEphemerisPeriod operator-(const FSEphemerisTime& A, const FSEphemerisTime& B)
+static inline FSEphemerisPeriod operator-(const FSEphemerisTime& A, const FSEphemerisTime& B)
 {
     return FSEphemerisPeriod(A.AsSpiceDouble() - B.AsSpiceDouble());
 }
 
-inline static FSEphemerisPeriod operator*(double A, const FSEphemerisPeriod& B)
+static inline FSEphemerisPeriod operator*(double A, const FSEphemerisPeriod& B)
 {
     return FSEphemerisPeriod(A * B.AsSpiceDouble());
 }
 
-inline static FSEphemerisPeriod operator*(const FSEphemerisPeriod& A, double B)
+static inline FSEphemerisPeriod operator*(const FSEphemerisPeriod& A, double B)
 {
     return FSEphemerisPeriod(A.AsSpiceDouble() * B);
 }
 
-inline static FSEphemerisPeriod operator/(const FSEphemerisPeriod& A, double B)
+static inline FSEphemerisPeriod operator/(const FSEphemerisPeriod& A, double B)
 {
     return FSEphemerisPeriod(A.AsSpiceDouble() / B);
 }
 
-inline static double operator/(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+static inline double operator/(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return A.AsSpiceDouble() / B.AsSpiceDouble();
 }
 
-inline static FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+static inline FSEphemerisPeriod operator%(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return FSEphemerisPeriod( fmod(A.AsSpiceDouble(), B.AsSpiceDouble()) );
 }
 
 
-inline static bool operator==(const FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs)
+static inline bool operator==(const FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs)
 {
     return lhs.seconds == rhs.seconds;
 }
 
-inline static bool operator!=(const FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs)
+static inline bool operator!=(const FSEphemerisPeriod& lhs, const FSEphemerisPeriod& rhs)
 {
     return !(lhs == rhs);
 }
 
 
-inline static bool operator>(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+static inline bool operator>(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return A.AsSpiceDouble() > B.AsSpiceDouble();
 }
 
-inline static bool operator<(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
+static inline bool operator<(const FSEphemerisPeriod& A, const FSEphemerisPeriod& B)
 {
     return A.AsSpiceDouble() < B.AsSpiceDouble();
 }
 
-inline static FSDistance operator*(const FSEphemerisPeriod& lhs, const FSSpeed& rhs)
+static inline FSDistance operator*(const FSEphemerisPeriod& lhs, const FSSpeed& rhs)
 {
     return FSDistance(lhs.seconds * rhs.kmps);
 }
 
-inline static FSDistance operator*(const FSSpeed& lhs, const FSEphemerisPeriod& rhs)
+static inline FSDistance operator*(const FSSpeed& lhs, const FSEphemerisPeriod& rhs)
 {
     return FSDistance(lhs.kmps * rhs.seconds);
 }
@@ -1389,72 +1389,72 @@ struct SPICE_API FSVelocityVector
 };
 
 
-inline static FSVelocityVector operator+(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+static inline FSVelocityVector operator+(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return FSVelocityVector(lhs.dx + rhs.dx, lhs.dy + rhs.dy, lhs.dz + rhs.dz);
 }
 
-inline static FSVelocityVector operator-(const FSVelocityVector& rhs)
+static inline FSVelocityVector operator-(const FSVelocityVector& rhs)
 {
     return FSVelocityVector(-rhs.dx, -rhs.dy, -rhs.dz);
 }
 
-inline static FSVelocityVector operator-(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+static inline FSVelocityVector operator-(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return FSVelocityVector(lhs.dx - rhs.dx, lhs.dy - rhs.dy, lhs.dz - rhs.dz);
 }
 
-inline static FSVelocityVector operator/(const FSVelocityVector& lhs, double rhs)
+static inline FSVelocityVector operator/(const FSVelocityVector& lhs, double rhs)
 {
     return FSVelocityVector(lhs.dx / rhs, lhs.dy / rhs, lhs.dz / rhs);
 }
 
-inline static FSDimensionlessVector operator/(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+static inline FSDimensionlessVector operator/(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return FSDimensionlessVector(lhs.dx / rhs.dx, lhs.dy / rhs.dy, lhs.dz / rhs.dz);
 }
 
-inline static FSVelocityVector operator*(double lhs, const FSVelocityVector& rhs)
+static inline FSVelocityVector operator*(double lhs, const FSVelocityVector& rhs)
 {
     return FSVelocityVector(lhs * rhs.dx, lhs * rhs.dy, lhs * rhs.dz);
 }
 
-inline static FSVelocityVector operator*(const FSVelocityVector& lhs, double rhs)
+static inline FSVelocityVector operator*(const FSVelocityVector& lhs, double rhs)
 {
     return FSVelocityVector(lhs.dx * rhs, lhs.dy * rhs, lhs.dz * rhs);
 }
 
-inline static FSDistanceVector operator*(const FSEphemerisPeriod& lhs, const FSVelocityVector& rhs)
+static inline FSDistanceVector operator*(const FSEphemerisPeriod& lhs, const FSVelocityVector& rhs)
 {
     return FSDistanceVector(lhs * rhs.dx, lhs * rhs.dy, lhs * rhs.dz);
 }
 
-inline static FSDistanceVector operator*(const FSVelocityVector& lhs, const FSEphemerisPeriod& rhs)
+static inline FSDistanceVector operator*(const FSVelocityVector& lhs, const FSEphemerisPeriod& rhs)
 {
     return FSDistanceVector(rhs * lhs.dx, rhs * lhs.dy, rhs * lhs.dz);
 }
 
-inline static bool operator==(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+static inline bool operator==(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return (lhs.x == rhs.x) && (lhs.y == rhs.y) && (lhs.z == rhs.z);
 }
 
-inline static bool operator==(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+static inline bool operator==(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return (lhs.dx == rhs.dx) && (lhs.dy == rhs.dy) && (lhs.dz == rhs.dz);
 }
 
-inline static bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
+static inline bool operator!=(const FSDistanceVector& lhs, const FSDistanceVector& rhs)
 {
     return !(lhs == rhs);
 }
 
-inline static bool operator!=(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
+static inline bool operator!=(const FSVelocityVector& lhs, const FSVelocityVector& rhs)
 {
     return !(lhs == rhs);
 }
 
-inline static FSVelocityVector& operator+=(FSVelocityVector& lhs, const FSVelocityVector& rhs) {
+static inline FSVelocityVector& operator+=(FSVelocityVector& lhs, const FSVelocityVector& rhs) {
 
     lhs.dx += rhs.dx;
     lhs.dy += rhs.dy;
@@ -1462,7 +1462,7 @@ inline static FSVelocityVector& operator+=(FSVelocityVector& lhs, const FSVeloci
     return lhs;
 }
 
-inline static FSVelocityVector& operator-=(FSVelocityVector& lhs, const FSVelocityVector& rhs) {
+static inline FSVelocityVector& operator-=(FSVelocityVector& lhs, const FSVelocityVector& rhs) {
 
     lhs.dx -= rhs.dx;
     lhs.dy -= rhs.dy;
@@ -1472,7 +1472,7 @@ inline static FSVelocityVector& operator-=(FSVelocityVector& lhs, const FSVeloci
 
 
 USTRUCT(BlueprintType)
-struct FSLonLat
+struct SPICE_API FSLonLat
 {
     GENERATED_BODY()
 
@@ -1514,7 +1514,7 @@ struct FSLonLat
 
 
 USTRUCT(BlueprintType)
-struct FSEulerAngles
+struct SPICE_API FSEulerAngles
 {
     GENERATED_BODY()
 
@@ -1559,7 +1559,7 @@ struct FSEulerAngles
         _axis1 = (uint8)axis1;
     }
 
-    static SPICE_API const FSEulerAngles Zero;
+    static const FSEulerAngles Zero;
 };
 
 
@@ -1623,43 +1623,43 @@ struct SPICE_API FSAngularVelocity
 };
 
 
-inline static FSAngularVelocity operator+(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
+static inline FSAngularVelocity operator+(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
 {
     return FSAngularVelocity(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 }
 
-inline static FSAngularVelocity operator-(const FSAngularVelocity& rhs)
+static inline FSAngularVelocity operator-(const FSAngularVelocity& rhs)
 {
     return FSAngularVelocity(-rhs.x, -rhs.y, -rhs.z);
 }
 
-inline static FSAngularVelocity operator-(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
+static inline FSAngularVelocity operator-(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
 {
     return FSAngularVelocity(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 }
 
-inline static FSAngularVelocity operator/(const FSAngularVelocity& lhs, double rhs)
+static inline FSAngularVelocity operator/(const FSAngularVelocity& lhs, double rhs)
 {
     return FSAngularVelocity(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
 
-inline static FSDimensionlessVector operator/(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
+static inline FSDimensionlessVector operator/(const FSAngularVelocity& lhs, const FSAngularVelocity& rhs)
 {
     return FSDimensionlessVector(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z);
 }
 
-inline static FSAngularVelocity operator*(double lhs, const FSAngularVelocity& rhs)
+static inline FSAngularVelocity operator*(double lhs, const FSAngularVelocity& rhs)
 {
     return FSAngularVelocity(lhs * rhs.x, lhs * rhs.y, lhs * rhs.z);
 }
 
-inline static FSAngularVelocity operator*(const FSAngularVelocity& lhs, double rhs)
+static inline FSAngularVelocity operator*(const FSAngularVelocity& lhs, double rhs)
 {
     return FSAngularVelocity(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }
 
 
-inline static FSAngularVelocity& operator+=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
+static inline FSAngularVelocity& operator+=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
 
     lhs.x += rhs.x;
     lhs.y += rhs.y;
@@ -1667,7 +1667,7 @@ inline static FSAngularVelocity& operator+=(FSAngularVelocity& lhs, const FSAngu
     return lhs;
 }
 
-inline static FSAngularVelocity& operator-=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
+static inline FSAngularVelocity& operator-=(FSAngularVelocity& lhs, const FSAngularVelocity& rhs) {
 
     lhs.x -= rhs.x;
     lhs.y -= rhs.y;
@@ -1677,7 +1677,7 @@ inline static FSAngularVelocity& operator-=(FSAngularVelocity& lhs, const FSAngu
 
 
 USTRUCT(BlueprintType)
-struct FSEulerAngularState
+struct SPICE_API FSEulerAngularState
 {
     GENERATED_BODY()
 
@@ -1730,7 +1730,7 @@ struct FSEulerAngularState
         _axis1 = (uint8)axis1;
     }
 
-    static SPICE_API const FSEulerAngularState Zero;
+    static const FSEulerAngularState Zero;
 };
 
 
@@ -1738,7 +1738,7 @@ struct FSEulerAngularState
 
 
 USTRUCT(BlueprintType)
-struct FSMassConstant
+struct SPICE_API FSMassConstant
 {
     GENERATED_BODY()
 
@@ -1777,11 +1777,24 @@ struct FSMassConstant
     {
         return GM > 0.;
     }
+
+    static const FSMassConstant Zero;
 };
 
 
+static inline bool operator==(const FSMassConstant& lhs, const FSMassConstant& rhs)
+{
+    return (lhs.GM == rhs.GM) && (lhs.GM == rhs.GM);
+}
+
+static inline bool operator!=(const FSMassConstant& lhs, const FSMassConstant& rhs)
+{
+    return !(lhs == rhs);
+}
+
+
 USTRUCT(BlueprintType)
-struct FSDimensionlessStateVector
+struct SPICE_API FSDimensionlessStateVector
 {
     GENERATED_BODY()
 
@@ -1821,7 +1834,7 @@ struct FSDimensionlessStateVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Rectangular  coordinates (X, Y, Z, DX, DY, DZ)"))
-struct FSStateVector
+struct SPICE_API FSStateVector
 {
     GENERATED_BODY()
 
@@ -1870,40 +1883,40 @@ struct FSStateVector
 };
 
 
-inline static bool operator==(const FSStateVector& lhs, const FSStateVector& rhs)
+static inline bool operator==(const FSStateVector& lhs, const FSStateVector& rhs)
 {
     return (lhs.r == rhs.r) && (lhs.v == rhs.v);
 }
 
-inline static bool operator!=(const FSStateVector& lhs, const FSStateVector& rhs)
+static inline bool operator!=(const FSStateVector& lhs, const FSStateVector& rhs)
 {
     return !(lhs == rhs);
 }
 
 
-inline static FSStateVector operator+(const FSStateVector& lhs, const FSStateVector& rhs)
+static inline FSStateVector operator+(const FSStateVector& lhs, const FSStateVector& rhs)
 {
     return FSStateVector(lhs.r + rhs.r, lhs.v + rhs.v);
 }
 
-inline static FSStateVector operator-(const FSStateVector& rhs)
+static inline FSStateVector operator-(const FSStateVector& rhs)
 {
     return FSStateVector(-rhs.r, -rhs.v);
 }
 
-inline static FSStateVector operator-(const FSStateVector& lhs, const FSStateVector& rhs)
+static inline FSStateVector operator-(const FSStateVector& lhs, const FSStateVector& rhs)
 {
     return FSStateVector(lhs.r - rhs.r, lhs.v - rhs.v);
 }
 
-inline static FSStateVector& operator+=(FSStateVector& lhs, const FSStateVector& rhs) {
+static inline FSStateVector& operator+=(FSStateVector& lhs, const FSStateVector& rhs) {
 
     lhs.r += rhs.r;
     lhs.v += rhs.v;
     return lhs;
 }
 
-inline static FSStateVector& operator-=(FSStateVector& lhs, const FSStateVector& rhs) {
+static inline FSStateVector& operator-=(FSStateVector& lhs, const FSStateVector& rhs) {
 
     lhs.r -= rhs.r;
     lhs.v -= rhs.v;
@@ -1912,7 +1925,7 @@ inline static FSStateVector& operator-=(FSStateVector& lhs, const FSStateVector&
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Cylindrical coordinates (R, LONG, Z)"))
-struct FSCylindricalVector
+struct SPICE_API FSCylindricalVector
 {
     GENERATED_BODY()
 
@@ -1979,7 +1992,7 @@ struct FSCylindricalVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Cylindrical coordinates (DR, DLONG, DZ)"))
-struct FSCylindricalVectorRates
+struct SPICE_API FSCylindricalVectorRates
 {
     GENERATED_BODY()
 
@@ -2039,7 +2052,7 @@ struct FSCylindricalVectorRates
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Cylindrical coordinates (R, LONG, Z, DR, DLONG, DZ)"))
-struct FSCylindricalStateVector
+struct SPICE_API FSCylindricalStateVector
 {
     GENERATED_BODY()
 
@@ -2079,7 +2092,7 @@ struct FSCylindricalStateVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Latitudinal coordinates (R, LONGLAT"))
-struct FSLatitudinalVector
+struct SPICE_API FSLatitudinalVector
 {
     GENERATED_BODY()
 
@@ -2137,7 +2150,7 @@ struct FSLatitudinalVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Latitudinal coordinates (DR, DLONG, DLAT)"))
-struct FSLatitudinalVectorRates
+struct SPICE_API FSLatitudinalVectorRates
 {
     GENERATED_BODY()
 
@@ -2197,7 +2210,7 @@ struct FSLatitudinalVectorRates
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Latitudinal coordinates (R, LONGLAT, DR, DLONG, DLAT)"))
-struct FSLatitudinalStateVector
+struct SPICE_API FSLatitudinalStateVector
 {
     GENERATED_BODY()
 
@@ -2237,7 +2250,7 @@ struct FSLatitudinalStateVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Spherical coordinates (R, COLAT, LONG)"))
-struct FSSphericalVector
+struct SPICE_API FSSphericalVector
 {
     GENERATED_BODY()
 
@@ -2304,7 +2317,7 @@ struct FSSphericalVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Spherical coordinates (DR, DCOLAT, DLONG)"))
-struct FSSphericalVectorRates
+struct SPICE_API FSSphericalVectorRates
 {
     GENERATED_BODY()
 
@@ -2363,7 +2376,7 @@ struct FSSphericalVectorRates
 };
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Spherical coordinates (R, COLAT, LONG, DR, DCOLAT, DLONG)"))
-struct FSSphericalStateVector
+struct SPICE_API FSSphericalStateVector
 {
     GENERATED_BODY()
 
@@ -2403,7 +2416,7 @@ struct FSSphericalStateVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Geodetic coordinates (LONG, LAT, ALT)"))
-struct FSGeodeticVector
+struct SPICE_API FSGeodeticVector
 {
     GENERATED_BODY()
 
@@ -2461,7 +2474,7 @@ struct FSGeodeticVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Geodetic coordinates (DLONG, DLAT, DALT"))
-struct FSGeodeticVectorRates
+struct SPICE_API FSGeodeticVectorRates
 {
     GENERATED_BODY()
 
@@ -2520,7 +2533,7 @@ struct FSGeodeticVectorRates
 };
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Geodetic coordinates (LONG, LAT, ALT, DLONG, DLAT, DALT"))
-struct FSGeodeticStateVector
+struct SPICE_API FSGeodeticStateVector
 {
     GENERATED_BODY()
 
@@ -2560,7 +2573,7 @@ struct FSGeodeticStateVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Planetographic coordinates (LONG, LAT, ALT)"))
-struct FSPlanetographicVector
+struct SPICE_API FSPlanetographicVector
 {
     GENERATED_BODY()
 
@@ -2618,7 +2631,7 @@ struct FSPlanetographicVector
 
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Planetographic coordinates (DLONG, DLAT, DALT)"))
-struct FSPlanetographicVectorRates
+struct SPICE_API FSPlanetographicVectorRates
 {
     GENERATED_BODY()
 
@@ -2677,7 +2690,7 @@ struct FSPlanetographicVectorRates
 };
 
 USTRUCT(BlueprintType, Meta = (ToolTip = "Planetographic coordinates (LONG, LAT, ALT, DLONG, DLAT, DALT)"))
-struct FSPlanetographicStateVector
+struct SPICE_API FSPlanetographicStateVector
 {
     GENERATED_BODY()
 
@@ -2717,7 +2730,7 @@ struct FSPlanetographicStateVector
 
 
 USTRUCT(BlueprintType)
-struct FSStateTransform
+struct SPICE_API FSStateTransform
 {
     GENERATED_BODY()
 
@@ -2751,7 +2764,7 @@ struct FSStateTransform
         m[5].CopyTo(_m[5]);
     }
 
-    static SPICE_API const FSStateTransform Identity;
+    static const FSStateTransform Identity;
 };
 
 
@@ -2762,7 +2775,7 @@ USTRUCT(BlueprintType,
         ShortToolTip = "C-Matrix",
         ToolTip = "3x3 Rotation Matrix (AKA C-Matrix, or Camera-Matrix)"
         ))
-struct FSRotationMatrix
+struct SPICE_API FSRotationMatrix
 {
     GENERATED_BODY()
 
@@ -2804,11 +2817,11 @@ struct FSRotationMatrix
         m[2].CopyTo(_m[2]);
     }
 
-    static SPICE_API const FSRotationMatrix Identity;
+    static const FSRotationMatrix Identity;
 };
 
 USTRUCT(BlueprintType)
-struct FSQuaternion
+struct SPICE_API FSQuaternion
 {
     GENERATED_BODY()
 
@@ -2871,17 +2884,17 @@ struct FSQuaternion
         _q[3] = z;
     }
 
-    static SPICE_API const FSQuaternion Identity;
+    static const FSQuaternion Identity;
 };
 
-FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs);
-FSDimensionlessVector operator*(const FSRotationMatrix& lhs, const FSDimensionlessVector& rhs);
-FSDistanceVector operator*(const FSRotationMatrix& lhs, const FSDistanceVector& rhs);
-FSVelocityVector operator*(const FSRotationMatrix& lhs, const FSVelocityVector& rhs);
-FSQuaternion operator*(const FSQuaternion& lhs, const FSQuaternion& rhs);
+SPICE_API FSRotationMatrix operator*(const FSRotationMatrix& lhs, const FSRotationMatrix& rhs);
+SPICE_API FSDimensionlessVector operator*(const FSRotationMatrix& lhs, const FSDimensionlessVector& rhs);
+SPICE_API FSDistanceVector operator*(const FSRotationMatrix& lhs, const FSDistanceVector& rhs);
+SPICE_API FSVelocityVector operator*(const FSRotationMatrix& lhs, const FSVelocityVector& rhs);
+SPICE_API FSQuaternion operator*(const FSQuaternion& lhs, const FSQuaternion& rhs);
 
 USTRUCT(BlueprintType)
-struct FSEllipse
+struct SPICE_API FSEllipse
 {
     GENERATED_BODY()
 
@@ -2921,7 +2934,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSPlane
+struct SPICE_API FSPlane
 {
     GENERATED_BODY()
 
@@ -2964,7 +2977,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSEulerAngularTransform
+struct SPICE_API FSEulerAngularTransform
 {
     GENERATED_BODY()
 
@@ -3000,14 +3013,14 @@ struct FSEulerAngularTransform
         m[5].CopyTo(_m[5]);
     }
 
-    static SPICE_API const FSEulerAngularTransform Identity;
+    static const FSEulerAngularTransform Identity;
 
 };
 
 
 
 USTRUCT(BlueprintType)
-struct FSConicElements
+struct SPICE_API FSConicElements
 {
     GENERATED_BODY()
 
@@ -3038,6 +3051,18 @@ struct FSConicElements
         MeanAnomalyAtEpoch = FSAngle();
         Epoch = FSEphemerisTime();
         GravitationalParameter = FSMassConstant();
+    }
+
+    FSConicElements(const FSConicElements& other)
+    {
+        PerifocalDistance = other.PerifocalDistance;
+        Eccentricity = other.Eccentricity;
+        Inclination = other.Inclination;
+        LongitudeOfAscendingNode = other.LongitudeOfAscendingNode;
+        ArgumentOfPeriapse = other.ArgumentOfPeriapse;
+        MeanAnomalyAtEpoch = other.MeanAnomalyAtEpoch;
+        Epoch = other.Epoch;
+        GravitationalParameter = other.GravitationalParameter;
     }
 
 
@@ -3088,10 +3113,27 @@ struct FSConicElements
         elts[6] = Epoch.seconds;
         elts[7] = GravitationalParameter.GM;
     }
+
+    FSConicElements& operator=(const FSConicElements& other)
+    {
+        if (this != &other)
+        {
+            PerifocalDistance = other.PerifocalDistance;
+            Eccentricity = other.Eccentricity;
+            Inclination = other.Inclination;
+            LongitudeOfAscendingNode = other.LongitudeOfAscendingNode;
+            ArgumentOfPeriapse = other.ArgumentOfPeriapse;
+            MeanAnomalyAtEpoch = other.MeanAnomalyAtEpoch;
+            Epoch = other.Epoch;
+            GravitationalParameter = other.GravitationalParameter;
+        }
+
+        return *this;
+    }
 };
 
 USTRUCT(BlueprintType)
-struct FSEquinoctialElements
+struct SPICE_API FSEquinoctialElements
 {
     GENERATED_BODY()
 
@@ -3202,7 +3244,7 @@ struct FSEquinoctialElements
 
 
 USTRUCT(BlueprintType)
-struct FSEphemerisTimeWindowSegment
+struct SPICE_API FSEphemerisTimeWindowSegment
 {
     GENERATED_BODY()
 
@@ -3263,7 +3305,7 @@ struct FSEphemerisTimeWindowSegment
 
 // CK Files include windows in spacecraft clock encoded time (type: double)
 USTRUCT(BlueprintType)
-struct FSWindowSegment
+struct SPICE_API FSWindowSegment
 {
     GENERATED_BODY()
 
@@ -3313,7 +3355,7 @@ struct FSWindowSegment
 
 
 USTRUCT(BlueprintType)
-struct FSPointingType2Observation
+struct SPICE_API FSPointingType2Observation
 {
     GENERATED_BODY()
 
@@ -3362,7 +3404,7 @@ struct FSPointingType2Observation
 
 
 USTRUCT(BlueprintType)
-struct FSPointingType1Observation
+struct SPICE_API FSPointingType1Observation
 {
     GENERATED_BODY()
 
@@ -3403,7 +3445,7 @@ struct FSPointingType1Observation
 
 
 USTRUCT(BlueprintType)
-struct FSPointingType5Observation
+struct SPICE_API FSPointingType5Observation
 {
     GENERATED_BODY()
 
@@ -3559,7 +3601,7 @@ struct FSPointingType5Observation
 
 
 USTRUCT(BlueprintType)
-struct FSPKType5Observation
+struct SPICE_API FSPKType5Observation
 {
     GENERATED_BODY()
 
@@ -3594,7 +3636,7 @@ struct FSPKType5Observation
 
 
 USTRUCT(BlueprintType)
-struct FSPKType15Observation
+struct SPICE_API FSPKType15Observation
 {
     GENERATED_BODY()
 
@@ -3676,7 +3718,7 @@ struct FSPKType15Observation
 
 
 USTRUCT(BlueprintType)
-struct FSTwoLineElements
+struct SPICE_API FSTwoLineElements
 {
     GENERATED_BODY()
 
@@ -3717,7 +3759,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSTLEGeophysicalConstants
+struct SPICE_API FSTLEGeophysicalConstants
 {
     GENERATED_BODY()
 
@@ -3740,7 +3782,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSLimptPoint
+struct SPICE_API FSLimptPoint
 {
     GENERATED_BODY()
 
@@ -3782,7 +3824,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSLimptCut
+struct SPICE_API FSLimptCut
 {
     GENERATED_BODY()
 
@@ -3798,7 +3840,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSTermptPoint
+struct SPICE_API FSTermptPoint
 {
     GENERATED_BODY()
 
@@ -3840,7 +3882,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSTermptCut
+struct SPICE_API FSTermptCut
 {
     GENERATED_BODY()
 
@@ -3855,7 +3897,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSRay
+struct SPICE_API FSRay
 {
     GENERATED_BODY()
 
@@ -3878,7 +3920,7 @@ public:
 };
 
 USTRUCT(BlueprintType)
-struct FSDLADescr
+struct SPICE_API FSDLADescr
 {
     GENERATED_BODY()
 
@@ -3912,7 +3954,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSDSKDescr
+struct SPICE_API FSDSKDescr
 {
     GENERATED_BODY()
 
@@ -3960,7 +4002,7 @@ public:
 
 
 USTRUCT(BlueprintType)
-struct FSPlateIndices
+struct SPICE_API FSPlateIndices
 {
     GENERATED_BODY()
 
