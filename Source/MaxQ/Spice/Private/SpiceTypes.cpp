@@ -50,6 +50,7 @@ SPICE_API const FSDimensionlessVector FSDimensionlessVector::Zero = FSDimensionl
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::X_Axis = FSDimensionlessVector(1., 0., 0.);
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::Y_Axis = FSDimensionlessVector(0., 1., 0.);
 SPICE_API const FSDimensionlessVector FSDimensionlessVector::Z_Axis = FSDimensionlessVector(0., 0., 1.);
+SPICE_API const FSMassConstant FSMassConstant::Zero = FSMassConstant(0.);
 SPICE_API int USpiceTypes::FloatFormatPrecision = 8;
 
 FSAngle::FSAngle()
