@@ -51,11 +51,29 @@ Unreal Engine 5.
                                      0 1 0
                                      0 0 1 )
 
-        FRAME_FAKEBODY9993_PA  =  1400200
-        FRAME_1400200_NAME     = 'FAKEBODY9993_PA'
+        FRAME_FAKEBODY9993_PA  =  1400004
+        FRAME_1400004_NAME     = 'FAKEBODY9993_PA'
+        FRAME_1400004_CLASS    =  2
+        FRAME_1400004_CENTER   = 9993
+        FRAME_1400004_CLASS_ID = 9993
+
+        FRAME_IAU_FAKEBODY9993 = 1400005
+        FRAME_1400005_NAME     = 'IAU_FAKEBODY9993'
+        FRAME_1400005_CLASS    = 4
+        FRAME_1400005_CLASS_ID = 1400005
+        FRAME_1400005_CENTER   = 9993
+
+        TKFRAME_1400005_SPEC     = 'MATRIX'
+        TKFRAME_1400005_RELATIVE = 'FAKEBODY9993_PA'
+        TKFRAME_1400005_MATRIX   = ( 1 0 0
+                                     0 1 0
+                                     0 0 1 )
+
+        FRAME_FAKEBOD9899_PA  =  1400200
+        FRAME_1400200_NAME     = 'FAKEBODY9899_PA'
         FRAME_1400200_CLASS    =  2
-        FRAME_1400200_CENTER   = 9993
-        FRAME_1400200_CLASS_ID = 9993
+        FRAME_1400200_CENTER   = 9899
+        FRAME_1400200_CLASS_ID = 9899
 
         FRAME_IAU_FAKEBODY9899 =  1400201
         FRAME_1400201_NAME     = 'IAU_FAKEBODY9899'

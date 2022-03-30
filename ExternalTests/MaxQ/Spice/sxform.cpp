@@ -51,26 +51,31 @@ TEST(sxform_test, Earth_Was_Turning) {
     ErrorMessage.Empty();
 
     FSStateTransform stateTransform;
-    FString from = TEXT("ECLIPJ2000");
-    FString to = TEXT("IAU_FAKEBODY9995");
+    FString from = TEXT("J2000");
+    FString to = TEXT("IAU_FAKEBODY9994");
 
-    USpice::sxform(ResultCode, ErrorMessage, stateTransform, et0, from, to);
+    // 90 degree rotation around +Z...
+    FSEphemerisPeriod T = FSEphemerisPeriod::Day / 10.;
+    FSAngularRate w = (_pos360_as_radians / T.AsSeconds());
+    FSEphemerisTime et(FSEphemerisTime::J2000 + 0.25 * T);
+
+    USpice::sxform(ResultCode, ErrorMessage, stateTransform, et, from, to);
 
     EXPECT_EQ(ResultCode, ES_ResultCode::Success);
 
     EXPECT_EQ(stateTransform.m.Num(), 6);
 
 
-    EXPECT_LT((stateTransform.m[0].r - FSDistanceVector(0, -1, 0)).Magnitude().AsKilometers(), 0.05);
-    EXPECT_LT((stateTransform.m[1].r - FSDistanceVector(0, 0, -1)).Magnitude().AsKilometers(), 0.05);
-    EXPECT_LT((stateTransform.m[2].r - FSDistanceVector(1, 0, 0)).Magnitude().AsKilometers(), 0.05);
+    EXPECT_LT((stateTransform.m[0].r - FSDistanceVector(0, 1, 0)).Magnitude().AsKilometers(), 0.0000001);
+    EXPECT_LT((stateTransform.m[1].r - FSDistanceVector(-1, 0, 0)).Magnitude().AsKilometers(), 0.0000001);
+    EXPECT_LT((stateTransform.m[2].r - FSDistanceVector(0, 0, 1)).Magnitude().AsKilometers(), 0.0000001);
 
-    EXPECT_LT((stateTransform.m[3].r - FSDistanceVector(0, 0, 0)).Magnitude().AsKilometers(), 0.05);
-    EXPECT_LT((stateTransform.m[4].r - FSDistanceVector(0, 0, 0)).Magnitude().AsKilometers(), 0.05);
-    EXPECT_LT((stateTransform.m[5].r - FSDistanceVector(0, 0, 0)).Magnitude().AsKilometers(), 0.05);
+    EXPECT_LT((stateTransform.m[3].r - FSDistanceVector(-w.AsRadiansPerSecond(), 0, 0)).Magnitude().AsKilometers(), 0.000000001);
+    EXPECT_LT((stateTransform.m[4].r - FSDistanceVector(0, -w.AsRadiansPerSecond(), 0)).Magnitude().AsKilometers(), 0.000000001);
+    EXPECT_LT((stateTransform.m[5].r - FSDistanceVector(0, 0, 0)).Magnitude().AsKilometers(), 0.000000001);
 
 
-    EXPECT_LT((stateTransform.m[3].dr - FSVelocityVector(0, -1, 0)).Magnitude().AsKilometersPerSecond(), 0.05);
-    EXPECT_LT((stateTransform.m[4].dr - FSVelocityVector(0, 0, -1)).Magnitude().AsKilometersPerSecond(), 0.05);
-    EXPECT_LT((stateTransform.m[5].dr - FSVelocityVector(1, 0, 0)).Magnitude().AsKilometersPerSecond(), 0.05);
+    EXPECT_LT((stateTransform.m[3].dr - FSVelocityVector(0, 1, 0)).Magnitude().AsKilometersPerSecond(), 0.0000001);
+    EXPECT_LT((stateTransform.m[4].dr - FSVelocityVector(-1, 0, 0)).Magnitude().AsKilometersPerSecond(), 0.0000001);
+    EXPECT_LT((stateTransform.m[5].dr - FSVelocityVector(0, 0, 1)).Magnitude().AsKilometersPerSecond(), 0.0000001);
 }
