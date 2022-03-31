@@ -2646,8 +2646,8 @@ void USpice::eqncpv(
     SpiceDouble	_et = et.seconds;
     SpiceDouble	_epoch = epoch.seconds;
     SpiceDouble _eqel[9];	eqel.CopyTo(_eqel);
-    SpiceDouble	_rapol = rapol.radians();
-    SpiceDouble	_decpol = decpol.radians();
+    SpiceDouble	_rapol = rapol.AsSpiceDouble();
+    SpiceDouble	_decpol = decpol.AsSpiceDouble();
     // Outputs
     SpiceDouble _state[6];	ZeroOut(_state);
 
@@ -2710,7 +2710,7 @@ void USpice::et2lst(
     // Inputs
     SpiceDouble        _et = et.seconds;
     SpiceInt           _body = body;
-    SpiceDouble        _lon = lon.radians();
+    SpiceDouble        _lon = lon.AsSpiceDouble();
     SpiceChar* _type;
     SpiceInt           _timlen = sizeof(szTime);
     SpiceInt           _ampmlen = sizeof(szAmPm);
@@ -3490,7 +3490,7 @@ void USpice::georec(
     SpiceDouble _rectan[3];
     ZeroOut(_rectan);
 
-    georec_c(geovec.lonlat.longitude.radians(), geovec.lonlat.latitude.radians(), geovec.alt.km, re.km, f, _rectan);
+    georec_c(geovec.lonlat.longitude.AsSpiceDouble(), geovec.lonlat.latitude.AsSpiceDouble(), geovec.alt.km, re.km, f, _rectan);
     rectan = FSDistanceVector(_rectan);
 
     // Error Handling
@@ -5054,8 +5054,8 @@ void USpice::srfrec(
 {
     // Inputs
     SpiceInt      _body         = (SpiceInt)body;
-    SpiceDouble   _longitude    = lonlat.longitude.radians();
-    SpiceDouble   _latitude     = lonlat.latitude.radians();
+    SpiceDouble   _longitude    = lonlat.longitude.AsSpiceDouble();
+    SpiceDouble   _latitude     = lonlat.latitude.AsSpiceDouble();
     
     // Output
     SpiceDouble   _rectan[3];     ZeroOut(_rectan);
@@ -7593,7 +7593,7 @@ void USpice::radrec(
 )
 {
     SpiceDouble _rectan[3];
-    radrec_c(range.km, ra.radians(), dec.radians(), _rectan);
+    radrec_c(range.km, ra.AsSpiceDouble(), dec.AsSpiceDouble(), _rectan);
     rectan = FSDistanceVector(_rectan);
 
     UnexpectedErrorCheck();

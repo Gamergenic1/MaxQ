@@ -472,6 +472,11 @@ static inline FSDimensionlessVector operator-(const FSDimensionlessVector& value
     return FSDimensionlessVector(-value.x, -value.y, -value.z);
 }
 
+static inline FSDimensionlessVector operator-(FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs){
+
+    return FSDimensionlessVector(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
+}
+
 // "exact", but probably not reliable depending on compiler flags, etc etc
 // Used in S/C for non-critical things like firing an OnChange event etc
 static inline bool operator==(const FSDimensionlessVector& lhs, const FSDimensionlessVector& rhs)
@@ -919,6 +924,13 @@ private:
     // CSPICE was built with numerical stability in mind, I think it's preferable
     // to defer to it for definitions of all constants.
     double cachedDpr;
+
+    // Use AsRadians(), (or AsSpiceDouble if you need Spice-default units)
+    inline double radians() const
+    {
+        return degrees / cachedDpr;
+    }
+
 public:
 
     // Let's use the CSPICE version of pi.  Since this is a header file, and we
@@ -928,11 +940,6 @@ public:
 
     inline FSAngle(double __radians);
 
-    // FOR CLARITY
-    inline double radians() const
-    {
-        return degrees / cachedDpr;
-    }
 
     inline FSAngle(const FSAngle& other)
     {
@@ -948,6 +955,20 @@ public:
     inline double AsSpiceDouble() const { return radians(); }
     inline double AsRadians() const { return radians(); }
     inline double AsDegrees() const { return degrees; }
+    static inline FSAngle FromSpiceDouble(double spiceDoubleAkaRadians)
+    {
+        return FSAngle(spiceDoubleAkaRadians);
+    }
+    static inline FSAngle FromRadians(double radians)
+    {
+        return FSAngle(radians);
+    }
+    static inline FSAngle FromDegrees(double degrees)
+    {
+        FSAngle Result;
+        Result.degrees = degrees;
+        return Result;
+    }
 
     bool operator==(const FSAngle& Other) const
     {
@@ -961,6 +982,7 @@ public:
 
     static const FSAngle _0;
     static const FSAngle _360;
+    static const double halfpi;
     static const double pi;
     static const double twopi;
     static const double dpr;
@@ -981,6 +1003,11 @@ static inline FSAngle operator*(const FSAngle& lhs,double rhs)
 static inline FSAngle operator+(const FSAngle& lhs, const FSAngle& rhs)
 {
     return FSAngle(lhs.AsSpiceDouble() + rhs.AsSpiceDouble());
+}
+
+static inline FSAngle operator-(const FSAngle& rhs)
+{
+    return FSAngle(-rhs.AsSpiceDouble());
 }
 
 static inline FSAngle operator-(const FSAngle& lhs, const FSAngle& rhs)
@@ -1551,9 +1578,9 @@ struct SPICE_API FSEulerAngles
 
     void CopyTo(double(&_eulang)[3], uint8& _axis3, uint8& _axis2, uint8& _axis1) const
     {
-        _eulang[0] = angle3.radians();
-        _eulang[1] = angle2.radians();
-        _eulang[2] = angle1.radians();
+        _eulang[0] = angle3.AsSpiceDouble();
+        _eulang[1] = angle2.AsSpiceDouble();
+        _eulang[2] = angle1.AsSpiceDouble();
         _axis3 = (uint8)axis3;
         _axis2 = (uint8)axis2;
         _axis1 = (uint8)axis1;
@@ -1719,9 +1746,9 @@ struct SPICE_API FSEulerAngularState
 
     void CopyTo(double(&_eulang)[6], uint8& _axis3, uint8& _axis2, uint8& _axis1) const
     {
-        _eulang[0] = angle3.radians();
-        _eulang[1] = angle2.radians();
-        _eulang[2] = angle1.radians();
+        _eulang[0] = angle3.AsSpiceDouble();
+        _eulang[1] = angle2.AsSpiceDouble();
+        _eulang[2] = angle1.AsSpiceDouble();
         _eulang[3] = rate3.radiansPerSecond;
         _eulang[4] = rate2.radiansPerSecond;
         _eulang[5] = rate1.radiansPerSecond;
@@ -3094,10 +3121,10 @@ struct SPICE_API FSConicElements
     {
         elts[0] = PerifocalDistance.km;
         elts[1] = Eccentricity;
-        elts[2] = Inclination.radians();
-        elts[3] = LongitudeOfAscendingNode.radians();
-        elts[4] = ArgumentOfPeriapse.radians();
-        elts[5] = MeanAnomalyAtEpoch.radians();
+        elts[2] = Inclination.AsSpiceDouble();
+        elts[3] = LongitudeOfAscendingNode.AsSpiceDouble();
+        elts[4] = ArgumentOfPeriapse.AsSpiceDouble();
+        elts[5] = MeanAnomalyAtEpoch.AsSpiceDouble();
         elts[6] = Epoch.seconds;
         elts[7] = GravitationalParameter.GM;
     }
@@ -3106,10 +3133,10 @@ struct SPICE_API FSConicElements
     {
         elts[0] = PerifocalDistance.km;
         elts[1] = Eccentricity;
-        elts[2] = Inclination.radians();
-        elts[3] = LongitudeOfAscendingNode.radians();
-        elts[4] = ArgumentOfPeriapse.radians();
-        elts[5] = MeanAnomalyAtEpoch.radians();
+        elts[2] = Inclination.AsSpiceDouble();
+        elts[3] = LongitudeOfAscendingNode.AsSpiceDouble();
+        elts[4] = ArgumentOfPeriapse.AsSpiceDouble();
+        elts[5] = MeanAnomalyAtEpoch.AsSpiceDouble();
         elts[6] = Epoch.seconds;
         elts[7] = GravitationalParameter.GM;
     }
@@ -3233,7 +3260,7 @@ struct SPICE_API FSEquinoctialElements
         elts[0] = a.km;
         elts[1] = h;
         elts[2] = k;
-        elts[3] = MeanLongitude.radians();
+        elts[3] = MeanLongitude.AsSpiceDouble();
         elts[4] = p;
         elts[5] = q;
         elts[6] = RateOfLongitudeOfPeriapse.radiansPerSecond;

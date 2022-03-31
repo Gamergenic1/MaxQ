@@ -31,6 +31,7 @@ SPICE_API const FSDistanceVector FSDistanceVector::Zero = FSDistanceVector();
 SPICE_API const FSVelocityVector FSVelocityVector::Zero = FSVelocityVector();
 SPICE_API const FSStateTransform FSStateTransform::Identity = FSStateTransform();
 SPICE_API const double FSAngle::pi = pi_c();
+SPICE_API const double FSAngle::halfpi = halfpi_c();
 SPICE_API const double FSAngle::twopi = twopi_c();
 SPICE_API const double FSAngle::dpr = dpr_c();
 SPICE_API const FSAngle FSAngle::_0 = FSAngle();
