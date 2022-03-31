@@ -12,7 +12,7 @@ static integer c__6 = 6;
 static integer c__1 = 1;
 static integer c__128 = 128;
 
-/* $Procedure      SPKS14 ( S/P Kernel, subset, type 14 ) */
+/* $Procedure SPKS14 ( S/P Kernel, subset, type 14 ) */
 /* Subroutine */ int spks14_(integer *srchan, doublereal *srcdsc, integer *
 	dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len)
 {
@@ -92,7 +92,7 @@ static integer c__128 = 128;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SRCHAN     I   Handle of the SPK file with the source segment. */
 /*     SRCDSC     I   Descriptor for the source segment. */
@@ -102,17 +102,18 @@ static integer c__128 = 128;
 
 /* $ Detailed_Input */
 
-/*     SRCHAN   The handle of the SPK file containing the source segment. */
+/*     SRCHAN   is the handle of the SPK file containing the source */
+/*              segment. */
 
-/*     SRCDSC   The SPK descriptor for the source segment. */
+/*     SRCDSC   is the SPK descriptor for the source segment. */
 
-/*     DSTHAN   The handle of the SPK file containing the new segment. */
+/*     DSTHAN   is the handle of the SPK file containing the new segment. */
 
-/*     DSTDSC   The SPK descriptor for the destination segment. It */
+/*     DSTDSC   is the SPK descriptor for the destination segment. It */
 /*              contains the desired start and stop times for the */
 /*              requested subset. */
 
-/*     DSTSID   The segment identifier for the destination segment. */
+/*     DSTSID   is the segment identifier for the destination segment. */
 
 /* $ Detailed_Output */
 
@@ -124,9 +125,8 @@ static integer c__128 = 128;
 
 /* $ Exceptions */
 
-/*     1) If the length of the SPK record that is to be moved is larger */
-/*        than MAXREC, the error 'SPICE(SPKRECTOOLARGE)' will be */
-/*        signalled. */
+/*     1)  If the length of the SPK record that is to be moved is larger */
+/*         than MAXREC, the error SPICE(SPKRECTOOLARGE) is signaled. */
 
 /* $ Files */
 
@@ -146,9 +146,9 @@ static integer c__128 = 128;
 
 /* $ Restrictions */
 
-/*     1) We assume that the source descriptor actually describes a */
-/*        segment in the source SPK file containing the time coverage */
-/*        that is desired for the subsetting operation. */
+/*     1)  We assume that the source descriptor actually describes a */
+/*         segment in the source SPK file containing the time coverage */
+/*         that is desired for the subsetting operation. */
 
 /* $ Literature_References */
 
@@ -156,16 +156,21 @@ static integer c__128 = 128;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 08-MAR-1995 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_14 spk segment */
+/*     subset type_14 SPK segment */
 
 /* -& */
 

@@ -4,7 +4,7 @@
 
 -Abstract
 
-    Add two vectors of arbitrary dimension.
+   Add two vectors of arbitrary dimension.
 
 -Disclaimer
 
@@ -37,7 +37,7 @@
 
 -Keywords
 
-    VECTOR
+   VECTOR
 
 */
 
@@ -53,80 +53,157 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-     v1        I     First vector to be added.
-     v2        I     Second vector to be added.
-     ndim      I     Dimension of v1, v2, and vout.
-     vout      O     Sum vector, v1 + v2.
-                     vout can overwrite either v1 or v2.
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I   First vector to be added.
+   v2         I   Second vector to be added.
+   ndim       I   Dimension of `v1', `v2', and `vout'.
+   vout       O   Sum vector, v1 + v2.
 
 -Detailed_Input
 
-    v1      This may be any double precision vector of arbitrary
-            dimension.
+   v1,
+   v2          are two arbitrary double precision n-dimensional
+               vectors.
 
-    v2      Likewise.
-
-    ndim    the dimension of v1, v2 and vout.
+   ndim        is the dimension of `v1', `v2' and `vout'.
 
 -Detailed_Output
 
-    vout   This is vector sum of v1 and v2. vout may overwrite either
-           v1 or v2.
+   vout        is the double precision n-dimensional vector sum of `v1'
+               and `v2'. `vout' may overwrite either `v1' or `v2'.
 
 -Parameters
 
    None.
 
--Particulars
-
-    This routine simply performs addition between components of v1
-    and v2.  No checking is performed to determine whether floating
-    point overflow has occurred.
-
--Examples
-
-    The following table shows the output vout as a function of the
-    the input v1 and v2 from the subroutine vaddg_c.
-
-    v1                  v2                  ndim   vout
-    -----------------------------------------------------------------
-    [1.0, 2.0, 3.0]     [4.0, 5.0, 6.0]     3      [5.0,  7.0, 9.0]
-    [1e-7,1e23]         [1e24, 1e23]        2      [1e24, 2e23]
-
--Restrictions
-
-    The user is required to determine that the magnitude each
-    component of the vectors is within the appropriate range so as
-    not to cause floating point overflow.
-
 -Exceptions
 
-    Error free.
+   Error free.
 
 -Files
 
-    None.
+   None.
 
--Author_and_Institution
+-Particulars
 
-    W.M. Owen       (JPL)
-    E.D. Wright     (JPL)
+   This routine simply performs addition between components of `v1'
+   and `v2'. No checking is performed to determine whether floating
+   point overflow has occurred.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Define two sets of n-dimensional vectors and compute the sum
+      of each vector in first set with the corresponding vector in
+      the second set.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vaddg_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NDIM         4
+         #define SETSIZ       2
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          vout   [NDIM];
+
+         SpiceInt             i;
+
+         /.
+         Define the two vector sets.
+         ./
+         SpiceDouble          seta   [SETSIZ][NDIM] = {
+                                   {1.0,   2.0,   3.0,    4.0},
+                                   {1.e-7, 1.e23, 1.e-9,  0.0} };
+
+         SpiceDouble          setb   [SETSIZ][NDIM] = {
+                                   {4.0,   5.0,    6.0,  7.0},
+                                   {1.e24, 1.e23,  0.0,  3.e-23} };
+
+         /.
+         Calculate the sum of each pair of vectors
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            vaddg_c ( seta[i], setb[i], NDIM, vout );
+
+            printf( "Vector A  :  %10.2e %10.2e %10.2e %10.2e\n",
+                    seta[i][0], seta[i][1], seta[i][2], seta[i][3] );
+            printf( "Vector B  :  %10.2e %10.2e %10.2e %10.2e\n",
+                    setb[i][0], setb[i][1], setb[i][2], setb[i][3] );
+            printf( "Sum vector:  %10.2e %10.2e %10.2e %10.2e\n",
+                           vout[0], vout[1], vout[2], vout[3] );
+            printf( "\n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Vector A  :    1.00e+00   2.00e+00   3.00e+00   4.00e+00
+      Vector B  :    4.00e+00   5.00e+00   6.00e+00   7.00e+00
+      Sum vector:    5.00e+00   7.00e+00   9.00e+00   1.10e+01
+
+      Vector A  :    1.00e-07   1.00e+23   1.00e-09   0.00e+00
+      Vector B  :    1.00e+24   1.00e+23   0.00e+00   3.00e-23
+      Sum vector:    1.00e+24   2.00e+23   1.00e-09   3.00e-23
+
+
+-Restrictions
+
+   1)  The user is required to determine that the magnitude each
+       component of the vectors is within the appropriate range so as
+       not to cause floating point overflow.
 
 -Literature_References
 
-    None.
+   None.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.1  07-NOV-2003  (EDW)
+   -CSPICE Version 1.0.2, 05-JUL-2021 (JDR)
 
-      Corrected a mistake in the second example's value
-      for VOUT, i.e. replaced [1D24, 2D23, 0.0] with
-      [1e24, 2e23].
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
 
-   -CSPICE Version 1.0.0, 29-JUN-1999
+   -CSPICE Version 1.0.1, 07-NOV-2003 (EDW)
+
+       Corrected a mistake in the second example's value
+       for VOUT, i.e. replaced [1D24, 2D23, 0.0] with
+       [1e24, 2e23].
+
+   -CSPICE Version 1.0.0, 29-JUN-1999 (EDW) (WMO)
 
 -Index_Entries
 
@@ -143,8 +220,8 @@
    SpiceInt       i;
 
 
-   /* 
-   Do it.  This isn't rocket science. 
+   /*
+   Do it.  This isn't rocket science.
    */
    for ( i = 0; i < ndim; i++ )
       {

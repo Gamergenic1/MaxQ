@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  PARSQS ( Parse quoted string token ) */
+/* $Procedure PARSQS ( Parse quoted string token ) */
 /* Subroutine */ int parsqs_(char *string, char *qchar, char *value, integer *
 	length, logical *error, char *errmsg, integer *ptr, ftnlen string_len,
 	 ftnlen qchar_len, ftnlen value_len, ftnlen errmsg_len)
@@ -67,7 +67,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   Quoted string to be parsed. */
 /*     QCHAR      I   Quote delimiter character. */
@@ -79,79 +79,79 @@
 
 /* $ Detailed_Input */
 
-/*     STRING         is a character string containing a `quoted string */
-/*                    token'.  Quoted string tokens are sequences of */
-/*                    characters that represent literal strings. */
-/*                    Syntactically, a string token is a sequence of */
-/*                    characters that begins and ends with a designated */
-/*                    `quote character'.  Within the token, any */
-/*                    occurrence of the quote character is indicated by */
-/*                    an adjacent pair of quote characters:  for example, */
-/*                    if the quote character is */
+/*     STRING   is a character string containing a `quoted string */
+/*              token'. Quoted string tokens are sequences of */
+/*              characters that represent literal strings. */
+/*              Syntactically, a string token is a sequence of */
+/*              characters that begins and ends with a designated */
+/*              `quote character'. Within the token, any */
+/*              occurrence of the quote character is indicated by */
+/*              an adjacent pair of quote characters: for example, */
+/*              if the quote character is */
 
-/*                       " */
+/*                 " */
 
-/*                    then the token representing one instance of this */
-/*                    character is */
+/*              then the token representing one instance of this */
+/*              character is */
 
-/*                       """" */
+/*                 """" */
 
-/*                    Here the first quote indicates the beginning of the */
-/*                    token, the next two quotes together indicate a */
-/*                    single quote character that constitutes the */
-/*                    `contents' of the token, and the final quote */
-/*                    indicates the end of the token. */
+/*              Here the first quote indicates the beginning of the */
+/*              token, the next two quotes together indicate a */
+/*              single quote character that constitutes the */
+/*              `contents' of the token, and the final quote */
+/*              indicates the end of the token. */
 
-/*                    Leading and trailing blanks in STRING are ignored. */
-/*                    The input string may not contain any trailing, */
-/*                    non-blank characters after the final quote */
-/*                    character. */
+/*              Leading and trailing blanks in STRING are ignored. */
+/*              The input string may not contain any trailing, */
+/*              non-blank characters after the final quote */
+/*              character. */
 
-/*                    All blanks occurring between the bracketing */
-/*                    quote characters in STRING are significant. */
+/*              All blanks occurring between the bracketing */
+/*              quote characters in STRING are significant. */
 
 
-/*     QCHAR          is the quote character.  This is always a single */
-/*                    character.  The characters */
+/*     QCHAR    is the quote character. This is always a single */
+/*              character. The characters */
 
-/*                       "  and ' */
+/*                 "  and ' */
 
-/*                    are common choices, but any non-blank character is */
-/*                    accepted.  Case *is* significant in QCHAR. */
+/*              are common choices, but any non-blank character is */
+/*              accepted. Case *is* significant in QCHAR. */
 
 /* $ Detailed_Output */
 
-/*     VALUE          is the string resulting from parsing STRING. */
-/*                    VALUE is obtained from STRING by removing the */
-/*                    bracketing quote characters and replacing each pair */
-/*                    of quote characters in the interior of STRING with */
-/*                    a singleton quote character.  The value resulting */
-/*                    from parsing STRING will occupy the leftmost */
-/*                    characters of VALUE, but will not be */
-/*                    `left-justified', since leading blanks within */
-/*                    the quoted string token in STRING are significant. */
+/*     VALUE    is the string resulting from parsing STRING. */
+/*              VALUE is obtained from STRING by removing the */
+/*              bracketing quote characters and replacing each pair */
+/*              of quote characters in the interior of STRING with */
+/*              a singleton quote character. The value resulting */
+/*              from parsing STRING will occupy the leftmost */
+/*              characters of VALUE, but will not be */
+/*              `left-justified', since leading blanks within */
+/*              the quoted string token in STRING are significant. */
 
-/*     LENGTH         is the number of significant characters in VALUE. */
-/*                    This is the number of characters in the string */
-/*                    resulting from parsing the input string.  Because */
-/*                    parsed strings containing embedded quote */
-/*                    characters are shorter than the unparsed tokens */
-/*                    that represent them, LENGTH may be less than the */
-/*                    number of characters between the bracketing quote */
-/*                    characters of the input string. */
+/*     LENGTH   is the number of significant characters in VALUE. */
+/*              This is the number of characters in the string */
+/*              resulting from parsing the input string. Because */
+/*              parsed strings containing embedded quote */
+/*              characters are shorter than the unparsed tokens */
+/*              that represent them, LENGTH may be less than the */
+/*              number of characters between the bracketing quote */
+/*              characters of the input string. */
 
-/*     ERROR          is a logical flag indicating whether a parse error */
-/*                    occurred; if so, ERROR is returned with the value */
-/*                    .TRUE. */
+/*     ERROR    is a logical flag indicating whether a parse error */
+/*              occurred; if so, ERROR is returned with the value */
+/*              .TRUE. */
 
-/*     ERRMSG         is a message indicating that STRING could not be */
-/*                    parsed due to an error in its structure.  If the */
-/*                    input string token was successfully parsed, ERRMSG */
-/*                    will be returned as a blank string. */
+/*     ERRMSG   is a message indicating that STRING could not be */
+/*              parsed due to an error in its structure. If the */
+/*              input string token was successfully parsed, ERRMSG */
+/*              will be returned as a blank string. */
 
-/*     PTR            indicates the character position at which an */
-/*                    error in STRING was detected.  If STRING is */
-/*                    correctly formed, PTR is returned as 0. */
+/*     PTR      indicates the character position at which an */
+/*              error in STRING was detected. If STRING is */
+/*              correctly formed, PTR is returned as 0. */
 
 /* $ Parameters */
 
@@ -161,24 +161,24 @@
 
 /*     Error free. */
 
-/*     1) If the input argument QCHAR is blank, a parse error will be */
-/*        indicated by ERROR; PTR will be set to 1.  The contents of */
-/*        VALUE and LENGTH are undefined in this case. */
+/*     1)  If the input argument QCHAR is blank, a parse error will be */
+/*         indicated by ERROR; PTR will be set to 1. The contents of */
+/*         VALUE and LENGTH are undefined in this case. */
 
-/*     2) If STRING is not a well-formed quoted string, a parse error */
-/*        will be indicated by ERROR and PTR.  The contents of VALUE */
-/*         and LENGTH are undefined in this case. */
+/*     2)  If STRING is not a well-formed quoted string, a parse error */
+/*         will be indicated by ERROR and PTR. The contents of VALUE */
+/*          and LENGTH are undefined in this case. */
 
-/*     3) If the length of the output string VALUE is too short to */
-/*        accommodate the parsed string token produced by this routine, */
-/*        a parse error message to this effect is generated.  VALUE */
-/*        will contain the as much as possible of the result, truncated */
-/*        on the right. */
+/*     3)  If the length of the output string VALUE is too short to */
+/*         accommodate the parsed string token produced by this routine, */
+/*         a parse error message to this effect is generated.  VALUE */
+/*         will contain the as much as possible of the result, truncated */
+/*         on the right. */
 
-/*     4) If STRING consists of a null string token, that is, two */
-/*        adjacent quote characters with nothing but blanks on either */
-/*        side, a parse error will be indicated.  The contents of VALUE */
-/*         and LENGTH are undefined in this case. */
+/*     4)  If STRING consists of a null string token, that is, two */
+/*         adjacent quote characters with nothing but blanks on either */
+/*         side, a parse error will be indicated. The contents of VALUE */
+/*          and LENGTH are undefined in this case. */
 
 /* $ Files */
 
@@ -186,12 +186,12 @@
 
 /* $ Particulars */
 
-/*     Quote characters may be ANY non-blank character.  For example, the */
+/*     Quote characters may be ANY non-blank character. For example, the */
 /*     ampersand */
 
 /*        & */
 
-/*     is a perfectly valid quote character.  If we were using the */
+/*     is a perfectly valid quote character. If we were using the */
 /*     ampersand as the quote character, then the term `doubled quote' */
 /*     in the following discussion would refer to the sequence */
 
@@ -202,11 +202,11 @@
 /*        " */
 
 /*     The string tokens that are expected inputs to this routine are */
-/*     Fortran-style quoted strings:  they start and end with quote */
-/*     characters.  In the interior of any such token, any quote */
-/*     characters are represented by doubled quote characters.  These */
+/*     Fortran-style quoted strings: they start and end with quote */
+/*     characters. In the interior of any such token, any quote */
+/*     characters are represented by doubled quote characters. These */
 /*     rules imply that the number of quote characters in a valid quoted */
-/*     string token is always even.  The end of a quoted string token is */
+/*     string token is always even. The end of a quoted string token is */
 /*     located at the first even-numbered quote character, counting from */
 /*     the initial quote character, that is  not the first member of a */
 /*     pair of quotes indicating an embedded quote character. */
@@ -240,12 +240,20 @@
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 03-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.0, 08-MAY-1996 (WLT) */
 
-/*        Corrected the problem with an unintitialized variable */
+/*        Corrected the problem with an uninitialized variable */
 /*        INLEN that was detected on the HP and reported by Steve */
 /*        Schlaifer of MASL. */
 

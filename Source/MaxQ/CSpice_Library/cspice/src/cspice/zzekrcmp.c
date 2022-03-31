@@ -671,11 +671,11 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 /*         handle these errors. */
 
 /*     4)  If the data type code in the input column descriptor is not */
-/*         recognized, the error SPICE(INVALIDDATATYPE) is signalled. */
+/*         recognized, the error SPICE(INVALIDDATATYPE) is signaled. */
 /*         The function value is .FALSE. in this case. */
 
 /*     5)  If the relational operator code OP is not recognized, the */
-/*         error SPICE(UNNATURALRELATION) is signalled. */
+/*         error SPICE(UNNATURALRELATION) is signaled. */
 /*         The function value is .FALSE. in this case. */
 
 /* $ Files */
@@ -695,7 +695,7 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 /* $ Restrictions */
 
 /*     1)  This routine must execute quickly.  Therefore, it checks in */
-/*         only if it detects an error.  If an error is signalled by a */
+/*         only if it detects an error.  If an error is signaled by a */
 /*         routine called by this routine, this routine will not appear */
 /*         in the SPICELIB traceback display.  Also, in the interest */
 /*         of speed, this routine does not test the value of the SPICELIB */
@@ -711,10 +711,14 @@ logical zzekrcmp_(integer *op, integer *ncols, integer *han1, integer *sgdsc1,
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
+
 /* -    SPICELIB Version 1.0.1, 02-JAN-2007 (EDW) */
 
 /*        Edited to remove typo in function declaration. */
-/*        Declaration included an extraneous continutation */
+/*        Declaration included an extraneous continuation */
 /*        marker. */
 
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      EUL2M ( Euler angles to matrix ) */
+/* $Procedure EUL2M ( Euler angles to matrix ) */
 /* Subroutine */ int eul2m_(doublereal *angle3, doublereal *angle2, 
 	doublereal *angle1, integer *axis3, integer *axis2, integer *axis1, 
 	doublereal *r__)
@@ -61,7 +61,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ANGLE3, */
 /*     ANGLE2, */
@@ -71,7 +71,6 @@
 /*     AXIS2, */
 /*     AXIS1      I   Axis numbers of third, second, and first rotation */
 /*                    axes. */
-
 /*     R          O   Product of the 3 rotations. */
 
 /* $ Detailed_Input */
@@ -79,64 +78,60 @@
 /*     ANGLE3, */
 /*     ANGLE2, */
 /*     ANGLE1, */
-
 /*     AXIS3, */
 /*     AXIS2, */
-/*     AXIS1          are, respectively, a set of three angles and three */
-/*                    coordinate axis numbers; each pair ANGLEx and */
-/*                    AXISx specifies a coordinate transformation */
-/*                    consisting of a rotation by ANGLEx radians about */
-/*                    the coordinate axis indexed by AXISx.  These */
-/*                    coordinate transformations are typically */
-/*                    symbolized by */
+/*     AXIS1    are, respectively, a set of three angles and three */
+/*              coordinate axis numbers; each pair ANGLEx and AXISx */
+/*              specifies a coordinate transformation consisting of a */
+/*              rotation by ANGLEx radians about the coordinate axis */
+/*              indexed by AXISx. These coordinate transformations are */
+/*              typically symbolized by */
 
-/*                       [ ANGLEx ]     . */
-/*                                 AXISx */
+/*                 [ ANGLEx ]     . */
+/*                           AXISx */
 
-/*                    See the $ Particulars section below for details */
-/*                    concerning this notation. */
+/*              See the $Particulars section below for details concerning */
+/*              this notation. */
 
-/*                    Note that these coordinate transformations rotate */
-/*                    vectors by */
+/*              Note that these coordinate transformations rotate vectors */
+/*              by */
 
-/*                       -ANGLEx */
+/*                 -ANGLEx */
 
-/*                    radians about the axis indexed by AXISx. */
+/*              radians about the axis indexed by AXISx. */
 
-/*                    The values of AXISx may be 1, 2, or 3, indicating */
-/*                    the x, y, and z axes respectively. */
+/*              The values of AXISx may be 1, 2, or 3, indicating the X, */
+/*              Y, and Z axes respectively. */
 
 /* $ Detailed_Output */
 
-/*     R              is a rotation matrix representing the composition */
-/*                    of the rotations defined by the input angle-axis */
-/*                    pairs.  Together, the three pairs specify a */
-/*                    composite transformation that is the result of */
-/*                    performing the rotations about the axes indexed */
-/*                    by AXIS1, AXIS2, and AXIS3, in that order.  So, */
+/*     R        is a rotation matrix representing the composition of the */
+/*              rotations defined by the input angle-axis pairs. */
+/*              Together, the three pairs specify a composite */
+/*              transformation that is the result of performing the */
+/*              rotations about the axes indexed by AXIS1, AXIS2, and */
+/*              AXIS3, in that order. So, */
 
-/*                       R = [ ANGLE3 ]    [ ANGLE2 ]      [ ANGLE1 ] */
-/*                                    AXIS3          AXIS2          AXIS1 */
+/*                 R = [ ANGLE3 ]      [ ANGLE2 ]      [ ANGLE1 ] */
+/*                               AXIS3           AXIS2           AXIS1 */
 
-/*                    See the $ Particulars section below for details */
-/*                    concerning this notation. */
+/*              See the $Particulars section below for details concerning */
+/*              this notation. */
 
-/*                    The resulting matrix R may be thought of as a */
-/*                    coordinate transformation; applying it to a vector */
-/*                    yields the vector's coordinates in the rotated */
-/*                    system. */
+/*              The resulting matrix R may be thought of as a coordinate */
+/*              transformation; applying it to a vector yields the */
+/*              vector's coordinates in the rotated system. */
 
-/*                    Viewing R as a coordinate transformation matrix, */
-/*                    the basis that R transforms vectors to is created */
-/*                    by rotating the original coordinate axes first by */
-/*                    ANGLE1 radians about the coordinate axis indexed */
-/*                    by AXIS1, next by ANGLE2 radians about the */
-/*                    coordinate axis indexed by AXIS2, and finally by */
-/*                    ANGLE3 radians about coordinate axis indexed by */
-/*                    AXIS3.  At the second and third steps of this */
-/*                    process, the coordinate axes about which rotations */
-/*                    are performed belong to the bases resulting from */
-/*                    the previous rotations. */
+/*              Viewing R as a coordinate transformation matrix, the */
+/*              basis that R transforms vectors to is created by rotating */
+/*              the original coordinate axes first by ANGLE1 radians */
+/*              about the coordinate axis indexed by AXIS1, next by */
+/*              ANGLE2 radians about the coordinate axis indexed by */
+/*              AXIS2, and finally by ANGLE3 radians about coordinate */
+/*              axis indexed by AXIS3. At the second and third steps of */
+/*              this process, the coordinate axes about which rotations */
+/*              are performed belong to the bases resulting from the */
+/*              previous rotations. */
 
 /* $ Parameters */
 
@@ -144,11 +139,11 @@
 
 /* $ Exceptions */
 
-/*     1)   If any of AXIS3, AXIS2, or AXIS1 do not have values in */
+/*     1)  If any of AXIS3, AXIS2, or AXIS1 do not have values in */
 
-/*             { 1, 2, 3 }, */
+/*            { 1, 2, 3 } */
 
-/*          the error SPICE(BADAXISNUMBERS) is signalled. */
+/*         the error SPICE(BADAXISNUMBERS) is signaled. */
 
 /* $ Files */
 
@@ -156,7 +151,7 @@
 
 /* $ Particulars */
 
-/*     A word about notation:  the symbol */
+/*     A word about notation: the symbol */
 
 /*        [ x ] */
 /*             i */
@@ -170,17 +165,17 @@
 /*     indicates a coordinate system rotation of x radians about the */
 /*     first, or x-, axis; the corresponding matrix is */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  1      0       0    | */
 /*        |                      | */
-/*        |  0    cos(x)  sin(x) |. */
+/*        |  0    cos(x)  sin(x) | */
 /*        |                      | */
 /*        |  0   -sin(x)  cos(x) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     Remember, this is a COORDINATE SYSTEM rotation by x radians; this */
 /*     matrix, when applied to a vector, rotates the vector by -x */
-/*     radians, not x radians.  Applying the matrix to a vector yields */
+/*     radians, not x radians. Applying the matrix to a vector yields */
 /*     the vector's representation relative to the rotated coordinate */
 /*     system. */
 
@@ -192,13 +187,13 @@
 
 /*     which symbolizes the matrix */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        | cos(x)   0   -sin(x) | */
 /*        |                      | */
-/*        |  0       1      0    |, */
+/*        |  0       1      0    | */
 /*        |                      | */
 /*        | sin(x)   0    cos(x) | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     and the analogous rotation about the third, or z-, axis is */
 /*     represented by */
@@ -208,17 +203,17 @@
 
 /*     which symbolizes the matrix */
 
-/*        +-                    -+ */
+/*        .-                    -. */
 /*        |  cos(x)  sin(x)   0  | */
 /*        |                      | */
-/*        | -sin(x)  cos(x)   0  |. */
+/*        | -sin(x)  cos(x)   0  | */
 /*        |                      | */
 /*        |  0        0       1  | */
-/*        +-                    -+ */
+/*        `-                    -' */
 
 /*     From time to time, (depending on one's line of work, perhaps) one */
 /*     may happen upon a pair of coordinate systems related by a */
-/*     sequence of rotations.  For example, the coordinate system */
+/*     sequence of rotations. For example, the coordinate system */
 /*     defined by an instrument such as a camera is sometime specified */
 /*     by RA, DEC, and twist; if alpha, delta, and phi are the rotation */
 /*     angles, then the series of rotations */
@@ -230,7 +225,7 @@
 
 /*     This routine is related to the SPICELIB routine M2EUL, which */
 /*     produces a sequence of Euler angles, given a rotation matrix. */
-/*     This routine is a `left inverse' of M2EUL:  the sequence of */
+/*     This routine is a "left inverse" of M2EUL: the sequence of */
 /*     calls */
 
 /*        CALL M2EUL ( R,  AXIS3,   AXIS2,   AXIS1, */
@@ -269,7 +264,7 @@
 /*            C        R  =  [ -50  ]   [  60  ]   [  30  ] */
 /*            C                      3          2          3 */
 /*            C */
-/*            C     All angles in radians, please.   The SPICELIB */
+/*            C     All angles in radians, please. The SPICELIB */
 /*            C     function RPD (radians per degree) gives the */
 /*            C     conversion factor. */
 /*            C */
@@ -343,22 +338,32 @@
 /*               CALL EUL2M (  TWIST,   HALFPI()-DEC,   RA, */
 /*              .              3,       2,              3,   TISP  ) */
 
-
 /* $ Restrictions */
 
-/*     Beware:  more than one definition of "RA, DEC and twist" exists. */
+/*     1)  Beware: more than one definition of "RA, DEC and twist" */
+/*         exists. */
 
 /* $ Literature_References */
 
-/*     [1]  `Galileo Attitude and Camera Models', JPL IOM 314-323, */
-/*           W. M. Owen, Jr.,  Nov. 11, 1983.  NAIF document number */
-/*           204.0. */
+/*     [1]  W. Owen, "Galileo Attitude and Camera Models," JPL */
+/*          Interoffice Memorandum 314-323, Nov. 11, 1983. NAIF document */
+/*          number 204.0. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary entries from $Revisions section. */
 
 /* -    SPICELIB Version 1.2.1, 26-DEC-2006 (NJB) */
 
@@ -382,8 +387,8 @@
 
 /*        Names of input arguments changed to reflect the order in */
 /*        which the rotations are applied when their product is */
-/*        computed.  The header was upgraded to describe notation in */
-/*        more detail.  Examples were added. */
+/*        computed. The header was upgraded to describe notation in */
+/*        more detail. Examples were added. */
 
 /* -    SPICELIB Version 1.0.0, 30-AUG-1990 (NJB) */
 
@@ -395,19 +400,14 @@
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.2.0, 25-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in ROTMAT calls. */
-
 /* -    SPICELIB Version 1.1.0, 02-NOV-1990 (NJB) */
 
 /*        Argument names were changed to describe the use of the */
-/*        arguments more accurately.  The axis and angle numbers */
+/*        arguments more accurately. The axis and angle numbers */
 /*        now decrease, rather than increase, from left to right. */
-/*        The current names reflect the order of operator application */
-/*        when the Euler angle rotations are applied to a vector:  the */
-/*        rightmost matrix */
+/*        The current names reflect the order of operator */
+/*        application when the Euler angle rotations are applied to */
+/*        a vector: the rightmost matrix */
 
 /*           [ ANGLE1 ] */
 /*                     AXIS1 */
@@ -422,10 +422,10 @@
 /*           [ ANGLE3 ] */
 /*                     AXIS3 */
 
-/*        Previously, the names reflected the order in which the Euler */
-/*        angle matrices appear on the page, from left to right.  This */
-/*        naming convention was found to be a bit obtuse by a various */
-/*        users. */
+/*        Previously, the names reflected the order in which the */
+/*        Euler angle matrices appear on the page, from left to */
+/*        right. This naming convention was found to be a bit */
+/*        obtuse by a various users. */
 
 /*        No change in functionality was made; the operation of the */
 /*        routine is identical to that of the previous version. */
@@ -433,15 +433,16 @@
 /*        Two new examples were added to assist users in verifying */
 /*        their understanding of the routine. */
 
-/*        Also, the header was upgraded to describe the notation in more */
-/*        detail.  The symbol */
+/*        Also, the header was upgraded to describe the notation in */
+/*        more detail. The symbol */
 
 /*           [ x ] */
 /*                i */
 
-/*        is explained at mind-numbing length.  An example was added */
-/*        that shows a specific set of inputs and the resulting output */
-/*        matrix. */
+/*        is explained at mind-numbing length. An example was */
+/*        added that shows a specific set of inputs and the */
+/*        resulting output matrix. */
+
 /* -& */
 
 /*     SPICELIB functions */

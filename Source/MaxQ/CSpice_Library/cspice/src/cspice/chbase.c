@@ -50,7 +50,6 @@ integer chbase_(void)
 /*     CONSTANTS */
 
 /* $ Declarations */
-/*     None. */
 /* $ Brief_I/O */
 
 /*     The function returns the base value used to encode unsigned */
@@ -73,7 +72,7 @@ integer chbase_(void)
 
 /*           ( ICHAR ( CHAR ( CHBASE ) ) .EQ. CHBASE ) */
 
-/*     is false. */
+/*     is .FALSE. */
 
 /*     Note that CHBASE can be (and probably is) different from the */
 /*     number of characters in the character set used by the processor. */
@@ -159,28 +158,38 @@ integer chbase_(void)
 
 /* $ Literature_References */
 
-/*     1. "Programming in VAX FORTRAN", Digital Equipment Corporation, */
-/*        September 1984, Section 8.3, page 8-6. */
+/*     [1]  "Programming in VAX FORTRAN", Digital Equipment Corporation, */
+/*          Section 8.3, pp.8-6, September 1984. */
 
-/*     2. "Microsoft FORTRAN Reference", Microsoft Corporation, */
-/*        1989, Section 5.1.1, page 241. */
+/*     [2]  "Microsoft FORTRAN Reference", Microsoft Corporation, */
+/*          Section 5.1.1, p.241, 1989. */
 
-/*     3. "Language Systems FORTRAN Reference Manual", Language Systems */
-/*        Corporation, version 1.2.1, page 3-20. */
+/*     [3]  "Language Systems FORTRAN Reference Manual", Language Systems */
+/*          Corporation, version 1.2.1, pp.3-20. */
 
-/*     4. "Lahey F77L EM/32 FORTRAN Language Reference Manual", page */
-/*        222, Note 20. */
+/*     [4]  "Lahey F77L EM/32 FORTRAN Language Reference Manual", p.222, */
+/*          Note 20. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     M.J. Spencer    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 2.26.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.26.0, 10-MAR-2014 (BVS) */
 
@@ -293,25 +302,25 @@ integer chbase_(void)
 /* -    SPICELIB Version 2.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 2.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 2.0.2, 28-JUL-1999 (WLT) */
 
-/*       The environment lines were expanded so that the supported */
-/*       environments are now explicitely given.  New */
-/*       environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
+/*        The environment lines were expanded so that the supported */
+/*        environments are now explicitly given. New */
+/*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 2.0.1, 18-MAR-1999 (WLT) */
 
-/*       The environment lines were expanded so that the supported */
-/*       environments are now explicitely given.  Previously, */
-/*       environments such as SUN-SUNOS and SUN-SOLARIS were implied */
-/*       by the environment label SUN. */
+/*        The environment lines were expanded so that the supported */
+/*        environments are now explicitly given. Previously, */
+/*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
+/*        by the environment label SUN. */
 
 /* -    SPICELIB Version 2.0.0, 05-APR-1998 (NJB) */
 
@@ -329,7 +338,7 @@ integer chbase_(void)
 /*        value for the Hewlett Packard UX 9000/750 environment, */
 /*        and the value for the Sun was changed from 128 to 256. */
 /*        Both changes are the result of running the program in */
-/*        the Particulars section of the header on both machines. */
+/*        the $Particulars section of the header on both machines. */
 
 /* -    SPICELIB Version 1.3.1, 10-MAR-1999 (WLT) */
 
@@ -350,7 +359,7 @@ integer chbase_(void)
 
 /*        Module was updated to include the character base */
 /*        value for the Sun. Sources for the values contained */
-/*        in this module are now specified in the Literature_References */
+/*        in this module are now specified in the $Literature_References */
 /*        section. */
 
 /* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
@@ -368,7 +377,7 @@ integer chbase_(void)
 /*        It was discovered that linux distributions shipping */
 /*        versions of g77 derived off of gcc versions 2.96-3.00 */
 /*        suffer from in implementation change in ICHAR that */
-/*        requires CHBASE to change to 128.  Since restricting */
+/*        requires CHBASE to change to 128. Since restricting */
 /*        CHBASE to 128 has little impact on other linux */
 /*        environments utilizing other versions of g77 or fort77, */
 /*        we elected to make the change to all environments */
@@ -380,7 +389,7 @@ integer chbase_(void)
 /*        value for the Hewlett Packard UX 9000/750 environment, */
 /*        and the value for the Sun was changed from 128 to 256. */
 /*        Both changes are the result of running the program in */
-/*        the Particulars section of the header on both machines. */
+/*        the $Particulars section of the header on both machines. */
 
 /*        The previous Sun value was computed on the Sun3 and was */
 /*        not updated when we moved to the Sun4. Everything passed */
@@ -391,7 +400,7 @@ integer chbase_(void)
 
 /* -    Beta Version 1.1.0, 16-FEB-1989 (HAN) (NJB) */
 
-/*        Contents of the Exceptions section was changed */
+/*        Contents of the $Exceptions section was changed */
 /*        to "error free" to reflect the decision that the */
 /*        module will never participate in error handling. */
 

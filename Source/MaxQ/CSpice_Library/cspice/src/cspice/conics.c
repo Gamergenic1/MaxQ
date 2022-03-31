@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CONICS ( Determine state from conic elements ) */
+/* $Procedure CONICS ( Determine state from conic elements ) */
 /* Subroutine */ int conics_(doublereal *elts, doublereal *et, doublereal *
 	state)
 {
@@ -88,48 +88,56 @@
 
 /* $ Detailed_Input */
 
-/*     ELTS       are conic elements describing the orbit of a body */
-/*                around a primary. The elements are, in order: */
+/*     ELTS     are conic elements describing the orbit of a body */
+/*              around a primary. The elements are, in order: */
 
-/*                      RP      Perifocal distance. */
-/*                      ECC     Eccentricity. */
-/*                      INC     Inclination. */
-/*                      LNODE   Longitude of the ascending node. */
-/*                      ARGP    Argument of periapse. */
-/*                      M0      Mean anomaly at epoch. */
-/*                      T0      Epoch. */
-/*                      MU      Gravitational parameter. */
+/*                 RP      Perifocal distance. */
+/*                 ECC     Eccentricity. */
+/*                 INC     Inclination. */
+/*                 LNODE   Longitude of the ascending node. */
+/*                 ARGP    Argument of periapse. */
+/*                 M0      Mean anomaly at epoch. */
+/*                 T0      Epoch. */
+/*                 MU      Gravitational parameter. */
 
-/*                Units are km, rad, rad/sec, km**3/sec**2.  The epoch */
-/*                is given in ephemeris seconds past J2000. The same */
-/*                elements are used to describe all three types */
-/*                (elliptic, hyperbolic, and parabolic) of conic orbit. */
+/*              Units are km, rad, rad/sec, km**3/sec**2. The epoch */
+/*              is given in ephemeris seconds past J2000. The same */
+/*              elements are used to describe all three types */
+/*              (elliptic, hyperbolic, and parabolic) of conic orbit. */
 
-/*     ET         is the time at which the state of the orbiting body */
-/*                is to be determined, in ephemeris seconds J2000. */
+/*     ET       is the time at which the state of the orbiting body */
+/*              is to be determined, in ephemeris seconds J2000. */
 
 /* $ Detailed_Output */
 
-/*     STATE      is the state (position and velocity) of the body at */
-/*                time ET. Components are x, y, z, dx/dt, dy/dt, dz/dt. */
+/*     STATE    is the state (position and velocity) of the body at */
+/*              time ET. Components are x, y, z, dx/dt, dy/dt, dz/dt. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the eccentricity supplied is less than 0, the error */
-/*        'SPICE(BADECCENTRICITY)' is signalled. */
+/*     1)  If the eccentricity supplied is less than 0, the error */
+/*         SPICE(BADECCENTRICITY) is signaled. */
 
-/*     2) If a non-positive periapse distance is supplied, the error */
-/*       'SPICE(BADPERIAPSEVALUE)' is signalled. */
+/*     2)  If a non-positive periapse distance is supplied, the error */
+/*         SPICE(BADPERIAPSEVALUE) is signaled. */
 
-/*     3) If a non-positive value for the attracting mass is supplied, */
-/*        the error 'SPICE(BADGM)',  is signalled. */
+/*     3)  If a non-positive value for the attracting mass is supplied, */
+/*         the error SPICE(BADGM) is signaled. */
 
-/*     4) Errors such as an out of bounds value for ET are diagnosed */
-/*        by routines called by this routine. */
+/*     4)  If ELTS is such that the resulting orbit at periapsis has */
+/*         either its position or velocity equal to zero, or the square */
+/*         of the resulting specific angular momentum's magnitude is */
+/*         zero, an error is signaled by a routine in the call tree of */
+/*         this routine. This is an indication of invalid ELTS elements. */
+
+/*     5)  If ET is such that the offset in time from periapsis, at which */
+/*         the state is to be determined, is so large that there is a */
+/*         danger of floating point overflow during computation, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -170,19 +178,30 @@
 
 /* $ Literature_References */
 
-/*     [1] Roger Bate, Fundamentals of Astrodynamics, Dover, 1971. */
+/*     [1]  R. Bate, D. Mueller, and J. White, "Fundamentals of */
+/*          Astrodynamics," Dover Publications Inc., 1971. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary entries in $Revisions section. */
+
+/*        Added entry #4 and updated entry #5 in $Exceptions section. */
 
 /* -    SPICELIB Version 4.0.0, 26-MAR-1998 (WLT) */
 
 /*        There was a coding error in the computation of the mean */
-/*        anomaly in the parabolic case.  This problem has been */
+/*        anomaly in the parabolic case. This problem has been */
 /*        corrected. */
 
 /* -    SPICELIB Version 3.0.1, 15-OCT-1996 (WLT) */
@@ -193,7 +212,7 @@
 /* -    SPICELIB Version 3.0.0, 12-NOV-1992 (WLT) */
 
 /*        The routine was re-written to make use of NAIF's universal */
-/*        variables formulation for state propagation (PROP2B).  As */
+/*        variables formulation for state propagation (PROP2B). As */
 /*        a result, several problems were simultaneously corrected. */
 
 /*        A major bug was fixed that caused improper state evaluations */
@@ -205,9 +224,9 @@
 
 /*        In addition to this reformulation of CONICS checks were */
 /*        installed that ensure the elements supplied are physically */
-/*        meaningful.  Eccentricity must be non-negative. The */
-/*        distance at periapse and central mass must be positive.  If */
-/*        not errors are signalled. */
+/*        meaningful. Eccentricity must be non-negative. The */
+/*        distance at periapse and central mass must be positive. If */
+/*        not errors are signaled. */
 
 /* -    SPICELIB Version 2.0.1, 10-MAR-1992 (WLT) */
 
@@ -228,44 +247,36 @@
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 3.0.1, 15-OCT-1996 (WLT) */
-
-/*        Corrected a typo in the description of the units associated */
-/*        with the input elements. */
-
 /* -    SPICELIB Version 3.0.0, 12-NOV-1992 (WLT) */
 
 /*        The routine was re-written to make use of NAIF's universal */
-/*        variables formulation for state propagation (PROP2B).  As */
+/*        variables formulation for state propagation (PROP2B). As */
 /*        a result, several problems were simultaneously corrected. */
 
-/*        A major bug was fixed that caused improper state evaluations */
-/*        for ET's that precede the epoch of the elements in the */
-/*        elliptic case. */
+/*        A major bug was fixed that caused improper state */
+/*        evaluations for ET's that precede the epoch of the */
+/*        elements in the elliptic case. */
 
 /*        A danger of non-convergence in the solution of Kepler's */
 /*        equation has been eliminated. */
 
 /*        In addition to this reformulation of CONICS checks were */
 /*        installed that ensure the elements supplied are physically */
-/*        meaningful.  Eccentricity must be non-negative. The */
-/*        distance at periapse and central mass must be positive.  If */
-/*        not errors are signalled. */
+/*        meaningful. Eccentricity must be non-negative. The */
+/*        distance at periapse and central mass must be positive. */
+/*        If not errors are signaled. */
 
 /*        These changes were prompted by the discovery that the old */
-/*        formulation had a severe bug for elliptic orbits and epochs */
-/*        prior to the epoch of the input elements, and by the discovery */
-/*        that the time of flight routines had problems with convergence. */
+/*        formulation had a severe bug for elliptic orbits and */
+/*        epochs prior to the epoch of the input elements, and by */
+/*        the discovery that the time of flight routines had */
+/*        problems with convergence. */
 
 /* -    SPICELIB Version 2.0.0, 19-APR-1991 (WLT) */
 
 /*        The original version of the routine had a bug in that */
 /*        it attempted to restrict the hyperbolic anomaly to */
-/*        the interval 0 to 2*PI.  This has been fixed. */
-
-/* -    Beta Version 1.0.1, 27-JAN-1989 (IMU) */
-
-/*        Examples section completed. */
+/*        the interval 0 to 2*PI. This has been fixed. */
 
 /* -& */
 

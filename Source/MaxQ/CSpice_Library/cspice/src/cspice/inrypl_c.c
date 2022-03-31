@@ -3,9 +3,9 @@
 -Procedure inrypl_c ( Intersection of ray and plane )
 
 -Abstract
- 
-   Find the intersection of a ray and a plane. 
- 
+
+   Find the intersection of a ray and a plane.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   PLANES 
- 
+
+   PLANES
+
 -Keywords
- 
-   GEOMETRY 
- 
+
+   GEOMETRY
+
 */
    #include <math.h>
    #include "SpiceUsr.h"
@@ -51,275 +51,270 @@
                    ConstSpiceDouble     dir    [3],
                    ConstSpicePlane    * plane,
                    SpiceInt           * nxpts,
-                   SpiceDouble          xpt    [3] ) 
+                   SpiceDouble          xpt    [3] )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   vertex, 
-   dir        I   Vertex and direction vector of ray. 
-   plane      I   A CSPICE plane. 
-   nxpts      O   Number of intersection points of ray and plane. 
-   xpt        O   Intersection point, if nxpts = 1. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   vertex,
+   dir        I   Vertex and direction vector of ray.
+   plane      I   A SPICE plane.
+   nxpts      O   Number of intersection points of ray and plane.
+   xpt        O   Intersection point, if nxpts = 1.
+
 -Detailed_Input
- 
-   vertex, 
-   dir            are a point and direction vector that define a 
-                  ray in three-dimensional space. 
- 
-   plane          is a CSPICE plane. 
- 
+
+   vertex,
+   dir         are a point and direction vector that define a
+               ray in three-dimensional space.
+
+   plane       is a SPICE plane.
+
 -Detailed_Output
- 
-   nxpts          is the number of points of intersection of the 
-                  input ray and plane.  Values and meanings of 
-                  nxpts are: 
- 
-                     0     No intersection. 
- 
-                     1     One point of intersection.  Note that 
-                           this case may occur when the ray's 
-                           vertex is in the plane. 
- 
-                    -1     An infinite number of points of 
-                           intersection; the ray lies in the plane. 
- 
- 
-   xpt            is the point of intersection of the input ray 
-                  and plane, when there is exactly one point of 
-                  intersection. 
-                  
-                  If the ray lies in the plane, xpt is set equal to
-                  vertex.
-                  
-                  If there is no intersection, xpt is the zero vector. 
- 
+
+   nxpts       is the number of points of intersection of the
+               input ray and plane. Values and meanings of
+               nxpts are:
+
+                  0     No intersection.
+
+                  1     One point of intersection. Note that
+                        this case may occur when the ray's
+                        vertex is in the plane.
+
+                 -1     An infinite number of points of
+                        intersection; the ray lies in the plane.
+
+
+   xpt         is the point of intersection of the input ray
+               and plane, when there is exactly one point of
+               intersection.
+
+               If the ray lies in the plane, xpt is set equal to
+               vertex.
+
+               If there is no intersection, xpt is the zero vector.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If the ray's direction vector is the zero vector, the error 
-       SPICE(ZEROVECTOR) is signaled.  nxpts and xpt are not 
-       modified. 
- 
- 
-   2)  If the ray's vertex is further than dpmax_c() / 3 from the 
-       origin, the error SPICE(VECTORTOOBIG) is signaled.  nxpts 
-       and xpt are not modified. 
- 
- 
-   3)  If the input plane is s further than dpmax_c() / 3 from the 
-       origin, the error SPICE(VECTORTOOBIG) is signaled.  nxpts 
-       and xpt are not modified. 
- 
- 
-   4)  The input plane should be created by one of the CSPICE 
-       routines 
- 
+
+   1)  If the ray's direction vector is the zero vector, the error
+       SPICE(ZEROVECTOR) is signaled. `nxpts' and `xpt' are not modified.
+
+   2)  If the ray's vertex is further than dpmax_c / 3 from the origin,
+       the error SPICE(VECTORTOOBIG) is signaled. `nxpts' and `xpt' are not
+       modified.
+
+   3)  If the input plane is further than dpmax_c / 3 from the origin, the
+       error SPICE(VECTORTOOBIG) is signaled. `nxpts' and `xpt' are not
+       modified.
+
+   4)  The input plane should be created by one of the CSPICE
+       routines
+
           nvc2pl_c
           nvp2pl_c
           psv2pl_c
- 
-       Invalid input planes will cause unpredictable results. 
- 
- 
-   5)  In the interest of good numerical behavior, in the case 
-       where the ray's vertex is not in the plane, this routine 
-       considers that an intersection of the ray and plane occurs 
-       only if the distance between the ray's vertex and the 
-       intersection point is less than dpmax_c() / 3. 
- 
-       If vertex is not in the plane and this condition is not 
-       met, then nxpts is set to 0 and xpt is set to the zero 
-       vector. 
- 
+
+       Invalid input planes will cause unpredictable results.
+
+   5)  In the interest of good numerical behavior, in the case
+       where the ray's vertex is not in the plane, this routine
+       considers that an intersection of the ray and plane occurs
+       only if the distance between the ray's vertex and the
+       intersection point is less than dpmax_c / 3.
+
+       If `vertex' is not in the plane and this condition is not
+       met, then `nxpts' is set to 0 and `xpt' is set to the zero
+       vector.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   The intersection of a ray and plane in three-dimensional space 
-   can be a the empty set, a single point, or the ray itself. 
- 
+
+   The intersection of a ray and plane in three-dimensional space
+   can be a the empty set, a single point, or the ray itself.
+
 -Examples
- 
-   1)  Find the camera projection of the center of an extended 
-       body.  For simplicity, we assume: 
- 
-          -- The camera has no distortion;  the image of a point 
-             is determined by the intersection of the focal plane 
-             and the line determined by the point and the camera's 
-             focal point. 
- 
-          -- The camera's pointing matrix (C-matrix) is available 
-             in a C-kernel. 
- 
- 
+
+   1)  Find the camera projection of the center of an extended
+       body. For simplicity, we assume:
+
+          -- The camera has no distortion;  the image of a point
+             is determined by the intersection of the focal plane
+             and the line determined by the point and the camera's
+             focal point.
+
+          -- The camera's pointing matrix (C-matrix) is available
+             in a C-kernel.
+
+
              /.
-             Load Leapseconds and SCLK kernels to support time 
-             conversion. 
+             Load Leapseconds and SCLK kernels to support time
+             conversion.
              ./
-             
-             furnsh_c ( "leap.ker" ); 
+
+             furnsh_c ( "leap.ker" );
              furnsh_c ( "sclk.ker" );
- 
+
              /.
-             Load an SPK file containing ephemeris data for 
-             observer (a spacecraft, whose NAIF integer code 
-             is sc) and target at the UTC epoch of observation. 
+             Load an SPK file containing ephemeris data for
+             observer (a spacecraft, whose NAIF integer code
+             is sc) and target at the UTC epoch of observation.
              ./
              furnsh_c ( "spk.bsp" );
- 
+
              /.
-             Load a C-kernel containing camera pointing for 
-             the UTC epoch of observation. 
+             Load a C-kernel containing camera pointing for
+             the UTC epoch of observation.
              ./
              furnsh_c ( "ck.bc" ) ;
- 
-            
+
+
              /.
-             Find the ephemeris time (barycentric dynamical time) 
-             and encoded spacecraft clock times corresponding to 
-             the UTC epoch of observation. 
+             Find the ephemeris time (barycentric dynamical time)
+             and encoded spacecraft clock times corresponding to
+             the UTC epoch of observation.
              ./
-             utc2et_c ( utc, &et          ); 
-             sce2c_c  ( sc,  et,  &sclkdp ); 
- 
+             utc2et_c ( utc, &et          );
+             sce2c_c  ( sc,  et,  &sclkdp );
+
              /.
-             Encode the pointing lookup tolerance. 
+             Encode the pointing lookup tolerance.
              ./
-             sctiks_c ( sc, tolch, &toldp ); 
- 
-            
+             sctiks_c ( sc, tolch, &toldp );
+
+
              /.
-             Find the observer-target vector at the observation 
-             epoch.  In this example, we'll use a light-time and stellar
-             aberration corrected state vector. 
+             Find the observer-target vector at the observation
+             epoch. In this example, we'll use a light-time and stellar
+             aberration corrected state vector.
              ./
-             
+
              spkez_c ( target, et, "J2000", "LT+S", sc, state, &lt );
-  
+
              /.
-             Look up camera pointing. 
+             Look up camera pointing.
              ./
-             ckgp_c ( camera, sclkdp, toldp, "J2000", cmat, &clkout, 
-                      &found                                        ); 
- 
+             ckgp_c ( camera, sclkdp, toldp, "J2000", cmat, &clkout,
+                      &found                                        );
+
              if ( !found )
              {
                 /.
-                No pointing was available.  
+                No pointing was available.
                 ./
-                
+
                 [Handle this case...]
-                
+
                 return;
              }
-             
+
              /.
-             Negate the spacecraft-to-target body vector and 
-             convert it to camera coordinates. 
+             Negate the spacecraft-to-target body vector and
+             convert it to camera coordinates.
              ./
              vminus_c ( state, dir       );
              mxv_c    ( cmat,  dir,  dir );
- 
-            
+
+
              /.
-             If FL is the camera's focal length, the effective 
-             focal point is 
-         
-                FL * ( 0, 0, 1 ) 
+             If FL is the camera's focal length, the effective
+             focal point is
+
+                FL * ( 0, 0, 1 )
              ./
-             
-             vscl_c ( FL, zvec, focus ); 
- 
-            
+
+             vscl_c ( FL, zvec, focus );
+
+
              /.
-             The camera's focal plane contains the origin in 
-             camera coordinates, and the z-vector is orthogonal 
-             to the plane.  Make a CSPICE plane representing 
-             the focal plane. 
+             The camera's focal plane contains the origin in
+             camera coordinates, and the z-vector is orthogonal
+             to the plane. Make a SPICE plane representing
+             the focal plane.
              ./
              nvc2pl_c ( zvec, 0., &fplane );
- 
+
              /.
-             The image of the target body's center in the focal 
-             plane is defined by the intersection with the focal 
-             plane of the ray whose vertex is the focal point and 
-             whose direction is dir. 
+             The image of the target body's center in the focal
+             plane is defined by the intersection with the focal
+             plane of the ray whose vertex is the focal point and
+             whose direction is dir.
              ./
-           
+
              inrypl_c ( focus, dir, fplane, &nxpts, image );
- 
-             if ( nxpts == 1 )   
+
+             if ( nxpts == 1 )
              {
                 /.
-                The body center does project to the focal plane. 
-                Check whether the image is actually in the 
-                camera's field of view... 
+                The body center does project to the focal plane.
+                Check whether the image is actually in the
+                camera's field of view...
                 ./
-                
+
                 [Handle this case...]
              }
              else
              {
                 /.
-                The body center does not map to the focal plane. 
+                The body center does not map to the focal plane.
                 ./
-                
+
                 [Handle this case...]
-             } 
- 
-  
+             }
+
+
    2)  Find the Saturn ring plane intercept of a spacecraft-mounted
-       instrument's boresight vector.  We want the find the point
+       instrument's boresight vector. We want the find the point
        in the ring plane that will be observed by an instrument
-       with a give boresight direction at a specified time.  We
+       with a give boresight direction at a specified time. We
        must account for light time and stellar aberration in order
-       to find this point.  The intercept point will be expressed
+       to find this point. The intercept point will be expressed
        in Saturn body-fixed coordinates.
- 
-          -- The ring plane is equatorial. 
- 
-          -- Light travels in a straight line. 
- 
-          -- The light time correction for the ring plane intercept 
-             can be obtained by performing three light-time 
-             correction iterations.  If this assumption does not 
-             lead to a sufficiently accurate result, additional 
-             iterations can be performed. 
- 
+
+          -- The ring plane is equatorial.
+
+          -- Light travels in a straight line.
+
+          -- The light time correction for the ring plane intercept
+             can be obtained by performing three light-time
+             correction iterations. If this assumption does not
+             lead to a sufficiently accurate result, additional
+             iterations can be performed.
+
           -- A Newtonian approximation of stellar aberration
              suffices.
 
-          -- The boresight vector is given in J2000 coordinates. 
- 
-          -- The observation epoch is et ephemeris seconds past 
-             J2000. 
- 
-          -- The boresight vector, spacecraft and planetary 
-             ephemerides, and ring plane orientation are all known 
-             with sufficient accuracy for the application. 
+          -- The boresight vector is given in J2000 coordinates.
+
+          -- The observation epoch is et ephemeris seconds past
+             J2000.
+
+          -- The boresight vector, spacecraft and planetary
+             ephemerides, and ring plane orientation are all known
+             with sufficient accuracy for the application.
 
           -- All necessary kernels are loaded by the caller of
              this example routine.
 
 
-       (A similar technique could be used to obtain low-accuracy 
-       predictions of radio occultations.  In that case, the 
-       instrument boresight ray's direction vector would be replaced 
-       by the vector from the observer to the light-time corrected 
-       radio source position.) 
- 
-       We omit display of the portion of the code that loads SPICE 
-       kernels. 
+       (A similar technique could be used to obtain low-accuracy
+       predictions of radio occultations. In that case, the
+       instrument boresight ray's direction vector would be replaced
+       by the vector from the observer to the light-time corrected
+       radio source position.)
+
+       We omit display of the portion of the code that loads SPICE
+       kernels.
 
           #include "SpiceUsr.h"
           #include "SpiceZfc.h"
@@ -333,8 +328,8 @@
           {
 
              /.
-             Local constants 
-             ./  
+             Local constants
+             ./
              #define SATURN          699
 
              /.
@@ -363,11 +358,11 @@
 
 
              /.
-             First step:  account for stellar aberration.  Since the
+             First step: account for stellar aberration. Since the
              instrument pointing is given, we need to find the intercept
              point such that, when the stellar aberration correction is
              applied to the vector from the spacecraft to that point,
-             the resulting vector is parallel to borvec.  An easy solution
+             the resulting vector is parallel to borvec. An easy solution
              is to apply the inverse of the normal stellar aberration
              correction to borvec, and then solve the intercept problem
              with this corrected boresight vector.
@@ -390,9 +385,9 @@
 
              /.
              We now wish to find the vector corvec that, when corrected for
-             stellar aberration, yields borvec.  A good first approximation is
+             stellar aberration, yields borvec. A good first approximation is
              obtained by applying the stellar aberration correction for
-             transmission to borvec.  Note that the routine called is not
+             transmission to borvec. Note that the routine called is not
              a wrapper, so there is no letter 'c' at the end of its name.
              The prototype for this routine is declared in SpiceZfc.h.
              ./
@@ -401,7 +396,7 @@
              /.
              The inverse of the stellar aberration correction
              applicable to corvec should be a very good estimate of
-             the correction we need to apply to borvec.  Apply
+             the correction we need to apply to borvec. Apply
              this correction to borvec to obtain an improved estimate
              of corvec.
              ./
@@ -413,7 +408,7 @@
              Because the ring plane intercept may be quite far from
              Saturn's center, we cannot assume light time from the intercept
              to the observer is well approximated by light time from
-             Saturn's center to the observer.  We compute the light time
+             Saturn's center to the observer. We compute the light time
              explicitly using an iterative approach.
 
              We can however use the light time from Saturn's center to
@@ -433,7 +428,7 @@
              *found  =  SPICETRUE;
 
              while (  ( i < 3 ) && ( *found )  )
-             { 
+             {
                 /.
                 Find the position of Saturn relative
                 to the solar system barycenter at et-tau.
@@ -448,7 +443,7 @@
 
                 /.
                 Look up Saturn's pole at et-tau; this is the third
-                row of the matrix that transforms J2000 
+                row of the matrix that transforms J2000
                 coordinates to Saturn body-fixed coordinates.
                 ./
                 pxform_c ( "J2000", "IAU_SATURN", et-tau, tipm );
@@ -456,7 +451,7 @@
                 vequ_c ( tipm[2], zvec );
 
                 /.
-                Make a CSPICE plane representing the ring plane.
+                Make a SPICE plane representing the ring plane.
                 We're treating Saturn's center as the origin, so
                 the plane constant is 0.
                 ./
@@ -474,7 +469,7 @@
                 find the next light time estimate.
                 ./
                 if ( nxpts == 1 )
-                { 
+                {
                    /.
                    Find the light time (zero-order) from the
                    intercept point to the spacecraft.
@@ -486,19 +481,19 @@
                 {
                    *found = SPICEFALSE;
                 }
-             } 
+             }
              /.
              At this point, if found is SPICETRUE, we iterated
              three times, and xpt is our estimate of the
              position of the ring plane intercept point
-             relative to Saturn in the J2000 frame.  This is the
+             relative to Saturn in the J2000 frame. This is the
              point observed by an instrument pointed in direction
              borvec at et at mounted on the spacecraft sc.
 
              If found is SPICEFALSE, the boresight ray does not
              intersect the ring plane.
 
-             As a final step, tranform xpt to Saturn body-fixed
+             As a final step, transform xpt to Saturn body-fixed
              coordinates.
              ./
              if ( *found )
@@ -508,22 +503,25 @@
 
           }
 
- 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL)
-   B.V. Semenov   (JPL)
-   W.L. Taber     (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+
 -Version
+
+   -CSPICE Version 1.0.3, 24-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
 
    -CSPICE Version 1.0.2, 01-FEB-2017 (BVS)
 
@@ -531,17 +529,17 @@
 
    -CSPICE Version 1.0.1, 12-DEC-2002 (NJB)
 
-       Header fix:  ring plane intercept algorithm was corrected. 
-       Now light time is computed accurately, and stellar aberration 
-       is accounted for.  Example was turned into a complete
+       Header fix: ring plane intercept algorithm was corrected.
+       Now light time is computed accurately, and stellar aberration
+       is accounted for. Example was turned into a complete
        subroutine.
- 
+
    -CSPICE Version 1.0.0, 26-JUN-1999 (NJB)
 
 -Index_Entries
- 
-   intersection of ray and plane 
- 
+
+   intersection of ray and plane
+
 -&
 */
 
@@ -550,14 +548,13 @@
    /*
    Local constants
    */
-   
    #define MARGIN  3.0
 
 
    /*
    Local macros
    */
-   #define CLEAR_VEC( v )    (v)[0] = 0.; (v)[1] = 0.; (v)[2] = 0.;   
+   #define CLEAR_VEC( v )    (v)[0] = 0.; (v)[1] = 0.; (v)[2] = 0.;
 
    /*
    Local variables
@@ -584,7 +581,7 @@
    {
       return;
    }
-   
+
    chkin_c ( "inrypl_c" );
 
 
@@ -599,7 +596,7 @@
 
    Check the distance of the ray's vertex from the origin.
    */
-   
+
    toobig = dpmax_c() / MARGIN;
 
    if (  vnorm_c (vertex)  >=  toobig  )
@@ -610,13 +607,13 @@
       return;
    }
 
- 
+
    /*
    Check the distance of the plane from the origin.  (The returned
    plane constant IS this distance.)
    */
    pl2nvc_c ( plane, normal, &constant );
- 
+
    if (  constant >=  toobig  )
    {
       setmsg_c ( "Plane is too far from the origin." );
@@ -624,13 +621,13 @@
       chkout_c ( "inrypl_c"                          );
       return;
    }
- 
- 
+
+
    /*
    Check the ray's direction vector.
    */
    vhat_c ( dir, udir );
- 
+
    if ( vzero_c (udir) )
    {
       setmsg_c ( "Ray's direction vector is the zero vector."  );
@@ -638,15 +635,15 @@
       chkout_c ( "inrypl_c"                                    );
       return;
    }
- 
-  
+
+
    /*
    That takes care of the error cases.  Now scale the input vertex
    and plane to improve numerical behavior.
    */
    mscale = MaxAbs ( constant, vnorm_c(vertex) );
- 
-   if ( mscale != 0. ) 
+
+   if ( mscale != 0. )
    {
       vscl_c ( 1.0 / mscale, vertex, sclvtx );
       sclcon  =  constant / mscale;
@@ -662,15 +659,15 @@
    {
       toobig = toobig / mscale;
    }
- 
- 
+
+
    /*
    Find the projection (coefficient) of the ray's vertex along the
    plane's normal direction.
    */
-   
+
    prjvn = vdot_c ( sclvtx, normal );
- 
+
    /*
    If this projection is the plane constant, the ray's vertex lies in
    the plane.  We have one intersection or an infinite number of
@@ -680,36 +677,36 @@
    The absolute value of prjdif is the distance of the ray's vertex
    from the plane.
    */
-   
+
    prjdif  =  sclcon - prjvn;
- 
+
    if ( prjdif == 0. )
    {
       /*
       xpt is the original, unscaled vertex.
       */
-      
+
       vequ_c ( vertex, xpt );
- 
+
       if (  vdot_c ( normal, udir ) == 0.  )
       {
          /*
          The ray's in the plane.
          */
-         
+
          *nxpts  =  -1;
       }
       else
       {
          *nxpts  =   1;
       }
- 
+
       chkout_c ( "inrypl_c" );
-      return; 
+      return;
    }
-   
-   
- 
+
+
+
    /*
    Ok, the ray's vertex is not in the plane.  The ray may still be
    parallel to or may point away from the plane.  If the ray does
@@ -753,37 +750,37 @@
 
 
    */
- 
- 
+
+
    /*
    Find the projection of the direction vector along the plane's
    normal vector.
    */
-   
+
    prjdir  =  vdot_c ( udir, normal );
- 
-  
+
+
    /*
    We're done if the ray doesn't point toward the plane.  prjdif
    has already been found to be non-zero at this point; prjdir is
    zero if the ray and plane are parallel.  The CSPICE routine
    smsgnd_ will return a value of SPICEFALSE if prjdir is zero.
    */
-  
+
    if ( ! smsgnd_ (&prjdir, &prjdif)  )
    {
       /*
       The ray is parallel to or points away from the plane.
       */
       *nxpts  = 0;
-      
+
       CLEAR_VEC ( xpt );
- 
+
       chkout_c ( "inrypl_c" );
-      return; 
+      return;
    }
- 
- 
+
+
    /*
    The difference xpt - sclvtx is the hypotenuse of a right triangle
    formed by sclvtx, xpt, and the orthogonal projection of sclvtx
@@ -802,8 +799,8 @@
    the hypotenuse is no longer than toobig.  The product can be
    computed safely since prjdir has magnitude 1 or less.
    */
-   
- 
+
+
    if (  fabs(prjdif)  >=  fabs(prjdir) * toobig  )
    {
       /*
@@ -813,31 +810,30 @@
       CLEAR_VEC ( xpt );
 
       chkout_c ( "inrypl_c" );
-      return; 
+      return;
    }
-   
-    
+
+
    /*
    We conclude that it's safe to compute xpt.  Scale udir and add
    the result to sclvtx.  The addition is safe because both addends
    have magnitude no larger than toobig.  The vector thus obtained
    is the intersection point.
    */
-   
+
    *nxpts   =   1;
    scale    =   fabs (prjdif)  /   fabs (prjdir);
- 
+
    vlcom_c ( 1.0, sclvtx, scale, udir, xpt );
- 
+
    /*
    Re-scale xpt.  This is safe, since toobig has already been
    scaled to allow for any growth of xpt at this step.
    */
-   
+
    vscl_c ( mscale, xpt, xpt );
- 
+
 
    chkout_c ( "inrypl_c" );
 
 } /* End inrypl_c */
-

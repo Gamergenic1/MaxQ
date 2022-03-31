@@ -31,12 +31,12 @@
 
 /* $ Abstract */
 
+/*     Deprecated: This routine has been superseded by the SPICELIB */
+/*     routines DAFGDA and DAFGSR. This routine is supported for purposes */
+/*     of backward compatibility only. */
+
 /*     Read the double precision data bounded by two addresses within */
 /*     a DAF. */
-
-/*     Deprecated: This routine has been superseded by DAFGDA and */
-/*     DAFGSR.  This routine is supported for purposes of backward */
-/*     compatibility only. */
 
 /* $ Disclaimer */
 
@@ -74,7 +74,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAF. */
 /*     BEGIN, */
@@ -83,37 +83,36 @@
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a DAF. */
+/*     HANDLE   is the handle of a DAF. */
 
 /*     BEGIN, */
-/*     END         are the initial and final addresses of a contiguous */
-/*                 set of double precision numbers within a DAF. */
-/*                 Presumably, these make up all or part of a particular */
-/*                 array. */
+/*     END      are the initial and final addresses of a contiguous */
+/*              set of double precision numbers within a DAF. */
+/*              Presumably, these make up all or part of a particular */
+/*              array. */
 
 /* $ Detailed_Output */
 
-/*     DATA        are the double precision data contained between */
-/*                 the specified addresses within the specified file. */
+/*     DATA     are the double precision data contained between */
+/*              the specified addresses within the specified file. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If BEGIN is zero or negative, the error SPICE(DAFNEGADDR) */
-/*        is signalled. */
+/*     1)  If BEGIN is zero or negative, the error SPICE(DAFNEGADDR) */
+/*         is signaled. */
 
-/*     2) If the BEGIN > END, the error SPICE(DAFBEGGTEND) */
-/*        is signalled. */
+/*     2)  If BEGIN > END, the error SPICE(DAFBEGGTEND) is signaled. */
 
-/*     3) If the file associated with HANDLE is not of the native */
-/*        binary file format this routine signals the error */
-/*        SPICE(UNSUPPORTEDBFF). */
+/*     3)  If the file associated with HANDLE is not of the native */
+/*         binary file format, the error SPICE(UNSUPPORTEDBFF) is */
+/*         signaled. */
 
-/*     4) If HANDLE is invalid, routines in the call tree of DAFRDA */
-/*        signal an appropriate error. */
+/*     4)  If HANDLE is invalid, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
 /* $ Files */
 
@@ -128,8 +127,8 @@
 /*     records in which they are stored. */
 
 /*     This routine has been made obsolete by the routines DAFGDA and */
-/*     DAFGSR.  This routine is supported for reasons of backward */
-/*     compatibility only.  New software development should utilize */
+/*     DAFGSR. This routine is supported for reasons of backward */
+/*     compatibility only. New software development should utilize */
 /*     DAFGDA or DAFGSR. */
 
 /* $ Examples */
@@ -155,7 +154,6 @@
 /*           END IF */
 /*        END DO */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -166,10 +164,21 @@
 
 /* $ Author_and_Institution */
 
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.2, 18-MAY-2010 (BVS) */
 
@@ -178,7 +187,7 @@
 /* -    SPICELIB Version 2.0.1, 27-OCT-2003 (NJB) */
 
 /*        The header now states that this routine is deprecated. */
-/*        The Exceptions header section has been extended. */
+/*        The $Exceptions header section has been extended. */
 /*        Minor additional header updates were made. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
@@ -199,7 +208,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     DEPRECATED read data from daf address */
+/*     DEPRECATED read data from DAF address */
 
 /* -& */
 /* $ Revisions */
@@ -209,13 +218,13 @@
 /*        The exception SPICE(UNSUPPORTEDBFF) was added to guarantee */
 /*        this routine's functionality remains unchanged as a result */
 /*        of the updates to the underlying DAF software's utilization of */
-/*        the handle manager.  In versions of the Toolkit prior to this, */
+/*        the handle manager. In versions of the Toolkit prior to this, */
 /*        all DAFs loaded were of the native binary file format. */
 /*        While rather unlikely, this routine could be used to read */
 /*        the contents of summary records in addition to the usual */
-/*        data records.  The non-native to native translation process */
+/*        data records. The non-native to native translation process */
 /*        for these two different types of records in general are not */
-/*        the same.  Rather than attempt to interpret the caller's */
+/*        the same. Rather than attempt to interpret the caller's */
 /*        intent, this routine is deprecated and restricted to */
 /*        functioning only on DAFs of the native binary file format. */
 

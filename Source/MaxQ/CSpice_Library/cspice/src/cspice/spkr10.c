@@ -466,7 +466,7 @@ static integer c__14 = 14;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -476,18 +476,18 @@ static integer c__14 = 14;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a SPK segment of type 10. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a SPK segment of type 10. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 a specific segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              a specific segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the record from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of some body, relative */
-/*                 to some center, in some inertial reference frame. */
+/*     RECORD   is the record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
 /* $ Parameters */
 
@@ -495,12 +495,12 @@ static integer c__14 = 14;
 
 /* $ Exceptions */
 
-/*     1) It is assumed that the descriptor and handle supplied are */
-/*        for a properly constructed type 10 segment.  No checks are */
-/*        performed to ensure this. */
+/*     1)  It is assumed that the descriptor and handle supplied are */
+/*         for a properly constructed type 10 segment. No checks are */
+/*         performed to ensure this. */
 
-/*     2) All errors are diagnosed by routines in the call tree */
-/*        of this routine. */
+/*     2)  If an error occurs while looking up SPK data, the error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -514,9 +514,9 @@ static integer c__14 = 14;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRxx */
+/*     completely. Given that understanding, however, the SPKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -547,25 +547,32 @@ static integer c__14 = 14;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.1, 17-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated entry */
+/*        #2 in $Exceptions section. Moved SPK required reading from */
+/*        $Literature_References to $Required_Reading section. */
+
 /* -    SPICELIB Version 1.1.0, 09-MAR-2009 (EDW) */
 
-/*        Remove declaration of unused varaible DOINT. */
+/*        Removed declaration of unused variable DOINT. */
 
 /* -    SPICELIB Version 1.0.0, 05-JAN-1994 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_10 spk segment */
+/*     read record from type_10 SPK segment */
 
 /* -& */
 

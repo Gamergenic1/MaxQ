@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      VSCLG ( Vector scaling, general dimension ) */
+/* $Procedure VSCLG ( Vector scaling, general dimension ) */
 /* Subroutine */ int vsclg_(doublereal *s, doublereal *v1, integer *ndim, 
 	doublereal *vout)
 {
@@ -64,20 +64,20 @@
 /*     S          I   Scalar to multiply a vector. */
 /*     V1         I   Vector to be multiplied. */
 /*     NDIM       I   Dimension of V1 (and also VOUT). */
-/*     VOUT       O   Product vector, S*V1. */
+/*     VOUT       O   Product vector, S * V1. */
 
 /* $ Detailed_Input */
 
-/*     S      is a double precision scalar. */
+/*     S        is a double precision scalar. */
 
-/*     V1     is a double precision vector of arbitrary dimension. */
+/*     V1       is a double precision n-dimensional vector. */
 
-/*     NDIM   is the dimension of V1 (and VOUT). */
+/*     NDIM     is the dimension of V1 (and VOUT). */
 
 /* $ Detailed_Output */
 
-/*     VOUT   is a double precision vector of arbitrary dimension */
-/*            containing the product of the scalar with the vector V1. */
+/*     VOUT     is a double precision n-dimensional vector containing */
+/*              the product of the scalar with the vector V1. */
 
 /* $ Parameters */
 
@@ -103,20 +103,87 @@
 
 /* $ Examples */
 
-/*     The following table shows the results of VSCLG from various */
-/*     inputs. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        V1                 S           NDIM        VOUT */
-/*        ---------------------------------------------------------- */
-/*        (1, 2, -3, 4)      3            4         ( 3,  6, -9, 12) */
-/*        (1, 2, -3, 4)      0            4         ( 0,  0,  0,  0) */
-/*        (1, 2, -3, 4)     -1            4         (-3, -6,  9,-12) */
+/*     1) Define a sets of scalar double precision values and use them */
+/*        to scale a given n-dimensional vector. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM VSCLG_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NDIM */
+/*              PARAMETER           ( NDIM   = 4 ) */
+
+/*              INTEGER               SETSIZ */
+/*              PARAMETER           ( SETSIZ = 3 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      S    ( SETSIZ ) */
+/*              DOUBLE PRECISION      V1   ( NDIM   ) */
+/*              DOUBLE PRECISION      VOUT ( NDIM   ) */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Define the set of scalars and the input vector. */
+/*        C */
+/*              DATA                  S    / 3.D0, 0.D0, -1.D0 / */
+
+/*              DATA                  V1   / 1.D0, 2.D0, -3.D0, 4.D0  / */
+
+
+/*              WRITE(*,'(A,4F6.1)') 'Input vector : ', V1 */
+/*              WRITE(*,*) */
+
+/*        C */
+/*        C     Calculate product of each scalar and V1. */
+/*        C */
+/*              DO I=1, SETSIZ */
+
+/*                 CALL VSCLG ( S(I), V1, NDIM, VOUT ) */
+
+/*                 WRITE(*,'(A,F6.1)')  'Scale factor : ', S(I) */
+/*                 WRITE(*,'(A,4F6.1)') 'Output vector: ', VOUT */
+/*                 WRITE(*,*) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Input vector :    1.0   2.0  -3.0   4.0 */
+
+/*        Scale factor :    3.0 */
+/*        Output vector:    3.0   6.0  -9.0  12.0 */
+
+/*        Scale factor :    0.0 */
+/*        Output vector:    0.0   0.0  -0.0   0.0 */
+
+/*        Scale factor :   -1.0 */
+/*        Output vector:   -1.0  -2.0   3.0  -4.0 */
+
 
 /* $ Restrictions */
 
-/*     No error checking is performed to guard against numeric overflow. */
-/*     The programmer is thus required to insure that the values in V1 */
-/*     and S are reasonable and will not cause overflow. */
+/*     1)  No error checking is performed to guard against numeric */
+/*         overflow. The programmer is thus required to insure that the */
+/*         values in V1 and S are reasonable and will not cause overflow. */
 
 /* $ Literature_References */
 
@@ -124,9 +191,19 @@
 
 /* $ Author_and_Institution */
 
-/*     W.M. Owen       (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing example. */
 
 /* -    SPICELIB Version 1.0.2, 22-APR-2010 (NJB) */
 
@@ -146,6 +223,9 @@
 /*     n-dimensional vector scaling */
 
 /* -& */
+
+/*     Local variables */
+
     /* Parameter adjustments */
     vout_dim1 = *ndim;
     v1_dim1 = *ndim;
@@ -154,9 +234,9 @@
     i__1 = *ndim;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "vsclg_", (ftnlen)145)] = *s * v1[(i__3 = i__ - 1) < 
+		 i__2, "vsclg_", (ftnlen)228)] = *s * v1[(i__3 = i__ - 1) < 
 		v1_dim1 && 0 <= i__3 ? i__3 : s_rnge("v1", i__3, "vsclg_", (
-		ftnlen)145)];
+		ftnlen)228)];
     }
     return 0;
 } /* vsclg_ */

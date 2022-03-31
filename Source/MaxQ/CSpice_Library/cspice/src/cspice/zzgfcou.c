@@ -53,16 +53,15 @@ static integer c__3 = 3;
 
     /* Local variables */
     static doublereal svre;
-    extern /* Subroutine */ int zzgfcost_(char *, char *, integer *, 
-	    doublereal *, char *, char *, integer *, char *, integer *, 
-	    doublereal *, doublereal *, doublereal *, logical *, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen), zzvalcor_(char *, logical *, 
-	    ftnlen), zzgfcprx_(doublereal *, char *, doublereal *, doublereal 
-	    *, integer *, integer *, ftnlen);
-    integer n;
-    extern /* Subroutine */ int etcal_(doublereal *, char *, ftnlen), chkin_(
-	    char *, ftnlen), ucase_(char *, char *, ftnlen, ftnlen), errch_(
-	    char *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgftreb_(integer *, doublereal *), zzgfcost_(
+	    char *, char *, integer *, doublereal *, char *, char *, integer *
+	    , char *, integer *, doublereal *, doublereal *, doublereal *, 
+	    logical *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), zzvalcor_(
+	    char *, logical *, ftnlen), zzgfcprx_(doublereal *, char *, 
+	    doublereal *, doublereal *, integer *, integer *, ftnlen), etcal_(
+	    doublereal *, char *, ftnlen), chkin_(char *, ftnlen), ucase_(
+	    char *, char *, ftnlen, ftnlen), errch_(char *, char *, ftnlen, 
+	    ftnlen);
     integer class__;
     extern /* Subroutine */ int moved_(doublereal *, integer *, doublereal *);
     logical found;
@@ -79,8 +78,8 @@ static integer c__3 = 3;
     extern doublereal pi_(void);
     extern /* Subroutine */ int cleard_(integer *, doublereal *);
     extern logical bodfnd_(integer *, char *, ftnlen);
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
+    extern /* Subroutine */ int recrad_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
     integer frcode;
     extern integer isrchc_(char *, integer *, char *, ftnlen, ftnlen);
     extern logical return_(void);
@@ -104,22 +103,21 @@ static integer c__3 = 3;
 	    doublereal *, ftnlen);
     doublereal lon;
     extern /* Subroutine */ int reclat_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *), recrad_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *), recsph_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *), reccyl_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
+	    doublereal *, doublereal *), recgeo_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
     static doublereal svf;
-    extern /* Subroutine */ int recgeo_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *), zzgfcoq_(
-	    char *, char *, integer *, doublereal *, char *, char *, integer *
-	    , char *, doublereal *, char *, integer *, doublereal *, 
-	    doublereal *, char *, doublereal *, logical *, ftnlen, ftnlen, 
-	    ftnlen, ftnlen, ftnlen, ftnlen, ftnlen);
+    extern /* Subroutine */ int zzgfcoq_(char *, char *, integer *, 
+	    doublereal *, char *, char *, integer *, char *, doublereal *, 
+	    char *, integer *, doublereal *, doublereal *, char *, doublereal 
+	    *, logical *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen, 
+	    ftnlen);
 
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
-/*     routines.  Users should not call this routine directly due to the */
+/*     routines. Users should not call this routine directly due to the */
 /*     volatile nature of this routine. */
 
 /*     This is the umbrella routine for the entry points needed by */
@@ -588,13 +586,12 @@ static integer c__3 = 3;
 
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     VECDEF     I   COIN */
 /*     METHOD     I   COIN */
 /*     TARGET     I   COIN */
-/*     ET         I   COIN, CODC, COG, COCD, COCG, COSD, */
-/*                    COSG, COEX */
+/*     ET         I   COIN, CODC, COG, COCD, COCG, COSD, COSG, COEX */
 /*     REF        I   COIN */
 /*     ABCORR     I   COIN */
 /*     OBSRVR     I   COIN */
@@ -620,49 +617,49 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1) If this routine is called directly, the error */
-/*        SPICE(BOGUSENTRY) is signaled. */
-
 /*     See the entry points for descriptions of exceptions specific */
 /*     to those routines. */
+
+/*     1)  If this routine is called directly, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
 /*     This suite of routines doesn't directly participate in SPICE */
-/*     kernel loading or unloading.  However, a variety of SPICE kernels */
+/*     kernel loading or unloading. However, a variety of SPICE kernels */
 /*     must be loaded in order for these utilities to work: */
 
-/*        - Since all coordinate computations supported by this routine */
-/*          depend on observer-target vectors, at a minimum, SPK files */
-/*          providing ephemeris data enabling computation of these */
-/*          vectors are required. */
+/*     -  Since all coordinate computations supported by this routine */
+/*        depend on observer-target vectors, at a minimum, SPK files */
+/*        providing ephemeris data enabling computation of these */
+/*        vectors are required. */
 
-/*        - If non-inertial reference frames are used, then PCK */
-/*          files, frame kernels, C-kernels, and SCLK kernels may be */
-/*          needed. */
+/*     -  If non-inertial reference frames are used, then PCK */
+/*        files, frame kernels, C-kernels, and SCLK kernels may be */
+/*        needed. */
 
-/*        - If the coordinate of interest is defined in terms of a target */
-/*          surface point, then (currently) a PCK providing radii for a */
-/*          triaxial shape model must be loaded. */
+/*     -  If the coordinate of interest is defined in terms of a target */
+/*        surface point, then (currently) a PCK providing radii for a */
+/*        triaxial shape model must be loaded. */
 
-/*        - If geodetic coordinates are used, then a PCK providing radii */
-/*          for a triaxial shape model must be loaded. */
+/*     -  If geodetic coordinates are used, then a PCK providing radii */
+/*        for a triaxial shape model must be loaded. */
 
-/*     See the Files section of GFEVNT's header for further information. */
+/*     See the $Files section of GFEVNT's header for further information. */
 
 /* $ Particulars */
 
 /*     This routine serves as the umbrella routine for entry points */
 /*     needed by GFEVNT or other GF routines in order to solve for time */
 /*     windows on which specified mathematical conditions involving */
-/*     coordinates are satisfied.  For brevity, we may refer to such a */
+/*     coordinates are satisfied. For brevity, we may refer to such a */
 /*     time window as the "solution window" or "coordinate solution */
 /*     window." */
 
 /*     The entry points of this package are */
 
 /*        ZZGFCOIN      an initialization routine that must be called */
-/*                      to define the coordinate of interest.  This */
+/*                      to define the coordinate of interest. This */
 /*                      routine must be called at least once before */
 /*                      any of the other entry points are called, but */
 /*                      it may be called as many times as necessary */
@@ -670,7 +667,7 @@ static integer c__3 = 3;
 
 /*                      Below, the phrase "the coordinate" refers */
 /*                      to the coordinate established by the latest */
-/*                      call to ZZGFCOIN.  For example, the coordinate */
+/*                      call to ZZGFCOIN. For example, the coordinate */
 /*                      may be the "geodetic latitude of the sub-moon */
 /*                      point on the earth, relative to the IAU_EARTH */
 /*                      reference frame, computed using light time and */
@@ -692,7 +689,7 @@ static integer c__3 = 3;
 
 /*        The following entry points support solution window */
 /*        computations for conditions involving longitude or right */
-/*        ascension.  They may have applications for relations involving */
+/*        ascension. They may have applications for relations involving */
 /*        other angular coordinates. */
 
 /*        ZZGFCOCD      indicates whether the cosine of the coordinate is */
@@ -728,11 +725,21 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 3.0.0 05-APR-2011 (EDW) */
+/* -    SPICELIB Version 3.1.0, 17-OCT-2021 (EDW) (JDR) */
+
+/*        ZZGFCOIN, body radii accessed from kernel pool */
+/*        using ZZGFTREB. */
+
+/*        Edited the header of the umbrella routine and all its entry */
+/*        points to comply with NAIF standard. */
+
+/* -    SPICELIB Version 3.0.0, 05-APR-2011 (EDW) */
 
 /*        Code edits to implement use of ZZGFRELX. */
 /*        These edits include removal of unneeded routines: */
@@ -746,12 +753,12 @@ static integer c__3 = 3;
 
 /*        Corresponding update to header entries. */
 
-/* -    SPICELIB Version 2.0.0 12-MAY-2009 (NJB) */
+/* -    SPICELIB Version 2.0.0, 12-MAY-2009 (NJB) */
 
 /*        Upgraded to support targets and observers having */
 /*        no names associated with their ID codes. */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -920,183 +927,182 @@ L_zzgfcoin:
 
 /* $ Detailed_Input */
 
+/*     VECDEF   every coordinate computed by this routine is a */
+/*              function of an underlying vector. VECDEF is a short */
+/*              string describing the means by which the vector of */
+/*              interest is defined. Only parameters from the Fortran */
+/*              INCLUDE file zzgf.inc should be used. Parameter names */
+/*              and meanings are: */
 
-/*     VECDEF     Every coordinate computed by this routine is a */
-/*                function of an underlying vector. VECDEF is a short */
-/*                string describing the means by which the vector of */
-/*                interest is defined. Only parameters from the Fortran */
-/*                INCLUDE file zzgf.inc should be used. Parameter names */
-/*                and meanings are: */
+/*                 POSDEF               Vector is position of */
+/*                                      target relative to observer. */
 
-/*                   POSDEF               Vector is position of */
-/*                                        target relative to observer. */
+/*                 SOBDEF               Vector is sub-observer */
+/*                                      point on target body. Vector */
+/*                                      points from target body */
+/*                                      center to sub-observer point. */
+/*                                      The target must be an extended */
+/*                                      body modeled as a triaxial */
+/*                                      ellipsoid. */
 
-/*                   SOBDEF               Vector is sub-observer */
-/*                                        point on target body.  Vector */
-/*                                        points from target body */
-/*                                        center to sub-observer point. */
-/*                                        The target must be an extended */
-/*                                        body modeled as a triaxial */
-/*                                        ellipsoid. */
+/*                 SINDEF               Vector is ray-surface intercept */
+/*                                      point on target body. Vector */
+/*                                      points from target body */
+/*                                      center to sub-observer point. */
+/*                                      The target must be an extended */
+/*                                      body modeled as a triaxial */
+/*                                      ellipsoid. */
 
-/*                   SINDEF               Vector is ray-surface intercept */
-/*                                        point on target body. Vector */
-/*                                        points from target body */
-/*                                        center to sub-observer point. */
-/*                                        The target must be an extended */
-/*                                        body modeled as a triaxial */
-/*                                        ellipsoid. */
-
-/*                Case, leading and trailing blanks ARE significant */
-/*                in the string VECDEF. */
-
-
-/*     METHOD     is a string specifying the computational method */
-/*                applicable to the vector of interest. When VECDEF */
-/*                is the parameter */
-
-/*                   SOBDEF */
-
-/*                METHOD should be set to one of the values accepted */
-/*                by the SPICELIB routine SUBPNT. */
-
-/*                When VECDEF is the parameter */
-
-/*                   SINDEF */
-
-/*                METHOD should be set to one of the values accepted */
-/*                by the SPICELIB routine SINCPT. */
-
-/*                METHOD is ignored if VECDEF is set to */
-
-/*                   POSDEF */
-
-/*                Case, leading and trailing blanks are not significant */
-/*                in the string METHOD. */
+/*              Case, leading and trailing blanks ARE significant */
+/*              in the string VECDEF. */
 
 
-/*     TARGET     is the name of the target object. */
+/*     METHOD   is a string specifying the computational method */
+/*              applicable to the vector of interest. When VECDEF */
+/*              is the parameter */
+
+/*                 SOBDEF */
+
+/*              METHOD should be set to one of the values accepted */
+/*              by the SPICELIB routine SUBPNT. */
+
+/*              When VECDEF is the parameter */
+
+/*                 SINDEF */
+
+/*              METHOD should be set to one of the values accepted */
+/*              by the SPICELIB routine SINCPT. */
+
+/*              METHOD is ignored if VECDEF is set to */
+
+/*                 POSDEF */
+
+/*              Case, leading and trailing blanks are not significant */
+/*              in the string METHOD. */
 
 
-/*     REF        is the name of the reference frame relative to which */
-/*                the vector of interest is specified. The specified */
-/*                condition applies to the specified coordinate of */
-/*                of this vector in frame REF. */
-
-/*                When geodetic coordinates are used, the reference */
-/*                ellipsoid is assumed to be that associated with */
-/*                the central body of the frame designated by REF. */
-/*                In this case, the central body of the frame must */
-/*                be an extended body. */
-
-/*                Case, leading and trailing blanks are not significant */
-/*                in the string REF. */
+/*     TARGET   is the name of the target object. */
 
 
-/*     ABCORR     indicates the aberration corrections to be applied to */
-/*                the state of the target body to account for one-way */
-/*                light time and stellar aberration.  The orientation */
-/*                of the target body will also be corrected for one-way */
-/*                light time when light time corrections are requested. */
+/*     REF      is the name of the reference frame relative to which */
+/*              the vector of interest is specified. The specified */
+/*              condition applies to the specified coordinate of */
+/*              of this vector in frame REF. */
 
-/*                Supported aberration correction options for */
-/*                observation (case where radiation is received by */
-/*                observer at ET) are: */
+/*              When geodetic coordinates are used, the reference */
+/*              ellipsoid is assumed to be that associated with */
+/*              the central body of the frame designated by REF. */
+/*              In this case, the central body of the frame must */
+/*              be an extended body. */
 
-/*                  'NONE'          No correction. */
-/*                  'LT'            Light time only. */
-/*                  'LT+S'          Light time and stellar aberration. */
-/*                  'CN'            Converged Newtonian (CN) light time. */
-/*                  'CN+S'          CN light time and stellar aberration. */
-
-/*                Supported aberration correction options for */
-/*                transmission (case where radiation is emitted from */
-/*                observer at ET) are: */
-
-/*                  'XLT'           Light time only. */
-/*                  'XLT+S'         Light time and stellar aberration. */
-/*                  'XCN'           Converged Newtonian (CN) light time. */
-/*                  'XCN+S'         CN light time and stellar aberration. */
-
-/*                For detailed information, see the geometry finder */
-/*                required reading, gf.req.  Also see the header of */
-/*                SPKEZR, which contains a detailed discussion of */
-/*                aberration corrections. */
-
-/*                Case, leading and trailing blanks are not significant */
-/*                in the string ABCORR. */
+/*              Case, leading and trailing blanks are not significant */
+/*              in the string REF. */
 
 
-/*     OBSRVR     is the name of the observer. */
+/*     ABCORR   indicates the aberration corrections to be applied to */
+/*              the state of the target body to account for one-way */
+/*              light time and stellar aberration. The orientation */
+/*              of the target body will also be corrected for one-way */
+/*              light time when light time corrections are requested. */
+
+/*              Supported aberration correction options for */
+/*              observation (case where radiation is received by */
+/*              observer at ET) are: */
+
+/*                'NONE'          No correction. */
+/*                'LT'            Light time only. */
+/*                'LT+S'          Light time and stellar aberration. */
+/*                'CN'            Converged Newtonian (CN) light time. */
+/*                'CN+S'          CN light time and stellar aberration. */
+
+/*              Supported aberration correction options for */
+/*              transmission (case where radiation is emitted from */
+/*              observer at ET) are: */
+
+/*                'XLT'           Light time only. */
+/*                'XLT+S'         Light time and stellar aberration. */
+/*                'XCN'           Converged Newtonian (CN) light time. */
+/*                'XCN+S'         CN light time and stellar aberration. */
+
+/*              For detailed information, see the geometry finder */
+/*              required reading, gf.req. Also see the header of */
+/*              SPKEZR, which contains a detailed discussion of */
+/*              aberration corrections. */
+
+/*              Case, leading and trailing blanks are not significant */
+/*              in the string ABCORR. */
 
 
-/*     DREF       is the name of the reference frame relative to which a */
-/*                ray's direction vector is expressed. This may be any */
-/*                frame supported by the SPICE system, including */
-/*                built-in frames (documented in the Frames Required */
-/*                Reading) and frames defined by a loaded frame kernel */
-/*                (FK). The string DREF is case-insensitive, and leading */
-/*                and trailing blanks in FIXREF are not significant. */
-
-/*                When DREF designates a non-inertial frame, the */
-/*                orientation of the frame is evaluated at an epoch */
-/*                dependent on the frame's center and, if the center is */
-/*                not the observer, on the selected aberration */
-/*                correction. See the description of the direction */
-/*                vector DVEC for details. */
+/*     OBSRVR   is the name of the observer. */
 
 
-/*     DVEC       Ray direction vector emanating from the observer. The */
-/*                intercept with the target body's surface of the ray */
-/*                defined by the observer and DVEC is sought. */
+/*     DREF     is the name of the reference frame relative to which a */
+/*              ray's direction vector is expressed. This may be any */
+/*              frame supported by the SPICE system, including */
+/*              built-in frames (documented in the Frames Required */
+/*              Reading) and frames defined by a loaded frame kernel */
+/*              (FK). The string DREF is case-insensitive, and leading */
+/*              and trailing blanks in FIXREF are not significant. */
 
-/*                DVEC is specified relative to the reference frame */
-/*                designated by DREF. */
-
-/*                Non-inertial reference frames are treated as follows: */
-/*                if the center of the frame is at the observer's */
-/*                location, the frame is evaluated at ET. If the frame's */
-/*                center is located elsewhere, then letting LTCENT be */
-/*                the one-way light time between the observer and the */
-/*                central body associated with the frame, the */
-/*                orientation of the frame is evaluated at ET-LTCENT, */
-/*                ET+LTCENT, or ET depending on whether the requested */
-/*                aberration correction is, respectively, for received */
-/*                radiation, transmitted radiation, or is omitted. */
-/*                LTCENT is computed using the method indicated by */
-/*                ABCORR. */
+/*              When DREF designates a non-inertial frame, the */
+/*              orientation of the frame is evaluated at an epoch */
+/*              dependent on the frame's center and, if the center is */
+/*              not the observer, on the selected aberration */
+/*              correction. See the description of the direction */
+/*              vector DVEC for details. */
 
 
-/*     CRDSYS     is the name of the coordinate system to which the */
-/*                coordinate of interest belongs. Allowed values are */
-/*                those defined in the GF Fortran INCLUDE file */
+/*     DVEC     ray direction vector emanating from the observer. The */
+/*              intercept with the target body's surface of the ray */
+/*              defined by the observer and DVEC is sought. */
 
-/*                   zzgf.inc. */
+/*              DVEC is specified relative to the reference frame */
+/*              designated by DREF. */
 
-/*                Note that when geodetic or planetograhic coordinates */
-/*                are used, the reference ellipsoid is that associated */
-/*                with the central body of the reference frame */
-/*                designated by REF. The central body must be an */
-/*                extended body in this case. */
+/*              Non-inertial reference frames are treated as follows: */
+/*              if the center of the frame is at the observer's */
+/*              location, the frame is evaluated at ET. If the frame's */
+/*              center is located elsewhere, then letting LTCENT be */
+/*              the one-way light time between the observer and the */
+/*              central body associated with the frame, the */
+/*              orientation of the frame is evaluated at ET-LTCENT, */
+/*              ET+LTCENT, or ET depending on whether the requested */
+/*              aberration correction is, respectively, for received */
+/*              radiation, transmitted radiation, or is omitted. */
+/*              LTCENT is computed using the method indicated by */
+/*              ABCORR. */
 
-/*                Case, leading and trailing blanks are not significant */
-/*                in the string CRDSYS. */
+
+/*     CRDSYS   is the name of the coordinate system to which the */
+/*              coordinate of interest belongs. Allowed values are */
+/*              those defined in the GF Fortran INCLUDE file */
+
+/*                 zzgf.inc. */
+
+/*              Note that when geodetic or planetographic coordinates */
+/*              are used, the reference ellipsoid is that associated */
+/*              with the central body of the reference frame */
+/*              designated by REF. The central body must be an */
+/*              extended body in this case. */
+
+/*              Case, leading and trailing blanks are not significant */
+/*              in the string CRDSYS. */
 
 
-/*     CRDNAM     is the name of the coordinate of interest:  this is */
-/*                the coordinate to which the specified condition */
-/*                applies.  The set of coordinate names is a function of */
-/*                the coordinate system. Allowed values are those */
-/*                defined in the GF Fortran INCLUDE file */
+/*     CRDNAM   is the name of the coordinate of interest: this is */
+/*              the coordinate to which the specified condition */
+/*              applies. The set of coordinate names is a function of */
+/*              the coordinate system. Allowed values are those */
+/*              defined in the GF Fortran INCLUDE file */
 
-/*                   zzgf.inc. */
+/*                 zzgf.inc. */
 
-/*                Case, leading and trailing blanks are not significant */
-/*                in the string CRDNAM. */
+/*              Case, leading and trailing blanks are not significant */
+/*              in the string CRDNAM. */
 
 /* $ Detailed_Output */
 
-/*     None.  This routine operates by side effects.  See Particulars */
+/*     None. This routine operates by side effects. See $Particulars */
 /*     for a description of the action of this routine. */
 
 /* $ Parameters */
@@ -1127,7 +1133,7 @@ L_zzgfcoin:
 /*         the error SPICE(NOTSUPPORTED) is signaled. */
 
 /*     8)  If the frame REF is not recognized by the frames subsystem, */
-/*         the error SPICE(NOFRAME) will be signaled. */
+/*         the error SPICE(NOFRAME) is signaled. */
 
 /*     9)  If VECDEF calls for a computation involving a target surface */
 /*         intercept point and the name and ID code of the frame DREF */
@@ -1141,18 +1147,18 @@ L_zzgfcoin:
 /*     11) If VECDEF calls for a computation involving a target surface */
 /*         point and the radii defining the reference ellipsoid */
 /*         associated with the target body are not available in the */
-/*         kernel pool, the error will be diagnosed by routines in the */
+/*         kernel pool, an error is signaled by a routine in the */
 /*         call tree of this routine. */
 
 /*     12) If VECDEF calls for a computation involving a target surface */
 /*         point and the frame REF is not centered on the target body, */
-/*         the error SPICE(INVALIDFRAME) will be signaled. */
+/*         the error SPICE(INVALIDFRAME) is signaled. */
 
 /*     13) If geodetic or planetographic coordinates are used and the */
 /*         radii defining the reference ellipsoid associated with the */
 /*         center of the frame REF are not available in the kernel pool, */
-/*         the error will be diagnosed by routines in the call tree of */
-/*         this routine. */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     14) If geodetic or planetographic coordinates are used and the */
 /*         first equatorial radius of the reference ellipsoid associated */
@@ -1169,20 +1175,28 @@ L_zzgfcoin:
 /*         REF is degenerate (one or more radii are non-positive), */
 /*         the error SPICE(DEGENERATECASE) is signaled. */
 
+/*     17) If a body RADII vector has other than exactly thee elements, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
+
+/*     18) If a body RADII vector has any element less-than or equal to */
+/*         zero, an error is signaled by a routine in the call tree of */
+/*         this routine. */
+
 /* $ Files */
 
-/*     See the discussion in the Files section of the header of the */
+/*     See the discussion in the $Files section of the header of the */
 /*     umbrella subroutine ZZGFCOU. */
 
 /* $ Particulars */
 
-/*     This routine's main purpose is to support GFEVNT.  Many of */
+/*     This routine's main purpose is to support GFEVNT. Many of */
 /*     the geometric quantities supported by GFEVNT are simply */
 /*     coordinates of a vector in some reference frame. */
 
 /*     The entry points that deal with sines and cosines of coordinates */
 /*     support solving problems involving constraints on */
-/*     longitude or right ascension.  See ZZGFLONG for usage examples. */
+/*     longitude or right ascension. See ZZGFLONG for usage examples. */
 
 /* $ Examples */
 
@@ -1191,7 +1205,7 @@ L_zzgfcoin:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -1210,28 +1224,35 @@ L_zzgfcoin:
 /*            - The set of supported coordinate systems must be kept in */
 /*              sync with the set supported by zzgf.inc. */
 
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 3.0.0 05-APR-2011 (EDW) */
+/* -    SPICELIB Version 3.1.0, 11-SEP-2021 (EDW) (JDR) */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 3.0.0, 05-APR-2011 (EDW) */
 
 /*        REFVAL removed from routine argument list due to use */
 /*        of ZZGFRELX to calculate the events. */
 
-/* -    SPICELIB Version 2.0.0 12-MAY-2009 (NJB) */
+/* -    SPICELIB Version 2.0.0, 12-MAY-2009 (NJB) */
 
 /*        Upgraded to support targets and observers having */
 /*        no names associated with their ID codes. */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1342,8 +1363,8 @@ L_zzgfcoin:
 /*     supported names. */
 
     svcidx = isrchc_(svcrd, &c__3, crdnms + (((i__1 = sysidx * 3 - 3) < 21 && 
-	    0 <= i__1 ? i__1 : s_rnge("crdnms", i__1, "zzgfcou_", (ftnlen)985)
-	    ) << 5), (ftnlen)32, (ftnlen)32);
+	    0 <= i__1 ? i__1 : s_rnge("crdnms", i__1, "zzgfcou_", (ftnlen)
+	    1011)) << 5), (ftnlen)32, (ftnlen)32);
     if (svcidx == 0) {
 
 /*        We don't recognize this coordinate name. */
@@ -1448,42 +1469,8 @@ L_zzgfcoin:
 
 /*        We know the kernel pool contains data for body SVRCTR. */
 
-	bodvcd_(&svrctr, "RADII", &c__3, &n, svradi, (ftnlen)5);
+	zzgftreb_(&svrctr, svradi);
 	if (failed_()) {
-	    chkout_("ZZGFCOIN", (ftnlen)8);
-	    return 0;
-	}
-
-/*        Make sure we obtained three radii. */
-
-	if (n != 3) {
-	    setmsg_("Expected to find three radii defining triaxial ellipsoi"
-		    "dal shape model for body # but instead found #.", (ftnlen)
-		    102);
-	    errint_("#", &svrctr, (ftnlen)1);
-	    errint_("#", &n, (ftnlen)1);
-	    sigerr_("SPICE(INVALIDDIMENSION)", (ftnlen)23);
-	    chkout_("ZZGFCOIN", (ftnlen)8);
-	    return 0;
-	}
-
-/*        Check the radii. */
-
-	if (svradi[0] == 0.) {
-	    setmsg_("Cannot compute flattening factor. Radii are # # #.", (
-		    ftnlen)50);
-	    errdp_("#", svradi, (ftnlen)1);
-	    errdp_("#", &svradi[1], (ftnlen)1);
-	    errdp_("#", &svradi[2], (ftnlen)1);
-	    sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
-	    chkout_("ZZGFCOIN", (ftnlen)8);
-	    return 0;
-	} else if (svradi[0] < 0. || svradi[1] <= 0. || svradi[2] <= 0.) {
-	    setmsg_("Degenerate ellipsoid: radii are # # #.", (ftnlen)38);
-	    errdp_("#", svradi, (ftnlen)1);
-	    errdp_("#", &svradi[1], (ftnlen)1);
-	    errdp_("#", &svradi[2], (ftnlen)1);
-	    sigerr_("SPICE(DEGENERATECASE)", (ftnlen)21);
 	    chkout_("ZZGFCOIN", (ftnlen)8);
 	    return 0;
 	}
@@ -1668,14 +1655,13 @@ L_zzgfcog:
 
 /* $ Detailed_Input */
 
-/*     ET             is the computation epoch, expressed as seconds */
-/*                    past J2000 TDB. */
+/*     ET       is the computation epoch, expressed as seconds */
+/*              past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     CRDVAL         is the coordinate defined by the previous call to */
-/*                    ZZGFCOIN, evaluated at the epoch ET. */
-
+/*     CRDVAL   is the coordinate defined by the previous call to */
+/*              ZZGFCOIN, evaluated at the epoch ET. */
 
 /* $ Parameters */
 
@@ -1687,12 +1673,12 @@ L_zzgfcog:
 /*         error SPICE(NOTCOMPUTABLE) is signaled. */
 
 /*     2)  If an error occurs while this routine computes the coordinate */
-/*         defined by ZZGFCOIN, the error will be diagnosed by routines */
+/*         defined by ZZGFCOIN, the error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFCOU. */
+/*     See the $Files header section of the umbrella routine ZZGFCOU. */
 
 /* $ Particulars */
 
@@ -1705,7 +1691,7 @@ L_zzgfcog:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -1717,11 +1703,16 @@ L_zzgfcog:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1813,19 +1804,19 @@ L_zzgfcodc:
 
 /* $ Detailed_Input */
 
-/*     ET             is the computation epoch, expressed as seconds */
-/*                    past J2000 TDB. */
+/*     ET       is the computation epoch, expressed as seconds */
+/*              past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     DECRES         is a logical flag indicating whether */
-/*                    the coordinate defined by the previous call to */
-/*                    ZZGFCOIN is strictly decreasing at the epoch ET. */
-/*                    DECRES is .FALSE. if the coordinate */
-/*                    is decreasing and .TRUE. otherwise. */
+/*     DECRES   is a logical flag indicating whether */
+/*              the coordinate defined by the previous call to */
+/*              ZZGFCOIN is strictly decreasing at the epoch ET. */
+/*              DECRES is .FALSE. if the coordinate */
+/*              is decreasing and .TRUE. otherwise. */
 
-/*                    In cases where the coordinate is undefined */
-/*                    at ET, DECRES is set to .FALSE. */
+/*              In cases where the coordinate is undefined */
+/*              at ET, DECRES is set to .FALSE. */
 
 /* $ Parameters */
 
@@ -1833,23 +1824,23 @@ L_zzgfcodc:
 
 /* $ Exceptions */
 
-/*     1) In cases where the any intermediate quantity required by */
-/*        this routine is undefined, DECRES is set to .FALSE.  This */
-/*        situation occurs when the Jacobian of the coordinate system */
-/*        with respect to rectangular coordinates is undefined at ET. */
+/*     1)  In cases where the any intermediate quantity required by */
+/*         this routine is undefined, DECRES is set to .FALSE. This */
+/*         situation occurs when the Jacobian of the coordinate system */
+/*         with respect to rectangular coordinates is undefined at ET. */
 
-/*     2) If an error occurs while this routine computes the coordinate */
-/*        defined by ZZGFCOIN, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     2)  If an error occurs while this routine computes the coordinate */
+/*         defined by ZZGFCOIN, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
-/*     3) If an error occurs while this routine computes the derivative */
-/*        with respect to time of the coordinate defined by ZZGFCOIN, the */
-/*        error will be diagnosed by routines in the call tree of this */
-/*        routine. */
+/*     3)  If an error occurs while this routine computes the derivative */
+/*         with respect to time of the coordinate defined by ZZGFCOIN, */
+/*         the error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFCOU. */
+/*     See the $Files header section of the umbrella routine ZZGFCOU. */
 
 /* $ Particulars */
 
@@ -1877,7 +1868,7 @@ L_zzgfcodc:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -1889,16 +1880,22 @@ L_zzgfcodc:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 2.0.0 05-APR-2011 (EDW) */
+/* -    SPICELIB Version 2.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 05-APR-2011 (EDW) */
 
 /*        Added UDFUNC to argument list for use of ZZGFRELX when */
 /*        calculating the events. */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1942,7 +1939,7 @@ L_zzgfcodc:
 /*     is negative. This is indicated by a "sign" of -1. */
 
     *decres = cdsign[(i__1 = svcidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "cdsign", i__1, "zzgfcou_", (ftnlen)1686)] == -1;
+	    "cdsign", i__1, "zzgfcou_", (ftnlen)1679)] == -1;
     chkout_("ZZGFCODC", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFCOEX ( GF, does coordinate state exist? ) */
@@ -2006,16 +2003,16 @@ L_zzgfcoex:
 
 /* $ Detailed_Input */
 
-/*     ET             is the computation epoch, expressed as seconds */
-/*                    past J2000 TDB. */
+/*     ET       is the computation epoch, expressed as seconds */
+/*              past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     CRDFND         is a logical flag indicating whether the state of */
-/*                    the coordinate defined by the previous call to */
-/*                    ZZGFCOIN is computable at the epoch ET. DECRES is */
-/*                    .TRUE. if the coordinate is computable and .FALSE. */
-/*                    otherwise. */
+/*     CRDFND   is a logical flag indicating whether the state of */
+/*              the coordinate defined by the previous call to */
+/*              ZZGFCOIN is computable at the epoch ET. DECRES is */
+/*              .TRUE. if the coordinate is computable and .FALSE. */
+/*              otherwise. */
 
 /* $ Parameters */
 
@@ -2023,13 +2020,13 @@ L_zzgfcoex:
 
 /* $ Exceptions */
 
-/*     1) If an error occurs while this routine attempts to compute the */
-/*        coordinate defined by ZZGFCOIN, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     1)  If an error occurs while this routine attempts to compute the */
+/*         coordinate defined by ZZGFCOIN, the error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFCOU. */
+/*     See the $Files header section of the umbrella routine ZZGFCOU. */
 
 /* $ Particulars */
 
@@ -2039,9 +2036,9 @@ L_zzgfcoex:
 /*     Coordinates defined by surface intercepts may fail to be */
 /*     computable because either */
 
-/*        - the surface intercept does not exist */
+/*     -  the surface intercept does not exist */
 
-/*        - the velocity of the intercept is not computable */
+/*     -  the velocity of the intercept is not computable */
 
 /* $ Examples */
 
@@ -2050,7 +2047,7 @@ L_zzgfcoex:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -2062,16 +2059,22 @@ L_zzgfcoex:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 2.0.0 05-APR-2011 (EDW) */
+/* -    SPICELIB Version 2.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 05-APR-2011 (EDW) */
 
 /*        Added UDFUNC to argument list for use of ZZGFRELX when */
 /*        calculating the events. */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2157,14 +2160,14 @@ L_zzgfcocg:
 
 /* $ Detailed_Input */
 
-/*     ET             is the computation epoch, expressed as seconds */
-/*                    past J2000 TDB. */
+/*     ET       is the computation epoch, expressed as seconds */
+/*              past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     CRDVAL         is the cosine of the coordinate defined by the */
-/*                    previous call to ZZGFCOIN, evaluated at the epoch */
-/*                    ET. */
+/*     CRDVAL   is the cosine of the coordinate defined by the */
+/*              previous call to ZZGFCOIN, evaluated at the epoch */
+/*              ET. */
 
 /* $ Parameters */
 
@@ -2172,13 +2175,13 @@ L_zzgfcocg:
 
 /* $ Exceptions */
 
-/*     1) If an error occurs while this routine computes the coordinate */
-/*        defined by ZZGFCOIN, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     1)  If an error occurs while this routine computes the coordinate */
+/*         defined by ZZGFCOIN, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFCOU. */
+/*     See the $Files header section of the umbrella routine ZZGFCOU. */
 
 /* $ Particulars */
 
@@ -2191,7 +2194,7 @@ L_zzgfcocg:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -2203,11 +2206,16 @@ L_zzgfcocg:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2299,14 +2307,14 @@ L_zzgfcosg:
 
 /* $ Detailed_Input */
 
-/*     ET             is the computation epoch, expressed as seconds */
-/*                    past J2000 TDB. */
+/*     ET       is the computation epoch, expressed as seconds */
+/*              past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     CRDVAL         is the sine of the coordinate defined by the */
-/*                    previous call to ZZGFCOIN, evaluated at the epoch */
-/*                    ET. */
+/*     CRDVAL   is the sine of the coordinate defined by the */
+/*              previous call to ZZGFCOIN, evaluated at the epoch */
+/*              ET. */
 
 /* $ Parameters */
 
@@ -2314,13 +2322,13 @@ L_zzgfcosg:
 
 /* $ Exceptions */
 
-/*     1) If an error occurs while this routine computes the coordinate */
-/*        defined by ZZGFCOIN, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     1)  If an error occurs while this routine computes the coordinate */
+/*         defined by ZZGFCOIN, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFCOU. */
+/*     See the $Files header section of the umbrella routine ZZGFCOU. */
 
 /* $ Particulars */
 
@@ -2333,7 +2341,7 @@ L_zzgfcosg:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -2345,11 +2353,16 @@ L_zzgfcosg:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2438,19 +2451,19 @@ L_zzgfcocd:
 
 /* $ Detailed_Input */
 
-/*     ET             is the computation epoch, expressed as seconds */
-/*                    past J2000 TDB. */
+/*     ET       is the computation epoch, expressed as seconds */
+/*              past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     DECRES         is a logical flag indicating whether the cosine of */
-/*                    the coordinate defined by the previous call to */
-/*                    ZZGFCOIN is strictly decreasing at the epoch ET. */
-/*                    DECRES is .FALSE. if the cosine of the coordinate */
-/*                    is decreasing and .TRUE. otherwise. */
+/*     DECRES   is a logical flag indicating whether the cosine of */
+/*              the coordinate defined by the previous call to */
+/*              ZZGFCOIN is strictly decreasing at the epoch ET. */
+/*              DECRES is .FALSE. if the cosine of the coordinate */
+/*              is decreasing and .TRUE. otherwise. */
 
-/*                    In cases where the coordinate is undefined */
-/*                    at ET, DECRES is set to .FALSE. */
+/*              In cases where the coordinate is undefined */
+/*              at ET, DECRES is set to .FALSE. */
 
 /* $ Parameters */
 
@@ -2458,23 +2471,23 @@ L_zzgfcocd:
 
 /* $ Exceptions */
 
-/*     1) In cases where the any intermediate quantity required by */
-/*        this routine is undefined, DECRES is set to .FALSE.  This */
-/*        situation occurs when the Jacobian of the coordinate system */
-/*        with respect to rectangular coordinates is undefined at ET. */
+/*     1)  In cases where the any intermediate quantity required by */
+/*         this routine is undefined, DECRES is set to .FALSE. This */
+/*         situation occurs when the Jacobian of the coordinate system */
+/*         with respect to rectangular coordinates is undefined at ET. */
 
-/*     2) If an error occurs while this routine computes the coordinate */
-/*        defined by ZZGFCOIN, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     2)  If an error occurs while this routine computes the coordinate */
+/*         defined by ZZGFCOIN, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
-/*     3) If an error occurs while this routine computes the derivative */
-/*        with respect to time of the coordinate defined by ZZGFCOIN, the */
-/*        error will be diagnosed by routines in the call tree of this */
-/*        routine. */
+/*     3)  If an error occurs while this routine computes the derivative */
+/*         with respect to time of the coordinate defined by ZZGFCOIN, */
+/*         the error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFCOU. */
+/*     See the $Files header section of the umbrella routine ZZGFCOU. */
 
 /* $ Particulars */
 
@@ -2502,7 +2515,7 @@ L_zzgfcocd:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -2514,16 +2527,22 @@ L_zzgfcocd:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 2.0.0 05-APR-2011 (EDW) */
+/* -    SPICELIB Version 2.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 05-APR-2011 (EDW) */
 
 /*        Added UDFUNC to argument list for use of ZZGFRELX when */
 /*        calculating the events. */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2597,7 +2616,7 @@ L_zzgfcocd:
 /*     Pick off the coordinate value. */
 
     value = coords[(i__1 = svcidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("coo"
-	    "rds", i__1, "zzgfcou_", (ftnlen)2421)];
+	    "rds", i__1, "zzgfcou_", (ftnlen)2444)];
 
 /*     Compute the proxy for the derivative with respect to time of the */
 /*     coordinate. This proxy gives us the sign of the derivative, which */
@@ -2608,7 +2627,7 @@ L_zzgfcocd:
 /*     The derivative of the coordinate is negative if the "sign" is -1. */
 
     *decres = -sin(value) * cdsign[(i__1 = svcidx - 1) < 3 && 0 <= i__1 ? 
-	    i__1 : s_rnge("cdsign", i__1, "zzgfcou_", (ftnlen)2433)] < 0.;
+	    i__1 : s_rnge("cdsign", i__1, "zzgfcou_", (ftnlen)2456)] < 0.;
     chkout_("ZZGFCOCD", (ftnlen)8);
     return 0;
 /* $Procedure ZZGFCOSD ( GF, is sine of coordinate decreasing? ) */
@@ -2673,16 +2692,16 @@ L_zzgfcosd:
 
 /* $ Detailed_Input */
 
-/*     ET             is the computation epoch, expressed as seconds */
-/*                    past J2000 TDB. */
+/*     ET       is the computation epoch, expressed as seconds */
+/*              past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     DECRES         is a logical flag indicating whether the sine */
-/*                    of the coordinate defined by the previous call to */
-/*                    ZZGFCOIN is strictly decreasing at the epoch ET. */
-/*                    DECRES is .FALSE. if the sine of the coordinate is */
-/*                    decreasing and .TRUE. otherwise. */
+/*     DECRES   is a logical flag indicating whether the sine */
+/*              of the coordinate defined by the previous call to */
+/*              ZZGFCOIN is strictly decreasing at the epoch ET. */
+/*              DECRES is .FALSE. if the sine of the coordinate is */
+/*              decreasing and .TRUE. otherwise. */
 
 /* $ Parameters */
 
@@ -2690,23 +2709,23 @@ L_zzgfcosd:
 
 /* $ Exceptions */
 
-/*     1) In cases where the any intermediate quantity required by */
-/*        this routine is undefined, DECRES is set to .FALSE.  This */
-/*        situation occurs when the Jacobian of the coordinate system */
-/*        with respect to rectangular coordinates is undefined at ET. */
+/*     1)  In cases where the any intermediate quantity required by */
+/*         this routine is undefined, DECRES is set to .FALSE. This */
+/*         situation occurs when the Jacobian of the coordinate system */
+/*         with respect to rectangular coordinates is undefined at ET. */
 
-/*     2) If an error occurs while this routine computes the coordinate */
-/*        defined by ZZGFCOIN, the error will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     2)  If an error occurs while this routine computes the coordinate */
+/*         defined by ZZGFCOIN, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
-/*     3) If an error occurs while this routine computes the derivative */
-/*        with respect to time of the coordinate defined by ZZGFCOIN, the */
-/*        error will be diagnosed by routines in the call tree of this */
-/*        routine. */
+/*     3)  If an error occurs while this routine computes the derivative */
+/*         with respect to time of the coordinate defined by ZZGFCOIN, */
+/*         the error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
-/*     See the Files header section of the umbrella routine ZZGFCOU. */
+/*     See the $Files header section of the umbrella routine ZZGFCOU. */
 
 /* $ Particulars */
 
@@ -2734,7 +2753,7 @@ L_zzgfcosd:
 /* $ Restrictions */
 
 /*     1)  The interface and functionality of this set of routines may */
-/*         change without notice.  These routines should be called only */
+/*         change without notice. These routines should be called only */
 /*         by SPICELIB routines. */
 
 /*     2)  ZZGFCOIN must be called prior to use of any of the other */
@@ -2746,16 +2765,22 @@ L_zzgfcosd:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 2.0.0 05-APR-2011 (EDW) */
+/* -    SPICELIB Version 2.0.1, 11-SEP-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 05-APR-2011 (EDW) */
 
 /*        Added UDFUNC to argument list for use of ZZGFRELX when */
 /*        calculating the events. */
 
-/* -    SPICELIB Version 1.0.0 05-MAR-2009 (NJB) */
+/* -    SPICELIB Version 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -2828,7 +2853,7 @@ L_zzgfcosd:
 /*     Pick off the coordinate value. */
 
     value = coords[(i__1 = svcidx - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("coo"
-	    "rds", i__1, "zzgfcou_", (ftnlen)2693)];
+	    "rds", i__1, "zzgfcou_", (ftnlen)2724)];
 
 /*     Compute the proxy for the derivative with respect to time of the */
 /*     coordinate. This proxy gives us the sign of the derivative, which */
@@ -2839,7 +2864,7 @@ L_zzgfcosd:
 /*     The derivative of the coordinate is negative if the "sign" is -1. */
 
     *decres = cos(value) * cdsign[(i__1 = svcidx - 1) < 3 && 0 <= i__1 ? i__1 
-	    : s_rnge("cdsign", i__1, "zzgfcou_", (ftnlen)2705)] < 0.;
+	    : s_rnge("cdsign", i__1, "zzgfcou_", (ftnlen)2736)] < 0.;
     chkout_("ZZGFCOSD", (ftnlen)8);
     return 0;
 } /* zzgfcou_ */

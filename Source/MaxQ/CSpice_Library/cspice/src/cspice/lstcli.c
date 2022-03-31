@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure   LSTCLI ( Closest integer array element ) */
+/* $Procedure LSTCLI ( Closest integer array element ) */
 integer lstcli_(integer *x, integer *n, integer *array)
 {
     /* System generated locals */
@@ -16,8 +16,8 @@ integer lstcli_(integer *x, integer *n, integer *array)
 
 /* $ Abstract */
 
-/*     Given a number X and an array of non-decreasing integers, find */
-/*     the index of the array element whose value is closest to X. */
+/*     Find the index of the array element closest to a given integer X */
+/*     in an array of non-decreasing integers. */
 
 /* $ Disclaimer */
 
@@ -67,36 +67,47 @@ integer lstcli_(integer *x, integer *n, integer *array)
 
 /* $ Detailed_Input */
 
-/*     X       is the value to be compared with the elements of ARRAY. */
+/*     X        is the value to be compared with the elements of ARRAY. */
 
-/*     N       is the number of elements in ARRAY. */
+/*     N        is the number of elements in ARRAY. */
 
-/*     ARRAY   is an array of integers such that */
+/*     ARRAY    is an array of integers such that */
 
-/*                        ARRAY( I ) <= ARRAY( J ) */
+/*                         ARRAY( I ) <= ARRAY( J ) */
 
-/*             for all I < J. */
+/*              for all I < J. */
 
 /* $ Detailed_Output */
 
-/*     LSTCLI  is the index of the element of the non-decreasing */
-/*             sequence: {ARRAY(I) : 1 <= I <= N} that is closest to */
-/*             X. In other words, ARRAY( LSTCLI( X, N, ARRAY ) ) is the */
-/*             closest element of ARRAY to X. */
+/*     LSTCLI   is the index of the element of the non-decreasing */
+/*              sequence: {ARRAY(I) : 1 <= I <= N} that is closest to */
+/*              X. In other words, ARRAY( LSTCLI( X, N, ARRAY ) ) is the */
+/*              closest element of ARRAY to X. */
 
-/*             If X falls precisely on the midpoint of consecutive array */
-/*             elements, the index of the larger of the two values is */
-/*             returned. */
+/*              If X falls precisely on the midpoint of consecutive array */
+/*              elements, the index of the larger of the two values is */
+/*              returned. */
 
-/*             If X is closest to a value which appears more than */
-/*             once in the array (since the array is ordered, these */
-/*             elements would have to be consecutive), the highest index */
-/*             for that value will be returned. */
+/*              If X is closest to a value which appears more than */
+/*              once in the array (since the array is ordered, these */
+/*              elements would have to be consecutive), the highest index */
+/*              for that value will be returned. */
 
-/*             LSTCLI = I for some I in the range 1 to N, unless N is */
-/*             less than or equal to zero, in which case LSTCLI is zero. */
+/*              LSTCLI = I for some I in the range 1 to N, unless N is */
+/*              less than or equal to zero, in which case LSTCLI is zero. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/*     1)  If the value of N is non-positive, LSTCLI returns the value */
+/*         zero. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -131,29 +142,26 @@ integer lstcli_(integer *x, integer *n, integer *array)
 
 /* $ Restrictions */
 
-/*     If the sequence is not non-decreasing, the routine will run */
-/*     to completion but the index found will not mean anything. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/*     1) If the value of N is non-positive, LSTCLI returns the value */
-/*        zero. */
-
-/* $ Files */
-
-/*     None. */
-
-/* $ Author_and_Institution */
-
-/*     R.E. Thurman    (JPL) */
+/*     1)  If the sequence is not non-decreasing, the routine will run */
+/*         to completion but the index found will not mean anything. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

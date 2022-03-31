@@ -240,6 +240,13 @@ enum class ES_LimbComputationMethod : uint8
     GUIDED_DSK          UMETA(DisplayName = "Guided/DSK/Unprioritized")
 };
 
+UENUM(BlueprintType)
+enum class ES_LocalZenithMethod : uint8
+{
+    NONE = 0 UMETA(Hidden),
+    ELLIPSOID = 1  UMETA(DisplayName = "Ellipsoid"),
+};
+
 
 UENUM(BlueprintType)
 enum class ES_Shadow : uint8

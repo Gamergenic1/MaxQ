@@ -33,9 +33,9 @@ static doublereal c_b13 = 1.;
     extern /* Subroutine */ int zzspkas1_(integer *, doublereal *, char *, 
 	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, ftnlen, ftnlen), zzspkgo1_(integer *, doublereal *, 
-	    char *, integer *, doublereal *, doublereal *, ftnlen);
+	    char *, integer *, doublereal *, doublereal *, ftnlen), zzvalcor_(
+	    char *, logical *, ftnlen);
     integer i__;
-    extern /* Subroutine */ int zzprscor_(char *, logical *, ftnlen);
     doublereal t;
     integer refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
@@ -617,6 +617,11 @@ static doublereal c_b13 = 1.;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 23-AUG-2021 (NJB) */
+
+/*        Bug fix: aberration correction strings are now parsed using */
+/*        ZZVALCOR. This improves error checking. */
+
 /* -    SPICELIB Version 1.0.1, 04-JUL-2014 (NJB) */
 
 /*        Discussion of light time corrections was updated. Assertions */
@@ -666,7 +671,7 @@ static doublereal c_b13 = 1.;
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
 
-	zzprscor_(abcorr, attblk, abcorr_len);
+	zzvalcor_(abcorr, attblk, abcorr_len);
 	if (failed_()) {
 	    chkout_("ZZSPKAC1", (ftnlen)8);
 	    return 0;
@@ -683,7 +688,7 @@ static doublereal c_b13 = 1.;
 /*           specified. */
 
 /*        The above definitions are consistent with those used by */
-/*        ZZPRSCOR. */
+/*        ZZVALCOR. */
 
 	usestl = attblk[2];
 	first = FALSE_;
@@ -722,7 +727,7 @@ static doublereal c_b13 = 1.;
 	    t = *et + ((i__ << 1) - 3) * 1.;
 	    zzspkgo1_(obs, &t, ref, &c__0, &stobs[(i__1 = i__ * 6 - 6) < 12 &&
 		     0 <= i__1 ? i__1 : s_rnge("stobs", i__1, "zzspkac1_", (
-		    ftnlen)632)], &ltssb, ref_len);
+		    ftnlen)637)], &ltssb, ref_len);
 	}
 	qderiv_(&c__3, &stobs[3], &stobs[9], &c_b13, acc);
     } else {

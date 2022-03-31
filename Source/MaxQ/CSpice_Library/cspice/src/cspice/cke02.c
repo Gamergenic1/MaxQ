@@ -9,7 +9,7 @@
 
 static integer c__4 = 4;
 
-/* $Procedure  CKE02 ( C-kernel, evaluate pointing record, data type 2 ) */
+/* $Procedure CKE02 ( C-kernel, evaluate pointing record, data type 2 ) */
 /* Subroutine */ int cke02_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
@@ -30,9 +30,9 @@ static integer c__4 = 4;
 
 /* $ Abstract */
 
-/*   Evaluate a pointing record returned by CKR02 from a CK data type 2 */
-/*   segment. Return the C-matrix and angular velocity vector associated */
-/*   with the time CLKOUT. */
+/*     Evaluate a pointing record returned by CKR02 from a CK data type 2 */
+/*     segment. Return the C-matrix and angular velocity vector */
+/*     associated with the time CLKOUT. */
 
 /* $ Disclaimer */
 
@@ -61,19 +61,19 @@ static integer c__4 = 4;
 
 /* $ Required_Reading */
 
-/*   CK */
+/*     CK */
 /*     ROTATION */
 
 /* $ Keywords */
 
-/*   POINTING */
+/*     POINTING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     NEEDAV     I   True if angular velocity is requested. */
+/*     NEEDAV     I   .TRUE. if angular velocity is requested. */
 /*     RECORD     I   Data type 2 pointing record. */
 /*     CMAT       O   C-matrix. */
 /*     AV         O   Angular velocity vector. */
@@ -81,80 +81,79 @@ static integer c__4 = 4;
 
 /* $ Detailed_Input */
 
-/*     NEEDAV     is true if angular velocity is requested. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. */
 
-/*     RECORD     is a set of double precision numbers returned by CKR02 */
-/*                that contain sufficient information from a data type */
-/*                2 pointing segment to evaluate the C-matrix and the */
-/*                angular velocity vector for a particular instance. */
+/*     RECORD   is a set of double precision numbers returned by CKR02 */
+/*              that contain sufficient information from a data type */
+/*              2 pointing segment to evaluate the C-matrix and the */
+/*              angular velocity vector for a particular instance. */
 
-/*                The contents of RECORD are as follows: */
+/*              The contents of RECORD are as follows: */
 
-/*                   RECORD( 1  ) = start SCLKDP of interval */
+/*                 RECORD( 1  ) = start SCLKDP of interval */
 
-/*                   RECORD( 2  ) = SCLK for which pointing was found */
+/*                 RECORD( 2  ) = SCLK for which pointing was found */
 
-/*                   RECORD( 3  ) = seconds / tick rate */
+/*                 RECORD( 3  ) = seconds / tick rate */
 
-/*                   RECORD( 4  ) = q0 */
-/*                   RECORD( 5  ) = q1 */
-/*                   RECORD( 6  ) = q2 */
-/*                   RECORD( 7  ) = q3 */
+/*                 RECORD( 4  ) = q0 */
+/*                 RECORD( 5  ) = q1 */
+/*                 RECORD( 6  ) = q2 */
+/*                 RECORD( 7  ) = q3 */
 
-/*                   RECORD( 8  ) = av1 */
-/*                   RECORD( 9  ) = av2 */
-/*                   RECORD( 10 ) = av3 */
+/*                 RECORD( 8  ) = av1 */
+/*                 RECORD( 9  ) = av2 */
+/*                 RECORD( 10 ) = av3 */
 
-/*                The quantities q0 - q3 are the components of the */
-/*                quaternion that represents the C - matrix associated */
-/*                with the start of the interval. The quantities av1, */
-/*                av2, and av3 are the components of the angular velocity */
-/*                vector. */
+/*              The quantities q0 - q3 are the components of the */
+/*              quaternion that represents the C - matrix associated */
+/*              with the start of the interval. The quantities av1, */
+/*              av2, and av3 are the components of the angular velocity */
+/*              vector. */
 
 /* $ Detailed_Output */
 
+/*     CMAT     is a rotation matrix that transforms the components */
+/*              of a vector expressed in the inertial frame given in */
+/*              the segment to components expressed in the instrument */
+/*              fixed frame at the returned time. */
 
-/*     CMAT       is a rotation matrix that transforms the components */
-/*                of a vector expressed in the inertial frame given in */
-/*                the segment to components expressed in the instrument */
-/*                fixed frame at the returned time. */
+/*              Thus, if a vector v has components x, y, z in the */
+/*              inertial frame, then v has components x', y', z' in the */
+/*              instrument fixed frame where: */
 
-/*                Thus, if a vector v has components x, y, z in the */
-/*                inertial frame, then v has components x', y', z' in the */
-/*                instrument fixed frame where: */
+/*                   [ x' ]     [          ] [ x ] */
+/*                   | y' |  =  |   CMAT   | | y | */
+/*                   [ z' ]     [          ] [ z ] */
 
-/*                     [ x' ]     [          ] [ x ] */
-/*                     | y' |  =  |   CMAT   | | y | */
-/*                     [ z' ]     [          ] [ z ] */
+/*              If the x', y', z' components are known, use the */
+/*              transpose of the C-matrix to determine x, y, z as */
+/*              follows. */
 
-/*                If the x', y', z' components are known, use the */
-/*                transpose of the C-matrix to determine x, y, z as */
-/*                follows. */
+/*                   [ x ]      [          ]T    [ x' ] */
+/*                   | y |  =   |   CMAT   |     | y' | */
+/*                   [ z ]      [          ]     [ z' ] */
+/*                            (Transpose of CMAT) */
 
-/*                     [ x ]      [          ]T    [ x' ] */
-/*                     | y |  =   |   CMAT   |     | y' | */
-/*                     [ z ]      [          ]     [ z' ] */
-/*                              (Transpose of CMAT) */
+/*     AV       is the angular velocity vector. The angular velocity */
+/*              contained in RECORD is returned only if NEEDAV is .TRUE. */
 
-/*     AV         is the angular velocity vector. The angular velocity */
-/*                contained in RECORD is returned only if NEEDAV is true. */
+/*              The direction of the angular velocity vector gives */
+/*              the right-handed axis about which the instrument fixed */
+/*              reference frame is rotating. The magnitude of AV is */
+/*              the magnitude of the instantaneous velocity of the */
+/*              rotation, in radians per second. */
 
-/*                The direction of the angular velocity vector gives */
-/*                the right-handed axis about which the instrument fixed */
-/*                reference frame is rotating. The magnitude of AV is */
-/*                the magnitude of the instantaneous velocity of the */
-/*                rotation, in radians per second. */
+/*              The angular velocity vector is returned in component */
+/*              form */
 
-/*                The angular velocity vector is returned in component */
-/*                form */
+/*                       AV = [ AV1  , AV2  , AV3  ] */
 
-/*                         AV = [ AV1  , AV2  , AV3  ] */
+/*              which is in terms of the inertial coordinate frame */
+/*              specified in the segment descriptor. */
 
-/*                which is in terms of the inertial coordinate frame */
-/*                specified in the segment descriptor. */
-
-/*     CLKOUT     is the encoded SCLK associated with the returned */
-/*                C-matrix and angular velocity vector. */
+/*     CLKOUT   is the encoded SCLK associated with the returned */
+/*              C-matrix and angular velocity vector. */
 
 /* $ Parameters */
 
@@ -162,7 +161,7 @@ static integer c__4 = 4;
 
 /* $ Exceptions */
 
-/*     1) No checking is done to determine whether RECORD is valid. */
+/*     1)  No checking is done to determine whether RECORD is valid. */
 
 /* $ Files */
 
@@ -276,12 +275,19 @@ static integer c__4 = 4;
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     E.D. Wright    (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.3, 31-JAN-2008 (BVS) */
 
@@ -303,7 +309,7 @@ static integer c__4 = 4;
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate ck type_2 pointing data record */
+/*     evaluate CK type_2 pointing data record */
 
 /* -& */
 

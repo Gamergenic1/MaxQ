@@ -345,7 +345,7 @@ static integer c__0 = 0;
 
 /*     2)  If NJRS is non-positive, or if NJRS exceeds the maximum */
 /*         allowed number of constraint relations MAXCON, the error */
-/*         SPICE(INVALIDCOUNT) will be signalled. */
+/*         SPICE(INVALIDCOUNT) will be signaled. */
 
 /* $ Files */
 
@@ -389,6 +389,10 @@ static integer c__0 = 0;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    Beta Version 1.1.1,  03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.1.0,  8-JAN-1996 (WLT) */
 
@@ -437,7 +441,7 @@ static integer c__0 = 0;
     for (cand = 2; cand <= i__1; ++cand) {
 
 /*        We'll compare row vectors in the CAND join row set to row */
-/*        vectors in the preceeding join row sets.  Only row vectors */
+/*        vectors in the preceding join row sets.  Only row vectors */
 /*        corresponding to matching segment vectors need be compared. */
 /*        Therefore, we'll loop over the segment vectors in the CAND */
 /*        join row set, and for each such segment vector, loop over the */

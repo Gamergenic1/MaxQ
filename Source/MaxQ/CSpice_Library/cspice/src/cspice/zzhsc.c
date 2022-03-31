@@ -395,9 +395,18 @@
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-OCT-2020 (JDR) (BVS) */
+
+/*        Changed entry point ZZHSCINI to not check RETURN() */
+/*        on entry. That entry point now initializes the hash */
+/*        as long as the size parameter is greater than zero. */
+
+/*        Fixed short error message in umbrella routine. */
 
 /* -    SPICELIB Version 1.0.0, 31-JUL-2013 (BVS) */
 
@@ -442,7 +451,7 @@
 
 /*     Signal bogus entry error and check out. */
 
-    sigerr_("BOGUSENTRY", (ftnlen)10);
+    sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("ZZHSC", (ftnlen)5);
     return 0;
 /* $Procedure ZZHSCINI ( Private---Initialize Add-only Character Hash ) */
@@ -563,6 +572,12 @@ L_zzhscini:
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 12-OCT-2020 (BVS) */
+
+/*        Changed to not check RETURN() on entry. The entry point */
+/*        now initializes the hash as long as the size parameter */
+/*        is greater than zero. */
+
 /* -    SPICELIB Version 1.0.0, 31-JUL-2013 (BVS) */
 
 /* -& */
@@ -574,10 +589,21 @@ L_zzhscini:
 
 /*     Standard SPICE error handling. */
 
-    if (return_()) {
-	return 0;
-    }
     chkin_("ZZHSCINI", (ftnlen)8);
+    if (*hashsz > 0) {
+
+/*        Wipe out head node pointer list. */
+
+	i__1 = *hashsz;
+	for (i__ = 1; i__ <= i__1; ++i__) {
+	    hedlst[i__ - 1] = 0;
+	}
+
+/*        Reset control area. */
+
+	collst[5] = *hashsz;
+	collst[4] = 1;
+    }
 
 /*     The requested number of nodes must be in the valid range. If it */
 /*     is not, ZZHASH2 will signal an error. */
@@ -587,18 +613,6 @@ L_zzhscini:
 	chkout_("ZZHSCINI", (ftnlen)8);
 	return 0;
     }
-
-/*     Wipe out head node pointer list. */
-
-    i__1 = *hashsz;
-    for (i__ = 1; i__ <= i__1; ++i__) {
-	hedlst[i__ - 1] = 0;
-    }
-
-/*     Reset control area. */
-
-    collst[5] = *hashsz;
-    collst[4] = 1;
     chkout_("ZZHSCINI", (ftnlen)8);
     return 0;
 /* $Procedure ZZHSCADD ( Private---Add Item to Add-only Character Hash ) */

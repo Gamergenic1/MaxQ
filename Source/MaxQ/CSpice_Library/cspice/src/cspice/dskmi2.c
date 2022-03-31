@@ -512,7 +512,7 @@ static integer c_b20 = 32000000;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     IXDFIX     P   Size of fixed-size portion of d.p. index component. */
 /*     IXIFIX     P   Size of fixed-size portion of integer index */
@@ -528,166 +528,171 @@ static integer c_b20 = 32000000;
 /*     VOXLSZ     I   Voxel-plate list array size. */
 /*     MAKVTL     I   Vertex-plate list flag. */
 /*     SPXISZ     I   Spatial index integer component size. */
-/*     WORK       I   Workspace. */
-/*     SPAIXD     I   Double precision component of spatial index. */
-/*     SPAIXI     I   Integer component of spatial index. */
+/*     WORK      I-O  Workspace. */
+/*     SPAIXD     O   Double precision component of spatial index. */
+/*     SPAIXI     O   Integer component of spatial index. */
 
 /* $ Detailed_Input */
 
-/*     NV          is the number of vertices belonging to the input */
-/*                 set of plates. */
+/*     NV       is the number of vertices belonging to the input */
+/*              set of plates. */
 
+/*     VRTCES   is an array of coordinates of the vertices. The Ith */
+/*              vertex occupies elements (1:3,I) of this array. */
 
-/*     VRTCES      is an array of coordinates of the vertices. The Ith */
-/*                 vertex occupies elements (1:3,I) of this array. */
+/*     NP       is the number of plates in the input plate set. */
 
+/*     PLATES   is an array representing the triangular plates of a */
+/*              shape model. The elements of PLATES are vertex */
+/*              indices; vertex indices are 1-based. The vertex */
+/*              indices of the Ith plate occupy elements (1:3,I) of */
+/*              this array. */
 
-/*     NP          is the number of plates in the input plate set. */
+/*     FINSCL   is the fine voxel scale. This scale determines the */
+/*              edge length of the cubical voxels comprising the fine */
+/*              voxel grid: the edge length VOXSIZ is approximately */
 
+/*                  FINSCL * {average plate extent} */
 
-/*     PLATES      is an array representing the triangular plates of a */
-/*                 shape model. The elements of PLATES are vertex */
-/*                 indices; vertex indices are 1-based. The vertex */
-/*                 indices of the Ith plate occupy elements (1:3,I) of */
-/*                 this array. */
+/*              where the extents of a plate are the respective */
+/*              differences between the maximum and minimum */
+/*              coordinate values of the plate's vertices. */
 
+/*              The relationship between VOXSIZ and the average plate */
+/*              extent is approximate because the VOXSIZ is adjusted */
+/*              so that each dimension of the fine voxel grid is an */
+/*              integer multiple of the coarse voxel scale. */
 
-/*     FINSCL      is the fine voxel scale. This scale determines the */
-/*                 edge length of the cubical voxels comprising the fine */
-/*                 voxel grid: the edge length VOXSIZ is approximately */
+/*              See the $Particulars section below for further */
+/*              information on voxel scales. */
 
-/*                     FINSCL * {average plate extent} */
+/*     CORSCL   is the coarse voxel scale. This integer scale is the */
+/*              ratio of the edge length of coarse voxels to */
+/*              that of fine voxels. The coarse scale must be */
+/*              large enough so that the total number of coarse */
+/*              voxels does not exceed MAXCGR (see the $Parameters */
+/*              section below). */
 
-/*                 where the extents of a plate are the respective */
-/*                 differences between the maximum and minimum */
-/*                 coordinate values of the plate's vertices. */
+/*     WORKSZ   is the second dimension of the workspace array WORK. */
+/*              WORKSZ must be at least as large as the greater of */
 
-/*                 The relationship between VOXSIZ and the average plate */
-/*                 extent is approximate because the VOXSIZ is adjusted */
-/*                 so that each dimension of the fine voxel grid is an */
-/*                 integer multiple of the coarse voxel scale. */
+/*                 - the number of fine voxel-plate associations */
 
-/*                 See the Particulars section below for further */
-/*                 information on voxel scales. */
+/*                   This number is equal to */
 
+/*                      NP * {average number of fine voxels */
+/*                            intersected by each plate} */
 
-/*     CORSCL      is the coarse voxel scale. This integer scale is the */
-/*                 ratio of the edge length of coarse voxels to */
-/*                 that of fine voxels. The coarse scale must be */
-/*                 large enough so that the total number of coarse */
-/*                 voxels does not exceed MAXCGR (see the Parameters */
-/*                 section below). */
+/*                 - the number of vertex-plate associations, if */
+/*                   the vertex-plate mapping is constructed. */
 
+/*                   This number is equal to */
 
-/*     WORKSZ      is the second dimension of the workspace array WORK. */
-/*                 WORKSZ must be at least as large as the greater of */
+/*                      NV + ( 3 * NP ) */
 
-/*                    - the number of fine voxel-plate associations */
+/*     VOXPSZ   is the size of the fine voxel-plate pointer array. */
+/*              This array maps fine voxels to lists of plates that */
+/*              intersect those voxels. VOXPSZ must be at least as */
+/*              large as */
 
-/*                      This number is equal to */
+/*                       3 */
+/*                 CORSCL  * {number of non-empty coarse voxels} */
 
-/*                         NP * {average number of fine voxels */
-/*                               intersected by each plate} */
+/*     VOXLSZ   is the size of the fine voxel-plate list array. This */
+/*              array contains, for each non-empty fine voxel, the */
+/*              count of plates that intersect that voxel and the */
+/*              IDs of those plates. VOXLSZ must be at least as large */
+/*              as */
 
-/*                    - the number of vertex-plate associations, if */
-/*                      the vertex-plate mapping is constructed. */
+/*                      NP * {average number of fine voxels */
+/*                            intersected by each plate} */
 
-/*                      This number is equal to */
+/*                  +   {number of non-empty fine voxels} */
 
-/*                         NV + ( 3 * NP ) */
+/*     MAKVTL   is a logical flag that, when set to .TRUE., indicates */
+/*              that a  vertex-plate association list is to be */
+/*              constructed. */
 
+/*              The amount of workspace that is needed may depend on */
+/*              whether a vertex-plate association list is */
+/*              constructed. When this list is constructed, the size */
+/*              of the integer component of the spatial index is */
+/*              increased by the size of the list and the size of a */
+/*              vertex-plate pointer array; the total of these sizes */
+/*              is */
 
-/*     VOXPSZ      is the size of the fine voxel-plate pointer array. */
-/*                 This array maps fine voxels to lists of plates that */
-/*                 intersect those voxels. VOXPSZ must be at least as */
-/*                 large as */
+/*                 ( 2 * NV ) + ( 3 * NP ) */
 
-/*                          3 */
-/*                    CORSCL  * {number of non-empty coarse voxels} */
+/*     SPXISZ   is the declared size of the output array SPAIXI. This */
+/*              size must be at least as large as the sum of */
 
+/*                 - the fixed-size part of the integer component of */
+/*                   the index, which includes the coarse voxel grid; */
+/*                   this value is */
 
-/*     VOXLSZ      is the size of the fine voxel-plate list array. This */
-/*                 array contains, for each non-empty fine voxel, the */
-/*                 count of plates that intersect that voxel and the */
-/*                 IDs of those plates. VOXLSZ must be at least as large */
-/*                 as */
+/*                      IXIFIX */
 
-/*                         NP * {average number of fine voxels */
-/*                               intersected by each plate} */
+/*                 - the size VOXPSZ of the voxel-plate pointer array */
 
-/*                     +   {number of non-empty fine voxels} */
+/*                 - the size VOXLSZ of the voxel-plate association */
+/*                   list */
 
+/*              plus, if the vertex-plate association list is */
+/*              constructed, */
 
-/*     MAKVTL      is a logical flag that, when set to .TRUE., indicates */
-/*                 that a  vertex-plate association list is to be */
-/*                 constructed. */
+/*                 - the size NV of the vertex-plate pointer array */
 
-/*                 The amount of workspace that is needed may depend on */
-/*                 whether a vertex-plate association list is */
-/*                 constructed. When this list is constructed, the size */
-/*                 of the integer component of the spatial index is */
-/*                 increased by the size of the list and the size of a */
-/*                 vertex-plate pointer array; the total of these sizes */
-/*                 is */
+/*                 - the size of the vertex-plate association list; */
+/*                   this size is */
 
-/*                    ( 2 * NV ) + ( 3 * NP ) */
+/*                      NV + ( 3 * NP ) */
 
+/*     WORK     is the workspace array. The array should be declared */
+/*              with dimensions */
 
-/*     SPXISZ      is the declared size of the output array SPAIXI. This */
-/*                 size must be at least as large as the sum of */
+/*                 (2, WORKSZ) */
 
-/*                    - the fixed-size part of the integer component of */
-/*                      the index, which includes the coarse voxel grid; */
-/*                      this value is */
-
-/*                         IXIFIX */
-
-/*                    - the size VOXPSZ of the voxel-plate pointer array */
-
-/*                    - the size VOXLSZ of the voxel-plate association */
-/*                      list */
-
-/*                 plus, if the vertex-plate association list is */
-/*                 constructed, */
-
-/*                    - the size NV of the vertex-plate pointer array */
-
-/*                    - the size of the vertex-plate association list; */
-/*                      this size is */
-
-/*                         NV + ( 3 * NP ) */
-
-
-/*     WORK        is the workspace array. The array should be declared */
-/*                 with dimensions */
-
-/*                    (2, WORKSZ) */
-
-/*                 See the description of WORKSZ above. */
-
+/*              See the description of WORKSZ above. */
 
 /* $ Detailed_Output */
 
-/*     WORK        is the workspace array, modified by the operations */
-/*                 performed by this routine. */
+/*     WORK     is the workspace array, modified by the operations */
+/*              performed by this routine. */
 
 /*     SPAIXD, */
-/*     SPAIXI      are, respectively, the double precision and integer */
-/*                 components of the spatial index of the segment. */
+/*     SPAIXI   are, respectively, the double precision and integer */
+/*              components of the spatial index of the segment. */
 
-/*                 SPAIXD must be declared with size at least IXDFIX. */
-/*                 SPAIXI must be declared with size at least SPXISZ. */
+/*              SPAIXD must be declared with size at least IXDFIX. */
+/*              SPAIXI must be declared with size at least SPXISZ. */
 
 /* $ Parameters */
 
-/*     IXDFIX      is the size of the double precision component of */
-/*                 the spatial index. */
+/*     IXDFIX   is the size of the double precision component of */
+/*              the spatial index. */
 
-/*     IXIFIX      is the size of the fixed-size portion of the integer */
-/*                 component of the spatial index. */
+/*     IXIFIX   is the size of the fixed-size portion of the integer */
+/*              component of the spatial index. */
 
-/*     See the include file dsk02.inc for declarations of the public DSK */
-/*     type 2 parameters used by this routine. */
+/*     See the include file */
+
+/*        dsk02.inc */
+
+/*     for declarations of DSK data type 2 (plate model) parameters. */
+
+/*     See the include file */
+
+/*        dla.inc */
+
+/*     for declarations of DLA descriptor sizes and documentation of the */
+/*     contents of DLA descriptors. */
+
+/*     See the include file */
+
+/*        dskdsc.inc */
+
+/*     for declarations of DSK descriptor sizes and documentation of the */
+/*     contents of DSK descriptors. */
 
 /* $ Exceptions */
 
@@ -707,21 +712,21 @@ static integer c_b20 = 32000000;
 /*         SPICE(WORKSPACETOOSMALL) is signaled. This is merely a */
 /*         sanity check; normally the workspace will need to be */
 /*         substantially larger than this reference value. See the */
-/*         description of WORKSZ in the header section Detailed_Input */
+/*         description of WORKSZ in the header section $Detailed_Input */
 /*         above. */
 
 /*     6)  If the voxel-plate pointer array size VOXPSZ is less than 1, */
 /*         the error SPICE(PTRARRAYTOOSMALL) is signaled. This is merely */
 /*         a sanity check; normally this pointer array will need to be */
 /*         substantially larger than this reference value. See the */
-/*         description of VOXPSZ in the header section Detailed_Input */
+/*         description of VOXPSZ in the header section $Detailed_Input */
 /*         above. */
 
 /*     7)  If the voxel-plate list array size VOXLSZ is less than NP+1, */
 /*         the error SPICE(PLATELISTTOOSMALL) is signaled. This is */
 /*         merely a sanity check; normally this array will need to be */
 /*         substantially larger than this reference value. See the */
-/*         description of VOXLSZ in the header section Detailed_Input */
+/*         description of VOXLSZ in the header section $Detailed_Input */
 /*         above. */
 
 /*     8)  If the size SPXISZ of the integer array SPAIXI is too small */
@@ -730,12 +735,11 @@ static integer c_b20 = 32000000;
 
 /*             NV, NP, VOXPSZ, VOXLSZ */
 
-/*         the error SPICE(INTINDEXTOOSMALL) will be signaled. */
+/*         the error SPICE(INTINDEXTOOSMALL) is signaled. */
 
 /*     9)  If there is insufficient room to create any of the data */
-/*         structures contained in the spatial index, the error */
-/*         will be diagnosed and signaled by a routine in the call */
-/*         tree of this routine. */
+/*         structures contained in the spatial index, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -780,16 +784,16 @@ static integer c_b20 = 32000000;
 
 /*     There are two voxel scales: */
 
-/*        - The coarse voxel scale is the integer ratio of the */
-/*          edge length of a coarse voxel to the edge length of */
-/*          a fine voxel */
+/*     -  The coarse voxel scale is the integer ratio of the */
+/*        edge length of a coarse voxel to the edge length of */
+/*        a fine voxel */
 
-/*        - The fine voxel scale is the double precision ratio */
-/*          of the edge length of a fine voxel to the average */
-/*          extent of the plates in the input plate set. "Extents" */
-/*          of a plate are the absolute values of the differences */
-/*          between the respective maximum and minimum X, Y, and Z */
-/*          coordinates of the plate's vertices. */
+/*     -  The fine voxel scale is the double precision ratio */
+/*        of the edge length of a fine voxel to the average */
+/*        extent of the plates in the input plate set. "Extents" */
+/*        of a plate are the absolute values of the differences */
+/*        between the respective maximum and minimum X, Y, and Z */
+/*        coordinates of the plate's vertices. */
 
 /*     Voxel scales determine the resolution of the voxel grid. */
 /*     Voxel scales must be chosen to satisfy size constraints and */
@@ -826,9 +830,7 @@ static integer c_b20 = 32000000;
 
 /*        In general, FS should not smaller than 1. */
 
-
 /* $ Examples */
-
 
 /*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
@@ -841,285 +843,323 @@ static integer c_b20 = 32000000;
 /*        realistic example, but it serves to demonstrate use of */
 /*        the supported coordinate systems. */
 
-/*        For simplicity, use an existing DSK file to provide the */
+/*        Use the DSK kernel below to provide, for simplicity, the */
 /*        input plate and vertex data. The selected input file has one */
 /*        segment. */
 
+/*           phobos_3_3.bds */
 
-/*     C */
-/*     C     Example program for DSKW02, DSKMI2, and DSKRB2 */
-/*     C */
-/*     C        Create a three-segment DSK file using plate model data */
-/*     C        for Phobos. Use latitudinal, rectangular, and */
-/*     C        planetodetic coordinates in the respective segments. */
-/*     C */
-/*     C        For simplicity, use an existing DSK file to provide the */
-/*     C        input plate and vertex data. The selected input file has */
-/*     C        one segment. */
-/*     C */
-/*     C           Version 1.0.0 22-JAN-2016 (NJB) */
-/*     C */
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
 
-/*           INCLUDE 'dla.inc' */
-/*           INCLUDE 'dskdsc.inc' */
-/*           INCLUDE 'dsk02.inc' */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      JYEAR */
-/*           DOUBLE PRECISION      PI */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               FRNMLN */
-/*           PARAMETER           ( FRNMLN = 32 ) */
 
-/*           INTEGER               NSEG */
-/*           PARAMETER           ( NSEG   = 3 ) */
+/*        C */
+/*        C     Example program for DSKW02, DSKMI2, and DSKRB2 */
+/*        C */
+/*        C        Create a three-segment DSK file using plate model */
+/*        C        data for Phobos. Use latitudinal, rectangular, and */
+/*        C        planetodetic coordinates in the respective segments. */
+/*        C */
+/*        C        For simplicity, use an existing DSK file to provide */
+/*        C        the input plate and vertex data. The selected input */
+/*        C        file has one segment. */
+/*        C */
+/*        C           Version 1.0.0 22-JAN-2016 (NJB) */
+/*        C */
+/*              PROGRAM DSKMI2_EX1 */
+/*              IMPLICIT NONE */
 
-/*           INTEGER               NAMLEN */
-/*           PARAMETER           ( NAMLEN = 20 ) */
+/*              INCLUDE 'dla.inc' */
+/*              INCLUDE 'dskdsc.inc' */
+/*              INCLUDE 'dsk02.inc' */
 
-/*           INTEGER               FILSIZ */
-/*           PARAMETER           ( FILSIZ = 255 ) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      JYEAR */
+/*              DOUBLE PRECISION      PI */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
 
-/*           INTEGER               LNSIZE */
-/*           PARAMETER           ( LNSIZE = 80 ) */
+/*              INTEGER               NSEG */
+/*              PARAMETER           ( NSEG   = 3 ) */
 
-/*           INTEGER               NCOR */
-/*           PARAMETER           ( NCOR   = 4 ) */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 20 ) */
 
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(NAMLEN)    CORNAM ( NCOR ) */
-/*           CHARACTER*(FILSIZ)    DSK */
-/*           CHARACTER*(FRNMLN)    FRAME */
-/*           CHARACTER*(FILSIZ)    INDSK */
-/*           CHARACTER*(LNSIZE)    LINE */
-/*     C */
-/*     C     Note: the values of MAXVRT and MAXPLT declared */
-/*     C     in dsk02.inc, and the integer spatial index */
-/*     C     dimension SPAISZ are very large. Smaller buffers */
-/*     C     can be used for most applications. */
-/*     C */
-/*           DOUBLE PRECISION      CORPAR ( NSYPAR ) */
-/*           DOUBLE PRECISION      F */
-/*           DOUBLE PRECISION      FINSCL */
-/*           DOUBLE PRECISION      FIRST */
-/*           DOUBLE PRECISION      LAST */
-/*           DOUBLE PRECISION      MNCOR1 */
-/*           DOUBLE PRECISION      MNCOR2 */
-/*           DOUBLE PRECISION      MNCOR3 */
-/*           DOUBLE PRECISION      MXCOR1 */
-/*           DOUBLE PRECISION      MXCOR2 */
-/*           DOUBLE PRECISION      MXCOR3 */
-/*           DOUBLE PRECISION      RE */
-/*           DOUBLE PRECISION      RP */
-/*           DOUBLE PRECISION      SPAIXD ( IXDFIX ) */
-/*           DOUBLE PRECISION      VRTCES ( 3, MAXVRT ) */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*           INTEGER               CENTER */
-/*           INTEGER               CORSCL */
-/*           INTEGER               CORSYS */
-/*           INTEGER               DCLASS */
-/*           INTEGER               DLADSC ( DLADSZ ) */
-/*           INTEGER               HANDLE */
-/*           INTEGER               INHAN */
-/*           INTEGER               NP */
-/*           INTEGER               NV */
-/*           INTEGER               PLATES ( 3, MAXPLT ) */
-/*           INTEGER               SEGNO */
-/*           INTEGER               SPAIXI ( SPAISZ ) */
-/*           INTEGER               SURFID */
-/*           INTEGER               VOXPSZ */
-/*           INTEGER               VOXLSZ */
-/*           INTEGER               WORK   ( 2, MAXCEL ) */
-/*           INTEGER               WORKSZ */
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
 
-/*           LOGICAL               FOUND */
-/*     C */
-/*     C     Saved variables */
-/*     C */
-/*     C     Save all large arrays to avoid stack problems. */
-/*     C */
-/*           SAVE */
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*           DATA                  CORNAM / 'radius', */
-/*          .                               'Z-coordinate', */
-/*          .                               'Z-coordinate', */
-/*          .                               'altitude'     / */
+/*              INTEGER               NCOR */
+/*              PARAMETER           ( NCOR   = 4 ) */
 
-/*     C */
-/*     C     Assign names of input and output DSK files. */
-/*     C */
-/*           INDSK = 'phobos_3_3.bds' */
-/*           DSK   = 'phobos_3_3_3seg.bds' */
-/*     C */
-/*     C     Open input DSK for read access; find first segment. */
-/*     C */
-/*           CALL DASOPR ( INDSK, INHAN ) */
-/*           CALL DLABFS ( INHAN, DLADSC, FOUND ) */
-/*     C */
-/*     C     Fetch vertices and plates from input DSK file. */
-/*     C */
-/*           WRITE (*,*) 'Reading input data...' */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(NAMLEN)    CORNAM ( NCOR ) */
+/*              CHARACTER*(FILSIZ)    DSK */
+/*              CHARACTER*(FRNMLN)    FRAME */
+/*              CHARACTER*(FILSIZ)    INDSK */
+/*              CHARACTER*(LNSIZE)    LINE */
+/*        C */
+/*        C     Note: the values of MAXVRT and MAXPLT declared */
+/*        C     in dsk02.inc, and the integer spatial index */
+/*        C     dimension SPAISZ are very large. Smaller buffers */
+/*        C     can be used for most applications. */
+/*        C */
+/*              DOUBLE PRECISION      CORPAR ( NSYPAR ) */
+/*              DOUBLE PRECISION      F */
+/*              DOUBLE PRECISION      FINSCL */
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      LAST */
+/*              DOUBLE PRECISION      MNCOR1 */
+/*              DOUBLE PRECISION      MNCOR2 */
+/*              DOUBLE PRECISION      MNCOR3 */
+/*              DOUBLE PRECISION      MXCOR1 */
+/*              DOUBLE PRECISION      MXCOR2 */
+/*              DOUBLE PRECISION      MXCOR3 */
+/*              DOUBLE PRECISION      RE */
+/*              DOUBLE PRECISION      RP */
+/*              DOUBLE PRECISION      SPAIXD ( IXDFIX ) */
+/*              DOUBLE PRECISION      VRTCES ( 3, MAXVRT ) */
 
-/*           CALL DSKV02 ( INHAN, DLADSC, 1, MAXVRT, NV, VRTCES ) */
-/*           CALL DSKP02 ( INHAN, DLADSC, 1, MAXPLT, NP, PLATES ) */
+/*              INTEGER               CENTER */
+/*              INTEGER               CORSCL */
+/*              INTEGER               CORSYS */
+/*              INTEGER               DCLASS */
+/*              INTEGER               DLADSC ( DLADSZ ) */
+/*              INTEGER               HANDLE */
+/*              INTEGER               INHAN */
+/*              INTEGER               NP */
+/*              INTEGER               NV */
+/*              INTEGER               PLATES ( 3, MAXPLT ) */
+/*              INTEGER               SEGNO */
+/*              INTEGER               SPAIXI ( SPAISZ ) */
+/*              INTEGER               SURFID */
+/*              INTEGER               VOXPSZ */
+/*              INTEGER               VOXLSZ */
+/*              INTEGER               WORK   ( 2, MAXCEL ) */
+/*              INTEGER               WORKSZ */
 
-/*           WRITE (*,*) 'Done.' */
-/*     C */
-/*     C     Set input array sizes required by DSKMI2. */
-/*     C */
-/*           VOXPSZ = MAXVXP */
-/*           VOXLSZ = MXNVLS */
-/*           WORKSZ = MAXCEL */
-/*     C */
-/*     C     Set fine and coarse voxel scales. (These usually */
-/*     C     need to determined by experimentation.) */
-/*     C */
-/*           FINSCL = 5.D0 */
-/*           CORSCL = 4 */
-/*     C */
-/*     C     Open a new DSK file. */
-/*     C */
-/*           CALL DSKOPN ( DSK, DSK, 0, HANDLE ) */
-/*     C */
-/*     C     Create three segments and add them to the file. */
-/*     C */
-/*           DO SEGNO = 1, NSEG */
-/*     C */
-/*     C        Create spatial index. */
-/*     C */
-/*              WRITE (*,*) 'Creating segment ', SEGNO */
-/*              WRITE (*,*) 'Creating spatial index...' */
+/*              LOGICAL               FOUND */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     Save all large arrays to avoid stack problems. */
+/*        C */
+/*              SAVE */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  CORNAM / 'radius', */
+/*             .                               'Z-coordinate', */
+/*             .                               'Z-coordinate', */
+/*             .                               'altitude'     / */
 
-/*              CALL DSKMI2 ( NV,     VRTCES, NP,     PLATES, FINSCL, */
-/*          .                 CORSCL, WORKSZ, VOXPSZ, VOXLSZ, .TRUE., */
-/*          .                 SPAISZ, WORK,   SPAIXD, SPAIXI          ) */
+/*        C */
+/*        C     Assign names of input and output DSK files. */
+/*        C */
+/*              INDSK = 'phobos_3_3.bds' */
+/*              DSK   = 'phobos_3_3_3seg.bds' */
+/*        C */
+/*        C     Open input DSK for read access; find first segment. */
+/*        C */
+/*              CALL DASOPR ( INDSK, INHAN ) */
+/*              CALL DLABFS ( INHAN, DLADSC, FOUND ) */
+/*        C */
+/*        C     Fetch vertices and plates from input DSK file. */
+/*        C */
+/*              WRITE (*,*) 'Reading input data...' */
+
+/*              CALL DSKV02 ( INHAN, DLADSC, 1, MAXVRT, NV, VRTCES ) */
+/*              CALL DSKP02 ( INHAN, DLADSC, 1, MAXPLT, NP, PLATES ) */
 
 /*              WRITE (*,*) 'Done.' */
-/*     C */
-/*     C        Set up inputs describing segment attributes: */
-/*     C */
-/*     C        - Central body: Phobos */
-/*     C        - Surface ID code: user's choice. */
-/*     C          We use the segment number here. */
-/*     C        - Data class: general (arbitrary) shape */
-/*     C        - Body-fixed reference frame */
-/*     C        - Time coverage bounds (TBD) */
-/*     C */
-/*              CENTER = 401 */
-/*              SURFID = SEGNO */
-/*              DCLASS = GENCLS */
-/*              FRAME  = 'IAU_PHOBOS' */
+/*        C */
+/*        C     Set input array sizes required by DSKMI2. */
+/*        C */
+/*              VOXPSZ = MAXVXP */
+/*              VOXLSZ = MXNVLS */
+/*              WORKSZ = MAXCEL */
+/*        C */
+/*        C     Set fine and coarse voxel scales. (These usually */
+/*        C     need to determined by experimentation.) */
+/*        C */
+/*              FINSCL = 5.D0 */
+/*              CORSCL = 4 */
+/*        C */
+/*        C     Open a new DSK file. */
+/*        C */
+/*              CALL DSKOPN ( DSK, DSK, 0, HANDLE ) */
+/*        C */
+/*        C     Create three segments and add them to the file. */
+/*        C */
+/*              DO SEGNO = 1, NSEG */
+/*        C */
+/*        C        Create spatial index. */
+/*        C */
+/*                 WRITE (*,*) 'Creating segment ', SEGNO */
+/*                 WRITE (*,*) 'Creating spatial index...' */
 
-/*              FIRST = -50 * JYEAR() */
-/*              LAST  =  50 * JYEAR() */
-/*     C */
-/*     C        Set the coordinate system and coordinate system */
-/*     C        bounds based on the segment index. */
-/*     C */
-/*     C        Zero out the coordinate parameters to start. */
-/*     C */
-/*              CALL CLEARD ( NSYPAR, CORPAR ) */
+/*                 CALL DSKMI2 ( NV,     VRTCES, NP,     PLATES, FINSCL, */
+/*             .                 CORSCL, WORKSZ, VOXPSZ, VOXLSZ, .TRUE., */
+/*             .                 SPAISZ, WORK,   SPAIXD, SPAIXI        ) */
 
-/*              IF ( SEGNO .EQ. 1 ) THEN */
-/*     C */
-/*     C           Use planetocentric latitudinal coordinates. Set */
-/*     C           the longitude and latitude bounds. */
-/*     C */
-/*                 CORSYS = LATSYS */
+/*                 WRITE (*,*) 'Done.' */
+/*        C */
+/*        C        Set up inputs describing segment attributes: */
+/*        C */
+/*        C        - Central body: Phobos */
+/*        C        - Surface ID code: user's choice. */
+/*        C          We use the segment number here. */
+/*        C        - Data class: general (arbitrary) shape */
+/*        C        - Body-fixed reference frame */
+/*        C        - Time coverage bounds (TBD) */
+/*        C */
+/*                 CENTER = 401 */
+/*                 SURFID = SEGNO */
+/*                 DCLASS = GENCLS */
+/*                 FRAME  = 'IAU_PHOBOS' */
 
-/*                 MNCOR1 = -PI() */
-/*                 MXCOR1 =  PI() */
-/*                 MNCOR2 = -PI()/2 */
-/*                 MXCOR2 =  PI()/2 */
+/*                 FIRST = -50 * JYEAR() */
+/*                 LAST  =  50 * JYEAR() */
+/*        C */
+/*        C        Set the coordinate system and coordinate system */
+/*        C        bounds based on the segment index. */
+/*        C */
+/*        C        Zero out the coordinate parameters to start. */
+/*        C */
+/*                 CALL CLEARD ( NSYPAR, CORPAR ) */
 
-/*              ELSE IF ( SEGNO .EQ. 2 ) THEN */
-/*     C */
-/*     C           Use rectangular coordinates. Set the */
-/*     C           X and Y bounds. */
-/*     C */
-/*     C           The bounds shown here were derived from */
-/*     C           the plate data. They lie slightly outside */
-/*     C           of the range spanned by the plates. */
-/*     C */
-/*                 CORSYS = RECSYS */
+/*                 IF ( SEGNO .EQ. 1 ) THEN */
+/*        C */
+/*        C           Use planetocentric latitudinal coordinates. Set */
+/*        C           the longitude and latitude bounds. */
+/*        C */
+/*                    CORSYS = LATSYS */
 
-/*                 MNCOR1 = -1.3D0 */
-/*                 MXCOR1 =  1.31D0 */
-/*                 MNCOR2 = -1.21D0 */
-/*                 MXCOR2 =  1.2D0 */
+/*                    MNCOR1 = -PI() */
+/*                    MXCOR1 =  PI() */
+/*                    MNCOR2 = -PI()/2 */
+/*                    MXCOR2 =  PI()/2 */
 
-/*              ELSE */
-/*     C */
-/*     C           Set the coordinate system to planetodetic. */
-/*     C */
-/*                 CORSYS    = PDTSYS */
+/*                 ELSE IF ( SEGNO .EQ. 2 ) THEN */
+/*        C */
+/*        C           Use rectangular coordinates. Set the */
+/*        C           X and Y bounds. */
+/*        C */
+/*        C           The bounds shown here were derived from */
+/*        C           the plate data. They lie slightly outside */
+/*        C           of the range spanned by the plates. */
+/*        C */
+/*                    CORSYS = RECSYS */
 
-/*                 MNCOR1    = -PI() */
-/*                 MXCOR1    =  PI() */
-/*                 MNCOR2    = -PI()/2 */
-/*                 MXCOR2    =  PI()/2 */
-/*     C */
-/*     C           We'll use equatorial and polar radii from */
-/*     C           pck00010.tpc. These normally would be fetched */
-/*     C           at run time, but for simplicity, we'll use */
-/*     C           hard-coded values. */
+/*                    MNCOR1 = -1.3D0 */
+/*                    MXCOR1 =  1.31D0 */
+/*                    MNCOR2 = -1.21D0 */
+/*                    MXCOR2 =  1.2D0 */
 
-/*                 RE        = 13.0D0 */
-/*                 RP        =  9.1D0 */
-/*                 F         = ( RE - RP ) / RE */
+/*                 ELSE */
+/*        C */
+/*        C           Set the coordinate system to planetodetic. */
+/*        C */
+/*                    CORSYS    = PDTSYS */
 
-/*                 CORPAR(1) = RE */
-/*                 CORPAR(2) = F */
+/*                    MNCOR1    = -PI() */
+/*                    MXCOR1    =  PI() */
+/*                    MNCOR2    = -PI()/2 */
+/*                    MXCOR2    =  PI()/2 */
+/*        C */
+/*        C           We'll use equatorial and polar radii from */
+/*        C           pck00010.tpc. These normally would be fetched */
+/*        C           at run time, but for simplicity, we'll use */
+/*        C           hard-coded values. */
 
-/*              END IF */
-/*     C */
-/*     C        Compute plate model radius bounds. */
-/*     C */
-/*              LINE = 'Computing # bounds of plate set...' */
+/*                    RE        = 13.0D0 */
+/*                    RP        =  9.1D0 */
+/*                    F         = ( RE - RP ) / RE */
 
-/*              CALL REPMC ( LINE, '#', CORNAM(CORSYS), LINE ) */
-/*              WRITE (*,*) LINE */
+/*                    CORPAR(1) = RE */
+/*                    CORPAR(2) = F */
 
-/*              CALL DSKRB2 ( NV,     VRTCES, NP,     PLATES, */
-/*          .                 CORSYS, CORPAR, MNCOR3, MXCOR3 ) */
+/*                 END IF */
+/*        C */
+/*        C        Compute plate model radius bounds. */
+/*        C */
+/*                 LINE = 'Computing # bounds of plate set...' */
+
+/*                 CALL REPMC ( LINE, '#', CORNAM(CORSYS), LINE ) */
+/*                 WRITE (*,*) LINE */
+
+/*                 CALL DSKRB2 ( NV,     VRTCES, NP,     PLATES, */
+/*             .                 CORSYS, CORPAR, MNCOR3, MXCOR3 ) */
+
+/*                 WRITE (*,*) 'Done.' */
+/*        C */
+/*        C        Write the segment to the file. */
+/*        C */
+/*                 WRITE (*,*) 'Writing segment...' */
+
+/*                 CALL DSKW02 ( HANDLE, */
+/*             .                 CENTER, SURFID, DCLASS, FRAME,  CORSYS, */
+/*             .                 CORPAR, MNCOR1, MXCOR1, MNCOR2, MXCOR2, */
+/*             .                 MNCOR3, MXCOR3, FIRST,  LAST,   NV, */
+/*             .                 VRTCES, NP,     PLATES, SPAIXD, SPAIXI ) */
+
+/*                 WRITE (*,*) 'Done.' */
+
+/*              END DO */
+/*        C */
+/*        C     Segregate the data records in the DSK file and */
+/*        C     close the file. */
+/*        C */
+/*              WRITE (*,*) 'Segregating and closing DSK file...' */
+
+/*              CALL DSKCLS ( HANDLE, .TRUE. ) */
 
 /*              WRITE (*,*) 'Done.' */
-/*     C */
-/*     C        Write the segment to the file. */
-/*     C */
-/*              WRITE (*,*) 'Writing segment...' */
-
-/*              CALL DSKW02 ( HANDLE, */
-/*          .                 CENTER, SURFID, DCLASS, FRAME,  CORSYS, */
-/*          .                 CORPAR, MNCOR1, MXCOR1, MNCOR2, MXCOR2, */
-/*          .                 MNCOR3, MXCOR3, FIRST,  LAST,   NV, */
-/*          .                 VRTCES, NP,     PLATES, SPAIXD, SPAIXI ) */
-
-/*              WRITE (*,*) 'Done.' */
-
-/*           END DO */
-/*     C */
-/*     C     Segregate the data records in the DSK file and */
-/*     C     close the file. */
-/*     C */
-/*           WRITE (*,*) 'Segregating and closing DSK file...' */
-
-/*           CALL DSKCLS ( HANDLE, .TRUE. ) */
-
-/*           WRITE (*,*) 'Done.' */
-/*           END */
+/*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Reading input data... */
+/*         Done. */
+/*         Creating segment            1 */
+/*         Creating spatial index... */
+/*         Done. */
+/*         Computing radius bounds of plate set... */
+/*         Done. */
+/*         Writing segment... */
+/*         Done. */
+/*         Creating segment            2 */
+/*         Creating spatial index... */
+/*         Done. */
+/*         Computing Z-coordinate bounds of plate set... */
+/*         Done. */
+/*         Writing segment... */
+/*         Done. */
+/*         Creating segment            3 */
+/*         Creating spatial index... */
+/*         Done. */
+/*         Computing altitude bounds of plate set... */
+/*         Done. */
+/*         Writing segment... */
+/*         Done. */
+/*         Segregating and closing DSK file... */
+/*         Done. */
+
+
+/*        Note that after run completion, a new DSK exists in the output */
+/*        directory. */
 
 /* $ Restrictions */
 
@@ -1131,9 +1171,18 @@ static integer c_b20 = 32000000;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) (BVS) */
+
+/*        Edited the header to comply with NAIF standard. Fixed I/O type */
+/*        of arguments WORK, SPAIXD and SPAIXI in $Brief_I/O table. */
+
+/*        Added solution to code example. */
 
 /* -    SPICELIB Version 1.0.0, 13-DEC-2016 (NJB) */
 
@@ -1141,8 +1190,8 @@ static integer c_b20 = 32000000;
 
 /*        16-MAR-2016 (NJB) */
 
-/*        Now zeros out the size of the vertex-plate list */
-/*        when the list is not created. */
+/*           Now zeros out the size of the vertex-plate list */
+/*           when the list is not created. */
 
 /*        23-JAN-2016 (NJB) */
 
@@ -1151,7 +1200,7 @@ static integer c_b20 = 32000000;
 /* -& */
 /* $ Index_Entries */
 
-/*     make spatial index for type 2 dsk segment */
+/*     make spatial index for type 2 DSK segment */
 
 /* -& */
 
@@ -1283,7 +1332,7 @@ static integer c_b20 = 32000000;
 /*     Set known values in spatial index arrays. */
 
     spaixi[(i__1 = 3) < spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dskmi2_",
-	     (ftnlen)898)] = *corscl;
+	     (ftnlen)949)] = *corscl;
 
 /*     Prepare indices in the spatial index arrays. */
 
@@ -1302,16 +1351,16 @@ static integer c_b20 = 32000000;
 
     zzmkspin_(np, plates, vrtces, finscl, corscl, voxpsz, worksz, voxlsz, 
 	    work, &spaixi[(i__1 = 0) < spaixi_dim1 ? i__1 : s_rnge("spaixi", 
-	    i__1, "dskmi2_", (ftnlen)917)], &spaixd[9], &spaixd[6], &nvxtot, &
+	    i__1, "dskmi2_", (ftnlen)968)], &spaixd[9], &spaixd[6], &nvxtot, &
 	    spaixi[(i__2 = 4) < spaixi_dim1 ? i__2 : s_rnge("spaixi", i__2, 
-	    "dskmi2_", (ftnlen)917)], &spaixi[(i__3 = vxpidx - 1) < 
+	    "dskmi2_", (ftnlen)968)], &spaixi[(i__3 = vxpidx - 1) < 
 	    spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge("spaixi", i__3, "dskmi2_"
-	    , (ftnlen)917)], &spaixi[(i__4 = 5) < spaixi_dim1 ? i__4 : s_rnge(
-	    "spaixi", i__4, "dskmi2_", (ftnlen)917)], &spaixi[(i__5 = vxlidx 
+	    , (ftnlen)968)], &spaixi[(i__4 = 5) < spaixi_dim1 ? i__4 : s_rnge(
+	    "spaixi", i__4, "dskmi2_", (ftnlen)968)], &spaixi[(i__5 = vxlidx 
 	    - 1) < spaixi_dim1 && 0 <= i__5 ? i__5 : s_rnge("spaixi", i__5, 
-	    "dskmi2_", (ftnlen)917)], spaixd, &spaixi[(i__6 = 7) < 
+	    "dskmi2_", (ftnlen)968)], spaixd, &spaixi[(i__6 = 7) < 
 	    spaixi_dim1 ? i__6 : s_rnge("spaixi", i__6, "dskmi2_", (ftnlen)
-	    917)]);
+	    968)]);
     if (failed_()) {
 	chkout_("DSKMI2", (ftnlen)6);
 	return 0;
@@ -1323,15 +1372,15 @@ static integer c_b20 = 32000000;
 /*     it starts right after the end of the pointer array. */
 
     nshift = *voxpsz - spaixi[(i__1 = 4) < spaixi_dim1 ? i__1 : s_rnge("spai"
-	    "xi", i__1, "dskmi2_", (ftnlen)942)];
+	    "xi", i__1, "dskmi2_", (ftnlen)993)];
     i__2 = spaixi[(i__1 = 5) < spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, 
-	    "dskmi2_", (ftnlen)944)];
+	    "dskmi2_", (ftnlen)995)];
     for (i__ = 1; i__ <= i__2; ++i__) {
 	j = vxlidx - 1 + i__;
 	spaixi[(i__1 = j - nshift - 1) < spaixi_dim1 && 0 <= i__1 ? i__1 : 
-		s_rnge("spaixi", i__1, "dskmi2_", (ftnlen)948)] = spaixi[(
+		s_rnge("spaixi", i__1, "dskmi2_", (ftnlen)999)] = spaixi[(
 		i__3 = j - 1) < spaixi_dim1 && 0 <= i__3 ? i__3 : s_rnge(
-		"spaixi", i__3, "dskmi2_", (ftnlen)948)];
+		"spaixi", i__3, "dskmi2_", (ftnlen)999)];
     }
 
 /*     Update the voxel list start index to reflect the shift. */
@@ -1346,7 +1395,7 @@ static integer c_b20 = 32000000;
 /*           VTPIDX is the start index of the vertex pointer array. */
 
 	vtpidx = vxlidx + spaixi[(i__2 = 5) < spaixi_dim1 ? i__2 : s_rnge(
-		"spaixi", i__2, "dskmi2_", (ftnlen)965)];
+		"spaixi", i__2, "dskmi2_", (ftnlen)1016)];
 
 /*           VXLIDX is the start index of the vertex-plate list. The */
 /*           list start is offset from the vertex pointer array by */
@@ -1355,17 +1404,17 @@ static integer c_b20 = 32000000;
 	vtlidx = vtpidx + *nv;
 	zzvrtplt_(nv, np, plates, worksz, &vtxlsz, work, &spaixi[(i__2 = 
 		vtpidx - 1) < spaixi_dim1 && 0 <= i__2 ? i__2 : s_rnge("spai"
-		"xi", i__2, "dskmi2_", (ftnlen)973)], &spaixi[(i__1 = 6) < 
+		"xi", i__2, "dskmi2_", (ftnlen)1024)], &spaixi[(i__1 = 6) < 
 		spaixi_dim1 ? i__1 : s_rnge("spaixi", i__1, "dskmi2_", (
-		ftnlen)973)], &spaixi[(i__3 = vtlidx - 1) < spaixi_dim1 && 0 
+		ftnlen)1024)], &spaixi[(i__3 = vtlidx - 1) < spaixi_dim1 && 0 
 		<= i__3 ? i__3 : s_rnge("spaixi", i__3, "dskmi2_", (ftnlen)
-		973)]);
+		1024)]);
     } else {
 
 /*        Zero out the size of the vertex-plate list. */
 
 	spaixi[(i__2 = 6) < spaixi_dim1 ? i__2 : s_rnge("spaixi", i__2, "dsk"
-		"mi2_", (ftnlen)983)] = 0;
+		"mi2_", (ftnlen)1034)] = 0;
     }
     chkout_("DSKMI2", (ftnlen)6);
     return 0;

@@ -301,6 +301,10 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
+/*     This routine is meant to signal no errors under normal */
+/*     circumstances. The only errors it can signal would be caused by */
+/*     bugs. */
+
 /*     1) If the input number of bodies NVALS is not less than or equal */
 /*        to the size of the output hash, the error 'SPICE(BUG1)' will be */
 /*        signaled. */
@@ -323,6 +327,7 @@ static integer c__0 = 0;
 /*     The order of mappings in the input arrays determines their */
 /*     priority, with the mapping having the lowest priority being first */
 /*     and the mapping with the highest priority being last. */
+
 /*     If more than one entry with a particular normalized name and body */
 /*     ID is present in the input arrays, only the latest entry is */
 /*     registered in the name-based hash. */
@@ -366,6 +371,11 @@ static integer c__0 = 0;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 05-NOV-2021 (NJB) */
+
+/*        Made minor formatting changes to code. */
+/*        Updated inline comments to clarify logic. */
+
 /* -    SPICELIB Version 1.0.0, 03-DEC-2015 (NJB) (BVS) (EDW) */
 
 /* -& */
@@ -377,6 +387,9 @@ static integer c__0 = 0;
 
 
 /*     Local Variables */
+
+
+/*     This routine uses discovery check-in. */
 
 
 /*     Consistency check. */
@@ -406,16 +419,23 @@ static integer c__0 = 0;
 /*     backwards to pick and register only the highest priority (latest) */
 /*     values for each pair of normalized surface name and body ID code. */
 
+/*     If multiple surface ID codes are associated with a name, only */
+/*     the highest priority ID is associated with the name in the */
+/*     mapping data structures. */
+
     for (i__ = *nvals; i__ >= 1; --i__) {
 
 /*        Register this normalized surface name and body ID, but only if */
-/*        this pair is not already in the hash. */
+/*        the name from this pair is not already in the hash. */
 
 /*        We must traverse the collision list for the normalized surface */
 /*        name "manually," since we have to check the body ID for each */
 /*        matching name. */
 
-/*        Use hash function to get index of the head node. */
+/*        Use hash function to get index of the head node. We apply the */
+/*        hash function to a version of the normalized name that has */
+/*        all blanks compressed out. (A normalized name may have single */
+/*        blanks separating words comprising the name.) */
 
 	cmprss_(" ", &c__0, nornam + (i__ - 1) * nornam_len, sqshnm, (ftnlen)
 		1, nornam_len, (ftnlen)36);
@@ -450,12 +470,16 @@ static integer c__0 = 0;
 		itemat = node;
 		node = snmpol[node + 5];
 	    }
-
-/*           ITEMAT is the value of the last node in the list, or */
-/*           0 if the list is empty. */
-
 	    namnew = ! lfound;
 	}
+
+/*        ITEMAT is the node at which a name match was found by the */
+/*        above loop, if a match was found. ITEMAT is the tail node of */
+/*        the list if no match was found. It is 0 if the list is empty. */
+
+/*        ITEMAT will be used below only if the list is non-empty and */
+/*        no match was found, in which case ITEMAT is non-zero. */
+
 	if (namnew) {
 
 /*           We need to add the current normalized name and BODY ID */
@@ -505,8 +529,8 @@ static integer c__0 = 0;
 /*           name and body ID pair maps to more than one surface ID. In */
 /*           such cases we want to completely mask all surface IDs with */
 /*           the lower priority. This is easy to do by simply not */
-/*           attempting to register any more surface IDs if the name is */
-/*           already registered. */
+/*           attempting to register any more surface IDs if the name was */
+/*           already registered due to a higher-indexed assignment. */
 
 /*           Register this surface ID and body ID pair, but only if it */
 /*           is not already in the hash. */
@@ -543,12 +567,17 @@ static integer c__0 = 0;
 		    itemat = node;
 		    node = sidpol[node + 5];
 		}
-
-/*              ITEMAT is the value of the last node in the list, or */
-/*              0 if the list is empty. */
-
 		idnew = ! lfound;
 	    }
+
+/*           ITEMAT is the node at which a surface ID code match was */
+/*           found by the above loop, if a match was found. ITEMAT is */
+/*           the tail node of the list if no match was found. It is 0 if */
+/*           the list is empty. */
+
+/*           ITEMAT will be used below only if the list is non-empty and */
+/*           no match was found, in which case ITEMAT is non-zero. */
+
 	    if (idnew) {
 
 /*              We need to add the current surface ID and BODY ID */

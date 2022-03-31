@@ -9,7 +9,7 @@
 
 static integer c__4 = 4;
 
-/* $Procedure      CKE05 ( C-Kernel, evaluate, type 5 ) */
+/* $Procedure CKE05 ( C-Kernel, evaluate, type 5 ) */
 /* Subroutine */ int cke05_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
@@ -379,9 +379,9 @@ static integer c__4 = 4;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     NEEDAV     I   True if angular velocity is requested. */
+/*     NEEDAV     I   .TRUE. if angular velocity is requested. */
 /*     RECORD    I-O  Data type 5 record. */
 /*     CMAT       O   C-matrix. */
 /*     AV         O   Angular velocity vector. */
@@ -389,91 +389,90 @@ static integer c__4 = 4;
 
 /* $ Detailed_Input */
 
-/*     NEEDAV      is true if angular velocity is requested. */
+/*     NEEDAV   is .TRUE. if angular velocity is requested. */
 
-/*     RECORD      is a record from a type 5 CK segment which, when */
-/*                 evaluated at the epoch contained in its first */
-/*                 element, will give the attitude and angular velocity */
-/*                 of a spacecraft structure or instrument relative to a */
-/*                 base reference frame. */
+/*     RECORD   is a record from a type 5 CK segment which, when */
+/*              evaluated at the epoch contained in its first */
+/*              element, will give the attitude and angular velocity */
+/*              of a spacecraft structure or instrument relative to a */
+/*              base reference frame. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | evaluation epoch     | */
-/*                    +----------------------+ */
-/*                    | subtype code         | */
-/*                    +----------------------+ */
-/*                    | number of packets (n)| */
-/*                    +----------------------+ */
-/*                    | nominal SCLK rate    | */
-/*                    +----------------------+ */
-/*                    | packet 1             | */
-/*                    +----------------------+ */
-/*                    | packet 2             | */
-/*                    +----------------------+ */
-/*                             . */
-/*                             . */
-/*                             . */
-/*                    +----------------------+ */
-/*                    | packet n             | */
-/*                    +----------------------+ */
-/*                    | epochs 1--n          | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | evaluation epoch     | */
+/*                 +----------------------+ */
+/*                 | subtype code         | */
+/*                 +----------------------+ */
+/*                 | number of packets (n)| */
+/*                 +----------------------+ */
+/*                 | nominal SCLK rate    | */
+/*                 +----------------------+ */
+/*                 | packet 1             | */
+/*                 +----------------------+ */
+/*                 | packet 2             | */
+/*                 +----------------------+ */
+/*                          . */
+/*                          . */
+/*                          . */
+/*                 +----------------------+ */
+/*                 | packet n             | */
+/*                 +----------------------+ */
+/*                 | epochs 1--n          | */
+/*                 +----------------------+ */
 
 /*                See the CK Required Reading or the include file */
 /*                ck05.inc for details on CK type 5 packet contents. */
 
-
 /* $ Detailed_Output */
 
-/*     RECORD     has been modified due to its use as a workspace array. */
-/*                The contents are undefined. */
+/*     RECORD   has been modified due to its use as a workspace array. */
+/*              The contents are undefined. */
 
 
-/*     CMAT       is a rotation matrix that transforms the components */
-/*                of a vector expressed in the base frame given in */
-/*                the segment to components expressed in the instrument */
-/*                fixed frame at the returned time. */
+/*     CMAT     is a rotation matrix that transforms the components */
+/*              of a vector expressed in the base frame given in */
+/*              the segment to components expressed in the instrument */
+/*              fixed frame at the returned time. */
 
-/*                Thus, if a vector v has components x, y, z in the */
-/*                base frame, then v has components x', y', z' in the */
-/*                instrument fixed frame where: */
+/*              Thus, if a vector v has components x, y, z in the */
+/*              base frame, then v has components x', y', z' in the */
+/*              instrument fixed frame where: */
 
-/*                     [ x' ]     [          ] [ x ] */
-/*                     | y' |  =  |   CMAT   | | y | */
-/*                     [ z' ]     [          ] [ z ] */
+/*                   [ x' ]     [          ] [ x ] */
+/*                   | y' |  =  |   CMAT   | | y | */
+/*                   [ z' ]     [          ] [ z ] */
 
-/*                If the x', y', z' components are known, use the */
-/*                transpose of the C-matrix to determine x, y, z as */
-/*                follows. */
+/*              If the x', y', z' components are known, use the */
+/*              transpose of the C-matrix to determine x, y, z as */
+/*              follows. */
 
-/*                     [ x ]      [          ]T    [ x' ] */
-/*                     | y |  =   |   CMAT   |     | y' | */
-/*                     [ z ]      [          ]     [ z' ] */
-/*                              (Transpose of CMAT) */
+/*                   [ x ]      [          ]T    [ x' ] */
+/*                   | y |  =   |   CMAT   |     | y' | */
+/*                   [ z ]      [          ]     [ z' ] */
+/*                            (Transpose of CMAT) */
 
 
-/*     AV         is the angular velocity vector of the instrument fixed */
-/*                frame defined by CMAT.  The angular velocity is */
-/*                returned only if NEEDAV is true. */
+/*     AV       is the angular velocity vector of the instrument fixed */
+/*              frame defined by CMAT. The angular velocity is */
+/*              returned only if NEEDAV is .TRUE. */
 
-/*                The direction of the angular velocity vector gives */
-/*                the right-handed axis about which the instrument fixed */
-/*                reference frame is rotating. The magnitude of AV is */
-/*                the magnitude of the instantaneous velocity of the */
-/*                rotation, in radians per second. */
+/*              The direction of the angular velocity vector gives */
+/*              the right-handed axis about which the instrument fixed */
+/*              reference frame is rotating. The magnitude of AV is */
+/*              the magnitude of the instantaneous velocity of the */
+/*              rotation, in radians per second. */
 
-/*                The angular velocity vector is returned in component */
-/*                form */
+/*              The angular velocity vector is returned in component */
+/*              form */
 
-/*                         AV = [ AV1  , AV2  , AV3  ] */
+/*                       AV = [ AV1  , AV2  , AV3  ] */
 
-/*                which is in terms of the base coordinate frame */
-/*                specified in the segment descriptor. */
+/*              which is in terms of the base coordinate frame */
+/*              specified in the segment descriptor. */
 
-/*     CLKOUT     is the encoded SCLK associated with the returned */
-/*                C-matrix and angular velocity vector. */
+/*     CLKOUT   is the encoded SCLK associated with the returned */
+/*              C-matrix and angular velocity vector. */
 
 /* $ Parameters */
 
@@ -628,13 +627,13 @@ static integer c__4 = 4;
 
 /* $ Restrictions */
 
-/*     1)  This routine assumes that the input record is valid.  Any */
+/*     1)  This routine assumes that the input record is valid. Any */
 /*         checking of the input data is assumed to have been performed */
 /*         when the source CK file was created. */
 
 /*     2)  This routine assumes that the input data are suitable for the */
 /*         interpolation method indicated by the subtype code in the */
-/*         input record.  Since the mapping of rotations to quaternions */
+/*         input record. Since the mapping of rotations to quaternions */
 /*         is multiple-valued, this routine assumes that whichever sign */
 /*         minimizes the Euclidean distance between one quaternion and */
 /*         the next is the correct sign. */
@@ -645,9 +644,14 @@ static integer c__4 = 4;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.1.0, 11-AUG-2015 (NJB) */
 
@@ -666,26 +670,26 @@ static integer c__4 = 4;
 
 /* -    SPICELIB Version 2.0.0, 20-NOV-2006 (NJB) */
 
-/*        Bug fix:  this routine now assumes that angular velocity */
+/*        Bug fix: this routine now assumes that angular velocity */
 /*        and quaternion derivative values stored in the input */
 /*        record have units of radians/second. */
 
-/*        Bug fix:  this routine no longer attempts to determine */
-/*        the correct sign of quaternion derivatives.  The caller */
+/*        Bug fix: this routine no longer attempts to determine */
+/*        the correct sign of quaternion derivatives. The caller */
 /*        must supply quaternion derivatives that are suitable */
 /*        for interpolation. */
 
 /* -    SPICELIB Version 1.3.0, 23-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments in */
-/*        XPOSEG and VSCL calls.  Replaced header reference to LDPOOL */
+/*        XPOSEG and VSCL calls. Replaced header reference to LDPOOL */
 /*        with reference to FURNSH. */
 
 /* -    SPICELIB Version 1.2.0, 14-FEB-2003 (NJB) */
 
-/*        Bug fix:  angular velocity computation was modified to */
+/*        Bug fix: angular velocity computation was modified to */
 /*        match that used in the corresponding algorithm employed */
-/*        by the MEX/Rosetta attitude file reader.  The quaternion */
+/*        by the MEX/Rosetta attitude file reader. The quaternion */
 /*        derivative used to derive angular velocity now is the */
 /*        derivative of the *unit* quaternion. */
 
@@ -694,7 +698,7 @@ static integer c__4 = 4;
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_5 ck segment */
+/*     evaluate type_5 CK segment */
 
 /* -& */
 /* $ Revisions */
@@ -702,21 +706,20 @@ static integer c__4 = 4;
 /* -    SPICELIB Version 1.3.0, 23-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments in */
-/*        XPOSEG and VSCL calls.  Replaced header reference to LDPOOL */
+/*        XPOSEG and VSCL calls. Replaced header reference to LDPOOL */
 /*        with reference to FURNSH. */
 
 /* -    SPICELIB Version 1.2.0, 14-FEB-2003 (NJB) */
 
-/*        Bug fix:  angular velocity computation was modified to */
+/*        Bug fix: angular velocity computation was modified to */
 /*        match that used in the corresponding algorithm employed */
-/*        by the MEX/Rosetta attitude file reader.  The quaternion */
+/*        by the MEX/Rosetta attitude file reader. The quaternion */
 /*        derivative used to derive angular velocity now is the */
 /*        derivative of the *unit* quaternion. */
 
 /*        Letting Q(t) be the quaternion derived by polynomial */
 /*        interpolation, and letting UQ(t) be Q(t)/||Q(t)||, */
 /*        the quaternion derivative d(UQ)/dt is now used. */
-
 
 /* -& */
 
@@ -882,9 +885,9 @@ static integer c__4 = 4;
 	    ystart = n * (i__ - 1) + 5;
 	    lgrind_(&n, &record[xstart - 1], &record[ystart - 1], work, &
 		    sclkdp, &state[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : 
-		    s_rnge("state", i__2, "cke05_", (ftnlen)657)], &state[(
+		    s_rnge("state", i__2, "cke05_", (ftnlen)661)], &state[(
 		    i__3 = i__ + 3) < 8 && 0 <= i__3 ? i__3 : s_rnge("state", 
-		    i__3, "cke05_", (ftnlen)657)]);
+		    i__3, "cke05_", (ftnlen)661)]);
 	}
 
 /*        The output quaternion is a unitized version of the */
@@ -964,7 +967,7 @@ static integer c__4 = 4;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ystart = n * (i__ - 1) + 5;
 	    state[(i__2 = i__ - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge("state", 
-		    i__2, "cke05_", (ftnlen)759)] = lgrint_(&n, &record[
+		    i__2, "cke05_", (ftnlen)763)] = lgrint_(&n, &record[
 		    xstart - 1], &record[ystart - 1], locrec, &sclkdp);
 	}
 
@@ -1006,10 +1009,10 @@ static integer c__4 = 4;
 		from = packsz * (j - 1) + 4 + i__;
 		to = (j << 1) - 1;
 		locrec[(i__2 = to - 1) < 340 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "cke05_", (ftnlen)811)] = record[from 
+			"locrec", i__2, "cke05_", (ftnlen)815)] = record[from 
 			- 1];
 		locrec[(i__2 = to) < 340 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "cke05_", (ftnlen)812)] = record[from + 3] * 
+			, i__2, "cke05_", (ftnlen)816)] = record[from + 3] * 
 			rate;
 	    }
 
@@ -1018,9 +1021,9 @@ static integer c__4 = 4;
 
 	    hrmint_(&n, &record[xstart - 1], locrec, &sclkdp, work, &state[(
 		    i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("state", 
-		    i__1, "cke05_", (ftnlen)820)], &state[(i__2 = i__ + 3) < 
+		    i__1, "cke05_", (ftnlen)824)], &state[(i__2 = i__ + 3) < 
 		    8 && 0 <= i__2 ? i__2 : s_rnge("state", i__2, "cke05_", (
-		    ftnlen)820)]);
+		    ftnlen)824)]);
 	}
 
 /*        The output quaternion is a unitized version of the */
@@ -1092,10 +1095,10 @@ static integer c__4 = 4;
 			from = packsz * (j - 1) + 12 + i__;
 			to = (j << 1) - 1;
 			locrec[(i__2 = to - 1) < 340 && 0 <= i__2 ? i__2 : 
-				s_rnge("locrec", i__2, "cke05_", (ftnlen)907)]
+				s_rnge("locrec", i__2, "cke05_", (ftnlen)911)]
 				 = record[from - 1];
 			locrec[(i__2 = to) < 340 && 0 <= i__2 ? i__2 : s_rnge(
-				"locrec", i__2, "cke05_", (ftnlen)908)] = 
+				"locrec", i__2, "cke05_", (ftnlen)912)] = 
 				record[from + 2] * rate;
 		    }
 
@@ -1106,9 +1109,9 @@ static integer c__4 = 4;
 
 		    hrmint_(&n, &record[xstart - 1], locrec, &sclkdp, work, &
 			    vbuff[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : 
-			    s_rnge("vbuff", i__1, "cke05_", (ftnlen)918)], &
+			    s_rnge("vbuff", i__1, "cke05_", (ftnlen)922)], &
 			    vbuff[(i__2 = i__ + 2) < 6 && 0 <= i__2 ? i__2 : 
-			    s_rnge("vbuff", i__2, "cke05_", (ftnlen)918)]);
+			    s_rnge("vbuff", i__2, "cke05_", (ftnlen)922)]);
 		}
 
 /*              Fill in the angular velocity in the output angular */

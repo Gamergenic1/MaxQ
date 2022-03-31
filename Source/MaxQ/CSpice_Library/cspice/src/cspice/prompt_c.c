@@ -4,7 +4,7 @@
 
 -Abstract
 
-   This function prompts a user for keyboard input.
+   Prompt a user for keyboard input.
 
 -Disclaimer
 
@@ -47,40 +47,40 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
 
-   SpiceChar * prompt_c ( ConstSpiceChar * prmptStr,
-                          SpiceInt         lenout,
+   SpiceChar * prompt_c ( ConstSpiceChar * dspmsg,
+                          SpiceInt         buflen,
                           SpiceChar      * buffer )
 
 /*
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   prmptStr   I   The prompt string to display when asking for input.
-   lenout     I   Minimum number of characters for response plus one.
+   dspmsg     I   The prompt string to display when asking for input.
+   buflen     I   Minimum number of characters for response plus one.
    buffer     O   The string containing the response typed by a user.
 
-   The routine also returns a pointer to the output buffer.
+   The routine returns a pointer to the output buffer.
 
 -Detailed_Input
 
-   prmptStr   A character string displayed from the current cursor
-              position which describes the requested input.  The prompt
-              string should be relatively short, i.e., 50 or fewer
-              characters, so a response may be typed on the line where
-              the prompt appears.
+   dspmsg      is a character string displayed from the current cursor
+               position which describes the requested input. The prompt
+               string should be relatively short, i.e., 50 or fewer
+               characters, so a response may be typed on the line where
+               the prompt appears.
 
-              All characters (including trailing blanks) in prmptStr
-              are considered significant and will be displayed.
+               All characters (including trailing blanks) in `dspmsg'
+               are considered significant and will be displayed.
 
-   lenout     The integer number of characters plus one for the
-              response string.
+   buflen      is the integer number of characters plus one for the
+               response string.
 
 -Detailed_Output
 
-   buffer     The user supplied string which holds the response.  The
-              string's memory is allocated in the calling routine.
+   buffer      is the user supplied string which holds the response. The
+               string's memory is allocated in the calling routine.
 
    The routine returns a pointer to buffer as well as passing the
    pointer back via an argument.
@@ -91,11 +91,11 @@
 
 -Exceptions
 
-   1) If the output string has length less than two characters, it
-      is too short to contain one character of output data plus a null
-      terminator, so it cannot be passed to the underlying Fortran
-      routine.  In this event, the error SPICE(STRINGTOOSHORT) is
-      signaled and a null pointer is returned.
+   1)  If the `buffer' output string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   2)  If the `buffer' output string has length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled.
 
 -Files
 
@@ -104,66 +104,244 @@
 -Particulars
 
    This is a utility that allows you to "easily" request information
-   from a program user.  The calling program declares an array or
+   from a program user. The calling program declares an array or
    allocate memory to contain the user's response to the prompt.
 
 -Examples
 
-   Suppose you have an interactive program that computes state
-   vectors by calling spkezr_c.  The program prompts the user for
-   the inputs to spkezr_c.  After each prompt is written, the program
-   leaves the cursor at the end of the string as shown here:
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      Enter UTC epoch  > _
+   1) Suppose you have an interactive program that computes state
+      vectors by calling spkezr_c. The program prompts the user for
+      the inputs to spkezr_c. After each prompt is written, the program
+      leaves the cursor at the end of the string as shown here:
 
-   (The underscore indicates the cursor position).
+         Enter UTC epoch  > _
 
-   The following program illustrates the aquisition of input
-   values using prompt_c:
+      (The underscore indicates the cursor position).
 
-   #include <stdlib.h>
-   #include <stdio.h>
+      The following code example illustrates the acquisition of input
+      values using prompt_c as a void function.
 
-   #include "SpiceUsr.h"
-
-   #define   STRLEN    32
-
-   void main()
-      {
-      SpiceChar    utc    [STRLEN];
-      SpiceChar    obs    [STRLEN];
-      SpiceChar    targ   [STRLEN];
-      SpiceChar  * utc1;
-      SpiceChar  * obs1;
-      SpiceChar  * targ1;
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
 
 
-      /. Call the routine as a subroutine. ./
+         KPL/MK
 
-      prompt_c ( "Enter UTC epoch             > ", STRLEN, utc  );
-      prompt_c ( "Enter observer name         > ", STRLEN, obs  );
-      prompt_c ( "Enter target name           > ", STRLEN, targ );
+         File: prompt_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                        Contents
+            ---------                        --------
+            de430.bsp                        Planetary ephemeris
+            mar097.bsp                       Mars satellite ephemeris
+            naif0011.tls                     Leapseconds
 
 
-      /. Or call the routine as a function. ./
+         \begindata
 
-      utc1   = ( SpiceChar * ) malloc (STRLEN);
-      obs1   = ( SpiceChar * ) malloc (STRLEN);
-      targ1  = ( SpiceChar * ) malloc (STRLEN);
+            KERNELS_TO_LOAD = ( 'de430.bsp',
+                                'mar097.bsp',
+                                'naif0011.tls' )
+
+         \begintext
+
+         End of meta-kernel
 
 
-      utc1 = prompt_c ( "Enter UTC epoch        > ", STRLEN, utc1 );
-      obs1 = prompt_c ( "Enter observer name    > ", STRLEN, obs1 );
-      targ1= prompt_c ( "Enter target name      > ", STRLEN, targ1);
+      Example code begins here.
 
 
       /.
-      Now do stuff with your strings.
+         Program prompt_ex1
       ./
+      #include <stdlib.h>
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-        ...
+
+      int main()
+      {
+         /.
+         Local parameters
+         ./
+         #define   STRLEN    37
+
+         /.
+         Local variables.
+         ./
+         SpiceChar      utc    [STRLEN];
+         SpiceChar      obs    [STRLEN];
+         SpiceChar      targ   [STRLEN];
+
+         SpiceDouble    et;
+         SpiceDouble    lt;
+         SpiceDouble    state [6];
+
+         /.
+         Load kernel.
+         ./
+         furnsh_c ( "prompt_ex1.tm" );
+
+         /.
+         Prompt for the required inputs
+         ./
+         prompt_c ( "Enter UTC epoch             > ", STRLEN, utc  );
+         prompt_c ( "Enter observer name         > ", STRLEN, obs  );
+         prompt_c ( "Enter target name           > ", STRLEN, targ );
+
+         /.
+         Convert the UTC request time to ET (seconds past
+         J2000, TDB).
+         ./
+         str2et_c ( utc, &et );
+
+         /.
+         Look up the state vector at the requested `et'
+         ./
+         spkezr_c ( targ, et, "J2000",  "NONE", obs, state, &lt );
+
+         printf( "\nEpoch               : %22.10f\n", et     );
+         printf( "   x-position   (km): %22.10f\n", state[0] );
+         printf( "   y-position   (km): %22.10f\n", state[1] );
+         printf( "   z-position   (km): %22.10f\n", state[2] );
+         printf( "   x-velocity (km/s): %22.10f\n", state[3] );
+         printf( "   y-velocity (km/s): %22.10f\n", state[4] );
+         printf( "   z-velocity (km/s): %22.10f\n", state[5] );
+
+         return ( 0 );
 
       }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the time string "2017-07-14T19:46:00" as epoch,
+      "MARS" as target and "EARTH" as observer, the output was:
+
+
+      Enter UTC epoch             > 2017-07-14T19:46:00
+      Enter observer name         > MARS
+      Enter target name           > EARTH
+
+      Epoch               :   553333628.1837273836
+         x-position   (km):   173881563.8231496215
+         y-position   (km):  -322898311.5398598909
+         z-position   (km):  -147992421.0068917871
+         x-velocity (km/s):          47.4619819770
+         y-velocity (km/s):          19.0770886182
+         z-velocity (km/s):           7.9424268278
+
+
+   2) The following code example illustrates the acquisition of input
+      values using prompt_c as a non-void function.
+
+      Use the meta-kernel from the first example.
+
+
+      Example code begins here.
+
+
+      /.
+         Program prompt_ex2
+      ./
+      #include <stdlib.h>
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+
+      int main()
+      {
+         /.
+         Local parameters
+         ./
+         #define   STRLEN    37
+
+         /.
+         Local variables.
+         ./
+         SpiceChar    * utc;
+         SpiceChar    * obs;
+         SpiceChar    * targ;
+
+         SpiceDouble    et;
+         SpiceDouble    lt;
+         SpiceDouble    state [6];
+
+         /.
+         Load kernels.
+         ./
+         furnsh_c ( "prompt_ex1.tm" );
+
+         /.
+         Allocate memory to each of the input variables.
+         ./
+         utc   = ( SpiceChar * ) malloc (STRLEN);
+         obs   = ( SpiceChar * ) malloc (STRLEN);
+         targ  = ( SpiceChar * ) malloc (STRLEN);
+
+         /.
+         Prompt for the required inputs
+         ./
+         utc  = prompt_c ( "Enter UTC epoch        > ", STRLEN, utc  );
+         obs  = prompt_c ( "Enter observer name    > ", STRLEN, obs  );
+         targ = prompt_c ( "Enter target name      > ", STRLEN, targ );
+
+         /.
+         Convert the UTC request time to ET (seconds past
+         J2000, TDB).
+         ./
+         str2et_c ( utc, &et );
+
+         /.
+         Look up the state vector at the requested `et'
+         ./
+         spkezr_c ( targ, et, "J2000",  "NONE", obs,  state,  &lt );
+
+         printf( "\nEpoch               : %22.10f\n", et     );
+         printf( "   x-position   (km): %22.10f\n", state[0] );
+         printf( "   y-position   (km): %22.10f\n", state[1] );
+         printf( "   z-position   (km): %22.10f\n", state[2] );
+         printf( "   x-velocity (km/s): %22.10f\n", state[3] );
+         printf( "   y-velocity (km/s): %22.10f\n", state[4] );
+         printf( "   z-velocity (km/s): %22.10f\n", state[5] );
+
+         return ( 0 );
+
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the time string "2017-07-14T19:46:00" as epoch,
+      "MARS" as target and "EARTH" as observer, the output was:
+
+
+      Enter UTC epoch        > 2017-07-14T19:46:00
+      Enter observer name    > MARS
+      Enter target name      > EARTH
+
+      Epoch               :   553333628.1837273836
+         x-position   (km):   173881563.8231496215
+         y-position   (km):  -322898311.5398598909
+         z-position   (km):  -147992421.0068917871
+         x-velocity (km/s):          47.4619819770
+         y-velocity (km/s):          19.0770886182
+         z-velocity (km/s):           7.9424268278
+
 
 -Restrictions
 
@@ -175,12 +353,22 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   K.R. Gehringer  (JPL)
-   W.L. Taber      (JPL)
-   E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
+
+   -CSPICE Version 1.1.0, 13-AUG-2021 (JDR)
+
+       Changed the input argument names "prmptStr" and "lenout" to
+       "dspmsg" and "buflen" for consistency with other routines.
+
+       Updated -Exceptions section to include missing exceptions.
+
+       Edited the header to comply with NAIF standard. Converted the
+       existing code fragments into complete examples and added required
+       meta-kernel and inputs to produce the presented solution.
 
    -CSPICE Version 1.0.0, 25-JUN-1999 (EDW) (NJB)
 
@@ -211,7 +399,7 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR_VAL ( CHK_STANDARD, "prompt_c", buffer, lenout, NULLCPTR );
+   CHKOSTR_VAL ( CHK_STANDARD, "prompt_c", buffer, buflen, NULLCPTR );
 
 
    /*
@@ -223,7 +411,7 @@
    /*
    Display the prompt string.
    */
-   printf ( "%s", prmptStr );
+   printf ( "%s", dspmsg );
 
 
    /*
@@ -237,15 +425,15 @@
       {
 
       /*
-      We have room for lenout characters, the last of which will
-      be a null terminator.  Slurp only (lenout - 1) characters
+      We have room for buflen characters, the last of which will
+      be a null terminator.  Slurp only (buflen - 1) characters
       from the input into buffer.  Ignore anything afterwards.
       */
-      if ( i < (lenout - 1 ) )
+      if ( i < (buflen - 1 ) )
          {
 
          /*
-         Read in no more than lenout - 1 chracters.
+         Read in no more than buflen - 1 characters.
          */
          buffer[i] = c;
          i++;
@@ -282,4 +470,3 @@
 
 
 } /* End prompt_c */
-

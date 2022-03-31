@@ -95,7 +95,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle assigned to binary SPK or CK file. */
 /*     LINE       O   First line of text from the comment area. */
@@ -103,17 +103,22 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file */
-/*                 which has been opened for read access. */
+/*     HANDLE   is the handle assigned to the binary SPK or CK file */
+/*              which has been opened for read access. */
+
+/*              Use the SPICELIB routine DAFOPR to open the file for read */
+/*              access and get HANDLE, unless SPKLEF or CKLPF has already */
+/*              been called and returned the handle. This file is */
+/*              unchanged by calling SPCRFL. */
 
 /* $ Detailed_Output */
 
-/*     LINE        is the first line of text from the comment area of */
-/*                 the SPK or CK file specified by HANDLE.  LINE may */
-/*                 be blank. */
+/*     LINE     is the first line of text from the comment area of */
+/*              the SPK or CK file specified by HANDLE. LINE may */
+/*              be blank. */
 
-/*     EOC         is true if the comment area is empty.  If there */
-/*                 are comments in the comment area, then EOC is false. */
+/*     EOC      is .TRUE. if the comment area is empty. If there */
+/*              are comments in the comment area, then EOC is .FALSE. */
 
 /* $ Parameters */
 
@@ -121,31 +126,27 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If the comment area of the SPK or CK file is empty, LINE */
-/*        will be blank. */
+/*     1)  If the comment area of the SPK or CK file is empty, LINE */
+/*         will be blank. */
 
-/*     2) If the first line of comments in the comment area is longer */
-/*        than the declared length of LINE, it will be truncated to */
-/*        fit into the variable. */
+/*     2)  If the first line of comments in the comment area is longer */
+/*         than the declared length of LINE, it will be truncated to */
+/*         fit into the variable. */
 
-/*     3) If there is a problem reading from the comment area, the error */
-/*        SPICE(FILEREADFAILED) is signalled. */
+/*     3)  If there is a problem reading from the comment area, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
 
-/*     4) If the comments are not in the correct format, the error */
-/*        SPICE(FORMATERROR) is signalled. */
+/*     4)  If the comments are not in the correct format, the error */
+/*         SPICE(FORMATERROR) is signaled. */
 
 /* $ Files */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file. */
-/*                 Use DAFOPR to open it for read access and get its */
-/*                 handle unless SPKLEF or CKLPF has already been called */
-/*                 and returned the handle.  This file is unchanged by */
-/*                 calling SPCRFL. */
+/*     See argument HANDLE. */
 
 /* $ Particulars */
 
 /*     The structure of SPK and CK files accommodates comments in */
-/*     addition to data.  The following routines are available */
+/*     addition to data. The following routines are available */
 /*     for accessing the comment area of a binary SPK or CK file: */
 
 /*           SPCAC           add comments */
@@ -159,7 +160,7 @@ static integer c__1 = 1;
 /*           SPCRNL          read next line of comments */
 
 /*     Note that comments must consist of only text, that is, printable */
-/*     ASCII characters, specifically ASCII 32-126.  This excludes */
+/*     ASCII characters, specifically ASCII 32-126. This excludes */
 /*     tabs (ASCII 9) and control characters. */
 
 /*     The SPC conversion routines---SPCB2A, SPCA2B, SPCB2T, and */
@@ -168,7 +169,7 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     Suppose we have a binary SPK file called A.BSP.  The following */
+/*     Suppose we have a binary SPK file called A.BSP. The following */
 /*     code fragment searches the comment area for a lines containing */
 /*     the character string `SOURCE' and writes the lines to standard */
 /*     output. */
@@ -184,8 +185,8 @@ static integer c__1 = 1;
 /*            CALL SPCRFL ( HANDLE, LINE, EOC ) */
 
 /*      C */
-/*      C     Search for the string 'SOURCE' in the line.  If */
-/*      C     it is found, write the line.  Then get the next */
+/*      C     Search for the string 'SOURCE' in the line. If */
+/*      C     it is found, write the line. Then get the next */
 /*      C     line of comments and repeat as long as we're not */
 /*      C     at the end. */
 /*      C */
@@ -202,7 +203,7 @@ static integer c__1 = 1;
 /* $ Restrictions */
 
 /*     1)  This routine assumes that the comment area of the binary SPK */
-/*         or CK file contains only text stored by SPCAC.  Comments */
+/*         or CK file contains only text stored by SPCAC. Comments */
 /*         written any other way may not be handled properly. */
 
 /* $ Literature_References */
@@ -211,10 +212,23 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 17-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Moved the contents of the $Files section to the description of */
+/*        HANDLE in $Detailed_Input section, and referred to it from */
+/*        $Files. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
@@ -226,8 +240,8 @@ static integer c__1 = 1;
 /*        Removed a call to the SPICELIB subroutine SUFFIX() which */
 /*        was used to join two parts of a comment line that may be */
 /*        broken across two comment records. The problem was, SUFFIX */
-/*        cannot know about leading/imbedded blanks when it appends, so */
-/*        blanks were inadvertantly removed when they happened to be */
+/*        cannot know about leading/embedded blanks when it appends, so */
+/*        blanks were inadvertently removed when they happened to be */
 /*        stored at the end of comment record. */
 
 /*        Added the variable TMPLEN to record the length of the first */
@@ -244,7 +258,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     read the first comment line of an spk or ck file */
+/*     read the first comment line of an SPK or CK file */
 
 /* -& */
 /* $ Revisions */
@@ -256,7 +270,7 @@ static integer c__1 = 1;
 /*        course of action due to the buffering of the logical unit */
 /*        by this routine for its entry point, adding a call to */
 /*        ZZDDHUNL in the entry point removes the need to lock DAFU */
-/*        to its handle.  The value of HANDLE is now buffered in */
+/*        to its handle. The value of HANDLE is now buffered in */
 /*        HANBUF, to allow the entry point to retrieve a logical */
 /*        unit. */
 
@@ -434,12 +448,14 @@ L_spcrnl:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     CHARACTER*(*)         LINE */
 /*     LOGICAL               EOC */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LINE       O   Next line of text from the comment area. */
 /*     EOC        O   End of comments? */
@@ -450,16 +466,16 @@ L_spcrnl:
 
 /* $ Detailed_Output */
 
-/*     LINE        is the next line of text from the comment area of */
-/*                 the SPK or CK file.  LINE may be blank. */
-/*                 SPCRFL reads the first line of comments from */
-/*                 a specified binary SPK or CK file.  Once SPCRFL */
-/*                 has been called, SPCRNL may be called repetitively */
-/*                 to read the next lines of the comment area until */
-/*                 the end. */
+/*     LINE     is the next line of text from the comment area of */
+/*              the SPK or CK file. LINE may be blank. */
+/*              SPCRFL reads the first line of comments from */
+/*              a specified binary SPK or CK file. Once SPCRFL */
+/*              has been called, SPCRNL may be called repetitively */
+/*              to read the next lines of the comment area until */
+/*              the end. */
 
-/*     EOC         is true if there are no more comments to read. */
-/*                 Otherwise, EOC is false. */
+/*     EOC      is .TRUE. if there are no more comments to read. */
+/*              Otherwise, EOC is .FALSE. */
 
 /* $ Parameters */
 
@@ -467,23 +483,23 @@ L_spcrnl:
 
 /* $ Exceptions */
 
-/*     1) If SPCRFL is not called prior to calling SPCRNL, the error */
-/*        SPICE(SPCRFLNOTCALLED). */
+/*     1)  If SPCRFL is not called prior to calling SPCRNL, the error */
+/*         SPICE(SPCRFLNOTCALLED) is signaled. */
 
-/*     2) If the most recent call to SPCRFL returned EOC with the value */
-/*        true, then SPCRNL will return EOC with the same value. */
+/*     2)  If the most recent call to SPCRFL returned EOC with the value */
+/*         true, then SPCRNL will return EOC with the same value. */
 
-/*     3) If EOC is true, LINE will be blank. */
+/*     3)  If EOC is .TRUE., LINE will be blank. */
 
-/*     4) If the first line of comments in the comment area is longer */
-/*        than the declared length of LINE, it will be truncated to */
-/*        fit into the variable. */
+/*     4)  If the first line of comments in the comment area is longer */
+/*         than the declared length of LINE, it will be truncated to */
+/*         fit into the variable. */
 
-/*     5) If there is a problem reading from the comment area, the error */
-/*        SPICE(FILEREADFAILED) is signalled. */
+/*     5)  If there is a problem reading from the comment area, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
 
-/*     6) If the comments are not in the correct format, the error */
-/*        SPICE(FORMATERROR) is signalled. */
+/*     6)  If the comments are not in the correct format, the error */
+/*         SPICE(FORMATERROR) is signaled. */
 
 /* $ Files */
 
@@ -493,7 +509,7 @@ L_spcrnl:
 /* $ Particulars */
 
 /*     The structure of SPK and CK files accommodates comments in */
-/*     addition to data.  The following five routines are available */
+/*     addition to data. The following five routines are available */
 /*     for accessing the comment area of a binary SPK or CK file: */
 
 /*           SPCAC           add comments */
@@ -507,7 +523,7 @@ L_spcrnl:
 /*           SPCRNL          read next line of comments */
 
 /*     Note that comments must consist of only text, that is, printable */
-/*     ASCII characters, specifically ASCII 32-126.  This excludes */
+/*     ASCII characters, specifically ASCII 32-126. This excludes */
 /*     tabs (ASCII 9) and control characters. */
 
 /*     The SPC conversion routines---SPCB2A, SPCA2B, SPCB2T, and */
@@ -516,7 +532,7 @@ L_spcrnl:
 
 /* $ Examples */
 
-/*     Suppose we have a binary SPK file called A.BSP.  The following */
+/*     Suppose we have a binary SPK file called A.BSP. The following */
 /*     code fragment searches the comment area for a lines containing */
 /*     the character string `SOURCE' and writes the lines to standard */
 /*     output. */
@@ -532,8 +548,8 @@ L_spcrnl:
 /*            CALL SPCRFL ( HANDLE, LINE, EOC ) */
 
 /*      C */
-/*      C     Search for the string 'SOURCE' in the line.  If */
-/*      C     it is found, write the line.  Then get the next */
+/*      C     Search for the string 'SOURCE' in the line. If */
+/*      C     it is found, write the line. Then get the next */
 /*      C     line of comments and repeat as long as we're not */
 /*      C     at the end. */
 /*      C */
@@ -550,7 +566,7 @@ L_spcrnl:
 /* $ Restrictions */
 
 /*     1)  This routine assumes that the comment area of the binary SPK */
-/*         or CK file contains only text stored by SPCAC.  Comments */
+/*         or CK file contains only text stored by SPCAC. Comments */
 /*         written any other way may not be handled properly. */
 
 /* $ Literature_References */
@@ -559,15 +575,24 @@ L_spcrnl:
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 17-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /*        Updated this entry point to utilize the handle manager */
-/*        interfaces.  See the Revisions section of the subroutine */
+/*        interfaces. See the $Revisions section of the subroutine */
 /*        header above for a detailed discussion of the changes. */
 
 /* -    SPICELIB Version 1.1.0, 27-JUL-1992 (KRG) */
@@ -575,8 +600,8 @@ L_spcrnl:
 /*        Removed a call to the SPICELIB subroutine SUFFIX() which */
 /*        was used to join two parts of a comment line that may be */
 /*        broken across two comment records. The problem was, SUFFIX */
-/*        cannot know about leading/imbedded blanks when it appends, so */
-/*        blanks were inadvertantly removed when they happened to be */
+/*        cannot know about leading/embedded blanks when it appends, so */
+/*        blanks were inadvertently removed when they happened to be */
 /*        stored at the end of comment record. */
 
 /*        Added the variable TMPLEN to record the length of the first */
@@ -593,8 +618,8 @@ L_spcrnl:
 /* -& */
 /* $ Index_Entries */
 
-/*     continue reading comments from an spk or ck file */
-/*     read the next comment line of an spk or ck file */
+/*     continue reading comments from an SPK or CK file */
+/*     read the next comment line of an SPK or CK file */
 
 /* -& */
 

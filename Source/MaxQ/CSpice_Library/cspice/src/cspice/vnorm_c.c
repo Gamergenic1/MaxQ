@@ -1,10 +1,11 @@
 /*
 
--Procedure  vnorm_c ( Vector norm, 3 dimensions )
+-Procedure vnorm_c ( Vector norm, 3 dimensions )
 
 -Abstract
 
-   Compute the magnitude of a double precision, 3-dimensional vector.
+   Compute the magnitude of a double precision 3-dimensional
+   vector.
 
 -Disclaimer
 
@@ -36,9 +37,9 @@
    None.
 
 -Keywords
- 
-   VECTOR 
- 
+
+   VECTOR
+
 */
    #include <math.h>
    #include "SpiceUsr.h"
@@ -56,16 +57,16 @@
    --------  ---  --------------------------------------------------
    v1         I   Vector whose magnitude is to be found.
 
-   The function returns the norm of v1.
- 
+   The function returns the magnitude of `v1'.
+
 -Detailed_Input
 
-   v1             may be any 3-dimensional, double precision vector.
- 
+   v1          is any double precision 3-dimensional vector.
+
 -Detailed_Output
 
-   The function returns the magnitude of v1 calculated in a numerically 
-   stable way.
+   The function returns the magnitude of `v1' calculated in a
+   numerically stable way.
 
 -Parameters
 
@@ -82,58 +83,128 @@
 -Particulars
 
    vnorm_c takes care to avoid overflow while computing the norm of the
-   input vector v1.  vnorm_c finds the component of v1 whose magnitude 
-   is the largest.  Calling this magnitude v1max, the norm is computed 
-   using the formula
- 
-       vnorm_c  =  v1max *  ||  (1/v1max) * v1  ||
-       
-   where the notation ||x|| indicates the norm of the vector x.
+   input vector `v1'. vnorm_c finds the component of `v1' whose magnitude
+   is the largest. Calling this magnitude `v1max', the norm is computed
+   using the formula:
+
+                        ||    1         ||
+      vnorm_c = v1max * || ------- * v1 ||
+                        ||  v1max       ||
+
+   where the notation ||x|| indicates the norm of the vector `x'.
 
 -Examples
 
-   The following table show the correlation between various input
-   vectors v1 and vnorm_c:
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   v1                                    vnorm_c
-   -----------------------------------------------------------------
-   ( 1.e0,    2.e0,   2.e0    )          3.e0
-   ( 5.e0,    12.e0,  0.e0    )          13.e0
-   ( -5.e-17, 0.0e0,  12.e-17 )          13.e-17
-       
+   1) Define a set of 3-dimensional vectors and compute the
+      magnitude of each vector within.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vnorm_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define SETSIZ       3
+
+         /.
+         Local variables.
+         ./
+         SpiceInt             i;
+
+         /.
+         Define a set of 3-dimensional vectors.
+         ./
+         SpiceDouble          v1     [SETSIZ][3] = {
+                                   { 1.0,    2.0,  2.0   },
+                                   { 5.0,   12.0,  0.0   },
+                                   {-5.e-17, 0.0, 12.e-17}  };
+
+         /.
+         Calculate the magnitude of each vector
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            printf( "Input vector:  %9.2e %9.2e %9.2e\n",
+                                   v1[i][0], v1[i][1], v1[i][2] );
+            printf( "Magnitude   :  %23.20f\n", vnorm_c ( v1[i] ) );
+            printf( "\n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector:   1.00e+00  2.00e+00  2.00e+00
+      Magnitude   :   3.00000000000000000000
+
+      Input vector:   5.00e+00  1.20e+01  0.00e+00
+      Magnitude   :  13.00000000000000000000
+
+      Input vector:  -5.00e-17  0.00e+00  1.20e-16
+      Magnitude   :   0.00000000000000013000
+
+
 -Restrictions
 
    None.
-   
+
 -Literature_References
 
    None.
 
 -Author_and_Institution
 
-   N.J. Bachman       (JPL)
-   W.L. Taber         (JPL)
-   W.M. Owen          (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.2, 16-JAN-2008   (EDW)
+   -CSPICE Version 1.0.3, 05-JUL-2021 (JDR)
 
-      Corrected typos in header titles:
-      
-      Detailed Input to Detailed_Input
-      Detailed Output to Detailed_Output
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
+   -CSPICE Version 1.0.2, 16-JAN-2008 (EDW)
+
+       Corrected typos in header titles:
+
+       Detailed Input to -Detailed_Input
+       Detailed Output to -Detailed_Output
 
    -CSPICE Version 1.0.1, 12-NOV-2006 (EDW)
 
-      Added Parameters section header.
+       Added -Parameters section header.
 
-   -CSPICE Version 1.0.0, 16-APR-1999 (NJB)
+   -CSPICE Version 1.0.0, 16-APR-1999 (NJB) (WMO) (WLT)
 
 -Index_Entries
 
    norm of 3-dimensional vector
-   
+
 -&
 */
 
@@ -153,16 +224,16 @@
    Determine the maximum component of the vector.
    */
    v1max = MaxAbs(  v1[0],   MaxAbs( v1[1], v1[2] )   );
-   
-   
+
+
    /*
    If the vector is zero, return zero; otherwise normalize first.
    Normalizing helps in the cases where squaring would cause overflow
    or underflow.  In the cases where such is not a problem it not worth
    it to optimize further.
-   */ 
-   
-   if ( v1max == 0.0 ) 
+   */
+
+   if ( v1max == 0.0 )
    {
       return ( 0.0 );
    }
@@ -171,11 +242,11 @@
       tmp0     =  v1[0]/v1max;
       tmp1     =  v1[1]/v1max;
       tmp2     =  v1[2]/v1max;
-      
+
       normSqr  =  tmp0*tmp0 + tmp1*tmp1 + tmp2*tmp2;
-        
+
       return (  v1max * sqrt( normSqr )  );
    }
- 
- 
+
+
 } /* End vnorm_c */

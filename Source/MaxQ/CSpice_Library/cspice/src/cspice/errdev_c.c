@@ -49,7 +49,7 @@
 
 
    void errdev_c ( ConstSpiceChar * op,
-                   SpiceInt         lenout,
+                   SpiceInt         devlen,
                    SpiceChar      * device )
 
 /*
@@ -59,71 +59,80 @@
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    op         I   The operation:  "GET" or "SET".
-   lenout     I   Length of device for output.
-   device    I/O  The device name.
+   devlen     I   Length of device for output.
+   device    I-O  The device name.
 
 -Detailed_Input
 
-   op      indicates the operation to be performed.  Possible
-           values are "GET" and "SET".  "GET" means, "set
-           device equal to the name of the current error
-           output device"  "SET" means, "set the name of the
-           current error output device equal to the value of
-           device."
+   op          indicates the operation to be performed. Possible
+               values are "GET" and "SET".  "GET" means, "set
+               device equal to the name of the current error
+               output device"  "SET" means, "set the name of the
+               current error output device equal to the value of
+               device."
 
-   lenout  the string size of output 'device' when op equals "GET."
-           The size described by lenout should be large enough to 
-           hold all characters of any possible output string 
-           plus 1 (to accommodate the C null terminator).
+   devlen      the string size of output `device' when op equals "GET".
+               The size described by devlen should be large enough to
+               hold all characters of any possible output string
+               plus 1 (to accommodate the C null terminator).
 
-   device  is an input when op has the value, "SET".  It
-           indicates an output device to which error messages
-           are to be sent.  Possible values for device are:
+   device      is an input when `op' has the value, "SET".  It
+               indicates an output device to which error messages
+               are to be sent. Possible values for device are:
 
-            1.    A file name.  Note that the name must not
-                  use one of the reserved strings below.
+                1. A file name. Note that the name must not
+                      use one of the reserved strings below.
 
-            2.    "SCREEN"    The output will go to the
-                   screen.  This is the default device.
+                2.    "SCREEN"    The output will go to the
+                       screen. This is the default device.
 
-            3.    "NULL"      The data will not be output.
+                3.    "NULL"      The data will not be output.
 
-            "SCREEN" and "NULL" can be written in mixed
-            case.  For example, the following call will work:
+                "SCREEN" and "NULL" can be written in mixed
+                case. For example, the following call will work:
 
-            errdev_c ( "SET", lenout, "screEn" );
+                errdev_c ( "SET", devlen, "screEn" );
 
 -Detailed_Output
 
-   device  is an output returning the current error output device
-           when 'op' equals "GET."  See "Detailed Input" 
-           descriptions of these values.
+   device      is an output returning the current error output device
+               when `op' equals "GET." See "Detailed Input"
+               descriptions of these values.
 
 -Parameters
 
-   None.
+   FILEN       The maximum length of a file name that can be processed
+               by this routine. FILEN is currently set to 255
+               characters.
 
 -Exceptions
 
-   1) If the input argument op does not indicate a valid operation,
-      the error SPICE(INVALIDOPERATION) will be signaled.
+   1)  If an invalid value of the argument `op' is supplied, the error
+       SPICE(INVALIDOPERATION) is signaled.
 
-   2) When op is "SET", if the input argument device has length greater
-      than FILEN characters, the error SPICE(DEVICENAMETOOLONG) will
-      be signaled.
+   2)  If `op' is "SET" and the device name `device' exceeds the maximum
+       length FILEN, the error SPICE(DEVICENAMETOOLONG) is signaled by a
+       routine in the call tree of this routine.
 
-   3) The error SPICE(EMPTYSTRING) is signaled if either input string
-      does not contain at least one character, since an input string
-      cannot be converted to a Fortran-style string in this case.  This
-      check always applies to op; it applies to device only when
-      device is an input, that is, when op is "SET."
+   3)  If the `op' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   4) The error SPICE(NULLPOINTER) is signaled if either string pointer
-      argument is null.
+   4)  If the `op' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled, since the input string cannot
+       be converted to a Fortran-style string in this case.
 
-   5) The caller must pass a value indicating the length of the output
-      string, when device is an output.  If this value is not at least
-      2, the error SPICE(STRINGTOOSHORT) is signaled.
+   5)  If the `device' string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   6)  If `op' is "SET" and the `device' string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled, since the input string cannot
+       be converted to a Fortran-style string in this case.
+
+   7)  If `op' is "GET" and the `device' string has length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled, since the
+       output string is too short to contain one character of output data plus
+       a null terminator, and therefore it cannot be passed to the underlying
+       Fortran routine.
 
 -Files
 
@@ -135,22 +144,22 @@
 
 -Examples
 
-   1.  In this example, we select as the output device
+   1. In this example, we select as the output device
        the file, SPUD.DAT.
 
           /.
           Set the error output device to the file SPUD.DAT:
           ./
-          errdev_c ( "SET", lenout, "SPUD.DAT" );
-
+          errdev_c ( "SET", devlen, "SPUD.DAT" );
 
 -Restrictions
 
-   This routine has no capability of determining the validity
-   of the name of an output device.  Care must be taken
-   to ensure that the file named is the correct one.
+   1)  This routine has no capability of determining the validity of
+       the name of an output device. Care must be taken to ensure
+       that the file named is the correct one.
 
-   The device name is assumed to be no longer than FILEN characters.
+       The device name is assumed to be no longer than FILEN
+       characters.
 
 -Literature_References
 
@@ -158,34 +167,41 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   H.A. Neilan     (JPL)
-   E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.4.0, 10-AUG-2021 (JDR)
+
+       Changed the input argument name "lenout" to "devlen" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.3.1, 25-SEP-2003 (EDW)
 
-      Corrected confusing description of 'lenout' argument.
+       Corrected confusing description of 'devlen' argument.
 
    -CSPICE Version 1.3.0, 24-JUN-2003 (NJB)
 
-      Bug fix:  case of invalid operation keyword is now 
-      diagnosed, as per the Exceptions section of the header.
+       Bug fix: case of invalid operation keyword is now
+       diagnosed, as per the -Exceptions section of the header.
 
    -CSPICE Version 1.2.0, 28-AUG-1999 (NJB)
 
-      Bug fix:  changed errprt_ call to call to errdev_.
+       Bug fix: changed errprt_ call to call to errdev_.
 
    -CSPICE Version 1.2.0, 09-FEB-1998 (NJB)
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.  Made various header fixes.
+       Re-implemented routine without dynamically allocated, temporary
+       strings. Made various header fixes.
 
    -CSPICE Version 1.0.1, 30-OCT-1997 (EDW)
 
-      Corrected errors in examples in which the call sequence
-      was incorrect.
+       Corrected errors in examples in which the call sequence
+       was incorrect.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 
@@ -196,14 +212,13 @@
 -&
 */
 
-
 { /* Begin errdev_c.c */
 
 
    /*
    Participate in error tracing.
    */
-   if ( return_c() ) 
+   if ( return_c() )
       {
       return;
       }
@@ -247,7 +262,7 @@
       output character and a null terminator.  Also check for a null
       pointer.
       */
-      CHKOSTR ( CHK_STANDARD, "errdev_c", device, lenout );
+      CHKOSTR ( CHK_STANDARD, "errdev_c", device, devlen );
 
       /*
       After the routine call, create a C string from the
@@ -256,16 +271,16 @@
       errdev_( ( char * ) op,
                ( char * ) device,
                ( ftnlen ) strlen(op),
-               ( ftnlen ) lenout-1     );
+               ( ftnlen ) devlen-1     );
 
 
-      F2C_ConvertStr( lenout, device );
+      F2C_ConvertStr( devlen, device );
       }
 
    else
       {
       setmsg_c ( "Input argument op had value: # "
-                 "Valid choices are GET or SET."   );   
+                 "Valid choices are GET or SET."   );
       errch_c  ( "#",  op                          );
       sigerr_c ( "SPICE(INVALIDOPERATION)"         );
       chkout_c ( "errdev_c"                        );

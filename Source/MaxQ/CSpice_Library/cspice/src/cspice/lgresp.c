@@ -66,7 +66,7 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     N          I   Number of points defining the polynomial. */
 /*     FIRST      I   First abscissa value. */
@@ -81,38 +81,35 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
 /* $ Detailed_Input */
 
-/*     N              is the number of points defining the polynomial. */
-/*                    The arrays XVALS and YVALS contain N elements. */
+/*     N        is the number of points defining the polynomial. The */
+/*              array YVALS contains N elements. */
 
 /*     FIRST, */
-/*     STEP           are, respectively, a starting abscissa value and a */
-/*                    step size that define the set of abscissa values */
-/*                    at which a Lagrange interpolating polynomial is to */
-/*                    be defined.  The set of abscissa values is */
+/*     STEP     are, respectively, a starting abscissa value and a */
+/*              step size that define the set of abscissa values */
+/*              at which a Lagrange interpolating polynomial is to */
+/*              be defined. The set of abscissa values is */
 
-/*                       FIRST   +   I * STEP,     I = 0, ..., N-1 */
+/*                 FIRST   +   I * STEP,     I = 0, ..., N-1 */
 
-/*                    STEP must be non-zero. */
+/*              STEP must be non-zero. */
 
+/*     YVALS    is an array of ordinate values that, together with */
+/*              the abscissa values defined by FIRST and STEP, */
+/*              define N ordered pairs belonging to the graph of */
+/*              a function. The set of points */
 
-/*     YVALS          is an array of ordinate values that, together with */
-/*                    the abscissa values defined by FIRST and STEP, */
-/*                    define N ordered pairs belonging to the graph of */
-/*                    a function.  The set of points */
+/*                 (  FIRST  +  (I-1)*STEP,   YVALS(I)  ) */
 
-/*                       (  FIRST  +  (I-1)*STEP,   YVALS(I)  ) */
+/*              where I ranges from 1 to N, define the Lagrange */
+/*              polynomial used for interpolation. */
 
-/*                    where I ranges from 1 to N, define the Lagrange */
-/*                    polynomial used for interpolation. */
+/*     WORK     is a work space array of the same dimension as YVALS. */
+/*              It is used by this routine as a scratch area to hold */
+/*              intermediate results. */
 
-
-/*     WORK           is a work space array of the same dimension as */
-/*                    XVALS and YVALS.  It is used by this routine as a */
-/*                    scratch area to hold intermediate results. */
-
-
-/*     X              is the abscissa value at which the interpolating */
-/*                    polynomial is to be evaluated. */
+/*     X        is the abscissa value at which the interpolating */
+/*              polynomial is to be evaluated. */
 
 /* $ Detailed_Output */
 
@@ -126,11 +123,11 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
 /* $ Exceptions */
 
-/*     1)  If STEP is zero, the error SPICE(INVALIDSTEPSIZE) will */
-/*         be signaled.  The function will return the value 0.D0. */
+/*     1)  If STEP is zero, the error SPICE(INVALIDSTEPSIZE) is */
+/*         signaled. The function will return the value 0.D0. */
 
 /*     2)  If N is less than 1, the error SPICE(INVALIDSIZE) is */
-/*         signaled.  The function will return the value 0.D0. */
+/*         signaled. The function will return the value 0.D0. */
 
 /*     3)  This routine does not attempt to ward off or diagnose */
 /*         arithmetic overflows. */
@@ -143,18 +140,18 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
 /*     Given a set of N distinct abscissa values and corresponding */
 /*     ordinate values, there is a unique polynomial of degree N-1, */
-/*     often called the `Lagrange polynomial', that fits the graph */
-/*     defined by these values.  The Lagrange polynomial can be used to */
+/*     often called the "Lagrange polynomial", that fits the graph */
+/*     defined by these values. The Lagrange polynomial can be used to */
 /*     interpolate the value of a function at a specified point, given a */
 /*     discrete set of values of the function. */
 
 /*     Users of this routine must choose the number of points to use */
-/*     in their interpolation method.  The authors of Reference [1] have */
+/*     in their interpolation method. The authors of Reference [1] have */
 /*     this to say on the topic: */
 
 /*        Unless there is solid evidence that the interpolating function */
-/*        is close in form to the true function f, it is a good idea to */
-/*        be cautious about high-order interpolation.  We */
+/*        is close in form to the true function F, it is a good idea to */
+/*        be cautious about high-order interpolation. We */
 /*        enthusiastically endorse interpolations with 3 or 4 points, we */
 /*        are perhaps tolerant of 5 or 6; but we rarely go higher than */
 /*        that unless there is quite rigorous monitoring of estimated */
@@ -165,80 +162,114 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
 /*        ...the dangers of extrapolation cannot be overemphasized: */
 /*        An interpolating function, which is perforce an extrapolating */
-/*        function, will typically go berserk when the argument x is */
+/*        function, will typically go berserk when the argument X is */
 /*        outside the range of tabulated values by more than the typical */
 /*        spacing of tabulated points. */
-
 
 /*     For Lagrange interpolation on unequally spaced abscissa values, */
 /*     see the SPICELIB routine LGRINT. */
 
 /* $ Examples */
 
-/*     1)  Fit a cubic polynomial through the points */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
 
-/*             ( -1,  -2 ) */
-/*             (  1,  -8 ) */
-/*             (  3,  26 ) */
-/*             (  5, 148 ) */
+/*     1) Fit a cubic polynomial through the points */
 
-/*         and evaluate this polynomial at x = 2. */
+/*            ( -1,  -2 ) */
+/*            (  1,  -8 ) */
+/*            (  3,  26 ) */
+/*            (  5, 148 ) */
 
+/*        and evaluate this polynomial at x = 2. */
 
-/*            PROGRAM TEST_LGRESP */
-
-/*            DOUBLE PRECISION      LGRESP */
-/*            DOUBLE PRECISION      ANSWER */
-/*            DOUBLE PRECISION      FIRST */
-/*            DOUBLE PRECISION      STEP */
-/*            DOUBLE PRECISION      YVALS (4) */
-/*            DOUBLE PRECISION      WORK  (4) */
-/*            INTEGER               N */
-
-/*            N         =   4 */
-/*            FIRST     =  -1.D0 */
-/*            STEP      =   2.D0 */
-
-/*            YVALS(1)  =  -2.D0 */
-/*            YVALS(2)  =  -8.D0 */
-/*            YVALS(3)  =  26.D0 */
-/*            YVALS(4)  = 148.D0 */
-
-/*            ANSWER    =   LGRESP ( N, FIRST, STEP, YVALS, WORK, 2.D0 ) */
-
-/*            WRITE (*,*) 'ANSWER = ', ANSWER */
-/*            END */
-
-
-/*        The returned value of ANSWER should be 1.D0, since the */
+/*        The returned value of LGRESP should be 1.D0, since the */
 /*        unique cubic polynomial that fits these points is */
 
-/*                     3       2 */
-/*           f(x)  =  x   +  2x  -  4x  -  7 */
+/*                     3      2 */
+/*           F(X)  =  X  + 2*X  - 4*X - 7 */
 
 
-/*        We also could have invoked LGRESP with the reference */
+/*        Example code begins here. */
 
-/*            ANSWER   =   LGRESP ( N, FIRST, STEP, YVALS, YVALS, 2.D0 ) */
 
-/*        if we wished to; in this case YVALS would have been */
-/*        modified on output. */
+/*              PROGRAM LGRESP_EX1 */
+/*              IMPLICIT NONE */
 
-/*        If we had solved the same problem using a negative step, */
-/*        we would have set the elements of YVALS in reverse order, */
-/*        as shown below: */
+/*              DOUBLE PRECISION      LGRESP */
+/*              DOUBLE PRECISION      ANSWER */
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      YVALS (4) */
+/*              DOUBLE PRECISION      WORK  (4) */
+/*              INTEGER               N */
 
-/*            FIRST     =   5.D0 */
-/*            STEP      =  -2.D0 */
+/*              N         =   4 */
+/*              FIRST     =  -1.D0 */
+/*              STEP      =   2.D0 */
 
-/*            YVALS(1)  = 148.D0 */
-/*            YVALS(2)  =  26.D0 */
-/*            YVALS(3)  =  -8.D0 */
-/*            YVALS(4)  =  -2.D0 */
+/*              YVALS(1)  =  -2.D0 */
+/*              YVALS(2)  =  -8.D0 */
+/*              YVALS(3)  =  26.D0 */
+/*              YVALS(4)  = 148.D0 */
 
-/*            ANSWER    =   LGRESP ( N, FIRST, STEP, YVALS, WORK, 2.D0 ) */
+/*              ANSWER    =   LGRESP ( N,     FIRST, STEP, */
+/*             .                       YVALS, WORK,  2.D0 ) */
 
-/*        The returned value of ANSWER would still be 1.D0. */
+/*              WRITE (*,*) 'ANSWER = ', ANSWER */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         ANSWER =    1.0000000000000000 */
+
+
+/*     2) Solve the same problem using a negative step. In order to */
+/*        find the solution, set the elements of YVALS in reverse order. */
+
+/*        The returned value of LGRESP would still be 1.D0. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM LGRESP_EX2 */
+/*              IMPLICIT NONE */
+
+/*              DOUBLE PRECISION      LGRESP */
+/*              DOUBLE PRECISION      ANSWER */
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      YVALS (4) */
+/*              DOUBLE PRECISION      WORK  (4) */
+/*              INTEGER               N */
+
+/*              N         =   4 */
+/*              FIRST     =   5.D0 */
+/*              STEP      =  -2.D0 */
+
+/*              YVALS(1)  = 148.D0 */
+/*              YVALS(2)  =  26.D0 */
+/*              YVALS(3)  =  -8.D0 */
+/*              YVALS(4)  =  -2.D0 */
+
+/*              ANSWER    =   LGRESP ( N,     FIRST, STEP, */
+/*             .                       YVALS, WORK,  2.D0 ) */
+
+/*              WRITE (*,*) 'ANSWER = ', ANSWER */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         ANSWER =    1.0000000000000000 */
 
 
 /* $ Restrictions */
@@ -247,15 +278,28 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 
 /* $ Literature_References */
 
-/*     [1]  "Numerical Recipes---The Art of Scientific Computing" by */
-/*           William H. Press, Brian P. Flannery, Saul A. Teukolsky, */
-/*           William T. Vetterling (see sections 3.0 and 3.1). */
+/*     [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling, */
+/*          "Numerical Recipes -- The Art of Scientific Computing," */
+/*          chapters 3.0 and 3.1, Cambridge University Press, 1986. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 19-FEB-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Update "N" and "WORK" detailed descriptions to remove */
+/*        references to nonexistent arguments. */
+
+/*        Updated the header to comply with NAIF standard. */
+/*        Added IMPLICIT NONE to code example. Added second example */
+/*        providing code to solve the problem of example #1 using a */
+/*        negative step. */
 
 /* -    SPICELIB Version 1.0.1, 10-JAN-2014 (NJB) */
 
@@ -268,7 +312,6 @@ doublereal lgresp_(integer *n, doublereal *first, doublereal *step,
 /* -    SPICELIB Version 1.0.0, 14-AUG-1993 (NJB) */
 
 /* -& */
-
 /* $ Index_Entries */
 
 /*     interpolate function using Lagrange polynomial */

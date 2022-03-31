@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  MOVEC  ( Move a character array to another ) */
+/* $Procedure MOVEC  ( Move a character array to another ) */
 /* Subroutine */ int movec_(char *arrfrm, integer *ndim, char *arrto, ftnlen 
 	arrfrm_len, ftnlen arrto_len)
 {
@@ -20,8 +20,8 @@
 
 /* $ Abstract */
 
-/*      Copy the elements of one character array into another */
-/*      array. */
+/*     Copy the elements of one character array into another */
+/*     array. */
 
 /* $ Disclaimer */
 
@@ -54,68 +54,31 @@
 
 /* $ Keywords */
 
-/*      ARRAY */
+/*     ARRAY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O              DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ARRFRM     I     Character array to be moved. */
-/*      NDIM       I     Number of elements to copy, i.e. the dimension */
-/*                       of ARRFRM and ARRTO. */
-/*      ARRTO      O     Destination array. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ARRFRM     I   Character array to be moved. */
+/*     NDIM       I   Number of elements to copy, i.e. the dimension */
+/*                    of ARRFRM and ARRTO. */
+/*     ARRTO      O   Destination array. */
 
 /* $ Detailed_Input */
 
-/*      ARRFRM     Array from which to copy items. */
+/*     ARRFRM   is an array from which to copy items. */
 
-/*      NDIM       Number of items to copy. */
+/*     NDIM     is the number of items to copy. */
 
 /* $ Detailed_Output */
 
-/*      ARRTO      Array to which items should be copied. */
+/*     ARRTO    is the array to which items should be copied. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      This routine is simply shorthand for the following 3 lines of */
-/*      code. */
-
-/*              DO I = 1, NDIM */
-/*                 ARRTO(I) = ARRFRM(I) */
-/*              END DO */
-
-/* $ Examples */
-
-/*      Often one needs to make a temporary copy of an array so that */
-/*      it can be manipulated without altering the original array. */
-/*      As pointed out in particulars, you could just do this within */
-/*      the code that needs the copy.  However, if you have several */
-/*      arrays to copy, you can cut the number of lines of code that */
-/*      are needed by a third. */
-
-/*      For example: */
-
-/*           DO I = 1, 19 */
-/*              TEMPA(I) = A(I) */
-/*           END DO */
-
-/*           DO I = 1, 38 */
-/*              TEMPB(I) = B(I) */
-/*           END DO */
-
-/*     Can be rewritten as */
-
-/*           CALL MOVEC ( A, 19, TEMPA ) */
-/*           CALL MOVEC ( B, 38, TEMPB ) */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
@@ -123,18 +86,62 @@
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     This routine is simply shorthand for the following 3 lines of */
+/*     code. */
+
+/*             DO I = 1, NDIM */
+/*                ARRTO(I) = ARRFRM(I) */
+/*             END DO */
+
+/* $ Examples */
+
+/*     Often one needs to make a temporary copy of an array so that */
+/*     it can be manipulated without altering the original array. */
+/*     As pointed out in particulars, you could just do this within */
+/*     the code that needs the copy. However, if you have several */
+/*     arrays to copy, you can cut the number of lines of code that */
+/*     are needed by a third. */
+
+/*     For example: */
+
+/*          DO I = 1, 19 */
+/*             TEMPA(I) = A(I) */
+/*          END DO */
+
+/*          DO I = 1, 38 */
+/*             TEMPB(I) = B(I) */
+/*          END DO */
+
+/*     Can be rewritten as */
+
+/*          CALL MOVEC ( A, 19, TEMPA ) */
+/*          CALL MOVEC ( B, 38, TEMPB ) */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

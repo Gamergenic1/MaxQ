@@ -180,7 +180,7 @@
 /*     NTOKEN     I   Number of tokens in query. */
 /*     TOKENS     I   Token codes. */
 /*     VALUES     I   Pointers to numeric and string token values. */
-/*     LOC        O   Location of first occurence of token. */
+/*     LOC        O   Location of first occurrence of token. */
 /*     FOUND      O   Flag indicating whether token was found. */
 
 /* $ Detailed_Input */
@@ -247,6 +247,10 @@
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comment. */
 
 /* -    Beta Version 1.0.0, 11-OCT-1995 (NJB) */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PARTOF ( Parabolic time of flight ) */
+/* $Procedure PARTOF ( Parabolic time of flight ) */
 /* Subroutine */ int partof_(doublereal *ma, doublereal *d__)
 {
     /* System generated locals */
@@ -67,31 +67,31 @@
 
 /* $ Detailed_Input */
 
-/*     MA          is the parabolic mean anomaly of an orbiting body at */
-/*                 some epoch t, */
+/*     MA       is the parabolic mean anomaly of an orbiting body at */
+/*              some epoch t, */
 
-/*                                         3  1/2 */
-/*                       MA = (t-T) (mu/(2q )) */
+/*                                   3  1/2 */
+/*                 MA = (t-T) (mu/(2q )) */
 
-/*                 where T is the time of periapsis passage, mu is */
-/*                 the gravitational parameter of the primary body, */
-/*                 and q is the perifocal distance. */
+/*              where T is the time of periapsis passage, mu is */
+/*              the gravitational parameter of the primary body, */
+/*              and q is the perifocal distance. */
 
 /* $ Detailed_Output */
 
-/*     D           is the corresponding parabolic anomaly. This is the */
-/*                 solution to the time of flight equation */
+/*     D        is the corresponding parabolic anomaly. This is the */
+/*              solution to the time of flight equation */
 
-/*                                 3 */
-/*                       MA = D + D / 3 */
+/*                           3 */
+/*                 MA = D + D / 3 */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     None. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -101,8 +101,8 @@
 
 /*     Iterate to solve */
 
-/*                            3 */
-/*           f(D,MA,p) = D + D / 3 - MA = 0 */
+/*                         3 */
+/*        f(D,MA,p) = D + D / 3 - MA = 0 */
 
 /* $ Examples */
 
@@ -114,14 +114,23 @@
 
 /* $ Literature_References */
 
-/*     [1] Roger Bate, Fundamentals of Astrodynamics, Dover, 1971. */
+/*     [1]  R. Bate, D. Mueller, and J. White, "Fundamentals of */
+/*          Astrodynamics," Dover Publications Inc., 1971. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 2.0.1, 10-MAR-1992 (WLT) */
 
@@ -138,17 +147,6 @@
 /* $ Index_Entries */
 
 /*     parabolic time of flight */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 2.0.0, 19-APR-1991 (WLT) */
-
-/*        A write statement left over from debugging days was removed. */
-
-/* -    Beta Version 1.0.1, 27-JAN-1989 (IMU) */
-
-/*        Examples section completed. */
 
 /* -& */
 

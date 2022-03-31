@@ -12,7 +12,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__1 = 1;
 
-/* $Procedure      SPKW18 ( Write SPK segment, type 18 ) */
+/* $Procedure SPKW18 ( Write SPK segment, type 18 ) */
 /* Subroutine */ int spkw18_(integer *handle, integer *subtyp, integer *body, 
 	integer *center, char *frame, doublereal *first, doublereal *last, 
 	char *segid, integer *degree, integer *n, doublereal *packts, 
@@ -165,7 +165,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an SPK file open for writing. */
 /*     SUBTYP     I   SPK type 18 subtype code. */
@@ -183,137 +183,129 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the file handle of an SPK file that has been */
-/*                    opened for writing. */
+/*     HANDLE   is the file handle of an SPK file that has been opened */
+/*              for writing. */
 
-/*     SUBTYP         is an integer code indicating the subtype of the */
-/*                    the segment to be created. */
+/*     SUBTYP   is an integer code indicating the subtype of the */
+/*              segment to be created. */
 
-/*     BODY           is the NAIF integer code for an ephemeris object */
-/*                    whose state relative to another body is described */
-/*                    by the segment to be created. */
+/*     BODY     is the NAIF integer code for an ephemeris object whose */
+/*              state relative to another body is described by the */
+/*              segment to be created. */
 
-/*     CENTER         is the NAIF integer code for the center of motion */
-/*                    of the object identified by BODY. */
+/*     CENTER   is the NAIF integer code for the center of motion of the */
+/*              object identified by BODY. */
 
-/*     FRAME          is the NAIF name for a reference frame */
-/*                    relative to which the state information for BODY */
-/*                    is specified. */
+/*     FRAME    is the NAIF name for a reference frame relative to which */
+/*              the state information for BODY is specified. */
 
 /*     FIRST, */
-/*     LAST           are, respectively, the start and stop times of */
-/*                    the time interval over which the segment defines */
-/*                    the state of BODY. */
+/*     LAST     are, respectively, the start and stop times of the time */
+/*              interval over which the segment defines the state of */
+/*              BODY. */
 
-/*     SEGID          is the segment identifier.  An SPK segment */
-/*                    identifier may contain up to 40 characters. */
+/*     SEGID    is the segment identifier. An SPK segment identifier may */
+/*              contain up to 40 characters. */
 
-/*     DEGREE         is the nominal degree of the polynomials used to */
-/*                    interpolate the states contained in the input */
-/*                    packets.  All components of the state vectors are */
-/*                    interpolated by polynomials of the specified */
-/*                    degree, except near the segment boundaries, */
-/*                    or if the total number of states in the segment */
-/*                    is too few to allow interpolation using the */
-/*                    specified degree. */
+/*     DEGREE   is the nominal degree of the polynomials used to */
+/*              interpolate the states contained in the input packets. */
+/*              All components of the state vectors are interpolated by */
+/*              polynomials of the specified degree, except near the */
+/*              segment boundaries, or if the total number of states in */
+/*              the segment is too few to allow interpolation using the */
+/*              specified degree. */
 
-/*                    If the actual interpolation degree is reduced, */
-/*                    the highest degree feasible degree valid for */
-/*                    the interpolation type is used. */
+/*              If the actual interpolation degree is reduced, the */
+/*              highest degree feasible degree valid for the */
+/*              interpolation type is used. */
 
-/*     N              is the number of packets in the input packet */
-/*                    array. */
+/*     N        is the number of packets in the input packet array. */
 
-/*     PACKTS         contains a time-ordered array of data packets */
-/*                    representing geometric states of BODY relative */
-/*                    to CENTER, specified relative to FRAME.  The */
-/*                    packet structure depends on the segment subtype */
-/*                    as follows: */
+/*     PACKTS   is a time-ordered array of data packets representing */
+/*              geometric states of BODY relative to CENTER, specified */
+/*              relative to FRAME. The packet structure depends on the */
+/*              segment subtype as follows: */
 
-/*                       Type 0 (indicated by code S18TP0): */
+/*                 Type 0 (indicated by code S18TP0): */
 
-/*                           x,  y,  z,  dx/dt,  dy/dt,  dz/dt, */
-/*                           vx, vy, vz, dvx/dt, dvy/dt, dvz/dt */
+/*                    x,  y,  z,  dx/dt,  dy/dt,  dz/dt, */
+/*                    vx, vy, vz, dvx/dt, dvy/dt, dvz/dt */
 
-/*                       where x, y, z represent Cartesian position */
-/*                       components and  vx, vy, vz represent Cartesian */
-/*                       velocity components.  Note well:  vx, vy, and */
-/*                       vz *are not necessarily equal* to the time */
-/*                       derivatives of x, y, and z.  This packet */
-/*                       structure mimics that of the Rosetta/MEX orbit */
-/*                       file from which the data are taken. */
+/*                 where x, y, z represent Cartesian position components */
+/*                 and  vx, vy, vz represent Cartesian velocity */
+/*                 components. Note well: vx, vy, and vz *are not */
+/*                 necessarily equal* to the time derivatives of x, y, */
+/*                 and z. This packet structure mimics that of the */
+/*                 Rosetta/MEX orbit file from which the data are taken. */
 
-/*                       Type 1 (indicated by code S18TP1): */
+/*                 Type 1 (indicated by code S18TP1): */
 
-/*                           x,  y,  z,  dx/dt,  dy/dt,  dz/dt */
+/*                    x,  y,  z,  dx/dt,  dy/dt,  dz/dt */
 
-/*                       where x, y, z represent Cartesian position */
-/*                       components and  vx, vy, vz represent Cartesian */
-/*                       velocity components. */
+/*                 where x, y, z represent Cartesian position components */
+/*                 and  vx, vy, vz represent Cartesian velocity */
+/*                 components. */
 
-/*                    Position units are kilometers, velocity units */
-/*                    are kilometers per second, and acceleration units */
-/*                    are kilometers per second per second. */
+/*              Position units are kilometers, velocity units are */
+/*              kilometers per second, and acceleration units are */
+/*              kilometers per second per second. */
 
-
-/*     EPOCHS         is an array of epochs corresponding to the members */
-/*                    of the packets array.  The epochs are specified as */
-/*                    seconds past J2000, TDB. */
+/*     EPOCHS   is an array of epochs corresponding to the members of the */
+/*              packets array. The epochs are specified as seconds past */
+/*              J2000, TDB. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     MAXDEG         is the maximum allowed degree of the interpolating */
-/*                    polynomial.  If the value of MAXDEG is increased, */
-/*                    the SPICELIB routine SPKPV must be changed */
-/*                    accordingly.  In particular, the size of the */
-/*                    record passed to SPKRnn and SPKEnn must be */
-/*                    increased, and comments describing the record size */
-/*                    must be changed. */
+/*     MAXDEG   is the maximum allowed degree of the interpolating */
+/*              polynomial. If the value of MAXDEG is increased, the */
+/*              SPICELIB routine SPKPVN must be changed accordingly. In */
+/*              particular, the size of the record passed to SPKRnn and */
+/*              SPKEnn must be increased, and comments describing the */
+/*              record size must be changed. */
 
 /* $ Exceptions */
 
-/*     If any of the following exceptions occur, this routine will return */
-/*     without creating a new segment. */
+/*     If any of the following exceptions occur, this routine will */
+/*     return without creating a new segment. */
 
-/*     1) If FRAME is not a recognized name, the error */
-/*        SPICE(INVALIDREFFRAME) is signaled. */
+/*     1)  If FRAME is not a recognized name, the error */
+/*         SPICE(INVALIDREFFRAME) is signaled. */
 
-/*     2) If the last non-blank character of SEGID occurs past index 40, */
-/*        the error SPICE(SEGIDTOOLONG) is signaled. */
+/*     2)  If the last non-blank character of SEGID occurs past index 40, */
+/*         the error SPICE(SEGIDTOOLONG) is signaled. */
 
-/*     3) If SEGID contains any nonprintable characters, the error */
-/*        SPICE(NONPRINTABLECHARS) is signaled. */
+/*     3)  If SEGID contains any nonprintable characters, the error */
+/*         SPICE(NONPRINTABLECHARS) is signaled. */
 
-/*     4) If DEGREE is not at least 1 or is greater than MAXDEG, the */
-/*        error SPICE(INVALIDDEGREE) is signaled. */
+/*     4)  If DEGREE is not at least 1 or is greater than MAXDEG, the */
+/*         error SPICE(INVALIDDEGREE) is signaled. */
 
-/*     5) If the window size implied by DEGREE is odd, the error */
-/*        SPICE(INVALIDDEGREE) is signaled. */
+/*     5)  If the window size implied by DEGREE is odd, the error */
+/*         SPICE(INVALIDDEGREE) is signaled. */
 
-/*     6) If the number of packets N is not at least 2, */
-/*        the error SPICE(TOOFEWSTATES) will be signaled. */
+/*     6)  If the number of packets N is not at least 2, the error */
+/*         SPICE(TOOFEWSTATES) is signaled. */
 
-/*     7) If FIRST is greater than or equal to LAST then the error */
-/*        SPICE(BADDESCRTIMES) will be signaled. */
+/*     7)  If FIRST is greater than or equal to LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
-/*     8) If the elements of the array EPOCHS are not in strictly */
-/*        increasing order, the error SPICE(TIMESOUTOFORDER) will be */
-/*        signaled. */
+/*     8)  If the elements of the array EPOCHS are not in strictly */
+/*         increasing order, the error SPICE(TIMESOUTOFORDER) is */
+/*         signaled. */
 
-/*     9) If the first epoch EPOCHS(1) is greater than FIRST, the error */
-/*        SPICE(BADDESCRTIMES) will be signaled. */
+/*     9)  If the first epoch EPOCHS(1) is greater than FIRST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
-/*    10) If the last epoch EPOCHS(N) is less than LAST, the error */
-/*        SPICE(BADDESCRTIMES) will be signaled. */
+/*     10) If the last epoch EPOCHS(N) is less than LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
-/*    11) If the subtype code is not recognized, the error */
-/*        SPICE(INVALIDVALUE) will be signaled. */
-
+/*     11) If the subtype code is not recognized, the error */
+/*         SPICE(INVALIDVALUE) is signaled. */
 
 /* $ Files */
 
@@ -358,9 +350,14 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 09-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 21-DEC-2012 (NJB) */
 
@@ -376,7 +373,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write spk type_18 ephemeris data segment */
+/*     write SPK type_18 ephemeris data segment */
 
 /* -& */
 

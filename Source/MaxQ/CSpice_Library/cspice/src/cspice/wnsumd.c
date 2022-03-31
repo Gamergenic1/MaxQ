@@ -7,7 +7,7 @@
 
 /* $Procedure WNSUMD ( Summary of a double precision window ) */
 /* Subroutine */ int wnsumd_(doublereal *window, doublereal *meas, doublereal 
-	*avg, doublereal *stddev, integer *short__, integer *long__)
+	*avg, doublereal *stddev, integer *idxsml, integer *idxlon)
 {
     /* System generated locals */
     integer i__1;
@@ -69,44 +69,50 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      WINDOW     I   Window to be summarized. */
-/*      MEAS       O   Total measure of intervals in WINDOW. */
-/*      AVG        O   Average measure. */
-/*      STDDEV     O   Standard deviation. */
-/*      SHORT, */
-/*      LONG       O   Locations of shortest, longest intervals. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     WINDOW     I   Window to be summarized. */
+/*     MEAS       O   Total measure of intervals in WINDOW. */
+/*     AVG        O   Average measure. */
+/*     STDDEV     O   Standard deviation. */
+/*     IDXSML, */
+/*     IDXLON     O   Locations of shortest, longest intervals. */
 
 /* $ Detailed_Input */
 
-/*      WINDOW      is a window containing zero or more intervals. */
+/*     WINDOW   is a window containing zero or more intervals. */
 
 /* $ Detailed_Output */
 
-/*      MEAS        is the total measure of the intervals in the input */
-/*                  window. This is just the sum of the measures of the */
-/*                  individual intervals. */
+/*     MEAS     is the total measure of the intervals in the input */
+/*              window. This is just the sum of the measures of the */
+/*              individual intervals. */
 
-/*      AVG         is the average of the measures of the intervals in */
-/*                  the input window. */
+/*     AVG      is the average of the measures of the intervals in the */
+/*              input window. */
 
-/*      STDDEV      is the standard deviation of the measures of the */
-/*                  intervals in the input window. */
+/*     STDDEV   is the standard deviation of the measures of the */
+/*              intervals in the input window. */
 
-/*      SHORT, */
-/*      LONG        are the locations of the shortest and longest */
-/*                  intervals in the input window. The shortest interval */
-/*                  is */
+/*     IDXSML, */
+/*     IDXLON   are the locations of the shortest and longest intervals */
+/*              in the input window. The shortest interval is */
 
-/*                        [ WINDOW(SHORT), WINDOW(SHORT+1) ] */
+/*                 [ WINDOW(IDXSML), WINDOW(IDXSML+1) ] */
 
-/*                  and the longest is */
+/*              and the longest is */
 
-/*                        [ WINDOW(LONG), WINDOW(LONG+1) ] */
+/*                 [ WINDOW(IDXLON), WINDOW(IDXLON+1) ] */
 
-/*                  SHORT and LONG are both zero if the input window */
-/*                  contains no intervals. */
+/*              IDXSML and IDXLON are both zero if the input window */
+/*              contains no intervals. */
+
+/*              If WINDOW contains multiple intervals having the shortest */
+/*              length, IDXSML is the index of the first such interval. */
+/*              Likewise for the longest length. */
+
+/*              Indices range from 1 to 2*N-1, where N is the number of */
+/*              intervals in the window. */
 
 /* $ Parameters */
 
@@ -114,108 +120,245 @@
 
 /* $ Exceptions */
 
-/*     1) The error SPICE(INVALIDCARDINALITY) signals if WINDOW has odd */
-/*        cardinality. */
+/*     1)  If WINDOW has odd cardinality, the error */
+/*         SPICE(INVALIDCARDINALITY) is signaled. */
+
+/*     2)  Left endpoints of stored intervals must be strictly greater */
+/*         than preceding right endpoints. Right endpoints must be */
+/*         greater than or equal to corresponding left endpoints. */
+/*         Invalid window data are not diagnosed by this routine and may */
+/*         lead to unpredictable results. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine provides a summary of the input window, consisting */
-/*      of the following items: */
+/*     This routine provides a summary of the input window, consisting */
+/*     of the following items: */
 
-/*            - The measure of the window. */
+/*     -  The measure of the window. */
 
-/*            - The average and standard deviation of the measures */
-/*              of the individual intervals in the window. */
+/*     -  The average and standard deviation of the measures */
+/*        of the individual intervals in the window. */
 
-/*            - The indices of the left endpoints of the shortest */
-/*              and longest intervals in the window. */
+/*     -  The indices of the left endpoints of the shortest */
+/*        and longest intervals in the window. */
 
-/*      All of these quantities are zero if the window contains no */
-/*      intervals. */
+/*     All of these quantities are zero if the window contains no */
+/*     intervals. */
 
 /* $ Examples */
 
-/*      Let A contain the intervals */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
 
-/*            [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
+/*     1) Define a window with six intervals, and calculate the */
+/*        summary for that window. */
 
-/*      Let B contain the singleton intervals */
 
-/*            [ 2, 2 ]  [ 9, 9 ]  [ 27, 27 ] */
+/*        Example code begins here. */
 
-/*      The measures of A and B are */
 
-/*            (3-1) + (11-7) + (27-23) = 10 */
+/*              PROGRAM WNSUMD_EX1 */
+/*              IMPLICIT NONE */
 
-/*      and */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
 
-/*            (2-2) + (9-9) + (27-27) = 0 */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1   = '(A,F11.6)' ) */
 
-/*      respectively. Each window has three intervals; thus, the average */
-/*      measures of the windows are 10/3 and 0. The standard deviations */
-/*      are */
+/*              CHARACTER*(*)         FMT2 */
+/*              PARAMETER           ( FMT2   = '(A,I4)' ) */
 
-/*           ---------------------------------------------- */
-/*          |          2         2          2 */
-/*          |     (3-1)  + (11-7)  + (27-23)           2             1/2 */
-/*          |     ---------------------------  - (10/3)       = (8/9) */
-/*          |                3 */
-/*        \ | */
-/*         \| */
+/*              CHARACTER*(*)         FMT3 */
+/*              PARAMETER           ( FMT3   = '(A,2(F6.3,A))' ) */
 
-/*      and 0. Neither window has one "shortest" interval or "longest" */
-/*      interval; so the first ones found are returned: SHORT and LONG */
-/*      are 1 and 3 for A, 1 and 1 for B. */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*              INTEGER               WNSIZE */
+/*              PARAMETER           ( WNSIZE = 12 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      AVG */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      MEAS */
+/*              DOUBLE PRECISION      RIGHT */
+/*              DOUBLE PRECISION      STDDEV */
+/*              DOUBLE PRECISION      WINDOW ( LBCELL:WNSIZE ) */
+
+/*              INTEGER               IDXLON */
+/*              INTEGER               IDXSML */
+/*              INTEGER               INTLON */
+/*              INTEGER               INTSML */
+
+/*        C */
+/*        C     Validate the WINDOW with size WNSIZE and zero elements. */
+/*        C */
+/*              CALL WNVALD ( WNSIZE, 0, WINDOW ) */
+
+/*        C */
+/*        C     Insert the intervals */
+/*        C */
+/*        C        [  1,  3 ] [  7, 11 ] [ 18, 18 ] */
+/*        C        [ 23, 27 ] [ 30, 69 ] [ 72, 80 ] */
+/*        C */
+/*        C     into WINDOW. */
+/*        C */
+/*              CALL WNINSD (  1.0D0,  3.0D0, WINDOW ) */
+/*              CALL WNINSD (  7.0D0, 11.0D0, WINDOW ) */
+/*              CALL WNINSD ( 18.0D0, 18.0D0, WINDOW ) */
+/*              CALL WNINSD ( 23.0D0, 27.0D0, WINDOW ) */
+/*              CALL WNINSD ( 30.0D0, 69.0D0, WINDOW ) */
+/*              CALL WNINSD ( 72.0D0, 80.0D0, WINDOW ) */
+
+/*        C */
+/*        C     Calculate the summary for WINDOW. */
+/*        C */
+/*              CALL WNSUMD ( WINDOW, MEAS,   AVG, */
+/*             .              STDDEV, IDXSML, IDXLON ) */
+
+/*        C */
+/*        C     IDXSML and IDXLON refer to the indices of */
+/*        C     the SPICE Cell data array. */
+/*        C */
+/*              INTSML = (IDXSML+1)/2 */
+/*              INTLON = (IDXLON+1)/2 */
+
+/*              WRITE(*,FMT1) 'Measure           : ', MEAS */
+/*              WRITE(*,FMT1) 'Average           : ', AVG */
+/*              WRITE(*,FMT1) 'Standard Dev      : ', STDDEV */
+/*              WRITE(*,FMT2) 'Index shortest    : ', IDXSML */
+/*              WRITE(*,FMT2) 'Index longest     : ', IDXLON */
+/*              WRITE(*,FMT2) 'Interval shortest : ', INTSML */
+/*              WRITE(*,FMT2) 'Interval longest  : ', INTLON */
+
+/*        C */
+/*        C     Output the shortest and longest intervals. */
+/*        C */
+/*              CALL WNFETD ( WINDOW, INTSML, LEFT, RIGHT ) */
+/*              WRITE(*,FMT3) 'Shortest interval : [ ', LEFT, ', ', */
+/*             .                                        RIGHT, ' ]' */
+/*              CALL WNFETD ( WINDOW, INTLON, LEFT, RIGHT ) */
+/*              WRITE(*,FMT3) 'Longest interval  : [ ', LEFT, ', ', */
+/*             .                                        RIGHT, ' ]' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Measure           :   57.000000 */
+/*        Average           :    9.500000 */
+/*        Standard Dev      :   13.413302 */
+/*        Index shortest    :    5 */
+/*        Index longest     :    9 */
+/*        Interval shortest :    3 */
+/*        Interval longest  :    5 */
+/*        Shortest interval : [ 18.000, 18.000 ] */
+/*        Longest interval  : [ 30.000, 69.000 ] */
+
+
+/*     2) Let A contain the intervals */
+
+/*           [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
+
+/*        Let B contain the singleton intervals */
+
+/*           [ 2, 2 ]  [ 9, 9 ]  [ 27, 27 ] */
+
+/*        The measures of A and B are */
+
+/*           (3-1) + (11-7) + (27-23) = 10 */
+
+/*        and */
+
+/*           (2-2) + (9-9) + (27-27) = 0 */
+
+/*        respectively. Each window has three intervals; thus, the */
+/*        average measures of the windows are 10/3 and 0. The standard */
+/*        deviations are */
+
+/*             .----------------------------------------- */
+/*             |       2         2          2 */
+/*             |  (3-1)  + (11-7)  + (27-23)           2           1/2 */
+/*             |  ---------------------------  - (10/3)     = (8/9) */
+/*             |             3 */
+/*           \ | */
+/*            \| */
+
+/*        and 0. Neither window has one "shortest" interval or "longest" */
+/*        interval; so the first ones found are returned: IDXSML and */
+/*        IDXLON are 1 and 3 for A, 1 and 1 for B. */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 25-FEB-2009 (EDW) */
+/* -    SPICELIB Version 1.2.0, 05-JUL-2021 (JDR) (NJB) */
 
-/*         Added error test to confirm input window has even cardinality. */
-/*         Corrected section order to match NAIF standard. */
+/*        Changed output argument names SMALL and LONG to IDXSML and */
+/*        IDXLON for consistency with other routines. */
 
-/* -     SPICELIB Version 1.0.2, 29-JUL-2002 (NJB) */
+/*        Added IMPLICIT NONE statement. */
 
-/*         Corrected error in example section:  changed claimed value */
-/*         of longest interval for window A from 2 to 3. */
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. Added entry #2 in $Exceptions section. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Improved description of arguments IDXSML and IDXLON in */
+/*        $Detailed_Output. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Removed unnecessary $Revisions section. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.1.0, 25-FEB-2009 (EDW) */
+
+/*        Added error test to confirm input window has even cardinality. */
+/*        Corrected section order to match NAIF standard. */
+
+/* -    SPICELIB Version 1.0.2, 29-JUL-2002 (NJB) */
+
+/*        Corrected error in example section: changed claimed value */
+/*        of longest interval for window A from 2 to 3. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     summary of a d.p. window */
-
-/* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.2.0, 24-FEB-1989  (HAN) */
-
-/*         Added calls to CHKIN and CHKOUT. */
 
 /* -& */
 
@@ -252,8 +395,8 @@
 	*meas = 0.;
 	*avg = 0.;
 	*stddev = 0.;
-	*short__ = 0;
-	*long__ = 0;
+	*idxsml = 0;
+	*idxlon = 0;
 
 /*     Collect the sum of the measures and the squares of the measures */
 /*     for each of the intervals in the window. At the same time, keep */
@@ -262,9 +405,9 @@
     } else {
 	sum = 0.;
 	sumsqr = 0.;
-	*short__ = 1;
+	*idxsml = 1;
 	mshort = window[7] - window[6];
-	*long__ = 1;
+	*idxlon = 1;
 	mlong = window[7] - window[6];
 	i__1 = card;
 	for (i__ = 1; i__ <= i__1; i__ += 2) {
@@ -272,11 +415,11 @@
 	    sum += m;
 	    sumsqr += m * m;
 	    if (m < mshort) {
-		*short__ = i__;
+		*idxsml = i__;
 		mshort = m;
 	    }
 	    if (m > mlong) {
-		*long__ = i__;
+		*idxlon = i__;
 		mlong = m;
 	    }
 	}

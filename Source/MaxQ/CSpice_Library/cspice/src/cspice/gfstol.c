@@ -195,7 +195,7 @@ static integer c__3 = 3;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ZZPUT      P   ZZHOLDD stores a DP value. */
 /*     GF_TOL     P   ZZHOLDD acts on the GF subsystem tolerance. */
@@ -203,10 +203,10 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     VALUE       The scalar double precision value to use as the GF */
-/*                 subsystem convergence tolerance. This value will */
-/*                 override the default tolerance, CNVTOL, defined in */
-/*                 gf.inc. Units are TDB seconds. */
+/*     VALUE    is the scalar double precision value to use as the GF */
+/*              subsystem convergence tolerance. This value will override */
+/*              the default tolerance, CNVTOL, defined in gf.inc. Units */
+/*              are TDB seconds. */
 
 /* $ Detailed_Output */
 
@@ -218,8 +218,8 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1)  The error SPICE(INVALIDTOLERANCE) signals if VALUE is not */
-/*         strictly greater-than-zero. */
+/*     1)  If VALUE is not strictly greater-than-zero, the error */
+/*         SPICE(INVALIDTOLERANCE) is signaled. */
 
 /* $ Files */
 
@@ -235,17 +235,22 @@ static integer c__3 = 3;
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
+/*     1) Perform a search for occultation events of the sun by earth as */
+/*        observed from the Moon center. Search during the interval from */
+/*        14 A.D. SEP 1 to 14 A.D. SEP 30 (Julian). */
+
 /*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
+
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: gfstol_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -261,149 +266,174 @@ static integer c__3 = 3;
 
 /*              File name                     Contents */
 /*              ---------                     -------- */
-/*              de421.bsp                     Planetary ephemeris */
 /*              pck00009.tpc                  Planet orientation and */
 /*                                            radii */
 /*              naif0009.tls                  Leapseconds */
 
 /*           \begindata */
 
-/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
-/*                                  'pck00009.tpc', */
+/*              KERNELS_TO_LOAD = ( 'pck00009.tpc', */
 /*                                  'naif0009.tls'  ) */
 
 /*           \begintext */
 
-/*        Example: */
-
-/*        Perform a search for occultation events of the sun by earth as */
-/*        observed from the Moon center. Search during the interval from */
-/*        14 A.D. SEP 1 to 14 A.D. SEP 30 (Julian). */
-
-/*           PROGRAM GFSTOL_T */
-
-/*           IMPLICIT NONE */
-
-/*           INTEGER               WNCARD */
-
-/*           CHARACTER*(*)         TIMFMT */
-/*           PARAMETER           ( TIMFMT = */
-/*          .                   'YYYY ERA MON DD HR:MN:SC.#### ::JCAL' ) */
-
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 2 * 100 ) */
-
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 40 ) */
-
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
-
-/*           CHARACTER*(TIMLEN)    WIN0 */
-/*           CHARACTER*(TIMLEN)    WIN1 */
-/*           CHARACTER*(TIMLEN)    BEGSTR */
-/*           CHARACTER*(TIMLEN)    ENDSTR */
-
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      ET1 */
-/*           DOUBLE PRECISION      LEFT */
-/*           DOUBLE PRECISION      RIGHT */
-/*           DOUBLE PRECISION      STEP */
-
-/*           INTEGER               I */
-
-/*           LOGICAL               OK */
+/*           End of meta-kernel. */
 
 
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ( 'standard.tm' ) */
+/*        Use the SPK kernel below to load the required ephemeris, */
+/*        covering year 14 AD. */
 
-/*     C */
-/*     C     Use an SPK covering year 14 AD. */
-/*     C */
-/*           CALL FURNSH ( 'de408.bsp' ) */
-
-/*     C */
-/*     C     Initialize the confinement and result windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, CNFINE ) */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
-
-/*     C */
-/*     C     Obtain the TDB time bounds of the confinement */
-/*     C     window, which is a single interval in this case. */
-/*     C */
-/*           WIN0 = '14 A.D. SEP 1  00:00:00' */
-/*           WIN1 = '14 A.D. SEP 30 00:00:00' */
-
-/*           CALL STR2ET ( WIN0, ET0 ) */
-/*           CALL STR2ET ( WIN1, ET1 ) */
-
-/*     C */
-/*     C     Insert the time bounds into the confinement */
-/*     C     window. */
-/*     C */
-/*           CALL WNINSD ( ET0, ET1, CNFINE ) */
-
-/*     C */
-/*     C     Select a 3-minute step. We'll ignore any occultations */
-/*     C     lasting less than 3 minutes. */
-/*     C */
-/*           STEP = 180.D0 */
-
-/*     C */
-/*     C     Perform the search. ET0 and ET1 have values ~-6*10^10, */
-/*     C     CNVTOL has value 10^-6, so double precision addition or */
-/*     C     subtraction of ET0 and ET1 with CNVTOL returns a result */
-/*     C     indistinguishable from ET0 and ET1. */
-/*     C */
-/*     C     Reduce the GF convergence tolerance by an order of */
-/*     C     magnitude to resolve this condition. */
-/*     C */
-/*           CALL GFSTOL ( 1D-5 ) */
-
-/*           CALL GFOCLT ( 'ANY', */
-/*          .              'EARTH', 'ellipsoid', 'IAU_EARTH', */
-/*          .              'SUN',   'ellipsoid', 'IAU_SUN', */
-/*          .              'LT',    'MOON',       STEP, */
-/*          .               CNFINE,  RESULT  ) */
+/*           de408.bsp */
 
 
-/*           IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+/*        Example code begins here. */
 
-/*              WRITE (*,*) 'No occultation was found.' */
 
-/*           ELSE */
+/*              PROGRAM GFSTOL_EX1 */
+/*              IMPLICIT NONE */
 
-/*              DO I = 1, WNCARD(RESULT) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
 
-/*     C */
-/*     C           Fetch and display each occultation interval. */
-/*     C */
-/*                 CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         TIMFMT */
+/*              PARAMETER           ( TIMFMT = */
+/*             .             'YYYY ERA MON DD HR:MN:SC.#### ::JCAL' ) */
 
-/*                 CALL TIMOUT ( LEFT,  TIMFMT, BEGSTR ) */
-/*                 CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 2 * 100 ) */
 
-/*                 WRITE (*,*) 'Interval ', I */
-/*                 WRITE (*,*) '   Start time: '//BEGSTR */
-/*                 WRITE (*,*) '   Stop time:  '//ENDSTR */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 40 ) */
 
-/*              END DO */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*           END IF */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(TIMLEN)    WIN0 */
+/*              CHARACTER*(TIMLEN)    WIN1 */
+/*              CHARACTER*(TIMLEN)    BEGSTR */
+/*              CHARACTER*(TIMLEN)    ENDSTR */
 
-/*           END */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2      ) */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RIGHT */
+/*              DOUBLE PRECISION      STEP */
 
-/*    The program outputs: */
+/*              INTEGER               I */
 
-/*       Interval            1 */
-/*          Start time:   14 A.D. SEP 27 05:02:02.8250 */
-/*          Stop time:    14 A.D. SEP 27 09:33:31.6995 */
+/*              LOGICAL               OK */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE and RESULT are */
+/*        C     saved because this practice helps to prevent stack */
+/*        C     overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfstol_ex1.tm' ) */
+
+/*        C */
+/*        C     Use an SPK covering year 14 AD. */
+/*        C */
+/*              CALL FURNSH ( 'de408.bsp' ) */
+
+/*        C */
+/*        C     Initialize the confinement and result windows. */
+/*        C */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+
+/*        C */
+/*        C     Obtain the TDB time bounds of the confinement */
+/*        C     window, which is a single interval in this case. */
+/*        C */
+/*              WIN0 = '14 A.D. SEP 1  00:00:00' */
+/*              WIN1 = '14 A.D. SEP 30 00:00:00' */
+
+/*              CALL STR2ET ( WIN0, ET0 ) */
+/*              CALL STR2ET ( WIN1, ET1 ) */
+
+/*        C */
+/*        C     Insert the time bounds into the confinement */
+/*        C     window. */
+/*        C */
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
+
+/*        C */
+/*        C     Select a 3-minute step. We'll ignore any occultations */
+/*        C     lasting less than 3 minutes. */
+/*        C */
+/*              STEP = 180.D0 */
+
+/*        C */
+/*        C     Perform the search. ET0 and ET1 have values ~-6*10^10, */
+/*        C     CNVTOL has value 10^-6, so double precision addition or */
+/*        C     subtraction of ET0 and ET1 with CNVTOL returns a result */
+/*        C     indistinguishable from ET0 and ET1. */
+/*        C */
+/*        C     Reduce the GF convergence tolerance by an order of */
+/*        C     magnitude to resolve this condition. */
+/*        C */
+/*              CALL GFSTOL ( 1D-5 ) */
+
+/*              CALL GFOCLT ( 'ANY', */
+/*             .              'EARTH', 'ellipsoid', 'IAU_EARTH', */
+/*             .              'SUN',   'ellipsoid', 'IAU_SUN', */
+/*             .              'LT',    'MOON',       STEP, */
+/*             .               CNFINE,  RESULT  ) */
+
+
+/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+
+/*                 WRITE (*,*) 'No occultation was found.' */
+
+/*              ELSE */
+
+/*                 DO I = 1, WNCARD(RESULT) */
+
+/*        C */
+/*        C           Fetch and display each occultation interval. */
+/*        C */
+/*                    CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
+
+/*                    CALL TIMOUT ( LEFT,  TIMFMT, BEGSTR ) */
+/*                    CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
+
+/*                    WRITE (*,*) 'Interval ', I */
+/*                    WRITE (*,*) '   Start time: '//BEGSTR */
+/*                    WRITE (*,*) '   Stop time:  '//ENDSTR */
+
+/*                 END DO */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Interval            1 */
+/*            Start time:   14 A.D. SEP 27 05:02:02.8250 */
+/*            Stop time:    14 A.D. SEP 27 09:33:31.6995 */
+
 
 /* $ Restrictions */
 
@@ -415,11 +445,19 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     E.D. Wright    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0  18-APR-2014 (EDW) */
+/* -    SPICELIB Version 1.0.1, 06-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added SAVE statements for CNFINE and RESULT variables in code */
+/*        example. */
+
+/* -    SPICELIB Version 1.0.0, 18-APR-2014 (EDW) */
 
 /* -& */
 /* $ Index_Entries */

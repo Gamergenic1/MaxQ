@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static doublereal c_b26 = 1.;
 
-/* $Procedure      INELPL ( Intersection of ellipse and plane ) */
+/* $Procedure INELPL ( Intersection of ellipse and plane ) */
 /* Subroutine */ int inelpl_(doublereal *ellips, doublereal *plane, integer *
 	nxpts, doublereal *xpt1, doublereal *xpt2)
 {
@@ -93,42 +93,42 @@ static doublereal c_b26 = 1.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     ELLIPS     I   A SPICELIB ellipse. */
-/*     PLANE      I   A SPICELIB plane. */
+/*     ELLIPS     I   A SPICE ellipse. */
+/*     PLANE      I   A SPICE plane. */
 /*     NXPTS      O   Number of intersection points of plane and ellipse. */
 /*     XPT1, */
 /*     XPT2       O   Intersection points. */
 
 /* $ Detailed_Input */
 
-/*     ELLIPS         is a SPICELIB ellipse. The ellipse is allowed to */
-/*                    be degenerate: one or both semi-axes may have */
-/*                    zero length. */
+/*     ELLIPS   is a SPICE ellipse. The ellipse is allowed to */
+/*              be degenerate: one or both semi-axes may have */
+/*              zero length. */
 
-/*     PLANE          is a SPICELIB plane. */
+/*     PLANE    is a SPICE plane. */
 
 /* $ Detailed_Output */
 
-/*     NXPTS          is the number of points of intersection of the */
-/*                    geometric plane and ellipse represented by PLANE */
-/*                    and ELLIPS. NXPTS may take the values 0, 1, 2 or */
-/*                    -1.  The value -1 indicates that the ellipse */
-/*                    consists of more than one point and lies in the */
-/*                    plane, so the number of intersection points is */
-/*                    infinite. */
+/*     NXPTS    is the number of points of intersection of the */
+/*              geometric plane and ellipse represented by PLANE */
+/*              and ELLIPS. NXPTS may take the values 0, 1, 2 or */
+/*              -1. The value -1 indicates that the ellipse */
+/*              consists of more than one point and lies in the */
+/*              plane, so the number of intersection points is */
+/*              infinite. */
 
-/*                    When the ellipse consists of a single point and */
-/*                    lies in the plane, NXPTS is set to 1. */
+/*              When the ellipse consists of a single point and */
+/*              lies in the plane, NXPTS is set to 1. */
 
 /*     XPT1, */
-/*     XPT2           are the points of intersection of the input plane */
-/*                    and ellipse. If there is only one intersection */
-/*                    point, both XPT1 and XPT2 contain that point. If */
-/*                    the number of intersection points is zero or */
-/*                    infinite, the contents of XPT1 and XPT2 are */
-/*                    undefined. */
+/*     XPT2     are the points of intersection of the input plane */
+/*              and ellipse. If there is only one intersection */
+/*              point, both XPT1 and XPT2 contain that point. If */
+/*              the number of intersection points is zero or */
+/*              infinite, the contents of XPT1 and XPT2 are */
+/*              undefined. */
 
 /* $ Parameters */
 
@@ -136,13 +136,12 @@ static doublereal c_b26 = 1.;
 
 /* $ Exceptions */
 
-/*     1)  The input plane must be a SPICE plane: the normal vector must */
-/*         be non-zero and the constant must be non-negative. */
-/*         If the input plane is invalid, the error SPICE(INVALIDPLANE) */
-/*         will be signaled. */
+/*     1)  If the input plane is invalid, the error SPICE(INVALIDPLANE) */
+/*         is signaled. The input plane must be a SPICE plane: the normal */
+/*         vector must be non-zero and the constant must be non-negative. */
 
 /*     2)  If the input ellipse has non-orthogonal axes, the error */
-/*         SPICE(INVALIDELLIPSE) will be signaled. */
+/*         SPICE(INVALIDELLIPSE) is signaled. */
 
 /*     3)  The input ellipse is allowed to be a line segment or a point; */
 /*         these cases are not considered to be errors. If the ellipse */
@@ -171,8 +170,8 @@ static doublereal c_b26 = 1.;
 /*     1)  If we want to find the angle of some ray above the limb of an */
 /*         ellipsoid, where the angle is measured in a plane containing */
 /*         the ray and a `down' vector, we can follow the procedure */
-/*         given below.  We assume the ray does not intersect the */
-/*         ellipsoid.  The result we seek is called ANGLE, imaginatively */
+/*         given below. We assume the ray does not intersect the */
+/*         ellipsoid. The result we seek is called ANGLE, imaginatively */
 /*         enough. */
 
 /*         We assume that all vectors are given in body-fixed */
@@ -180,7 +179,7 @@ static doublereal c_b26 = 1.;
 
 /*            C */
 /*            C     Find the limb of the ellipsoid as seen from the */
-/*            C     point OBSERV.  Here A, B, and C are the lengths of */
+/*            C     point OBSERV. Here A, B, and C are the lengths of */
 /*            C     the semi-axes of the ellipsoid. */
 /*            C */
 /*                  CALL EDLIMB ( A, B, C, OBSERV, LIMB ) */
@@ -193,10 +192,10 @@ static doublereal c_b26 = 1.;
 /*            C */
 /*            C     where t is any non-negative real number. */
 /*            C */
-/*            C     The `down' vector is just -OBSERV.  The vectors */
+/*            C     The `down' vector is just -OBSERV. The vectors */
 /*            C     OBSERV and RAYDIR are spanning vectors for the plane */
-/*            C     we're interested in.  We can use PSV2PL to represent */
-/*            C     this plane by a SPICELIB plane. */
+/*            C     we're interested in. We can use PSV2PL to represent */
+/*            C     this plane by a SPICE plane. */
 /*            C */
 /*                  CALL PSV2PL ( OBSERV, OBSERV, RAYDIR, PLANE ) */
 
@@ -218,7 +217,7 @@ static doublereal c_b26 = 1.;
 
 /*            C */
 /*            C     Form the vectors from OBSERV to the intersection */
-/*            C     points.  Find the angular separation between the */
+/*            C     points. Find the angular separation between the */
 /*            C     boresight ray and each vector from OBSERV to the */
 /*            C     intersection points. */
 /*            C */
@@ -244,9 +243,17 @@ static doublereal c_b26 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.0.0, 07-OCT-2011 (NJB) */
 
@@ -276,7 +283,7 @@ static doublereal c_b26 = 1.;
 /* -    SPICELIB Version 1.1.0, 24-MAR-1992 (NJB) (WLT) */
 
 /*        Output arguments XPT1, XPT2 are now correctly declared */
-/*        with length 3.  Comment section for permuted index source */
+/*        with length 3. Comment section for permuted index source */
 /*        lines was added following the header. */
 
 /* -    SPICELIB Version 1.0.0, 02-NOV-1990 (NJB) */
@@ -307,22 +314,6 @@ static doublereal c_b26 = 1.;
 /*        Error handling code has been added to trap errors that had */
 /*        been erroneously passed off to lower level routines for */
 /*        diagnosis. */
-
-/* -    SPICELIB Version 1.2.0, 25-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSUB call. */
-
-/* -    SPICELIB Version 1.1.0, 24-MAR-1992 (NJB) (WLT) */
-
-/*        Output arguments XPT1, XPT2 are now correctly declared */
-/*        with length 3.  They formerly were declared as scalars. */
-/*        The correction will not affect the behavior of the routine */
-/*        in programs that already declared the correponding arguments */
-/*        correctly. */
-
-/*        Comment section for permuted index source lines was added */
-/*        following the header. */
 
 /* -& */
 

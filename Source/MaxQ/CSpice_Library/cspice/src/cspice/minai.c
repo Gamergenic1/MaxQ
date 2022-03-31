@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  MINAI  ( Minimum element of array, integer ) */
+/* $Procedure MINAI  ( Minimum element of array, integer ) */
 /* Subroutine */ int minai_(integer *array, integer *ndim, integer *minval, 
 	integer *loc)
 {
@@ -50,83 +50,93 @@
 
 /* $ Keywords */
 
-/*      ARRAY,  SEARCH */
+/*     ARRAY */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O           DESCRIPTION */
-/*      --------  ---  ------------------------------------------------- */
-/*      ARRAY      I   Array. */
-/*      NDIM       I   Number of elements in ARRAY. */
-/*      MINVAL     O   Minimum value in ARRAY. */
-/*      LOC        O   Location of MINVAL in ARRAY. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  ------------------------------------------------- */
+/*     ARRAY      I   Array. */
+/*     NDIM       I   Number of elements in ARRAY. */
+/*     MINVAL     O   Minimum value in ARRAY. */
+/*     LOC        O   Location of MINVAL in ARRAY. */
 
 /* $ Detailed_Input */
 
-/*      ARRAY       is an arbitrary array. */
+/*     ARRAY    is an arbitrary array. */
 
-/*      NDIM        is the number of elements in ARRAY. */
+/*     NDIM     is the number of elements in ARRAY. */
 
 /* $ Detailed_Output */
 
-/*      MINVAL      is the value in array that is less than or equal */
-/*                  to all other values in the array. If the array */
-/*                  contains more than one element with this value, */
-/*                  the first one is returned. */
+/*     MINVAL   is the value in array that is less than or equal */
+/*              to all other values in the array. If the array */
+/*              contains more than one element with this value, */
+/*              the first one is returned. */
 
-/*      LOC         is the location of the minimum element. That is, */
-/*                  MINVAL contains element ARRAY(LOC). */
+/*     LOC      is the location of the minimum element. That is, */
+/*              MINVAL contains element ARRAY(LOC). */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If the array is empty (NDIM is less than one), LOC is zero, and */
-/*        MINVAL is not changed. */
+/*     1)  If the array is empty (NDIM is less than one), LOC is zero, */
+/*         and MINVAL is not changed. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      None. */
+/*     None. */
 
 /* $ Examples */
 
-/*      Let array A contain the following elements. */
+/*     Let array A contain the following elements. */
 
-/*         A(1) = 16 */
-/*         A(2) =  4 */
-/*         A(3) = 32 */
-/*         A(4) = 64 */
-/*         A(5) =  2 */
-/*         A(6) =  8 */
+/*        A(1) = 16 */
+/*        A(2) =  4 */
+/*        A(3) = 32 */
+/*        A(4) = 64 */
+/*        A(5) =  2 */
+/*        A(6) =  8 */
 
-/*      Then following the call */
+/*     Then following the call */
 
-/*         CALL MINAI ( A, 6, MINVAL, LOC ) */
+/*        CALL MINAI ( A, 6, MINVAL, LOC ) */
 
-/*      the values of MINVAL and LOC are 2 and 5 respectively. */
+/*     the values of MINVAL and LOC are 2 and 5 respectively. */
 
 /* $ Restrictions */
 
-/*      None */
-
-/* $ Author_and_Institution */
-
-/*      I.M. Underwood  (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -139,13 +149,6 @@
 /* $ Index_Entries */
 
 /*     minimum element of integer array */
-
-/* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.0.1, 2-FEB-1989 (IMU) */
-
-/*         Missing header sections completed. */
 
 /* -& */
 

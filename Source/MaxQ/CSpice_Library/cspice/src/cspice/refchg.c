@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      REFCHG (Reference frame Change) */
+/* $Procedure REFCHG (Reference frame Change) */
 /* Subroutine */ int refchg_(integer *frame1, integer *frame2, doublereal *et,
 	 doublereal *rotate)
 {
@@ -141,8 +141,8 @@ static integer c__2 = 2;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -192,6 +192,11 @@ static integer c__2 = 2;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -200,6 +205,7 @@ static integer c__2 = 2;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -207,6 +213,11 @@ static integer c__2 = 2;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -238,29 +249,28 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
-/*     FRAME1      is the frame id-code in which some positions */
-/*                 are known. */
+/*     FRAME1   is the frame id-code in which some positions */
+/*              are known. */
 
-/*     FRAME2      is the frame id-code for some frame in which you */
-/*                 would like to represent positions. */
+/*     FRAME2   is the frame id-code for some frame in which you */
+/*              would like to represent positions. */
 
-/*     ET          is the epoch at which to compute the transformation */
-/*                 matrix.  This epoch should be in TDB seconds past */
-/*                 the ephemeris epoch of J2000. */
+/*     ET       is the epoch at which to compute the transformation */
+/*              matrix. This epoch should be in TDB seconds past */
+/*              the ephemeris epoch of J2000. */
 
 /* $ Detailed_Output */
 
-/*     ROTATE      is a 3 x 3 rotaion matrix that can be used to */
-/*                 transform positions relative to the frame */
-/*                 correspsonding to frame FRAME2 to positions relative */
-/*                 to the frame FRAME2.  More explicitely, if POS is */
-/*                 the position of some object relative to the */
-/*                 reference frame of FRAME1 then POS2 is the position */
-/*                 of the same object relative to FRAME2 where POS2 is */
-/*                 computed via the subroutine call below */
+/*     ROTATE   is a 3 x 3 rotation matrix that can be used to */
+/*              transform positions relative to the frame */
+/*              corresponding to frame FRAME2 to positions relative */
+/*              to the frame FRAME2. More explicitly, if POS is */
+/*              the position of some object relative to the */
+/*              reference frame of FRAME1 then POS2 is the position */
+/*              of the same object relative to FRAME2 where POS2 is */
+/*              computed via the subroutine call below */
 
-/*                    CALL MXV ( ROTATE, POS, POS2 ) */
-
+/*                 CALL MXV ( ROTATE, POS, POS2 ) */
 
 /* $ Parameters */
 
@@ -268,12 +278,12 @@ static integer c__2 = 2;
 
 /* $ Exceptions */
 
-/*     1) If either of the reference frames is unrecognized, the error */
-/*        SPICE(UNKNOWNFRAME) will be signalled. */
+/*     1)  If either of the reference frames is unrecognized, the error */
+/*         SPICE(UNKNOWNFRAME) is signaled. */
 
-/*     2) If the auxillary information needed to compute a non-inertial */
-/*        frame is not available an error will be diagnosed and signalled */
-/*        by a routine in the call tree of this routine. */
+/*     2)  If the auxiliary information needed to compute a non-inertial */
+/*         frame is not available, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -284,17 +294,15 @@ static integer c__2 = 2;
 /*     This routine allows you to compute the rotation matrix */
 /*     between two reference frames. */
 
-
 /* $ Examples */
 
 /*     Suppose that you have a position POS1 at epoch ET */
 /*     relative to  FRAME1 and wish to determine its representation */
-/*     POS2 relative to FRAME2.  The following subroutine calls */
+/*     POS2 relative to FRAME2. The following subroutine calls */
 /*     would suffice to make this rotation. */
 
 /*        CALL REFCHG ( FRAME1, FRAME2, ET,   ROTATE ) */
 /*        CALL MXV    ( ROTATE, POS1,   POS2 ) */
-
 
 /* $ Restrictions */
 
@@ -306,9 +314,18 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 08-OCT-2021 (JDR) (NJB) */
+
+/*        Bug fix: added calls to FAILED after each call to */
+/*        FRINFO and to ROTGET. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 14-DEC-2008 (NJB) */
 
@@ -324,8 +341,7 @@ static integer c__2 = 2;
 
 /*        A typo was corrected in the long error message. */
 
-/* -    SPICELIB Version 1.0.0, 9-JUL-1998 (WLT) */
-
+/* -    SPICELIB Version 1.0.0, 09-JUL-1998 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -337,7 +353,7 @@ static integer c__2 = 2;
 /*     SPICE functions */
 
 
-/*     Local Paramters */
+/*     Local Parameters */
 
 
 /*     The root of all reference frames is J2000 (Frame ID = 1). */
@@ -386,6 +402,10 @@ static integer c__2 = 2;
 /*     frames are recognized. */
 
     frinfo_(frame1, &cent, &class__, &clssid, &found);
+    if (failed_()) {
+	chkout_("REFCHG", (ftnlen)6);
+	return 0;
+    }
     if (! found) {
 	setmsg_("The number # is not a recognized id-code for a reference fr"
 		"ame. ", (ftnlen)64);
@@ -395,6 +415,10 @@ static integer c__2 = 2;
 	return 0;
     }
     frinfo_(frame2, &cent, &class__, &clssid, &found);
+    if (failed_()) {
+	chkout_("REFCHG", (ftnlen)6);
+	return 0;
+    }
     if (! found) {
 	setmsg_("The number # is not a recognized id-code for a reference fr"
 		"ame. ", (ftnlen)64);
@@ -405,26 +429,30 @@ static integer c__2 = 2;
     }
     node = 1;
     frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", i__1, 
-	    "refchg_", (ftnlen)287)] = *frame1;
+	    "refchg_", (ftnlen)304)] = *frame1;
     found = TRUE_;
 
 /*     Follow the chain of rotations until we run into */
 /*     one that rotates to J2000 (frame id = 1) or we hit FRAME2. */
 
     while(frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "refchg_", (ftnlen)293)] != 1 && node < 10 && frame[(i__2 = 
+	    i__1, "refchg_", (ftnlen)310)] != 1 && node < 10 && frame[(i__2 = 
 	    node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, "refc"
-	    "hg_", (ftnlen)293)] != *frame2 && found) {
+	    "hg_", (ftnlen)310)] != *frame2 && found) {
 
 /*        Find out what rotation is available for this */
 /*        frame. */
 
 	rotget_(&frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "refchg_", (ftnlen)301)], et, &rot[(i__2 = (
+		"frame", i__1, "refchg_", (ftnlen)318)], et, &rot[(i__2 = (
 		node * 3 + 1) * 3 - 12) < 126 && 0 <= i__2 ? i__2 : s_rnge(
-		"rot", i__2, "refchg_", (ftnlen)301)], &frame[(i__3 = node) < 
+		"rot", i__2, "refchg_", (ftnlen)318)], &frame[(i__3 = node) < 
 		10 && 0 <= i__3 ? i__3 : s_rnge("frame", i__3, "refchg_", (
-		ftnlen)301)], &found);
+		ftnlen)318)], &found);
+	if (failed_()) {
+	    chkout_("REFCHG", (ftnlen)6);
+	    return 0;
+	}
 	if (found) {
 
 /*           We found a rotation matrix.  ROT(1,1,NODE) */
@@ -436,9 +464,9 @@ static integer c__2 = 2;
 	}
     }
     done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "refchg_", (ftnlen)317)] == 1 || frame[(i__2 = node - 1) < 
+	    i__1, "refchg_", (ftnlen)339)] == 1 || frame[(i__2 = node - 1) < 
 	    10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, "refchg_", (ftnlen)
-	    317)] == *frame2 || ! found;
+	    339)] == *frame2 || ! found;
     while(! done) {
 
 /*        The only way to get to this point is to have run out of */
@@ -449,9 +477,13 @@ static integer c__2 = 2;
 /*        root classes or we run into FRAME2. */
 
 	rotget_(&frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "refchg_", (ftnlen)331)], et, &rot[(i__2 = (
+		"frame", i__1, "refchg_", (ftnlen)353)], et, &rot[(i__2 = (
 		node * 3 + 1) * 3 - 12) < 126 && 0 <= i__2 ? i__2 : s_rnge(
-		"rot", i__2, "refchg_", (ftnlen)331)], &relto, &found);
+		"rot", i__2, "refchg_", (ftnlen)353)], &relto, &found);
+	if (failed_()) {
+	    chkout_("REFCHG", (ftnlen)6);
+	    return 0;
+	}
 	if (found) {
 
 /*           Recall that ROT(1,1,NODE-1) contains the rotation */
@@ -461,17 +493,17 @@ static integer c__2 = 2;
 /*           rotation from FRAME(NODE) to RELTO. */
 
 	    frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame",
-		     i__1, "refchg_", (ftnlen)342)] = relto;
+		     i__1, "refchg_", (ftnlen)368)] = relto;
 	    zzrxr_(&rot[(i__1 = ((node - 1) * 3 + 1) * 3 - 12) < 126 && 0 <= 
-		    i__1 ? i__1 : s_rnge("rot", i__1, "refchg_", (ftnlen)343)]
+		    i__1 ? i__1 : s_rnge("rot", i__1, "refchg_", (ftnlen)369)]
 		    , &c__2, tmprot);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		for (j = 1; j <= 3; ++j) {
 		    rot[(i__1 = i__ + (j + (node - 1) * 3) * 3 - 13) < 126 && 
 			    0 <= i__1 ? i__1 : s_rnge("rot", i__1, "refchg_", 
-			    (ftnlen)347)] = tmprot[(i__2 = i__ + j * 3 - 4) < 
+			    (ftnlen)373)] = tmprot[(i__2 = i__ + j * 3 - 4) < 
 			    9 && 0 <= i__2 ? i__2 : s_rnge("tmprot", i__2, 
-			    "refchg_", (ftnlen)347)];
+			    "refchg_", (ftnlen)373)];
 		}
 	    }
 	}
@@ -481,9 +513,9 @@ static integer c__2 = 2;
 /*        another rotation. */
 
 	done = frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge(
-		"frame", i__1, "refchg_", (ftnlen)357)] == 1 || frame[(i__2 = 
+		"frame", i__1, "refchg_", (ftnlen)383)] == 1 || frame[(i__2 = 
 		node - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge("frame", i__2, 
-		"refchg_", (ftnlen)357)] == *frame2 || ! found;
+		"refchg_", (ftnlen)383)] == *frame2 || ! found;
     }
 
 /*     Right now we have the following situation.  We have in hand */
@@ -517,7 +549,7 @@ static integer c__2 = 2;
 /*     We now have to do essentially the same thing for FRAME2. */
 
     if (frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("frame", 
-	    i__1, "refchg_", (ftnlen)395)] == *frame2) {
+	    i__1, "refchg_", (ftnlen)421)] == *frame2) {
 
 /*        We can handle this one immediately with the private routine */
 /*        ZZRXR which multiplies a series of matrices. */
@@ -570,7 +602,11 @@ static integer c__2 = 2;
 
 	    rotget_(&this__, et, &rot2[(i__1 = (put * 3 + 1) * 3 - 12) < 18 &&
 		     0 <= i__1 ? i__1 : s_rnge("rot2", i__1, "refchg_", (
-		    ftnlen)452)], &relto, &found);
+		    ftnlen)478)], &relto, &found);
+	    if (failed_()) {
+		chkout_("REFCHG", (ftnlen)6);
+		return 0;
+	    }
 	    if (found) {
 		this__ = relto;
 		get = put;
@@ -584,6 +620,10 @@ static integer c__2 = 2;
 /*           Fetch the rotation into a temporary spot TMPROT */
 
 	    rotget_(&this__, et, tmprot, &relto, &found);
+	    if (failed_()) {
+		chkout_("REFCHG", (ftnlen)6);
+		return 0;
+	    }
 	    if (found) {
 
 /*              Next multiply TMPROT on the right by the last partial */
@@ -593,21 +633,21 @@ static integer c__2 = 2;
 		    for (j = 1; j <= 3; ++j) {
 			rot2[(i__1 = i__ + (j + put * 3) * 3 - 13) < 18 && 0 
 				<= i__1 ? i__1 : s_rnge("rot2", i__1, "refch"
-				"g_", (ftnlen)478)] = tmprot[(i__2 = i__ - 1) <
+				"g_", (ftnlen)513)] = tmprot[(i__2 = i__ - 1) <
 				 9 && 0 <= i__2 ? i__2 : s_rnge("tmprot", 
-				i__2, "refchg_", (ftnlen)478)] * rot2[(i__3 = 
+				i__2, "refchg_", (ftnlen)513)] * rot2[(i__3 = 
 				(j + get * 3) * 3 - 12) < 18 && 0 <= i__3 ? 
 				i__3 : s_rnge("rot2", i__3, "refchg_", (
-				ftnlen)478)] + tmprot[(i__4 = i__ + 2) < 9 && 
+				ftnlen)513)] + tmprot[(i__4 = i__ + 2) < 9 && 
 				0 <= i__4 ? i__4 : s_rnge("tmprot", i__4, 
-				"refchg_", (ftnlen)478)] * rot2[(i__5 = (j + 
+				"refchg_", (ftnlen)513)] * rot2[(i__5 = (j + 
 				get * 3) * 3 - 11) < 18 && 0 <= i__5 ? i__5 : 
-				s_rnge("rot2", i__5, "refchg_", (ftnlen)478)] 
+				s_rnge("rot2", i__5, "refchg_", (ftnlen)513)] 
 				+ tmprot[(i__6 = i__ + 5) < 9 && 0 <= i__6 ? 
 				i__6 : s_rnge("tmprot", i__6, "refchg_", (
-				ftnlen)478)] * rot2[(i__7 = (j + get * 3) * 3 
+				ftnlen)513)] * rot2[(i__7 = (j + get * 3) * 3 
 				- 10) < 18 && 0 <= i__7 ? i__7 : s_rnge("rot2"
-				, i__7, "refchg_", (ftnlen)478)];
+				, i__7, "refchg_", (ftnlen)513)];
 		    }
 		}
 
@@ -640,7 +680,7 @@ static integer c__2 = 2;
 
     if (! gotone) {
 	zznofcon_(et, frame1, &frame[(i__1 = node - 1) < 10 && 0 <= i__1 ? 
-		i__1 : s_rnge("frame", i__1, "refchg_", (ftnlen)525)], frame2,
+		i__1 : s_rnge("frame", i__1, "refchg_", (ftnlen)557)], frame2,
 		 &this__, errmsg, (ftnlen)1840);
 	if (failed_()) {
 
@@ -681,9 +721,9 @@ static integer c__2 = 2;
 /*     result from FRAME1 to FRAME2. */
 
     xpose_(&rot2[(i__1 = (get * 3 + 1) * 3 - 12) < 18 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rot2", i__1, "refchg_", (ftnlen)568)], &rot[(i__2 = (
+	    s_rnge("rot2", i__1, "refchg_", (ftnlen)600)], &rot[(i__2 = (
 	    cmnode * 3 + 1) * 3 - 12) < 126 && 0 <= i__2 ? i__2 : s_rnge(
-	    "rot", i__2, "refchg_", (ftnlen)568)]);
+	    "rot", i__2, "refchg_", (ftnlen)600)]);
     zzrxr_(rot, &cmnode, rotate);
     chkout_("REFCHG", (ftnlen)6);
     return 0;

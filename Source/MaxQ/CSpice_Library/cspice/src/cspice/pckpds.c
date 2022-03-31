@@ -79,23 +79,23 @@ static integer c__5 = 5;
 
 /* $ Detailed_Input */
 
-/*     BODY       is the NAIF ID code for the body of the segment. */
+/*     BODY     is the NAIF ID code for the body of the segment. */
 
-/*     FRAME      is a string that names the inertial frame to which */
-/*                states for the body shall be referenced. */
+/*     FRAME    is a string that names the inertial frame to which */
+/*              states for the body shall be referenced. */
 
-/*     TYPE       is the type of PCK segment to create. */
+/*     TYPE     is the type of PCK segment to create. */
 
-/*     FIRST      is the first epoch for which the segment will have */
-/*                ephemeris data. */
+/*     FIRST    is the first epoch for which the segment will have */
+/*              ephemeris data. */
 
-/*     LAST       is the last epoch for which the segment will have */
-/*                ephemeris data. */
+/*     LAST     is the last epoch for which the segment will have */
+/*              ephemeris data. */
 
 /* $ Detailed_Output */
 
-/*     DESCR       is a valid PCK segment descriptor to use */
-/*                 when creating a DAF segment for this body. */
+/*     DESCR    is a valid PCK segment descriptor to use */
+/*              when creating a DAF segment for this body. */
 
 /* $ Parameters */
 
@@ -103,22 +103,21 @@ static integer c__5 = 5;
 
 /* $ Exceptions */
 
-/*     1) The error 'SPICE(BARYCENTERIDCODE)' is signalled if the */
-/*        value of BODY is the ID code of a barycenter, codes */
-/*        0, 1, ..., 9. */
+/*     1)  If the value of BODY is the ID code of a barycenter --codes 0, */
+/*         1, ..., 9, the error SPICE(BARYCENTERIDCODE) is signaled. */
 
-/*     3) The error 'SPICE(INVALIDREFFRAME)' is signalled if FRAME */
-/*        is not one of the known SPICE inertial reference frames. */
+/*     2)  If FRAME is not one of the known SPICE inertial reference */
+/*         frames, the error SPICE(INVALIDREFFRAME) is signaled. */
 
-/*     4) The error 'SPICE(BADDESCRTIMES)' is signalled if FIRST */
-/*        is greater than or equal to LAST */
+/*     3)  If FIRST is greater than or equal to LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
-/*     5) The error 'SPICE(UNKNOWNPCKTYPE)' is signalled if the */
-/*        value of TYPE is outside the range 2 to 1000 (inclusive). */
-/*        This does not ensure that the TYPE is a legitimate PCK */
-/*        segment type, but it is a simple check that helps avoid */
-/*        problems that arise from unitialized values or improperly */
-/*        ordered calling arguments. */
+/*     4)  If the value of TYPE is outside the range 2 to 1000 */
+/*         (inclusive), the error SPICE(UNKNOWNPCKTYPE) is signaled. This */
+/*         does not ensure that the TYPE is a legitimate PCK segment */
+/*         type, but it is a simple check that helps avoid problems that */
+/*         arise from uninitialized values or improperly ordered calling */
+/*         arguments. */
 
 /* $ Files */
 
@@ -127,14 +126,14 @@ static integer c__5 = 5;
 /* $ Particulars */
 
 /*     This is a utility routine for validating and creating */
-/*     the descriptor for a PCK segment.  It is intended for */
+/*     the descriptor for a PCK segment. It is intended for */
 /*     use only by routines that create PCK segments. */
 
 /* $ Examples */
 
 /*     Suppose that you wish to create a PCK segment of type X */
 /*     and that you are writing a routine to handle the details */
-/*     of the segment creation.  This routine can be used to */
+/*     of the segment creation. This routine can be used to */
 /*     ensure that the descriptor needed for the segment is */
 /*     properly formed and that the information in that descriptor */
 /*     is reasonable. */
@@ -155,13 +154,19 @@ static integer c__5 = 5;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 20-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 /*        Corrected order of header sections to conform to NAIF */
 /*        standard. */
 
@@ -188,7 +193,7 @@ static integer c__5 = 5;
 /*     Local Variables */
 
 
-/*     Standard SPICLEIB error handling. */
+/*     Standard SPICELIB error handling. */
 
     if (return_()) {
 	return 0;
@@ -250,7 +255,7 @@ static integer c__5 = 5;
     }
 
 /*     Well, that's it.  As far as we can determine these seem to be */
-/*     reasonble values to put into a descriptor.   Do it. */
+/*     reasonable values to put into a descriptor.   Do it. */
 
     ipart[0] = *body;
     ipart[1] = refcod;

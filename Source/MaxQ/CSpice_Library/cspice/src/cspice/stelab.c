@@ -9,7 +9,7 @@
 
 static integer c__3 = 3;
 
-/* $Procedure      STELAB     ( Stellar Aberration ) */
+/* $Procedure STELAB     ( Stellar Aberration ) */
 /* Subroutine */ int stelab_(doublereal *pobj, doublereal *vobs, doublereal *
 	appobj)
 {
@@ -39,8 +39,8 @@ static integer c__3 = 3;
 
 /* $ Abstract */
 
-/*      Correct the apparent position of an object for stellar */
-/*      aberration. */
+/*     Correct the apparent position of an object for stellar */
+/*     aberration. */
 
 /* $ Disclaimer */
 
@@ -73,34 +73,34 @@ static integer c__3 = 3;
 
 /* $ Keywords */
 
-/*      EPHEMERIS */
+/*     EPHEMERIS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      POBJ       I   Position of an object with respect to the */
-/*                     observer. */
-/*      VOBS       I   Velocity of the observer with respect to the */
-/*                     Solar System barycenter. */
-/*      APPOBJ     O   Apparent position of the object with respect to */
-/*                     the observer, corrected for stellar aberration. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     POBJ       I   Position of an object with respect to the */
+/*                    observer. */
+/*     VOBS       I   Velocity of the observer with respect to the */
+/*                    Solar System barycenter. */
+/*     APPOBJ     O   Apparent position of the object with respect to */
+/*                    the observer, corrected for stellar aberration. */
 
 /* $ Detailed_Input */
 
-/*      POBJ        is the position (x, y, z, km) of an object with */
-/*                  respect to the observer, possibly corrected for */
-/*                  light time. */
+/*     POBJ     is the position (x, y, z, km) of an object with */
+/*              respect to the observer, possibly corrected for */
+/*              light time. */
 
-/*      VOBS        is the velocity (dx/dt, dy/dt, dz/dt, km/sec) */
-/*                  of the observer with respect to the Solar System */
-/*                  barycenter. */
+/*     VOBS     is the velocity (dx/dt, dy/dt, dz/dt, km/sec) */
+/*              of the observer with respect to the Solar System */
+/*              barycenter. */
 
 /* $ Detailed_Output */
 
-/*      APPOBJ      is the apparent position of the object relative */
-/*                  to the observer, corrected for stellar aberration. */
+/*     APPOBJ   is the apparent position of the object relative */
+/*              to the observer, corrected for stellar aberration. */
 
 /* $ Parameters */
 
@@ -108,121 +108,244 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1) If the velocity of the observer is greater than or equal */
-/*        to the speed of light, the error SPICE(VALUEOUTOFRANGE) */
-/*        is signaled. */
+/*     1)  If the velocity of the observer is greater than or equal */
+/*         to the speed of light, the error SPICE(VALUEOUTOFRANGE) */
+/*         is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      Let r be the vector from the observer to the object, and v be */
-/*          -                                                    - */
-/*      the velocity of the observer with respect to the Solar System */
-/*      barycenter. Let w be the angle between them. The aberration */
-/*      angle phi is given by */
+/*     Let r be the vector from the observer to the object, and v be */
+/*         -                                                    - */
+/*     the velocity of the observer with respect to the Solar System */
+/*     barycenter. Let w be the angle between them. The aberration */
+/*     angle phi is given by */
 
-/*           sin(phi) = v sin(w) / c */
+/*          sin(phi) = v sin(w) / c */
 
-/*      Let h be the vector given by the cross product */
-/*          - */
+/*     Let h be the vector given by the cross product */
+/*         - */
 
-/*            h = r X v */
-/*            -   -   - */
+/*           h = r X v */
+/*           -   -   - */
 
-/*      Rotate r by phi radians about h to obtain the apparent position */
-/*             -                      - */
-/*      of the object. */
+/*     Rotate r by phi radians about h to obtain the apparent position */
+/*            -                      - */
+/*     of the object. */
 
 /* $ Examples */
 
-/*      In the following example, STELAB is used to correct the position */
-/*      of a target body for stellar aberration. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Compute the apparent position of the Moon relative to the */
+/*        Earth, corrected for one light-time and stellar aberration, */
+/*        given the geometric state of the Earth relative to the Solar */
+/*        System Barycenter, and the difference between the stellar */
+/*        aberration corrected and uncorrected position vectors, taking */
+/*        several steps. */
+
+/*        First, compute the light-time corrected state of the Moon body */
+/*        as seen by the Earth, using its geometric state. Then apply */
+/*        the correction for stellar aberration to the light-time */
+/*        corrected state of the target body. */
+
+/*        The code in this example could be replaced by a single call */
+/*        to SPKPOS: */
+
+/*            CALL SPKPOS ( 'MOON', ET, 'J2000', 'LT+S', 'EARTH', */
+/*           .               POS,   LT                           ) */
 
 
-/*          (Previous subroutine calls have loaded the SPK file and */
-/*           the leapseconds kernel file.) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*      C */
-/*      C     Get the geometric state of the observer OBS relative to */
-/*      C     the solar system barycenter. */
-/*      C */
-/*            CALL SPKSSB ( OBS, ET, 'J2000', SOBS ) */
+/*           KPL/MK */
 
-/*      C */
-/*      C     Get the light-time corrected position TPOS of the target */
-/*      C     body TARG as seen by the observer. Normally we would */
-/*      C     call SPKPOS to obtain this vector, but we already have */
-/*      C     the state of the observer relative to the solar system */
-/*      C     barycenter, so we can avoid looking up that state twice */
-/*      C     by calling SPKAPO. */
-/*      C */
-/*            CALL SPKAPO ( TARG, ET, 'J2000', SOBS, 'LT', TPOS, LT ) */
+/*           File name: stelab_ex1.tm */
 
-/*      C */
-/*      C     Apply the correction for stellar aberration to the */
-/*      C     light-time corrected position of the target body. */
-/*      C     The corrected position is returned in the argument */
-/*      C     PCORR. */
-/*      C */
-/*            CALL STELAB ( TPOS, SOBS(4), PCORR ) */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de418.bsp                     Planetary ephemeris */
+/*              naif0009.tls                  Leapseconds */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de418.bsp', */
+/*                                  'naif0009.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
 
 
-/*      Note that this example is somewhat contrived. The sequence */
-/*      of calls above could be replaced by a single call to SPKEZP, */
-/*      using the aberration correction flag 'LT+S'. */
+/*        Example code begins here. */
 
-/*      For more information on aberration-corrected states or */
-/*      positions, see the headers of any of the routines */
 
-/*         SPKEZR */
-/*         SPKEZ */
-/*         SPKPOS */
-/*         SPKEZP */
+/*              PROGRAM STELAB_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(6)         REFFRM */
+/*              CHARACTER*(12)        UTCSTR */
+
+/*              DOUBLE PRECISION      APPDIF ( 3 ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      PCORR  ( 3 ) */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      SOBS   ( 6 ) */
+
+/*              INTEGER               IDOBS */
+/*              INTEGER               IDTARG */
+
+/*        C */
+/*        C     Assign an observer, Earth, target, Moon, time of interest */
+/*        C     and reference frame for returned vectors. */
+/*        C */
+/*              IDOBS  = 399 */
+/*              IDTARG = 301 */
+/*              UTCSTR = 'July 4 2004' */
+/*              REFFRM = 'J2000' */
+
+/*        C */
+/*        C     Load the needed kernels. */
+/*        C */
+/*              CALL FURNSH ( 'stelab_ex1.tm' ) */
+
+/*        C */
+/*        C     Convert the time string to ephemeris time, J2000. */
+/*        C */
+/*              CALL STR2ET ( UTCSTR, ET ) */
+
+/*        C */
+/*        C     Get the state of the observer with respect to the solar */
+/*        C     system barycenter. */
+/*        C */
+/*              CALL SPKSSB ( IDOBS, ET, REFFRM, SOBS ) */
+
+/*        C */
+/*        C     Get the light-time corrected position POS of the target */
+/*        C     body IDTARG as seen by the observer. */
+/*        C */
+/*              CALL SPKAPO ( IDTARG, ET, REFFRM, SOBS, 'LT', POS, LT ) */
+
+/*        C */
+/*        C     Output the uncorrected vector. */
+/*        C */
+/*              WRITE(*,*) 'Uncorrected position vector' */
+/*              WRITE(*,'(A,3F19.6)') '   ', POS(1), POS(2), POS(3) */
+
+/*        C */
+/*        C     Apply the correction for stellar aberration to the */
+/*        C     light-time corrected position of the target body. */
+/*        C */
+/*              CALL STELAB ( POS, SOBS(4), PCORR ) */
+
+/*        C */
+/*        C     Output the corrected position vector and the apparent */
+/*        C     difference from the uncorrected vector. */
+/*        C */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Corrected position vector' */
+/*              WRITE(*,'(A,3F19.6)') '   ', PCORR(1), PCORR(2), */
+/*             .                             PCORR(3) */
+
+/*        C */
+/*        C     Apparent difference. */
+/*        C */
+/*              CALL VSUB ( POS, PCORR, APPDIF ) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Apparent difference' */
+/*              WRITE(*,'(A,3F19.6)') '   ', APPDIF(1), APPDIF(2), */
+/*             .                            APPDIF(3) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Uncorrected position vector */
+/*                 201738.725087     -260893.141602     -147722.589056 */
+
+/*         Corrected position vector */
+/*                 201765.929516     -260876.818077     -147714.262441 */
+
+/*         Apparent difference */
+/*                    -27.204429         -16.323525          -8.326615 */
+
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      1) W.M. Owen, Jr., JPL IOM #314.8-524, "The Treatment of */
-/*         Aberration in Optical Navigation", 8 February 1985. */
+/*     [1]  W. Owen, "The Treatment of Aberration in Optical Navigation", */
+/*          JPL IOM #314.8-524, 8 February 1985. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.1, 8-JAN-2008 (NJB) */
+/* -    SPICELIB Version 1.2.0, 05-JUL-2021 (JDR) */
 
-/*         The header example was updated to remove references */
-/*         to SPKAPP. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.1.0, 8-FEB-1999 (WLT) */
+/*        Edited the header to comply with NAIF standard. Added example's */
+/*        meta-kernel and problem statement. Created complete code */
+/*        example from existing code fragments. */
 
-/*         The example was corrected so that SOBS(4) is passed */
-/*         into STELAB instead of STARG(4). */
+/* -    SPICELIB Version 1.1.1, 08-JAN-2008 (NJB) */
 
-/* -     SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
+/*        The header example was updated to remove references */
+/*        to SPKAPP. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 1.1.0, 08-FEB-1999 (WLT) */
 
-/* -     SPICELIB Version 1.0.1, 8-AUG-1990 (HAN) */
+/*        The example was corrected so that SOBS(4) is passed */
+/*        into STELAB instead of STARG(4). */
 
-/*         Examples section of the header was updated to replace */
-/*         calls to the GEF ephemeris readers by calls to the */
-/*         new SPK ephemeris reader. */
+/* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.1, 08-AUG-1990 (HAN) */
+
+/*        $Examples section of the header was updated to replace */
+/*        calls to the GEF ephemeris readers by calls to the */
+/*        new SPK ephemeris reader. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -232,17 +355,17 @@ static integer c__3 = 3;
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 2.1.0, 9-MAR-1989 (HAN) */
+/* -    Beta Version 2.1.0, 9-MAR-1989 (HAN) */
 
-/*         Declaration of the variable LIGHT was removed from the code. */
-/*         The variable was declared but never used. */
+/*        Declaration of the variable LIGHT was removed from the code. */
+/*        The variable was declared but never used. */
 
-/* -     Beta Version 2.0.0, 28-DEC-1988 (HAN) */
+/* -    Beta Version 2.0.0, 28-DEC-1988 (HAN) */
 
-/*         Error handling was added to check the velocity of the */
-/*         observer. If the velocity of the observer is greater */
-/*         than or equal to the speed of light, the error */
-/*         SPICE(VALUEOUTOFRANGE) is signalled. */
+/*        Error handling was added to check the velocity of the */
+/*        observer. If the velocity of the observer is greater */
+/*        than or equal to the speed of light, the error */
+/*        SPICE(VALUEOUTOFRANGE) is signaled. */
 
 /* -& */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CYCLAC ( Cycle the elements of a character array ) */
+/* $Procedure CYCLAC ( Cycle the elements of a character array ) */
 /* Subroutine */ int cyclac_(char *array, integer *nelt, char *dir, integer *
 	ncycle, char *out, ftnlen array_len, ftnlen dir_len, ftnlen out_len)
 {
@@ -34,7 +34,7 @@
 
 /* $ Abstract */
 
-/*      Cycle the elements of a character array forward or backward. */
+/*     Cycle the elements of a character array forward or backward. */
 
 /* $ Disclaimer */
 
@@ -63,42 +63,42 @@
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      ARRAY */
+/*     ARRAY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ARRAY      I   Input array. */
-/*      NELT       I   Number of elements. */
-/*      DIR        I   Direction to cycle: 'F' or 'B'. */
-/*      NCYCLE     I   Number of times to cycle. */
-/*      OUT        O   Cycled array. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ARRAY      I   Input array. */
+/*     NELT       I   Number of elements. */
+/*     DIR        I   Direction to cycle: 'F' or 'B'. */
+/*     NCYCLE     I   Number of times to cycle. */
+/*     OUT        O   Cycled array. */
 
 /* $ Detailed_Input */
 
-/*      ARRAY       is the array to be cycled. */
+/*     ARRAY    is the array to be cycled. */
 
-/*      NELT        is the number of elements in the input array. */
+/*     NELT     is the number of elements in the input array. */
 
-/*      DIR         is the direction in which the elements in the */
-/*                  array are to be cycled. */
+/*     DIR      is the direction in which the elements in the */
+/*              array are to be cycled. */
 
-/*                        'F' or 'f'  to cycle forward. */
-/*                        'B' or 'b'  to cycle backward. */
+/*                    'F' or 'f'  to cycle forward. */
+/*                    'B' or 'b'  to cycle backward. */
 
-/*      NCYCLE      is the number of times the elements in the array */
-/*                  are to be cycled. */
+/*     NCYCLE   is the number of times the elements in the array */
+/*              are to be cycled. */
 
 /* $ Detailed_Output */
 
-/*      OUT         is the input array after it has been cycled. */
-/*                  OUT may overwrite ARRAY. */
+/*     OUT      is the input array after it has been cycled. */
+/*              OUT may overwrite ARRAY. */
 
 /* $ Parameters */
 
@@ -106,88 +106,96 @@
 
 /* $ Exceptions */
 
-/*      1) If the value of DIR is not recognized, the error */
-/*         SPICE(INVALIDDIRECTION) is signalled. */
+/*     1)  If the value of DIR is not recognized, the error */
+/*         SPICE(INVALIDDIRECTION) is signaled. */
 
-/*      2) If NELT is less than 1, the output array is not modified. */
+/*     2)  If NELT is less than 1, the output array is not modified. */
 
-/*      3) If NCYCLE is negative, the array is cycled NCYCLE times in */
+/*     3)  If NCYCLE is negative, the array is cycled NCYCLE times in */
 /*         the opposite direction of DIR. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      An array is cycled when its contents are shifted forward or */
-/*      backward by one place. An element pushed off one end of the */
-/*      array is brought around to the other end of the array instead */
-/*      of disappearing. */
+/*     An array is cycled when its contents are shifted forward or */
+/*     backward by one place. An element pushed off one end of the */
+/*     array is brought around to the other end of the array instead */
+/*     of disappearing. */
 
 /* $ Examples */
 
-/*      Let the integer array A contain the following elements. */
+/*     Let the integer array A contain the following elements. */
 
-/*            A(1) = 'apple' */
-/*            A(2) = 'bear' */
-/*            A(3) = 'cake' */
-/*            A(4) = 'dragon' */
+/*           A(1) = 'apple' */
+/*           A(2) = 'bear' */
+/*           A(3) = 'cake' */
+/*           A(4) = 'dragon' */
 
-/*      Cycling A forward once yields the array */
+/*     Cycling A forward once yields the array */
 
-/*            A(1) = 'dragon' */
-/*            A(2) = 'apple' */
-/*            A(3) = 'bear' */
-/*            A(4) = 'cake' */
+/*           A(1) = 'dragon' */
+/*           A(2) = 'apple' */
+/*           A(3) = 'bear' */
+/*           A(4) = 'cake' */
 
-/*      Cycling A backward once yields the array */
+/*     Cycling A backward once yields the array */
 
-/*            A(1) = 'bear' */
-/*            A(2) = 'cake' */
-/*            A(3) = 'dragon' */
-/*            A(4) = 'apple' */
+/*           A(1) = 'bear' */
+/*           A(2) = 'cake' */
+/*           A(3) = 'dragon' */
+/*           A(4) = 'apple' */
 
-/*      Cycling by any multiple of the number of elements in the array */
-/*      yields the same array. */
+/*     Cycling by any multiple of the number of elements in the array */
+/*     yields the same array. */
 
 /* $ Restrictions */
 
-/*      The memory used for the output array must be identical to or */
-/*      disjoint from the memory used for the input array. */
+/*     1)  The memory used for the output array must be identical to or */
+/*         disjoint from the memory used for the input array. */
 
-/*      That is: */
+/*         That is: */
 
-/*           CALL CYCLAC ( ARRAY, NELT, DIR, NCYCLE, ARRAY ) */
+/*            CALL CYCLAC ( ARRAY, NELT, DIR, NCYCLE, ARRAY ) */
 
-/*      will produce correct results, while */
+/*         will produce correct results, while */
 
-/*           CALL CYCLAC ( ARRAY, NELT-3, DIR, NCYCLE, ARRAY(4) ) */
+/*            CALL CYCLAC ( ARRAY, NELT-3, DIR, NCYCLE, ARRAY(4) ) */
 
-/*      will produce garbage. */
+/*         will produce garbage. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.2, 18-MAY-2010 (BVS) */
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.2, 18-MAY-2010 (BVS) */
 
 /*        Removed "C$" marker from text in the header. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -201,7 +209,7 @@
 
 /*         Error handling was added to detect an invalid value for */
 /*         the cycling direction. If the direction is not recognized */
-/*         the error SPICE(INVALIDDIRECTION) is signalled and the */
+/*         the error SPICE(INVALIDDIRECTION) is signaled and the */
 /*         output array is not modified. (The routine used to copy the */
 /*         input array into the output array if the direction was not */
 /*         recognized.) */

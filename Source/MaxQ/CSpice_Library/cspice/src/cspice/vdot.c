@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      VDOT  ( Vector dot product, 3 dimensions ) */
+/* $Procedure VDOT ( Vector dot product, 3 dimensions ) */
 doublereal vdot_(doublereal *v1, doublereal *v2)
 {
     /* System generated locals */
@@ -13,8 +13,8 @@ doublereal vdot_(doublereal *v1, doublereal *v2)
 
 /* $ Abstract */
 
-/*      Compute the dot product of two double precision, 3-dimensional */
-/*      vectors. */
+/*     Compute the dot product of two double precision, 3-dimensional */
+/*     vectors. */
 
 /* $ Disclaimer */
 
@@ -43,61 +43,38 @@ doublereal vdot_(doublereal *v1, doublereal *v2)
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      VECTOR */
+/*     VECTOR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       V1        I     First vector in the dot product. */
-/*       V2        I     Second vector in the dot product. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     V1         I   First vector in the dot product. */
+/*     V2         I   Second vector in the dot product. */
 
-/*       The function returns the value of the dot product of V1 and V2. */
+/*     The function returns the value of the dot product of V1 and V2. */
 
 /* $ Detailed_Input */
 
-/*      V1      This may be any 3-dimensional, double precision vector. */
-
-/*      V2      This may be any 3-dimensional, double precision vector. */
+/*     V1, */
+/*     V2       are two arbitrary double precision 3-dimensional */
+/*              vectors. */
 
 /* $ Detailed_Output */
 
-/*      The function returns the value of the dot product of V1 and V2. */
+/*     The function returns the value of the dot product (inner product) */
+/*     of V1 and V2: */
+
+/*        < V1, V2 > */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      VDOT calculates the dot product of V1 and V2 by a simple */
-/*      application of the definition.  No error checking is */
-/*      performed to prevent numeric overflow. */
-
-/* $ Examples */
-
-/*      Suppose that given two position vectors, we want to change */
-/*      one of the positions until the two vectors are perpendicular. */
-/*      The following code fragment demonstrates the use of VDOT to do */
-/*      so. */
-
-/*      DOT = VDOT ( V1, V2 ) */
-
-/*      DO WHILE ( DOT .NE. 0.0D0 ) */
-/*         change one of the position vectors */
-/*         DOT = VDOT ( V1, V2 ) */
-/*      END DO */
-
-/* $ Restrictions */
-
-/*      The user is responsible for determining that the vectors V1 and */
-/*      V2 are not so large as to cause numeric overflow.  In most cases */
-/*      this won't present a problem. */
+/*     None. */
 
 /* $ Exceptions */
 
@@ -105,17 +82,137 @@ doublereal vdot_(doublereal *v1, doublereal *v2)
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     VDOT calculates the dot product of V1 and V2 by a simple */
+/*     application of the definition: */
+
+/*                   3 */
+/*                .----- */
+/*                 \ */
+/*        VDOT  =   )  V1(I) * V2(I) */
+/*                 / */
+/*                '----- */
+/*                  I=1 */
+
+/*     No error checking is performed to prevent or recover from numeric */
+/*     overflow. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Suppose that you have a set of double precision 3-dimensional */
+/*        vectors. Check if they are orthogonal to the Z-axis. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM VDOT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              DOUBLE PRECISION      VDOT */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               SETSIZ */
+/*              PARAMETER           ( SETSIZ = 4 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      V1   ( 3, SETSIZ ) */
+/*              DOUBLE PRECISION      Z    ( 3         ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define the vector set. */
+/*        C */
+/*              DATA                  V1  / 1.D0,  0.D0,  0.D0, */
+/*             .                            0.D0, -6.D0,  0.D0, */
+/*             .                           10.D0,  0.D0, -1.D0, */
+/*             .                            0.D0,  0.D0,  1.D0  / */
+
+/*              DATA                  Z   / 0.D0,  0.D0,  1.D0  / */
+
+/*        C */
+/*        C     Check the orthogonality with respect to Z of each */
+/*        C     vector in V1. */
+/*        C */
+/*              DO I = 1, SETSIZ */
+
+/*                 WRITE(*,*) */
+/*                 WRITE(*,'(A,3F6.1)') 'Input vector (V1): ', */
+/*             .                         ( V1(J,I), J=1,3 ) */
+
+/*                 IF ( VDOT( V1(1,I), Z ) .EQ. 0.D0 ) THEN */
+
+/*                    WRITE(*,'(A)') 'V1 and Z are orthogonal.' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,'(A)') 'V1 and Z are NOT orthogonal.' */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Input vector (V1):    1.0   0.0   0.0 */
+/*        V1 and Z are orthogonal. */
+
+/*        Input vector (V1):    0.0  -6.0   0.0 */
+/*        V1 and Z are orthogonal. */
+
+/*        Input vector (V1):   10.0   0.0  -1.0 */
+/*        V1 and Z are NOT orthogonal. */
+
+/*        Input vector (V1):    0.0   0.0   1.0 */
+/*        V1 and Z are NOT orthogonal. */
+
+
+/* $ Restrictions */
+
+/*     1)  The user is responsible for determining that the vectors V1 */
+/*         and V2 are not so large as to cause numeric overflow. In */
+/*         most cases this will not present a problem. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 28-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. Improved $Particulars section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

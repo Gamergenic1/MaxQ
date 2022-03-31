@@ -466,117 +466,103 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     PRI        is a logical flag indicating whether to perform */
-/*                a prioritized or unprioritized DSK segment search. */
-/*                In an unprioritized search, no segment masks another: */
-/*                data from all specified segments are used to */
-/*                define the surface of interest. */
+/*     PRI      is a logical flag indicating whether to perform a */
+/*              prioritized or unprioritized DSK segment search. In an */
+/*              unprioritized search, no segment masks another: data from */
+/*              all specified segments are used to define the surface of */
+/*              interest. */
 
-/*                The search is unprioritized if and only if PRI */
-/*                is set to .FALSE. In the N0066 SPICE Toolkit, this */
-/*                is the only allowed value. */
+/*              The search is unprioritized if and only if PRI is set to */
+/*              .FALSE. In the N0066 SPICE Toolkit, this is the only */
+/*              allowed value. */
 
-
-/*     TARGET     is the name of the target body on which a surface */
-/*                intercept is sought. */
-
+/*     TARGET   is the name of the target body on which a surface */
+/*              intercept is sought. */
 
 /*     NSURF, */
-/*     SRFLST     are, respectively, a count of surface ID codes in a */
-/*                list and an array containing the list. Only DSK */
-/*                segments for the body designated by TARGET and having */
-/*                surface IDs in this list will be considered in the */
-/*                intercept computation. If the list is empty, all DSK */
-/*                segments for TARGET will be considered. */
+/*     SRFLST   are, respectively, a count of surface ID codes in a list */
+/*              and an array containing the list. Only DSK segments for */
+/*              the body designated by TARGET and having surface IDs in */
+/*              this list will be considered in the intercept */
+/*              computation. If the list is empty, all DSK segments for */
+/*              TARGET will be considered. */
 
+/*     ET       is the epoch of the intersection computation, expressed */
+/*              as seconds past J2000 TDB. This epoch is used only for */
+/*              DSK segment selection. Segments used in the intercept */
+/*              computation must include ET in their time coverage */
+/*              intervals. */
 
-/*     ET         is the epoch of the intersection computation, */
-/*                expressed as seconds past J2000 TDB. This epoch is */
-/*                used only for DSK segment selection. Segments used in */
-/*                the intercept computation must include ET in their */
-/*                time coverage intervals. */
+/*     FIXREF   is the name of a body-fixed, body-centered reference */
+/*              frame associated with the target. The input ray vectors */
+/*              are specified in this frame, as is the output intercept */
+/*              point. */
 
-
-/*     FIXREF     is the name of a body-fixed, body-centered reference */
-/*                frame associated with the target. The input ray vectors */
-/*                are specified in this frame, as is the output intercept */
-/*                point. */
-
-/*                The frame designated by FIXREF must have a fixed */
-/*                orientation relative to the frame of any DSK segment */
-/*                used in the computation. */
-
+/*              The frame designated by FIXREF must have a fixed */
+/*              orientation relative to the frame of any DSK segment used */
+/*              in the computation. */
 
 /*     VERTEX, */
-/*     RAYDIR     are, respectively, the vertex and direction vector of */
-/*                the ray to be used in the intercept computation. */
+/*     RAYDIR   are, respectively, the vertex and direction vector of the */
+/*              ray to be used in the intercept computation. */
 
-/*                Both the vertex and ray's direction vector must be */
-/*                represented in the reference frame designated by */
-/*                FIXREF. The vertex is considered to be an offset from */
-/*                the target body. */
-
+/*              Both the vertex and ray's direction vector must be */
+/*              represented in the reference frame designated by FIXREF. */
+/*              The vertex is considered to be an offset from the target */
+/*              body. */
 
 /*     MAXD, */
-/*     MAXI       are, respectively, the declared sizes of the arrays */
-/*                DC and IC. MAXD must be at least DCSIZE, while */
-/*                MAXI must be at least ICSIZE. See the Parameters */
-/*                section for details. */
+/*     MAXI     are, respectively, the declared sizes of the arrays DC */
+/*              and IC. MAXD must be at least DCSIZE, while MAXI must be */
+/*              at least ICSIZE. See the $Parameters section for details. */
 
 /* $ Detailed_Output */
 
+/*     XPT      is the intercept of the input ray on the surface */
+/*              specified by the inputs */
 
-/*     XPT        is the intercept of the input ray on the surface */
-/*                specified by the inputs */
+/*                 PRI */
+/*                 TARGET */
+/*                 NSURF */
+/*                 SRFLST */
+/*                 ET */
 
-/*                   PRI */
-/*                   TARGET */
-/*                   NSURF */
-/*                   SRFLST */
-/*                   ET */
+/*              if such an intercept exists. If the ray intersects the */
+/*              surface at multiple points, the one closest to the ray's */
+/*              vertex is selected. */
 
-/*                if such an intercept exists. If the ray intersects the */
-/*                surface at multiple points, the one closest to the */
-/*                ray's vertex is selected. */
+/*              XPT is defined if and only if FOUND is .TRUE. */
 
-/*                XPT is defined if and only if FOUND is .TRUE. */
-
-/*                Units are km. */
-
+/*              Units are km. */
 
 /*     HANDLE, */
 /*     DLADSC, */
-/*     DSKDSK     are, respectively, the DSK file handle, DLA descriptor, */
-/*                and DSK descriptor of the DSK file and segment that */
-/*                contributed the surface data on which the intercept */
-/*                was found. */
+/*     DSKDSC   are, respectively, the DSK file handle, DLA descriptor, */
+/*              and DSK descriptor of the DSK file and segment that */
+/*              contributed the surface data on which the intercept was */
+/*              found. */
 
-/*                These outputs are defined if and only if FOUND is */
-/*                .TRUE. */
+/*              These outputs are defined if and only if FOUND is .TRUE. */
 
 /*     DC, */
-/*     IC         are, respectively, double precision and integer arrays */
-/*                that may contain additional information associated */
-/*                with the segment contributing the surface data on */
-/*                which the intercept was found. The information is */
-/*                DSK data type-dependent. */
+/*     IC       are, respectively, double precision and integer arrays */
+/*              that may contain additional information associated with */
+/*              the segment contributing the surface data on which the */
+/*              intercept was found. The information is DSK data */
+/*              type-dependent. */
 
-/*                   For DSK type 2 segments */
+/*                 For DSK type 2 segments */
 
-/*                      IC(1) is the intercept plate ID. */
-/*                      DC is unused. */
+/*                    IC(1) is the intercept plate ID. DC is unused. */
 
-/*                These outputs are defined if and only if FOUND is */
-/*                .TRUE. */
+/*              These outputs are defined if and only if FOUND is .TRUE. */
 
-/*                The declared length of DC must be at least DSIZE; */
-/*                the declared length of IC must be at least ISIZE. */
-/*                See the Parameter section for details. */
+/*              The declared length of DC must be at least DCSIZE; the */
+/*              declared length of IC must be at least ICSIZE. See the */
+/*              $Parameters section for details. */
 
-
-/*     FOUND      is a logical flag that is set to .TRUE. if and only if */
-/*                and intercept was found. */
-
+/*     FOUND    is a logical flag that is set to .TRUE. if and only if */
+/*              and intercept was found. */
 
 /* $ Parameters */
 
@@ -607,8 +593,8 @@ static integer c__1 = 1;
 /*        dsktol.inc */
 
 /*     for the values of tolerance parameters used by default by the */
-/*     ray-surface intercept algorithm. These are discussed in in the */
-/*     Particulars section below. */
+/*     ray-surface intercept algorithm. These are discussed in the */
+/*     $Particulars section below. */
 
 /* $ Exceptions */
 
@@ -628,14 +614,14 @@ static integer c__1 = 1;
 /*         the target body, the error SPICE(INVALIDFRAME) is signaled. */
 
 /*     6)  If MAXD is less than DCSIZE or MAXI is less than ICSIZE, */
-/*         the error SPICE(ARRAYTOOSMALL) will be signaled. */
+/*         the error SPICE(ARRAYTOOSMALL) is signaled. */
 
 /*     7)  If NSURF is less than 0, the error SPICE(INVALIDCOUNT) */
 /*         is signaled. */
 
-/*     8)  Any errors that occur during the intercept computation */
-/*         will be signaled by routines in the call tree of this */
-/*         routine. */
+/*     8)  If an error occurs during the intercept computation, the error */
+/*         is signaled by a routine in the call tree of this routine. */
+
 /* $ Files */
 
 /*     Appropriate kernels must be loaded by the calling program before */
@@ -643,41 +629,39 @@ static integer c__1 = 1;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for the positions of the centers */
-/*          of DSK reference frames relative to the target body are */
-/*          required if those frames are not centered at the target */
-/*          body center. */
+/*     -  SPK data: ephemeris data for the positions of the centers */
+/*        of DSK reference frames relative to the target body are */
+/*        required if those frames are not centered at the target */
+/*        body center. */
 
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - DSK data: DSK files containing topographic data for the */
-/*          target body must be loaded. If a surface list is specified, */
-/*          data for at least one of the listed surfaces must be loaded. */
+/*     -  DSK data: DSK files containing topographic data for the */
+/*        target body must be loaded. If a surface list is specified, */
+/*        data for at least one of the listed surfaces must be loaded. */
 
-/*        - Frame data: if a frame definition is required to convert */
-/*          DSK segment data to the body-fixed frame designated by */
-/*          FIXREF, the target, that definition must be available in the */
-/*          kernel pool. Typically the definitions of frames not already */
-/*          built-in to SPICE are supplied by loading a frame kernel. */
+/*     -  Frame data: if a frame definition is required to convert */
+/*        DSK segment data to the body-fixed frame designated by */
+/*        FIXREF, the target, that definition must be available in the */
+/*        kernel pool. Typically the definitions of frames not already */
+/*        built-in to SPICE are supplied by loading a frame kernel. */
 
-/*        - CK data: if the frame to which FIXREF refers is a CK frame, */
-/*          and if any DSK segments used in the computation have a */
-/*          different frame, at least one CK file will be needed to */
-/*          permit transformation of vectors between that frame and both */
-/*          the J2000 and the target body-fixed frames. */
+/*     -  CK data: if the frame to which FIXREF refers is a CK frame, */
+/*        and if any DSK segments used in the computation have a */
+/*        different frame, at least one CK file will be needed to */
+/*        permit transformation of vectors between that frame and both */
+/*        the J2000 and the target body-fixed frames. */
 
-/*        - SCLK data: if a CK file is needed, an associated SCLK */
-/*          kernel is required to enable conversion between encoded SCLK */
-/*          (used to time-tag CK data) and barycentric dynamical time */
-/*          (TDB). */
+/*     -  SCLK data: if a CK file is needed, an associated SCLK */
+/*        kernel is required to enable conversion between encoded SCLK */
+/*        (used to time-tag CK data) and barycentric dynamical time */
+/*        (TDB). */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
 
-
 /* $ Particulars */
-
 
 /*     This is the lowest-level public interface for computing */
 /*     ray-surface intercepts, where the surface is modeled using */
@@ -822,21 +806,23 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-/*     1)  Compute surface intercepts of rays emanating from a set of */
-/*         vertices distributed on a longitude-latitude grid. All */
-/*         vertices are outside the target body, and all rays point */
-/*         toward the target's center. */
+/*     1) Compute surface intercepts of rays emanating from a set of */
+/*        vertices distributed on a longitude-latitude grid. All */
+/*        vertices are outside the target body, and all rays point */
+/*        toward the target's center. */
 
-/*         Check intercepts against expected values. Indicate the */
-/*         number of errors, the number of computations, and the */
-/*         number of intercepts found. */
+/*        Check intercepts against expected values. Indicate the */
+/*        number of errors, the number of computations, and the */
+/*        number of intercepts found. */
 
-/*        Use the meta-kernel below to load example SPICE kernels. */
+
+/*        Use the meta-kernel shown below to load example SPICE */
+/*        kernels. */
 
 
 /*           KPL/MK */
@@ -862,27 +848,24 @@ static integer c__1 = 1;
 /*                                               plate model */
 /*           \begindata */
 
-/*              PATH_SYMBOLS    = 'GEN' */
-/*              PATH_VALUES     = '/ftp/pub/naif/generic_kernels' */
-
-/*              KERNELS_TO_LOAD = ( '$GEN/dsk/phobos/phobos512.bds' ) */
+/*              KERNELS_TO_LOAD = ( 'phobos512.bds' ) */
 
 /*           \begintext */
 
+/*           End of meta-kernel */
 
-/*     Example code begins here. */
+
+/*        Example code begins here. */
 
 
-/*              PROGRAM SPEAR */
+/*              PROGRAM DSKXSI_EX1 */
 /*              IMPLICIT NONE */
+
 /*        C */
 /*        C     Multi-segment spear program. */
 /*        C */
 /*        C     This program expects all loaded DSKs */
 /*        C     to represent the same body and surface. */
-/*        C */
-/*        C        Syntax: spear <meta-kernel> */
-/*        C */
 /*        C */
 /*              INCLUDE 'dla.inc' */
 /*              INCLUDE 'dsk.inc' */
@@ -960,19 +943,17 @@ static integer c__1 = 1;
 
 
 /*              CALL CHKIN ( 'SPEAR' ) */
-/*        C */
-/*        C     Load kernel. */
-/*        C */
-/*              CALL GETCML ( META ) */
 
-/*              IF ( META .EQ. ' ' ) THEN */
-/*                 CALL TOSTDO( 'Syntax: spear <meta-kernel>' ) */
-/*                 CALL BYEBYE( 'SUCCESS' ) */
-/*              END IF */
 /*        C */
-/*        C     Load kernels. */
+/*        C     Prompt for the name of the meta-kernel. */
+/*        C */
+/*              CALL PROMPT ( 'Enter meta-kernel name >  ', META ) */
+
+/*        C */
+/*        C     Load the meta-kernel. */
 /*        C */
 /*              CALL FURNSH ( META ) */
+
 /*        C */
 /*        C     Get a handle for one of the loaded DSKs, */
 /*        C     then find the first segment and extract */
@@ -1042,7 +1023,12 @@ static integer c__1 = 1;
 /*              LAT    = 90.D0 */
 /*              NLSTEP = 0 */
 
+/*        C */
+/*        C     Set the epoch for interval selection. */
+/*        C */
+/*              ET     = 0.D0 */
 
+/*              WRITE (*,*) ' ' */
 /*              WRITE (*,*) 'Computing intercepts...' */
 
 /*              DO WHILE ( LON .LT. 180.D0 ) */
@@ -1159,16 +1145,19 @@ static integer c__1 = 1;
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using as input the meta-kernel dskxsi_ex1.tm, the */
+/*        output was: */
 
 
-/*        Computing intercepts... */
-/*        Done. */
+/*        Enter meta-kernel name >  dskxsi_ex1.tm */
 
-/*        NCASES =        32580 */
-/*        NHITS  =        32580 */
-/*        NDERR  =            0 */
+/*         Computing intercepts... */
+/*         Done. */
+
+/*         NCASES =        32580 */
+/*         NHITS  =        32580 */
+/*         NDERR  =            0 */
 
 
 /* $ Restrictions */
@@ -1186,21 +1175,28 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 06-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated code example to prompt for input meta-kernel name and */
+/*        set input time to zero. */
 
 /* -    SPICELIB Version 1.0.0, 04-APR-2017 (NJB) */
 
 /*        Original 26-FEB-2016 (NJB) */
 
-
 /* -& */
 /* $ Index_Entries */
 
-/*     dsk ray-surface intercept with source information */
-/*     dsk ray-surface intercept with handle and descriptors */
-/*     dsk ray-surface intercept with handle and descriptors */
+/*     DSK ray-surface intercept with source information */
+/*     DSK ray-surface intercept with handle and descriptors */
+/*     DSK ray-surface intercept with handle and descriptors */
 
 /* -& */
 

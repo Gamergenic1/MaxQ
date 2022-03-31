@@ -3,9 +3,9 @@
 -Procedure set_c ( Compare sets )
 
 -Abstract
- 
-   Given a relational operator, compare two sets of any data type. 
- 
+
+   Compare two sets of any data type, as indicated by a relational operator.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,15 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   CELLS, SETS 
- 
+
+   CELLS
+   SETS
+
 -Keywords
- 
-   CELLS, SETS 
- 
+
+   CELLS
+   SETS
+
 */
 
 
@@ -54,96 +56,129 @@
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   a          I   First set. 
-   op         I   Comparison operator. 
-   b          I   Second set. 
 
-   The function returns the result of the comparison: a (op) b. 
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   a          I   First set.
+   op         I   Comparison operator.
+   b          I   Second set.
+
+   The function returns the result of the comparison: a (op) b.
+
 -Detailed_Input
- 
- 
-   a           is a CSPICE set.  a must be declared as a character,
-               double precision, or integer SpiceCell. 
 
+   a           is a SPICE set.
 
-   op          is a comparison operator, indicating the way in 
-               which the input sets are to be compared. op may 
-               be any of the following: 
+               `a' must be declared as a character, double precision or
+               integer SpiceCell.
 
-                  Operator             Meaning 
-                  --------  ------------------------------------- 
-                    "="     a = b is true if a and b are equal 
-                            (contain the same elements). 
+               CSPICE provides the following macros, which declare and
+               initialize the cell
 
-                    "<>"    a <> b is true if a and b are not 
-                            equal. 
+                  SPICECHAR_CELL          ( a, ASZ, AMLEN );
+                  SPICEDOUBLE_CELL        ( a, ASZ );
+                  SPICEINT_CELL           ( a, ASZ );
 
-                    "<="    a <= b is true if a is a subset of b. 
+               where ASZ is the maximum capacity of `a' and AMLEN is the
+               maximum length of any member in the character cell.
 
-                    "<"     a < b is true if a is a proper subset 
-                            of b. 
+   op          is a comparison operator, indicating the way in
+               which the input sets are to be compared. `op' may
+               be any of the following:
 
-                    ">="    a >= b is true if b is a subset of a. 
+                  Operator             Meaning
+                  --------  -------------------------------------
+                    "="     a = b is true if a and b are equal
+                            (contain the same elements).
 
-                    ">"     a > b is true if b is a proper subset 
-                            of a. 
+                    "<>"    a <> b is true if a and b are not
+                            equal.
 
-                    "&"     a & b is true if a and b have one or more 
+                    "<="    a <= b is true if a is a subset of b.
+
+                    "<"     a < b is true if a is a proper subset
+                            of b.
+
+                    ">="    a >= b is true if b is a subset of a.
+
+                    ">"     a > b is true if b is a proper subset
+                            of a.
+
+                    "&"     a & b is true if a and b have one or more
                             elements in common (the intersection of
                             the two sets in non-empty.)
- 
-                    "~"     a ~ b is true if a and b are disjoint 
-                            sets. 
+
+                    "~"     a ~ b is true if a and b are disjoint
+                            sets.
 
                When comparing elements of character sets, this routine
                ignores trailing blanks.
 
-   b           is a CSPICE set of the same data type as a. 
+   b           is a second SPICE set, to be compared to `a'.
+
+               `b' must be declared as a SpiceCell of the same data type
+               as `a'.
+
+               CSPICE provides the following macros, which declare and
+               initialize the cell
+
+                  SPICECHAR_CELL          ( b, BSZ, BMLEN );
+                  SPICEDOUBLE_CELL        ( b, BSZ );
+                  SPICEINT_CELL           ( b, BSZ );
+
+               where BSZ is the maximum capacity of `b' and BMLEN is the
+               maximum length of any member in the character cell.
 
 -Detailed_Output
- 
-   The function returns the result of the comparison: a (op) b. 
- 
+
+   The function returns the result of the comparison: a (op) b.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If the set relational operator is not recognized, the error 
-       SPICE(INVALIDOPERATION) is signaled. 
 
-   2) The error SPICE(EMPTYSTRING) is signaled if the input operator
-      string does not contain at least one character, since this
-      input string cannot be converted to a Fortran-style string
-      in this case.
-      
-   3) The error SPICE(NULLPOINTER) is signalled if the input operator
-      string pointer is null.
+   1)  If the set relational operator is not recognized, the error
+       SPICE(INVALIDOPERATION) is signaled by a routine in the call tree
+       of this routine.
 
-   4) If the input set arguments don't have identical data types,
-      the error SPICE(TYPEMISMATCH) is signaled.
+   2)  If the `op' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   5) If either of the input set arguments may be unordered or contain 
-      duplicates, the error SPICE(NOTASET) is signaled.
+   3)  If the `op' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   4)  If the `a' and `c' cell arguments do not have identical data
+       types, the error SPICE(TYPEMISMATCH) is signaled.
+
+   5)  If any of the `a' or `c' cell arguments does not qualify as a
+       SPICE set, the error SPICE(NOTASET) is signaled. SPICE sets
+       have their data elements stored in increasing order and contain
+       no duplicate elements.
+
+   6)  If any of the `a' or `c' cell arguments does not have a
+       recognized data type, the error SPICE(NOTSUPPORTED) is signaled.
+
+   7)  If the cell arguments are of type SpiceChar and the string length
+       associated with any of them is non-positive or too short to be
+       usable when constructing the equivalent SPICE character cells
+       required by the wrapped SPICELIB routine, an error is signaled by
+       a routine in the call tree of this routine.
 
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   None. 
- 
+
+   None.
+
 -Examples
- 
-   1) In the following code fragment, set_c is used to repeat an operation 
-      for as long as the integer set finished remains a proper 
-      subset of the integer set planned. 
+
+   1) In the following code fragment, set_c is used to repeat an operation
+      for as long as the integer set finished remains a proper
+      subset of the integer set planned.
 
          #include "SpiceUsr.h"
                .
@@ -157,77 +192,87 @@
          }
 
 
-   2) In the following example, let the integer sets a, b, and c 
-      contain the elements listed below. Let e be an empty integer 
-      set. 
+   2) In the following example, let the integer sets a, b, and c
+      contain the elements listed below. Let e be an empty integer
+      set.
 
-         a        b        c 
-        ---      ---      --- 
-         1        1        1 
-         2        3        3 
-         3 
-         4 
+         a        b        c
+        ---      ---      ---
+         1        1        1
+         2        3        3
+         3
+         4
 
-   Then all of the following expressions are SPICETRUE. 
+   Then all of the following expressions are SPICETRUE.
 
-      set_c ( b, "=",  c )      "b is equal to c" 
-      set_c ( a, "<>", c )      "a is not equal to c" 
-      set_c ( a, ">",  b )      "a is a proper superset of b" 
-      set_c ( b, "<=", c )      "b is a subset of c" 
-      set_c ( c, "<=", b )      "c is a subset of b" 
-      set_c ( a, "<=", a )      "a is a subset of a" 
-      set_c ( e, "<=", b )      "e is a subset of b" 
-      set_c ( e, "<",  b )      "e is a proper subset of b" 
-      set_c ( e, "<=", e )      "e is a subset of e" 
-      set_c ( a, "&",  b )      "a has elements in common with b." 
-      set_c ( b, "&",  c )      "b has elements in common with c." 
+      set_c ( b, "=",  c )      "b is equal to c"
+      set_c ( a, "<>", c )      "a is not equal to c"
+      set_c ( a, ">",  b )      "a is a proper superset of b"
+      set_c ( b, "<=", c )      "b is a subset of c"
+      set_c ( c, "<=", b )      "c is a subset of b"
+      set_c ( a, "<=", a )      "a is a subset of a"
+      set_c ( e, "<=", b )      "e is a subset of b"
+      set_c ( e, "<",  b )      "e is a proper subset of b"
+      set_c ( e, "<=", e )      "e is a subset of e"
+      set_c ( a, "&",  b )      "a has elements in common with b."
+      set_c ( b, "&",  c )      "b has elements in common with c."
 
-   And all of the following are SPICEFALSE. 
+   And all of the following are SPICEFALSE.
 
-      set_c ( b, "<>", c )      "b is not equal to c" 
-      set_c ( a, "=",  c )      "a is equal to c" 
-      set_c ( a, "<",  b )      "a is a proper subset of b" 
-      set_c ( b, "<",  c )      "b is a proper subset of c" 
-      set_c ( b, ">=", a )      "b is a superset of a" 
-      set_c ( a, ">",  a )      "a is a proper superset of a" 
-      set_c ( e, ">=", a )      "e is a superset of a" 
-      set_c ( e, "<",  e )      "e is a proper subset of e" 
-      set_c ( a, "~",  b )      "a and b are disjoint sets." 
+      set_c ( b, "<>", c )      "b is not equal to c"
+      set_c ( a, "=",  c )      "a is equal to c"
+      set_c ( a, "<",  b )      "a is a proper subset of b"
+      set_c ( b, "<",  c )      "b is a proper subset of c"
+      set_c ( b, ">=", a )      "b is a superset of a"
+      set_c ( a, ">",  a )      "a is a proper superset of a"
+      set_c ( e, ">=", a )      "e is a superset of a"
+      set_c ( e, "<",  e )      "e is a proper subset of e"
+      set_c ( a, "~",  b )      "a and b are disjoint sets."
 
 -Restrictions
- 
-   1) String comparisons performed by this routine are Fortran-style:
-      trailing blanks in the input sets are ignored. This gives
-      consistent behavior with CSPICE code generated by the f2c
-      translator, as well as with the Fortran SPICE Toolkit.
 
-      Note that this behavior is not identical to that of the ANSI
-      C library functions strcmp and strncmp.
- 
+   1)  String comparisons performed by this routine are Fortran-style:
+       trailing blanks in the input sets are ignored. This gives
+       consistent behavior with CSPICE code generated by the f2c
+       translator, as well as with the Fortran SPICE Toolkit.
+
+       Note that this behavior is not identical to that of the ANSI
+       C library functions strcmp and strncmp.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   H.A. Neilan     (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   C.A. Curzon         (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 29-OCT-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Extended description of arguments "a", and "b" to include
+       type and preferred declaration method.
+
+       Added entries #5 and #6 in -Exceptions section.
+
    -CSPICE Version 1.1.0, 15-FEB-2005 (NJB)
 
-       Bug fix:  loop bound changed from 1 to 2 in loop used
+       Bug fix: loop bound changed from 1 to 2 in loop used
        to free dynamically allocated arrays.
 
    -CSPICE Version 1.0.0, 08-AUG-2002 (NJB) (CAC) (WLT) (IMU)
 
 -Index_Entries
- 
-   compare sets 
- 
+
+   compare sets
+
 -&
 */
 
@@ -235,7 +280,7 @@
 
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceBoolean            retval;
 
@@ -244,9 +289,9 @@
    SpiceInt                fLen [2];
    SpiceInt                i;
 
-   
+
   /*
-   Standard SPICE error handling. 
+   Standard SPICE error handling.
    */
 
    if ( return_c() )
@@ -257,14 +302,14 @@
 
 
    /*
-   Check the input string op to make sure the pointer is non-null 
+   Check the input string op to make sure the pointer is non-null
    and the string length is non-zero.
    */
    CHKFSTR_VAL ( CHK_STANDARD, "set_c", op, SPICEFALSE );
 
 
    /*
-   Make sure data types match. 
+   Make sure data types match.
    */
    CELLMATCH2_VAL ( CHK_STANDARD, "set_c", a, b, SPICEFALSE );
 
@@ -276,21 +321,21 @@
 
 
    /*
-   Initialize the cells if necessary. 
+   Initialize the cells if necessary.
    */
    CELLINIT2 ( a, b );
 
 
    /*
-   Call the set routine appropriate for the data type of the cells. 
+   Call the set routine appropriate for the data type of the cells.
    */
    if ( a->dtype == SPICE_CHR )
    {
 
       /*
-      Construct Fortran-style sets suitable for passing to setc_. 
+      Construct Fortran-style sets suitable for passing to setc_.
       */
-      C2F_MAP_CELL2 ( "set_c", 
+      C2F_MAP_CELL2 ( "set_c",
                       a, fCell,   fLen,
                       b, fCell+1, fLen+1 );
 
@@ -309,7 +354,7 @@
                                        (ftnlen    )  strlen(op),
                                        (ftnlen    )  fLen[1]     );
       /*
-      We're done with the dynamically allocated Fortran-style arrays. 
+      We're done with the dynamically allocated Fortran-style arrays.
       */
       for ( i = 0;  i < 2;  i++ )
       {
@@ -322,7 +367,7 @@
 
       retval =  (SpiceBoolean) setd_ ( (doublereal * ) (a->base),
                                        (char       * )  op,
-                                       (doublereal * ) (b->base), 
+                                       (doublereal * ) (b->base),
                                        (ftnlen       )  strlen(op)  );
    }
 
@@ -330,14 +375,14 @@
    {
       retval =  (SpiceBoolean) seti_ ( (integer * ) (a->base),
                                        (char    * )  op,
-                                       (integer * ) (b->base), 
+                                       (integer * ) (b->base),
                                        (ftnlen    )  strlen(op)  );
    }
 
    else
    {
       /*
-      We get to this point only if we have an invalid cell type. 
+      We get to this point only if we have an invalid cell type.
       */
       setmsg_c ( "Cell a contains unrecognized data type code #." );
       errint_c ( "#",  (SpiceInt) (a->dtype)                      );

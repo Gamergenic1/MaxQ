@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ISORDV ( Is it an order vector ) */
+/* $Procedure ISORDV ( Is it an order vector ) */
 logical isordv_(integer *array, integer *n)
 {
     /* System generated locals */
@@ -58,26 +58,26 @@ logical isordv_(integer *array, integer *n)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ARRAY      I   Array of integers. */
 /*     N          I   Number of integers in ARRAY. */
 
-/*     The function returns TRUE if the array contains the integers */
-/*     1 through N, otherwise it returns FALSE. */
+/*     The function returns .TRUE. if the array contains the integers */
+/*     1 through N, otherwise it returns .FALSE. */
 
 /* $ Detailed_Input */
 
-/*     ARRAY      is an array of integers.  Often this will be an array */
-/*                that is a candidate order vector to be passed to */
-/*                a routine for re-ordering some parallel array. */
+/*     ARRAY    is an array of integers. Often this will be an array */
+/*              that is a candidate order vector to be passed to */
+/*              a routine for re-ordering some parallel array. */
 
-/*     N          is the number of elements in ARRAY. */
+/*     N        is the number of elements in ARRAY. */
 
 /* $ Detailed_Output */
 
-/*     The function returns TRUE if the array contains the integers */
-/*     1 through N.  Otherwise it returns FALSE. */
+/*     The function returns .TRUE. if the array contains the integers */
+/*     1 through N. Otherwise it returns .FALSE. */
 
 /* $ Parameters */
 
@@ -87,7 +87,7 @@ logical isordv_(integer *array, integer *n)
 
 /*     Error free. */
 
-/*     1) If N < 1, the function returns .FALSE. */
+/*     1)  If N < 1, the function returns .FALSE. */
 
 /* $ Files */
 
@@ -102,12 +102,12 @@ logical isordv_(integer *array, integer *n)
 /* $ Examples */
 
 /*     1) Suppose you wished to reorder an array of strings based upon */
-/*        a ranking array supplied by a user.  If the ranking array */
+/*        a ranking array supplied by a user. If the ranking array */
 /*        contains any duplicates or refers to indices that are out */
 /*        of the range of valid indices for the array of strings, */
 /*        the attempt to reorder the array of strings cannot succeed. */
 /*        Its usually better to detect such a possibility before */
-/*        you begin trying to reorder the array of strings.  This routine */
+/*        you begin trying to reorder the array of strings. This routine */
 /*        will detect the error. */
 
 /*        The block of code below illustrates this idea. */
@@ -150,7 +150,6 @@ logical isordv_(integer *array, integer *n)
 /*              ARRAY(I) = ARRAY(I) + K - 1 */
 /*           END DO */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -161,18 +160,25 @@ logical isordv_(integer *array, integer *n)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 6-MAR-1991 (NJB) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 06-MAR-1991 (NJB) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

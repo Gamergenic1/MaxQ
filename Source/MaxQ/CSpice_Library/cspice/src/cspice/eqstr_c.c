@@ -50,9 +50,10 @@
    #include <ctype.h>
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
-   
-   
-   SpiceBoolean eqstr_c ( ConstSpiceChar * a,  ConstSpiceChar * b )
+
+
+   SpiceBoolean eqstr_c ( ConstSpiceChar    * a,
+                          ConstSpiceChar    * b )
 
 /*
 
@@ -63,7 +64,7 @@
    a,
    b          I   Arbitrary character strings.
 
-   The function returns SPICETRUE if A and B are equivalent.
+   The function returns SPICETRUE if `a' and `b' are equivalent.
 
 -Detailed_Input
 
@@ -72,10 +73,10 @@
 
 -Detailed_Output
 
-   The function returns TRUE if A and B are equivalent: that is,
-   if A and B contain  the same characters in the same order,
-   when white space characters are ignored and uppercase and lowercase
-   characters are considered equal.
+   The function returns SPICETRUE if `a' and `b' are equivalent: that is,
+   if `a' and `b' contain  the same characters in the same order,
+   when white space characters are ignored and uppercase and
+   lowercase characters are considered equal.
 
    White space characters are those in the set
 
@@ -89,15 +90,15 @@
 
    None.
 
+-Exceptions
+
+   1)  If any of the `a' or `b' input string pointers is null, the
+       error SPICE(NULLPOINTER) is signaled. The function returns the
+       value SPICEFALSE.
+
 -Files
 
    None.
-
--Exceptions
-
-    1) If either input string pointer is null, the error 
-       SPICE(NULLPOINTER) will be signaled.
-
 
 -Particulars
 
@@ -106,102 +107,144 @@
    extra (leading, trailing, and embedded) blanks and differences
    in case. For the most part,
 
-      if ( eqstr_c ( A, B ) )
-         .
-         .
+      eqstr_c ( a, b )
 
-   is true whenever
+   is SPICETRUE whenever
 
-      cmprss_c ( ' ', 0, a,        MAXLEN, tempa );
+      cmprss_c ( " ", 0, a,        MAXLEN, tempa );
       ucase_c  (            tempa, MAXLEN, tempa );
 
-      cmprss_c ( ' ', 0, b,        MAXLEN, tempb );
+      cmprss_c ( " ", 0, b,        MAXLEN, tempb );
       ucase_c  (            tempb, MAXLEN, tempb );
 
+      eqvlnt = !strncmp ( tempa, tempb, MAXLEN )
 
-      if ( !strcmp ( tempa, tempb ) )
-         .
-         .
-
-   is true. There are two important differences, however.
+   is SPICETRUE. There are two important differences, however.
 
       1) The single reference to eqstr_c is much simpler to
          write, and simpler to understand.
 
       2) The reference to eqstr_c does not require any temporary
-         storage, nor does it require that the strings a and b
+         storage, nor does it require that the strings `a' and `b'
          be changed. This feature is especially useful when
-         comparing strings recieved as subprogram arguments
+         comparing strings received as subprogram arguments
          against strings stored internally within the subprogram.
-
 
 -Examples
 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-    Usage
-    --------------------------------------------
+   1) This code provides examples of equivalent and non-equivalent
+      strings according to the algorithm implemented in eqstr_c.
 
-       All of the following are TRUE.
-
-          eqstr_c ( "A short string   ",
-                    "ashortstring"        );
-
-          eqstr_c ( "Embedded        blanks",
-                    "Em be dd ed bl an ks"    );
-
-          eqstr_c ( "Embedded        blanks",
-                    "   Embeddedblanks"    );
-
-          eqstr_c ( " ",
-                    "          " );
+      Example code begins here.
 
 
-       All of the following are FALSE.
+      /.
+         Program eqstr_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-          eqstr_c ( "One word left out",
-                    "WORD LEFT OUT"      );
+      int main( )
+      {
 
-          eqstr_c ( "Extra [] delimiters",
-                    "extradelimiters"      );
+         /.
+         Local parameters.
+         ./
+         #define SETSIZ       9
+         #define STRLEN       23
 
-          eqstr_c ( "Testing 1, 2, 3",
-                    "TESTING123"       );
+         /.
+         Local variables.
+         ./
+         SpiceInt             i;
+
+         /.
+         Initialize the two arrays of strings.
+         ./
+         SpiceChar            str1   [SETSIZ][STRLEN] = {
+                                "A short string   ", "Embedded        blanks",
+                                "Embedded        blanks", " ",
+                                "One word left out", "Extra [] delimiters",
+                                "Testing 1, 2, 3", "Case insensitive",
+                                "Steve" };
+
+         SpiceChar            str2   [SETSIZ][STRLEN] = {
+                                "ashortstring",      "Em be dd ed bl an ks",
+                                "   Embeddedblanks", "          ",
+                                "WORD LEFT OUT",     "extradelimiters",
+                                "TESTING123",        "Case Insensitive",
+                                "  S t E v E  " };
+
+         /.
+         Compare the two arrays.
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            printf( "\n" );
+            printf( "STR1 : %s\n", str1[i] );
+            printf( "STR2 : %s\n", str2[i] );
+
+            if ( eqstr_c ( str1[i], str2[i] ) )
+            {
+               printf( "eqstr_c: equivalent.\n" );
+            }
+            else
+            {
+               printf( "eqstr_c: NOT equivalent.\n" );
+            }
+
+         }
+
+         return ( 0 );
+      }
 
 
-    Use
-    --------------------------------------------
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
 
-       The following illustrates a typical use for eqstr_c.
 
-          #include "SpiceUsr.h"
-              .
-              .
-              .
-          SpiceChar * greeting ( SpiceChar *who )
-          {
+      STR1 : A short string
+      STR2 : ashortstring
+      eqstr_c: equivalent.
 
-             if ( eqstr_c ( who, "Steve" ) )
-             {
-                return ( "Yes, sir?" );
-             }
-             else if ( eqstr_c ( who, "Chuck" ) )
-             {
-                return ( "What can I do for you?" );
-             }
-             else
-             {
-                return ( "Whaddya want?" );
-             }
-          }
+      STR1 : Embedded        blanks
+      STR2 : Em be dd ed bl an ks
+      eqstr_c: equivalent.
 
-       Note that all of the following calls will elicit the
-       greeting "Yes, sir?":
+      STR1 : Embedded        blanks
+      STR2 :    Embeddedblanks
+      eqstr_c: equivalent.
 
-          greeting ( "STEVE" );
-          greeting ( "steve" );
-          greeting ( "Steve" );
-          greeting ( "sTEVE" );
-          greeting ( " S T E V E " );
+      STR1 :
+      STR2 :
+      eqstr_c: equivalent.
+
+      STR1 : One word left out
+      STR2 : WORD LEFT OUT
+      eqstr_c: NOT equivalent.
+
+      STR1 : Extra [] delimiters
+      STR2 : extradelimiters
+      eqstr_c: NOT equivalent.
+
+      STR1 : Testing 1, 2, 3
+      STR2 : TESTING123
+      eqstr_c: NOT equivalent.
+
+      STR1 : Case insensitive
+      STR2 : Case Insensitive
+      eqstr_c: equivalent.
+
+      STR1 : Steve
+      STR2 :   S t E v E
+      eqstr_c: equivalent.
+
 
 -Restrictions
 
@@ -209,25 +252,31 @@
 
 -Literature_References
 
-   1)  "American National Standard for Programming Languages -- C,"
-        Published by the American National Standards Institute, 1990.
-        Section 7.3.1.9., p. 104.
+   [1]  "American National Standard for Programming Languages -- C,"
+        Section 7.3.1.9, p.104, American National Standards Institute,
+        1990.
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
 
 -Version
 
-   -CSPICE Version 1.3.0, 27-AUG-1999   (NJB)
+   -CSPICE Version 1.3.1, 02-AUG-2021 (JDR)
 
-      Added check for null input strings.  Added logic to handle the
-      case where at least one input string is empty.
-      
+       Edited the header to comply with NAIF standard.
+
+       Added complete code example based on existing example fragments.
+
+   -CSPICE Version 1.3.0, 27-AUG-1999 (NJB)
+
+       Added check for null input strings. Added logic to handle the
+       case where at least one input string is empty.
+
    -CSPICE Version 1.2.0, 24-FEB-1999 (NJB)
 
-       Arguments passed to isspace are now cast to unsigned char to 
+       Arguments passed to isspace are now cast to unsigned char to
        suppress compilation warnings on some systems.
 
    -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)
@@ -285,7 +334,7 @@
    */
    CHKPTR_VAL ( CHK_DISCOVER, "eqstr_c", a, retval );
    CHKPTR_VAL ( CHK_DISCOVER, "eqstr_c", b, retval );
-   
+
 
    /*
    The general plan is to move a pair of pointers (PA, PB)
@@ -338,17 +387,17 @@
    Fortran, but it does here.  Handle these cases (the case where both
    are empty was handled by the strcmp test above).
    */
-   
+
    if (  ( lenA == 0 ) && ( lenB > 0 )  )
    {
       return ( SPICEFALSE );
-   } 
-   
+   }
+
    if (  ( lenB == 0 ) && ( lenA > 0 )  )
    {
       return ( SPICEFALSE );
-   } 
-   
+   }
+
 
    /*
    On with the normal path.

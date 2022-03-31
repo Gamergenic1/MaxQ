@@ -51,6 +51,7 @@
    void chkin_c ( ConstSpiceChar * module )
 
 /*
+
 -Brief_I/O
 
    VARIABLE  I/O  DESCRIPTION
@@ -59,12 +60,12 @@
 
 -Detailed_Input
 
-   module         is the name of the routine calling chkin_c.  The
-                  named routine is supposed to be `checking in'
-                  when it calls chkin_c; that is, the call should be
-                  the first executable statement following the
-                  reference to the function return_c() (which should be
-                  the first executable statement).
+   module      is the name of the routine calling chkin_c. The
+               named routine is supposed to be `checking in'
+               when it calls chkin_c; that is, the call should be
+               the first executable statement following the
+               reference to the function return_c() (which should be
+               the first executable statement).
 
 -Detailed_Output
 
@@ -76,20 +77,18 @@
 
 -Exceptions
 
-   1) The error SPICE(EMPTYSTRING) is signalled if the input
-      string does not contain at least one character, since the
-      input string cannot be converted to a Fortran-style string
-      in this case.
+   1)  If the `module' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   2) The error SPICE(NULLPOINTER) is signalled if the input string
-      pointer is null.
+   2)  If the `module' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
    The underlying f2c'd CSPICE routine chkin_ does not signal errors;
-   rather it writes error messages, so as to avoid recursion.  The
+   rather it writes error messages, so as to avoid recursion. The
    errors detected by chkin_ are:
 
    3)  If the traceback storage area overflows, the short error
-       message "SPICE(TRACEBACKOVERFLOW)" is written to the error
+       message SPICE(TRACEBACKOVERFLOW) is written to the error
        output device.
 
    4)  If the input argument module is blank, the short error message
@@ -104,11 +103,11 @@
    This routine is part of the CSPICE error handling mechanism.
 
    Conceptually, the effect of this routine is to `push' the
-   supplied module name onto a stack.  The routine chkout_c performs
+   supplied module name onto a stack. The routine chkout_c performs
    the inverse, or `pop', operation.
 
    Every routine that participates in the traceback scheme should
-   have a call to chkin_c as the second executable statement.  The
+   have a call to chkin_c as the second executable statement. The
    first executable statements should be:
 
       if ( return_c() )
@@ -130,7 +129,7 @@
 
 
    All CSPICE routines should call chkin_c and chkout_c, unless they
-   are classified as `error free'.  Programs linked with CSPICE
+   are classified as `error free'. Programs linked with CSPICE
    may also use chkin_c and chkout_c.
 
    Routines that don't call chkin_c and chkout_c won't appear in the
@@ -140,8 +139,8 @@
    trace mechanism will become very confused and require therapy.
 
    It is possible to disable check-ins (and check-outs) by calling
-   the trcoff_c.  chkin_c and chkout_c will return immediately
-   upon entry after trcoff_c has been called.  It is not possible to
+   the trcoff_c. chkin_c and chkout_c will return immediately
+   upon entry after trcoff_c has been called. It is not possible to
    re-enable check-ins and check-outs after calling trcoff_c. Routines
    that don't call chkin_c and chkout_c won't appear in the traceback.
 
@@ -151,10 +150,10 @@
 
 -Restrictions
 
-   Routines that call this routine must call chkout_c immediately
-   prior to any return or exit statement.
+   1)  Routines that call this routine must call chkout_c immediately
+       prior to any return or exit statement.
 
-   module names are assumed to have no embedded blanks.
+   2)  Module names are assumed to have no embedded blanks.
 
 -Literature_References
 
@@ -162,29 +161,34 @@
 
 -Author_and_Institution
 
-   K.R. Gehringer  (JPL)
-   N.J. Bachman    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 2.0.4, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 2.0.3, 23-JUL-2001 (NJB)
-     
-      Tabs removed from source file.
+
+       Tabs removed from source file.
 
    -CSPICE Version 2.0.2, 25-MAR-1998 (EDW)
-     
-      Minor corrections to header.
+
+       Minor corrections to header.
 
    -CSPICE Version 2.0.1, 08-FEB-1998 (EDW)
 
-      Corrected and clarified header entries.
+       Corrected and clarified header entries.
 
    -CSPICE Version 2.0.0, 09-JAN-1998 (NJB)
 
-      Input argument filename was changed to type ConstSpiceChar *.
+       Input argument filename was changed to type ConstSpiceChar *.
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.
+       Re-implemented routine without dynamically allocated, temporary
+       strings.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 

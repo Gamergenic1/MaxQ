@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__12 = 12;
 
-/* $Procedure      SPKR17 ( Read SPK record from segment, type 17 ) */
+/* $Procedure SPKR17 ( Read SPK record from segment, type 17 ) */
 /* Subroutine */ int spkr17_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -33,8 +33,8 @@ static integer c__12 = 12;
 
 /* $ Abstract */
 
-/*     This routine reads a single spk data record from a segment of */
-/*     type 17 (Precessing Conic Propagation). */
+/*     Read a single SPK data record from a segment of type 17 */
+/*     (Equinoctial Elements). */
 
 /* $ Disclaimer */
 
@@ -72,7 +72,7 @@ static integer c__12 = 12;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -82,35 +82,35 @@ static integer c__12 = 12;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a SPK segment of type 17. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a SPK segment of type 17. */
 
-/*     ET          is a target epoch, for which a data record from */
-/*                 a specific segment is required. */
+/*     ET       is a target epoch, for which a data record from */
+/*              a specific segment is required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the record from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of some body, relative */
-/*                 to some center, in some inertial reference frame. */
+/*     RECORD   is the record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the segment specified by DESCR is not a type 17 segment, */
+/*         the error SPICE(WRONGSPKTYPE) is signaled. */
+
+/*     2)  A type 17 segment should have exactly 16 values. If this */
+/*         is not the case, the error SPICE(MALFORMEDSEGMENT) is */
+/*         signaled. */
+
 /* $ Files */
 
 /*     See argument HANDLE. */
-
-/* $ Exceptions */
-
-/*     1) If the segment specified by DESCR is not a type 17 segment */
-/*        the error 'SPICE(WRONGSPKTYPE)' will be signalled. */
-
-/*     2) A type 17 segment should have exactly 16 values.  If this */
-/*        is not the case the error 'SPICE(MALFORMEDSEGMENT)' is */
-/*        signalled. */
 
 /* $ Particulars */
 
@@ -140,7 +140,7 @@ static integer c__12 = 12;
 
 /*         RECORD(8) is the rate of the longitude of periapse */
 /*                   (dARGP/dt + dNODE/dt ) at the epoch of */
-/*                   the elements.  This rate is assumed to hold */
+/*                   the elements. This rate is assumed to hold */
 /*                   for all time. */
 
 /*         RECORD(9) is the derivative of the mean longitude */
@@ -160,13 +160,12 @@ static integer c__12 = 12;
 
 /*     Units are km, radians and radians/second. */
 
-
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRnn */
+/*     completely. Given that understanding, however, the SPKRnn */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -191,32 +190,39 @@ static integer c__12 = 12;
 /*                  . */
 /*           END IF */
 
-
 /* $ Restrictions */
+
+/*     None. */
+
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*      W.L. Taber      (JPL) */
-
-/* $ Literature_References */
-
-/*      None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     S. Schlaifer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Fixed textual */
+/*        description of SPK type in $Abstract. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
 /*        Replaced DAFRDA call with DAFGDA. */
 /*        Added IMPLICIT NONE. */
 
-/* -    SPICELIB Version 1.0.0, 3-JAN-1997 (WLT) (SS) */
+/* -    SPICELIB Version 1.0.0, 03-JAN-1997 (WLT) (SS) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_17 spk segment */
+/*     read record from type_17 SPK segment */
 
 /* -& */
 

@@ -3,10 +3,10 @@
 -Procedure twopi_c ( Twice the value of pi )
 
 -Abstract
- 
-   Return twice the value of pi (the ratio of the circumference of 
-   a circle to its diameter). 
- 
+
+   Return twice the value of pi (the ratio of the circumference of
+   a circle to its diameter).
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,94 +33,99 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   CONSTANTS 
- 
+
+   CONSTANTS
+
 */
 
    #include <math.h>
    #include "SpiceUsr.h"
 
-   SpiceDouble twopi_c ( void ) 
+   SpiceDouble twopi_c ( void )
 
 /*
 
 -Brief_I/O
- 
-   The function returns twice the value of pi. 
- 
+
+   The function returns twice the value of pi.
+
 -Detailed_Input
- 
-   None. 
- 
+
+   None.
+
 -Detailed_Output
- 
-   The function returns twice the value of pi (the ratio of 
-   a circle's circumference to its diameter), determined by 
-   the ACOS function. That is, 
- 
-           twopi = acos ( -1. ) * 2. 
- 
+
+   The function returns twice the value of pi (the ratio of
+   a circle's circumference to its diameter), determined by
+   the ACOS function. That is,
+
+           twopi = acos ( -1. ) * 2.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   The first time the function is referenced, the value is computed 
-   as shown above. The value is saved, and returned directly upon 
-   subsequent reference. 
- 
+
+   The first time the function is referenced, the value is computed
+   as shown above. The value is saved, and returned directly upon
+   subsequent reference.
+
 -Examples
- 
-   The code fragment below illustrates the use of twopi_c. 
- 
-        /. 
-               The longitude of the ascending node is the angle 
-               between the x-axis and the node vector, n. 
-                                                       - 
+
+   The code fragment below illustrates the use of twopi_c.
+
+        /.
+               The longitude of the ascending node is the angle
+               between the x-axis and the node vector, n.
+                                                       -
         ./
                node = acos ( n[0] / vnorm_c( n ) );
- 
+
                if ( node < 0.D0 )
                   {
                   node = node + twopi_c();
                   }
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
-   E.D. Wright     (JPL)
- 
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.1, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT) (IMU)
 
 -Index_Entries
- 
-   twice the value of pi 
- 
+
+   twice the value of pi
+
 -&
 */
 

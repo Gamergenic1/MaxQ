@@ -728,6 +728,10 @@ static integer c__128 = 128;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -938,53 +942,53 @@ static integer c__128 = 128;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry */
+/*     VARIABLE  I/O  ENTRY */
 /*     --------  ---  -------------------------------------------------- */
-/*     HANDLE    I,O  DAFBFS, DAFBBS, DAFGH, DAFCS */
-/*     SUM       I,O  DAFGS,  DAFRS,  DAFWS */
-/*     NAME      I,O  DAFGN,  DAFRN */
+/*     HANDLE    I-O  DAFBFS, DAFBBS, DAFGH, DAFCS */
+/*     SUM       I-O  DAFGS,  DAFRS,  DAFWS */
+/*     NAME      I-O  DAFGN,  DAFRN */
 /*     FOUND      O   DAFFNA, DAFFPA */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      on input is the handle of the DAF to be searched. */
+/*     HANDLE   on input is the handle of the DAF to be searched. */
 
-/*     SUM         on input is an array summary that replaces the */
-/*                 summary of the current array in the DAF currently */
-/*                 being searched. */
+/*     SUM      on input is an array summary that replaces the */
+/*              summary of the current array in the DAF currently */
+/*              being searched. */
 
-/*     NAME        on input is an array name that replaces the name */
-/*                 of the current array in the DAF currently being */
-/*                 searched. */
+/*     NAME     on input is an array name that replaces the name */
+/*              of the current array in the DAF currently being */
+/*              searched. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE      on output is the handle of the DAF currently being */
-/*                 searched. */
+/*     HANDLE   on output is the handle of the DAF currently being */
+/*              searched. */
 
-/*     SUM         on output is the summary for the array found most */
-/*                 recently. */
+/*     SUM      on output is the summary for the array found most */
+/*              recently. */
 
-/*     NAME        on output is the name for the array found */
-/*                 most recently. */
+/*     NAME     on output is the name for the array found */
+/*              most recently. */
 
-/*     FOUND       is true whenever the search for the next or the */
-/*                 previous array is successful, and is false otherwise. */
+/*     FOUND    is .TRUE. whenever the search for the next or the */
+/*              previous array is successful, and is .FALSE. otherwise. */
 
 /* $ Parameters */
 
-/*     TBSIZE      the maximum number of files (DAS and DAF) that may be */
-/*                 simultaneously open. TBSIZE is set to FTSIZE which is */
-/*                 assigned and defined in zzdhman.inc. */
+/*     TBSIZE   is the maximum number of files (DAS and DAF) that may be */
+/*              simultaneously open. TBSIZE is set to FTSIZE which is */
+/*              assigned and defined in zzdhman.inc. */
 
 /* $ Exceptions */
 
-/*     1) If DAFFA is called directly, the error SPICE(BOGUSENTRY) */
-/*        is signaled. */
+/*     1)  If DAFFA is called directly, the error SPICE(BOGUSENTRY) */
+/*         is signaled. */
 
-/*     2) See entry points DAFBFS, DAFFNA, DAFBBS, DAFFPA, DAFGS, DAFGN, */
-/*        DAFGH, DAFRS, DAFWS, DAFRN, and DAFCS for exceptions specific */
-/*        to those entry points. */
+/*     2)  See entry points DAFBFS, DAFFNA, DAFBBS, DAFFPA, DAFGS, DAFGN, */
+/*         DAFGH, DAFRS, DAFWS, DAFRN, and DAFCS for exceptions specific */
+/*         to those entry points. */
 
 /* $ Files */
 
@@ -1028,12 +1032,14 @@ static integer c__128 = 128;
 /*        CALL DAFFNA ( FOUND  ) */
 
 /*        DO WHILE ( FOUND ) */
+
 /*           CALL DAFGS ( SUM  ) */
 /*           CALL DAFGN ( NAME ) */
 /*            . */
 /*            . */
 
 /*           CALL DAFFNA ( FOUND ) */
+
 /*        END DO */
 
 
@@ -1046,12 +1052,14 @@ static integer c__128 = 128;
 /*        CALL DAFFPA ( FOUND  ) */
 
 /*        DO WHILE ( FOUND ) */
+
 /*           CALL DAFGS ( SUM  ) */
 /*           CALL DAFGN ( NAME ) */
 /*            . */
 /*            . */
 
 /*           CALL DAFFPA ( FOUND ) */
+
 /*        END DO */
 
 
@@ -1134,356 +1142,415 @@ static integer c__128 = 128;
 
 /* $ Examples */
 
-/*     1) The following code fragment illustrates the way the entry */
-/*        points of DAFFA might be used to edit the summaries and names */
-/*        for the arrays contained in a DAF. (All subroutines and */
-/*        functions are from SPICELIB.) */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        In this example, the user begins by supplying the name of */
-/*        the file to be edited, followed by any number of the following */
-/*        commands. */
+/*     1) The following program illustrates the way summaries and */
+/*        names for the arrays contained in a DAF can be modified. */
 
-/*           NEXT      finds the next array. */
+/*        This example is provided for educational purpose only. */
 
-/*           PREV      finds the previous array. */
+/*        Replace the body ID code 301 (Moon) with a test body ID, */
+/*        e.g. -999, in every descriptor of an SPK file; update the */
+/*        segment identifier to indicate that such change has been */
+/*        implemented. */
 
-/*           EDIT      changes the value of an item in the summary or */
-/*                     of the entire name. The keyword EDIT is */
-/*                     always followed by the name of the item to be */
-/*                     edited, */
 
-/*                        DC n */
-/*                        IC n */
-/*                        NAME */
+/*        Example code begins here. */
 
-/*                     and the value, e.g., */
 
-/*                        EDIT IC 2 315 */
-/*                        EDIT NAME NAIF test K2905-1 */
+/*              PROGRAM DAFFA_EX1 */
+/*              IMPLICIT NONE */
 
-/*        The user may terminate the session at any time by typing END. */
-/*        Commands other than those listed above are ignored. */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               CARDI */
+/*              INTEGER               RTRIM */
 
-/*           READ (*,FMT='(A)') FNAME */
-/*           CALL DAFOPW ( FNAME, HANDLE ) */
-/*           CALL DAFBFS ( HANDLE ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               DSCSIZ */
+/*              PARAMETER           ( DSCSIZ  = 5    ) */
 
-/*           READ (*,FMT='(A)') COMMAND */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ  = 255  ) */
 
-/*           DO WHILE ( COMMAND .NE. 'END' ) */
-/*              CALL NEXTWD ( COMMAND, VERB, COMMAND ) */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*              IF ( VERB .EQ. 'NEXT' ) THEN */
-/*                 CALL DAFFNA ( FOUND ) */
-/*                 IF ( .NOT. FOUND ) THEN */
-/*                    WRITE (*,*) 'At end of array list.' */
-/*                 END IF */
+/*              INTEGER               MAXOBJ */
+/*              PARAMETER           ( MAXOBJ  = 1000 ) */
 
-/*              IF ( VERB .EQ. 'PREV' ) THEN */
-/*                 CALL DAFFPA ( FOUND ) */
-/*                 IF ( .NOT. FOUND ) THEN */
-/*                    WRITE (*,*) 'At beginning of array list.' */
-/*                 END IF */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND      = 2    ) */
 
-/*              IF ( VERB .EQ. 'EDIT' ) THEN */
-/*                 CALL DAFGS ( SUM ) */
-/*                 CALL DAFGN ( NAME ) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI      = 6    ) */
+
+/*              INTEGER               NEWCODE */
+/*              PARAMETER           ( NEWCODE = -999 ) */
+
+/*              INTEGER               OLDCODE */
+/*              PARAMETER           ( OLDCODE =  301 ) */
+
+/*              INTEGER               SGIDLN */
+/*              PARAMETER           ( SGIDLN  = 1000 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FILSIZ)    FNAME */
+/*              CHARACTER*(SGIDLN)    SEGID */
+/*              CHARACTER*(SGIDLN)    UPDSID */
+
+/*              DOUBLE PRECISION      DC     ( ND ) */
+/*              DOUBLE PRECISION      SUM    ( DSCSIZ ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               IC     ( NI ) */
+/*              INTEGER               IDS    ( LBCELL : MAXOBJ ) */
+/*              INTEGER               OBJ */
+
+/*              LOGICAL               FOUND */
+/*              LOGICAL               UPDATE */
+
+/*        C */
+/*        C     Get the SPK file name. */
+/*        C */
+/*              CALL PROMPT ( 'Enter name of the SPK file > ', FNAME ) */
+
+/*        C */
+/*        C     Initialize the set IDS. */
+/*        C */
+/*              CALL SSIZEI ( MAXOBJ, IDS ) */
+
+/*        C */
+/*        C     Find the set of objects in the SPK file. */
+/*        C */
+/*              CALL SPKOBJ ( FNAME, IDS ) */
+
+/*              WRITE(*,'(A)') 'Objects in the original DAF file:' */
+/*              WRITE(*,'(20I4)') ( IDS(I), I= 1, CARDI ( IDS ) ) */
+
+/*        C */
+/*        C     Open for writing the SPK file. */
+/*        C */
+/*              CALL DAFOPW ( FNAME, HANDLE ) */
+
+/*        C */
+/*        C     Search the file in forward order. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+/*              CALL DAFFNA ( FOUND  ) */
+
+/*              WRITE(*,'(A)') 'Original Segment IDs (forward order):' */
+
+/*              DO WHILE ( FOUND ) */
+
+/*        C */
+/*        C        Fetch and unpack the descriptor (aka summary) */
+/*        C        of the current segment, and get its name. */
+/*        C */
+/*                 CALL DAFGN ( SEGID ) */
+/*                 CALL DAFGS ( SUM   ) */
 /*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*                 CALL NEXTWD ( COMMAND, ITEM, VALUE ) */
+/*        C */
+/*        C        Print the current segment name */
+/*        C */
+/*                 WRITE(*,'(2I6,2X,A)') IC(1), IC(2), */
+/*             .                         SEGID(:RTRIM(SEGID)) */
 
-/*                 IF ( ITEM .EQ. 'DC' ) THEN */
-/*                    CALL NEXTWD ( VALUE, INDEX, VALUE ) */
-/*                    CALL NPARSI ( INDEX, LOC,     ERR, PTR ) */
-/*                    CALL NPARSD ( VALUE, DC(LOC), ERR, PTR ) */
+/*        C */
+/*        C        Replace ID codes if necessary. */
+/*        C */
+/*                 UPDATE = .FALSE. */
+/*                 IF ( IC(1) .EQ. OLDCODE ) THEN */
 
-/*                 ELSE IF ( ITEM .EQ. 'IC' ) THEN */
-/*                    CALL NEXTWD ( VALUE, INDEX, VALUE ) */
-/*                    CALL NPARSI ( INDEX, LOC,     ERR, PTR ) */
-/*                    CALL NPARSI ( VALUE, IC(LOC), ERR, PTR ) */
+/*                    IC(1)  = NEWCODE */
+/*                    UPDATE = .TRUE. */
 
-/*                 ELSE IF ( ITEM .EQ. 'NAME' ) THEN */
-/*                    NAME = VALUE */
+/*                 END IF */
+/*                 IF ( IC(2) .EQ. OLDCODE ) THEN */
+
+/*                    IC(2) = NEWCODE */
+/*                    UPDATE = .TRUE. */
+
 /*                 END IF */
 
+/*        C */
+/*        C        Update segment ID if necessary. */
+/*        C */
+/*                 IF ( UPDATE ) THEN */
+
+/*                    UPDSID = '# - Updated. Do not use.' */
+/*                    CALL REPMC ( UPDSID, '#', SEGID(:RTRIM(SEGID)), */
+/*             .                   UPDSID                            ) */
+/*                    CALL DAFRN ( UPDSID ) */
+
+/*                 END IF */
+
+/*        C */
+/*        C        Re-pack the descriptor; replace the descriptor */
+/*        C        in the file. */
+/*        C */
 /*                 CALL DAFPS ( ND, NI, DC, IC, SUM ) */
+
 /*                 CALL DAFRS ( SUM ) */
-/*                 CALL DAFRN ( NAME ) */
-/*              END IF */
 
-/*              READ (*,FMT='(A)') COMMAND */
-/*           END DO */
-
-
-/*     2)  The following program compares data in two DAFs. The DAFs are */
-/*         expected to have the same number of arrays, the same number */
-/*         of elements in each corresponding array, and the same summary */
-/*         format. */
-
-/*         Each difference whose magnitude exceeds a specified tolerance */
-/*         is flagged. The difference information is written to a file. */
-
-
-/*           PROGRAM CMPDAF */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     Compare data in two DAFs having identical structures. */
-/*     C     No array in either DAF is longer than ARRYSZ d.p. */
-/*     C     numbers. */
-/*     C */
-
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               ARRYSZ */
-/*           PARAMETER           ( ARRYSZ = 10000000 ) */
-
-/*           INTEGER               ERRLEN */
-/*           PARAMETER           ( ERRLEN =  240 ) */
-
-/*           INTEGER               FILEN */
-/*           PARAMETER           ( FILEN  =  128 ) */
-
-/*           INTEGER               LINLEN */
-/*           PARAMETER           ( LINLEN =   80 ) */
-
-/*           INTEGER               MAXND */
-/*           PARAMETER           ( MAXND  =  125 ) */
-
-/*           INTEGER               MAXNI */
-/*           PARAMETER           ( MAXNI  =  250 ) */
-
-/*           INTEGER               MAXSUM */
-/*           PARAMETER           ( MAXSUM =  128 ) */
-
-/*           INTEGER               RLEN */
-/*           PARAMETER           ( RLEN   = 1000 ) */
-
-
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(RLEN)      ANAME1 */
-/*           CHARACTER*(RLEN)      ANAME2 */
-/*           CHARACTER*(FILEN)     DAF1 */
-/*           CHARACTER*(FILEN)     DAF2 */
-/*           CHARACTER*(FILEN)     LOG */
-/*           CHARACTER*(ERRLEN)    PRSERR */
-/*           CHARACTER*(LINLEN)    STR */
-/*           CHARACTER*(LINLEN)    TOLCH */
-
-/*           DOUBLE PRECISION      ARRAY1 ( ARRYSZ ) */
-/*           DOUBLE PRECISION      ARRAY2 ( ARRYSZ ) */
-/*           DOUBLE PRECISION      DC1    ( MAXND ) */
-/*           DOUBLE PRECISION      DC2    ( MAXND ) */
-/*           DOUBLE PRECISION      TOL */
-/*           DOUBLE PRECISION      DIFF */
-/*           DOUBLE PRECISION      SUM1   ( MAXSUM ) */
-/*           DOUBLE PRECISION      SUM2   ( MAXSUM ) */
-
-/*           INTEGER               FA1 */
-/*           INTEGER               FA2 */
-/*           INTEGER               I */
-/*           INTEGER               IA1 */
-/*           INTEGER               IA2 */
-/*           INTEGER               IC1    ( MAXNI ) */
-/*           INTEGER               IC2    ( MAXNI ) */
-/*           INTEGER               HANDL1 */
-/*           INTEGER               HANDL2 */
-/*           INTEGER               LEN1 */
-/*           INTEGER               LEN2 */
-/*           INTEGER               ND1 */
-/*           INTEGER               ND2 */
-/*           INTEGER               NI1 */
-/*           INTEGER               NI2 */
-/*           INTEGER               PTR */
-
-/*           LOGICAL               FOUND */
-
-
-/*     C */
-/*     C     Start out by obtaining the names of the DAFs to be */
-/*     C     compared. */
-/*     C */
-/*           WRITE (*,*) 'Enter name of first DAF.' */
-/*           READ  (*,FMT='(A)') DAF1 */
-
-/*           WRITE (*,*) 'Enter name of second DAF.' */
-/*           READ  (*,FMT='(A)') DAF2 */
-
-/*           WRITE (*,*) 'Enter name of log file.' */
-/*           READ  (*,FMT='(A)') LOG */
-
-/*           WRITE (*,*) 'Enter tolerance for data comparison.' */
-/*           READ  (*,FMT='(A)') TOLCH */
-
-/*           CALL NPARSD ( TOLCH, TOL, PRSERR, PTR ) */
-
-/*           DO WHILE ( PRSERR .NE. ' ' ) */
-
-/*              WRITE (*,*) PRSERR */
-/*              WRITE (*,*) 'Enter tolerance for data comparison.' */
-/*              READ  (*,FMT='(A)') TOLCH */
-
-/*              CALL NPARSD ( TOLCH, TOL, PRSERR, PTR ) */
-
-/*           END DO */
-
-/*     C */
-/*     C     Open both DAFs for reading. */
-/*     C */
-/*           CALL DAFOPR ( DAF1, HANDL1 ) */
-/*           CALL DAFOPR ( DAF2, HANDL2 ) */
-
-/*     C */
-/*     C     Start forward searches in both DAFS. */
-/*     C */
-/*           CALL DAFBFS ( HANDL1 ) */
-/*           CALL DAFBFS ( HANDL2 ) */
-
-/*     C */
-/*     C     Obtain the summary formats for each DAF. Stop now */
-/*     C     if the summary formats don't match. */
-/*     C */
-/*           CALL DAFHSF ( HANDL1, ND1, NI1 ) */
-/*           CALL DAFHSF ( HANDL2, ND2, NI2 ) */
-
-/*           IF (  ( ND1 .NE. ND2 ) .OR. ( NI1 .NE. NI2 )  ) THEN */
-
-/*              STR = 'Summary formats do not match.  NI1 = #, '// */
-/*          .                      'NI2 = #, ND1 = #, ND2 = #.' */
-
-/*              CALL REPMI  ( STR, '#', NI1, STR ) */
-/*              CALL REPMI  ( STR, '#', NI2, STR ) */
-/*              CALL REPMI  ( STR, '#', ND1, STR ) */
-/*              CALL REPMI  ( STR, '#', ND2, STR ) */
-
-/*              CALL WRLINE ( LOG,  STR ) */
-
-/*              CALL SIGERR ( 'Incompatible DAFs' ) */
-
-/*           END IF */
-
-/*     C */
-/*     C     Find the first array in each DAF. Use DAFCS */
-/*     C     (DAF, continue search) to set the handle of the DAF */
-/*     C     to search in before calling DAFFNA. */
-/*     C */
-/*           CALL DAFCS  ( HANDL1 ) */
-/*           CALL DAFFNA ( FOUND  ) */
-
-/*           IF ( FOUND ) THEN */
-/*              CALL DAFCS  ( HANDL2 ) */
-/*              CALL DAFFNA ( FOUND  ) */
-/*           END IF */
-
-/*           DO WHILE ( FOUND ) */
-
-/*     C */
-/*     C        Get the summary and name of each array, using */
-/*     C        DAFCS to select the DAF to get the information */
-/*     C        from. Unpack the summaries and find the beginning */
-/*     C        and ending addresses of the arrays. Read the */
-/*     C        arrays into the variables ARRAY1 and ARRAY2. */
-/*     C */
-/*              CALL DAFCS ( HANDL1 ) */
-/*              CALL DAFGN ( ANAME1 ) */
-/*              CALL DAFGS ( SUM1   ) */
-/*              CALL DAFUS ( SUM1, ND1, NI1, DC1, IC1 ) */
-
-/*              IA1  = IC1 ( NI1 - 1 ) */
-/*              FA1  = IC1 ( NI1     ) */
-/*              LEN1 = FA1 - IA1  + 1 */
-
-/*              IF (  LEN1  .GT.  ARRYSZ  ) THEN */
-/*                 CALL SETMSG ( 'Buffer too small; need # elts.') */
-/*                 CALL ERRINT ( '#', LEN1                       ) */
-/*                 CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
-/*              ELSE */
-/*                 CALL DAFGDA ( HANDL1, IA1, FA1, ARRAY1 ) */
-/*              END IF */
-
-/*              CALL DAFCS ( HANDL2 ) */
-/*              CALL DAFGN ( ANAME2 ) */
-/*              CALL DAFGS ( SUM2   ) */
-/*              CALL DAFUS ( SUM2, ND2, NI2, DC2, IC2 ) */
-
-/*              IA2 = IC2 ( NI2 - 1 ) */
-/*              FA2 = IC2 ( NI2     ) */
-
-/*              LEN2 = FA2 - IA2  + 1 */
-
-/*              IF (  LEN2  .GT.  ARRYSZ  ) THEN */
-
-/*                 CALL SETMSG ( 'Buffer too small; need # elts.') */
-/*                 CALL ERRINT ( '#', LEN2                       ) */
-/*                 CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
-
-/*              ELSE IF ( LEN1 .NE. LEN2 ) THEN */
-
-/*                 CALL SETMSG ( 'DAF structures do not match. '// */
-/*          .                    'LEN1 = #, LEN2 = #. ' ) */
-/*                 CALL ERRINT ( '#', LEN1              ) */
-/*                 CALL ERRINT ( '#', LEN2              ) */
-/*                 CALL SIGERR ( 'Incompatible DAFs' ) */
-
-/*              ELSE */
-/*                 CALL DAFGDA ( HANDL2, IA2, FA2, ARRAY2 ) */
-/*              END IF */
-/*     C */
-/*     C */
-/*     C        Compare the data in the two arrays. Log a message */
-/*     C        for every instance of data that differs by more */
-/*     C        than the allowed tolerance. Use the array names */
-/*     C        to label the data sources. */
-/*     C */
-/*              DO I = 1, LEN1 */
-
-/*                 DIFF  =  ABS( ARRAY1(I) - ARRAY2(I) ) */
-
-/*                 IF (  DIFF  .GT.  TOL  ) THEN */
-/*     C */
-/*     C              Get the array names. */
-/*     C */
-/*                    CALL DAFCS ( HANDL1 ) */
-/*                    CALL DAFGN ( ANAME1 ) */
-/*                    CALL DAFCS ( HANDL2 ) */
-/*                    CALL DAFGN ( ANAME2 ) */
-
-/*     C */
-/*     C              Construct the report strings. The number 14 */
-/*     C              below is the number of significant digits to */
-/*     C              show in the strings representing d.p. */
-/*     C              numbers. */
-/*     C */
-
-/*                    CALL WRLINE ( LOG, ' ' ) */
-/*                    CALL WRLINE ( LOG, 'Difference of array ' // */
-/*          .                            'elements exceeded '   // */
-/*          .                            'tolerance.'            ) */
-/*                    CALL WRLINE ( LOG, 'First array:  '//ANAME1) */
-/*                    CALL WRLINE ( LOG, 'Second array: '//ANAME2) */
-
-/*                    STR = 'First value:  #' */
-/*                    CALL REPMD  ( STR, '#', ARRAY1(I), 14, STR ) */
-/*                    CALL WRLINE ( LOG, STR                     ) */
-
-/*                    STR = 'Second value: #' */
-/*                    CALL REPMD  ( STR, '#', ARRAY2(I), 14, STR ) */
-/*                    CALL WRLINE ( LOG, STR                     ) */
-
-/*                    STR = 'Difference:   #' */
-/*                    CALL REPMD  ( STR, '#', DIFF,      14, STR ) */
-/*                    CALL WRLINE ( LOG, STR                     ) */
-/*                    CALL WRLINE ( LOG, ' '                     ) */
-
-/*                 END IF */
+/*        C */
+/*        C        Find the next segment. */
+/*        C */
+/*                 CALL DAFFNA ( FOUND ) */
 
 /*              END DO */
 
-/*     C */
-/*     C        Find the next pair of arrays. */
-/*     C */
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Reset the set IDS. */
+/*        C */
+/*              CALL SCARDI ( 0, IDS ) */
+
+/*        C */
+/*        C     Find the set of objects in the updated SPK file. */
+/*        C */
+/*              CALL SPKOBJ ( FNAME, IDS ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A)') 'Objects in the updated DAF file:' */
+/*              WRITE(*,'(20I4)') ( IDS(I), I= 1, CARDI ( IDS ) ) */
+
+/*        C */
+/*        C     Search the file in backwards order and output the */
+/*        C     segment IDs. */
+/*        C */
+/*              CALL DAFOPR ( FNAME, HANDLE ) */
+
+/*              CALL DAFBBS ( HANDLE ) */
+/*              CALL DAFFPA ( FOUND  ) */
+
+/*              WRITE(*,'(A)') 'Updated Segment IDs (backwards order):' */
+
+/*              DO WHILE ( FOUND ) */
+
+/*        C */
+/*        C        Fetch and unpack the descriptor (aka summary) */
+/*        C        of the current segment, and get its name. */
+/*        C */
+/*                 CALL DAFGN ( SEGID ) */
+/*                 CALL DAFGS ( SUM   ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+
+/*                 WRITE(*,'(2I6,2X,A)') IC(1), IC(2), */
+/*             .                         SEGID(:RTRIM(SEGID)) */
+
+/*        C */
+/*        C        Find the previous segment. */
+/*        C */
+/*                 CALL DAFFPA ( FOUND ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the SPK file named de430.bsp, the output was: */
+
+
+/*        Enter name of the SPK file > de430.bsp */
+/*        Objects in the original DAF file: */
+/*           1   2   3   4   5   6   7   8   9  10 199 299 301 399 */
+/*        Original Segment IDs (forward order): */
+/*             1     0  DE-0430LE-0430 */
+/*             2     0  DE-0430LE-0430 */
+/*             3     0  DE-0430LE-0430 */
+/*             4     0  DE-0430LE-0430 */
+/*             5     0  DE-0430LE-0430 */
+/*             6     0  DE-0430LE-0430 */
+/*             7     0  DE-0430LE-0430 */
+/*             8     0  DE-0430LE-0430 */
+/*             9     0  DE-0430LE-0430 */
+/*            10     0  DE-0430LE-0430 */
+/*           301     3  DE-0430LE-0430 */
+/*           399     3  DE-0430LE-0430 */
+/*           199     1  DE-0430LE-0430 */
+/*           299     2  DE-0430LE-0430 */
+
+/*        Objects in the updated DAF file: */
+/*        -999   1   2   3   4   5   6   7   8   9  10 199 299 399 */
+/*        Updated Segment IDs (backwards order): */
+/*           299     2  DE-0430LE-0430 */
+/*           199     1  DE-0430LE-0430 */
+/*           399     3  DE-0430LE-0430 */
+/*          -999     3  DE-0430LE-0430 - Updated. Do not use. */
+/*            10     0  DE-0430LE-0430 */
+/*             9     0  DE-0430LE-0430 */
+/*             8     0  DE-0430LE-0430 */
+/*             7     0  DE-0430LE-0430 */
+/*             6     0  DE-0430LE-0430 */
+/*             5     0  DE-0430LE-0430 */
+/*             4     0  DE-0430LE-0430 */
+/*             3     0  DE-0430LE-0430 */
+/*             2     0  DE-0430LE-0430 */
+/*             1     0  DE-0430LE-0430 */
+
+
+/*     2) The following program compares data in two DAFs. The DAFs are */
+/*        expected to have the same number of arrays, the same number */
+/*        of elements in each corresponding array, and the same summary */
+/*        format. */
+
+/*        Each difference whose magnitude exceeds a specified tolerance */
+/*        is flagged. The difference information is written to the */
+/*        screen. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DAFFA_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               ARRYSZ */
+/*              PARAMETER           ( ARRYSZ = 10000000 ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN =  240 ) */
+
+/*              INTEGER               FILEN */
+/*              PARAMETER           ( FILEN  =  128 ) */
+
+/*              INTEGER               LINLEN */
+/*              PARAMETER           ( LINLEN =   80 ) */
+
+/*              INTEGER               MAXND */
+/*              PARAMETER           ( MAXND  =  125 ) */
+
+/*              INTEGER               MAXNI */
+/*              PARAMETER           ( MAXNI  =  250 ) */
+
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM =  128 ) */
+
+/*              INTEGER               RLEN */
+/*              PARAMETER           ( RLEN   = 1000 ) */
+
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(RLEN)      ANAME1 */
+/*              CHARACTER*(RLEN)      ANAME2 */
+/*              CHARACTER*(FILEN)     DAF1 */
+/*              CHARACTER*(FILEN)     DAF2 */
+/*              CHARACTER*(FILEN)     LOG */
+/*              CHARACTER*(ERRLEN)    PRSERR */
+/*              CHARACTER*(LINLEN)    STR */
+/*              CHARACTER*(LINLEN)    TOLCH */
+
+/*              DOUBLE PRECISION      ARRAY1 ( ARRYSZ ) */
+/*              DOUBLE PRECISION      ARRAY2 ( ARRYSZ ) */
+/*              DOUBLE PRECISION      DC1    ( MAXND ) */
+/*              DOUBLE PRECISION      DC2    ( MAXND ) */
+/*              DOUBLE PRECISION      TOL */
+/*              DOUBLE PRECISION      DIFF */
+/*              DOUBLE PRECISION      SUM1   ( MAXSUM ) */
+/*              DOUBLE PRECISION      SUM2   ( MAXSUM ) */
+
+/*              INTEGER               FA1 */
+/*              INTEGER               FA2 */
+/*              INTEGER               I */
+/*              INTEGER               IA1 */
+/*              INTEGER               IA2 */
+/*              INTEGER               IC1    ( MAXNI ) */
+/*              INTEGER               IC2    ( MAXNI ) */
+/*              INTEGER               HANDL1 */
+/*              INTEGER               HANDL2 */
+/*              INTEGER               LEN1 */
+/*              INTEGER               LEN2 */
+/*              INTEGER               ND1 */
+/*              INTEGER               ND2 */
+/*              INTEGER               NI1 */
+/*              INTEGER               NI2 */
+/*              INTEGER               PTR */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Start out by obtaining the names of the DAFs to be */
+/*        C     compared. */
+/*        C */
+/*              CALL PROMPT ( 'Enter name of first DAF  > ', DAF1 ) */
+/*              CALL PROMPT ( 'Enter name of second DAF > ', DAF2 ) */
+/*              CALL PROMPT ( 'Enter tolerance for data comparison > ', */
+/*             .              TOLCH                                   ) */
+
+/*              CALL NPARSD ( TOLCH, TOL, PRSERR, PTR ) */
+
+/*        C */
+/*        C     Open both DAFs for reading. */
+/*        C */
+/*              CALL DAFOPR ( DAF1, HANDL1 ) */
+/*              CALL DAFOPR ( DAF2, HANDL2 ) */
+
+/*        C */
+/*        C     Start forward searches in both DAFS. */
+/*        C */
+/*              CALL DAFBFS ( HANDL1 ) */
+/*              CALL DAFBFS ( HANDL2 ) */
+
+/*        C */
+/*        C     Obtain the summary formats for each DAF. Stop now */
+/*        C     if the summary formats don't match. */
+/*        C */
+/*              CALL DAFHSF ( HANDL1, ND1, NI1 ) */
+/*              CALL DAFHSF ( HANDL2, ND2, NI2 ) */
+
+/*              IF (  ( ND1 .NE. ND2 ) .OR. ( NI1 .NE. NI2 )  ) THEN */
+
+/*                 STR = 'Summary formats do not match.  NI1 = #, '// */
+/*             .                      'NI2 = #, ND1 = #, ND2 = #.' */
+
+/*                 CALL REPMI  ( STR, '#', NI1, STR ) */
+/*                 CALL REPMI  ( STR, '#', NI2, STR ) */
+/*                 CALL REPMI  ( STR, '#', ND1, STR ) */
+/*                 CALL REPMI  ( STR, '#', ND2, STR ) */
+
+/*                 WRITE(*,*) STR */
+
+/*                 CALL SIGERR ( 'Incompatible DAFs' ) */
+
+/*              END IF */
+
+/*        C */
+/*        C     Find the first array in each DAF. Use DAFCS */
+/*        C     (DAF, continue search) to set the handle of the DAF */
+/*        C     to search in before calling DAFFNA. */
+/*        C */
 /*              CALL DAFCS  ( HANDL1 ) */
 /*              CALL DAFFNA ( FOUND  ) */
 
@@ -1492,20 +1559,267 @@ static integer c__128 = 128;
 /*                 CALL DAFFNA ( FOUND  ) */
 /*              END IF */
 
-/*           END DO */
+/*              DO WHILE ( FOUND ) */
 
-/*     C */
-/*     C     Close the DAFs. */
-/*     C */
-/*           CALL DAFCLS ( HANDL1 ) */
-/*           CALL DAFCLS ( HANDL2 ) */
+/*        C */
+/*        C        Get the summary and name of each array, using */
+/*        C        DAFCS to select the DAF to get the information */
+/*        C        from. Unpack the summaries and find the beginning */
+/*        C        and ending addresses of the arrays. Read the */
+/*        C        arrays into the variables ARRAY1 and ARRAY2. */
+/*        C */
+/*                 CALL DAFCS ( HANDL1 ) */
+/*                 CALL DAFGN ( ANAME1 ) */
+/*                 CALL DAFGS ( SUM1   ) */
+/*                 CALL DAFUS ( SUM1, ND1, NI1, DC1, IC1 ) */
 
-/*           END */
+/*                 IA1  = IC1 ( NI1 - 1 ) */
+/*                 FA1  = IC1 ( NI1     ) */
+/*                 LEN1 = FA1 - IA1  + 1 */
+
+/*                 IF (  LEN1  .GT.  ARRYSZ  ) THEN */
+/*                    CALL SETMSG ( 'Buffer too small; need # elts.') */
+/*                    CALL ERRINT ( '#', LEN1                       ) */
+/*                    CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
+/*                 ELSE */
+/*                    CALL DAFGDA ( HANDL1, IA1, FA1, ARRAY1 ) */
+/*                 END IF */
+
+/*                 CALL DAFCS ( HANDL2 ) */
+/*                 CALL DAFGN ( ANAME2 ) */
+/*                 CALL DAFGS ( SUM2   ) */
+/*                 CALL DAFUS ( SUM2, ND2, NI2, DC2, IC2 ) */
+
+/*                 IA2 = IC2 ( NI2 - 1 ) */
+/*                 FA2 = IC2 ( NI2     ) */
+
+/*                 LEN2 = FA2 - IA2  + 1 */
+
+/*                 IF (  LEN2  .GT.  ARRYSZ  ) THEN */
+
+/*                    CALL SETMSG ( 'Buffer too small; need # elts.') */
+/*                    CALL ERRINT ( '#', LEN2                       ) */
+/*                    CALL SIGERR ( 'ARRAYTOOSMALL'                 ) */
+
+/*                 ELSE IF ( LEN1 .NE. LEN2 ) THEN */
+
+/*                    CALL SETMSG ( 'DAF structures do not match. '// */
+/*             .                    'LEN1 = #, LEN2 = #. ' ) */
+/*                    CALL ERRINT ( '#', LEN1              ) */
+/*                    CALL ERRINT ( '#', LEN2              ) */
+/*                    CALL SIGERR ( 'Incompatible DAFs' ) */
+
+/*                 ELSE */
+/*                    CALL DAFGDA ( HANDL2, IA2, FA2, ARRAY2 ) */
+/*                 END IF */
+/*        C */
+/*        C */
+/*        C        Compare the data in the two arrays. Log a message */
+/*        C        for every instance of data that differs by more */
+/*        C        than the allowed tolerance. Use the array names */
+/*        C        to label the data sources. */
+/*        C */
+/*                 DO I = 1, LEN1 */
+
+/*                    DIFF  =  ABS( ARRAY1(I) - ARRAY2(I) ) */
+
+/*                    IF (  DIFF  .GT.  TOL  ) THEN */
+/*        C */
+/*        C              Get the array names. */
+/*        C */
+/*                       CALL DAFCS ( HANDL1 ) */
+/*                       CALL DAFGN ( ANAME1 ) */
+/*                       CALL DAFCS ( HANDL2 ) */
+/*                       CALL DAFGN ( ANAME2 ) */
+
+/*        C */
+/*        C              Construct the report strings. The number 14 */
+/*        C              below is the number of significant digits to */
+/*        C              show in the strings representing d.p. */
+/*        C              numbers. */
+/*        C */
+
+/*                       WRITE(*,*) ' ' */
+/*                       WRITE(*,*) 'Difference of array ' // */
+/*             .                    'elements exceeded '   // */
+/*             .                    'tolerance.' */
+/*                       WRITE(*,*) 'First array : ', */
+/*             .                     ANAME1(:RTRIM(ANAME1)) */
+/*                       WRITE(*,*) 'Second array: ', */
+/*             .                     ANAME2(:RTRIM(ANAME2)) */
+
+/*                       STR = 'First value : #' */
+/*                       CALL REPMD  ( STR, '#', ARRAY1(I), 14, STR ) */
+/*                       WRITE(*,*) STR */
+
+/*                       STR = 'Second value: #' */
+/*                       CALL REPMD  ( STR, '#', ARRAY2(I), 14, STR ) */
+/*                       WRITE(*,*) STR */
+
+/*                       STR = 'Difference  :  #' */
+/*                       CALL REPMD  ( STR, '#', DIFF,      14, STR ) */
+/*                       WRITE(*,*) STR */
+
+/*                    END IF */
+
+/*                 END DO */
+
+/*        C */
+/*        C        Find the next pair of arrays. */
+/*        C */
+/*                 CALL DAFCS  ( HANDL1 ) */
+/*                 CALL DAFFNA ( FOUND  ) */
+
+/*                 IF ( FOUND ) THEN */
+/*                    CALL DAFCS  ( HANDL2 ) */
+/*                    CALL DAFFNA ( FOUND  ) */
+/*                 END IF */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the DAFs. */
+/*        C */
+/*              CALL DAFCLS ( HANDL1 ) */
+/*              CALL DAFCLS ( HANDL2 ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the PCK (DAF) files named */
+/*        earth_720101_031229.bpc and earth_720101_070527.bpc, and a */
+/*        tolerance of '1.D0', the output was: */
+
+
+/*        Enter name of first DAF  > earth_720101_031229.bpc */
+/*        Enter name of second DAF > earth_720101_070527.bpc */
+/*        Enter tolerance for data comparison > 1.D0 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8352636890345E+08 */
+/*         Second value: -8.8352636783584E+08 */
+/*         Difference  :  1.0676109790802E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8343997629503E+08 */
+/*         Second value: -8.8343997451568E+08 */
+/*         Difference  :  1.7793515920639E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8335358368661E+08 */
+/*         Second value: -8.8335358119552E+08 */
+/*         Difference  :  2.4910920858383E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8326719107819E+08 */
+/*         Second value: -8.8326718787536E+08 */
+/*         Difference  :  3.2028328180313E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8318079846977E+08 */
+/*         Second value: -8.8318079455519E+08 */
+/*         Difference  :  3.9145733118057E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8309440586135E+08 */
+/*         Second value: -8.8309440123503E+08 */
+/*         Difference  :  4.6263140439987E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8300801325293E+08 */
+/*         Second value: -8.8300800791487E+08 */
+/*         Difference  :  5.3380546569824E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8292162064451E+08 */
+/*         Second value: -8.8292161459471E+08 */
+/*         Difference  :  6.0497951507568E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8283522803609E+08 */
+/*         Second value: -8.8283522127455E+08 */
+/*         Difference  :  6.7615358829498E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8274883542767E+08 */
+/*         Second value: -8.8274882795439E+08 */
+/*         Difference  :  7.4732763767242E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8266244281925E+08 */
+/*         Second value: -8.8266243463423E+08 */
+/*         Difference  :  8.1850171089172E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8257605021083E+08 */
+/*         Second value: -8.8257604131407E+08 */
+/*         Difference  :  8.8967577219009E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8248965760241E+08 */
+/*         Second value: -8.8248964799391E+08 */
+/*         Difference  :  9.6084982156754E+00 */
+
+/*         Difference of array elements exceeded tolerance. */
+/*         First array : Earth PCK, ITRF93 Frame */
+/*         Second array: Earth PCK, ITRF93 Frame */
+/*         First value : -8.8240326499398E+08 */
+/*         Second value: -8.8240325467375E+08 */
+
+/*        [...] */
+
+
+/*        Warning: incomplete output. Only 100 out of 80582 lines have */
+/*        been provided. */
 
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -1513,13 +1827,26 @@ static integer c__128 = 128;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.0, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header of DAFFA umbrella routine and all its entry */
+/*        to comply with NAIF standard. */
+
+/*        Updated $Restrictions sections of this routine and its entry */
+/*        points. */
 
 /* -    SPICELIB Version 3.1.1, 14-MAR-2017 (NJB) */
 
@@ -1534,19 +1861,19 @@ static integer c__128 = 128;
 
 /* -    SPICELIB Version 3.1.0, 10-FEB-2014 (EDW) (BVS) */
 
-/*        Added a functional code example to the Examples section */
+/*        Added a functional code example to the $Examples section */
 /*        in DAFBFS, DAFFNA, DAFGS. */
 
 /*        Added check on value of "found" boolean returned from */
 /*        DAFGSR calls. Failure to check this value can cause an */
 /*        infinite loop during segment searches on damaged SPKs. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
 
-/*        Added full declaration of HANDLE to the Declarations section */
+/*        Added full declaration of HANDLE to the $Declarations section */
 /*        of the DAFCS header. */
 
 /* -    SPICELIB Version 3.0.0, 16-NOV-2001 (FST) */
@@ -1572,7 +1899,7 @@ static integer c__128 = 128;
 /*        dossier to the state table. Also, after attempting to */
 /*        clean up all files listed in the state table that are */
 /*        not currently open, DAFBFS and DAFBBS attempt to locate */
-/*        the first dossier with STADDG set to FALSE. This is then */
+/*        the first dossier with STADDG set to .FALSE. This is then */
 /*        freed to make room for the new DAF. If DAFBNA fails */
 /*        to locate such a dossier in the state table, it */
 /*        signals the error SPICE(STFULL). */
@@ -1628,7 +1955,7 @@ static integer c__128 = 128;
 /*        to DAFFA, information about the DAF is added to the state */
 /*        table. If there are no free elements in the state table, */
 /*        the routine starting the search (DAFBFS or DAFBBS) will */
-/*        perform garbage collection:  the routine will test the handles */
+/*        perform garbage collection: the routine will test the handles */
 /*        of each file about which information in stored in the state */
 /*        table to see whether that file is still open. Nodes containing */
 /*        information about DAFs that are no longer open will be moved */
@@ -1828,14 +2155,14 @@ L_dafbfs:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of file to be searched. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a DAF on which a forward */
-/*                 search is to be conducted. */
+/*     HANDLE   is the handle of a DAF on which a forward */
+/*              search is to be conducted. */
 
 /* $ Detailed_Output */
 
@@ -1847,11 +2174,11 @@ L_dafbfs:
 
 /* $ Exceptions */
 
-/*     1)  If the input handle is invalid, the error will be diagnosed */
-/*         by routines called by this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2)  If DAFBSR retuns with the read success flag as false, a */
-/*         SPICE(RECORDNOTFOUND) error signals. */
+/*     2)  If the first summary record of the DAF file cannot be read, */
+/*         the error SPICE(RECORDNOTFOUND) is signaled. */
 
 /* $ Files */
 
@@ -1863,123 +2190,156 @@ L_dafbfs:
 
 /* $ Examples */
 
-/*     Example (1): */
+/*     1) See DAFFA. */
 
-/*        See DAFFA. */
+/*     2) Create a simple program to output the double precision and */
+/*        integer values stored in an SPK's segment's descriptors. This */
+/*        program opens a DAF for read, performs a forwards search for */
+/*        the DAF arrays, prints the segment description for each array */
+/*        found, then closes the DAF. */
 
-/*     Example (2): */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*     Use a simple routine to output the double precision and integer */
-/*     values stored in an SPK's segments descriptors. This function */
-/*     opens a DAF for read, performs a forwards search for the DAF */
-/*     arrays, prints segments description for each array found, then */
-/*     closes the DAF. */
-
-/*           PROGRAM DAF_T */
-
-/*           INTEGER             HANDLE */
-
-/*     C */
-/*     C     Define the summary parameters appropriate */
-/*     C     for an SPK file. */
-/*     C */
-/*           INTEGER             ND */
-/*           PARAMETER         ( ND = 2 ) */
-
-/*           INTEGER             NI */
-/*           PARAMETER         ( NI = 6 ) */
-
-/*           INTEGER             IC( NI ) */
-
-/*           DOUBLE PRECISION    DC( ND ) */
-
-/*           CHARACTER*(32)      KERNEL */
-
-/*           LOGICAL             FOUND */
+/*           de421.bsp */
 
 
-/*     C */
-/*     C     Open a DAF for read. Return a HANDLE referring to the file. */
-/*     C */
-/*           KERNEL = 'de421.bsp' */
-/*           CALL DAFOPR ( KERNEL, HANDLE ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Begin a forward search on the file. */
-/*     C */
-/*           CALL DAFBFS ( HANDLE ) */
 
-/*     C */
-/*     C     Search until a DAF array is found. */
-/*     C */
-/*           CALL DAFFNA ( FOUND ) */
+/*              PROGRAM DAFBFS_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Loop while the search finds subsequent DAF arrays. */
-/*     C */
-/*           DO WHILE ( FOUND ) */
+/*        C */
+/*        C     Define the summary parameters appropriate */
+/*        C     for an SPK file. */
+/*        C */
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM = 125 ) */
 
-/*              CALL DAFGS ( SUM ) */
-/*              CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND = 2 ) */
 
-/*              WRITE(*,*)                'Doubles: ', DC(1:ND) */
-/*              WRITE(*, FMT='(A,6I9)' ) 'Integers: ', IC(1:NI) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI = 6 ) */
 
-/*     C */
-/*     C        Check for another segment. */
-/*     C */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(32)        KERNEL */
+
+/*              DOUBLE PRECISION      DC ( ND     ) */
+/*              DOUBLE PRECISION      SUM( MAXSUM ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC( NI ) */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Open a DAF for read. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              KERNEL = 'de421.bsp' */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Begin a forward search on the file. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+
+/*        C */
+/*        C     Search until a DAF array is found. */
+/*        C */
 /*              CALL DAFFNA ( FOUND ) */
 
-/*           END DO */
+/*        C */
+/*        C     Loop while the search finds subsequent DAF arrays. */
+/*        C */
+/*              DO WHILE ( FOUND ) */
 
-/*     C */
-/*     C     Safely close the DAF. */
-/*     C */
-/*           CALL DAFCLS ( HANDLE ) */
+/*                 CALL DAFGS ( SUM ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*           END */
+/*                 WRITE(*,*)                'Doubles:', DC(1:ND) */
+/*                 WRITE(*, FMT='(A,6I9)' ) 'Integers:', IC(1:NI) */
 
-/*     The program outputs: */
+/*        C */
+/*        C        Check for another segment. */
+/*        C */
+/*                 CALL DAFFNA ( FOUND ) */
 
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         1        0        1        2      641   310404 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         2        0        1        2   310405   423048 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         3        0        1        2   423049   567372 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         4        0        1        2   567373   628976 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         5        0        1        2   628977   674740 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         6        0        1        2   674741   715224 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         7        0        1        2   715225   750428 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         8        0        1        2   750429   785632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         9        0        1        2   785633   820836 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:        10        0        1        2   820837   944040 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       301        3        1        2   944041  1521324 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       399        3        1        2  1521325  2098608 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       199        1        1        2  2098609  2098620 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       299        2        1        2  2098621  2098632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       499        4        1        2  2098633  2098644 */
+/*              END DO */
 
-/*      Note, the final entries in the integer array contains the segment */
-/*      start/end indexes. The output indicates the search proceeded */
-/*      from the start of the file (low value index) towards the end */
-/*      (high value index). */
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        1        0        1        2      641   310404 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        2        0        1        2   310405   423048 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        3        0        1        2   423049   567372 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        4        0        1        2   567373   628976 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        5        0        1        2   628977   674740 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        6        0        1        2   674741   715224 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        7        0        1        2   715225   750428 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        8        0        1        2   750429   785632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        9        0        1        2   785633   820836 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:       10        0        1        2   820837   944040 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      301        3        1        2   944041  1521324 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      399        3        1        2  1521325  2098608 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      199        1        1        2  2098609  2098620 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      299        2        1        2  2098621  2098632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      499        4        1        2  2098633  2098644 */
+
+
+/*        Note, the final entries in the integer array contains the */
+/*        segment start/end indexes. The output indicates the search */
+/*        proceeded from the start of the file (low value index) towards */
+/*        the end (high value index). */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -1987,22 +2347,31 @@ L_dafbfs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.1, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added undeclared variables to code example. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.1.0, 10-OCT-2012 (EDW) */
 
-/*        Added a functional code example to the Examples section. */
+/*        Added a functional code example to the $Examples section. */
 
 /*        Added check on value of "found" boolean returned from */
 /*        DAFGSR calls. Failure to check this value can cause an */
 /*        infinite loop during segment searches on damaged SPKs. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -2060,7 +2429,7 @@ L_dafbfs:
 	ssizei_(&c__5000, opnset);
 	for (i__ = 1; i__ <= 4999; ++i__) {
 	    stpool[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stp"
-		    "ool", i__1, "daffa_", (ftnlen)1256)] = i__ + 1;
+		    "ool", i__1, "daffa_", (ftnlen)1625)] = i__ + 1;
 	}
 	stpool[4999] = -1;
 	stfptr = 1;
@@ -2075,12 +2444,12 @@ L_dafbfs:
     fnd = FALSE_;
     while(p != -1 && ! fnd) {
 	if (stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-		i__1, "daffa_", (ftnlen)1275)] == *handle) {
+		i__1, "daffa_", (ftnlen)1644)] == *handle) {
 	    fnd = TRUE_;
 	} else {
 	    prev = p;
 	    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)1279)];
+		    "stpool", i__1, "daffa_", (ftnlen)1648)];
 	}
     }
 
@@ -2117,11 +2486,11 @@ L_dafbfs:
 /*           the predecessor of P is not NIL. */
 
 	    stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)1317)] = stpool[(i__2 = 
+		    "stpool", i__1, "daffa_", (ftnlen)1686)] = stpool[(i__2 = 
 		    p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stpool", i__2,
-		     "daffa_", (ftnlen)1317)];
+		     "daffa_", (ftnlen)1686)];
 	    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool"
-		    , i__1, "daffa_", (ftnlen)1318)] = sthead;
+		    , i__1, "daffa_", (ftnlen)1687)] = sthead;
 	    sthead = p;
 	}
     } else {
@@ -2149,14 +2518,14 @@ L_dafbfs:
 
 	    while(p != -1) {
 		if (elemi_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)1350)], opnset)
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)1719)], opnset)
 			) {
 
 /*                 The file is open. Have a look at the next node. */
 
 		    prev = p;
 		    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			    s_rnge("stpool", i__1, "daffa_", (ftnlen)1355)];
+			    s_rnge("stpool", i__1, "daffa_", (ftnlen)1724)];
 		} else {
 
 /*                 This file handle is not on the list, so free the */
@@ -2180,7 +2549,7 @@ L_dafbfs:
 
 
 		    nextp = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 :
-			     s_rnge("stpool", i__1, "daffa_", (ftnlen)1379)];
+			     s_rnge("stpool", i__1, "daffa_", (ftnlen)1748)];
 		    if (p == sthead) {
 
 /*                    Re-assign STHEAD so that we don't lose the head */
@@ -2196,11 +2565,11 @@ L_dafbfs:
 /*                    pointer of node PREV. */
 
 			stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : 
-				s_rnge("stpool", i__1, "daffa_", (ftnlen)1397)
+				s_rnge("stpool", i__1, "daffa_", (ftnlen)1766)
 				] = nextp;
 		    }
 		    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-			    "stpool", i__1, "daffa_", (ftnlen)1401)] = stfptr;
+			    "stpool", i__1, "daffa_", (ftnlen)1770)] = stfptr;
 		    stfptr = p;
 		    p = nextp;
 		}
@@ -2225,9 +2594,9 @@ L_dafbfs:
 /*        of the active list, and make P the head of the active list. */
 
 	stfptr = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stpool", i__1, "daffa_", (ftnlen)1429)];
+		"stpool", i__1, "daffa_", (ftnlen)1798)];
 	stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", 
-		i__1, "daffa_", (ftnlen)1430)] = sthead;
+		i__1, "daffa_", (ftnlen)1799)] = sthead;
 	sthead = p;
     }
 
@@ -2243,15 +2612,15 @@ L_dafbfs:
     dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
     dafgsr_(handle, &fward, &c__1, &c__128, &stsr[(i__1 = (p << 7) - 128) < 
 	    640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (
-	    ftnlen)1447)], &fnd);
+	    ftnlen)1816)], &fnd);
     if (! fnd) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)1451)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)1820)], dafnam, (ftnlen)255);
 	setmsg_("Attempt to read descriptor record # of DAF '#' failed; reco"
 		"rd was not found. This condition may indicate a corrupted DA"
 		"F.", (ftnlen)121);
 	errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("stnext", i__1, "daffa_", (ftnlen)1457)], (ftnlen)1);
+		s_rnge("stnext", i__1, "daffa_", (ftnlen)1826)], (ftnlen)1);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
 	chkout_("DAFBFS", (ftnlen)6);
@@ -2263,29 +2632,29 @@ L_dafbfs:
 /*     yet. */
 
     stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", i__1, 
-	    "daffa_", (ftnlen)1470)] = *handle;
+	    "daffa_", (ftnlen)1839)] = *handle;
     stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis", i__1, 
-	    "daffa_", (ftnlen)1471)] = fward;
+	    "daffa_", (ftnlen)1840)] = fward;
     stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext", i__1, 
-	    "daffa_", (ftnlen)1472)] = (integer) stsr[(i__2 = (p << 7) - 128) 
+	    "daffa_", (ftnlen)1841)] = (integer) stsr[(i__2 = (p << 7) - 128) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)1472)];
+	    ftnlen)1841)];
     stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev", i__1, 
-	    "daffa_", (ftnlen)1473)] = (integer) stsr[(i__2 = (p << 7) - 127) 
+	    "daffa_", (ftnlen)1842)] = (integer) stsr[(i__2 = (p << 7) - 127) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)1473)];
+	    ftnlen)1842)];
     stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg", i__1, 
-	    "daffa_", (ftnlen)1474)] = (integer) stsr[(i__2 = (p << 7) - 126) 
+	    "daffa_", (ftnlen)1843)] = (integer) stsr[(i__2 = (p << 7) - 126) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)1474)];
+	    ftnlen)1843)];
     sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", i__1, 
-	    "daffa_", (ftnlen)1475)] = FALSE_;
+	    "daffa_", (ftnlen)1844)] = FALSE_;
 
 /*     The arrays are returned in forward order within each summary */
 /*     record. */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)1481)] = 0;
+	    "daffa_", (ftnlen)1850)] = 0;
     chkout_("DAFBFS", (ftnlen)6);
     return 0;
 /* $Procedure DAFFNA ( DAF, find next array ) */
@@ -2334,9 +2703,9 @@ L_daffna:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     FOUND      O   True if an array was found. */
+/*     FOUND      O   .TRUE. if an array was found. */
 
 /* $ Detailed_Input */
 
@@ -2344,11 +2713,11 @@ L_daffna:
 
 /* $ Detailed_Output */
 
-/*     FOUND       is true if an array was found, and is false if, */
-/*                 when this routine is called, the current array is */
-/*                 the tail of the array list. (Recall that the */
-/*                 arrays in a DAF may be viewed as a doubly linked */
-/*                 list, with the tail being the last array in the file.) */
+/*     FOUND    is .TRUE. if an array was found, and is .FALSE. if, */
+/*              when this routine is called, the current array is */
+/*              the tail of the array list. (Recall that the */
+/*              arrays in a DAF may be viewed as a doubly linked */
+/*              list, with the tail being the last array in the file.) */
 
 /* $ Parameters */
 
@@ -2359,14 +2728,15 @@ L_daffna:
 /*     1)  If this routine is called before a search is begun, the */
 /*         error SPICE(DAFNOSEARCH) is signaled. */
 
-/*     2)  If the DAF to be searched has actually been closed, the error */
-/*         will be diagnosed by routines called by this routine. */
+/*     2)  If the DAF to be searched has actually been closed, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /*     3)  If the end of the array list has already been reached when */
 /*         this routine is called, this routine has no effect. */
 
-/*     4)  If DAFBSR retuns with the read success flag as false, a */
-/*         SPICE(RECORDNOTFOUND) error signals. */
+/*     4)  If the summary record of the next array (aka "segment") in */
+/*         the DAF file cannot be read, the error SPICE(RECORDNOTFOUND) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -2378,123 +2748,156 @@ L_daffna:
 
 /* $ Examples */
 
-/*     Example (1): */
+/*     1) See DAFFA. */
 
-/*        See DAFFA. */
+/*     2) Use a simple routine to output the double precision and */
+/*        integer values stored in an SPK's segment's descriptors. This */
+/*        function opens a DAF for read, performs a forwards search for */
+/*        the DAF arrays, prints the segment descriptor for each array */
+/*        found, then closes the DAF. */
 
-/*     Example (2): */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*     Use a simple routine to output the double precision and integer */
-/*     values stored in an SPK's segments descriptors. This function */
-/*     opens a DAF for read, performs a forwards search for the DAF */
-/*     arrays, prints segments description for each array found, then */
-/*     closes the DAF. */
-
-/*           PROGRAM DAF_T */
-
-/*           INTEGER             HANDLE */
-
-/*     C */
-/*     C     Define the summary parameters appropriate */
-/*     C     for an SPK file. */
-/*     C */
-/*           INTEGER             ND */
-/*           PARAMETER         ( ND = 2 ) */
-
-/*           INTEGER             NI */
-/*           PARAMETER         ( NI = 6 ) */
-
-/*           INTEGER             IC( NI ) */
-
-/*           DOUBLE PRECISION    DC( ND ) */
-
-/*           CHARACTER*(32)      KERNEL */
-
-/*           LOGICAL             FOUND */
+/*           de421.bsp */
 
 
-/*     C */
-/*     C     Open a DAF for read. Return a HANDLE referring to the file. */
-/*     C */
-/*           KERNEL = 'de421.bsp' */
-/*           CALL DAFOPR ( KERNEL, HANDLE ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Begin a forward search on the file. */
-/*     C */
-/*           CALL DAFBFS ( HANDLE ) */
 
-/*     C */
-/*     C     Search until a DAF array is found. */
-/*     C */
-/*           CALL DAFFNA ( FOUND ) */
+/*              PROGRAM DAFFNA_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Loop while the search finds subsequent DAF arrays. */
-/*     C */
-/*           DO WHILE ( FOUND ) */
+/*        C */
+/*        C     Define the summary parameters appropriate */
+/*        C     for an SPK file. */
+/*        C */
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM = 125 ) */
 
-/*              CALL DAFGS ( SUM ) */
-/*              CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND = 2 ) */
 
-/*              WRITE(*,*)                'Doubles: ', DC(1:ND) */
-/*              WRITE(*, FMT='(A,6I9)' ) 'Integers: ', IC(1:NI) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI = 6 ) */
 
-/*     C */
-/*     C        Check for another segment. */
-/*     C */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(32)        KERNEL */
+
+/*              DOUBLE PRECISION      DC ( ND     ) */
+/*              DOUBLE PRECISION      SUM( MAXSUM ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC( NI ) */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Open a DAF for read. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              KERNEL = 'de421.bsp' */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Begin a forward search on the file. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+
+/*        C */
+/*        C     Search until a DAF array is found. */
+/*        C */
 /*              CALL DAFFNA ( FOUND ) */
 
-/*           END DO */
+/*        C */
+/*        C     Loop while the search finds subsequent DAF arrays. */
+/*        C */
+/*              DO WHILE ( FOUND ) */
 
-/*     C */
-/*     C     Safely close the DAF. */
-/*     C */
-/*           CALL DAFCLS ( HANDLE ) */
+/*                 CALL DAFGS ( SUM ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*           END */
+/*                 WRITE(*,*)                'Doubles:', DC(1:ND) */
+/*                 WRITE(*, FMT='(A,6I9)' ) 'Integers:', IC(1:NI) */
 
-/*     The program outputs: */
+/*        C */
+/*        C        Check for another segment. */
+/*        C */
+/*                 CALL DAFFNA ( FOUND ) */
 
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         1        0        1        2      641   310404 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         2        0        1        2   310405   423048 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         3        0        1        2   423049   567372 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         4        0        1        2   567373   628976 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         5        0        1        2   628977   674740 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         6        0        1        2   674741   715224 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         7        0        1        2   715225   750428 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         8        0        1        2   750429   785632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         9        0        1        2   785633   820836 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:        10        0        1        2   820837   944040 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       301        3        1        2   944041  1521324 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       399        3        1        2  1521325  2098608 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       199        1        1        2  2098609  2098620 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       299        2        1        2  2098621  2098632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       499        4        1        2  2098633  2098644 */
+/*              END DO */
 
-/*      Note, the final entries in the integer array contains the segment */
-/*      start/end indexes. The output indicates the search proceeded */
-/*      from the start of the file (low value index) towards the end */
-/*      (high value index). */
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        1        0        1        2      641   310404 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        2        0        1        2   310405   423048 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        3        0        1        2   423049   567372 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        4        0        1        2   567373   628976 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        5        0        1        2   628977   674740 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        6        0        1        2   674741   715224 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        7        0        1        2   715225   750428 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        8        0        1        2   750429   785632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        9        0        1        2   785633   820836 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:       10        0        1        2   820837   944040 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      301        3        1        2   944041  1521324 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      399        3        1        2  1521325  2098608 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      199        1        1        2  2098609  2098620 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      299        2        1        2  2098621  2098632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      499        4        1        2  2098633  2098644 */
+
+
+/*        Note, the final entries in the integer array contains the */
+/*        segment start/end indexes. The output indicates the search */
+/*        proceeded from the start of the file (low value index) towards */
+/*        the end (high value index). */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -2502,22 +2905,31 @@ L_daffna:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.1, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added undeclared variables to code example. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.1.0, 10-OCT-2012 (EDW) */
 
-/*        Added a functional code example to the Examples section. */
+/*        Added a functional code example to the $Examples section. */
 
 /*        Added check on value of "found" boolean returned from */
 /*        DAFGSR calls. Failure to check this value can cause an */
 /*        infinite loop during segment searches on damaged SPKs. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -2577,7 +2989,7 @@ L_daffna:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)1788)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)2201)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFFNA", (ftnlen)6);
 	    return 0;
@@ -2597,14 +3009,14 @@ L_daffna:
 /*     no more arrays to be found.) */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)1814)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)1814)] + 1;
+	    "daffa_", (ftnlen)2227)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)2227)] + 1;
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)1816)] > stnseg[(i__2 = p - 1) < 5000 && 
-	    0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)1816)]
+	    i__1, "daffa_", (ftnlen)2229)] > stnseg[(i__2 = p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)2229)]
 	    ) {
 	if (stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext"
-		, i__1, "daffa_", (ftnlen)1818)] == 0) {
+		, i__1, "daffa_", (ftnlen)2231)] == 0) {
 
 /*           There are no more arrays in the list. */
 
@@ -2616,9 +3028,9 @@ L_daffna:
 /*           the list. */
 
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)1829)] = stnseg[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)2242)] = stnseg[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daff"
-		    "a_", (ftnlen)1829)] + 1;
+		    "a_", (ftnlen)2242)] + 1;
 
 /*           The careful reader may note that we're not updating any */
 /*           of the pointers */
@@ -2633,20 +3045,20 @@ L_daffna:
 
 	} else {
 	    dafgsr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stfh", i__1, "daffa_", (ftnlen)1844)], &stnext[(i__2 = p 
+		    "stfh", i__1, "daffa_", (ftnlen)2257)], &stnext[(i__2 = p 
 		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stnext", i__2, 
-		    "daffa_", (ftnlen)1844)], &c__1, &c__128, &stsr[(i__3 = (
+		    "daffa_", (ftnlen)2257)], &c__1, &c__128, &stsr[(i__3 = (
 		    p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(
-		    "stsr", i__3, "daffa_", (ftnlen)1844)], &fnd);
+		    "stsr", i__3, "daffa_", (ftnlen)2257)], &fnd);
 	    if (! fnd) {
 		dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)1848)], dafnam,
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)2261)], dafnam,
 			 (ftnlen)255);
 		setmsg_("Attempt to read descriptor record # of DAF '#' fail"
 			"ed; record was not found. This condition may indicat"
 			"e a corrupted DAF.", (ftnlen)121);
 		errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)1854)]
+			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)2267)]
 			, (ftnlen)1);
 		errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 		sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
@@ -2659,27 +3071,27 @@ L_daffna:
 /*           the summary record, so the summary record remains valid. */
 
 	    sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr"
-		    , i__1, "daffa_", (ftnlen)1867)] = FALSE_;
+		    , i__1, "daffa_", (ftnlen)2280)] = FALSE_;
 	    stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis"
-		    , i__1, "daffa_", (ftnlen)1869)] = stnext[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)2282)] = stnext[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stnext", i__2, "daff"
-		    "a_", (ftnlen)1869)];
+		    "a_", (ftnlen)2282)];
 	    stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext"
-		    , i__1, "daffa_", (ftnlen)1870)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)2283)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 128) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)1870)];
+		    "stsr", i__2, "daffa_", (ftnlen)2283)];
 	    stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev"
-		    , i__1, "daffa_", (ftnlen)1871)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)2284)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 127) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)1871)];
+		    "stsr", i__2, "daffa_", (ftnlen)2284)];
 	    stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg"
-		    , i__1, "daffa_", (ftnlen)1872)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)2285)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 126) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)1872)];
+		    "stsr", i__2, "daffa_", (ftnlen)2285)];
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)1873)] = 1;
+		    , i__1, "daffa_", (ftnlen)2286)] = 1;
 	    *found = stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)1875)] > 0;
+		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)2288)] > 0;
 	}
     }
     chkout_("DAFFNA", (ftnlen)6);
@@ -2730,14 +3142,14 @@ L_dafbbs:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF to be searched. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a DAF on which a backward */
-/*                 search is to be conducted. */
+/*     HANDLE   is the handle of a DAF on which a backward */
+/*              search is to be conducted. */
 
 /* $ Detailed_Output */
 
@@ -2749,11 +3161,11 @@ L_dafbbs:
 
 /* $ Exceptions */
 
-/*     1)  If the input handle is invalid, the error will be diagnosed */
-/*         by routines called by this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2)  If DAFBSR retuns with the read success flag as false, a */
-/*         SPICE(RECORDNOTFOUND) error signals. */
+/*     2)  If the last summary record of the DAF file cannot be read, */
+/*         the error SPICE(RECORDNOTFOUND) is signaled. */
 
 /* $ Files */
 
@@ -2765,123 +3177,156 @@ L_dafbbs:
 
 /* $ Examples */
 
-/*     Example (1): */
+/*     1) See DAFFA. */
 
-/*        See DAFFA. */
+/*     2) Create a simple routine to output the double precision and */
+/*        integer values stored in an SPK's segment's descriptors. This */
+/*        program opens a DAF for read, performs a backward search for */
+/*        the DAF arrays, prints the segment descriptor for each array */
+/*        found, then closes the DAF. */
 
-/*     Example (2): */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*     Use a simple routine to output the double precision and integer */
-/*     values stored in an SPK's segments descriptors. This function */
-/*     opens a DAF for read, performs a backward search for the DAF */
-/*     arrays, prints segments description for each array found, then */
-/*     closes the DAF. */
-
-/*           PROGRAM DAFB_T */
-
-/*           INTEGER             HANDLE */
-
-/*     C */
-/*     C     Define the summary parameters appropriate */
-/*     C     for an SPK file. */
-/*     C */
-/*           INTEGER             ND */
-/*           PARAMETER         ( ND = 2 ) */
-
-/*           INTEGER             NI */
-/*           PARAMETER         ( NI = 6 ) */
-
-/*           INTEGER             IC( NI ) */
-
-/*           DOUBLE PRECISION    DC( ND ) */
-
-/*           CHARACTER*(32)      KERNEL */
-
-/*           LOGICAL             FOUND */
+/*           de421.bsp */
 
 
-/*     C */
-/*     C     Open a DAF for read. Return a HANDLE referring to the file. */
-/*     C */
-/*           KERNEL = 'de421.bsp' */
-/*           CALL DAFOPR ( KERNEL, HANDLE ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Begin a backward search on the file. */
-/*     C */
-/*           CALL DAFBBS ( HANDLE ) */
 
-/*     C */
-/*     C     Search until a DAF array is found. */
-/*     C */
-/*           CALL DAFFPA ( FOUND ) */
+/*              PROGRAM DAFBBS_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Loop while the search finds subsequent DAF arrays. */
-/*     C */
-/*           DO WHILE ( FOUND ) */
+/*        C */
+/*        C     Define the summary parameters appropriate */
+/*        C     for an SPK file. */
+/*        C */
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM = 125 ) */
 
-/*              CALL DAFGS ( SUM ) */
-/*              CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND = 2 ) */
 
-/*              WRITE(*,*)                'Doubles: ', DC(1:ND) */
-/*              WRITE(*, FMT='(A,6I9)' ) 'Integers: ', IC(1:NI) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI = 6 ) */
 
-/*     C */
-/*     C        Check for another segment. */
-/*     C */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(32)        KERNEL */
+
+/*              DOUBLE PRECISION      DC ( ND     ) */
+/*              DOUBLE PRECISION      SUM( MAXSUM ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC( NI ) */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Open a DAF for read. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              KERNEL = 'de421.bsp' */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Begin a backward search on the file. */
+/*        C */
+/*              CALL DAFBBS ( HANDLE ) */
+
+/*        C */
+/*        C     Search until a DAF array is found. */
+/*        C */
 /*              CALL DAFFPA ( FOUND ) */
 
-/*           END DO */
+/*        C */
+/*        C     Loop while the search finds subsequent DAF arrays. */
+/*        C */
+/*              DO WHILE ( FOUND ) */
 
-/*     C */
-/*     C     Safely close the DAF. */
-/*     C */
-/*           CALL DAFCLS ( HANDLE ) */
+/*                 CALL DAFGS ( SUM ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*           END */
+/*                 WRITE(*,*)                'Doubles:', DC(1:ND) */
+/*                 WRITE(*, FMT='(A,6I9)' ) 'Integers:', IC(1:NI) */
 
-/*     The program outputs: */
+/*        C */
+/*        C        Check for another segment. */
+/*        C */
+/*                 CALL DAFFPA ( FOUND ) */
 
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       499        4        1        2  2098633  2098644 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       299        2        1        2  2098621  2098632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       199        1        1        2  2098609  2098620 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       399        3        1        2  1521325  2098608 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       301        3        1        2   944041  1521324 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:        10        0        1        2   820837   944040 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         9        0        1        2   785633   820836 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         8        0        1        2   750429   785632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         7        0        1        2   715225   750428 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         6        0        1        2   674741   715224 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         5        0        1        2   628977   674740 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         4        0        1        2   567373   628976 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         3        0        1        2   423049   567372 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         2        0        1        2   310405   423048 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         1        0        1        2      641   310404 */
+/*              END DO */
 
-/*      Note, the final entries in the integer arrays record the segment */
-/*      start/end indexes. The output indicates the search proceeded */
-/*      from the end of the file (high value index) towards the beginning */
-/*      (low value index). */
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      499        4        1        2  2098633  2098644 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      299        2        1        2  2098621  2098632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      199        1        1        2  2098609  2098620 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      399        3        1        2  1521325  2098608 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      301        3        1        2   944041  1521324 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:       10        0        1        2   820837   944040 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        9        0        1        2   785633   820836 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        8        0        1        2   750429   785632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        7        0        1        2   715225   750428 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        6        0        1        2   674741   715224 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        5        0        1        2   628977   674740 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        4        0        1        2   567373   628976 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        3        0        1        2   423049   567372 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        2        0        1        2   310405   423048 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        1        0        1        2      641   310404 */
+
+
+/*        Note, the final entries in the integer arrays record the */
+/*        segment start/end indexes. The output indicates the search */
+/*        proceeded from the end of the file (high value index) towards */
+/*        the beginning (low value index). */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -2889,22 +3334,31 @@ L_dafbbs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 3.1.0, 10-OCT-2012 (EDW) */
+/* -    SPICELIB Version 2.1.1, 26-OCT-2021 (JDR) (NJB) */
 
-/*        Added a functional code example to the Examples section. */
+/*        Edited the header to comply with NAIF standard. */
+/*        Added undeclared variables to code example. */
+
+/*        Updated $Restrictions section. */
+
+/* -    SPICELIB Version 2.1.0, 10-OCT-2012 (EDW) */
+
+/*        Added a functional code example to the $Examples section. */
 
 /*        Added check on value of "found" boolean returned from */
 /*        DAFGSR calls. Failure to check this value can cause an */
 /*        infinite loop during segment searches on damaged SPKs. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -2962,7 +3416,7 @@ L_dafbbs:
 	ssizei_(&c__5000, opnset);
 	for (i__ = 1; i__ <= 4999; ++i__) {
 	    stpool[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stp"
-		    "ool", i__1, "daffa_", (ftnlen)2172)] = i__ + 1;
+		    "ool", i__1, "daffa_", (ftnlen)2629)] = i__ + 1;
 	}
 	stpool[4999] = -1;
 	stfptr = 1;
@@ -2977,12 +3431,12 @@ L_dafbbs:
     fnd = FALSE_;
     while(p != -1 && ! fnd) {
 	if (stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-		i__1, "daffa_", (ftnlen)2191)] == *handle) {
+		i__1, "daffa_", (ftnlen)2648)] == *handle) {
 	    fnd = TRUE_;
 	} else {
 	    prev = p;
 	    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)2195)];
+		    "stpool", i__1, "daffa_", (ftnlen)2652)];
 	}
     }
 
@@ -3019,11 +3473,11 @@ L_dafbbs:
 /*           the predecessor of P is not NIL. */
 
 	    stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)2233)] = stpool[(i__2 = 
+		    "stpool", i__1, "daffa_", (ftnlen)2690)] = stpool[(i__2 = 
 		    p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stpool", i__2,
-		     "daffa_", (ftnlen)2233)];
+		     "daffa_", (ftnlen)2690)];
 	    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool"
-		    , i__1, "daffa_", (ftnlen)2234)] = sthead;
+		    , i__1, "daffa_", (ftnlen)2691)] = sthead;
 	    sthead = p;
 	}
     } else {
@@ -3051,14 +3505,14 @@ L_dafbbs:
 
 	    while(p != -1) {
 		if (elemi_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)2266)], opnset)
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)2723)], opnset)
 			) {
 
 /*                 The file is open. Have a look at the next node. */
 
 		    prev = p;
 		    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			    s_rnge("stpool", i__1, "daffa_", (ftnlen)2271)];
+			    s_rnge("stpool", i__1, "daffa_", (ftnlen)2728)];
 		} else {
 
 /*                 This file handle is not on the list, so free the */
@@ -3082,7 +3536,7 @@ L_dafbbs:
 
 
 		    nextp = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 :
-			     s_rnge("stpool", i__1, "daffa_", (ftnlen)2295)];
+			     s_rnge("stpool", i__1, "daffa_", (ftnlen)2752)];
 		    if (p == sthead) {
 
 /*                    Re-assign STHEAD so that we don't lose the head */
@@ -3098,11 +3552,11 @@ L_dafbbs:
 /*                    pointer of node PREV. */
 
 			stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : 
-				s_rnge("stpool", i__1, "daffa_", (ftnlen)2313)
+				s_rnge("stpool", i__1, "daffa_", (ftnlen)2770)
 				] = nextp;
 		    }
 		    stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-			    "stpool", i__1, "daffa_", (ftnlen)2318)] = stfptr;
+			    "stpool", i__1, "daffa_", (ftnlen)2775)] = stfptr;
 		    stfptr = p;
 		    p = nextp;
 		}
@@ -3127,9 +3581,9 @@ L_dafbbs:
 /*        of the active list, and make P the head of the active list. */
 
 	stfptr = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stpool", i__1, "daffa_", (ftnlen)2345)];
+		"stpool", i__1, "daffa_", (ftnlen)2802)];
 	stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", 
-		i__1, "daffa_", (ftnlen)2346)] = sthead;
+		i__1, "daffa_", (ftnlen)2803)] = sthead;
 	sthead = p;
     }
 
@@ -3145,45 +3599,45 @@ L_dafbbs:
     dafrfr_(handle, &nd, &ni, ifname, &fward, &bward, &free, (ftnlen)60);
     dafgsr_(handle, &bward, &c__1, &c__128, &stsr[(i__1 = (p << 7) - 128) < 
 	    640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (
-	    ftnlen)2363)], &fnd);
+	    ftnlen)2820)], &fnd);
     if (! fnd) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)2367)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)2824)], dafnam, (ftnlen)255);
 	setmsg_("Attempt to read descriptor record # of DAF '#' failed; reco"
 		"rd was not found. This condition may indicate a corrupted DA"
 		"F.", (ftnlen)121);
 	errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("stnext", i__1, "daffa_", (ftnlen)2373)], (ftnlen)1);
+		s_rnge("stnext", i__1, "daffa_", (ftnlen)2830)], (ftnlen)1);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 	sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
 	chkout_("DAFBBS", (ftnlen)6);
 	return 0;
     }
     stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", i__1, 
-	    "daffa_", (ftnlen)2381)] = *handle;
+	    "daffa_", (ftnlen)2838)] = *handle;
     stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis", i__1, 
-	    "daffa_", (ftnlen)2382)] = bward;
+	    "daffa_", (ftnlen)2839)] = bward;
     stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext", i__1, 
-	    "daffa_", (ftnlen)2383)] = (integer) stsr[(i__2 = (p << 7) - 128) 
+	    "daffa_", (ftnlen)2840)] = (integer) stsr[(i__2 = (p << 7) - 128) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)2383)];
+	    ftnlen)2840)];
     stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev", i__1, 
-	    "daffa_", (ftnlen)2384)] = (integer) stsr[(i__2 = (p << 7) - 127) 
+	    "daffa_", (ftnlen)2841)] = (integer) stsr[(i__2 = (p << 7) - 127) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)2384)];
+	    ftnlen)2841)];
     stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg", i__1, 
-	    "daffa_", (ftnlen)2385)] = (integer) stsr[(i__2 = (p << 7) - 126) 
+	    "daffa_", (ftnlen)2842)] = (integer) stsr[(i__2 = (p << 7) - 126) 
 	    < 640000 && 0 <= i__2 ? i__2 : s_rnge("stsr", i__2, "daffa_", (
-	    ftnlen)2385)];
+	    ftnlen)2842)];
     sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", i__1, 
-	    "daffa_", (ftnlen)2386)] = FALSE_;
+	    "daffa_", (ftnlen)2843)] = FALSE_;
 
 /*     The arrays are returned in backward order from each summary */
 /*     record. */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)2392)] = stnseg[(i__2 = p - 1) < 5000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)2392)] + 1;
+	    "daffa_", (ftnlen)2849)] = stnseg[(i__2 = p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (ftnlen)2849)] + 1;
     chkout_("DAFBBS", (ftnlen)6);
     return 0;
 /* $Procedure DAFFPA ( DAF, find previous array ) */
@@ -3232,9 +3686,9 @@ L_daffpa:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     FOUND      O   True if an array was found. */
+/*     FOUND      O   .TRUE. if an array was found. */
 
 /* $ Detailed_Input */
 
@@ -3242,12 +3696,12 @@ L_daffpa:
 
 /* $ Detailed_Output */
 
-/*     FOUND       is true if an array was found, and is false if, */
-/*                 when this routine is called, the current array is */
-/*                 the head of the array list. (Recall that the */
-/*                 arrays in a DAF may be viewed as a doubly linked */
-/*                 list, with the head being the first array in the */
-/*                 file.) */
+/*     FOUND    is .TRUE. if an array was found, and is .FALSE. if, */
+/*              when this routine is called, the current array is */
+/*              the head of the array list. (Recall that the */
+/*              arrays in a DAF may be viewed as a doubly linked */
+/*              list, with the head being the first array in the */
+/*              file.) */
 
 /* $ Parameters */
 
@@ -3255,18 +3709,19 @@ L_daffpa:
 
 /* $ Exceptions */
 
-/*     1) If this routine is called before a search is begun, the */
-/*        error SPICE(DAFNOSEARCH) is signaled. */
+/*     1)  If this routine is called before a search is begun, the */
+/*         error SPICE(DAFNOSEARCH) is signaled. */
 
-/*     2) If the DAF to be searched has actually been closed, the error */
-/*        will be diagnosed by routines called by this routine. */
+/*     2)  If the DAF to be searched has actually been closed, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     3) If the beginning of the array list has already been reached */
-/*        when this routine is called, this routine will not change the */
-/*        current array. FOUND will be false on output. */
+/*     3)  If the beginning of the array list has already been reached */
+/*         when this routine is called, this routine will not change the */
+/*         current array. FOUND will be false on output. */
 
-/*     4) If DAFBSR retuns with the read success flag as false, a */
-/*        SPICE(RECORDNOTFOUND) error signals. */
+/*     4)  If the summary record of the previous array (aka "segment") */
+/*         in the DAF file cannot be read, the error */
+/*         SPICE(RECORDNOTFOUND) is signaled. */
 
 /* $ Files */
 
@@ -3278,123 +3733,156 @@ L_daffpa:
 
 /* $ Examples */
 
-/*     Example (1): */
+/*     1) See DAFFA. */
 
-/*        See DAFFA. */
+/*     2) Use a simple routine to output the double precision and */
+/*        integer values stored in an SPK's segment's descriptors. This */
+/*        function opens a DAF for read, performs a backward search for */
+/*        the DAF arrays, prints the segment descriptor for each array */
+/*        found, then closes the DAF. */
 
-/*     Example (2): */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*     Use a simple routine to output the double precision and integer */
-/*     values stored in an SPK's segments descriptors. This function */
-/*     opens a DAF for read, performs a backward search for the DAF */
-/*     arrays, prints segments description for each array found, then */
-/*     closes the DAF. */
-
-/*           PROGRAM DAFB_T */
-
-/*           INTEGER             HANDLE */
-
-/*     C */
-/*     C     Define the summary parameters appropriate */
-/*     C     for an SPK file. */
-/*     C */
-/*           INTEGER             ND */
-/*           PARAMETER         ( ND = 2 ) */
-
-/*           INTEGER             NI */
-/*           PARAMETER         ( NI = 6 ) */
-
-/*           INTEGER             IC( NI ) */
-
-/*           DOUBLE PRECISION    DC( ND ) */
-
-/*           CHARACTER*(32)      KERNEL */
-
-/*           LOGICAL             FOUND */
+/*           de421.bsp */
 
 
-/*     C */
-/*     C     Open a DAF for read. Return a HANDLE referring to the file. */
-/*     C */
-/*           KERNEL = 'de421.bsp' */
-/*           CALL DAFOPR ( KERNEL, HANDLE ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Begin a backward search on the file. */
-/*     C */
-/*           CALL DAFBBS ( HANDLE ) */
 
-/*     C */
-/*     C     Search until a DAF array is found. */
-/*     C */
-/*           CALL DAFFPA ( FOUND ) */
+/*              PROGRAM DAFFPA_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Loop while the search finds subsequent DAF arrays. */
-/*     C */
-/*           DO WHILE ( FOUND ) */
+/*        C */
+/*        C     Define the summary parameters appropriate */
+/*        C     for an SPK file. */
+/*        C */
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM = 125 ) */
 
-/*              CALL DAFGS ( SUM ) */
-/*              CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND = 2 ) */
 
-/*              WRITE(*,*)                'Doubles: ', DC(1:ND) */
-/*              WRITE(*, FMT='(A,6I9)' ) 'Integers: ', IC(1:NI) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI = 6 ) */
 
-/*     C */
-/*     C        Check for another segment. */
-/*     C */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(32)        KERNEL */
+
+/*              DOUBLE PRECISION      DC ( ND     ) */
+/*              DOUBLE PRECISION      SUM( MAXSUM ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC( NI ) */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Open a DAF for read. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              KERNEL = 'de421.bsp' */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Begin a backward search on the file. */
+/*        C */
+/*              CALL DAFBBS ( HANDLE ) */
+
+/*        C */
+/*        C     Search until a DAF array is found. */
+/*        C */
 /*              CALL DAFFPA ( FOUND ) */
 
-/*           END DO */
+/*        C */
+/*        C     Loop while the search finds subsequent DAF arrays. */
+/*        C */
+/*              DO WHILE ( FOUND ) */
 
-/*     C */
-/*     C     Safely close the DAF. */
-/*     C */
-/*           CALL DAFCLS ( HANDLE ) */
+/*                 CALL DAFGS ( SUM ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*           END */
+/*                 WRITE(*,*)                'Doubles:', DC(1:ND) */
+/*                 WRITE(*, FMT='(A,6I9)' ) 'Integers:', IC(1:NI) */
 
-/*     The program outputs: */
+/*        C */
+/*        C        Check for another segment. */
+/*        C */
+/*                 CALL DAFFPA ( FOUND ) */
 
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       499        4        1        2  2098633  2098644 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       299        2        1        2  2098621  2098632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       199        1        1        2  2098609  2098620 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       399        3        1        2  1521325  2098608 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       301        3        1        2   944041  1521324 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:        10        0        1        2   820837   944040 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         9        0        1        2   785633   820836 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         8        0        1        2   750429   785632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         7        0        1        2   715225   750428 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         6        0        1        2   674741   715224 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         5        0        1        2   628977   674740 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         4        0        1        2   567373   628976 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         3        0        1        2   423049   567372 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         2        0        1        2   310405   423048 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         1        0        1        2      641   310404 */
+/*              END DO */
 
-/*      Note, the final entries in the integer arrays record the segment */
-/*      start/end indexes. The output indicates the search proceeded */
-/*      from the end of the file (high value index) towards the beginning */
-/*      (low value index). */
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      499        4        1        2  2098633  2098644 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      299        2        1        2  2098621  2098632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      199        1        1        2  2098609  2098620 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      399        3        1        2  1521325  2098608 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      301        3        1        2   944041  1521324 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:       10        0        1        2   820837   944040 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        9        0        1        2   785633   820836 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        8        0        1        2   750429   785632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        7        0        1        2   715225   750428 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        6        0        1        2   674741   715224 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        5        0        1        2   628977   674740 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        4        0        1        2   567373   628976 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        3        0        1        2   423049   567372 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        2        0        1        2   310405   423048 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        1        0        1        2      641   310404 */
+
+
+/*        Note, the final entries in the integer arrays record the */
+/*        segment start/end indexes. The output indicates the search */
+/*        proceeded from the end of the file (high value index) towards */
+/*        the beginning (low value index). */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -3402,22 +3890,31 @@ L_daffpa:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.1.1, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added undeclared variables to code example. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.1.0, 10-OCT-2012 (EDW) */
 
-/*        Added a functional code example to the Examples section. */
+/*        Added a functional code example to the $Examples section. */
 
 /*        Added check on value of "found" boolean returned from */
 /*        DAFGSR calls. Failure to check this value can cause an */
 /*        infinite loop during segment searches on damaged SPKs. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -3437,7 +3934,7 @@ L_daffpa:
 /*        its associated set of pointers. */
 
 /*        Also, a bug fix was made to the array pointer adjustment */
-/*        algorithm:  the pointer is no longer decremented if it */
+/*        algorithm: the pointer is no longer decremented if it */
 /*        is already less than 1 and the array summary pointer */
 /*        is already pointing to the first array summary. In */
 /*        addition, a test made to detect this condition was fixed: */
@@ -3490,7 +3987,7 @@ L_daffpa:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)2714)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)3215)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFFPA", (ftnlen)6);
 	    return 0;
@@ -3510,12 +4007,12 @@ L_daffpa:
 /*     no more arrays to be found.) */
 
     stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", i__1, 
-	    "daffa_", (ftnlen)2737)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
-	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)2737)] - 1;
+	    "daffa_", (ftnlen)3238)] = stcurr[(i__2 = p - 1) < 5000 && 0 <= 
+	    i__2 ? i__2 : s_rnge("stcurr", i__2, "daffa_", (ftnlen)3238)] - 1;
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)2739)] <= 0) {
+	    i__1, "daffa_", (ftnlen)3240)] <= 0) {
 	if (stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev"
-		, i__1, "daffa_", (ftnlen)2741)] == 0) {
+		, i__1, "daffa_", (ftnlen)3242)] == 0) {
 
 /*           There is no predecessor of the current array in the list. */
 
@@ -3527,7 +4024,7 @@ L_daffpa:
 /*           the list. */
 
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)2752)] = 0;
+		    , i__1, "daffa_", (ftnlen)3253)] = 0;
 
 /*           The careful reader may note that we're not updating any */
 /*           of the pointers */
@@ -3542,20 +4039,20 @@ L_daffpa:
 
 	} else {
 	    dafgsr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stfh", i__1, "daffa_", (ftnlen)2767)], &stprev[(i__2 = p 
+		    "stfh", i__1, "daffa_", (ftnlen)3268)], &stprev[(i__2 = p 
 		    - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stprev", i__2, 
-		    "daffa_", (ftnlen)2767)], &c__1, &c__128, &stsr[(i__3 = (
+		    "daffa_", (ftnlen)3268)], &c__1, &c__128, &stsr[(i__3 = (
 		    p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : s_rnge(
-		    "stsr", i__3, "daffa_", (ftnlen)2767)], &fnd);
+		    "stsr", i__3, "daffa_", (ftnlen)3268)], &fnd);
 	    if (! fnd) {
 		dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-			s_rnge("stfh", i__1, "daffa_", (ftnlen)2771)], dafnam,
+			s_rnge("stfh", i__1, "daffa_", (ftnlen)3272)], dafnam,
 			 (ftnlen)255);
 		setmsg_("Attempt to read descriptor record # of DAF '#' fail"
 			"ed; record was not found. This condition may indicat"
 			"e a corrupted DAF.", (ftnlen)121);
 		errint_("#", &stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)2777)]
+			i__1 : s_rnge("stnext", i__1, "daffa_", (ftnlen)3278)]
 			, (ftnlen)1);
 		errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
 		sigerr_("SPICE(RECORDNOTFOUND)", (ftnlen)21);
@@ -3568,29 +4065,29 @@ L_daffpa:
 /*           the summary record, so the summary record remains valid. */
 
 	    sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr"
-		    , i__1, "daffa_", (ftnlen)2790)] = FALSE_;
+		    , i__1, "daffa_", (ftnlen)3291)] = FALSE_;
 	    stthis[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stthis"
-		    , i__1, "daffa_", (ftnlen)2792)] = stprev[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)3293)] = stprev[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stprev", i__2, "daff"
-		    "a_", (ftnlen)2792)];
+		    "a_", (ftnlen)3293)];
 	    stnext[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnext"
-		    , i__1, "daffa_", (ftnlen)2793)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)3294)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 128) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)2793)];
+		    "stsr", i__2, "daffa_", (ftnlen)3294)];
 	    stprev[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stprev"
-		    , i__1, "daffa_", (ftnlen)2794)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)3295)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 127) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)2794)];
+		    "stsr", i__2, "daffa_", (ftnlen)3295)];
 	    stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnseg"
-		    , i__1, "daffa_", (ftnlen)2795)] = (integer) stsr[(i__2 = 
+		    , i__1, "daffa_", (ftnlen)3296)] = (integer) stsr[(i__2 = 
 		    (p << 7) - 126) < 640000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "stsr", i__2, "daffa_", (ftnlen)2795)];
+		    "stsr", i__2, "daffa_", (ftnlen)3296)];
 	    stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr"
-		    , i__1, "daffa_", (ftnlen)2796)] = stnseg[(i__2 = p - 1) <
+		    , i__1, "daffa_", (ftnlen)3297)] = stnseg[(i__2 = p - 1) <
 		     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daff"
-		    "a_", (ftnlen)2796)];
+		    "a_", (ftnlen)3297)];
 	    *found = stnseg[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)2798)] > 0;
+		    s_rnge("stnseg", i__1, "daffa_", (ftnlen)3299)] > 0;
 	}
     }
     chkout_("DAFFPA", (ftnlen)6);
@@ -3642,7 +4139,7 @@ L_dafgs:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SUM        O   Summary for current array. */
 
@@ -3652,8 +4149,8 @@ L_dafgs:
 
 /* $ Detailed_Output */
 
-/*     SUM         is the summary for the current array (the array */
-/*                 found by the latest call to DAFFNA or DAFFPA). */
+/*     SUM      is the summary for the current array (the array */
+/*              found by the latest call to DAFFNA or DAFFPA). */
 
 /* $ Parameters */
 
@@ -3664,16 +4161,15 @@ L_dafgs:
 /*     1)  If this routine is called when no search is in progress in the */
 /*         the current DAF, the error SPICE(DAFNOSEARCH) is signaled. */
 
-/*     2)  If the DAF for which the `current' array's summary is to be */
-/*         returned has actually been closed, the error will be diagnosed */
-/*         by routines called by this routine. */
+/*     2)  If the DAF for which the "current" array's summary is to be */
+/*         returned has actually been closed, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     3)  If no array is current in the current DAF, the error */
-/*         SPICE(NOCURRENTARRAY) is signaled. There is no current */
-/*         array when a search is started by DAFBFS or DAFBBS, but no */
-/*         calls to DAFFNA or DAFBNA have been made yet, or whenever */
-/*         DAFFNA or DAFFPA return the value .FALSE. in the FOUND */
-/*         argument. */
+/*         SPICE(NOCURRENTARRAY) is signaled. There is no current array */
+/*         when a search is started by DAFBFS or DAFBBS, but no calls to */
+/*         DAFFNA or DAFFPA have been made yet, or whenever DAFFNA or */
+/*         DAFFPA return the value .FALSE. in the FOUND argument. */
 
 /* $ Files */
 
@@ -3685,123 +4181,156 @@ L_dafgs:
 
 /* $ Examples */
 
-/*     Example (1): */
+/*     1) See $Examples in DAFFA. */
 
-/*        See DAFFA. */
+/*     2) Use a simple routine to output the double precision and */
+/*        integer values stored in an SPK's segment's descriptors. This */
+/*        function opens a DAF for read, performs a forwards search for */
+/*        the DAF arrays, prints the segment descriptor for each array */
+/*        found, then closes the DAF. */
 
-/*     Example (2): */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*     Use a simple routine to output the double precision and integer */
-/*     values stored in an SPK's segments descriptors. This function */
-/*     opens a DAF for read, performs a forwards search for the DAF */
-/*     arrays, prints segments description for each array found, then */
-/*     closes the DAF. */
-
-/*           PROGRAM DAF_T */
-
-/*           INTEGER             HANDLE */
-
-/*     C */
-/*     C     Define the summary parameters appropriate */
-/*     C     for an SPK file. */
-/*     C */
-/*           INTEGER             ND */
-/*           PARAMETER         ( ND = 2 ) */
-
-/*           INTEGER             NI */
-/*           PARAMETER         ( NI = 6 ) */
-
-/*           INTEGER             IC( NI ) */
-
-/*           DOUBLE PRECISION    DC( ND ) */
-
-/*           CHARACTER*(32)      KERNEL */
-
-/*           LOGICAL             FOUND */
+/*           de421.bsp */
 
 
-/*     C */
-/*     C     Open a DAF for read. Return a HANDLE referring to the file. */
-/*     C */
-/*           KERNEL = 'de421.bsp' */
-/*           CALL DAFOPR ( KERNEL, HANDLE ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Begin a forward search on the file. */
-/*     C */
-/*           CALL DAFBFS ( HANDLE ) */
 
-/*     C */
-/*     C     Search until a DAF array is found. */
-/*     C */
-/*           CALL DAFFNA ( FOUND ) */
+/*              PROGRAM DAFGS_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Loop while the search finds subsequent DAF arrays. */
-/*     C */
-/*           DO WHILE ( FOUND ) */
+/*        C */
+/*        C     Define the summary parameters appropriate */
+/*        C     for an SPK file. */
+/*        C */
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM = 125 ) */
 
-/*              CALL DAFGS ( SUM ) */
-/*              CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND = 2 ) */
 
-/*              WRITE(*,*)                'Doubles: ', DC(1:ND) */
-/*              WRITE(*, FMT='(A,6I9)' ) 'Integers: ', IC(1:NI) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI = 6 ) */
 
-/*     C */
-/*     C        Check for another segment. */
-/*     C */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(32)        KERNEL */
+
+/*              DOUBLE PRECISION      DC ( ND     ) */
+/*              DOUBLE PRECISION      SUM( MAXSUM ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC( NI ) */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Open a DAF for read. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              KERNEL = 'de421.bsp' */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Begin a forward search on the file. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+
+/*        C */
+/*        C     Search until a DAF array is found. */
+/*        C */
 /*              CALL DAFFNA ( FOUND ) */
 
-/*           END DO */
+/*        C */
+/*        C     Loop while the search finds subsequent DAF arrays. */
+/*        C */
+/*              DO WHILE ( FOUND ) */
 
-/*     C */
-/*     C     Safely close the DAF. */
-/*     C */
-/*           CALL DAFCLS ( HANDLE ) */
+/*                 CALL DAFGS ( SUM ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*           END */
+/*                 WRITE(*,*)                'Doubles:', DC(1:ND) */
+/*                 WRITE(*, FMT='(A,6I9)' ) 'Integers:', IC(1:NI) */
 
-/*     The program outputs: */
+/*        C */
+/*        C        Check for another segment. */
+/*        C */
+/*                 CALL DAFFNA ( FOUND ) */
 
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         1        0        1        2      641   310404 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         2        0        1        2   310405   423048 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         3        0        1        2   423049   567372 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         4        0        1        2   567373   628976 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         5        0        1        2   628977   674740 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         6        0        1        2   674741   715224 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         7        0        1        2   715225   750428 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         8        0        1        2   750429   785632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         9        0        1        2   785633   820836 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:        10        0        1        2   820837   944040 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       301        3        1        2   944041  1521324 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       399        3        1        2  1521325  2098608 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       199        1        1        2  2098609  2098620 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       299        2        1        2  2098621  2098632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       499        4        1        2  2098633  2098644 */
+/*              END DO */
 
-/*      Note, the final entries in the integer array contains the segment */
-/*      start/end indexes. The output indicates the search proceeded */
-/*      from the start of the file (low value index) towards the end */
-/*      (high value index). */
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        1        0        1        2      641   310404 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        2        0        1        2   310405   423048 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        3        0        1        2   423049   567372 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        4        0        1        2   567373   628976 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        5        0        1        2   628977   674740 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        6        0        1        2   674741   715224 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        7        0        1        2   715225   750428 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        8        0        1        2   750429   785632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        9        0        1        2   785633   820836 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:       10        0        1        2   820837   944040 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      301        3        1        2   944041  1521324 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      399        3        1        2  1521325  2098608 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      199        1        1        2  2098609  2098620 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      299        2        1        2  2098621  2098632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      499        4        1        2  2098633  2098644 */
+
+
+/*        Note, the final entries in the integer array contains the */
+/*        segment start/end indexes. The output indicates the search */
+/*        proceeded from the start of the file (low value index) towards */
+/*        the end (high value index). */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -3809,18 +4338,30 @@ L_dafgs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.3, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added undeclared variables to code example. */
+
+/*        Fixed typo in $Exceptions entry #3: DAFFPA is used to find the */
+/*        previous array, not the non existing API DAFBNA. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.0.2, 10-OCT-2012 (EDW) */
 
-/*        Added a functional code example to the Examples section. */
+/*        Added a functional code example to the $Examples section. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -3881,7 +4422,7 @@ L_dafgs:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3104)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)3650)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFGS", (ftnlen)5);
 	    return 0;
@@ -3895,9 +4436,9 @@ L_dafgs:
 /*     current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)3120)] == 0) {
+	    i__1, "daffa_", (ftnlen)3666)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3122)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3668)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -3905,11 +4446,11 @@ L_dafgs:
 	chkout_("DAFGS", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)3131)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)3677)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)3131)]) {
+	    ftnlen)3677)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3133)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3679)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -3922,12 +4463,12 @@ L_dafgs:
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3148)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)3694)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)3152)] - 1) * sumsiz + 3;
+	    "urr", i__1, "daffa_", (ftnlen)3698)] - 1) * sumsiz + 3;
     moved_(&stsr[(i__1 = offset + 1 + (p << 7) - 129) < 640000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3154)], &sumsiz, 
+	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3700)], &sumsiz, 
 	    sum);
     chkout_("DAFGS", (ftnlen)5);
     return 0;
@@ -3977,7 +4518,7 @@ L_dafgn:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       O   Name of current array. */
 
@@ -3987,8 +4528,8 @@ L_dafgn:
 
 /* $ Detailed_Output */
 
-/*     NAME        is the name for the current array (the array */
-/*                 found by the latest call to DAFFNA or DAFFPA). */
+/*     NAME     is the name for the current array (the array found by the */
+/*              latest call to DAFFNA or DAFFPA). */
 
 /* $ Parameters */
 
@@ -3999,16 +4540,15 @@ L_dafgn:
 /*     1)  If this routine is called when no search is in progress in the */
 /*         the current DAF, the error SPICE(DAFNOSEARCH) is signaled. */
 
-/*     2)  If the DAF for which the `current' array's name is to be */
-/*         returned has actually been closed, the error will be diagnosed */
-/*         by routines called by this routine. */
+/*     2)  If the DAF for which the "current" array's name is to be */
+/*         returned has actually been closed, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     3)  If no array is current in the current DAF, the error */
-/*         SPICE(NOCURRENTARRAY) is signaled. There is no current */
-/*         array when a search is started by DAFBFS or DAFBBS, but no */
-/*         calls to DAFFNA or DAFBNA have been made yet, or whenever */
-/*         DAFFNA or DAFFPA return the value .FALSE. in the FOUND */
-/*         argument. */
+/*         SPICE(NOCURRENTARRAY) is signaled. There is no current array */
+/*         when a search is started by DAFBFS or DAFBBS, but no calls to */
+/*         DAFFNA or DAFFPA have been made yet, or whenever DAFFNA or */
+/*         DAFFPA return the value .FALSE. in the FOUND argument. */
 
 /* $ Files */
 
@@ -4020,11 +4560,28 @@ L_dafgn:
 
 /* $ Examples */
 
-/*     See DAFFA. */
+/*     See $Examples in DAFFA. */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -4032,16 +4589,27 @@ L_dafgn:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.3, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Fixed typo in $Exceptions entry #3: DAFFPA is used to find the */
+/*        previous array, not the non existing API DAFBNA. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.0.2, 18-AUG-2011 (EDW) */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -4102,7 +4670,7 @@ L_dafgn:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3342)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)3916)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFGN", (ftnlen)5);
 	    return 0;
@@ -4116,9 +4684,9 @@ L_dafgn:
 /*     called when the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)3358)] == 0) {
+	    i__1, "daffa_", (ftnlen)3932)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3360)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3934)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4126,11 +4694,11 @@ L_dafgn:
 	chkout_("DAFGN", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)3369)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)3943)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)3369)]) {
+	    ftnlen)3943)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3371)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)3945)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4143,29 +4711,29 @@ L_dafgn:
 /*     already. */
 
     if (! sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-	    i__1, "daffa_", (ftnlen)3387)]) {
+	    i__1, "daffa_", (ftnlen)3961)]) {
 	i__4 = stthis[(i__2 = p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"stthis", i__2, "daffa_", (ftnlen)3389)] + 1;
+		"stthis", i__2, "daffa_", (ftnlen)3963)] + 1;
 	dafrcr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3389)], &i__4, stnr + ((i__3 =
+		"stfh", i__1, "daffa_", (ftnlen)3963)], &i__4, stnr + ((i__3 =
 		 p - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("stnr", i__3, 
-		"daffa_", (ftnlen)3389)) * 1000, (ftnlen)1000);
+		"daffa_", (ftnlen)3963)) * 1000, (ftnlen)1000);
 	sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-		i__1, "daffa_", (ftnlen)3391)] = TRUE_;
+		i__1, "daffa_", (ftnlen)3965)] = TRUE_;
     }
 
 /*     The location of the name depends on the current pointer */
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3400)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)3974)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     namsiz = sumsiz << 3;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)3406)] - 1) * namsiz;
+	    "urr", i__1, "daffa_", (ftnlen)3980)] - 1) * namsiz;
     i__2 = offset;
     s_copy(name__, stnr + (((i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("stnr", i__1, "daffa_", (ftnlen)3408)) * 1000 + i__2), 
+	    s_rnge("stnr", i__1, "daffa_", (ftnlen)3982)) * 1000 + i__2), 
 	    name_len, offset + namsiz - i__2);
     chkout_("DAFGN", (ftnlen)5);
     return 0;
@@ -4215,7 +4783,7 @@ L_dafgh:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     O   Handle for current DAF. */
 
@@ -4225,9 +4793,8 @@ L_dafgh:
 
 /* $ Detailed_Output */
 
-/*     HANDLE      is the handle for the current DAF (the handle */
-/*                 connected to the DAF that is currently being */
-/*                 searched). */
+/*     HANDLE   is the handle for the current DAF (the handle connected */
+/*              to the DAF that is currently being actively searched). */
 
 /* $ Parameters */
 
@@ -4239,18 +4806,19 @@ L_dafgh:
 /*         the current DAF, the error SPICE(DAFNOSEARCH) is signaled. */
 
 /*     2)  If the DAF whose handle is to be returned has actually been */
-/*         closed, the error will be diagnosed by routines called by */
+/*         closed, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
 /* $ Files */
 
-/*     None. */
+/*     This routine returns the handle of a DAF that is currently */
+/*     being searched. */
 
 /* $ Particulars */
 
-/*     Under rare circumstances, it may be necessary to identify */
-/*     the particular DAF that is being searched (such as when */
-/*     the search is begun by one module and continued by another). */
+/*     Under rare circumstances, it may be necessary to identify the */
+/*     particular DAF that is being searched (such as when the search is */
+/*     begun by one module and continued by another). */
 
 /* $ Examples */
 
@@ -4263,6 +4831,7 @@ L_dafgh:
 /*        CALL DAFFNA ( FOUND  ) */
 
 /*        DO WHILE ( FOUND ) */
+
 /*           CALL CHECK_DAF ( STATUS ) */
 
 /*           IF ( STATUS .EQ. 'EXAMINE' ) THEN */
@@ -4270,6 +4839,7 @@ L_dafgh:
 /*           END IF */
 
 /*           CALL DAFFNA ( FOUND ) */
+
 /*        END DO */
 
 /*     The subroutine CHECK_DAF, which assumes that a search is in */
@@ -4300,10 +4870,26 @@ L_dafgh:
 /*         . */
 /*         . */
 
-
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -4311,12 +4897,21 @@ L_dafgh:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.4, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. Extended $Files */
+/*        section. */
+
+/*        Updated $Restrictions section. */
 
 /* -    SPICELIB Version 2.0.3, 14-MAR-2017 (NJB) */
 
@@ -4324,7 +4919,7 @@ L_dafgh:
 
 /* -    SPICELIB Version 2.0.2, 18-AUG-2011 (EDW) */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -4380,14 +4975,14 @@ L_dafgh:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3636)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)4238)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFGH", (ftnlen)5);
 	    return 0;
 	}
     }
     *handle = stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3645)];
+	    i__1, "daffa_", (ftnlen)4247)];
     chkout_("DAFGH", (ftnlen)5);
     return 0;
 /* $Procedure DAFRS ( DAF, replace summary ) */
@@ -4432,20 +5027,20 @@ L_dafrs:
 
 /* $ Declarations */
 
-/*     DOUBLE PRECISION      SUM */
+/*     DOUBLE PRECISION      SUM    ( * ) */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SUM        I   New summary for current array. */
 
 /* $ Detailed_Input */
 
-/*     SUM         is the new summary for the current array. This */
-/*                 replaces the existing summary. However, the addresses */
-/*                 (the final two integer components) of the original */
-/*                 summary are not changed. */
+/*     SUM      is the new summary for the current array. This */
+/*              replaces the existing summary. However, the addresses */
+/*              (the final two integer components) of the original */
+/*              summary are not changed. */
 
 /* $ Detailed_Output */
 
@@ -4460,20 +5055,19 @@ L_dafrs:
 /*     1)  If this routine is called when no search is in progress in the */
 /*         the current DAF, the error SPICE(DAFNOSEARCH) is signaled. */
 
-/*     2)  If the DAF containing the `current' array has actually been */
-/*         closed, the error will be diagnosed by routines called by */
+/*     2)  If the DAF containing the "current" array has actually been */
+/*         closed, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
-/*     3)  If the DAF containing the `current' array is not open for */
-/*         writing, the error will be diagnosed by routines called by */
+/*     3)  If the DAF containing the "current" array is not open for */
+/*         writing, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
 /*     4)  If no array is current in the current DAF, the error */
-/*         SPICE(NOCURRENTARRAY) is signaled. There is no current */
-/*         array when a search is started by DAFBFS or DAFBBS, but no */
-/*         calls to DAFFNA or DAFBNA have been made yet, or whenever */
-/*         DAFFNA or DAFFPA return the value .FALSE. in the FOUND */
-/*         argument. */
+/*         SPICE(NOCURRENTARRAY) is signaled. There is no current array */
+/*         when a search is started by DAFBFS or DAFBBS, but no calls to */
+/*         DAFFNA or DAFFPA have been made yet, or whenever DAFFNA or */
+/*         DAFFPA return the value .FALSE. in the FOUND argument. */
 
 /* $ Files */
 
@@ -4485,11 +5079,28 @@ L_dafrs:
 
 /* $ Examples */
 
-/*     See DAFFA. */
+/*     See $Examples in DAFFA. */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -4497,16 +5108,29 @@ L_dafrs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.3, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Fixed typo in the $Declarations section. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Fixed typo in $Exceptions entry #4: DAFFPA is used to find the */
+/*        previous array, not the non existing API DAFBNA. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.0.2, 18-AUG-2011 (EDW) */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -4568,7 +5192,7 @@ L_dafrs:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3840)], "WRITE", (ftnlen)5);
+		"stfh", i__1, "daffa_", (ftnlen)4472)], "WRITE", (ftnlen)5);
 	if (failed_()) {
 	    chkout_("DAFRS", (ftnlen)5);
 	    return 0;
@@ -4582,9 +5206,9 @@ L_dafrs:
 /*     the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)3856)] == 0) {
+	    i__1, "daffa_", (ftnlen)4488)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3858)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4490)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4592,11 +5216,11 @@ L_dafrs:
 	chkout_("DAFRS", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)3867)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)4499)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)3867)]) {
+	    ftnlen)4499)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)3869)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4501)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4609,17 +5233,17 @@ L_dafrs:
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3884)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)4516)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)3888)] - 1) * sumsiz + 3;
+	    "urr", i__1, "daffa_", (ftnlen)4520)] - 1) * sumsiz + 3;
 
 /*     Get the existing summary, and unpack it. Replace everything */
 /*     but the addresses (the final two integer components), and */
 /*     repack. Then replace the existing summary within the record. */
 
     moved_(&stsr[(i__1 = offset + 1 + (p << 7) - 129) < 640000 && 0 <= i__1 ? 
-	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)3895)], &sumsiz, 
+	    i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)4527)], &sumsiz, 
 	    exsum);
     dafus_(exsum, &nd, &ni, exdc, exic);
     dafus_(sum, &nd, &ni, newdc, newic);
@@ -4629,15 +5253,15 @@ L_dafrs:
     dafps_(&nd, &ni, exdc, exic, exsum);
     moved_(exsum, &sumsiz, &stsr[(i__1 = offset + 1 + (p << 7) - 129) < 
 	    640000 && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (
-	    ftnlen)3904)]);
+	    ftnlen)4536)]);
 
 /*     Rewrite the modified summary record. */
 
     dafwdr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)3909)], &stthis[(i__2 = p - 1) < 5000 && 
-	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)3909)]
+	    i__1, "daffa_", (ftnlen)4541)], &stthis[(i__2 = p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)4541)]
 	    , &stsr[(i__3 = (p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : 
-	    s_rnge("stsr", i__3, "daffa_", (ftnlen)3909)]);
+	    s_rnge("stsr", i__3, "daffa_", (ftnlen)4541)]);
     chkout_("DAFRS", (ftnlen)5);
     return 0;
 /* $Procedure DAFRN ( DAF, change array name ) */
@@ -4686,14 +5310,14 @@ L_dafrn:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   New name for current array. */
 
 /* $ Detailed_Input */
 
-/*     NAME        is the new name for the current array. */
-/*                 This replaces the existing name. */
+/*     NAME     is the new name for the current array. */
+/*              This replaces the existing name. */
 
 /* $ Detailed_Output */
 
@@ -4708,12 +5332,12 @@ L_dafrn:
 /*     1)  If this routine is called when no search is in progress in the */
 /*         the current DAF, the error SPICE(DAFNOSEARCH) is signaled. */
 
-/*     2)  If the DAF containing the `current' array has actually been */
-/*         closed, the error will be diagnosed by routines called by */
+/*     2)  If the DAF containing the "current" array has actually been */
+/*         closed, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
-/*     3)  If the DAF containing the `current' array is not open for */
-/*         writing, the error will be diagnosed by routines called by */
+/*     3)  If the DAF containing the "current" array is not open for */
+/*         writing, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
 /*     4)  If no array is current in the current DAF, the error */
@@ -4733,11 +5357,28 @@ L_dafrn:
 
 /* $ Examples */
 
-/*     See DAFFA. */
+/*     See $Examples in DAFFA. */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -4745,16 +5386,24 @@ L_dafrn:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.3, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.0.2, 18-AUG-2011 (EDW) */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -4815,7 +5464,7 @@ L_dafrn:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4100)], "WRITE", (ftnlen)5);
+		"stfh", i__1, "daffa_", (ftnlen)4758)], "WRITE", (ftnlen)5);
 	if (failed_()) {
 	    chkout_("DAFRN", (ftnlen)5);
 	    return 0;
@@ -4829,9 +5478,9 @@ L_dafrn:
 /*     called when the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)4116)] == 0) {
+	    i__1, "daffa_", (ftnlen)4774)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4118)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4776)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4839,11 +5488,11 @@ L_dafrn:
 	chkout_("DAFRN", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)4127)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)4785)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)4127)]) {
+	    ftnlen)4785)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4129)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)4787)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -4856,39 +5505,39 @@ L_dafrn:
 /*     already. */
 
     if (! sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-	    i__1, "daffa_", (ftnlen)4146)]) {
+	    i__1, "daffa_", (ftnlen)4804)]) {
 	i__4 = stthis[(i__2 = p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-		"stthis", i__2, "daffa_", (ftnlen)4148)] + 1;
+		"stthis", i__2, "daffa_", (ftnlen)4806)] + 1;
 	dafrcr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4148)], &i__4, stnr + ((i__3 =
+		"stfh", i__1, "daffa_", (ftnlen)4806)], &i__4, stnr + ((i__3 =
 		 p - 1) < 5000 && 0 <= i__3 ? i__3 : s_rnge("stnr", i__3, 
-		"daffa_", (ftnlen)4148)) * 1000, (ftnlen)1000);
+		"daffa_", (ftnlen)4806)) * 1000, (ftnlen)1000);
 	sthvnr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("sthvnr", 
-		i__1, "daffa_", (ftnlen)4150)] = TRUE_;
+		i__1, "daffa_", (ftnlen)4808)] = TRUE_;
     }
 
 /*     The location of the name depends on the current pointer */
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4159)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)4817)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     namsiz = sumsiz << 3;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)4165)] - 1) * namsiz;
+	    "urr", i__1, "daffa_", (ftnlen)4823)] - 1) * namsiz;
     i__2 = offset;
     s_copy(stnr + (((i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stnr",
-	     i__1, "daffa_", (ftnlen)4167)) * 1000 + i__2), name__, offset + 
+	     i__1, "daffa_", (ftnlen)4825)) * 1000 + i__2), name__, offset + 
 	    namsiz - i__2, name_len);
 
 /*     Rewrite the character record. */
 
     i__4 = stthis[(i__2 = p - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("stthis",
-	     i__2, "daffa_", (ftnlen)4172)] + 1;
+	     i__2, "daffa_", (ftnlen)4830)] + 1;
     dafwcr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4172)], &i__4, stnr + ((i__3 = p - 1) < 
+	    i__1, "daffa_", (ftnlen)4830)], &i__4, stnr + ((i__3 = p - 1) < 
 	    5000 && 0 <= i__3 ? i__3 : s_rnge("stnr", i__3, "daffa_", (ftnlen)
-	    4172)) * 1000, (ftnlen)1000);
+	    4830)) * 1000, (ftnlen)1000);
     chkout_("DAFRN", (ftnlen)5);
     return 0;
 /* $Procedure DAFWS ( DAF, write summary ) */
@@ -4937,16 +5586,16 @@ L_dafws:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SUM        I   New summary for current array in the current DAF. */
 
 /* $ Detailed_Input */
 
-/*     SUM         is the new summary for the current array. This */
-/*                 replaces the existing summary, including the */
-/*                 addresses (the final two integer components) of */
-/*                 the original summary. */
+/*     SUM      is the new summary for the current array. This */
+/*              replaces the existing summary, including the */
+/*              addresses (the final two integer components) of */
+/*              the original summary. */
 
 /* $ Detailed_Output */
 
@@ -4961,12 +5610,12 @@ L_dafws:
 /*     1)  If this routine is called when no search is in progress in the */
 /*         the current DAF, the error SPICE(DAFNOSEARCH) is signaled. */
 
-/*     2)  If the DAF containing the `current' array has actually been */
-/*         closed, the error will be diagnosed by routines called by */
+/*     2)  If the DAF containing the "current" array has actually been */
+/*         closed, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
-/*     3)  If the DAF containing the `current' array is not open for */
-/*         writing, the error will be diagnosed by routines called by */
+/*     3)  If the DAF containing the "current" array is not open for */
+/*         writing, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
 /*     4)  If no array is current in the current DAF, the error */
@@ -4990,11 +5639,28 @@ L_dafws:
 
 /* $ Examples */
 
-/*     See DAFFA. */
+/*     None. */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -5002,16 +5668,23 @@ L_dafws:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.3, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 2.0.2, 18-AUG-2011 (EDW) */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -5069,7 +5742,7 @@ L_dafws:
 
     } else {
 	dafsih_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4366)], "READ", (ftnlen)4);
+		"stfh", i__1, "daffa_", (ftnlen)5049)], "READ", (ftnlen)4);
 	if (failed_()) {
 	    chkout_("DAFWS", (ftnlen)5);
 	    return 0;
@@ -5083,9 +5756,9 @@ L_dafws:
 /*     when the current array was the first. */
 
     if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stcurr", 
-	    i__1, "daffa_", (ftnlen)4382)] == 0) {
+	    i__1, "daffa_", (ftnlen)5065)] == 0) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4384)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)5067)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `next' array is the first array of"
 		" DAF #", (ftnlen)65);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -5093,11 +5766,11 @@ L_dafws:
 	chkout_("DAFWS", (ftnlen)5);
 	return 0;
     } else if (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "stcurr", i__1, "daffa_", (ftnlen)4393)] > stnseg[(i__2 = p - 1) <
+	    "stcurr", i__1, "daffa_", (ftnlen)5076)] > stnseg[(i__2 = p - 1) <
 	     5000 && 0 <= i__2 ? i__2 : s_rnge("stnseg", i__2, "daffa_", (
-	    ftnlen)4393)]) {
+	    ftnlen)5076)]) {
 	dafhfn_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"stfh", i__1, "daffa_", (ftnlen)4395)], dafnam, (ftnlen)255);
+		"stfh", i__1, "daffa_", (ftnlen)5078)], dafnam, (ftnlen)255);
 	setmsg_("No array is current; the `previous' array is the last array"
 		" of DAF #", (ftnlen)68);
 	errch_("#", dafnam, (ftnlen)1, (ftnlen)255);
@@ -5110,21 +5783,21 @@ L_dafws:
 /*     position. */
 
     dafhsf_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4412)], &nd, &ni);
+	    i__1, "daffa_", (ftnlen)5095)], &nd, &ni);
     sumsiz = nd + (ni + 1) / 2;
     offset = (stcurr[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stc"
-	    "urr", i__1, "daffa_", (ftnlen)4416)] - 1) * sumsiz + 3;
+	    "urr", i__1, "daffa_", (ftnlen)5099)] - 1) * sumsiz + 3;
     moved_(sum, &sumsiz, &stsr[(i__1 = offset + 1 + (p << 7) - 129) < 640000 
-	    && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)4418)
+	    && 0 <= i__1 ? i__1 : s_rnge("stsr", i__1, "daffa_", (ftnlen)5101)
 	    ]);
 
 /*     Rewrite the modified summary record. */
 
     dafwdr_(&stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-	    i__1, "daffa_", (ftnlen)4423)], &stthis[(i__2 = p - 1) < 5000 && 
-	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)4423)]
+	    i__1, "daffa_", (ftnlen)5106)], &stthis[(i__2 = p - 1) < 5000 && 
+	    0 <= i__2 ? i__2 : s_rnge("stthis", i__2, "daffa_", (ftnlen)5106)]
 	    , &stsr[(i__3 = (p << 7) - 128) < 640000 && 0 <= i__3 ? i__3 : 
-	    s_rnge("stsr", i__3, "daffa_", (ftnlen)4423)]);
+	    s_rnge("stsr", i__3, "daffa_", (ftnlen)5106)]);
     chkout_("DAFWS", (ftnlen)5);
     return 0;
 /* $Procedure DAFCS ( DAF, continue search ) */
@@ -5174,16 +5847,16 @@ L_dafcs:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF to continue searching. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a DAF in which either a forward */
-/*                    or backward search has already been started by */
-/*                    DAFBFS or DAFBBS. The DAF may be open for read */
-/*                    or write access. */
+/*     HANDLE   is the handle of a DAF in which either a forward */
+/*              or backward search has already been started by */
+/*              DAFBFS or DAFBBS. The DAF may be open for read */
+/*              or write access. */
 
 /* $ Detailed_Output */
 
@@ -5195,8 +5868,8 @@ L_dafcs:
 
 /* $ Exceptions */
 
-/*     1)  If the input handle is invalid, the error will be diagnosed */
-/*         by routines called by this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  If this routine is called when no search is in progress in the */
 /*         the current DAF, the error SPICE(DAFNOSEARCH) is signaled. */
@@ -5214,11 +5887,28 @@ L_dafcs:
 
 /* $ Examples */
 
-/*     See DAFFA. */
+/*     See $Examples in DAFFA. */
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Calls that do or may change DAF addresses of DAF summaries, */
+/*         names, or data of a given DAF file should not be made during */
+/*         a search of that file initiated by either DAFBFS or DAFBBS. */
+/*         No such changes should be made between the start of a search */
+/*         and calls to any entry point that reads or writes to the */
+/*         summary of the "current array" found by that search, or */
+/*         that returns a "found" flag indicating whether the current */
+/*         array exists. */
+
+/*         Changing the size of the comment area while a search is in */
+/*         progress can invalidate record numbers stored in local data */
+/*         structures of this routine. This can cause corrupted array */
+/*         summaries and names to be returned upon read access and file */
+/*         corruption to occur upon write access. */
+
+/*         Adding arrays (aka "segments") while either a forward or */
+/*         backward search is in progress can cause the search to miss */
+/*         the new segments. */
 
 /* $ Literature_References */
 
@@ -5226,15 +5916,22 @@ L_dafcs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.3, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated $Restrictions section. */
+
 /* -    SPICELIB Version 1.0.2, 10-FEB-2014 (BVS) */
 
-/*        Added full declaration of HANDLE to the Declarations section */
+/*        Added full declaration of HANDLE to the $Declarations section */
 /*        of the header. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -5276,12 +5973,12 @@ L_dafcs:
     fnd = FALSE_;
     while(p != -1 && ! fnd) {
 	if (stfh[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stfh", 
-		i__1, "daffa_", (ftnlen)4588)] == *handle) {
+		i__1, "daffa_", (ftnlen)5296)] == *handle) {
 	    fnd = TRUE_;
 	} else {
 	    prev = p;
 	    p = stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stpool", i__1, "daffa_", (ftnlen)4592)];
+		    "stpool", i__1, "daffa_", (ftnlen)5300)];
 	}
     }
 
@@ -5314,11 +6011,11 @@ L_dafcs:
 /*        the predecessor of P is not NIL. */
 
 	stpool[(i__1 = prev - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool",
-		 i__1, "daffa_", (ftnlen)4632)] = stpool[(i__2 = p - 1) < 
+		 i__1, "daffa_", (ftnlen)5340)] = stpool[(i__2 = p - 1) < 
 		5000 && 0 <= i__2 ? i__2 : s_rnge("stpool", i__2, "daffa_", (
-		ftnlen)4632)];
+		ftnlen)5340)];
 	stpool[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("stpool", 
-		i__1, "daffa_", (ftnlen)4633)] = sthead;
+		i__1, "daffa_", (ftnlen)5341)] = sthead;
 	sthead = p;
     }
     chkout_("DAFCS", (ftnlen)5);

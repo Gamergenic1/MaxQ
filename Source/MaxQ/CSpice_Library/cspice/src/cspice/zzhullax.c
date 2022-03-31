@@ -101,7 +101,6 @@ static doublereal c_b36 = .5;
 /*     CK */
 /*     FRAMES */
 /*     GF */
-/*     IK */
 /*     KERNEL */
 
 /* $ Keywords */
@@ -342,6 +341,10 @@ static doublereal c_b36 = .5;
 
 /* $ Version */
 
+/* -    SPICELIB 1.0.1, 24-NOV-2021 (BVS) */
+
+/*        Removed IK from Required Reading list. */
+
 /* -    SPICELIB 1.0.0, 05-MAR-2009 (NJB) */
 
 /* -& */
@@ -409,9 +412,9 @@ static doublereal c_b36 = .5;
 /*        in the case the current face is exterior. */
 
 	vcrss_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? 
-		i__1 : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)408)], &
+		i__1 : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)411)], &
 		bounds[(i__2 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__2 ? 
-		i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)408)], cp);
+		i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)411)], cp);
 
 /*        We insist on consecutive boundary vectors being */
 /*        linearly independent. */
@@ -444,7 +447,7 @@ static doublereal c_b36 = .5;
 	    if (m != i__ && m != next) {
 		sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < bounds_dim2 * 3 
 			&& 0 <= i__1 ? i__1 : s_rnge("bounds", i__1, "zzhull"
-			"ax_", (ftnlen)446)]);
+			"ax_", (ftnlen)449)]);
 		if (pass1) {
 
 /*                 Adjust CP if necessary so that it points */
@@ -512,9 +515,9 @@ static doublereal c_b36 = .5;
 
 		vcrss_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
 			i__1 ? i__1 : s_rnge("bounds", i__1, "zzhullax_", (
-			ftnlen)530)], &bounds[(i__2 = next * 3 - 3) < 
+			ftnlen)533)], &bounds[(i__2 = next * 3 - 3) < 
 			bounds_dim2 * 3 && 0 <= i__2 ? i__2 : s_rnge("bounds",
-			 i__2, "zzhullax_", (ftnlen)530)], cp);
+			 i__2, "zzhullax_", (ftnlen)533)], cp);
 
 /*              It's allowable for non-consecutive boundary vectors to */
 /*              be linearly dependent, but if we have such a pair, */
@@ -544,7 +547,7 @@ static doublereal c_b36 = .5;
 			    sep = vsep_(cp, &bounds[(i__1 = m * 3 - 3) < 
 				    bounds_dim2 * 3 && 0 <= i__1 ? i__1 : 
 				    s_rnge("bounds", i__1, "zzhullax_", (
-				    ftnlen)560)]);
+				    ftnlen)563)]);
 			    if (pass1) {
 
 /*                          Adjust CP if necessary so that it points */
@@ -646,9 +649,9 @@ static doublereal c_b36 = .5;
 
 
     vhat_(&bounds[(i__1 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? i__1 :
-	     s_rnge("bounds", i__1, "zzhullax_", (ftnlen)683)], ray1);
+	     s_rnge("bounds", i__1, "zzhullax_", (ftnlen)686)], ray1);
     vhat_(&bounds[(i__1 = next * 3 - 3) < bounds_dim2 * 3 && 0 <= i__1 ? i__1 
-	    : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)684)], ray2);
+	    : s_rnge("bounds", i__1, "zzhullax_", (ftnlen)687)], ray2);
     vlcom_(&c_b36, ray1, &c_b36, ray2, xvec);
     vhatip_(xvec);
     vhat_(cp, yvec);
@@ -659,17 +662,17 @@ static doublereal c_b36 = .5;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	trans[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("trans", 
-		i__1, "zzhullax_", (ftnlen)698)] = xvec[(i__2 = i__ - 1) < 3 
+		i__1, "zzhullax_", (ftnlen)701)] = xvec[(i__2 = i__ - 1) < 3 
 		&& 0 <= i__2 ? i__2 : s_rnge("xvec", i__2, "zzhullax_", (
-		ftnlen)698)];
+		ftnlen)701)];
 	trans[(i__1 = i__ * 3 - 2) < 9 && 0 <= i__1 ? i__1 : s_rnge("trans", 
-		i__1, "zzhullax_", (ftnlen)699)] = yvec[(i__2 = i__ - 1) < 3 
+		i__1, "zzhullax_", (ftnlen)702)] = yvec[(i__2 = i__ - 1) < 3 
 		&& 0 <= i__2 ? i__2 : s_rnge("yvec", i__2, "zzhullax_", (
-		ftnlen)699)];
+		ftnlen)702)];
 	trans[(i__1 = i__ * 3 - 1) < 9 && 0 <= i__1 ? i__1 : s_rnge("trans", 
-		i__1, "zzhullax_", (ftnlen)700)] = zvec[(i__2 = i__ - 1) < 3 
+		i__1, "zzhullax_", (ftnlen)703)] = zvec[(i__2 = i__ - 1) < 3 
 		&& 0 <= i__2 ? i__2 : s_rnge("zvec", i__2, "zzhullax_", (
-		ftnlen)700)];
+		ftnlen)703)];
     }
 
 /*     Now we're going to compute the longitude of each boundary in the */
@@ -689,7 +692,7 @@ static doublereal c_b36 = .5;
 
 	    mxv_(trans, &bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <=
 		     i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (
-		    ftnlen)720)], v);
+		    ftnlen)723)], v);
 	    reclat_(v, &r__, &lon, &lat);
 
 /*           Update the longitude bounds. */
@@ -751,7 +754,7 @@ static doublereal c_b36 = .5;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	sep = vsep_(&bounds[(i__2 = i__ * 3 - 3) < bounds_dim2 * 3 && 0 <= 
-		i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)794)
+		i__2 ? i__2 : s_rnge("bounds", i__2, "zzhullax_", (ftnlen)797)
 		], axis);
 	if (sep > halfpi_() - 1e-12) {
 	    setmsg_("Boundary vector at index # has angular separation of # "

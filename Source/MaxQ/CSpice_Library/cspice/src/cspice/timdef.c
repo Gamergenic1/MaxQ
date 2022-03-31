@@ -11,7 +11,7 @@ static integer c__8 = 8;
 static integer c__0 = 0;
 static integer c__1 = 1;
 
-/* $Procedure      TIMDEF ( Time Software Defaults ) */
+/* $Procedure TIMDEF ( Time Software Defaults ) */
 /* Subroutine */ int timdef_(char *action, char *item, char *value, ftnlen 
 	action_len, ftnlen item_len, ftnlen value_len)
 {
@@ -85,85 +85,85 @@ static integer c__1 = 1;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      TIME */
+/*     TIME */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     ACTION     I   is the kind of action to take 'SET' or 'GET'. */
-/*     ITEM       I   is the default item of interest. */
-/*     VALUE     I/O  is the value associated with the default item. */
+/*     ACTION     I   Kind of action to take 'SET' or 'GET'. */
+/*     ITEM       I   Default item of interest. */
+/*     VALUE     I-O  Value associated with the default item. */
 
 /* $ Detailed_Input */
 
-/*     ACTION     is a word that specifies whether TIMDEF sets the */
-/*                value associated with ITEM or retrieves the value */
-/*                associated with ITEM.  The allowed values for */
-/*                ACTION are 'SET' and 'GET'.  The routine is not */
-/*                sensitive to the case of the letters in ACTION. */
+/*     ACTION   is a word that specifies whether TIMDEF sets the */
+/*              value associated with ITEM or retrieves the value */
+/*              associated with ITEM. The allowed values for */
+/*              ACTION are 'SET' and 'GET'. The routine is not */
+/*              sensitive to the case of the letters in ACTION. */
 
-/*     ITEM       is the default items whose value should be set or */
-/*                retrieved.  The items that may be requested are: */
+/*     ITEM     is the default items whose value should be set or */
+/*              retrieved. The items that may be requested are: */
 
-/*                ITEM        Allowed Values */
-/*                ---------   -------------- */
-/*                CALENDAR    GREGORIAN */
-/*                            JULIAN */
-/*                            MIXED */
+/*                 ITEM        Allowed Values */
+/*                 ---------   -------------- */
+/*                 CALENDAR    GREGORIAN */
+/*                             JULIAN */
+/*                             MIXED */
 
-/*                SYSTEM      TDB */
-/*                            TDT */
-/*                            UTC */
+/*                 SYSTEM      TDB */
+/*                             TDT */
+/*                             TT */
+/*                             UTC */
 
-/*                ZONE        EST, EDT, CST, CDT, MST, MDT, PST, PDT */
-/*                            UTC+HR */
-/*                            UTC-HR       ( 0 <= HR < 13 ) */
-/*                            UTC+HR:MN    ( 0 <= MN < 60 ) */
-/*                            UTC-HR:MN */
+/*                 ZONE        EST, EDT, CST, CDT, MST, MDT, PST, PDT */
+/*                             UTC+HR */
+/*                             UTC-HR       ( 0 <= HR < 13 ) */
+/*                             UTC+HR:MN    ( 0 <= MN < 60 ) */
+/*                             UTC-HR:MN */
 
-/*                The case of ITEM is not significant. */
+/*              The case of ITEM is not significant. */
 
-
-/*     VALUE      if the action is 'SET' then VALUE is an input and */
-/*                is the value to be associated with ITEM.  Note that */
-/*                VALUE is checked to ensure it is within the range */
-/*                of allowed values for ITEM.  If it is not within */
-/*                the expected range and appropriate error message */
-/*                is signalled.  The case of VALUE is not significant. */
+/*     VALUE    if the action is 'SET' then VALUE is an input and */
+/*              is the value to be associated with ITEM. Note that */
+/*              VALUE is checked to ensure it is within the range */
+/*              of allowed values for ITEM. If it is not within */
+/*              the expected range and appropriate error message */
+/*              is signaled. The case of VALUE is not significant. */
 
 /* $ Detailed_Output */
 
-/*     VALUE      if the action is 'GET' then VALUE will be the */
-/*                value associated with the requested ITEM.  Note that */
-/*                when time zones are set, they are translated to the */
-/*                UTC offset form ( UTC(+/-)HR[:MN] ).  When VALUE is */
-/*                an output it will be in upper case. */
+/*     VALUE    if the action is 'GET' then VALUE will be the */
+/*              value associated with the requested ITEM. Note that */
+/*              when time zones are set, they are translated to the */
+/*              UTC offset form ( UTC(+/-)HR[:MN] ). When VALUE is */
+/*              an output it will be in upper case. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the ACTION specified is not 'SET' or 'GET', the error */
+/*         SPICE(BADACTION) is signaled. */
+
+/*     2)  If the ITEM specified is not one the recognized items, */
+/*         the error SPICE(BADTIMEITEM) is signaled. */
+
+/*     3)  If the value associated with a 'SET' item input */
+/*         is not one of the recognized items, the error */
+/*         SPICE(BADDEFAULTVALUE) is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the ACTION specified is not SET or GET the error */
-/*        'SPICE(BADACTION)' is signalled. */
-
-/*     2) If the ITEM specified is not one the recognized items */
-/*        the error 'SPICE(BADTIMEITEM)' is signalled. */
-
-/*     3) If the value associated with a 'SET', item input */
-/*        is not one of the recognized items, the error */
-/*        'SPICE(BADDEFAULTVALUE)' is signalled. */
 
 /* $ Particulars */
 
@@ -172,7 +172,7 @@ static integer c__1 = 1;
 /*     routine STR2ET. */
 
 /*     Normally, unlabelled time strings are assumed to belong to */
-/*     the Gregorian Calendar and are UTC times.  However, you */
+/*     the Gregorian Calendar and are UTC times. However, you */
 /*     may alter the default behavior by calling TIMDEF. */
 
 /*     Calendar */
@@ -181,14 +181,14 @@ static integer c__1 = 1;
 /*     You may set the calendar to be one of the following */
 
 /*     Gregorian   --- This is the calendar used daily the */
-/*                     Western Hemisphere.  Leap years occur in this */
+/*                     Western Hemisphere. Leap years occur in this */
 /*                     calendar every 4 years except on centuries */
 /*                     such as 1900 that are not divisible by 400. */
 
 /*     Julian      --- This is the calendar that was in use prior */
-/*                     to October 15, 1582.  Leap years occur every */
+/*                     to October 15, 1582. Leap years occur every */
 /*                     4 years on the Julian Calendar (including all */
-/*                     centuries.)  October 5, 1582 on the Julian */
+/*                     centuries.) October 5, 1582 on the Julian */
 /*                     calendar corresponds to October 15, 1582 of the */
 /*                     Gregorian Calendar. */
 
@@ -207,13 +207,14 @@ static integer c__1 = 1;
 /*     ------- */
 
 /*     You may set the system used for keeping time to be UTC (default) */
-/*     TDB (barycentric dynamical time) or TDT (terrestrial dynamical */
-/*     time).  Both TDB and TDT have no leapseconds.  As such the time */
-/*     elapsed between any two epochs on these calendars does not depend */
-/*     upon when leapseconds occur. */
+/*     TDB (barycentric Dynamical Time), TDT (Terrestrial Dynamical */
+/*     Time), or TT (Terrestrial Time). TDT and TT represent the same */
+/*     time system. Both TDB and TT (TDT) have no leapseconds. As such */
+/*     the time elapsed between any two epochs on these calendars does */
+/*     not depend upon when leapseconds occur. */
 
-/*     To set the default time system, select TDT, TDB or UTC for VALUE */
-/*     and make the following call. */
+/*     To set the default time system, select TDT, TT, TDB or UTC for */
+/*     VALUE and make the following call. */
 
 /*        CALL TIMDEF ( 'SET', 'SYSTEM', VALUE ) */
 
@@ -224,8 +225,8 @@ static integer c__1 = 1;
 /*     ----- */
 
 /*     You may alter the UTC system by specifying a time zone (UTC */
-/*     offset).  For example you may specify that epochs are referred */
-/*     to Pacific Standard Time (PST --- UTC-7).  The standard */
+/*     offset). For example you may specify that epochs are referred */
+/*     to Pacific Standard Time (PST --- UTC-7). The standard */
 /*     abbreviations for U.S. time zones are recognized: */
 
 /*        EST   UTC-5 */
@@ -238,18 +239,18 @@ static integer c__1 = 1;
 /*        PDT   UTC-7 */
 
 /*     In addition you may specify any commercial time zone by using */
-/*     "offset" notation.  This notation starts with the letters 'UTC' */
-/*     followed by a + for time zones east of Greenwich and - for */
-/*     time zones west of Greenwich.  This is followed by the number */
-/*     of hours to add or subtract from UTC.  This is optionally followed */
-/*     by a colon ':' and the number of minutes to add or subtract (based */
-/*     on the sign that follows 'UTC') to get the */
-/*     local time zone.  Thus to specify the time zone of Calcutta you */
-/*     would specify the time zone to be UTC+5:30.  To specify the */
-/*     time zone of Newfoundland use the time zone UTC-3:30. */
+/*     "offset" notation. This notation starts with the letters 'UTC' */
+/*     followed by a + for time zones east of Greenwich and - for time */
+/*     zones west of Greenwich. This is followed by the number of hours */
+/*     to add or subtract from UTC. This is optionally followed by a */
+/*     colon ':' and the number of minutes to add or subtract (based on */
+/*     the sign that follows 'UTC') to get the local time zone. Thus to */
+/*     specify the time zone of Calcutta you would specify the time zone */
+/*     to be UTC+5:30. To specify the time zone of Newfoundland use the */
+/*     time zone UTC-3:30. */
 
 /*     To set a default time zone, select one of the "built-in" U.S. */
-/*     zones or construct an offset as discussed above.  Then make the */
+/*     zones or construct an offset as discussed above. Then make the */
 /*     call */
 
 /*        CALL TIMDEF ( 'SET', 'ZONE', VALUE ) */
@@ -265,7 +266,7 @@ static integer c__1 = 1;
 /*     Suppose you wish to modify the behavior of STR2ET so that */
 /*     it interprets unlabeled time strings as being times in */
 /*     Pacific Daylight Time and that you want the calendar to use */
-/*     to be the "Mixed" calendar.  The following two calls will */
+/*     to be the "Mixed" calendar. The following two calls will */
 /*     make the desired changes to the behavior of STR2ET */
 
 /*         CALL TIMDEF ( 'SET', 'CALENDAR', 'MIXED' ) */
@@ -275,15 +276,26 @@ static integer c__1 = 1;
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 14-OCT-2021 (EDW) (JDR) */
+
+/*        UCASE and LJUST called on VALUE only in 'SET' block. */
+
+/*        Add time system name 'TT' (Terrestrial Time) as alternate */
+/*        assignment of 'TDT' (Terrestrial Dynamical Time). */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 26-MAY-1998 (WLT) */
 
@@ -304,7 +316,6 @@ static integer c__1 = 1;
 /*        the default value was set. */
 
 /* -    SPICELIB Version 1.0.0, 13-NOV-1996 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -332,8 +343,6 @@ static integer c__1 = 1;
     ucase_(myactn, myactn, (ftnlen)16, (ftnlen)16);
     ljust_(item, myitem, item_len, (ftnlen)16);
     ucase_(myitem, myitem, (ftnlen)16, (ftnlen)16);
-    ljust_(value, myval, value_len, (ftnlen)16);
-    ucase_(myval, myval, (ftnlen)16, (ftnlen)16);
 
 /*     Admittedly, the decision making below is not very elegant. */
 /*     However, this works and is simpler than anything that comes */
@@ -341,16 +350,23 @@ static integer c__1 = 1;
 /*     diagnostic messages easily. */
 
     if (s_cmp(myactn, "SET", (ftnlen)16, (ftnlen)3) == 0) {
+	ljust_(value, myval, value_len, (ftnlen)16);
+	ucase_(myval, myval, (ftnlen)16, (ftnlen)16);
 	if (s_cmp(myitem, "SYSTEM", (ftnlen)16, (ftnlen)6) == 0) {
+
+/*           Recognize only the know time systems. Note, 'UTC' not */
+/*           actually a time system, more a time representation. */
+
 	    if (s_cmp(myval, "TDB", (ftnlen)16, (ftnlen)3) == 0 || s_cmp(
 		    myval, "TDT", (ftnlen)16, (ftnlen)3) == 0 || s_cmp(myval, 
-		    "UTC", (ftnlen)16, (ftnlen)3) == 0) {
+		    "TT", (ftnlen)16, (ftnlen)2) == 0 || s_cmp(myval, "UTC", (
+		    ftnlen)16, (ftnlen)3) == 0) {
 		s_copy(defzon, " ", (ftnlen)16, (ftnlen)1);
 		s_copy(defsys, myval, (ftnlen)16, (ftnlen)16);
 	    } else {
 		setmsg_("The default value assigned to the time system must "
-			"be one of 'UTC', 'TDT', or 'TDB'. The value supplied"
-			" was '#'. ", (ftnlen)113);
+			"be one of 'UTC', 'TDT', 'TT', or 'TDB'. The value su"
+			"pplied was '#'. ", (ftnlen)119);
 		errch_("#", value, (ftnlen)1, value_len);
 		sigerr_("SPICE(BADDEFAULTVALUE)", (ftnlen)22);
 		chkout_("TIMDEF", (ftnlen)6);
@@ -364,7 +380,7 @@ static integer c__1 = 1;
 
 	    if (zone > 0) {
 		s_copy(myval, trnslt + (((i__1 = zone - 1) < 8 && 0 <= i__1 ? 
-			i__1 : s_rnge("trnslt", i__1, "timdef_", (ftnlen)387))
+			i__1 : s_rnge("trnslt", i__1, "timdef_", (ftnlen)404))
 			 << 4), (ftnlen)16, (ftnlen)16);
 	    }
 	    prefix_("::", &c__0, myval, (ftnlen)2, (ftnlen)16);
@@ -424,7 +440,7 @@ static integer c__1 = 1;
 	    return 0;
 	}
     } else {
-	setmsg_("The action speficied to TIMDEF was '#'.  This is not a reco"
+	setmsg_("The action specified to TIMDEF was '#'.  This is not a reco"
 		"gnized action. The recognized actions are 'SET' and 'GET'. ", 
 		(ftnlen)118);
 	errch_("#", action, (ftnlen)1, action_len);

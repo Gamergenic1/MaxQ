@@ -488,7 +488,7 @@ static integer c__82 = 82;
 /*         error will be diagnosed by routines called by this routine. */
 
 /*     3)  If the number of keys in the root does not correspond to an */
-/*         overflow of exactly 1 key, the error SPICE(BUG) is signalled. */
+/*         overflow of exactly 1 key, the error SPICE(BUG) is signaled. */
 
 /* $ Files */
 
@@ -576,6 +576,10 @@ static integer c__82 = 82;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
+
 /* -    Beta Version 1.0.0, 26-OCT-1995 (NJB) */
 
 /* -& */
@@ -607,7 +611,7 @@ static integer c__82 = 82;
 
     for (i__ = 1; i__ <= 2; ++i__) {
 	zzekpgal_(handle, &c__3, &child[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? 
-		i__1 : s_rnge("child", i__1, "zzektr13_", (ftnlen)221)], &
+		i__1 : s_rnge("child", i__1, "zzektr13_", (ftnlen)225)], &
 		base);
     }
 
@@ -635,23 +639,23 @@ static integer c__82 = 82;
 
     middle = 42;
     movei_(&rpage[(i__1 = middle + 5) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)254)], &c__41, &c2page[1]);
+	    "rpage", i__1, "zzektr13_", (ftnlen)258)], &c__41, &c2page[1]);
     movei_(&rpage[(i__1 = middle + 172) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)255)], &c__41, &c2page[128]);
+	    "rpage", i__1, "zzektr13_", (ftnlen)259)], &c__41, &c2page[128]);
     movei_(&rpage[(i__1 = middle + 88) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)256)], &c__42, &c2page[64]);
+	    "rpage", i__1, "zzektr13_", (ftnlen)260)], &c__42, &c2page[64]);
 
 /*     The keys in this second node must be adjusted to account for the */
 /*     loss of the predecessors assigned to the subtree headed by the */
 /*     left child, as well as of the middle key. */
 
     delta = rpage[(i__1 = middle + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)263)];
+	    "rpage", i__1, "zzektr13_", (ftnlen)267)];
     for (i__ = 1; i__ <= 41; ++i__) {
 	c2page[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge("c2page", i__1,
-		 "zzektr13_", (ftnlen)266)] = c2page[(i__2 = i__) < 256 && 0 
+		 "zzektr13_", (ftnlen)270)] = c2page[(i__2 = i__) < 256 && 0 
 		<= i__2 ? i__2 : s_rnge("c2page", i__2, "zzektr13_", (ftnlen)
-		266)] - delta;
+		270)] - delta;
     }
 
 /*     Now the root must be updated.  The root now contains just 1 */
@@ -661,9 +665,9 @@ static integer c__82 = 82;
 /*     number of nodes in the tree. */
 
     rpage[5] = rpage[(i__1 = middle + 4) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "rpage", i__1, "zzektr13_", (ftnlen)276)];
+	    "rpage", i__1, "zzektr13_", (ftnlen)280)];
     rpage[172] = rpage[(i__1 = middle + 171) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("rpage", i__1, "zzektr13_", (ftnlen)277)];
+	    s_rnge("rpage", i__1, "zzektr13_", (ftnlen)281)];
     rpage[88] = child[0];
     rpage[89] = child[1];
     rpage[4] = 1;

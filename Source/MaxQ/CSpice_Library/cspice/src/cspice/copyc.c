@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      COPYC ( Copy a character cell ) */
+/* $Procedure COPYC ( Copy a character cell ) */
 /* Subroutine */ int copyc_(char *cell, char *copy, ftnlen cell_len, ftnlen 
 	copy_len)
 {
@@ -33,7 +33,7 @@
 
 /* $ Abstract */
 
-/*      Copy the contents of a character cell to another cell. */
+/*     Copy the contents of a character cell to another cell. */
 
 /* $ Disclaimer */
 
@@ -62,38 +62,49 @@
 
 /* $ Required_Reading */
 
-/*      CELLS */
+/*     CELLS */
 
 /* $ Keywords */
 
-/*      CELLS */
+/*     CELLS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      CELL       I   Cell to be copied. */
-/*      COPY       O   New cell. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     CELL       I   Cell to be copied. */
+/*     COPY       O   New cell. */
 
 /* $ Detailed_Input */
 
-
-/*      CELL        is a cell. */
-
+/*     CELL     is a cell. */
 
 /* $ Detailed_Output */
 
-/*      COPY        is a cell which contains the same elements as the */
-/*                  input cell, in the same order. If the size (maximum */
-/*                  cardinality) of the output cell is smaller than */
-/*                  the cardinality of the input cell, then only as many */
-/*                  items as will fit in the output cell are copied, */
-/*                  and an error is signalled. */
+/*     COPY     is a cell which contains the same elements as the */
+/*              input cell, in the same order. If the size (maximum */
+/*              cardinality) of the output cell is smaller than */
+/*              the cardinality of the input cell, then only as many */
+/*              items as will fit in the output cell are copied, */
+/*              and an error is signaled. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If the output cell in not large enough to hold the elements */
+/*         of the input cell, the error SPICE(CELLTOOSMALL) is signaled. */
+
+/*     2)  If length of the elements of the output cell is less than the */
+/*         length of the elements of the input cell, the error */
+/*         SPICE(ELEMENTSTOOSHORT) is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -120,31 +131,24 @@
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*      1) If the output cell in not large enough to hold the elements */
-/*         of the input cell, the error SPICE(CELLTOOSMALL) is signalled. */
-
-/*      2) If length of the elements of the output cell is less than the */
-/*         length of the elements of the input cell, the error */
-/*         SPICE(ELEMENTSTOOSHORT) is signalled. */
-
-/* $ Files */
-
-/*     None. */
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -163,9 +167,9 @@
 
 /* -    Beta Version 2.0.0, 09-JAN-1989 (NJB) */
 
-/*        Error signalled if output set elements are not long enough. */
+/*        Error signaled if output set elements are not long enough. */
 /*        Length must be at least max of lengths of input elements. */
-/*        Also, calling protocol for EXCESS has been changed.  And, */
+/*        Also, calling protocol for EXCESS has been changed. And, */
 /*        elements LBCELL through -2 of control area are now copied to */
 /*        the output cell. */
 

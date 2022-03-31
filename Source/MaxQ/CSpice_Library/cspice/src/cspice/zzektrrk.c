@@ -450,7 +450,7 @@ static integer c__63 = 63;
 /*         routine. */
 
 /*     3)  If either LEFT or RIGHT are actually the root, the error */
-/*         SPICE(BUG) is signalled. */
+/*         SPICE(BUG) is signaled. */
 
 /*     4)  If LEFT and RIGHT are not neighboring sibling nodes, the */
 /*         error will be diagnosed by routines called by this routine. */
@@ -458,7 +458,7 @@ static integer c__63 = 63;
 /*     5)  The rotation is not allowed to create an overflow of more */
 /*         than one key in the destination node, not an underflow of */
 /*         more than one key in the source node.  If either restriction */
-/*         is violated, the error SPICE(BUG) is signalled. */
+/*         is violated, the error SPICE(BUG) is signaled. */
 
 /* $ Files */
 
@@ -523,6 +523,10 @@ static integer c__63 = 63;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
+
 /* -    Beta Version 1.0.0, 16-NOV-1995 (NJB) */
 
 /* -& */
@@ -574,9 +578,9 @@ static integer c__63 = 63;
 /*     their common parent. */
 
     lsib = ppage[(i__1 = kidbas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektrrk_", (ftnlen)276)];
+	    s_rnge("ppage", i__1, "zzektrrk_", (ftnlen)280)];
     rsib = ppage[(i__1 = kidbas + *pkidx) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektrrk_", (ftnlen)277)];
+	    "ppage", i__1, "zzektrrk_", (ftnlen)281)];
     if (lsib != *left || rsib != *right) {
 	chkin_("ZZEKTRRK", (ftnlen)8);
 	setmsg_("LEFT, RIGHT, PARENT, and PKIDX are inconsistent. LEFT = #; "
@@ -645,12 +649,12 @@ static integer c__63 = 63;
 
     if (*pkidx == 1) {
 	lnsize = ppage[(i__1 = keybas) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)364)] - 1;
+		"ppage", i__1, "zzektrrk_", (ftnlen)368)] - 1;
     } else {
 	lnsize = ppage[(i__1 = keybas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 
-		: s_rnge("ppage", i__1, "zzektrrk_", (ftnlen)366)] - ppage[(
+		: s_rnge("ppage", i__1, "zzektrrk_", (ftnlen)370)] - ppage[(
 		i__2 = keybas + *pkidx - 2) < 256 && 0 <= i__2 ? i__2 : 
-		s_rnge("ppage", i__2, "zzektrrk_", (ftnlen)366)] - 1;
+		s_rnge("ppage", i__2, "zzektrrk_", (ftnlen)370)] - 1;
     }
 
 /*     Now, the actions we take depend on whether we must schlep keys */
@@ -690,7 +694,7 @@ static integer c__63 = 63;
 /*        the successor of the subtree left behind. */
 
 	futrpk = lpage[(i__1 = remain + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"lpage", i__1, "zzektrrk_", (ftnlen)407)];
+		"lpage", i__1, "zzektrrk_", (ftnlen)411)];
 	subsiz = lnsize - futrpk;
 
 /*        The rotated set of keys will no longer be preceded by the */
@@ -728,21 +732,21 @@ static integer c__63 = 63;
 
 	for (i__ = rnkeys; i__ >= 1; --i__) {
 	    rpage[(i__1 = i__ + 1 + schlep - 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)449)] = rpage[(
+		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)453)] = rpage[(
 		    i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		    i__2, "zzektrrk_", (ftnlen)449)] + dshift;
+		    i__2, "zzektrrk_", (ftnlen)453)] + dshift;
 	}
 	for (i__ = rnkeys; i__ >= 1; --i__) {
 	    rpage[(i__1 = i__ + 128 + schlep - 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)453)] = rpage[(
+		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)457)] = rpage[(
 		    i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		    "rpage", i__2, "zzektrrk_", (ftnlen)453)];
+		    "rpage", i__2, "zzektrrk_", (ftnlen)457)];
 	}
 	for (i__ = rnkeys + 1; i__ >= 1; --i__) {
 	    rpage[(i__1 = i__ + 64 + schlep - 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)457)] = rpage[(
+		    s_rnge("rpage", i__1, "zzektrrk_", (ftnlen)461)] = rpage[(
 		    i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpa"
-		    "ge", i__2, "zzektrrk_", (ftnlen)457)];
+		    "ge", i__2, "zzektrrk_", (ftnlen)461)];
 	}
 
 /*        `Move' the old parent key to its target destination in the */
@@ -750,24 +754,24 @@ static integer c__63 = 63;
 /*        is simply set to its new value. */
 
 	rpage[(i__1 = schlep) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage", 
-		i__1, "zzektrrk_", (ftnlen)465)] = nvopar;
+		i__1, "zzektrrk_", (ftnlen)469)] = nvopar;
 	rpage[(i__1 = schlep + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge("rpage"
-		, i__1, "zzektrrk_", (ftnlen)466)] = ppage[(i__2 = datbas + *
+		, i__1, "zzektrrk_", (ftnlen)470)] = ppage[(i__2 = datbas + *
 		pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, 
-		"zzektrrk_", (ftnlen)466)];
+		"zzektrrk_", (ftnlen)470)];
 
 /*        `Move' the future parent key to its target destination in the */
 /*        parent.  The data pointer is copied; the key is adjusted by */
 /*        the offset delta we've computed. */
 
 	ppage[(i__1 = datbas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)473)] = lpage[(i__2 = 
+		"ppage", i__1, "zzektrrk_", (ftnlen)477)] = lpage[(i__2 = 
 		remain + 128) < 256 && 0 <= i__2 ? i__2 : s_rnge("lpage", 
-		i__2, "zzektrrk_", (ftnlen)473)];
+		i__2, "zzektrrk_", (ftnlen)477)];
 	ppage[(i__1 = keybas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)474)] = ppage[(i__2 = 
+		"ppage", i__1, "zzektrrk_", (ftnlen)478)] = ppage[(i__2 = 
 		keybas + *pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppa"
-		"ge", i__2, "zzektrrk_", (ftnlen)474)] + dpar;
+		"ge", i__2, "zzektrrk_", (ftnlen)478)] + dpar;
 
 /*        Rotate the subtree following the future parent key to its */
 /*        destination in the sibling.  Update the keys to account for */
@@ -776,16 +780,16 @@ static integer c__63 = 63;
 	i__1 = schlep - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    rpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		    i__2, "zzektrrk_", (ftnlen)482)] = lpage[(i__3 = remain + 
+		    i__2, "zzektrrk_", (ftnlen)486)] = lpage[(i__3 = remain + 
 		    2 + i__ - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("lpage", 
-		    i__3, "zzektrrk_", (ftnlen)482)] + drotat;
+		    i__3, "zzektrrk_", (ftnlen)486)] + drotat;
 	}
 	i__2 = schlep - 1;
 	movei_(&lpage[(i__1 = remain + 129) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)485)], &i__2, &
+		s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)489)], &i__2, &
 		rpage[128]);
 	movei_(&lpage[(i__1 = remain + 65) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"lpage", i__1, "zzektrrk_", (ftnlen)486)], &schlep, &rpage[64]
+		"lpage", i__1, "zzektrrk_", (ftnlen)490)], &schlep, &rpage[64]
 		);
 
 /*        Update the key counts in both the input node and sibling. */
@@ -812,7 +816,7 @@ static integer c__63 = 63;
 /*        left behind. */
 
 	futrpk = rpage[(i__1 = schlep) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"rpage", i__1, "zzektrrk_", (ftnlen)517)];
+		"rpage", i__1, "zzektrrk_", (ftnlen)521)];
 	subsiz = futrpk - 1;
 
 /*        The rotated set of keys will be preceded by the keys already */
@@ -844,24 +848,24 @@ static integer c__63 = 63;
 /*        is simply set to its new value. */
 
 	lpage[(i__1 = lnkeys + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge("lpage", 
-		i__1, "zzektrrk_", (ftnlen)553)] = nvopar;
+		i__1, "zzektrrk_", (ftnlen)557)] = nvopar;
 	lpage[(i__1 = lnkeys + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge("lpage"
-		, i__1, "zzektrrk_", (ftnlen)554)] = ppage[(i__2 = datbas + *
+		, i__1, "zzektrrk_", (ftnlen)558)] = ppage[(i__2 = datbas + *
 		pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, 
-		"zzektrrk_", (ftnlen)554)];
+		"zzektrrk_", (ftnlen)558)];
 
 /*        `Move' the future parent key to its target destination in the */
 /*        parent.  The data pointer is copied; the key is adjusted by */
 /*        the offset delta we've computed. */
 
 	ppage[(i__1 = datbas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)561)] = rpage[(i__2 = 
+		"ppage", i__1, "zzektrrk_", (ftnlen)565)] = rpage[(i__2 = 
 		schlep + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		i__2, "zzektrrk_", (ftnlen)561)];
+		i__2, "zzektrrk_", (ftnlen)565)];
 	ppage[(i__1 = keybas + *pkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"ppage", i__1, "zzektrrk_", (ftnlen)562)] = ppage[(i__2 = 
+		"ppage", i__1, "zzektrrk_", (ftnlen)566)] = ppage[(i__2 = 
 		keybas + *pkidx - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppa"
-		"ge", i__2, "zzektrrk_", (ftnlen)562)] + dpar;
+		"ge", i__2, "zzektrrk_", (ftnlen)566)] + dpar;
 
 /*        Rotate the subtree following the future parent key to its */
 /*        destination in the sibling.  Update the keys to account for */
@@ -869,21 +873,21 @@ static integer c__63 = 63;
 
 	i__2 = schlep - 1;
 	movei_(&rpage[1], &i__2, &lpage[(i__1 = lnkeys + 2) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)569)]
+		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)573)]
 		);
 	i__2 = schlep - 1;
 	movei_(&rpage[128], &i__2, &lpage[(i__1 = lnkeys + 129) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)570)]
+		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)574)]
 		);
 	movei_(&rpage[64], &schlep, &lpage[(i__1 = lnkeys + 65) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)571)]
+		i__1 ? i__1 : s_rnge("lpage", i__1, "zzektrrk_", (ftnlen)575)]
 		);
 	i__1 = schlep - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    lpage[(i__2 = lnkeys + 2 + i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-		    s_rnge("lpage", i__2, "zzektrrk_", (ftnlen)574)] = lpage[(
+		    s_rnge("lpage", i__2, "zzektrrk_", (ftnlen)578)] = lpage[(
 		    i__3 = lnkeys + 2 + i__ - 1) < 256 && 0 <= i__3 ? i__3 : 
-		    s_rnge("lpage", i__3, "zzektrrk_", (ftnlen)574)] + drotat;
+		    s_rnge("lpage", i__3, "zzektrrk_", (ftnlen)578)] + drotat;
 	}
 
 /*        Shift the remaining elements of the sibling to the left. */
@@ -896,23 +900,23 @@ static integer c__63 = 63;
 	i__1 = remain;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    rpage[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage", 
-		    i__2, "zzektrrk_", (ftnlen)586)] = rpage[(i__3 = i__ + 1 
+		    i__2, "zzektrrk_", (ftnlen)590)] = rpage[(i__3 = i__ + 1 
 		    + schlep - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpage", 
-		    i__3, "zzektrrk_", (ftnlen)586)] + dshift;
+		    i__3, "zzektrrk_", (ftnlen)590)] + dshift;
 	}
 	i__1 = remain;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    rpage[(i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpa"
-		    "ge", i__2, "zzektrrk_", (ftnlen)590)] = rpage[(i__3 = i__ 
+		    "ge", i__2, "zzektrrk_", (ftnlen)594)] = rpage[(i__3 = i__ 
 		    + 128 + schlep - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge(
-		    "rpage", i__3, "zzektrrk_", (ftnlen)590)];
+		    "rpage", i__3, "zzektrrk_", (ftnlen)594)];
 	}
 	i__1 = remain + 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    rpage[(i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge("rpage"
-		    , i__2, "zzektrrk_", (ftnlen)594)] = rpage[(i__3 = i__ + 
+		    , i__2, "zzektrrk_", (ftnlen)598)] = rpage[(i__3 = i__ + 
 		    64 + schlep - 1) < 256 && 0 <= i__3 ? i__3 : s_rnge("rpa"
-		    "ge", i__3, "zzektrrk_", (ftnlen)594)];
+		    "ge", i__3, "zzektrrk_", (ftnlen)598)];
 	}
 
 /*        Update the key counts in both the input node and sibling. */

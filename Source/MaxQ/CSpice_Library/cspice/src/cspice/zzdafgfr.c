@@ -167,6 +167,10 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.6.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
 /* -    SPICELIB Version 2.5.0, 10-MAR-2014 (BVS) */
 
 /*        Updated for SUN-SOLARIS-64BIT-INTEL. */
@@ -447,7 +451,7 @@ static integer c__1 = 1;
 
 /* $ Particulars */
 
-/*     This routine reads the publically available components of */
+/*     This routine reads the publicly available components of */
 /*     file records from native and supported non-native DAFs. */
 
 /*     The size of the character buffer and the number of records */
@@ -481,6 +485,10 @@ static integer c__1 = 1;
 /*     F.S. Turner     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 03-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    SPICELIB Version 1.0.1, 24-JUL-2014 (NJB) */
 
@@ -540,7 +548,7 @@ static integer c__1 = 1;
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    zzddhgsd_("BFF", &i__, strbff + (((i__1 = i__ - 1) < 4 && 0 <= 
 		    i__1 ? i__1 : s_rnge("strbff", i__1, "zzdafgfr_", (ftnlen)
-		    280)) << 3), (ftnlen)3, (ftnlen)8);
+		    284)) << 3), (ftnlen)3, (ftnlen)8);
 	}
 
 /*        Fetch the native binary file format and determine its */

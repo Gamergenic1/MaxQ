@@ -54,30 +54,35 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-    v1,v2     I   Input vectors.
+   v1,
+   v2         I   Input vectors.
+
+   The function returns the relative difference between two
+   3-dimensional vectors.
 
 -Detailed_Input
 
-    v1, v2        are two 3-dimensional vectors for which the
-                  relative difference is to be computed.
+   v1,
+   v2          are two 3-dimensional vectors for which the relative
+               difference is to be computed.
 
 -Detailed_Output
 
-    vrel_c        the relative difference between V1 and V2.
-                  It is defined as:
-                                              || v1 - v2 ||
-                            vrel_c   =   ----------------------
-                                       max ( ||v1||, ||v2|| )
+   The function returns the relative difference between the two input
+   3-dimensional vectors `v1' and `v2'.
 
-                  where || x || indicates the Euclidean norm of
-                  the vector x ( ||x|| = sqrt( x . x ) ).
+   It is defined as:
 
-                  vrel_c assumes values in the range [0,2]. If both
-                  v1 and v2 are zero vectors then vrel_c is defined
-                  to be zero.
+                        || v1 - v2 ||
+      vrel_c   =   ------------------------
+                    max ( ||v1||, ||v2|| )
 
+   where ||x|| indicates the Euclidean norm of the vector `x'.
+
+   vrel_c assumes values in the range [0,2]. If both `v1' and `v2' are zero
+   vectors then vrel_c is defined to be zero.
 
 -Parameters
 
@@ -87,8 +92,8 @@
 
    Error free.
 
-   If both v1 and v2 are zero vectors then vrel_c is defined
-   to be zero.
+   1)  If both `v1' and `v2' are zero vectors, then vrel_c is defined
+       to be zero.
 
 -Files
 
@@ -177,20 +182,26 @@
 
 -Author_and_Institution
 
-   J.M. Lynch     (JPL)
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   J.M. Lynch          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.1.0, 28-AUG-2001 (NJB)
-     
-      Include interface macro definition file SpiceZim.h. 
+   -CSPICE Version 1.1.1, 09-APR-2021 (JDR)
 
-   -CSPICE Version 1.0.1, 13-APR-2000 (NJB) 
-   
-      Made some minor updates and corrections in the code example.
-      
-   -CSPICE Version 1.0.0, 6-JUL-1999
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.1.0, 28-AUG-2001 (NJB)
+
+       Include interface macro definition file SpiceZim.h.
+
+   -CSPICE Version 1.0.1, 13-APR-2000 (NJB)
+
+       Made some minor updates and corrections in the code example.
+
+   -CSPICE Version 1.0.0, 06-JUL-1999 (EDW) (JML)
 
 -Index_Entries
 

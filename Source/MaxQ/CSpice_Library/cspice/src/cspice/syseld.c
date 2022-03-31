@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SYSELD ( Select a subset of the values of a symbol ) */
+/* $Procedure SYSELD ( Select a subset of the values of a symbol ) */
 /* Subroutine */ int syseld_(char *name__, integer *begin, integer *end, char 
 	*tabsym, integer *tabptr, doublereal *tabval, doublereal *values, 
 	logical *found, ftnlen name_len, ftnlen tabsym_len)
@@ -73,46 +73,44 @@
 /*                    be returned. */
 /*     BEGIN      I   Index of the first associated value to be returned. */
 /*     END        I   Index of the last associated value to be returned. */
-
 /*     TABSYM, */
 /*     TABPTR, */
 /*     TABVAL     I   Components of the symbol table. */
-
 /*     VALUES     O   Subset of the values associated with the symbol */
 /*                    NAME. */
-/*     FOUND      O   True if the subset of values exists. */
+/*     FOUND      O   .TRUE. if the subset of values exists. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose subset of associated */
-/*                values to be returned. If NAME is not in the symbol */
-/*                table, FOUND is false. */
+/*     NAME     is the name of the symbol whose subset of associated */
+/*              values to be returned. If NAME is not in the symbol */
+/*              table, FOUND is .FALSE. */
 
-/*     BEGIN      is the index of the first associated value to be */
-/*                returned. If BEGIN is out of range (BEGIN < 1 or */
-/*                BEGIN > END) FOUND is false. */
+/*     BEGIN    is the index of the first associated value to be */
+/*              returned. If BEGIN is out of range (BEGIN < 1 or */
+/*              BEGIN > END) FOUND is .FALSE. */
 
-/*     END        is the index of the last associated value to be */
-/*                returned. If END is out of range (END < 1 or */
-/*                END > is greater than the dimension of NAME) */
-/*                FOUND is false. */
+/*     END      is the index of the last associated value to be */
+/*              returned. If END is out of range (END < 1 or */
+/*              END > is greater than the dimension of NAME) */
+/*              FOUND is .FALSE. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are components of the double precision symbol table. */
+/*     TABVAL   are components of the double precision symbol table. */
 
 /* $ Detailed_Output */
 
-/*     VALUES     is a subset of the values associated with the */
-/*                symbol NAME. If the subset specified by BEGIN and */
-/*                END exists, as many values as will fit in VALUES */
-/*                are returned. If the subset does not exist, no */
-/*                values are returned and FOUND is false. */
+/*     VALUES   is a subset of the values associated with the */
+/*              symbol NAME. If the subset specified by BEGIN and */
+/*              END exists, as many values as will fit in VALUES */
+/*              are returned. If the subset does not exist, no */
+/*              values are returned and FOUND is .FALSE. */
 
-/*     FOUND      is true if the subset of values is exists. */
-/*                FOUND is false if BEGIN < 1, BEGIN > END, END < 1, */
-/*                END > the dimension of NAME, or NAME is not */
-/*                in the symbol table. */
+/*     FOUND    is .TRUE. if the subset of values is exists. */
+/*              FOUND is .FALSE. if BEGIN < 1, BEGIN > END, END < 1, */
+/*              END > the dimension of NAME, or NAME is not */
+/*              in the symbol table. */
 
 /* $ Parameters */
 
@@ -120,9 +118,10 @@
 
 /* $ Exceptions */
 
-/*     1)  This subroutine does not check to see if the output array */
-/*         VALUES is large enough to hold the selected set of values. */
-/*         The caller must provide the required space. */
+/*     1)  If there is an issue while reading the components of a double */
+/*         precision symbol table, an error is signaled by a routine in */
+/*         the call tree of this routine. This normally indicates that */
+/*         the double precision symbol table is corrupted. */
 
 /* $ Files */
 
@@ -155,39 +154,41 @@
 /*     The ouput values of VALUES and FOUND for the input values of */
 /*     NAME, BEGIN, and END are contained in this table: */
 
-/*     NAME            BEGIN    END        VALUES               FOUND */
-/*     -------------   -----    ---    ---------------------   ------- */
-/*     MEAN_ANOM         1       2         6.239996D0            TRUE */
-/*                                         1.99096871D-7 */
+/*        NAME            BEGIN    END        VALUES              FOUND */
+/*        -------------   -----    ---    --------------------   ------- */
+/*        MEAN_ANOM         1       2         6.239996D0          .TRUE. */
+/*                                            1.99096871D-7 */
 
-/*     BODY4_POLE_RA     1       3         3.17681D2 */
-/*                                         1.08D-1 */
-/*                                         0.0D0 */
+/*        BODY4_POLE_RA     1       3         3.17681D2           .TRUE. */
+/*                                            1.08D-1 */
+/*                                            0.0D0 */
 
-/*     BODY4_PRIME       1       3                              FALSE */
+/*        BODY4_PRIME       1       3                            .FALSE. */
 
-/*     MEAN_ANOM         2       1                              FALSE */
+/*        MEAN_ANOM         2       1                            .FALSE. */
 
-/*     ORBIT_ECC         1      -2                              FALSE */
+/*        ORBIT_ECC         1      -2                            .FALSE. */
 
-/*     K                 1       5                              FALSE */
-/*     ---------------------------------------------------------------- */
+/*        K                 1       5                            .FALSE. */
+/*        -------------------------------------------------------------- */
 
-/*     Note that FOUND is FALSE for examples 3 through 6 because: */
+/*     Note that FOUND is .FALSE. for examples 3 through 6 because: */
 
-/*        - In the 3rd example, the symbol 'BODY4_PRIME' is not in the */
-/*          symbol table. */
+/*     -  In the 3rd example, the symbol 'BODY4_PRIME' is not in the */
+/*        symbol table. */
 
-/*        - In the 4th example, BEGIN > END. */
+/*     -  In the 4th example, BEGIN > END. */
 
-/*        - In the 5th example, END < 0. */
+/*     -  In the 5th example, END < 0. */
 
-/*        - In the 6th example, END is greater than the dimension of the */
-/*          symbol 'K'. */
+/*     -  In the 6th example, END is greater than the dimension of the */
+/*        symbol 'K'. */
 
 /* $ Restrictions */
 
-/*     1) See Exceptions section. */
+/*     1)  This subroutine does not check to see if the output array */
+/*         VALUES is large enough to hold the selected set of values. */
+/*         The caller must provide the required space. */
 
 /* $ Literature_References */
 
@@ -195,24 +196,35 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.2, 03-NOV-2005 (NJB) */
+/* -    SPICELIB Version 1.1.0, 16-AUG-2021 (JDR) */
 
-/*         Various header corrections were made.  In particular, */
-/*         the header no longer asserts that this routine will */
-/*         "return as many values as will fit" in the output array */
-/*         VALUES. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Edited the header to comply with NAIF standard. Moved entry */
+/*        from $Exceptions to $Restrictions and added entry #1 in */
+/*        $Exceptions. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 1.0.2, 03-NOV-2005 (NJB) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Various header corrections were made. In particular, */
+/*        the header no longer asserts that this routine will */
+/*        "return as many values as will fit" in the output array */
+/*        VALUES. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

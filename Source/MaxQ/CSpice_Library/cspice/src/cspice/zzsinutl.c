@@ -7,10 +7,10 @@
 
 /* Table of constant values */
 
-static integer c__3 = 3;
 static integer c__100 = 100;
+static integer c__3 = 3;
 
-/* $Procedure ZZSINUTL ( DSK, utilities for generalized ray intercept ) */
+/* $Procedure ZZSINUTL ( Utilities for generalized ray intercept ) */
 /* Subroutine */ int zzsinutl_0_(int n__, integer *trgcde, integer *nsurf, 
 	integer *srflst, doublereal *et, integer *fixfid, doublereal *vertex, 
 	doublereal *raydir, doublereal *spoint, logical *found, doublereal *
@@ -20,14 +20,11 @@ static integer c__100 = 100;
     doublereal d__1;
 
     /* Local variables */
-    extern /* Subroutine */ int zzdsksph_(integer *, integer *, integer *, 
-	    doublereal *, doublereal *);
-    integer n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), movei_(integer *, 
-	    integer *, integer *);
+    extern /* Subroutine */ int zzgftreb_(integer *, doublereal *), zzdsksph_(
+	    integer *, integer *, integer *, doublereal *, doublereal *), 
+	    chkin_(char *, ftnlen), movei_(integer *, integer *, integer *);
     extern logical failed_(void);
-    extern /* Subroutine */ int cleard_(integer *, doublereal *), bodvcd_(
-	    integer *, char *, integer *, integer *, doublereal *, ftnlen);
+    extern /* Subroutine */ int cleard_(integer *, doublereal *);
     static integer savfid;
     static doublereal savrad[3];
     extern /* Subroutine */ int npedln_(doublereal *, doublereal *, 
@@ -108,7 +105,7 @@ static integer c__100 = 100;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     TRGCDE     I   ZZSUELIN, ZZSUDSKI */
 /*     NSURF      I   ZZSUELIN, ZZSUDSKI */
@@ -138,11 +135,11 @@ static integer c__100 = 100;
 
 /* $ Exceptions */
 
-/*     1)  If this routine is called directly, it signals the error */
-/*         SPICE(BOGUSENTRY). */
+/*     1)  If this routine is called directly, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
-/*     See the entry points for descriptions of errors specific to */
-/*     those routines. */
+/*     2)  See the entry points for descriptions of errors specific to */
+/*         those routines. */
 
 /* $ Files */
 
@@ -164,7 +161,7 @@ static integer c__100 = 100;
 
 /* $ Particulars */
 
-/*     This routine is meant to be used only by the DSK subsystem. */
+/*     This routine is meant to be used only SPICELIB. */
 
 /*     This routine contains the following entry points that support */
 /*     the generalized ray-surface intercept algorithm used by SINCPT: */
@@ -199,7 +196,7 @@ static integer c__100 = 100;
 
 /* $ Restrictions */
 
-/*     1) This is a private routine. */
+/*     1)  This is a private routine. */
 
 /* $ Literature_References */
 
@@ -207,11 +204,18 @@ static integer c__100 = 100;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.0.0 01-JUN-2016 (NJB) */
+/* -    SPICELIB Version 1.0.1, 17-OCT-2021 (NJB) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated comments. */
+
+/* -    SPICELIB Version 1.0.0, 01-JUN-2016 (NJB) */
 
 /*        Updated comments. Updated error handling in ZZSUDSKI. */
 
@@ -289,7 +293,7 @@ static integer c__100 = 100;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("ZZSINUTL", (ftnlen)8);
     return 0;
-/* $Procedure ZZSUELIN ( DSK, initialize SINCPT utilities for ellipsoid ) */
+/* $Procedure ZZSUELIN ( Initialize SINCPT utilities for ellipsoid ) */
 
 L_zzsuelin:
 /* $ Abstract */
@@ -345,16 +349,16 @@ L_zzsuelin:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TRGCDE     I   Target body ID code. */
 
 /* $ Detailed_Input */
 
-/*     TRGCDE     is the integer body ID of the target body for which */
-/*                ray-surface intercept or ray-surface near point */
-/*                computations are to be performed by the callback */
-/*                entry points of this package. */
+/*     TRGCDE   is the integer body ID of the target body for which */
+/*              ray-surface intercept or ray-surface near point */
+/*              computations are to be performed by the callback */
+/*              entry points of this package. */
 
 /* $ Detailed_Output */
 
@@ -367,8 +371,8 @@ L_zzsuelin:
 /* $ Exceptions */
 
 /*     1)  If an error occurs during lookup of the target body's radii, */
-/*         an error will be signaled by a routine in the call tree */
-/*         of this routine. */
+/*         the error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     2)  If the body-fixed frame used by the caller of this routine */
 /*         does not have its axes properly aligned with the target */
@@ -388,7 +392,7 @@ L_zzsuelin:
 
 /* $ Particulars */
 
-/*     This routine is meant to be used only by the DSK subsystem. */
+/*     This routine is meant to be used only by SPICELIB. */
 
 /*     This routine supports the generalized ray-surface intercept */
 /*     algorithm used by SINCPT. */
@@ -399,10 +403,10 @@ L_zzsuelin:
 /*     and ray-ellipsoid altitude computation using NPEDLN. */
 
 /*     Note the absence of a frame ID from the argument list. This */
-/*     routine assumes the input ray vectors are expressed in a */
-/*     body-fixed frame centered at the target body's center, having its */
-/*     axes aligned with the principal axes of the target body's */
-/*     reference ellipsoid. */
+/*     routine and related utilities assume the input ray vectors are */
+/*     expressed in a body-fixed frame centered at the target body's */
+/*     center, having its axes aligned with the principal axes of the */
+/*     target body's reference ellipsoid. */
 
 /* $ Examples */
 
@@ -410,9 +414,9 @@ L_zzsuelin:
 
 /* $ Restrictions */
 
-/*     1) This is a private routine. */
+/*     1)  This is a private routine. */
 
-/*     2) See exception (2) above. */
+/*     2)  See exception (2) above. */
 
 /* $ Literature_References */
 
@@ -420,9 +424,16 @@ L_zzsuelin:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 30-MAY-2021 (NJB) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated comments. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUN-2016 (NJB) */
 
@@ -437,7 +448,7 @@ L_zzsuelin:
     }
     chkin_("ZZSUELIN", (ftnlen)8);
     savtyp = 1;
-    bodvcd_(trgcde, "RADII", &c__3, &n, savrad, (ftnlen)5);
+    zzgftreb_(trgcde, savrad);
     if (failed_()) {
 	chkout_("ZZSUELIN", (ftnlen)8);
 	return 0;
@@ -450,7 +461,7 @@ L_zzsuelin:
     savmxr = max(d__1,savrad[2]);
     chkout_("ZZSUELIN", (ftnlen)8);
     return 0;
-/* $Procedure ZZSUDSKI ( DSK, initialize SINCPT utilities for dsk target ) */
+/* $Procedure ZZSUDSKI ( DSK, initialize SINCPT utilities for DSK target ) */
 
 L_zzsudski:
 /* $ Abstract */
@@ -511,7 +522,7 @@ L_zzsudski:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TRGCDE     I   Target body ID code. */
 /*     NSURF      I   Number of surface IDs in surface list. */
@@ -521,21 +532,21 @@ L_zzsudski:
 
 /* $ Detailed_Input */
 
-/*     TRGCDE     is the integer body ID of the target body for which */
-/*                ray-surface intercept or ray-surface near point */
-/*                computations are to be performed by the callback */
-/*                entry points of this package. */
+/*     TRGCDE   is the integer body ID of the target body for which */
+/*              ray-surface intercept or ray-surface near point */
+/*              computations are to be performed by the callback */
+/*              entry points of this package. */
 
 /*     NSURF, */
-/*     SRFLST     are, respectively, the count of surface IDs in the */
-/*                surface ID list and the list itself. */
+/*     SRFLST   are, respectively, the count of surface IDs in the */
+/*              surface ID list and the list itself. */
 
-/*                If the list is empty, all surfaces associated with */
-/*                the target body are used. */
+/*              If the list is empty, all surfaces associated with */
+/*              the target body are used. */
 
-/*     FIXFID     is the frame ID code of a body-fixed reference frame */
-/*                associated with the target body. The frame must be */
-/*                centered at the target body's center. */
+/*     FIXFID   is the frame ID code of a body-fixed reference frame */
+/*              associated with the target body. The frame must be */
+/*              centered at the target body's center. */
 
 /* $ Detailed_Output */
 
@@ -543,24 +554,31 @@ L_zzsudski:
 
 /* $ Parameters */
 
-/*     MAXSRF     is the maximum supported size of a surface ID list. */
-/*                See the include file dsk.inc for the parameter's */
-/*                value. */
+/*     MAXSRF   is the maximum supported size of a surface ID list. */
+/*              See the include file dsk.inc for the parameter's */
+/*              value. */
 
 /* $ Exceptions */
 
 /*     1)  If the number of IDs in the surface list is negative or */
-/*         exceeds MAXSRF, the error SPICE(INVALIDCOUNT) will be */
-/*         signaled. */
+/*         exceeds MAXSRF, the error SPICE(INVALIDCOUNT) is signaled. */
 
 /*     2)  If an error occurs during calculation of the radii of the */
 /*         inner and outer bounding spheres for the target body, */
-/*         the error will be signaled by a routine in the call tree */
+/*         the error is signaled by a routine in the call tree */
 /*         of this routine. */
 
 /*     3)  The reference frame designated by FIXFID must be centered */
 /*         at the target body's center. This condition must be */
 /*         checked by the caller of this routine. */
+
+/*     4)  If a body RADII vector has other than exactly thee elements, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
+
+/*     5)  If a body RADII vector has any element less-than or equal to */
+/*         zero, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
@@ -577,7 +595,7 @@ L_zzsudski:
 /*     This routine prepares the callback entry points for computations */
 /*     using a DSK shape model. It stores the target body ID, DSK */
 /*     surface ID list, and ID of the target body-fixed frame. It */
-/*     also computes the radii of the inner and output bounding */
+/*     also computes the radii of the inner and outer bounding */
 /*     surfaces for the target body; these surfaces are computed using */
 /*     loaded DSK segments for the surfaces indicated by the input */
 /*     body ID and surface ID list. */
@@ -591,9 +609,9 @@ L_zzsudski:
 
 /* $ Restrictions */
 
-/*     1) This is a private routine. */
+/*     1)  This is a private routine. */
 
-/*     2) See exception (2) above. */
+/*     2)  See exception (2) above. */
 
 /* $ Literature_References */
 
@@ -601,16 +619,24 @@ L_zzsudski:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 07-SEP-2021 (EDW) (JDR) */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUN-2016 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     initialize intercept utilities for dsk target */
+/*     initialize intercept utilities for DSK target */
 
 /* -& */
     if (return_()) {
@@ -642,7 +668,7 @@ L_zzsudski:
     zzdsksph_(trgcde, &savnsf, savsrf, &savmnr, &savmxr);
     chkout_("ZZSUDSKI", (ftnlen)8);
     return 0;
-/* $Procedure ZZRAYSFX ( DSK, callback for ray-surface intercept ) */
+/* $Procedure ZZRAYSFX ( Callback for ray-surface intercept ) */
 
 L_zzraysfx:
 /* $ Abstract */
@@ -702,41 +728,41 @@ L_zzraysfx:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     VERTEX     I   Ray's vertex. */
 /*     RAYDIR     I   Ray's direction vector. */
 /*     ET         I   Evaluation epoch, seconds past J2000 TDB. */
 /*     SPOINT     O   Surface intercept point. */
-/*     FOUND      O   Found flag. True if intercept exists. */
+/*     FOUND      O   Found flag. .TRUE. if intercept exists. */
 
 /* $ Detailed_Input */
 
 /*     VERTEX, */
-/*     RAYDIR     are, respectively, the vertex and direction vector of */
-/*                a ray. When the target's surface is represented by DSK */
-/*                data, Both vectors are expressed in the frame */
-/*                designated by FIXFID, which is set via a call to one */
-/*                of the initialization routines of this package. */
+/*     RAYDIR   are, respectively, the vertex and direction vector of */
+/*              a ray. When the target's surface is represented by DSK */
+/*              data, both vectors are expressed in the frame */
+/*              designated by FIXFID, which is set via a call to one */
+/*              of the initialization routines of this package. */
 
-/*                When the target's surface is represented by an */
-/*                ellipsoid, the vectors are presumed to be expressed in */
-/*                a body-fixed frame compatible with that ellipsoid. */
+/*              When the target's surface is represented by an */
+/*              ellipsoid, the vectors are presumed to be expressed in */
+/*              a body-fixed frame compatible with that ellipsoid. */
 
-/*     ET         is the epoch for which the computation is to be */
-/*                performed. This epoch is used for DSK segment */
-/*                selection; only segments containing ET in their time */
-/*                coverage interval will be used. ET is expressed as */
-/*                seconds past J2000 TDB. */
+/*     ET       is the epoch for which the computation is to be */
+/*              performed. This epoch is used for DSK segment */
+/*              selection; only segments containing ET in their time */
+/*              coverage interval will be used. ET is expressed as */
+/*              seconds past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     SPOINT     is the surface intercept on the target body */
-/*                nearest to the ray's vertex, if the intercept */
-/*                exists. */
+/*     SPOINT   is the surface intercept on the target body */
+/*              nearest to the ray's vertex, if the intercept */
+/*              exists. */
 
-/*     FOUND      is a logical flag that is set to .TRUE. if and */
-/*                only if an intercept exists. */
+/*     FOUND    is a logical flag that is set to .TRUE. if and */
+/*              only if an intercept exists. */
 
 /* $ Parameters */
 
@@ -745,7 +771,7 @@ L_zzraysfx:
 /* $ Exceptions */
 
 /*     1)  If an error occurs while this routine attempts to compute a */
-/*         surface intercept, the error will be signaled by a routine in */
+/*         surface intercept, the error is signaled by a routine in */
 /*         the call tree of this routine. */
 
 /* $ Files */
@@ -771,7 +797,7 @@ L_zzraysfx:
 
 /* $ Particulars */
 
-/*     This routine is meant to be used only by the DSK subsystem. */
+/*     This routine is meant to be used only by SPICELIB. */
 
 /*     This routine prepares the local buffers for a ray-surface */
 /*     intercept computation using unprioritized DSK data. It calls */
@@ -797,9 +823,17 @@ L_zzraysfx:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 30-MAY-2021 (NJB) (JDR) */
+
+/*        Updated comments: this routine no longer is considered */
+/*        a DSK subsystem routine. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUN-2016 (NJB) */
 
@@ -829,7 +863,7 @@ L_zzraysfx:
     }
     chkout_("ZZRAYSFX", (ftnlen)8);
     return 0;
-/* $Procedure ZZMAXRAD ( DSK, maximum radius ) */
+/* $Procedure ZZMAXRAD ( Shape model, maximum radius ) */
 
 L_zzmaxrad:
 /* $ Abstract */
@@ -883,25 +917,25 @@ L_zzmaxrad:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     MAXRAD     O   Radius of outer bounding sphere for target body. */
 
 /* $ Detailed_Input */
 
-/*     MAXRAD     is the radius of an outer bounding sphere for the */
-/*                target body. The sphere is centered at the center of */
-/*                the target body. */
+/*     MAXRAD   is the radius of an outer bounding sphere for the */
+/*              target body. The sphere is centered at the center of */
+/*              the target body. */
 
-/*                If the target's surface is modeled as an ellipsoid, */
-/*                this radius is the maximum radius of the ellipsoid. If */
-/*                the target's surface is modeled using DSK data, the */
-/*                radius is determined by the surface list used at */
-/*                initialization time. */
+/*              If the target's surface is modeled as an ellipsoid, */
+/*              this radius is the maximum radius of the ellipsoid. If */
+/*              the target's surface is modeled using DSK data, the */
+/*              radius is determined by the surface list used at */
+/*              initialization time. */
 
-/*                The radius is not necessarily a least upper bound. */
+/*              The radius is not necessarily a least upper bound. */
 
-/*                Units are km. */
+/*              Units are km. */
 
 /* $ Detailed_Output */
 
@@ -924,7 +958,7 @@ L_zzmaxrad:
 
 /* $ Particulars */
 
-/*     This routine is meant to be used only by the DSK subsystem. */
+/*     This routine is meant to be used only by SPICELIB. */
 
 /*     This routine supports the generalized ray-surface intercept */
 /*     algorithm used by SINCPT. */
@@ -937,7 +971,7 @@ L_zzmaxrad:
 /*     the maximum radius that would be obtained by considering only */
 /*     segments covering the epoch of interest. */
 
-/*     The routine considers all segments for the target in in the */
+/*     The routine considers all segments for the target in the */
 /*     interest of efficiency: it simply returns a value that was */
 /*     computed during the last setup call. If the routine were */
 /*     time-dependent, it would need to re-compute the maximum radius */
@@ -967,9 +1001,17 @@ L_zzmaxrad:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 16-JUL-2021 (NJB) (JDR) */
+
+/*        Updated comments: this routine no longer is considered */
+/*        a DSK subsystem routine. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUN-2016 (NJB) */
 
@@ -981,7 +1023,7 @@ L_zzmaxrad:
 /* -& */
     *maxrad = savmxr;
     return 0;
-/* $Procedure ZZMINRAD ( DSK, minimum radius ) */
+/* $Procedure ZZMINRAD ( Shape model, minimum radius ) */
 
 L_zzminrad:
 /* $ Abstract */
@@ -1035,25 +1077,25 @@ L_zzminrad:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     MINRAD     O   Radius of inner bounding sphere for target body. */
 
 /* $ Detailed_Input */
 
-/*     MINRAD     is the radius of the inner bounding sphere for the */
-/*                target body. The sphere is centered at the center of */
-/*                the target body. */
+/*     MINRAD   is the radius of the inner bounding sphere for the */
+/*              target body. The sphere is centered at the center of */
+/*              the target body. */
 
-/*                If the target's surface is modeled as an ellipsoid, */
-/*                this radius is the minimum radius of the ellipsoid. If */
-/*                the target's surface is modeled using DSK data, the */
-/*                radius is determined by the surface list used at */
-/*                initialization time. */
+/*              If the target's surface is modeled as an ellipsoid, */
+/*              this radius is the minimum radius of the ellipsoid. If */
+/*              the target's surface is modeled using DSK data, the */
+/*              radius is determined by the surface list used at */
+/*              initialization time. */
 
-/*                The radius is not necessarily a least upper bound. */
+/*              The radius is not necessarily a least upper bound. */
 
-/*                Units are km. */
+/*              Units are km. */
 
 /* $ Detailed_Output */
 
@@ -1076,7 +1118,7 @@ L_zzminrad:
 
 /* $ Particulars */
 
-/*     This routine is meant to be used only by the DSK subsystem. */
+/*     This routine is meant to be used only by SPICELIB. */
 
 /*     This routine supports the generalized ray-surface intercept */
 /*     algorithm used by SINCPT. */
@@ -1089,7 +1131,7 @@ L_zzminrad:
 /*     the minimum radius that would be obtained by considering only */
 /*     segments covering the epoch of interest. */
 
-/*     The routine considers all segments for the target in in the */
+/*     The routine considers all segments for the target in the */
 /*     interest of efficiency: it simply returns a value that was */
 /*     computed during the last setup call. If the routine were */
 /*     time-dependent, it would need to re-compute the minimum radius */
@@ -1119,9 +1161,17 @@ L_zzminrad:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 16-JUL-2021 (NJB) (JDR) */
+
+/*        Updated comments: this routine no longer is considered */
+/*        a DSK subsystem routine. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUN-2016 (NJB) */
 
@@ -1133,7 +1183,7 @@ L_zzminrad:
 /* -& */
     *minrad = savmnr;
     return 0;
-/* $Procedure ZZRAYNP ( DSK, callback for ray-surface near point ) */
+/* $Procedure ZZRAYNP ( Shape model, callback for ray-surface near point ) */
 
 L_zzraynp:
 /* $ Abstract */
@@ -1194,7 +1244,7 @@ L_zzraynp:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     VERTEX     I   Ray's vertex. */
 /*     RAYDIR     I   Ray's direction vector. */
@@ -1205,41 +1255,41 @@ L_zzraynp:
 /* $ Detailed_Input */
 
 /*     VERTEX, */
-/*     RAYDIR     are, respectively, the vertex and direction vector of */
-/*                a ray. When the target's surface is represented by DSK */
-/*                data, Both vectors are expressed in the frame */
-/*                designated by FIXFID, which is set via a call to one */
-/*                of the initialization routines of this package. */
+/*     RAYDIR   are, respectively, the vertex and direction vector of */
+/*              a ray. When the target's surface is represented by DSK */
+/*              data, both vectors are expressed in the frame */
+/*              designated by FIXFID, which is set via a call to one */
+/*              of the initialization routines of this package. */
 
-/*                When the target's surface is represented by an */
-/*                ellipsoid, the vectors are presumed to be expressed in */
-/*                a body-fixed frame compatible with that ellipsoid. */
+/*              When the target's surface is represented by an */
+/*              ellipsoid, the vectors are presumed to be expressed in */
+/*              a body-fixed frame compatible with that ellipsoid. */
 
-/*     ET         is the epoch for which the computation is to be */
-/*                performed. This epoch is used for DSK segment */
-/*                selection; only segments containing ET in their time */
-/*                coverage interval will be used. ET is expressed as */
-/*                seconds past J2000 TDB. */
+/*     ET       is the epoch for which the computation is to be */
+/*              performed. This epoch is used for DSK segment */
+/*              selection; only segments containing ET in their time */
+/*              coverage interval will be used. ET is expressed as */
+/*              seconds past J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     PNEAR      is, when the target shape is modeled by a reference */
-/*                ellipsoid, the point on the target body nearest to the */
-/*                ray, if the ray does not intersect the body. If a */
-/*                ray-surface intercept exists, PNEAR is set to the */
-/*                intercept closest to the ray's vertex. */
+/*     PNEAR    is, when the target shape is modeled by a reference */
+/*              ellipsoid, the point on the target body nearest to the */
+/*              ray, if the ray does not intersect the body. If a */
+/*              ray-surface intercept exists, PNEAR is set to the */
+/*              intercept closest to the ray's vertex. */
 
-/*                When the target shape is modeled using DSK data, the */
-/*                computation is performed with an outer bounding sphere */
-/*                for the target used in place of the target's reference */
-/*                ellipsoid. This routine does not attempt to find the */
-/*                closest point on the topographic surface to the ray. */
+/*              When the target shape is modeled using DSK data, the */
+/*              computation is performed with an outer bounding sphere */
+/*              for the target used in place of the target's reference */
+/*              ellipsoid. This routine does not attempt to find the */
+/*              closest point on the topographic surface to the ray. */
 
-/*                PNEAR is expressed in the reference frame associated */
-/*                with the input ray's vertex and direction vectors. */
+/*              PNEAR is expressed in the reference frame associated */
+/*              with the input ray's vertex and direction vectors. */
 
-/*     DIST       is the distance between PNEAR and VERTEX. Units are */
-/*                km. */
+/*     DIST     is the distance between PNEAR and VERTEX. Units are */
+/*              km. */
 
 /* $ Parameters */
 
@@ -1249,7 +1299,7 @@ L_zzraynp:
 
 /*     1)  If an error occurs while this routine attempts to */
 /*         find the nearest point on the target surface to the */
-/*         input ray, the error will be signaled by a routine */
+/*         input ray, the error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /* $ Files */
@@ -1263,7 +1313,7 @@ L_zzraynp:
 
 /* $ Particulars */
 
-/*     This routine is meant to be used only by the DSK subsystem. */
+/*     This routine is meant to be used only by SPICELIB. */
 
 /*     This routine prepares the local buffers for a ray-surface */
 /*     near point computation using unprioritized DSK data. When */
@@ -1295,9 +1345,17 @@ L_zzraynp:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 30-MAY-2021 (NJB) (JDR) */
+
+/*        Updated comments: this routine no longer is considered */
+/*        a DSK subsystem routine. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUN-2016 (NJB) */
 

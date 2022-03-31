@@ -11,7 +11,7 @@ static logical c_false = FALSE_;
 static integer c__3 = 3;
 static integer c__256 = 256;
 
-/* $Procedure      DASACR ( DAS, add comment records ) */
+/* $Procedure DASACR ( DAS, add comment records ) */
 /* Subroutine */ int dasacr_(integer *handle, integer *n)
 {
     /* Initialized data */
@@ -104,7 +104,7 @@ static integer c__256 = 256;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   A DAS file handle. */
 /*     N          I   Number of comment records to append to the comment */
@@ -112,17 +112,17 @@ static integer c__256 = 256;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of an existing DAS file opened for */
-/*                    comment area modification by DASOPC. */
+/*     HANDLE   is the handle of an existing DAS file opened for */
+/*              comment area modification by DASOPC. */
 
-/*     N              is the number of records to append to the comment */
-/*                    area.  If NCOMR is the number of comment records */
-/*                    present in the file on input, then on output the */
-/*                    number of comment records will be NCOMR + N. */
+/*     N        is the number of records to append to the comment */
+/*              area. If NCOMR is the number of comment records */
+/*              present in the file on input, then on output the */
+/*              number of comment records will be NCOMR + N. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
@@ -131,11 +131,11 @@ static integer c__256 = 256;
 
 /* $ Exceptions */
 
-/*     1)  If the input handle is invalid, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  If an I/O error occurs during the addition process, the error */
-/*         will be diagnosed by routines called by this routine.  The */
+/*         is signaled by a routine in the call tree of this routine. The */
 /*         DAS file will probably be corrupted in this case. */
 
 /* $ Files */
@@ -145,7 +145,7 @@ static integer c__256 = 256;
 /* $ Particulars */
 
 /*     This routine is used to create space in the comment area of a DAS */
-/*     file to allow addition of comments to the file.  If there are */
+/*     file to allow addition of comments to the file. If there are */
 /*     comment records present in the file at the time this routine is */
 /*     called, the number of comment records specified by the input */
 /*     argument N will be appended to the existing comment records. */
@@ -186,8 +186,8 @@ static integer c__256 = 256;
 
 /* $ Restrictions */
 
-/*     1) The DAS file must have a binary file format native to the host */
-/*        system. */
+/*     1)  The DAS file must have a binary file format native to the host */
+/*         system. */
 
 /* $ Literature_References */
 
@@ -195,10 +195,17 @@ static integer c__256 = 256;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 05-FEB-2015 (NJB) */
 
@@ -210,7 +217,7 @@ static integer c__256 = 256;
 
 /* -    SPICELIB Version 1.1.0, 11-OCT-1996 (NJB) */
 
-/*        Bug fix:  backward and forward directory record pointers */
+/*        Bug fix: backward and forward directory record pointers */
 /*        are now updated when directory records are moved. */
 
 /* -    SPICELIB Version 1.0.0, 01-FEB-1993 (NJB) (WLT) */
@@ -225,10 +232,10 @@ static integer c__256 = 256;
 
 /* -    SPICELIB Version 1.1.0, 11-OCT-1996 (NJB) */
 
-/*        Bug fix:  backward and forward directory record pointers */
+/*        Bug fix: backward and forward directory record pointers */
 /*        are now updated when directory records are moved. */
 
-/*        Because these pointers are not used by the DAS sofware */
+/*        Because these pointers are not used by the DAS software */
 /*        once a DAS file is segregated, this bug had no effect on */
 /*        DAS files that were created and closed via DASCLS, then */
 /*        commented via the commnt utility. */
@@ -331,11 +338,11 @@ static integer c__256 = 256;
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dasacr_", (ftnlen)373)] == lrec && lastwd[(i__2 = i__ 
+		 i__1, "dasacr_", (ftnlen)382)] == lrec && lastwd[(i__2 = i__ 
 		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dasac"
-		"r_", (ftnlen)373)] > lword) {
+		"r_", (ftnlen)382)] > lword) {
 	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dasacr_", (ftnlen)376)];
+		    "lastwd", i__1, "dasacr_", (ftnlen)385)];
 	}
     }
 
@@ -387,15 +394,15 @@ static integer c__256 = 256;
 	    i__1 = lindex;
 	    for (i__ = 11; i__ <= i__1; ++i__) {
 		if (dirrec[(i__2 = i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-			s_rnge("dirrec", i__2, "dasacr_", (ftnlen)435)] < 0) {
+			s_rnge("dirrec", i__2, "dasacr_", (ftnlen)444)] < 0) {
 		    type__ = prev[(i__2 = type__ - 1) < 3 && 0 <= i__2 ? i__2 
-			    : s_rnge("prev", i__2, "dasacr_", (ftnlen)436)];
+			    : s_rnge("prev", i__2, "dasacr_", (ftnlen)445)];
 		} else {
 		    type__ = next[(i__2 = type__ - 1) < 3 && 0 <= i__2 ? i__2 
-			    : s_rnge("next", i__2, "dasacr_", (ftnlen)438)];
+			    : s_rnge("next", i__2, "dasacr_", (ftnlen)447)];
 		}
 		base += (i__3 = dirrec[(i__2 = i__ - 2) < 256 && 0 <= i__2 ? 
-			i__2 : s_rnge("dirrec", i__2, "dasacr_", (ftnlen)441)]
+			i__2 : s_rnge("dirrec", i__2, "dasacr_", (ftnlen)450)]
 			, abs(i__3));
 	    }
 
@@ -419,7 +426,7 @@ static integer c__256 = 256;
 /*                 ordering of types. */
 
 		    if (dirrec[(i__1 = pos) < 256 && 0 <= i__1 ? i__1 : 
-			    s_rnge("dirrec", i__1, "dasacr_", (ftnlen)467)] > 
+			    s_rnge("dirrec", i__1, "dasacr_", (ftnlen)476)] > 
 			    0) {
 
 /*                    This assignment and the one below in the ELSE */
@@ -429,18 +436,18 @@ static integer c__256 = 256;
 
 			type__ = prev[(i__1 = nxttyp - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("prev", i__1, "dasacr_", (
-				ftnlen)474)];
+				ftnlen)483)];
 		    } else {
 			type__ = next[(i__1 = nxttyp - 1) < 3 && 0 <= i__1 ? 
 				i__1 : s_rnge("next", i__1, "dasacr_", (
-				ftnlen)476)];
+				ftnlen)485)];
 		    }
 
 /*                 Update the cluster base record number. */
 
 		    base -= (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 <= 
 			    i__1 ? i__1 : s_rnge("dirrec", i__1, "dasacr_", (
-			    ftnlen)482)], abs(i__2));
+			    ftnlen)491)], abs(i__2));
 		}
 
 /*              Move the current cluster. */
@@ -448,7 +455,7 @@ static integer c__256 = 256;
 		i__3 = base;
 		for (i__ = base + (i__2 = dirrec[(i__1 = pos - 1) < 256 && 0 
 			<= i__1 ? i__1 : s_rnge("dirrec", i__1, "dasacr_", (
-			ftnlen)489)], abs(i__2)) - 1; i__ >= i__3; --i__) {
+			ftnlen)498)], abs(i__2)) - 1; i__ >= i__3; --i__) {
 		    if (type__ == 1) {
 			dasioc_("READ", &unit, &i__, recc, (ftnlen)4, (ftnlen)
 				1024);
@@ -510,11 +517,11 @@ static integer c__256 = 256;
     free += *n;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		 i__3, "dasacr_", (ftnlen)564)] != 0) {
+		 i__3, "dasacr_", (ftnlen)573)] != 0) {
 	    lastrc[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge("lastrc",
-		     i__3, "dasacr_", (ftnlen)565)] = lastrc[(i__1 = i__ - 1) 
+		     i__3, "dasacr_", (ftnlen)574)] = lastrc[(i__1 = i__ - 1) 
 		    < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc", i__1, "dasacr_"
-		    , (ftnlen)565)] + *n;
+		    , (ftnlen)574)] + *n;
 	}
     }
     dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, lastrc, 

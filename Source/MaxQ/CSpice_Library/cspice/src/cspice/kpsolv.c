@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      KPSOLV ( Solve Keplers Equation --- Vector Form ) */
+/* $Procedure KPSOLV ( Solve Kepler's Equation --- Vector Form ) */
 doublereal kpsolv_(doublereal *evec)
 {
     /* System generated locals */
@@ -31,9 +31,9 @@ doublereal kpsolv_(doublereal *evec)
 
 /* $ Abstract */
 
-/*    This routine solves the equation X = < EVEC, U(X) > where */
-/*    U(X) is the unit vector [ Cos(X), SIN(X) ] and  < , > denotes */
-/*    the two-dimensional dot product. */
+/*     Solve the equation X = < EVEC, U(X) > where U(X) is the unit */
+/*     vector [ COS(X), SIN(X) ] and  < , > denotes the two-dimensional */
+/*     dot product. */
 
 /* $ Disclaimer */
 
@@ -79,8 +79,8 @@ doublereal kpsolv_(doublereal *evec)
 
 /* $ Detailed_Input */
 
-/*     EVEC       is any two dimensional vector whose magnitude is */
-/*                less than 1. */
+/*     EVEC     is any two dimensional vector whose magnitude is */
+/*              less than 1. */
 
 /* $ Detailed_Output */
 
@@ -92,14 +92,14 @@ doublereal kpsolv_(doublereal *evec)
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the magnitude of EVEC is greater than or equal to 1, */
+/*         the error SPICE(EVECOUTOFRANGE) is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the magnitude of EVEC is greater than or equal to 1 */
-/*        the error SPICE(EVECOUTOFRANGE) is signalled. */
 
 /* $ Particulars */
 
@@ -109,7 +109,6 @@ doublereal kpsolv_(doublereal *evec)
 /*        X = EVEC(1)COS(X) + EVEC(2)SIN(X). */
 
 /*     This equation is just a "vector form" of Kepler's equation. */
-
 
 /* $ Examples */
 
@@ -136,20 +135,24 @@ doublereal kpsolv_(doublereal *evec)
 /*         EVEC(2) = ECC * DCOS(M) */
 /*         E       = M   + KPSOLV( EVEC ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
-
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 26-AUG-1997 (WLT) */
 

@@ -11,7 +11,7 @@ static integer c__142 = 142;
 static integer c__7 = 7;
 static doublereal c_b20 = 128.;
 
-/* $Procedure      CKW04A ( CK type 04: Add data to a segment ) */
+/* $Procedure CKW04A ( CK type 04: Add data to a segment ) */
 /* Subroutine */ int ckw04a_(integer *handle, integer *npkts, integer *pktsiz,
 	 doublereal *pktdat, doublereal *sclkdp)
 {
@@ -278,26 +278,28 @@ static doublereal c_b20 = 128.;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the file handle of a CK file in which a CK type 4 */
-/*                segment is currently being written. */
+/*     HANDLE   is the file handle of a CK file in which a CK type 4 */
+/*              segment is currently being written. */
 
-/*     NPKTS      is the number of data packets to write to a segment. */
+/*     NPKTS    is the number of data packets to write to a segment. */
 
-/*     PKTSIZ     is the number of values in all data packets. */
+/*     PKTSIZ   is the number of values in all data packets. */
 
-/*     PKTDAT     is the data packets. The data packets in this array */
-/*                must be organized as described in the $ Particulars */
-/*                section of the header. */
+/*     PKTDAT   is the data packets. The data packets in this array */
+/*              must be organized as described in the $Particulars */
+/*              section of the header. */
 
-/*     SCLKDP     contains the initial SCLK times corresponding to the */
-/*                Chebyshev coefficients in PKTSIZ. The I'th time is */
-/*                start time of the I'th packet coverage interval. */
-/*                The times must form a strictly increasing sequence. */
+/*     SCLKDP   contains the initial SCLK times corresponding to the */
+/*              Chebyshev coefficients in PKTSIZ. The I'th time is */
+/*              start time of the I'th packet coverage interval. */
+/*              The times must form a strictly increasing sequence. */
 
 /* $ Detailed_Output */
 
-/*     None.      Data is stored in a segment in the DAF file */
-/*                associated with HANDLE. */
+/*     None. */
+
+/*     Data is stored in a segment in the DAF file associated with */
+/*     HANDLE. */
 
 /* $ Parameters */
 
@@ -305,16 +307,16 @@ static doublereal c_b20 = 128.;
 
 /* $ Exceptions */
 
-/*     1) If the number of coefficient sets and epochs is not positive, */
-/*        the error SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If the number of coefficient sets and epochs is not positive, */
+/*         the error SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2) If size of any input packet is greater that maximum allowed */
-/*        type 4 CK record size minus one, the error */
-/*        SPICE(INVALIDARGUMENT) will be signalled. */
+/*     2)  If size of any input packet is greater that maximum allowed */
+/*         type 4 CK record size minus one, the error */
+/*         SPICE(INVALIDARGUMENT) is signaled. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -402,12 +404,12 @@ static doublereal c_b20 = 128.;
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -527,7 +529,7 @@ static doublereal c_b20 = 128.;
 /*                   +-             -+ */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -592,7 +594,6 @@ static doublereal c_b20 = 128.;
 
 /*        M1*M2 */
 
-
 /* $ Examples */
 
 /*     Assume that we have: */
@@ -654,9 +655,9 @@ static doublereal c_b20 = 128.;
 
 /* $ Restrictions */
 
-/*     1) The type 4 CK segment to which the data is added must have */
-/*        been started by the routine CKW04B, the routine which begins */
-/*        a type 4 CK segment. */
+/*     1)  The type 4 CK segment to which the data is added must have */
+/*         been started by the routine CKW04B, the routine which begins */
+/*         a type 4 CK segment. */
 
 /* $ Literature_References */
 
@@ -664,10 +665,17 @@ static doublereal c_b20 = 128.;
 
 /* $ Author_and_Institution */
 
-/*     Y.K. Zaiko     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
+/*     Y.K. Zaiko         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.3, 02-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.2, 18-APR-2014 (BVS) */
 
@@ -688,7 +696,7 @@ static doublereal c_b20 = 128.;
 /* -& */
 /* $ Index_Entries */
 
-/*     add data to a type_4 ck segment */
+/*     add data to a type_4 CK segment */
 
 /* -& */
 
@@ -767,7 +775,7 @@ static doublereal c_b20 = 128.;
 
 	for (kk = 1; kk <= 7; ++kk) {
 	    numcft[(i__2 = kk - 1) < 7 && 0 <= i__2 ? i__2 : s_rnge("numcft", 
-		    i__2, "ckw04a_", (ftnlen)580)] = (integer) pktdat[kk + 2 
+		    i__2, "ckw04a_", (ftnlen)591)] = (integer) pktdat[kk + 2 
 		    + displm - 1];
 	}
 	zzck4i2d_(numcft, &c__7, &c_b20, &pktdat[dispm + 2]);

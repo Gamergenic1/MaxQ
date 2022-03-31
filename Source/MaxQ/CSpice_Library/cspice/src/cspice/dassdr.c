@@ -13,7 +13,7 @@ static integer c__1 = 1;
 static integer c__256 = 256;
 static integer c__0 = 0;
 
-/* $Procedure      DASSDR ( DAS, segregate data records ) */
+/* $Procedure DASSDR ( DAS, segregate data records ) */
 /* Subroutine */ int dassdr_(integer *handle)
 {
     /* Initialized data */
@@ -112,17 +112,17 @@ static integer c__0 = 0;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAS file handle. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is a file handle of a DAS file opened for writing. */
+/*     HANDLE   is a file handle of a DAS file opened for writing. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
@@ -131,22 +131,22 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1)  If the input file handle is invalid, the error will be */
-/*         diagnosed by routines called by this routine. */
+/*     1)  If the input file handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2)  If a Fortran read attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The state of the DAS file undergoing re-ordering will be */
+/*     2)  If a Fortran read attempted by this routine fails, an error is */
+/*         signaled by a routine in the call tree of this routine. The */
+/*         state of the DAS file undergoing re-ordering will be */
 /*         indeterminate. */
 
-/*     3)  If a Fortran write attempted by this routine fails, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The state of the DAS file undergoing re-ordering will be */
+/*     3)  If a Fortran write attempted by this routine fails, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         state of the DAS file undergoing re-ordering will be */
 /*         indeterminate. */
 
-/*     4)  If any other I/O error occurs during the re-arrangement of */
-/*         the records in the indicated DAS file, the error will be */
-/*         diagnosed by routines called by this routine. */
+/*     4)  If any other I/O error occurs during the re-arrangement of the */
+/*         records in the indicated DAS file, the error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -159,14 +159,14 @@ static integer c__0 = 0;
 
 /*     The effect of this routine is to re-arrange the data records */
 /*     in a DAS file so that the file contains a single cluster for */
-/*     each data type present in the file:  in the general case, there */
+/*     each data type present in the file: in the general case, there */
 /*     will be a single cluster of each of the integer, double */
 /*     precision, and character data types. */
 
 /*     The relative order of data records of a given type is not */
-/*     affected by this re-ordering.  After the re-ordering, the DAS */
+/*     affected by this re-ordering. After the re-ordering, the DAS */
 /*     file contains a single directory record that has one descriptor */
-/*     for each cluster.  After that point, the order in the file of the */
+/*     for each cluster. After that point, the order in the file of the */
 /*     sets of data records of the various data types will be: */
 
 /*        +-------+ */
@@ -179,12 +179,12 @@ static integer c__0 = 0;
 
 /*     Files that contain multiple directory records will have all but */
 /*     the first directory record moved to the end of the file when the */
-/*     re-ordering is complete.  These records are not visible to the */
+/*     re-ordering is complete. These records are not visible to the */
 /*     DAS system and will be overwritten if data is subsequently added */
 /*     to the DAS file. */
 
 /*     The purpose of segregating a DAS file's data records into three */
-/*     clusters is to make read access more efficient:  when a DAS file */
+/*     clusters is to make read access more efficient: when a DAS file */
 /*     contains a single directory with at most three cluster type */
 /*     descriptors, mapping logical to physical addresses can be done */
 /*     in constant time. */
@@ -206,36 +206,45 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.1 19-DEC-1995 (NJB) */
+/* -    SPICELIB Version 2.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.1, 19-DEC-1995 (NJB) */
 
 /*        Corrected title of permuted index entry section. */
 
-/* -    EKLIB Version 2.0.0, 17-NOV-1993 (KRG) */
+/* -    SPICELIB Version 2.0.0, 17-NOV-1993 (KRG) */
 
 /*        Added test of FAILED after each DAS call, or sequence of calls, */
-/*        which returns immediately if FAILED is true. This fixes a bug */
+/*        which returns immediately if FAILED is .TRUE. This fixes a bug */
 /*        where DASOPS signals an error and then DASSDR has a */
 /*        segmentation fault. */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
-/* -    EKLIB Version 1.2.0, 07-OCT-1993 (NJB) (HAN) (MJS) */
+/* -    SPICELIB Version 1.2.0, 07-OCT-1993 (NJB) (HAN) (MJS) */
 
-/*        Bug fix:  call to CLEARD replaced with call to */
+/*        Bug fix: call to CLEARD replaced with call to */
 /*        CLEARI. */
 
-/* -    EKLIB Version 1.1.0, 08-JUL-1993 (NJB) (MJS) */
+/* -    SPICELIB Version 1.1.0, 08-JUL-1993 (NJB) (MJS) */
 
-/*        Bug fix:  extraneous commas removed from argument lists */
+/*        Bug fix: extraneous commas removed from argument lists */
 /*        in calls to DASADI. */
 
 /* -    SPICELIB Version 1.0.0, 11-NOV-1992 (NJB) (WLT) */
@@ -248,27 +257,27 @@ static integer c__0 = 0;
 /* -& */
 /* $ Revisions */
 
-/* -    EKLIB Version 2.0.0, 17-NOV-1993 (KRG) */
+/* -    SPICELIB Version 2.0.0, 17-NOV-1993 (KRG) */
 
 /*        Added test of failed after each DAS call, or sequence of calls, */
-/*        which returns immediately if FAILED is true. This fixes a bug */
+/*        which returns immediately if FAILED is .TRUE. This fixes a bug */
 /*        where DASOPS signals an error and then DASSDR has a */
 /*        segmentation fault. */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
-/* -    EKLIB Version 1.2.0, 07-OCT-1993 (NJB) (HAN) (MJS) */
+/* -    SPICELIB Version 1.2.0, 07-OCT-1993 (NJB) (HAN) (MJS) */
 
-/*        Bug fix:  call to CLEARD replaced with call to */
+/*        Bug fix: call to CLEARD replaced with call to */
 /*        CLEARI. */
 
-/* -    EKLIB Version 1.1.0, 08-JUL-1993 (NJB) */
+/* -    SPICELIB Version 1.1.0, 08-JUL-1993 (NJB) */
 
-/*        Bug fix:  extraneous commas removed from argument lists */
-/*        in calls to DASADI.  This bug had no visible effect on */
+/*        Bug fix: extraneous commas removed from argument lists */
+/*        in calls to DASADI. This bug had no visible effect on */
 /*        VAX and Sun systems, but generated a compile error under */
 /*        Lahey Fortran. */
 
@@ -390,11 +399,11 @@ static integer c__0 = 0;
     lword = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dassdr_", (ftnlen)451)] == lrec && lastwd[(i__2 = i__ 
+		 i__1, "dassdr_", (ftnlen)462)] == lrec && lastwd[(i__2 = i__ 
 		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dassd"
-		"r_", (ftnlen)451)] > lword) {
+		"r_", (ftnlen)462)] > lword) {
 	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dassdr_", (ftnlen)454)];
+		    "lastwd", i__1, "dassdr_", (ftnlen)465)];
 	    ltype = i__;
 	}
     }
@@ -431,7 +440,7 @@ static integer c__0 = 0;
 
 	type__ = irec[8];
 	prvtyp = prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"prev", i__1, "dassdr_", (ftnlen)498)];
+		"prev", i__1, "dassdr_", (ftnlen)509)];
 
 /*        Now traverse the directory and update the inverse order */
 /*        vector based on the descriptors we find. */
@@ -443,7 +452,7 @@ static integer c__0 = 0;
 /*           Obtain the count for the current descriptor. */
 
 	    n = (i__2 = irec[(i__1 = i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-		    s_rnge("irec", i__1, "dassdr_", (ftnlen)512)], abs(i__2));
+		    s_rnge("irec", i__1, "dassdr_", (ftnlen)523)], abs(i__2));
 
 /*           Update our inverse order vector to describe the positions */
 /*           of the N records described by the current descriptor. */
@@ -452,7 +461,7 @@ static integer c__0 = 0;
 	    for (j = 1; j <= i__1; ++j) {
 		dasadi_(&scrhan, &c__1, &type__);
 		i__3 = count[(i__2 = type__ - 1) < 4 && 0 <= i__2 ? i__2 : 
-			s_rnge("count", i__2, "dassdr_", (ftnlen)521)] + j;
+			s_rnge("count", i__2, "dassdr_", (ftnlen)532)] + j;
 		dasadi_(&scrhan, &c__1, &i__3);
 		if (failed_()) {
 		    chkout_("DASSDR", (ftnlen)6);
@@ -463,9 +472,9 @@ static integer c__0 = 0;
 /*           Adjust the count of records of data type TYPE. */
 
 	    count[(i__1 = type__ - 1) < 4 && 0 <= i__1 ? i__1 : s_rnge("count"
-		    , i__1, "dassdr_", (ftnlen)533)] = count[(i__2 = type__ - 
+		    , i__1, "dassdr_", (ftnlen)544)] = count[(i__2 = type__ - 
 		    1) < 4 && 0 <= i__2 ? i__2 : s_rnge("count", i__2, "dass"
-		    "dr_", (ftnlen)533)] + n;
+		    "dr_", (ftnlen)544)] + n;
 
 /*           Find the next type. */
 
@@ -474,13 +483,13 @@ static integer c__0 = 0;
 		more = FALSE_;
 	    } else {
 		if (irec[(i__1 = i__ - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-			"irec", i__1, "dassdr_", (ftnlen)547)] > 0) {
+			"irec", i__1, "dassdr_", (ftnlen)558)] > 0) {
 		    type__ = next[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("next", i__1, "dassdr_", (ftnlen)548)];
+			    : s_rnge("next", i__1, "dassdr_", (ftnlen)559)];
 		} else if (irec[(i__1 = i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-			s_rnge("irec", i__1, "dassdr_", (ftnlen)550)] < 0) {
+			s_rnge("irec", i__1, "dassdr_", (ftnlen)561)] < 0) {
 		    type__ = prev[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 
-			    : s_rnge("prev", i__1, "dassdr_", (ftnlen)551)];
+			    : s_rnge("prev", i__1, "dassdr_", (ftnlen)562)];
 		} else {
 		    more = FALSE_;
 		}
@@ -569,7 +578,7 @@ static integer c__0 = 0;
 	for (j = 1; j <= 3; ++j) {
 	    if (type__ > j) {
 		dest += count[(i__2 = j - 1) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-			"count", i__2, "dassdr_", (ftnlen)648)];
+			"count", i__2, "dassdr_", (ftnlen)659)];
 	    }
 	}
 
@@ -856,16 +865,16 @@ static integer c__0 = 0;
 
     for (type__ = 1; type__ <= 3; ++type__) {
 	maxadr = lastla[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"lastla", i__1, "dassdr_", (ftnlen)957)];
+		"lastla", i__1, "dassdr_", (ftnlen)968)];
 	if (maxadr > 0) {
 	    minadr = 1;
 	} else {
 	    minadr = 0;
 	}
 	irec[(i__1 = type__ << 1) < 256 && 0 <= i__1 ? i__1 : s_rnge("irec", 
-		i__1, "dassdr_", (ftnlen)965)] = minadr;
+		i__1, "dassdr_", (ftnlen)976)] = minadr;
 	irec[(i__1 = (type__ << 1) + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"irec", i__1, "dassdr_", (ftnlen)966)] = maxadr;
+		"irec", i__1, "dassdr_", (ftnlen)977)] = maxadr;
     }
 
 /*     Set the descriptors in the directory.  Determine which type */
@@ -875,7 +884,7 @@ static integer c__0 = 0;
     pos = 9;
     for (type__ = 1; type__ <= 3; ++type__) {
 	if (lastla[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("las"
-		"tla", i__1, "dassdr_", (ftnlen)979)] > 0) {
+		"tla", i__1, "dassdr_", (ftnlen)990)] > 0) {
 	    if (pos == 9) {
 
 /*              This is the first type for which any data is present. */
@@ -885,11 +894,11 @@ static integer c__0 = 0;
 
 		irec[8] = type__;
 		irec[9] = count[(i__1 = type__ - 1) < 4 && 0 <= i__1 ? i__1 : 
-			s_rnge("count", i__1, "dassdr_", (ftnlen)989)];
+			s_rnge("count", i__1, "dassdr_", (ftnlen)1000)];
 		lastrc[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"lastrc", i__1, "dassdr_", (ftnlen)990)] = recno;
+			"lastrc", i__1, "dassdr_", (ftnlen)1001)] = recno;
 		lastwd[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"lastwd", i__1, "dassdr_", (ftnlen)991)] = 10;
+			"lastwd", i__1, "dassdr_", (ftnlen)1002)] = 10;
 		pos += 2;
 		prvtyp = type__;
 	    } else {
@@ -898,22 +907,22 @@ static integer c__0 = 0;
 /*              the directory. */
 
 		if (type__ == next[(i__1 = prvtyp - 1) < 3 && 0 <= i__1 ? 
-			i__1 : s_rnge("next", i__1, "dassdr_", (ftnlen)1000)])
+			i__1 : s_rnge("next", i__1, "dassdr_", (ftnlen)1011)])
 			 {
 		    irec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-			    "irec", i__1, "dassdr_", (ftnlen)1001)] = count[(
+			    "irec", i__1, "dassdr_", (ftnlen)1012)] = count[(
 			    i__2 = type__ - 1) < 4 && 0 <= i__2 ? i__2 : 
-			    s_rnge("count", i__2, "dassdr_", (ftnlen)1001)];
+			    s_rnge("count", i__2, "dassdr_", (ftnlen)1012)];
 		} else {
 		    irec[(i__1 = pos - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-			    "irec", i__1, "dassdr_", (ftnlen)1003)] = -count[(
+			    "irec", i__1, "dassdr_", (ftnlen)1014)] = -count[(
 			    i__2 = type__ - 1) < 4 && 0 <= i__2 ? i__2 : 
-			    s_rnge("count", i__2, "dassdr_", (ftnlen)1003)];
+			    s_rnge("count", i__2, "dassdr_", (ftnlen)1014)];
 		}
 		lastrc[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"lastrc", i__1, "dassdr_", (ftnlen)1006)] = recno;
+			"lastrc", i__1, "dassdr_", (ftnlen)1017)] = recno;
 		lastwd[(i__1 = type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"lastwd", i__1, "dassdr_", (ftnlen)1007)] = pos;
+			"lastwd", i__1, "dassdr_", (ftnlen)1018)] = pos;
 		++pos;
 		prvtyp = type__;
 	    }

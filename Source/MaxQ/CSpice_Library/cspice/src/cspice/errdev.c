@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      ERRDEV ( Get/Set Error Output Device Name ) */
+/* $Procedure ERRDEV ( Get/Set Error Output Device Name ) */
 /* Subroutine */ int errdev_(char *op, char *device, ftnlen op_len, ftnlen 
 	device_len)
 {
@@ -79,60 +79,54 @@ static integer c__2 = 2;
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     OP         I   The operation:  'GET' or 'SET'. */
-/*     DEVICE    I/O  The device name. */
+/*     DEVICE    I-O  The device name. */
 /*     FILEN      P   Maximum length of file name. */
 
 /* $ Detailed_Input */
 
-/*     OP      indicates the operation to be performed.  Possible */
-/*             values are 'GET' and 'SET'.  'GET' means, "set */
-/*             DEVICE equal to the name of the current error */
-/*             output device"  'SET' means, "set the name of the */
-/*             current error output device equal to the value of */
-/*             DEVICE." */
+/*     OP       indicates the operation to be performed. Possible */
+/*              values are 'GET' and 'SET'. 'GET' means, "set */
+/*              DEVICE equal to the name of the current error */
+/*              output device"  'SET' means, "set the name of the */
+/*              current error output device equal to the value of */
+/*              DEVICE." */
 
-/*     DEVICE  is an input when OP has the value, 'SET'.  It */
-/*             indicates an output device to which error messages */
-/*             are to be sent.  Possible values for DEVICE are: */
+/*     DEVICE   is an input when OP has the value, 'SET'. It */
+/*              indicates an output device to which error messages */
+/*              are to be sent. Possible values for DEVICE are: */
 
-/*              1.    A file name.  Note that the name must not */
-/*                    be any of the reserved strings below. */
+/*                 A file name     Note that the name must not */
+/*                                 be any of the reserved strings below. */
 
-/*              2.    'SCREEN'    The output will go to the */
-/*                     screen.  This is the default device. */
+/*                 'SCREEN'        The output will go to the */
+/*                                 screen. This is the default device. */
 
-/*              3.    'NULL'      The data will not be output. */
+/*                 'NULL'          The data will not be output. */
 
-/*              'SCREEN' and 'NULL' can be written in mixed */
-/*              case.  For example, the following call will work: */
+/*               'SCREEN' and 'NULL' can be written in mixed */
+/*               case. For example, the following call will work: */
 
-/*              CALL ERRDEV ( 'SET' , 'screEn' ) */
+/*               CALL ERRDEV ( 'SET' , 'screEn' ) */
 
 /* $ Detailed_Output */
 
-/*     DEVICE  is an output when OP is 'GET'.  It is the */
-/*             current error output device.  See "Detailed */
-/*             Input" for possible values and meanings. */
+/*     DEVICE   is an output when OP is 'GET'. It is the */
+/*              current error output device. See "Detailed */
+/*              Input" for possible values and meanings. */
 
 /* $ Parameters */
 
-/*     FILEN   The maximum length of a file name that can be */
-/*             processed by this routine. See the Literature_References */
-/*             section for more information. */
+/*     FILEN    is the maximum length of a file name that can be */
+/*              processed by this routine. FILEN is currently set to 255 */
+/*              characters. */
 
 /* $ Exceptions */
 
-/*     This routine detects the following errors: */
+/*     1)  If an invalid value of the argument OP is supplied, the error */
+/*         SPICE(INVALIDOPERATION) is signaled. */
 
-/*     1.  'SPICE(INVALIDOPERATION)'  ...Invalid value of the */
-/*                                       argument, OP. */
-
-/*     2.  'SPICE(DEVICENAMETOOLONG)' ...Device name exceeds */
-/*                                       FILEN characters */
-
-
-/*     Also, this routine is part of the SPICELIB error */
-/*     handling mechanism. */
+/*     2)  If OP is 'SET' and the device name DEVICE exceeds the maximum */
+/*         length FILEN, the error SPICE(DEVICENAMETOOLONG) is signaled. */
 
 /* $ Files */
 
@@ -140,14 +134,16 @@ static integer c__2 = 2;
 
 /* $ Particulars */
 
+/*     This routine is part of the SPICELIB error handling mechanism. */
+
 /*     Please read the "required reading"! */
 
 /*     This routine can't tell whether the name supplied */
-/*     to indicate the output device is valid.  Be careful! */
+/*     to indicate the output device is valid. Be careful! */
 
 /* $ Examples */
 
-/*     1.  In this example, we select as the output device */
+/*     1. In this example, we select as the output device */
 /*         the file, SPUD.DAT. */
 
 /*      C */
@@ -156,14 +152,14 @@ static integer c__2 = 2;
 
 /*             CALL ERRDEV (  'SET',  'SPUD.DAT'  ) */
 
-
 /* $ Restrictions */
 
-/*     This routine has no capability of determining the validity */
-/*     of the name of an output device.  Care must be taken */
-/*     to ensure that the file named is the correct one. */
+/*     1)  This routine has no capability of determining the validity of */
+/*         the name of an output device. Care must be taken to ensure */
+/*         that the file named is the correct one. */
 
-/*     The device name is assumed to be no longer than FILEN characters. */
+/*         The device name is assumed to be no longer than FILEN */
+/*         characters. */
 
 /* $ Literature_References */
 
@@ -171,10 +167,26 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 2.26.0, 07-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. $Exceptions */
+/*        section has been completely updated to provide only the list */
+/*        of exceptions. Additional information provided there has been */
+/*        moved to $Particulars. */
 
 /* -    SPICELIB Version 2.25.0, 10-MAR-2014 (BVS) */
 
@@ -283,23 +295,23 @@ static integer c__2 = 2;
 /* -    SPICELIB Version 2.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 2.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 2.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 2.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -307,14 +319,14 @@ static integer c__2 = 2;
 
 /*        References to the PC-LINUX environment were added. */
 
-/* -    SPICELIB Version 1.2.0, 3-NOV-1993 (HAN) */
+/* -    SPICELIB Version 1.2.0, 03-NOV-1993 (HAN) */
 
 /*        Module was updated to include the value for FILEN */
 /*        for the Silicon Graphics, DEC Alpha-OSF/1, and */
 /*        NeXT platforms. Also, the previous value of 256 for */
 /*        Unix platforms was changed to 255. */
 
-/* -    SPICELIB Version 1.1.0, 9-OCT-1992 (HAN) */
+/* -    SPICELIB Version 1.1.0, 09-OCT-1992 (HAN) */
 
 /*        Updated module for multiple environments. */
 
@@ -341,14 +353,14 @@ static integer c__2 = 2;
 
 /*        References to the PC-LINUX environment were added. */
 
-/* -     SPICELIB Version 1.2.0, 3-NOV-1993 (HAN) */
+/* -     SPICELIB Version 1.2.0, 03-NOV-1993 (HAN) */
 
 /*         Module was updated to include the value for FILEN */
 /*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
 /*         NeXT platforms. Also, the previous value of 256 for */
 /*         Unix platforms was changed to 255. */
 
-/* -     SPICELIB Version 1.1.0, 9-OCT-1992 (HAN) */
+/* -     SPICELIB Version 1.1.0, 09-OCT-1992 (HAN) */
 
 /*         Updated module for multiple environments. */
 
@@ -358,10 +370,10 @@ static integer c__2 = 2;
 
 /* -     Beta Version 1.1.0, 16-FEB-1989 (NJB) */
 
-/*        File name length parameter added to parameters section. */
+/*        File name length parameter added to $Parameters section. */
 /*        Declaration of the unused function FRSTNB removed. */
-/*        Trace participation added.  This routine now checks in */
-/*        and checks out.  However, it does not test RETURN, */
+/*        Trace participation added. This routine now checks in */
+/*        and checks out. However, it does not test RETURN, */
 /*        because it should be able to execute in RETURN mode when */
 /*        an error condition exists. */
 

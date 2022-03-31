@@ -24,17 +24,16 @@ static integer c__1 = 1;
     char dtype[1];
     extern integer rtrim_(char *, ftnlen);
     extern logical failed_(void);
-    integer codeln, nameln;
+    integer codeln;
     char kvname[32], cdestr[32];
-    integer itemln, reqnam;
-    extern /* Subroutine */ int chkout_(char *, ftnlen);
+    integer itemln, nameln;
     extern logical return_(void);
-    integer reqnum;
-    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), dtpool_(
-	    char *, logical *, integer *, char *, ftnlen, ftnlen), setmsg_(
-	    char *, ftnlen), errint_(char *, integer *, ftnlen), sigerr_(char 
-	    *, ftnlen), gdpool_(char *, integer *, integer *, integer *, 
-	    doublereal *, logical *, ftnlen);
+    integer reqnam, reqnum;
+    extern /* Subroutine */ int intstr_(integer *, char *, ftnlen), chkout_(
+	    char *, ftnlen), dtpool_(char *, logical *, integer *, char *, 
+	    ftnlen, ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer 
+	    *, ftnlen), sigerr_(char *, ftnlen), gdpool_(char *, integer *, 
+	    integer *, integer *, doublereal *, logical *, ftnlen);
 
 /* $ Abstract */
 
@@ -145,6 +144,10 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.0, 22-SEP-2020 (NJB) */
+
+/*        Updated to support the product frame family. */
+
 /* -    SPICELIB Version 1.1.0, 12-JAN-2005 (NJB) */
 
 /*        Parameters KWX, KWY, KWZ renamed to KVX, KVY, KVZ. */
@@ -191,6 +194,10 @@ static integer c__1 = 1;
 /*     in an "Euler frame" definition */
 
 
+/*     The parameter MXNFAC is the maximum number of factors in */
+/*     a product frame. */
+
+
 /*     The parameter LBSEP is the default angular separation limit for */
 /*     the vectors defining a two-vector frame.  The angular separation */
 /*     of the vectors must differ from Pi and 0 by at least this amount. */
@@ -220,7 +227,7 @@ static integer c__1 = 1;
 /*        T0 +/- DELTA */
 
 /*     while providing the largest value of DELTA having this form that */
-/*     causes the order of the error term O(DELTA**2) in the quadratric */
+/*     causes the order of the error term O(DELTA**2) in the quadratic */
 /*     function approximation to round to zero.  Note that the error */
 /*     itself will normally be small but doesn't necessarily round to */
 /*     zero.  Note also that the small function approximation error */
@@ -301,6 +308,9 @@ static integer c__1 = 1;
 
 
 /*     Token indicating Euler frame. */
+
+
+/*     Token indicating product frame. */
 
 
 /*     "Of date" frame family parameters */
@@ -424,6 +434,10 @@ static integer c__1 = 1;
 
 /*     See the section "Physical unit parameters" below for additional */
 /*     parameters applicable to Euler frames. */
+
+
+/*     Product frame family parameters */
+/*     --------------------------------- */
 
 
 /*     Physical unit parameters */

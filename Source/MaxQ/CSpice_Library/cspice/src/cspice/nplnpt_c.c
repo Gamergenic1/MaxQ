@@ -3,10 +3,10 @@
 -Procedure nplnpt_c ( Nearest point on line to point )
 
 -Abstract
- 
-   Find the nearest point on a line to a specified point, and find 
-   the distance between the two points. 
- 
+
+   Find the nearest point on a line to a specified point, and find
+   the distance between the two points.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,144 +33,149 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   GEOMETRY 
-   MATH 
-   VECTOR 
- 
+
+   GEOMETRY
+   MATH
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
    #undef    nplnpt_c
-   
+
 
    void nplnpt_c ( ConstSpiceDouble    linpt  [3],
                    ConstSpiceDouble    lindir [3],
                    ConstSpiceDouble    point  [3],
                    SpiceDouble         pnear  [3],
-                   SpiceDouble       * dist       ) 
+                   SpiceDouble       * dist       )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   linpt, 
-   lindir     I   Point on a line and the line's direction vector. 
-   point      I   A second point. 
-   pnear      O   Nearest point on the line to point. 
-   dist       O   Distance between point and pnear. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   linpt,
+   lindir     I   Point on a line and the line's direction vector.
+   point      I   A second point.
+   pnear      O   Nearest point on the line to point.
+   dist       O   Distance between point and pnear.
+
 -Detailed_Input
- 
-   linpt 
-   lindir         are, respectively, a point and a direction vector 
-                  that define a line in 3-dimensional space.  The 
-                  line is the set of points 
- 
-                     linpt   +   t * lindir 
- 
-                  where t is any real number. 
- 
-   point          is a point in 3-dimensional space. 
- 
+
+   linpt,
+   lindir      are, respectively, a point and a direction vector
+               that define a line in 3-dimensional space. The
+               line is the set of points
+
+                  linpt   +   t * lindir
+
+               where t is any real number.
+
+   point       is a point in 3-dimensional space.
+
 -Detailed_Output
- 
-   pnear          is the nearest point on the input line to the input 
-                  point. 
- 
-   dist           is the distance between the input line and input 
-                  point. 
- 
+
+   pnear       is the nearest point on the input line to the input
+               point.
+
+   dist        is the distance between the input line and input
+               point.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If the line direction vector lindir is the zero vector, the 
-       error SPICE(ZEROVECTOR) is signaled. 
- 
+
+   1)  If the line direction vector `lindir' is the zero vector, the
+       error SPICE(ZEROVECTOR) is signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   For every line L and point P, there is a unique closest point 
-   on L to P.  Call this closest point C.  It is always true that 
-   P - C  is perpendicular to L, and the length of P - C is called 
-   the "distance" between P and L. 
- 
+
+   For every line L and point P, there is a unique closest point
+   on L to P. Call this closest point C. It is always true that
+   P - C  is perpendicular to L, and the length of P - C is called
+   the "distance" between P and L.
+
 -Examples
- 
-   1)  Suppose a line passes through the point ( 1, 2, 3 ) and 
-       has direction vector ( 0, 1, 1 ).  We wish to find the 
-       closest point on the line to the point ( -6, 9, 10 ).  We 
-       can use the code fragment 
- 
+
+   1)  Suppose a line passes through the point ( 1, 2, 3 ) and
+       has direction vector ( 0, 1, 1 ).  We wish to find the
+       closest point on the line to the point ( -6, 9, 10 ).  We
+       can use the code fragment
+
           #include "SpiceUsr.h"
                .
                .
                .
-          LINPT[0]   =  1.0; 
-          LINPT[1]   =  2.0; 
-          LINPT[2]   =  3.0; 
- 
-          LINDIR[0]  =  0.0; 
-          LINDIR[1]  =  1.0; 
-          LINDIR[2]  =  1.0; 
- 
-          POINT[0]   = -6.0; 
-          POINT[1]   =  9.0; 
-          POINT[2]   = 10.0; 
- 
+          LINPT[0]   =  1.0;
+          LINPT[1]   =  2.0;
+          LINPT[2]   =  3.0;
+
+          LINDIR[0]  =  0.0;
+          LINDIR[1]  =  1.0;
+          LINDIR[2]  =  1.0;
+
+          POINT[0]   = -6.0;
+          POINT[1]   =  9.0;
+          POINT[2]   = 10.0;
+
           nplnpt_c ( linpt, lindir, point, pnear, &dist );
- 
- 
-       After the call, pnear will take the value 
- 
-          ( 1., 9., 10. ); 
- 
-       dist will be 7.0. 
- 
+
+
+       After the call, pnear will take the value
+
+          ( 1., 9., 10. );
+
+       dist will be 7.0.
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 16-AUG-1999 (NJB)
 
 -Index_Entries
- 
-   distance between point and line 
-   nearest point on line to point 
- 
+
+   distance between point and line
+   nearest point on line to point
+
 -&
 */
 
 { /* Begin nplnpt_c */
 
- 
+
    /*
    Local variables
    */
    SpiceDouble             trans [3];
- 
+
 
 
    /*
@@ -184,18 +189,18 @@
       chkout_c ( "nplnpt_c"                           );
       return;
    }
- 
- 
+
+
    /*
    We translate line and input point so as to put the line through
    the origin.  Then the nearest point on the translated line to the
    translated point TRANS is the projection of TRANS onto the line.
    */
-   
+
    vsub_c  ( point,  linpt,  trans );
    vproj_c ( trans,  lindir, pnear );
    vadd_c  ( pnear,  linpt,  pnear );
- 
+
    *dist = vdist_c ( pnear,  point );
 
 

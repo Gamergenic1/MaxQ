@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      VDIST ( Vector distance ) */
+/* $Procedure VDIST ( Vector distance ) */
 doublereal vdist_(doublereal *v1, doublereal *v2)
 {
     /* System generated locals */
@@ -57,7 +57,7 @@ doublereal vdist_(doublereal *v1, doublereal *v2)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 
 /*     V1, */
@@ -68,15 +68,15 @@ doublereal vdist_(doublereal *v1, doublereal *v2)
 /* $ Detailed_Input */
 
 /*     V1, */
-/*     V2         are two vectors in three-dimensional space, the */
-/*                distance between which is desired. */
+/*     V2       are two vectors in three-dimensional space, the */
+/*              distance between which is desired. */
 
 /* $ Detailed_Output */
 
-/*     The function returns the distance between V1 and V2.  This is */
+/*     The function returns the distance between V1 and V2. This is */
 /*     defined as */
 
-/*              ||  V1 - V2  ||, */
+/*        ||  V1 - V2  ||, */
 
 /*     where || x || indicates the Euclidean norm of the vector x. */
 
@@ -113,7 +113,7 @@ doublereal vdist_(doublereal *v1, doublereal *v2)
 
 
 /*     This number is the distance of the point (x, y, z) from the */
-/*     origin.  If A and B are two vectors whose components are */
+/*     origin. If A and B are two vectors whose components are */
 
 /*        ( A(1), A(2), A(3) )    and    ( B(1), B(2), B(3) ), */
 
@@ -159,9 +159,17 @@ doublereal vdist_(doublereal *v1, doublereal *v2)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 25-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

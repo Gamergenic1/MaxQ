@@ -94,9 +94,9 @@ static integer c__0 = 0;
     doublereal xform[9]	/* was [3][3] */;
     extern doublereal vnorm_(doublereal *);
     static integer nsurf;
+    extern logical vzero_(doublereal *);
     extern /* Subroutine */ int vcrss_(doublereal *, doublereal *, doublereal 
 	    *);
-    extern logical vzero_(doublereal *);
     doublereal prvlt;
     extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
 	    *, doublereal *);
@@ -225,8 +225,8 @@ static integer c__0 = 0;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -276,6 +276,11 @@ static integer c__0 = 0;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -284,6 +289,7 @@ static integer c__0 = 0;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -291,6 +297,11 @@ static integer c__0 = 0;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -706,7 +717,7 @@ static integer c__0 = 0;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     METHOD     I   Computation method. */
 /*     ILUSRC     I   Illumination source. */
@@ -732,8 +743,8 @@ static integer c__0 = 0;
 /*     METHOD   is a short string providing parameters defining */
 /*              the computation method to be used. In the syntax */
 /*              descriptions below, items delimited by angle brackets */
-/*              '<>' are to be replaced by actual values. Items */
-/*              delimited by brackets '[]' are optional. */
+/*              "<>" are to be replaced by actual values. Items */
+/*              delimited by brackets "[]" are optional. */
 
 /*              METHOD may be assigned the following values: */
 
@@ -752,13 +763,14 @@ static integer c__0 = 0;
 /*                                that receives no light from the */
 /*                                illumination source. The shape of the */
 /*                                source is modeled as a sphere. See the */
-/*                                Particulars section below for details. */
+/*                                $Particulars section below for details. */
 
 /*                    'PENUMBRAL' indicates the terminator is the */
 /*                                boundary of the portion of the surface */
 /*                                that receives all possible light from */
 /*                                the illumination source. The shape of */
 /*                                the source is modeled as a sphere. */
+
 /*                                The penumbral terminator bounds the */
 /*                                portion of the surface that is not */
 /*                                subject to self-occultation of light */
@@ -768,7 +780,7 @@ static integer c__0 = 0;
 /*                                nearer to the source than the */
 /*                                penumbral terminator, the source */
 /*                                appears to be a lit disc. See the */
-/*                                Particulars section below for details. */
+/*                                $Particulars section below for details. */
 
 
 /*                 <curve type> may be either of the strings */
@@ -784,7 +796,7 @@ static integer c__0 = 0;
 /*                                terminator point is a point of */
 /*                                tangency of a plane that is also */
 /*                                tangent to the illumination source. */
-/*                                See the Particulars section below for */
+/*                                See the $Particulars section below for */
 /*                                details. */
 
 /*                                Terminator points are generated within */
@@ -863,7 +875,7 @@ static integer c__0 = 0;
 /*                       If multiple surfaces are specified, their names */
 /*                       or IDs must be separated by commas. */
 
-/*                       See the Particulars section below for details */
+/*                       See the $Particulars section below for details */
 /*                       concerning use of DSK data. */
 
 
@@ -901,415 +913,412 @@ static integer c__0 = 0;
 /*                    "MARS MEGDR128PIXEL/DEG" */
 
 
-/*     ILUSRC      is the name of the illumination source. This source */
-/*                 may be any ephemeris object. Case, blanks, and */
-/*                 numeric values are treated in the same way as for the */
-/*                 input TARGET. */
+/*     ILUSRC   is the name of the illumination source. This source */
+/*              may be any ephemeris object. Case, blanks, and */
+/*              numeric values are treated in the same way as for the */
+/*              input TARGET. */
 
-/*                 The shape of the illumination source is considered */
-/*                 to be spherical. The radius of the sphere is the */
-/*                 largest radius of the source's reference ellipsoid. */
-
-
-/*     TARGET      is the name of the target body. The target body is */
-/*                 an extended ephemeris object. */
-
-/*                 The string TARGET is case-insensitive, and leading */
-/*                 and trailing blanks in TARGET are not significant. */
-/*                 Optionally, you may supply a string containing the */
-/*                 integer ID code for the object. For example both */
-/*                 'MOON' and '301' are legitimate strings that indicate */
-/*                 the Moon is the target body. */
-
-/*                 When the target body's surface is represented by a */
-/*                 tri-axial ellipsoid, this routine assumes that a */
-/*                 kernel variable representing the ellipsoid's radii is */
-/*                 present in the kernel pool. Normally the kernel */
-/*                 variable would be defined by loading a PCK file. */
+/*              The shape of the illumination source is considered */
+/*              to be spherical. The radius of the sphere is the */
+/*              largest radius of the source's reference ellipsoid. */
 
 
-/*     ET          is the epoch of participation of the observer, */
-/*                 expressed as TDB seconds past J2000 TDB: ET is */
-/*                 the epoch at which the observer's state is computed. */
+/*     TARGET   is the name of the target body. The target body is */
+/*              an extended ephemeris object. */
 
-/*                 When aberration corrections are not used, ET is also */
-/*                 the epoch at which the position and orientation of */
-/*                 the target body are computed. */
+/*              The string TARGET is case-insensitive, and leading */
+/*              and trailing blanks in TARGET are not significant. */
+/*              Optionally, you may supply a string containing the */
+/*              integer ID code for the object. For example both */
+/*              'MOON' and '301' are legitimate strings that indicate */
+/*              the Moon is the target body. */
 
-/*                 When aberration corrections are used, the position */
-/*                 and orientation of the target body are computed at */
-/*                 ET-LT, where LT is the one-way light time between the */
-/*                 aberration correction locus and the observer. The */
-/*                 locus is specified by the input argument CORLOC. */
-/*                 See the descriptions of ABCORR and CORLOC below for */
-/*                 details. */
-
-
-/*     FIXREF      is the name of a body-fixed reference frame centered */
-/*                 on the target body. FIXREF may be any such frame */
-/*                 supported by the SPICE system, including built-in */
-/*                 frames (documented in the Frames Required Reading) */
-/*                 and frames defined by a loaded frame kernel (FK). The */
-/*                 string FIXREF is case-insensitive, and leading and */
-/*                 trailing blanks in FIXREF are not significant. */
-
-/*                 The output terminator points in the array POINTS and */
-/*                 the output observer-terminator vectors in the array */
-/*                 TRMVCS are expressed relative to this reference */
-/*                 frame. */
+/*              When the target body's surface is represented by a */
+/*              tri-axial ellipsoid, this routine assumes that a */
+/*              kernel variable representing the ellipsoid's radii is */
+/*              present in the kernel pool. Normally the kernel */
+/*              variable would be defined by loading a PCK file. */
 
 
-/*     ABCORR      indicates the aberration corrections to be applied */
-/*                 when computing the target's position and orientation. */
-/*                 Corrections are applied at the location specified by */
-/*                 the aberration correction locus argument CORLOC, */
-/*                 which is described below. */
+/*     ET       is the epoch of participation of the observer, */
+/*              expressed as TDB seconds past J2000 TDB: ET is */
+/*              the epoch at which the observer's state is computed. */
 
-/*                 For remote sensing applications, where apparent */
-/*                 terminator points seen by the observer are desired, */
-/*                 normally either of the corrections */
+/*              When aberration corrections are not used, ET is also */
+/*              the epoch at which the position and orientation of */
+/*              the target body are computed. */
 
-/*                    'LT+S' */
-/*                    'CN+S' */
-
-/*                 should be used. These and the other supported options */
-/*                 are described below. ABCORR may be any of the */
-/*                 following: */
-
-/*                    'NONE'     Apply no correction. Return the */
-/*                               geometric terminator points on the */
-/*                               target body. */
-
-/*                 Let LT represent the one-way light time between the */
-/*                 observer and the aberration correction locus. The */
-/*                 following values of ABCORR apply to the "reception" */
-/*                 case in which photons depart from the locus at the */
-/*                 light-time corrected epoch ET-LT and *arrive* at the */
-/*                 observer's location at ET: */
+/*              When aberration corrections are used, the position */
+/*              and orientation of the target body are computed at */
+/*              ET-LT, where LT is the one-way light time between the */
+/*              aberration correction locus and the observer. The */
+/*              locus is specified by the input argument CORLOC. */
+/*              See the descriptions of ABCORR and CORLOC below for */
+/*              details. */
 
 
-/*                    'LT'       Correct for one-way light time (also */
-/*                               called "planetary aberration") using a */
-/*                               Newtonian formulation. This correction */
-/*                               yields the locus at the moment it */
-/*                               emitted photons arriving at the */
-/*                               observer at ET. */
+/*     FIXREF   is the name of a body-fixed reference frame centered */
+/*              on the target body. FIXREF may be any such frame */
+/*              supported by the SPICE system, including built-in */
+/*              frames (documented in the Frames Required Reading) */
+/*              and frames defined by a loaded frame kernel (FK). The */
+/*              string FIXREF is case-insensitive, and leading and */
+/*              trailing blanks in FIXREF are not significant. */
 
-/*                               The light time correction uses an */
-/*                               iterative solution of the light time */
-/*                               equation. The solution invoked by the */
-/*                               'LT' option uses one iteration. */
-
-/*                               Both the target position as seen by the */
-/*                               observer, and rotation of the target */
-/*                               body, are corrected for light time. The */
-/*                               position of the illumination source as */
-/*                               seen from the target is corrected as */
-/*                               well. */
-
-/*                    'LT+S'     Correct for one-way light time and */
-/*                               stellar aberration using a Newtonian */
-/*                               formulation. This option modifies the */
-/*                               locus obtained with the 'LT' option to */
-/*                               account for the observer's velocity */
-/*                               relative to the solar system */
-/*                               barycenter. These corrections yield */
-/*                               points on the apparent terminator. */
-
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equation, the 'CN' correction iterates */
-/*                               until the solution converges. Both the */
-/*                               position and rotation of the target */
-/*                               body are corrected for light time. The */
-/*                               position of the illumination source as */
-/*                               seen from the target is corrected as */
-/*                               well. */
-
-/*                    'CN+S'     Converged Newtonian light time and */
-/*                               stellar aberration corrections. This */
-/*                               option produces a solution that is at */
-/*                               least as accurate at that obtainable */
-/*                               with the `LT+S' option. Whether the */
-/*                               'CN+S' solution is substantially more */
-/*                               accurate depends on the geometry of the */
-/*                               participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. */
+/*              The output terminator points in the array POINTS and */
+/*              the output observer-terminator vectors in the array */
+/*              TRMVCS are expressed relative to this reference */
+/*              frame. */
 
 
-/*     CORLOC      is a string specifying the aberration correction */
-/*                 locus: the point or set of points for which */
-/*                 aberration corrections are performed. CORLOC may be */
-/*                 assigned the values: */
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              when computing the target's position and orientation. */
+/*              Corrections are applied at the location specified by */
+/*              the aberration correction locus argument CORLOC, */
+/*              which is described below. */
 
-/*                    'CENTER' */
+/*              For remote sensing applications, where apparent */
+/*              terminator points seen by the observer are desired, */
+/*              normally either of the corrections */
 
-/*                        Light time and stellar aberration corrections */
-/*                        are applied to the vector from the observer to */
-/*                        the center of the target body. The one way */
-/*                        light time from the target center to the */
-/*                        observer is used to determine the epoch at */
-/*                        which the target body orientation is computed. */
+/*                 'LT+S' */
+/*                 'CN+S' */
 
-/*                        This choice is appropriate for small target */
-/*                        objects for which the light time from the */
-/*                        surface to the observer varies little across */
-/*                        the entire target. It may also be appropriate */
-/*                        for large, nearly ellipsoidal targets when the */
-/*                        observer is very far from the target. */
+/*              should be used. These and the other supported options */
+/*              are described below. ABCORR may be any of the */
+/*              following: */
 
-/*                        Computation speed for this option is faster */
-/*                        than for the ELLIPSOID TERMINATOR option. */
+/*                 'NONE'     Apply no correction. Return the */
+/*                            geometric terminator points on the */
+/*                            target body. */
 
-/*                    'ELLIPSOID TERMINATOR' */
-
-/*                        Light time and stellar aberration corrections */
-/*                        are applied to individual terminator points on */
-/*                        the reference ellipsoid. For a terminator */
-/*                        point on the surface described by topographic */
-/*                        data, lying in a specified cutting half-plane, */
-/*                        the unique reference ellipsoid terminator */
-/*                        point in the same half-plane is used as the */
-/*                        locus of the aberration corrections. */
-
-/*                        This choice is appropriate for large target */
-/*                        objects for which the light time from the */
-/*                        terminator to the observer is significantly */
-/*                        different from the light time from the target */
-/*                        center to the observer. */
-
-/*                        Because aberration corrections are repeated */
-/*                        for individual terminator points, */
-/*                        computational speed for this option is */
-/*                        relatively slow. */
+/*              Let LT represent the one-way light time between the */
+/*              observer and the aberration correction locus. The */
+/*              following values of ABCORR apply to the "reception" */
+/*              case in which photons depart from the locus at the */
+/*              light-time corrected epoch ET-LT and *arrive* at the */
+/*              observer's location at ET: */
 
 
-/*     OBSRVR      is the name of the observing body. The observing body */
-/*                 is an ephemeris object: it typically is a spacecraft, */
-/*                 the earth, or a surface point on the earth. OBSRVR is */
-/*                 case-insensitive, and leading and trailing blanks in */
-/*                 OBSRVR are not significant. Optionally, you may */
-/*                 supply a string containing the integer ID code for */
-/*                 the object. For example both 'MOON' and '301' are */
-/*                 legitimate strings that indicate the Moon is the */
-/*                 observer. */
+/*                 'LT'       Correct for one-way light time (also */
+/*                            called "planetary aberration") using a */
+/*                            Newtonian formulation. This correction */
+/*                            yields the locus at the moment it */
+/*                            emitted photons arriving at the */
+/*                            observer at ET. */
+
+/*                            The light time correction uses an */
+/*                            iterative solution of the light time */
+/*                            equation. The solution invoked by the */
+/*                            'LT' option uses one iteration. */
+
+/*                            Both the target position as seen by the */
+/*                            observer, and rotation of the target */
+/*                            body, are corrected for light time. The */
+/*                            position of the illumination source as */
+/*                            seen from the target is corrected as */
+/*                            well. */
+
+/*                 'LT+S'     Correct for one-way light time and */
+/*                            stellar aberration using a Newtonian */
+/*                            formulation. This option modifies the */
+/*                            locus obtained with the 'LT' option to */
+/*                            account for the observer's velocity */
+/*                            relative to the solar system */
+/*                            barycenter. These corrections yield */
+/*                            points on the apparent terminator. */
+
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equation, the 'CN' correction iterates */
+/*                            until the solution converges. Both the */
+/*                            position and rotation of the target */
+/*                            body are corrected for light time. The */
+/*                            position of the illumination source as */
+/*                            seen from the target is corrected as */
+/*                            well. */
+
+/*                 'CN+S'     Converged Newtonian light time and */
+/*                            stellar aberration corrections. This */
+/*                            option produces a solution that is at */
+/*                            least as accurate at that obtainable */
+/*                            with the 'LT+S' option. Whether the */
+/*                            'CN+S' solution is substantially more */
+/*                            accurate depends on the geometry of the */
+/*                            participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. */
+
+
+/*     CORLOC   is a string specifying the aberration correction */
+/*              locus: the point or set of points for which */
+/*              aberration corrections are performed. CORLOC may be */
+/*              assigned the values: */
+
+/*                 'CENTER' */
+
+/*                     Light time and stellar aberration corrections */
+/*                     are applied to the vector from the observer to */
+/*                     the center of the target body. The one way */
+/*                     light time from the target center to the */
+/*                     observer is used to determine the epoch at */
+/*                     which the target body orientation is computed. */
+
+/*                     This choice is appropriate for small target */
+/*                     objects for which the light time from the */
+/*                     surface to the observer varies little across */
+/*                     the entire target. It may also be appropriate */
+/*                     for large, nearly ellipsoidal targets when the */
+/*                     observer is very far from the target. */
+
+/*                     Computation speed for this option is faster */
+/*                     than for the ELLIPSOID TERMINATOR option. */
+
+/*                 'ELLIPSOID TERMINATOR' */
+
+/*                     Light time and stellar aberration corrections */
+/*                     are applied to individual terminator points on */
+/*                     the reference ellipsoid. For a terminator */
+/*                     point on the surface described by topographic */
+/*                     data, lying in a specified cutting half-plane, */
+/*                     the unique reference ellipsoid terminator */
+/*                     point in the same half-plane is used as the */
+/*                     locus of the aberration corrections. */
+
+/*                     This choice is appropriate for large target */
+/*                     objects for which the light time from the */
+/*                     terminator to the observer is significantly */
+/*                     different from the light time from the target */
+/*                     center to the observer. */
+
+/*                     Because aberration corrections are repeated */
+/*                     for individual terminator points, */
+/*                     computational speed for this option is */
+/*                     relatively slow. */
+
+
+/*     OBSRVR   is the name of the observing body. The observing body */
+/*              is an ephemeris object: it typically is a spacecraft, */
+/*              the earth, or a surface point on the earth. OBSRVR is */
+/*              case-insensitive, and leading and trailing blanks in */
+/*              OBSRVR are not significant. Optionally, you may */
+/*              supply a string containing the integer ID code for */
+/*              the object. For example both 'MOON' and '301' are */
+/*              legitimate strings that indicate the Moon is the */
+/*              observer. */
 
 
 /*     REFVEC, */
 /*     ROLSTP, */
-/*     NCUTS       are, respectively, a reference vector, a roll step */
-/*                 angle, and a count of cutting half-planes. */
+/*     NCUTS    are, respectively, a reference vector, a roll step */
+/*              angle, and a count of cutting half-planes. */
 
-/*                 REFVEC defines the first of a sequence of cutting */
-/*                 half-planes in which terminator points are to be */
-/*                 found. Each cutting half-plane has as its edge the */
-/*                 line containing the illumination source center-target */
-/*                 center vector; the first half-plane contains REFVEC. */
+/*              REFVEC defines the first of a sequence of cutting */
+/*              half-planes in which terminator points are to be */
+/*              found. Each cutting half-plane has as its edge the */
+/*              line containing the illumination source center-target */
+/*              center vector; the first half-plane contains REFVEC. */
 
-/*                 REFVEC is expressed in the body-fixed reference frame */
-/*                 designated by FIXREF. */
+/*              REFVEC is expressed in the body-fixed reference frame */
+/*              designated by FIXREF. */
 
-/*                 ROLSTP is an angular step by which to roll the */
-/*                 cutting half-planes about the target-illumination */
-/*                 source vector, which we'll call the "axis." The Ith */
-/*                 half-plane is rotated from REFVEC about the axis in */
-/*                 the counter-clockwise direction by (I-1)*ROLSTP. */
-/*                 Units are radians. ROLSTP should be set to */
+/*              ROLSTP is an angular step by which to roll the */
+/*              cutting half-planes about the target-illumination */
+/*              source vector, which we'll call the "axis." The Ith */
+/*              half-plane is rotated from REFVEC about the axis in */
+/*              the counter-clockwise direction by (I-1)*ROLSTP. */
+/*              Units are radians. ROLSTP should be set to */
 
-/*                    2*pi/NCUTS */
+/*                 2*pi/NCUTS */
 
-/*                 to generate an approximately uniform distribution of */
-/*                 points along the terminator. */
+/*              to generate an approximately uniform distribution of */
+/*              points along the terminator. */
 
-/*                 NCUTS is the number of cutting half-planes used to */
-/*                 find terminator points; the angular positions of */
-/*                 consecutive half-planes increase in the positive */
-/*                 (counterclockwise) sense about the axis and are */
-/*                 distributed roughly equally about that vector: each */
-/*                 half-plane has angular separation of approximately */
+/*              NCUTS is the number of cutting half-planes used to */
+/*              find terminator points; the angular positions of */
+/*              consecutive half-planes increase in the positive */
+/*              (counterclockwise) sense about the axis and are */
+/*              distributed roughly equally about that vector: each */
+/*              half-plane has angular separation of approximately */
 
-/*                    ROLSTP radians */
+/*                 ROLSTP radians */
 
-/*                 from each of its neighbors. When the aberration */
-/*                 correction locus is set to 'CENTER', the angular */
-/*                 separation is the value above, up to round-off. */
-/*                 When the locus is 'TANGENT', the separations are */
-/*                 less uniform due to differences in the aberration */
-/*                 corrections used for the respective terminator points. */
+/*              from each of its neighbors. When the aberration */
+/*              correction locus is set to 'CENTER', the angular */
+/*              separation is the value above, up to round-off. */
+/*              When the locus is 'TANGENT', the separations are */
+/*              less uniform due to differences in the aberration */
+/*              corrections used for the respective terminator points. */
 
 
 /*     SCHSTP, */
-/*     SOLTOL      are used only for DSK-based surfaces. These inputs */
-/*                 are, respectively, the search angular step size and */
-/*                 solution convergence tolerance used to find tangent */
-/*                 rays and associated terminator points within each */
-/*                 cutting half plane.  These values are used when the */
-/*                 METHOD argument includes the TANGENT option. In this */
-/*                 case, terminator points are found by a two-step */
-/*                 search process: */
+/*     SOLTOL   are used only for DSK-based surfaces. These inputs */
+/*              are, respectively, the search angular step size and */
+/*              solution convergence tolerance used to find tangent */
+/*              rays and associated terminator points within each */
+/*              cutting half plane. These values are used when the */
+/*              METHOD argument includes the TANGENT option. In this */
+/*              case, terminator points are found by a two-step */
+/*              search process: */
 
-/*                    1) Bracketing: starting with a direction having */
-/*                       sufficiently small angular separation from the */
-/*                       axis, rays emanating from the surface of the */
-/*                       illumination source are generated within the */
-/*                       half-plane at successively greater angular */
-/*                       separations from the axis, where the increment */
-/*                       of angular separation is SCHSTP. The rays are */
-/*                       tested for intersection with the target */
-/*                       surface. When a transition from */
-/*                       non-intersection to intersection is found, the */
-/*                       angular separation of a tangent ray has been */
-/*                       bracketed. */
+/*                 1) Bracketing: starting with a direction having */
+/*                    sufficiently small angular separation from the */
+/*                    axis, rays emanating from the surface of the */
+/*                    illumination source are generated within the */
+/*                    half-plane at successively greater angular */
+/*                    separations from the axis, where the increment */
+/*                    of angular separation is SCHSTP. The rays are */
+/*                    tested for intersection with the target */
+/*                    surface. When a transition from */
+/*                    non-intersection to intersection is found, the */
+/*                    angular separation of a tangent ray has been */
+/*                    bracketed. */
 
-/*                    2) Root finding: each time a tangent ray is */
-/*                       bracketed, a search is done to find the angular */
-/*                       separation from the starting direction at which */
-/*                       a tangent ray exists. The search terminates */
-/*                       when successive rays are separated by no more */
-/*                       than SOLTOL. When the search converges, the */
-/*                       last ray-surface intersection point found in */
-/*                       the convergence process is considered to be a */
-/*                       terminator point. */
-
-
-/*                  SCHSTP and SOLTOL have units of radians. */
-
-/*                  Target bodies with simple surfaces---for example, */
-/*                  convex shapes---will have a single terminator point */
-/*                  within each cutting half-plane. For such surfaces, */
-/*                  SCHSTP can be set large enough so that only one */
-/*                  bracketing step is taken. A value greater than pi, */
-/*                  for example 4.D0, is recommended. */
-
-/*                  Target bodies with complex surfaces can have */
-/*                  multiple terminator points within a given cutting */
-/*                  half-plane. To find all terminator points, SCHSTP */
-/*                  must be set to a value smaller than the angular */
-/*                  separation of any two terminator points in any */
-/*                  cutting half-plane, where the vertex of the angle is */
-/*                  near a point on the surface of the illumination */
-/*                  source. SCHSTP must not be too small, or the search */
-/*                  will be excessively slow. */
-
-/*                  For both kinds of surfaces, SOLTOL must be chosen so */
-/*                  that the results will have the desired precision. */
-/*                  Note that the choice of SOLTOL required to meet a */
-/*                  specified bound on terminator point height errors */
-/*                  depends on the illumination source-target distance. */
+/*                 2) Root finding: each time a tangent ray is */
+/*                    bracketed, a search is done to find the angular */
+/*                    separation from the starting direction at which */
+/*                    a tangent ray exists. The search terminates */
+/*                    when successive rays are separated by no more */
+/*                    than SOLTOL. When the search converges, the */
+/*                    last ray-surface intersection point found in */
+/*                    the convergence process is considered to be a */
+/*                    terminator point. */
 
 
-/*     MAXN         is the maximum number of terminator points that can */
-/*                  be stored in the output array POINTS. */
+/*              SCHSTP and SOLTOL have units of radians. */
 
+/*              Target bodies with simple surfaces---for example, */
+/*              convex shapes---will have a single terminator point */
+/*              within each cutting half-plane. For such surfaces, */
+/*              SCHSTP can be set large enough so that only one */
+/*              bracketing step is taken. A value greater than pi, */
+/*              for example 4.D0, is recommended. */
+
+/*              Target bodies with complex surfaces can have */
+/*              multiple terminator points within a given cutting */
+/*              half-plane. To find all terminator points, SCHSTP */
+/*              must be set to a value smaller than the angular */
+/*              separation of any two terminator points in any */
+/*              cutting half-plane, where the vertex of the angle is */
+/*              near a point on the surface of the illumination */
+/*              source. SCHSTP must not be too small, or the search */
+/*              will be excessively slow. */
+
+/*              For both kinds of surfaces, SOLTOL must be chosen so */
+/*              that the results will have the desired precision. */
+/*              Note that the choice of SOLTOL required to meet a */
+/*              specified bound on terminator point height errors */
+/*              depends on the illumination source-target distance. */
+
+
+/*     MAXN     is the maximum number of terminator points that can */
+/*              be stored in the output array POINTS. */
 
 /* $ Detailed_Output */
 
-
-/*     NPTS         is an array of counts of terminator points within */
-/*                  the specified set of cutting half-planes. The Ith */
-/*                  element of NPTS is the terminator point count in the */
-/*                  Ith half-plane. NPTS should be declared with length */
-/*                  at least NCUTS. */
-
-
-/*     POINTS       is an array containing the terminator points found */
-/*                  by this routine. Terminator points are ordered by */
-/*                  the indices of the half-planes in which they're */
-/*                  found. The terminator points in a given half-plane */
-/*                  are ordered by decreasing angular separation from */
-/*                  the illumination source-target direction; the */
-/*                  outermost terminator point in a given half-plane is */
-/*                  the first of that set. */
-
-/*                  The terminator points for the half-plane containing */
-/*                  REFVEC occupy array elements */
-
-/*                     POINTS(1,1) through POINTS(3,NPTS(1)) */
-
-/*                  Terminator points for the second half plane occupy */
-/*                  elements */
-
-/*                     POINTS(1, NPTS(1)+1       ) through */
-/*                     POINTS(3, NPTS(1)+NPTS(2) ) */
-
-/*                  and so on. */
-
-/*                  POINTS should be declared with dimensions */
-
-/*                     ( 3, MAXN ) */
-
-/*                  Terminator points are expressed in the reference */
-/*                  frame designated by FIXREF. For each terminator */
-/*                  point, the orientation of the frame is evaluated at */
-/*                  the epoch corresponding to the terminator point; the */
-/*                  epoch is provided in the output array EPOCHS */
-/*                  (described below). */
-
-/*                  Units of the terminator points are km. */
+/*     NPTS     is an array of counts of terminator points within */
+/*              the specified set of cutting half-planes. The Ith */
+/*              element of NPTS is the terminator point count in the */
+/*              Ith half-plane. NPTS should be declared with length */
+/*              at least NCUTS. */
 
 
-/*     EPOCHS       is an array of epochs associated with the terminator */
-/*                  points, accounting for light time if aberration */
-/*                  corrections are used. EPOCHS contains one element */
-/*                  for each terminator point. EPOCHS should be declared */
-/*                  with length */
+/*     POINTS   is an array containing the terminator points found */
+/*              by this routine. Terminator points are ordered by */
+/*              the indices of the half-planes in which they're */
+/*              found. The terminator points in a given half-plane */
+/*              are ordered by decreasing angular separation from */
+/*              the illumination source-target direction; the */
+/*              outermost terminator point in a given half-plane is */
+/*              the first of that set. */
 
-/*                     MAXN */
+/*              The terminator points for the half-plane containing */
+/*              REFVEC occupy array elements */
 
-/*                  The element */
+/*                 POINTS(1,1) through POINTS(3,NPTS(1)) */
 
-/*                     EPOCHS(I) */
+/*              Terminator points for the second half plane occupy */
+/*              elements */
 
-/*                  is associated with the terminator point */
+/*                 POINTS(1, NPTS(1)+1       ) through */
+/*                 POINTS(3, NPTS(1)+NPTS(2) ) */
 
-/*                     POINTS(J,I), J = 1 to 3 */
+/*              and so on. */
 
-/*                  If CORLOC is set to 'CENTER', all values of EPOCHS */
-/*                  will be the epoch associated with the target body */
-/*                  center. That is, if aberration corrections are used, */
-/*                  and if LT is the one-way light time from the target */
-/*                  center to the observer, the elements of EPOCHS will */
-/*                  all be set to */
+/*              POINTS should be declared with dimensions */
 
-/*                     ET - LT */
+/*                 ( 3, MAXN ) */
 
-/*                  If CORLOC is set to 'ELLIPSOID TERMINATOR', all */
-/*                  values of EPOCHS for the terminator points in a */
-/*                  given half plane will be those for the reference */
-/*                  ellipsoid terminator point in that half plane. That */
-/*                  is, if aberration corrections are used, and if LT(I) */
-/*                  is the one-way light time to the observer from the */
-/*                  reference ellipsoid terminator point in the Ith half */
-/*                  plane, the elements of EPOCHS for that half plane */
-/*                  will all be set to */
+/*              Terminator points are expressed in the reference */
+/*              frame designated by FIXREF. For each terminator */
+/*              point, the orientation of the frame is evaluated at */
+/*              the epoch corresponding to the terminator point; the */
+/*              epoch is provided in the output array EPOCHS */
+/*              (described below). */
 
-/*                     ET - LT(I) */
+/*              Units of the terminator points are km. */
 
 
-/*     TRMVCS       is an array of vectors connecting the observer to */
-/*                  the terminator points. The terminator vectors are */
-/*                  expressed in the frame designated by FIXREF. For the */
-/*                  Ith vector, the orientation of the frame is */
-/*                  evaluated at the Ith epoch provided in the output */
-/*                  array EPOCHS (described above). */
+/*     EPOCHS   is an array of epochs associated with the terminator */
+/*              points, accounting for light time if aberration */
+/*              corrections are used. EPOCHS contains one element */
+/*              for each terminator point. EPOCHS should be declared */
+/*              with length */
 
-/*                  TRMVCS should be declared with dimensions */
+/*                 MAXN */
 
-/*                     ( 3, MAXN ) */
+/*              The element */
 
-/*                  The elements */
+/*                 EPOCHS(I) */
 
-/*                     TRMVCS(J,I), J = 1 to 3 */
+/*              is associated with the terminator point */
 
-/*                  are associated with the terminator point */
+/*                 POINTS(J,I), J = 1 to 3 */
 
-/*                     POINTS(J,I), J = 1 to 3 */
+/*              If CORLOC is set to 'CENTER', all values of EPOCHS */
+/*              will be the epoch associated with the target body */
+/*              center. That is, if aberration corrections are used, */
+/*              and if LT is the one-way light time from the target */
+/*              center to the observer, the elements of EPOCHS will */
+/*              all be set to */
 
-/*                  Units of the terminator vectors are km. */
+/*                 ET - LT */
 
+/*              If CORLOC is set to 'ELLIPSOID TERMINATOR', all */
+/*              values of EPOCHS for the terminator points in a */
+/*              given half plane will be those for the reference */
+/*              ellipsoid terminator point in that half plane. That */
+/*              is, if aberration corrections are used, and if LT(I) */
+/*              is the one-way light time to the observer from the */
+/*              reference ellipsoid terminator point in the Ith half */
+/*              plane, the elements of EPOCHS for that half plane */
+/*              will all be set to */
+
+/*                 ET - LT(I) */
+
+
+/*     TRMVCS   is an array of vectors connecting the observer to */
+/*              the terminator points. The terminator vectors are */
+/*              expressed in the frame designated by FIXREF. For the */
+/*              Ith vector, the orientation of the frame is */
+/*              evaluated at the Ith epoch provided in the output */
+/*              array EPOCHS (described above). */
+
+/*              TRMVCS should be declared with dimensions */
+
+/*                 ( 3, MAXN ) */
+
+/*              The elements */
+
+/*                 TRMVCS(J,I), J = 1 to 3 */
+
+/*              are associated with the terminator point */
+
+/*                 POINTS(J,I), J = 1 to 3 */
+
+/*              Units of the terminator vectors are km. */
 
 /* $ Parameters */
 
@@ -1317,99 +1326,98 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1)  If the specified aberration correction is unrecognized, the */
-/*         error will be signaled by a routine in the call tree of this */
-/*         routine. If transmission corrections are commanded, the error */
-/*         SPICE(INVALIDOPTION) will be signaled. */
+/*     1)  If the specified aberration correction is unrecognized, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2)  If either the target or observer input strings cannot be */
+/*     2)  If transmission corrections are commanded, the error */
+/*         SPICE(INVALIDOPTION) is signaled. */
+
+/*     3)  If either the target or observer input strings cannot be */
 /*         converted to an integer ID code, the error */
 /*         SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     3)  If OBSRVR and TARGET map to the same NAIF integer ID code, */
+/*     4)  If OBSRVR and TARGET map to the same NAIF integer ID code, */
 /*         the error SPICE(BODIESNOTDISTINCT) is signaled. */
 
-/*     4)  If the input target body-fixed frame FIXREF is not */
+/*     5)  If the input target body-fixed frame FIXREF is not */
 /*         recognized, the error SPICE(NOFRAME) is signaled. A frame */
 /*         name may fail to be recognized because a required frame */
 /*         specification kernel has not been loaded; another cause is a */
 /*         misspelling of the frame name. */
 
-/*     5)  If the input frame FIXREF is not centered at the target body, */
+/*     6)  If the input frame FIXREF is not centered at the target body, */
 /*         the error SPICE(INVALIDFRAME) is signaled. */
 
-/*     6)  If the input argument METHOD is not recognized, the error */
-/*         SPICE(INVALIDMETHOD) is signaled by this routine, or the */
-/*         error is signaled by a routine in the call tree of this */
-/*         routine. */
+/*     7)  If the input argument METHOD is not recognized, the error */
+/*         SPICE(INVALIDMETHOD) is signaled by either this routine or a */
+/*         routine in the call tree of this routine. */
 
-/*     7)  If METHOD contains an invalid terminator type, the error */
-/*         SPICE(INVALIDTERMTYPE) will be signaled. */
+/*     8)  If METHOD contains an invalid terminator type, the error */
+/*         SPICE(INVALIDTERMTYPE) is signaled. */
 
-/*     8)  If the target and observer have distinct identities but are */
-/*         at the same location the error SPICE(NOSEPARATION) is */
+/*     9)  If the target and observer have distinct identities but are */
+/*         at the same location, the error SPICE(NOSEPARATION) is */
 /*         signaled. */
 
-/*     9)  If insufficient ephemeris data have been loaded prior to */
-/*         calling TERMPT, the error will be signaled by a routine in */
+/*     10) If insufficient ephemeris data have been loaded prior to */
+/*         calling TERMPT, an error is signaled by a routine in */
 /*         the call tree of this routine. When light time correction is */
 /*         used, sufficient ephemeris data must be available to */
 /*         propagate the states of both observer and target to the solar */
 /*         system barycenter. */
 
-/*    10)  If the computation method requires an ellipsoidal target */
-/*         shape and triaxial radii of the target body have not been */
-/*         loaded into the kernel pool prior to calling TERMPT, the */
-/*         error will be diagnosed and signaled by a routine in the call */
-/*         tree of this routine. */
+/*     11) If the computation method requires an ellipsoidal target shape */
+/*         and triaxial radii of the target body have not been loaded */
+/*         into the kernel pool prior to calling TERMPT, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /*         When the target shape is modeled by topographic data, radii */
 /*         of the reference triaxial ellipsoid are still required if */
 /*         the aberration correction locus is ELLIPSOID TERMINATOR or if */
 /*         the terminator point generation method is GUIDED. */
 
-/*    11)  The target must be an extended body. If the target body's */
-/*         shape is modeled as an ellipsoid, and if any of the radii of */
-/*         the target body are non-positive, the error will be diagnosed */
-/*         and signaled by routines in the call tree of this routine. */
+/*     12) If the target body's shape is modeled as an ellipsoid, and if */
+/*         any of the radii of the target body are non-positive, an error */
+/*         is signaled by a routine in the call tree of this routine. The */
+/*         target must be an extended body. */
 
-/*    12)  If PCK data specifying the target body-fixed frame */
-/*         orientation have not been loaded prior to calling TERMPT, */
-/*         the error will be diagnosed and signaled by a routine in the */
-/*         call tree of this routine. */
+/*     13) If PCK data specifying the target body-fixed frame orientation */
+/*         have not been loaded prior to calling TERMPT, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*    13)  If METHOD specifies that the target surface is represented by */
+/*     14) If METHOD specifies that the target surface is represented by */
 /*         DSK data, and no DSK files are loaded for the specified */
-/*         target, the error is signaled by a routine in the call tree */
+/*         target, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*    14)  If the array bound MAXN is less than 1, the error */
-/*         SPICE(INVALIDSIZE) will be signaled. */
+/*     15) If the array bound MAXN is less than 1, the error */
+/*         SPICE(INVALIDSIZE) is signaled. */
 
-/*    15)  If the number of cutting half-planes specified by NCUTS */
+/*     16) If the number of cutting half-planes specified by NCUTS */
 /*         is negative or greater than MAXN, the error */
-/*         SPICE(INVALIDCOUNT) will be signaled. */
+/*         SPICE(INVALIDCOUNT) is signaled. */
 
-/*    16)  If the aberration correction locus is not recognized, the */
-/*         error SPICE(INVALIDLOCUS) will be signaled. */
+/*     17) If the aberration correction locus is not recognized, the */
+/*         error SPICE(INVALIDLOCUS) is signaled. */
 
-/*    17)  If the GUIDED terminator type is used with the */
+/*     18) If the GUIDED terminator type is used with the */
 /*         ELLIPSOID TERMINATOR aberration correction locus, the */
-/*         error SPICE(BADTERMLOCUSMIX) will be signaled. */
+/*         error SPICE(BADTERMLOCUSMIX) is signaled. */
 
-/*    18)  If the reference vector REFVEC is the zero vector, the */
-/*         error SPICE(ZEROVECTOR) will be signaled. */
+/*     19) If the reference vector REFVEC is the zero vector, the */
+/*         error SPICE(ZEROVECTOR) is signaled. */
 
-/*    19)  If the reference vector REFVEC and the observer target */
+/*     20) If the reference vector REFVEC and the observer target */
 /*         vector are linearly dependent, the error */
-/*         SPICE(DEGENERATECASE) will be signaled. */
+/*         SPICE(DEGENERATECASE) is signaled. */
 
-/*    20)  If the terminator points cannot all be stored in the output */
-/*         POINTS array, the error SPICE(OUTOFROOM) will be signaled. */
+/*     21) If the terminator points cannot all be stored in the output */
+/*         POINTS array, the error SPICE(OUTOFROOM) is signaled. */
 
-/*    21)  If NCUTS is greater than 1, the roll step ROLSTP must be */
-/*         positive. Otherwise, the error SPICE(INVALIDROLLSTEP) will */
-/*         be signaled. */
+/*     22) If NCUTS is greater than 1, the roll step ROLSTP must be */
+/*         positive. Otherwise, the error SPICE(INVALIDROLLSTEP) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -1418,80 +1426,79 @@ static integer c__0 = 0;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for the target, observer, and */
-/*          illumination source must be loaded. If aberration */
-/*          corrections are used, the states of target and observer */
-/*          relative to the solar system barycenter must be calculable */
-/*          from the available ephemeris data. Typically ephemeris data */
-/*          are made available by loading one or more SPK files via */
-/*          FURNSH. */
+/*     -  SPK data: ephemeris data for the target, observer, and */
+/*        illumination source must be loaded. If aberration */
+/*        corrections are used, the states of target and observer */
+/*        relative to the solar system barycenter must be calculable */
+/*        from the available ephemeris data. Typically ephemeris data */
+/*        are made available by loading one or more SPK files via */
+/*        FURNSH. */
 
-/*        - Target body orientation data: these may be provided in a text */
-/*          or binary PCK file. In some cases, target body orientation */
-/*          may be provided by one more more CK files. In either case, */
-/*          data are made available by loading the files via FURNSH. */
+/*     -  Target body orientation data: these may be provided in a text */
+/*        or binary PCK file. In some cases, target body orientation */
+/*        may be provided by one more more CK files. In either case, */
+/*        data are made available by loading the files via FURNSH. */
 
-/*        - Shape data for the target body: */
+/*     -  Shape data for the target body: */
 
-/*            PCK data: */
+/*           PCK data: */
 
-/*               If the target body shape is modeled as an ellipsoid, */
-/*               triaxial radii for the target body must be loaded into */
-/*               the kernel pool. Typically this is done by loading a */
-/*               text PCK file via FURNSH. */
+/*              If the target body shape is modeled as an ellipsoid, */
+/*              triaxial radii for the target body must be loaded into */
+/*              the kernel pool. Typically this is done by loading a */
+/*              text PCK file via FURNSH. */
 
-/*               Triaxial radii are also needed if the target shape is */
-/*               modeled by DSK data but one or both of the GUIDED */
-/*               terminator definition method or the ELLIPSOID */
-/*               TERMINATOR aberration correction locus are selected. */
+/*              Triaxial radii are also needed if the target shape is */
+/*              modeled by DSK data but one or both of the GUIDED */
+/*              terminator definition method or the ELLIPSOID */
+/*              TERMINATOR aberration correction locus are selected. */
 
-/*            DSK data: */
+/*           DSK data: */
 
-/*               If the target shape is modeled by DSK data, DSK files */
-/*               containing topographic data for the target body must be */
-/*               loaded. If a surface list is specified, data for at */
-/*               least one of the listed surfaces must be loaded. */
+/*              If the target shape is modeled by DSK data, DSK files */
+/*              containing topographic data for the target body must be */
+/*              loaded. If a surface list is specified, data for at */
+/*              least one of the listed surfaces must be loaded. */
 
-/*        - Shape data for the illumination source: */
+/*     -  Shape data for the illumination source: */
 
-/*            PCK data: */
+/*           PCK data: */
 
-/*               Triaxial radii for the illumination source must be */
-/*               loaded into the kernel pool. Typically this is done by */
-/*               loading a text PCK file via FURNSH. */
+/*              Triaxial radii for the illumination source must be */
+/*              loaded into the kernel pool. Typically this is done by */
+/*              loading a text PCK file via FURNSH. */
 
 /*     The following data may be required: */
 
-/*        - Frame data: if a frame definition is required to convert the */
-/*          observer and target states to the body-fixed frame of the */
-/*          target, that definition must be available in the kernel */
-/*          pool. Typically the definition is supplied by loading a */
-/*          frame kernel via FURNSH. */
+/*     -  Frame data: if a frame definition is required to convert the */
+/*        observer and target states to the body-fixed frame of the */
+/*        target, that definition must be available in the kernel */
+/*        pool. Typically the definition is supplied by loading a */
+/*        frame kernel via FURNSH. */
 
-/*        - Surface name-ID associations: if surface names are specified */
-/*          in `method', the association of these names with their */
-/*          corresponding surface ID codes must be established by */
-/*          assignments of the kernel variables */
+/*     -  Surface name-ID associations: if surface names are specified */
+/*        in `method', the association of these names with their */
+/*        corresponding surface ID codes must be established by */
+/*        assignments of the kernel variables */
 
-/*             NAIF_SURFACE_NAME */
-/*             NAIF_SURFACE_CODE */
-/*             NAIF_SURFACE_BODY */
+/*           NAIF_SURFACE_NAME */
+/*           NAIF_SURFACE_CODE */
+/*           NAIF_SURFACE_BODY */
 
-/*          Normally these associations are made by loading a text */
-/*          kernel containing the necessary assignments. An example */
-/*          of such a set of assignments is */
+/*        Normally these associations are made by loading a text */
+/*        kernel containing the necessary assignments. An example */
+/*        of such a set of assignments is */
 
-/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
-/*             NAIF_SURFACE_CODE += 1 */
-/*             NAIF_SURFACE_BODY += 499 */
+/*           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*           NAIF_SURFACE_CODE += 1 */
+/*           NAIF_SURFACE_BODY += 499 */
 
-/*        - SCLK data: if the target body's orientation is provided by */
-/*          CK files, an associated SCLK kernel must be loaded. */
+/*     -  SCLK data: if the target body's orientation is provided by */
+/*        CK files, an associated SCLK kernel must be loaded. */
 
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
-
 
 /* $ Particulars */
 
@@ -1685,9 +1692,7 @@ static integer c__0 = 0;
 /*           'UMBRAL/TANGENT/DSK/UNPRIORITIZED/ */
 /*            SURFACES= "Mars MEGDR 64 PIXEL/DEG",3' */
 
-
 /* $ Examples */
-
 
 /*     The numerical results shown for these examples may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
@@ -1719,13 +1724,13 @@ static integer c__0 = 0;
 /*        the number of cuts and the number of resulting terminator */
 /*        points would be much greater. */
 
-/*        Use the meta-kernel below to load the required SPICE */
+/*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
 
 /*           KPL/MK */
 
-/*           File: limbpt_ex1.tm */
+/*           File: termpt_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -1751,33 +1756,27 @@ static integer c__0 = 0;
 /*                                               Phobos plate model */
 /*           \begindata */
 
-/*              PATH_SYMBOLS    = 'GEN' */
-/*              PATH_VALUES     = '/ftp/pub/naif/generic_kernels' */
-
 /*              KERNELS_TO_LOAD = ( 'de430.bsp', */
 /*                                  'mar097.bsp', */
 /*                                  'pck00010.tpc', */
 /*                                  'naif0011.tls', */
-/*                                  '$GEN/dsk/phobos/phobos512.bds' ) */
+/*                                  'phobos512.bds' ) */
 /*           \begintext */
 
 
+/*        Example code begins here. */
 
-/*     Example code begins here. */
-
 
 /*        C */
-/*        C     TERMPT example 1 */
+/*        C     Find terminator points on Phobos as seen from Mars. */
 /*        C */
-/*        C        Find terminator points on Phobos as seen from Mars. */
+/*        C     Compute terminator points using the tangent */
+/*        C     definition, using the "umbral" shadow type. */
+/*        C     The sun is the illumination source. Perform */
+/*        C     aberration corrections for the target center. */
+/*        C     Use both ellipsoid and DSK shape models. */
 /*        C */
-/*        C        Compute terminator points using the tangent */
-/*        C        definition, using the "umbral" shadow type. */
-/*        C        The sun is the illumination source. Perform */
-/*        C        aberration corrections for the target center. */
-/*        C        Use both ellipsoid and DSK shape models. */
-/*        C */
-/*              PROGRAM EX1 */
+/*              PROGRAM TERMPT_EX1 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     SPICELIB functions */
@@ -1795,7 +1794,10 @@ static integer c__0 = 0;
 /*              PARAMETER           ( FM1    =  '(A,F21.9)' ) */
 
 /*              CHARACTER*(*)         FM2 */
-/*              PARAMETER           ( FM2    =  '(1X,3F21.9)' ) */
+/*              PARAMETER           ( FM2    =  '(1X,3F20.9)' ) */
+
+/*              CHARACTER*(*)         FM3 */
+/*              PARAMETER           ( FM3    =  '(A,I2)' ) */
 
 /*              INTEGER               BDNMLN */
 /*              PARAMETER           ( BDNMLN = 36 ) */
@@ -1891,7 +1893,7 @@ static integer c__0 = 0;
 /*        C     time for this approximation. */
 /*        C */
 /*              CALL SPKPOS ( ILUSRC, ET,  'J2000', ABCORR, */
-/*             .              TARGET, POS, LT               ) */
+/*             .              TARGET, POS, LT              ) */
 
 /*              DIST   = VNORM(POS) */
 
@@ -1935,11 +1937,11 @@ static integer c__0 = 0;
 /*                    WRITE(*,*)   ' ' */
 /*                    WRITE(*,FM1) '  Roll angle (deg) = ', ROLL * DPR() */
 /*                    WRITE(*,FM1) '     Target epoch  = ', TRGEPS(J) */
-/*                    WRITE(*,*)   '    Number of terminator points  ' */
+/*                    WRITE(*,FM3) '    Number of terminator points  ' */
 /*             .      //           'at this roll angle: ', */
 /*             .                   NPTS(J) */
 
-/*                    WRITE (*,*) '      Terminator points' */
+/*                    WRITE (*,*) '      Terminator points:' */
 
 /*                    DO K = 1, NPTS(J) */
 /*                       WRITE (*,FM2) ( POINTS(M,K+START), M = 1, 3 ) */
@@ -1955,63 +1957,62 @@ static integer c__0 = 0;
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*      Light source:   SUN */
-/*      Observer:       MARS */
-/*      Target:         PHOBOS */
-/*      Frame:          IAU_PHOBOS */
+/*         Light source:   SUN */
+/*         Observer:       MARS */
+/*         Target:         PHOBOS */
+/*         Frame:          IAU_PHOBOS */
 
-/*      Number of cuts:            3 */
-
-
-/*      Computation method = UMBRAL/TANGENT/ELLIPSOID */
-/*      Locus              = CENTER */
+/*         Number of cuts:            3 */
 
 
-/*       Roll angle (deg) =           0.000000000 */
-/*          Target epoch  =   271684865.152078211 */
-/*          Number of terminator points  at this roll angle:            1 */
-/*            Terminator points: */
-/*                2.040498332          5.012722925          8.047281838 */
-
-/*       Roll angle (deg) =         120.000000000 */
-/*          Target epoch  =   271684865.152078211 */
-/*          Number of terminator points  at this roll angle:            1 */
-/*            Terminator points: */
-/*              -11.058054707          0.167672089         -4.782740292 */
-
-/*       Roll angle (deg) =         240.000000000 */
-/*          Target epoch  =   271684865.152078211 */
-/*          Number of terminator points  at this roll angle:            1 */
-/*            Terminator points: */
-/*                8.195238564         -6.093889437         -5.122310498 */
+/*         Computation method = UMBRAL/TANGENT/ELLIPSOID */
+/*         Locus              = CENTER */
 
 
-/*      Computation method = UMBRAL/TANGENT/DSK/UNPRIORITIZED */
-/*      Locus              = CENTER */
+/*          Roll angle (deg) =           0.000000000 */
+/*             Target epoch  =   271684865.152078211 */
+/*            Number of terminator points  at this roll angle:  1 */
+/*               Terminator points: */
+/*                  2.040498332         5.012722925         8.047281838 */
+
+/*          Roll angle (deg) =         120.000000000 */
+/*             Target epoch  =   271684865.152078211 */
+/*            Number of terminator points  at this roll angle:  1 */
+/*               Terminator points: */
+/*                -11.058054707         0.167672089        -4.782740292 */
+
+/*          Roll angle (deg) =         240.000000000 */
+/*             Target epoch  =   271684865.152078211 */
+/*            Number of terminator points  at this roll angle:  1 */
+/*               Terminator points: */
+/*                  8.195238564        -6.093889437        -5.122310498 */
 
 
-/*       Roll angle (deg) =           0.000000000 */
-/*          Target epoch  =   271684865.152078211 */
-/*          Number of terminator points  at this roll angle:            1 */
-/*            Terminator points: */
-/*                1.626396028          3.995432180          8.853689595 */
+/*         Computation method = UMBRAL/TANGENT/DSK/UNPRIORITIZED */
+/*         Locus              = CENTER */
 
-/*       Roll angle (deg) =         120.000000000 */
-/*          Target epoch  =   271684865.152078211 */
-/*          Number of terminator points  at this roll angle:            1 */
-/*            Terminator points: */
-/*              -11.186659928         -0.142366793         -4.646136984 */
 
-/*       Roll angle (deg) =         240.000000000 */
-/*          Target epoch  =   271684865.152078211 */
-/*          Number of terminator points  at this roll angle:            1 */
-/*            Terminator points: */
-/*                9.338447202         -6.091352186         -5.960849442 */
+/*          Roll angle (deg) =           0.000000000 */
+/*             Target epoch  =   271684865.152078211 */
+/*            Number of terminator points  at this roll angle:  1 */
+/*               Terminator points: */
+/*                  1.626396028         3.995432180         8.853689595 */
 
+/*          Roll angle (deg) =         120.000000000 */
+/*             Target epoch  =   271684865.152078211 */
+/*            Number of terminator points  at this roll angle:  1 */
+/*               Terminator points: */
+/*                -11.186660113        -0.142367244        -4.646136750 */
+
+/*          Roll angle (deg) =         240.000000000 */
+/*             Target epoch  =   271684865.152078211 */
+/*            Number of terminator points  at this roll angle:  1 */
+/*               Terminator points: */
+/*                  9.338447202        -6.091352186        -5.960849442 */
 
 
 /*     2) Find apparent terminator points on Mars as seen from the */
@@ -2032,7 +2033,7 @@ static integer c__0 = 0;
 /*        the number of cuts and the number of resulting terminator */
 /*        points would be much greater. */
 
-/*        Use the meta-kernel below to load the required SPICE */
+/*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
 
@@ -2074,439 +2075,433 @@ static integer c__0 = 0;
 /*           \begintext */
 
 
-
-/*     Example code begins here. */
-
-
-/*      C */
-/*      C     TERMPT example 2 */
-/*      C */
-/*      C        Find terminator points on Mars as seen from the */
-/*      C        earth. */
-/*      C */
-/*      C        Use only ellipsoid shape models. Use the */
-/*      C        ELLIPSOID TERMINATOR aberration correction */
-/*      C        locus. */
-/*      C */
-/*      C        Use both UMBRAL and PENUMBRAL shadow definitions. */
-/*      C        Compute the distances between corresponding */
-/*      C        umbral and penumbral terminator points. */
-/*      C */
-/*      C        Check terminator points by computing solar */
-/*      C        incidence angles at each point. */
-/*      C */
-/*      C */
-/*            PROGRAM EX2 */
-/*            IMPLICIT NONE */
-/*      C */
-/*      C     SPICELIB functions */
-/*      C */
-/*            DOUBLE PRECISION      DPR */
-/*            DOUBLE PRECISION      PI */
-/*            DOUBLE PRECISION      VDIST */
-/*            DOUBLE PRECISION      VNORM */
-/*      C */
-/*      C     Local parameters */
-/*      C */
-/*            CHARACTER*(*)         META */
-/*            PARAMETER           ( META    = 'termpt_ex2.tm' ) */
-
-/*            CHARACTER*(*)         FM1 */
-/*            PARAMETER           ( FM1     =  '(A,F21.9)' ) */
-
-/*            CHARACTER*(*)         FM2 */
-/*            PARAMETER           ( FM2     =  '(A,I2)' ) */
-
-/*            INTEGER               BDNMLN */
-/*            PARAMETER           ( BDNMLN = 36 ) */
-
-/*            INTEGER               FRNMLN */
-/*            PARAMETER           ( FRNMLN = 32 ) */
-
-/*            INTEGER               CORLEN */
-/*            PARAMETER           ( CORLEN = 20 ) */
-
-/*            INTEGER               MTHLEN */
-/*            PARAMETER           ( MTHLEN = 50 ) */
-
-/*            INTEGER               NMETH */
-/*            PARAMETER           ( NMETH  = 2 ) */
-
-/*            INTEGER               MAXN */
-/*            PARAMETER           ( MAXN   = 100 ) */
-/*      C */
-/*      C     Local variables */
-/*      C */
-/*            CHARACTER*(CORLEN)    ABCORR */
-/*            CHARACTER*(CORLEN)    CORLOC ( NMETH ) */
-/*            CHARACTER*(FRNMLN)    FIXREF */
-/*            CHARACTER*(MTHLEN)    ILUMTH ( NMETH ) */
-/*            CHARACTER*(BDNMLN)    ILUSRC */
-/*            CHARACTER*(BDNMLN)    OBSRVR */
-/*            CHARACTER*(BDNMLN)    TARGET */
-/*            CHARACTER*(MTHLEN)    METHOD ( NMETH ) */
-
-/*            DOUBLE PRECISION      ADJANG */
-/*            DOUBLE PRECISION      ALT */
-/*            DOUBLE PRECISION      ANGSRC */
-/*            DOUBLE PRECISION      DELROL */
-/*            DOUBLE PRECISION      DIST */
-/*            DOUBLE PRECISION      EMISSN */
-/*            DOUBLE PRECISION      ET */
-/*            DOUBLE PRECISION      F */
-/*            DOUBLE PRECISION      ILUPOS ( 3 ) */
-/*            DOUBLE PRECISION      LAT */
-/*            DOUBLE PRECISION      LON */
-/*            DOUBLE PRECISION      LT */
-/*            DOUBLE PRECISION      PHASE */
-/*            DOUBLE PRECISION      POINTS ( 3, MAXN ) */
-/*            DOUBLE PRECISION      SVPNTS ( 3, MAXN ) */
-/*            DOUBLE PRECISION      TPTILU ( 3 ) */
-/*            DOUBLE PRECISION      RADII  ( 3 ) */
-/*            DOUBLE PRECISION      RE */
-/*            DOUBLE PRECISION      ROLL */
-/*            DOUBLE PRECISION      RP */
-/*            DOUBLE PRECISION      SCHSTP */
-/*            DOUBLE PRECISION      SOLAR */
-/*            DOUBLE PRECISION      SOLTOL */
-/*            DOUBLE PRECISION      SRCRAD ( 3 ) */
-/*            DOUBLE PRECISION      SRFVEC ( 3 ) */
-/*            DOUBLE PRECISION      TRMVCS ( 3, MAXN ) */
-/*            DOUBLE PRECISION      TRGEPC */
-/*            DOUBLE PRECISION      TRGEPS ( MAXN ) */
-/*            DOUBLE PRECISION      Z      ( 3 ) */
-
-/*            INTEGER               I */
-/*            INTEGER               J */
-/*            INTEGER               K */
-/*            INTEGER               M */
-/*            INTEGER               N */
-/*            INTEGER               NCUTS */
-/*            INTEGER               NPTS   ( MAXN ) */
-/*            INTEGER               START */
-
-/*      C */
-/*      C     Saved variables */
-/*      C */
-/*            SAVE                  METHOD */
-/*      C */
-/*      C     Initial values */
-/*      C */
-/*            DATA                  CORLOC / */
-/*           .                        'ELLIPSOID TERMINATOR', */
-/*           .                        'ELLIPSOID TERMINATOR' */
-/*           .                             / */
-
-/*            DATA                  ILUMTH / */
-/*           .                        'ELLIPSOID', */
-/*           .                        'ELLIPSOID' */
-/*           .                             / */
-
-/*            DATA                  METHOD / */
-/*           .                      'UMBRAL/ELLIPSOID/TANGENT', */
-/*           .                      'PENUMBRAL/ELLIPSOID/TANGENT' */
-/*           .                             / */
-
-/*            DATA                  Z      / 0.D0, 0.D0, 1.D0 / */
-/*      C */
-/*      C     Load kernel files via the meta-kernel. */
-/*      C */
-/*            CALL FURNSH ( META ) */
-/*      C */
-/*      C     Set target, observer, and target body-fixed, */
-/*      C     body-centered reference frame. */
-/*      C */
-/*            ILUSRC = 'SUN' */
-/*            OBSRVR = 'EARTH' */
-/*            TARGET = 'MARS' */
-/*            FIXREF = 'IAU_MARS' */
-/*      C */
-/*      C     Set the aberration correction. We'll set the */
-/*      C     correction locus below. */
-/*      C */
-/*            ABCORR = 'CN+S' */
-/*      C */
-/*      C     Convert the UTC request time string seconds past */
-/*      C     J2000, TDB. */
-/*      C */
-/*            CALL STR2ET ( '2008 AUG 11 00:00:00', ET ) */
-/*      C */
-/*      C     Look up the target body's radii. We'll use these to */
-/*      C     convert Cartesian to planetographic coordinates. Use */
-/*      C     the radii to compute the flattening coefficient of */
-/*      C     the reference ellipsoid. */
-/*      C */
-/*            CALL BODVRD ( TARGET, 'RADII', 3, N, RADII ) */
-/*      C */
-/*      C     Compute the flattening coefficient for planetodetic */
-/*      C     coordinates */
-/*      C */
-/*            RE = RADII(1) */
-/*            RP = RADII(3) */
-/*            F  = ( RE - RP ) / RE */
-
-/*      C */
-/*      C     Get the radii of the illumination source as well. */
-/*      C     We'll use these radii to compute the angular radius */
-/*      C     of the source as seen from the terminator points. */
-/*      C */
-/*            CALL BODVRD ( ILUSRC, 'RADII', 3, N, SRCRAD ) */
-/*      C */
-/*      C     Compute a set of terminator points using light time and */
-/*      C     stellar aberration corrections. Use both ellipsoid */
-/*      C     and DSK shape models. */
-/*      C */
-/*      C     Get the approximate light source-target distance */
-/*      C     at ET. We'll ignore the observer-target light */
-/*      C     time for this approximation. */
-/*      C */
-/*            CALL SPKPOS ( ILUSRC, ET,     FIXREF, ABCORR, */
-/*           .              TARGET, ILUPOS, LT             ) */
-
-/*            DIST = VNORM( ILUPOS ) */
-/*      C */
-/*      C     Set the angular step size so that a single step will */
-/*      C     be taken in the root bracketing process; that's all */
-/*      C     that is needed since we don't expect to have multiple */
-/*      C     terminator points in any cutting half-plane. */
-/*      C */
-/*            SCHSTP = 4.D0 */
-/*      C */
-/*      C     Set the convergence tolerance to minimize the */
-/*      C     height error. We can't achieve the precision */
-/*      C     suggested by the formula because the sun-Mars */
-/*      C     distance is about 2.4e8 km. Compute 3 terminator */
-/*      C     points for each computation method. */
-/*      C */
-/*            SOLTOL = 1.D-7/DIST */
-/*      C */
-/*      C     Set the number of cutting half-planes and roll step. */
-/*      C */
-/*            NCUTS  = 3 */
-/*            DELROL = 2*PI() / NCUTS */
-
-/*            WRITE (*,*) ' ' */
-/*            WRITE (*,*) 'Light source:          '//ILUSRC */
-/*            WRITE (*,*) 'Observer:              '//OBSRVR */
-/*            WRITE (*,*) 'Target:                '//TARGET */
-/*            WRITE (*,*) 'Frame:                 '//FIXREF */
-/*            WRITE (*,*) 'Aberration Correction: '//ABCORR */
-/*            WRITE (*,*) ' ' */
-/*            WRITE (*,*) 'Number of cuts: ', NCUTS */
-
-/*            DO I = 1, NMETH */
-
-/*               CALL TERMPT ( METHOD(I), ILUSRC, TARGET,    ET, */
-/*           .                 FIXREF,    ABCORR, CORLOC(I), OBSRVR, */
-/*           .                 Z,         DELROL, NCUTS,     SCHSTP, */
-/*           .                 SOLTOL,    MAXN,   NPTS,      POINTS, */
-/*           .                 TRGEPS,    TRMVCS                    ) */
-/*      C */
-/*      C        Write the results. */
-/*      C */
-/*               WRITE(*,*) ' ' */
-/*               WRITE(*,*) 'Computation method = ', METHOD(I) */
-/*               WRITE(*,*) 'Locus              = ', CORLOC(I) */
-
-
-/*               START  = 0 */
-
-/*               DO J = 1, NCUTS */
-
-/*                  ROLL = (J-1) * DELROL */
-
-/*                  WRITE(*,*)   ' ' */
-/*                  WRITE(*,FM1) '   Roll angle (deg) = ', ROLL * DPR() */
-/*                  WRITE(*,FM1) '    Target epoch    = ', TRGEPS(J) */
-/*                  WRITE(*,FM2) '    Number of terminator points at ' */
-/*           .      //           'this roll angle: ', */
-/*           .                   NPTS(J) */
-
-/*                  DO K = 1, NPTS(J) */
-
-/*                     WRITE (*,*) '    Terminator point planetodetic ' */
-/*           .         //          'coordinates:' */
-
-/*                     CALL RECGEO ( POINTS(1,K+START), RE,  F, */
-/*           .                       LON,               LAT, ALT ) */
-
-/*                     WRITE (*,FM1) '      Longitude       (deg): ', */
-/*           .                       LON*DPR() */
-/*                     WRITE (*,FM1) '      Latitude        (deg): ', */
-/*           .                       LAT*DPR() */
-/*                     WRITE (*,FM1) '      Altitude         (km): ', */
-/*           .                       ALT */
-
-/*      C */
-/*      C              Get illumination angles for this terminator point. */
-/*      C */
-/*                     M = K+START */
-
-/*                     CALL ILLUMG ( ILUMTH,      TARGET, ILUSRC, ET, */
-/*           .                       FIXREF,      ABCORR, OBSRVR, */
-/*           .                       POINTS(1,M), TRGEPC, SRFVEC, */
-/*           .                       PHASE,       SOLAR,  EMISSN ) */
-
-/*                     WRITE (*,FM1) '      Incidence angle ' */
-/*           .         //            '(deg): ', SOLAR * DPR() */
-
-
-/*      C */
-/*      C              Adjust the incidence angle for the angular */
-/*      C              radius of the illumination source. Use the */
-/*      C              epoch associated with the terminator point */
-/*      C              for this lookup. */
-/*      C */
-/*                     CALL SPKPOS ( ILUSRC, TRGEPS(M), FIXREF, */
-/*           .                       ABCORR, TARGET,    TPTILU, LT ) */
-
-/*                     DIST   = VNORM( TPTILU ) */
-
-/*                     ANGSRC = ASIN (  MAX( SRCRAD(1), */
-/*           .                               SRCRAD(2), */
-/*           .                               SRCRAD(3) )  / DIST  ) */
-
-/*                     IF ( I .EQ. 1 ) THEN */
-/*      C */
-/*      C                 For points on the umbral terminator, */
-/*      C                 the ellipsoid outward normal is tilted */
-/*      C                 away from the terminator-source center */
-/*      C                 direction by the angular radius of the */
-/*      C                 source. Subtract this radius from the */
-/*      C                 illumination incidence angle to get the */
-/*      C                 angle between the local normal and the */
-/*      C                 direction to the corresponding tangent */
-/*      C                 point on the source. */
-/*      C */
-/*                        ADJANG = SOLAR - ANGSRC */
-
-/*                     ELSE */
-/*      C */
-/*      C                 For the penumbral case, the outward */
-/*      C                 normal is tilted toward the illumination */
-/*      C                 source by the angular radius of the */
-/*      C                 source. Adjust the illumination */
-/*      C                 incidence angle for this. */
-/*      C */
-/*                        ADJANG = SOLAR + ANGSRC */
-
-/*                     END IF */
-
-/*                     WRITE (*,FM1)  '      Adjusted angle  ' */
-/*           .         //             '(deg): ', ADJANG * DPR() */
-
-
-/*                     IF ( I .EQ. 1 ) THEN */
-/*      C */
-/*      C                 Save terminator points for comparison. */
-/*      C */
-/*                        CALL VEQU ( POINTS(1,M), SVPNTS(1,M) ) */
-
-/*                     ELSE */
-/*      C */
-/*      C                 Compare terminator points with last */
-/*      C                 saved values. */
-/*      C */
-/*                        DIST = VDIST( POINTS(1,M), SVPNTS(1,M) ) */
-
-/*                        WRITE (*,FM1) */
-/*           .            '      Distance offset  (km): ', DIST */
-/*                     END IF */
-
-
-/*                  END DO */
-
-/*                  START = START + NPTS(J) */
-
-/*               END DO */
-
-/*               WRITE (*,*) ' ' */
-
-/*            END DO */
-/*            END */
-
-
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
-
-
-/*        Light source:          SUN */
-/*        Observer:              EARTH */
-/*        Target:                MARS */
-/*        Frame:                 IAU_MARS */
-/*        Aberration Correction: CN+S */
-
-/*        Number of cuts:            3 */
-
-/*        Computation method = UMBRAL/ELLIPSOID/TANGENT */
-/*        Locus              = ELLIPSOID TERMINATOR */
-
-/*          Roll angle (deg) =           0.000000000 */
-/*           Target epoch    =   271683700.369686902 */
-/*           Number of terminator points at this roll angle:  1 */
-/*            Terminator point planetodetic coordinates: */
-/*             Longitude       (deg):           4.189318082 */
-/*             Latitude        (deg):          66.416132677 */
-/*             Altitude         (km):           0.000000000 */
-/*             Incidence angle (deg):          90.163842885 */
-/*             Adjusted angle  (deg):          89.999999980 */
-
-/*          Roll angle (deg) =         120.000000000 */
-/*           Target epoch    =   271683700.372003794 */
-/*           Number of terminator points at this roll angle:  1 */
-/*            Terminator point planetodetic coordinates: */
-/*             Longitude       (deg):         107.074551917 */
-/*             Latitude        (deg):         -27.604435701 */
-/*             Altitude         (km):           0.000000000 */
-/*             Incidence angle (deg):          90.163842793 */
-/*             Adjusted angle  (deg):          89.999999888 */
-
-/*          Roll angle (deg) =         240.000000000 */
-/*           Target epoch    =   271683700.364983618 */
-/*           Number of terminator points at this roll angle:  1 */
-/*            Terminator point planetodetic coordinates: */
-/*             Longitude       (deg):         -98.695906077 */
-/*             Latitude        (deg):         -27.604435700 */
-/*             Altitude         (km):          -0.000000000 */
-/*             Incidence angle (deg):          90.163843001 */
-/*             Adjusted angle  (deg):          90.000000096 */
-
-
-/*        Computation method = PENUMBRAL/ELLIPSOID/TANGENT */
-/*        Locus              = ELLIPSOID TERMINATOR */
-
-/*          Roll angle (deg) =           0.000000000 */
-/*           Target epoch    =   271683700.369747400 */
-/*           Number of terminator points at this roll angle:  1 */
-/*            Terminator point planetodetic coordinates: */
-/*             Longitude       (deg):           4.189317837 */
-/*             Latitude        (deg):          66.743818467 */
-/*             Altitude         (km):           0.000000000 */
-/*             Incidence angle (deg):          89.836157094 */
-/*             Adjusted angle  (deg):          89.999999999 */
-/*             Distance offset  (km):          19.483590936 */
-
-/*          Roll angle (deg) =         120.000000000 */
-/*           Target epoch    =   271683700.372064054 */
-/*           Number of terminator points at this roll angle:  1 */
-/*            Terminator point planetodetic coordinates: */
-/*             Longitude       (deg):         107.404259674 */
-/*             Latitude        (deg):         -27.456458359 */
-/*             Altitude         (km):           0.000000000 */
-/*             Incidence angle (deg):          89.836157182 */
-/*             Adjusted angle  (deg):          90.000000087 */
-/*             Distance offset  (km):          19.411414247 */
-
-/*          Roll angle (deg) =         240.000000000 */
-/*           Target epoch    =   271683700.365043879 */
-/*           Number of terminator points at this roll angle:  1 */
-/*            Terminator point planetodetic coordinates: */
-/*             Longitude       (deg):         -99.025614323 */
-/*             Latitude        (deg):         -27.456458357 */
-/*             Altitude         (km):           0.000000000 */
-/*             Incidence angle (deg):          89.836156972 */
-/*             Adjusted angle  (deg):          89.999999877 */
-/*             Distance offset  (km):          19.411437239 */
+/*        Example code begins here. */
+
+
+/*        C */
+/*        C     Find terminator points on Mars as seen from the */
+/*        C     earth. */
+/*        C */
+/*        C     Use only ellipsoid shape models. Use the */
+/*        C     ELLIPSOID TERMINATOR aberration correction */
+/*        C     locus. */
+/*        C */
+/*        C     Use both UMBRAL and PENUMBRAL shadow definitions. */
+/*        C     Compute the distances between corresponding */
+/*        C     umbral and penumbral terminator points. */
+/*        C */
+/*        C     Check terminator points by computing solar */
+/*        C     incidence angles at each point. */
+/*        C */
+/*        C */
+/*              PROGRAM TERMPT_EX2 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      PI */
+/*              DOUBLE PRECISION      VDIST */
+/*              DOUBLE PRECISION      VNORM */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META    = 'termpt_ex2.tm' ) */
+
+/*              CHARACTER*(*)         FM1 */
+/*              PARAMETER           ( FM1     =  '(A,F21.9)' ) */
+
+/*              CHARACTER*(*)         FM2 */
+/*              PARAMETER           ( FM2     =  '(A,I2)' ) */
+
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
+
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
+
+/*              INTEGER               CORLEN */
+/*              PARAMETER           ( CORLEN = 20 ) */
+
+/*              INTEGER               MTHLEN */
+/*              PARAMETER           ( MTHLEN = 50 ) */
+
+/*              INTEGER               NMETH */
+/*              PARAMETER           ( NMETH  = 2 ) */
+
+/*              INTEGER               MAXN */
+/*              PARAMETER           ( MAXN   = 100 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CORLEN)    ABCORR */
+/*              CHARACTER*(CORLEN)    CORLOC ( NMETH ) */
+/*              CHARACTER*(FRNMLN)    FIXREF */
+/*              CHARACTER*(MTHLEN)    ILUMTH ( NMETH ) */
+/*              CHARACTER*(BDNMLN)    ILUSRC */
+/*              CHARACTER*(BDNMLN)    OBSRVR */
+/*              CHARACTER*(BDNMLN)    TARGET */
+/*              CHARACTER*(MTHLEN)    METHOD ( NMETH ) */
+
+/*              DOUBLE PRECISION      ADJANG */
+/*              DOUBLE PRECISION      ALT */
+/*              DOUBLE PRECISION      ANGSRC */
+/*              DOUBLE PRECISION      DELROL */
+/*              DOUBLE PRECISION      DIST */
+/*              DOUBLE PRECISION      EMISSN */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      F */
+/*              DOUBLE PRECISION      ILUPOS ( 3 ) */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      PHASE */
+/*              DOUBLE PRECISION      POINTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      SVPNTS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      TPTILU ( 3 ) */
+/*              DOUBLE PRECISION      RADII  ( 3 ) */
+/*              DOUBLE PRECISION      RE */
+/*              DOUBLE PRECISION      ROLL */
+/*              DOUBLE PRECISION      RP */
+/*              DOUBLE PRECISION      SCHSTP */
+/*              DOUBLE PRECISION      SOLAR */
+/*              DOUBLE PRECISION      SOLTOL */
+/*              DOUBLE PRECISION      SRCRAD ( 3 ) */
+/*              DOUBLE PRECISION      SRFVEC ( 3 ) */
+/*              DOUBLE PRECISION      TRMVCS ( 3, MAXN ) */
+/*              DOUBLE PRECISION      TRGEPC */
+/*              DOUBLE PRECISION      TRGEPS ( MAXN ) */
+/*              DOUBLE PRECISION      Z      ( 3 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               K */
+/*              INTEGER               M */
+/*              INTEGER               N */
+/*              INTEGER               NCUTS */
+/*              INTEGER               NPTS   ( MAXN ) */
+/*              INTEGER               START */
+
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  CORLOC / */
+/*             .                        'ELLIPSOID TERMINATOR', */
+/*             .                        'ELLIPSOID TERMINATOR' */
+/*             .                             / */
+
+/*              DATA                  ILUMTH / */
+/*             .                        'ELLIPSOID', */
+/*             .                        'ELLIPSOID' */
+/*             .                             / */
+
+/*              DATA                  METHOD / */
+/*             .                      'UMBRAL/ELLIPSOID/TANGENT', */
+/*             .                      'PENUMBRAL/ELLIPSOID/TANGENT' */
+/*             .                             / */
+
+/*              DATA                  Z      / 0.D0, 0.D0, 1.D0 / */
+/*        C */
+/*        C     Load kernel files via the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+/*        C */
+/*        C     Set target, observer, and target body-fixed, */
+/*        C     body-centered reference frame. */
+/*        C */
+/*              ILUSRC = 'SUN' */
+/*              OBSRVR = 'EARTH' */
+/*              TARGET = 'MARS' */
+/*              FIXREF = 'IAU_MARS' */
+/*        C */
+/*        C     Set the aberration correction. We'll set the */
+/*        C     correction locus below. */
+/*        C */
+/*              ABCORR = 'CN+S' */
+/*        C */
+/*        C     Convert the UTC request time string seconds past */
+/*        C     J2000, TDB. */
+/*        C */
+/*              CALL STR2ET ( '2008 AUG 11 00:00:00', ET ) */
+/*        C */
+/*        C     Look up the target body's radii. We'll use these to */
+/*        C     convert Cartesian to planetographic coordinates. Use */
+/*        C     the radii to compute the flattening coefficient of */
+/*        C     the reference ellipsoid. */
+/*        C */
+/*              CALL BODVRD ( TARGET, 'RADII', 3, N, RADII ) */
+/*        C */
+/*        C     Compute the flattening coefficient for planetodetic */
+/*        C     coordinates */
+/*        C */
+/*              RE = RADII(1) */
+/*              RP = RADII(3) */
+/*              F  = ( RE - RP ) / RE */
+
+/*        C */
+/*        C     Get the radii of the illumination source as well. */
+/*        C     We'll use these radii to compute the angular radius */
+/*        C     of the source as seen from the terminator points. */
+/*        C */
+/*              CALL BODVRD ( ILUSRC, 'RADII', 3, N, SRCRAD ) */
+/*        C */
+/*        C     Compute a set of terminator points using light time and */
+/*        C     stellar aberration corrections. Use both ellipsoid */
+/*        C     and DSK shape models. */
+/*        C */
+/*        C     Get the approximate light source-target distance */
+/*        C     at ET. We'll ignore the observer-target light */
+/*        C     time for this approximation. */
+/*        C */
+/*              CALL SPKPOS ( ILUSRC, ET,     FIXREF, ABCORR, */
+/*             .              TARGET, ILUPOS, LT             ) */
+
+/*              DIST = VNORM( ILUPOS ) */
+/*        C */
+/*        C     Set the angular step size so that a single step will */
+/*        C     be taken in the root bracketing process; that's all */
+/*        C     that is needed since we don't expect to have multiple */
+/*        C     terminator points in any cutting half-plane. */
+/*        C */
+/*              SCHSTP = 4.D0 */
+/*        C */
+/*        C     Set the convergence tolerance to minimize the */
+/*        C     height error. We can't achieve the precision */
+/*        C     suggested by the formula because the sun-Mars */
+/*        C     distance is about 2.4e8 km. Compute 3 terminator */
+/*        C     points for each computation method. */
+/*        C */
+/*              SOLTOL = 1.D-7/DIST */
+/*        C */
+/*        C     Set the number of cutting half-planes and roll step. */
+/*        C */
+/*              NCUTS  = 3 */
+/*              DELROL = 2*PI() / NCUTS */
+
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Light source:          '//ILUSRC */
+/*              WRITE (*,*) 'Observer:              '//OBSRVR */
+/*              WRITE (*,*) 'Target:                '//TARGET */
+/*              WRITE (*,*) 'Frame:                 '//FIXREF */
+/*              WRITE (*,*) 'Aberration Correction: '//ABCORR */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Number of cuts: ', NCUTS */
+
+/*              DO I = 1, NMETH */
+
+/*                 CALL TERMPT ( METHOD(I), ILUSRC, TARGET,    ET, */
+/*             .                 FIXREF,    ABCORR, CORLOC(I), OBSRVR, */
+/*             .                 Z,         DELROL, NCUTS,     SCHSTP, */
+/*             .                 SOLTOL,    MAXN,   NPTS,      POINTS, */
+/*             .                 TRGEPS,    TRMVCS                    ) */
+/*        C */
+/*        C        Write the results. */
+/*        C */
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) 'Computation method = ', METHOD(I) */
+/*                 WRITE(*,*) 'Locus              = ', CORLOC(I) */
+
+
+/*                 START  = 0 */
+
+/*                 DO J = 1, NCUTS */
+
+/*                    ROLL = (J-1) * DELROL */
+
+/*                    WRITE(*,*)   ' ' */
+/*                    WRITE(*,FM1) '   Roll angle (deg) = ', ROLL * DPR() */
+/*                    WRITE(*,FM1) '    Target epoch    = ', TRGEPS(J) */
+/*                    WRITE(*,FM2) '    Number of terminator points at ' */
+/*             .      //           'this roll angle: ', */
+/*             .                   NPTS(J) */
+
+/*                    DO K = 1, NPTS(J) */
+
+/*                       WRITE (*,*) '    Terminator point planetodetic ' */
+/*             .         //          'coordinates:' */
+
+/*                       CALL RECGEO ( POINTS(1,K+START), RE,  F, */
+/*             .                       LON,               LAT, ALT ) */
+
+/*                       WRITE (*,FM1) '      Longitude       (deg): ', */
+/*             .                       LON*DPR() */
+/*                       WRITE (*,FM1) '      Latitude        (deg): ', */
+/*             .                       LAT*DPR() */
+/*                       WRITE (*,FM1) '      Altitude         (km): ', */
+/*             .                       ALT */
+
+/*        C */
+/*        C              Get illumination angles for this terminator */
+/*        C              point. */
+/*        C */
+/*                       M = K+START */
+
+/*                       CALL ILLUMG ( ILUMTH,      TARGET, ILUSRC, ET, */
+/*             .                       FIXREF,      ABCORR, OBSRVR, */
+/*             .                       POINTS(1,M), TRGEPC, SRFVEC, */
+/*             .                       PHASE,       SOLAR,  EMISSN ) */
+
+/*                       WRITE (*,FM1) '      Incidence angle ' */
+/*             .         //            '(deg): ', SOLAR * DPR() */
+
+
+/*        C */
+/*        C              Adjust the incidence angle for the angular */
+/*        C              radius of the illumination source. Use the */
+/*        C              epoch associated with the terminator point */
+/*        C              for this lookup. */
+/*        C */
+/*                       CALL SPKPOS ( ILUSRC, TRGEPS(M), FIXREF, */
+/*             .                       ABCORR, TARGET,    TPTILU, LT ) */
+
+/*                       DIST   = VNORM( TPTILU ) */
+
+/*                       ANGSRC = ASIN (  MAX( SRCRAD(1), */
+/*             .                               SRCRAD(2), */
+/*             .                               SRCRAD(3) )  / DIST  ) */
+
+/*                       IF ( I .EQ. 1 ) THEN */
+/*        C */
+/*        C                 For points on the umbral terminator, */
+/*        C                 the ellipsoid outward normal is tilted */
+/*        C                 away from the terminator-source center */
+/*        C                 direction by the angular radius of the */
+/*        C                 source. Subtract this radius from the */
+/*        C                 illumination incidence angle to get the */
+/*        C                 angle between the local normal and the */
+/*        C                 direction to the corresponding tangent */
+/*        C                 point on the source. */
+/*        C */
+/*                          ADJANG = SOLAR - ANGSRC */
+
+/*                       ELSE */
+/*        C */
+/*        C                 For the penumbral case, the outward */
+/*        C                 normal is tilted toward the illumination */
+/*        C                 source by the angular radius of the */
+/*        C                 source. Adjust the illumination */
+/*        C                 incidence angle for this. */
+/*        C */
+/*                          ADJANG = SOLAR + ANGSRC */
+
+/*                       END IF */
+
+/*                       WRITE (*,FM1)  '      Adjusted angle  ' */
+/*             .         //             '(deg): ', ADJANG * DPR() */
+
+
+/*                       IF ( I .EQ. 1 ) THEN */
+/*        C */
+/*        C                 Save terminator points for comparison. */
+/*        C */
+/*                          CALL VEQU ( POINTS(1,M), SVPNTS(1,M) ) */
+
+/*                       ELSE */
+/*        C */
+/*        C                 Compare terminator points with last */
+/*        C                 saved values. */
+/*        C */
+/*                          DIST = VDIST( POINTS(1,M), SVPNTS(1,M) ) */
+
+/*                          WRITE (*,FM1) */
+/*             .            '      Distance offset  (km): ', DIST */
+/*                       END IF */
+
+
+/*                    END DO */
+
+/*                    START = START + NPTS(J) */
+
+/*                 END DO */
+
+/*                 WRITE (*,*) ' ' */
+
+/*              END DO */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Light source:          SUN */
+/*         Observer:              EARTH */
+/*         Target:                MARS */
+/*         Frame:                 IAU_MARS */
+/*         Aberration Correction: CN+S */
+
+/*         Number of cuts:            3 */
+
+/*         Computation method = UMBRAL/ELLIPSOID/TANGENT */
+/*         Locus              = ELLIPSOID TERMINATOR */
+
+/*           Roll angle (deg) =           0.000000000 */
+/*            Target epoch    =   271683700.369686902 */
+/*            Number of terminator points at this roll angle:  1 */
+/*             Terminator point planetodetic coordinates: */
+/*              Longitude       (deg):           4.189318082 */
+/*              Latitude        (deg):          66.416132677 */
+/*              Altitude         (km):           0.000000000 */
+/*              Incidence angle (deg):          90.163842885 */
+/*              Adjusted angle  (deg):          89.999999980 */
+
+/*           Roll angle (deg) =         120.000000000 */
+/*            Target epoch    =   271683700.372003794 */
+/*            Number of terminator points at this roll angle:  1 */
+/*             Terminator point planetodetic coordinates: */
+/*              Longitude       (deg):         107.074551917 */
+/*              Latitude        (deg):         -27.604435701 */
+/*              Altitude         (km):           0.000000000 */
+/*              Incidence angle (deg):          90.163842793 */
+/*              Adjusted angle  (deg):          89.999999888 */
+
+/*           Roll angle (deg) =         240.000000000 */
+/*            Target epoch    =   271683700.364983618 */
+/*            Number of terminator points at this roll angle:  1 */
+/*             Terminator point planetodetic coordinates: */
+/*              Longitude       (deg):         -98.695906077 */
+/*              Latitude        (deg):         -27.604435700 */
+/*              Altitude         (km):          -0.000000000 */
+/*              Incidence angle (deg):          90.163843001 */
+/*              Adjusted angle  (deg):          90.000000096 */
+
+
+/*         Computation method = PENUMBRAL/ELLIPSOID/TANGENT */
+/*         Locus              = ELLIPSOID TERMINATOR */
+
+/*           Roll angle (deg) =           0.000000000 */
+/*            Target epoch    =   271683700.369747400 */
+/*            Number of terminator points at this roll angle:  1 */
+/*             Terminator point planetodetic coordinates: */
+/*              Longitude       (deg):           4.189317837 */
+/*              Latitude        (deg):          66.743818467 */
+/*              Altitude         (km):           0.000000000 */
+/*              Incidence angle (deg):          89.836157094 */
+/*              Adjusted angle  (deg):          89.999999999 */
+/*              Distance offset  (km):          19.483590936 */
+
+/*           Roll angle (deg) =         120.000000000 */
+/*            Target epoch    =   271683700.372064054 */
+/*            Number of terminator points at this roll angle:  1 */
+/*             Terminator point planetodetic coordinates: */
+/*              Longitude       (deg):         107.404259674 */
+/*              Latitude        (deg):         -27.456458359 */
+/*              Altitude         (km):          -0.000000000 */
+/*              Incidence angle (deg):          89.836157182 */
+/*              Adjusted angle  (deg):          90.000000087 */
+/*              Distance offset  (km):          19.411414247 */
+
+/*           Roll angle (deg) =         240.000000000 */
+/*            Target epoch    =   271683700.365043879 */
+/*            Number of terminator points at this roll angle:  1 */
+/*             Terminator point planetodetic coordinates: */
+/*              Longitude       (deg):         -99.025614323 */
+/*              Latitude        (deg):         -27.456458357 */
+/*              Altitude         (km):           0.000000000 */
+/*              Incidence angle (deg):          89.836156972 */
+/*              Adjusted angle  (deg):          89.999999877 */
+/*              Distance offset  (km):          19.411437239 */
 
 
 /* $ Restrictions */
@@ -2519,17 +2514,30 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/*     SPICELIB Version 1.0.0 04-APR-2017 (NJB) */
+/* -    SPICELIB Version 1.1.0, 12-SEP-2021 (NJB) (JDR) */
+
+/*        Bug fix: PRVCOR is no longer set to blank before */
+/*        ABCORR is parsed. */
+
+/*        ZZVALCOR is now used instead of ZZPRSCOR. This provides */
+/*        better error handling. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Corrected the filename of code example #1's meta-kernel. */
+/*        Removed unnecessary SAVE statement from code example #2. */
+
+/* -    SPICELIB Version 1.0.0, 04-APR-2017 (NJB) */
 
 /*        11-MAR-2016 (NJB) */
 
 /*        Changed ellipsoid algorithm to use ZZEDTMPT. Added ROLSTP */
 /*        argument. Updated calls to ZZTANGNT to accommodate argument */
-/*        list change. Added code examples. Updated Detailed_Input. Made */
+/*        list change. Added code examples. Updated $Detailed_Input. Made */
 /*        various header corrections. */
 
 /*        Original version 18-NOV-2015 (NJB) */
@@ -2612,11 +2620,6 @@ static integer c__0 = 0;
     }
     if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
 
-/*        Make sure the results of this block won't be reused */
-/*        if we bail out due to an error. */
-
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
-
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
 
@@ -2650,7 +2653,7 @@ static integer c__0 = 0;
 
 
 /*        The above definitions are consistent with those used by */
-/*        ZZPRSCOR. */
+/*        ZZVALCOR. */
 
 	uselt = attblk[1];
 	usecn = attblk[3];
@@ -3238,10 +3241,10 @@ static integer c__0 = 0;
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
 		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3029)], &
+			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3020)], &
 			points[to * 3 - 3]);
 		vadd_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3030)], 
+			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3021)], 
 			trgpos, &trmvcs[to * 3 - 3]);
 		epochs[to - 1] = trgepc;
 		++to;
@@ -3534,10 +3537,10 @@ static integer c__0 = 0;
 	    i__2 = npts[i__ - 1];
 	    for (j = 1; j <= i__2; ++j) {
 		vequ_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3373)], &
+			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3364)], &
 			points[to * 3 - 3]);
 		vadd_(&pntbuf[(i__3 = j * 3 - 3) < 6000 && 0 <= i__3 ? i__3 : 
-			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3374)], 
+			s_rnge("pntbuf", i__3, "termpt_", (ftnlen)3365)], 
 			trgpos, &trmvcs[to * 3 - 3]);
 		if (usestl) {
 

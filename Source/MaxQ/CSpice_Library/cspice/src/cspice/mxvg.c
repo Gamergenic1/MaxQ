@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      MXVG ( Matrix time vector, general dimension ) */
+/* $Procedure MXVG ( Matrix time vector, general dimension ) */
 /* Subroutine */ int mxvg_(doublereal *m1, doublereal *v2, integer *nr1, 
 	integer *nc1r2, doublereal *vout)
 {
@@ -71,20 +71,20 @@
 
 /* $ Detailed_Input */
 
-/*     M1      This is a double precision matrix of arbitrary size which */
-/*             forms the left-hand matrix of the multiplication. */
+/*     M1       is a double precision matrix of arbitrary size which */
+/*              forms the left-hand matrix of the multiplication. */
 
-/*     V2      This is a double precision vector on the right of the */
-/*             multiplication. */
+/*     V2       is a double precision vector on the right of the */
+/*              multiplication. */
 
-/*     NR1     This is the row dimension of M1 and length of VOUT. */
+/*     NR1      is the row dimension of M1 and length of VOUT. */
 
-/*     NC1R2   This is the column dimension of M1 and length of V2. */
+/*     NC1R2    is the column dimension of M1 and length of V2. */
 
 /* $ Detailed_Output */
 
-/*     VOUT    This is the double precision vector which results from */
-/*             the expression VOUT = (M1) x V2. */
+/*     VOUT     is the double precision vector which results from */
+/*              the expression VOUT = (M1) x V2. */
 
 /* $ Parameters */
 
@@ -108,27 +108,64 @@
 
 /* $ Examples */
 
-/*     Suppose that M1  = | 1  1  1 | */
-/*                        | 2  3  4 | */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*                        | 1 | */
-/*     and that     V2  = | 2 | */
-/*                        | 3 | */
+/*     1) Given a 2x3 matrix and a 3-vector, multiply the matrix by */
+/*        the vector. */
 
-/*     Then calling MXVG according to the following calling sequence */
 
-/*        CALL MXVG (M1, V2, 2, 3, VOUT) */
+/*        Example code begins here. */
 
-/*     will yield the following vector value for VOUT */
 
-/*        VOUT = | 6  | */
-/*               | 20 | */
+/*              PROGRAM MXVG_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      M    ( 2, 3 ) */
+/*              DOUBLE PRECISION      VIN  ( 3    ) */
+/*              DOUBLE PRECISION      VOUT ( 2    ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define M and VIN. */
+/*        C */
+/*              DATA                  M    /  1.0D0,  2.0D0, */
+/*             .                              1.0D0,  3.0D0, */
+/*             .                              1.0D0,  4.0D0  / */
+
+/*              DATA                  VIN  /  1.0D0,  2.0D0,  3.0D0  / */
+
+/*        C */
+/*        C     Multiply M by VIN. */
+/*        C */
+/*              CALL MXVG ( M, VIN, 2, 3, VOUT ) */
+
+/*              WRITE(*,'(A)') 'M times VIN:' */
+/*              WRITE(*,'(2F10.3)') VOUT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        M times VIN: */
+/*             6.000    20.000 */
+
 
 /* $ Restrictions */
 
-/*     1) The user is responsible for checking the magnitudes of the */
-/*        elements of M1 and V2 so that a floating point overflow does */
-/*        not occur. */
+/*     1)  The user is responsible for checking the magnitudes of the */
+/*         elements of M1 and V2 so that a floating point overflow does */
+/*         not occur. */
 
 /* $ Literature_References */
 
@@ -136,9 +173,19 @@
 
 /* $ Author_and_Institution */
 
-/*     W.M. Owen       (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 04-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example based on the existing example. */
 
 /* -    SPICELIB Version 1.0.2, 23-APR-2010 (NJB) */
 
@@ -159,6 +206,9 @@
 
 /* -& */
 
+/*     Local variables */
+
+
 /*  Perform the matrix-vector multiplication */
 
     /* Parameter adjustments */
@@ -176,11 +226,11 @@
 	for (k = 1; k <= i__2; ++k) {
 	    sum += m1[(i__3 = i__ + k * m1_dim1 - m1_offset) < m1_dim1 * 
 		    m1_dim2 && 0 <= i__3 ? i__3 : s_rnge("m1", i__3, "mxvg_", 
-		    (ftnlen)163)] * v2[(i__4 = k - 1) < v2_dim1 && 0 <= i__4 ?
-		     i__4 : s_rnge("v2", i__4, "mxvg_", (ftnlen)163)];
+		    (ftnlen)217)] * v2[(i__4 = k - 1) < v2_dim1 && 0 <= i__4 ?
+		     i__4 : s_rnge("v2", i__4, "mxvg_", (ftnlen)217)];
 	}
 	vout[(i__2 = i__ - 1) < vout_dim1 && 0 <= i__2 ? i__2 : s_rnge("vout",
-		 i__2, "mxvg_", (ftnlen)165)] = sum;
+		 i__2, "mxvg_", (ftnlen)219)] = sum;
     }
     return 0;
 } /* mxvg_ */

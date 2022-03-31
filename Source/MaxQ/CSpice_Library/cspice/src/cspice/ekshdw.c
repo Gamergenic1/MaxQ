@@ -5,14 +5,14 @@
 
 #include "f2c.h"
 
-/* $Procedure     EKSHDW ( EK, return shadowing status <STUB> ) */
+/* $Procedure EKSHDW ( EK, return shadowing status <STUB> ) */
 /* Subroutine */ int ekshdw_(integer *handle, logical *isshad)
 {
     integer i__;
 
 /* $ Abstract */
 
-/*     Return shadowing status of a specified EK file.  THIS IS A */
+/*     Return shadowing status of a specified EK file. THIS IS A */
 /*     STUB ROUTINE. */
 
 /* $ Disclaimer */
@@ -53,23 +53,23 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle attached to EK file. */
 /*     ISSHAD     O   Logical flag indicating whether EK is shadowed. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the file handle of an EK open for writing. */
+/*     HANDLE   is the file handle of an EK open for writing. */
 
 /* $ Detailed_Output */
 
-/*     ISSHAD         is a logical flag that is returned .TRUE. if and */
-/*                    only if the EK file designated by HANDLE is */
-/*                    shadowed. */
+/*     ISSHAD   is a logical flag that is returned .TRUE. if and */
+/*              only if the EK file designated by HANDLE is */
+/*              shadowed. */
 
-/*                    In this stub version of the routine, ISSHAD is */
-/*                    always returned .FALSE. */
+/*              In this stub version of the routine, ISSHAD is */
+/*              always returned .FALSE. */
 
 /* $ Parameters */
 
@@ -98,7 +98,7 @@
 
 /* $ Restrictions */
 
-/*     1) This is a stub routine. */
+/*     1)  This is a stub routine. */
 
 /* $ Literature_References */
 
@@ -106,11 +106,18 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.0, 19-DEC-1995 (NJB) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

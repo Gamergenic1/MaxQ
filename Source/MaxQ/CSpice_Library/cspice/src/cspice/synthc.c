@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SYNTHC ( Return Nth value associated with the symbol ) */
+/* $Procedure SYNTHC ( Return Nth value associated with the symbol ) */
 /* Subroutine */ int synthc_(char *name__, integer *nth, char *tabsym, 
 	integer *tabptr, char *tabval, char *value, logical *found, ftnlen 
 	name_len, ftnlen tabsym_len, ftnlen tabval_len, ftnlen value_len)
@@ -73,89 +73,89 @@
 /*     NAME       I   Name of the symbol whose Nth associated value is */
 /*                    to be returned. */
 /*     NTH        I   Index of the value to be returned. */
-
 /*     TABSYM, */
 /*     TABPTR, */
 /*     TABVAL     I   Components of the symbol table. */
-
 /*     VALUE      O   Nth value associated with the symbol. */
-/*     FOUND      O   True if the Nth value of the symbol exists, false */
-/*                    if it does not. */
+/*     FOUND      O   .TRUE. if the Nth value of the symbol exists. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose Nth associated value */
-/*                is to be returned. If NAME is not in the symbol table, */
-/*                FOUND is false. */
+/*     NAME     is the name of the symbol whose Nth associated value */
+/*              is to be returned. If NAME is not in the symbol table, */
+/*              FOUND is .FALSE. */
 
-/*     NTH        is the index of the value to be returned. If the */
-/*                value of NTH is out of range ( NTH < 1 or NTH is */
-/*                greater than the dimension of the symbol ) FOUND is */
-/*                false. */
+/*     NTH      is the index of the value to be returned. If the */
+/*              value of NTH is out of range ( NTH < 1 or NTH is */
+/*              greater than the dimension of the symbol ) FOUND is */
+/*              .FALSE. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
-/*                The symbol table is not modified by this subroutine. */
+/*     TABVAL   are the components of a character symbol table. */
+/*              The symbol table is not modified by this subroutine. */
 
 /* $ Detailed_Output */
 
-/*     VALUES     is the NTH value associated with the symbol NAME. */
+/*     VALUES   is the NTH value associated with the symbol NAME. */
 
-/*     FOUND      is true if NAME is in the symbol table and the NTH */
-/*                value associated with NAME exists.  Otherwise FOUND */
-/*                is false. */
+/*     FOUND    is .TRUE. if NAME is in the symbol table and the NTH */
+/*              value associated with NAME exists. Otherwise FOUND */
+/*              is .FALSE. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
+
+/*     1)  If there is an issue while reading the components of a */
+/*         character symbol table, an error is signaled by a routine in */
+/*         the call tree of this routine. This normally indicates that */
+/*         the character symbol table is corrupted. */
+
+/* $ Files */
 
 /*     None. */
 
 /* $ Particulars */
 
-/*     Two conditions will cause the value of FOUND to be false: */
+/*     Two conditions will cause the value of FOUND to be .FALSE.: */
 
-/*       1) The symbol NAME is not in the symbol table. */
+/*     1)  The symbol NAME is not in the symbol table. */
 
-/*       2) NTH is out of range ( NTH < 1 or NTH is greater than the */
-/*          dimension of the symbol ). */
+/*     2)  NTH is out of range ( NTH < 1 or NTH is greater than the */
+/*         dimension of the symbol ). */
 
 /* $ Examples */
 
 /*     The contents of the symbol table are: */
 
-/*        BOHR      -->   HYDROGEN ATOM */
-/*        EINSTEIN  -->   SPECIAL RELATIVITY */
-/*                        PHOTOELECTRIC EFFECT */
-/*                        BROWNIAN MOTION */
-/*        FERMI     -->   NUCLEAR FISSION */
+/*         BOHR      -->   HYDROGEN ATOM */
+/*         EINSTEIN  -->   SPECIAL RELATIVITY */
+/*                         PHOTOELECTRIC EFFECT */
+/*                         BROWNIAN MOTION */
+/*         FERMI     -->   NUCLEAR FISSION */
 
-/*     The calls, */
+/*      The calls, */
 
-/*     CALL SYNTHC ( 'EINSTEIN', 2, TABSYM, TABPTR, TABVAL, VALUE, */
-/*    .               FOUND                                        ) */
+/*      CALL SYNTHC ( 'EINSTEIN', 2, TABSYM, TABPTR, TABVAL, VALUE, */
+/*     .               FOUND                                        ) */
 
-/*     CALL SYNTHC ( 'BORN',     2, TABSYM, TABPTR, TABVAL, VALUE, */
-/*    .               FOUND                                        ) */
+/*      CALL SYNTHC ( 'BORN',     2, TABSYM, TABPTR, TABVAL, VALUE, */
+/*     .               FOUND                                        ) */
 
-/*     CALL SYNTHC ( 'MAXWELL',  5, TABSYM, TABPTR, TABVAL, VALUE, */
-/*    .               FOUND                                        ) */
+/*      CALL SYNTHC ( 'MAXWELL',  5, TABSYM, TABPTR, TABVAL, VALUE, */
+/*     .               FOUND                                        ) */
 
-/*     return the values of VALUE and FOUND corresponding to NAME and */
-/*     NTH: */
+/*      return the values of VALUE and FOUND corresponding to NAME and */
+/*      NTH: */
 
-/*     NAME          NTH           VALUE                 FOUND */
-/*     ----------   -----     ----------------------    ------- */
-/*     EINSTEIN       2       PHOTOELECTRIC EFFECT        TRUE */
-/*     BORN           2                                  FALSE */
-/*     MAXWELL        5                                  FALSE */
+/*         NAME          NTH           VALUE                 FOUND */
+/*         ----------   -----     ----------------------    ------- */
+/*         EINSTEIN       2       PHOTOELECTRIC EFFECT       .TRUE. */
+/*         BORN           2                                 .FALSE. */
+/*         MAXWELL        5                                 .FALSE. */
 
 /* $ Restrictions */
 
@@ -167,17 +167,26 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 16-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. Added entry #1 */
+/*        in $Exceptions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

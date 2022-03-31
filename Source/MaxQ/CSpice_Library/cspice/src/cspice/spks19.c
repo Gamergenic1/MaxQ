@@ -217,7 +217,7 @@ static doublereal c_b118 = 1.;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of file containing source segment. */
 /*     BADDR      I   Beginning address in file of source segment. */
@@ -229,29 +229,29 @@ static doublereal c_b118 = 1.;
 
 /*     HANDLE, */
 /*     BADDR, */
-/*     EADDR       are the file handle assigned to an SPK file, and the */
-/*                 beginning and ending addresses of a segment within */
-/*                 that file. Together these identify an SPK segment */
-/*                 from which a subset is to be extracted. */
+/*     EADDR    are the file handle assigned to an SPK file, and the */
+/*              beginning and ending addresses of a segment within */
+/*              that file. Together these identify an SPK segment */
+/*              from which a subset is to be extracted. */
 
-/*                 The subset is written to a second SPK file which is */
-/*                 open for writing, and in which a new segment has been */
-/*                 started. See the Particulars section below for */
-/*                 details. */
+/*              The subset is written to a second SPK file which is */
+/*              open for writing, and in which a new segment has been */
+/*              started. See the $Particulars section below for */
+/*              details. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset. */
+/*     END      are the initial and final epochs (ephemeris time) */
+/*              of the subset. */
 
-/*                 The first epoch for which there will be ephemeris */
-/*                 data in the new segment will be the greatest time */
-/*                 in the source segment that is less than or equal */
-/*                 to BEGIN. */
+/*              The first epoch for which there will be ephemeris */
+/*              data in the new segment will be the greatest time */
+/*              in the source segment that is less than or equal */
+/*              to BEGIN. */
 
-/*                 The last epoch for which there will be ephemeris */
-/*                 data in the new segment will be the smallest time */
-/*                 in the source segment that is greater than or equal */
-/*                 to END. */
+/*              The last epoch for which there will be ephemeris */
+/*              data in the new segment will be the smallest time */
+/*              in the source segment that is greater than or equal */
+/*              to END. */
 
 /* $ Detailed_Output */
 
@@ -281,7 +281,7 @@ static doublereal c_b118 = 1.;
 /*     handle, and written to the current DAF open for writing. */
 
 /*     The segment descriptor and summary must already have been written */
-/*     prior to calling this routine.  The segment must be ended */
+/*     prior to calling this routine. The segment must be ended */
 /*     external to this routine. */
 
 /* $ Particulars */
@@ -312,15 +312,15 @@ static doublereal c_b118 = 1.;
 
 /*        End the array to which this routine writes data. */
 
-/*     Much of this procedure is carried out by the routine SPKSUB.  The */
+/*     Much of this procedure is carried out by the routine SPKSUB. The */
 /*     examples of that routine illustrate more fully the process */
 /*     described above. */
 
 /* $ Restrictions */
 
-/*     1) This routine relies on the input segment being correct; */
-/*        very limited error checking is performed on the input */
-/*        data. */
+/*     1)  This routine relies on the input segment being correct; */
+/*         very limited error checking is performed on the input */
+/*         data. */
 
 /* $ Literature_References */
 
@@ -328,13 +328,19 @@ static doublereal c_b118 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 2.0.0, 04-APR-2017 (NJB) */
 
@@ -350,11 +356,6 @@ static doublereal c_b118 = 1.;
 /* $ Index_Entries */
 
 /*     subset type_19 spk_segment */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 
@@ -647,7 +648,7 @@ static doublereal c_b118 = 1.;
 /*     operation. On the first pass NREAD is at least 1. */
 
     while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("data", i__1, "spks19_", (ftnlen)576)] < *begin) {
+	    s_rnge("data", i__1, "spks19_", (ftnlen)578)] < *begin) {
 	bufbas += nread;
 	nread = min(100,remain);
 
@@ -726,7 +727,7 @@ static doublereal c_b118 = 1.;
 	return 0;
     }
     pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge("pktszs",
-	     i__1, "spks19_", (ftnlen)666)];
+	     i__1, "spks19_", (ftnlen)668)];
 
 /*     Determine how much of the mini-segment we need to transfer. The */
 /*     first step is to find the last epoch less than or equal to BEGIN */
@@ -756,7 +757,7 @@ static doublereal c_b118 = 1.;
 /*     operation. */
 
     while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("data", i__1, "spks19_", (ftnlen)701)] < *begin) {
+	    s_rnge("data", i__1, "spks19_", (ftnlen)703)] < *begin) {
 
 /*        Advance the buffer base to account for the NREAD */
 /*        epochs fetched on the previous DAFGDA call. */
@@ -891,7 +892,7 @@ static doublereal c_b118 = 1.;
 /*        NREAD is (still) at least 2. */
 
 	while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 
-		: s_rnge("data", i__1, "spks19_", (ftnlen)844)] <= *end) {
+		: s_rnge("data", i__1, "spks19_", (ftnlen)846)] <= *end) {
 	    bufbas += nread;
 	    nread = min(remain,100);
 
@@ -939,7 +940,7 @@ static doublereal c_b118 = 1.;
 	    errint_("#", baddr, (ftnlen)1);
 	    errint_("#", eaddr, (ftnlen)1);
 	    errdp_("#", &data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("data", i__1, "spks19_", (ftnlen)897)], (ftnlen)1);
+		    s_rnge("data", i__1, "spks19_", (ftnlen)899)], (ftnlen)1);
 	    errint_("#", &begidx, (ftnlen)1);
 	    errdp_("#", &ivlend, (ftnlen)1);
 	    sigerr_("SPICE(SPKSTRUCTUREERROR)", (ftnlen)24);
@@ -952,7 +953,7 @@ static doublereal c_b118 = 1.;
 /*        index EEPIDX. */
 
 	if (data[(i__1 = l - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("data", 
-		i__1, "spks19_", (ftnlen)911)] == *end) {
+		i__1, "spks19_", (ftnlen)913)] == *end) {
 
 /*           The epochs at indices EEPIDX-1 and EEPIDX comprise the */
 /*           first two epochs of the right half of an interpolation */
@@ -1290,7 +1291,7 @@ static doublereal c_b118 = 1.;
 		return 0;
 	    }
 	    pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "pktszs", i__1, "spks19_", (ftnlen)1301)];
+		    "pktszs", i__1, "spks19_", (ftnlen)1303)];
 
 /*           Determine how much of the mini-segment we need to transfer. */
 /*           The first step is to find the last epoch less than or equal */
@@ -1320,7 +1321,7 @@ static doublereal c_b118 = 1.;
 /*           into the buffer on the previous read operation. */
 
 	    while(remain > 0 && data[(i__1 = nread - 1) < 100 && 0 <= i__1 ? 
-		    i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)1335)] <= *
+		    i__1 : s_rnge("data", i__1, "spks19_", (ftnlen)1337)] <= *
 		    end) {
 		bufbas += nread;
 		nread = min(100,remain);
@@ -1379,7 +1380,7 @@ static doublereal c_b118 = 1.;
 /*           index EEPIDX. */
 
 	    if (data[(i__1 = l - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("data",
-		     i__1, "spks19_", (ftnlen)1402)] == *end) {
+		     i__1, "spks19_", (ftnlen)1404)] == *end) {
 
 /*              The epochs at indices EEPIDX-1 and EEPIDX comprise */
 /*              the first two epochs of the right half of an */

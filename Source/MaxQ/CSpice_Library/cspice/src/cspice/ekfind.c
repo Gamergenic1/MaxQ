@@ -11,7 +11,7 @@ static integer c__27869 = 27869;
 static integer c__100 = 100;
 static integer c__500 = 500;
 
-/* $Procedure      EKFIND ( EK, find data ) */
+/* $Procedure EKFIND ( EK, find data ) */
 /* Subroutine */ int ekfind_(char *query, integer *nmrows, logical *error, 
 	char *errmsg, ftnlen query_len, ftnlen errmsg_len)
 {
@@ -699,7 +699,7 @@ static integer c__500 = 500;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     QUERY      I   Query specifying data to be found. */
 /*     NMROWS     O   Number of matching rows. */
@@ -708,298 +708,298 @@ static integer c__500 = 500;
 
 /* $ Detailed_Input */
 
-/*     QUERY          is a character string that specifies a set of EK */
-/*                    data to select from those present in currently */
-/*                    loaded EK files.  The selected data will be */
-/*                    retrievable via the EK fetch routines EKGC, EKGD, */
-/*                    and EKGI. */
-
-/*                    The query consists of four clauses, the third and */
-/*                    fourth of which are optional.  The general form */
-/*                    of a query is */
-
-/*                       SELECT <column list> */
-/*                       FROM <table list> */
-/*                       [WHERE <constraint list>] */
-/*                       [ORDER BY <ORDER BY column list>] */
-
-/*                    where brackets indicate optional items.  The */
-/*                    elements of the query shown above are called, */
-/*                    respectively, the `SELECT clause', the */
-/*                    `FROM clause', the `WHERE clause', and the */
-/*                    `ORDER BY clause'.  The result of a query may be */
-/*                    thought of as a new table, whose columns are those */
-/*                    specified in the SELECT clause, whose rows are */
-/*                    those satisfying the constraints of the WHERE */
-/*                    clause, and whose rows are ordered according to */
-/*                    the ORDER BY clause. */
+/*     QUERY    is a character string that specifies a set of EK */
+/*              data to select from those present in currently */
+/*              loaded EK files. The selected data will be */
+/*              retrievable via the EK fetch routines EKGC, EKGD, */
+/*              and EKGI. */
+
+/*              The query consists of four clauses, the third and */
+/*              fourth of which are optional. The general form */
+/*              of a query is */
+
+/*                 SELECT <column list> */
+/*                 FROM <table list> */
+/*                 [WHERE <constraint list>] */
+/*                 [ORDER BY <ORDER BY column list>] */
+
+/*              where brackets indicate optional items. The */
+/*              elements of the query shown above are called, */
+/*              respectively, the `SELECT clause', the */
+/*              `FROM clause', the `WHERE clause', and the */
+/*              `ORDER BY clause'. The result of a query may be */
+/*              thought of as a new table, whose columns are those */
+/*              specified in the SELECT clause, whose rows are */
+/*              those satisfying the constraints of the WHERE */
+/*              clause, and whose rows are ordered according to */
+/*              the ORDER BY clause. */
 
-/*                    The SELECT clause specifies a list of columns */
-/*                    from which data are to be selected.  In a simple */
-/*                    (non-join) query, these columns must belong to */
-/*                    the single table specified in the FROM clause. */
+/*              The SELECT clause specifies a list of columns */
+/*              from which data are to be selected. In a simple */
+/*              (non-join) query, these columns must belong to */
+/*              the single table specified in the FROM clause. */
 
-/*                    The form of a SELECT clause is */
+/*              The form of a SELECT clause is */
 
-/*                       SELECT <column name> [ ,<column name>...] */
+/*                 SELECT <column name> [ ,<column name>...] */
 
-/*                    In queries having multiple tables in the FROM */
-/*                    clause, column names are ambiguous if they occur */
-/*                    in more than one table in the FROM clause.  Such */
-/*                    column names must be qualified with table */
-/*                    identifiers.  These identifiers may be the names of */
-/*                    the tables to which the columns belong, or table */
-/*                    `aliases', names (usually short ones) associated */
-/*                    with tables in the FROM clause.  Table aliases have */
-/*                    duration limited to the execution of the query to */
-/*                    which they belong. */
+/*              In queries having multiple tables in the FROM */
+/*              clause, column names are ambiguous if they occur */
+/*              in more than one table in the FROM clause. Such */
+/*              column names must be qualified with table */
+/*              identifiers. These identifiers may be the names of */
+/*              the tables to which the columns belong, or table */
+/*              `aliases', names (usually short ones) associated */
+/*              with tables in the FROM clause. Table aliases have */
+/*              duration limited to the execution of the query to */
+/*              which they belong. */
 
-/*                    The form of a qualified column name is */
+/*              The form of a qualified column name is */
 
-/*                       <table name>.<column name> */
+/*                 <table name>.<column name> */
 
-/*                    or */
+/*              or */
 
-/*                       <table alias>.<column name> */
+/*                 <table alias>.<column name> */
 
 
-/*                    The FROM clause specifies the tables from which */
-/*                    data are to be selected.  In simple queries, only */
-/*                    one table is listed.  In this case the form of */
-/*                    the FROM clause is */
+/*              The FROM clause specifies the tables from which */
+/*              data are to be selected. In simple queries, only */
+/*              one table is listed. In this case the form of */
+/*              the FROM clause is */
 
-/*                       FROM <table name> */
+/*                 FROM <table name> */
 
-/*                    In queries involving multiple tables, the form of */
-/*                    the FROM clause becomes */
+/*              In queries involving multiple tables, the form of */
+/*              the FROM clause becomes */
 
-/*                       FROM <table name> [<table alias>] */
-/*                            [ , <table name> [<table alias>] ... ] */
+/*                 FROM <table name> [<table alias>] */
+/*                      [ , <table name> [<table alias>] ... ] */
 
-/*                    The aliases associated with the table names must */
-/*                    be distinct and must not be the actual names of */
-/*                    loaded EK tables. */
+/*              The aliases associated with the table names must */
+/*              be distinct and must not be the actual names of */
+/*              loaded EK tables. */
 
-/*                    Queries involving multiple tables are called */
-/*                    `joins'. */
+/*              Queries involving multiple tables are called */
+/*              `joins'. */
 
-/*                    The meaning of a FROM clause containing multiple */
-/*                    tables is that the output is to be a subset of */
-/*                    the rows of the Cartesian product of the listed */
-/*                    tables.  Normally, WHERE clause constraints are */
-/*                    supplied to reduce the selected rows to a set of */
-/*                    interest. */
+/*              The meaning of a FROM clause containing multiple */
+/*              tables is that the output is to be a subset of */
+/*              the rows of the Cartesian product of the listed */
+/*              tables. Normally, WHERE clause constraints are */
+/*              supplied to reduce the selected rows to a set of */
+/*              interest. */
 
-/*                    The most common example of a join is a query with */
-/*                    two tables listed in the FROM clause, and a WHERE */
-/*                    clause constraint enforcing equality of members */
-/*                    of a column in the first table with members of */
-/*                    column in the second table.  Such a query is */
-/*                    called an `equi-join'.  A join in which columns */
-/*                    of different tables are related by an inequality */
-/*                    is called a `non-equi-join'.  Any type of join */
-/*                    other than an equi-join may be very slow to */
-/*                    evaluate, due to the large number of elements that */
-/*                    may be contained in the Cartesian */
-/*                    product of the listed tables. */
+/*              The most common example of a join is a query with */
+/*              two tables listed in the FROM clause, and a WHERE */
+/*              clause constraint enforcing equality of members */
+/*              of a column in the first table with members of */
+/*              column in the second table. Such a query is */
+/*              called an `equi-join'. A join in which columns */
+/*              of different tables are related by an inequality */
+/*              is called a `non-equi-join'. Any type of join */
+/*              other than an equi-join may be very slow to */
+/*              evaluate, due to the large number of elements that */
+/*              may be contained in the Cartesian */
+/*              product of the listed tables. */
 
-/*                    The WHERE clause lists constraints that must */
-/*                    be met by each row satisfying the query.  The */
-/*                    constraints are specified as a logical combination */
-/*                    of relational expressions.  The form of the */
-/*                    constraint list is */
+/*              The WHERE clause lists constraints that must */
+/*              be met by each row satisfying the query. The */
+/*              constraints are specified as a logical combination */
+/*              of relational expressions. The form of the */
+/*              constraint list is */
 
-/*                       WHERE <constraint expression> */
+/*                 WHERE <constraint expression> */
 
-/*                    where each <constraint expression> consists of one */
-/*                    or more simple relational expressions of the form */
+/*              where each <constraint expression> consists of one */
+/*              or more simple relational expressions of the form */
 
-/*                       <column name> <operator> <RHS symbol> */
+/*                 <column name> <operator> <RHS symbol> */
 
-/*                    where */
+/*              where */
 
-/*                       <RHS symbol> */
+/*                 <RHS symbol> */
 
-/*                    is a column name, a literal value, or the special */
-/*                    symbol */
+/*              is a column name, a literal value, or the special */
+/*              symbol */
 
-/*                       NULL */
+/*                 NULL */
 
-/*                    and */
+/*              and */
 
-/*                       <operator> */
+/*                 <operator> */
 
-/*                    is any of */
+/*              is any of */
 
-/*                       EQ, GE, GT, LE, LIKE, LT, NE, NOT LIKE, <, <=, */
-/*                       =, >, >=, !=, <> */
+/*                 EQ, GE, GT, LE, LIKE, LT, NE, NOT LIKE, <, <=, */
+/*                 =, >, >=, !=, <> */
 
-/*                    For comparison with null values, the special */
-/*                    syntaxes */
+/*              For comparison with null values, the special */
+/*              syntaxes */
 
-/*                       <column name> IS NULL */
-/*                       <column name> IS NOT NULL */
+/*                 <column name> IS NULL */
+/*                 <column name> IS NOT NULL */
 
-/*                    are allowed, in addition to the standard */
-/*                    comparison syntaxes using the equality or */
-/*                    inequality operators. */
+/*              are allowed, in addition to the standard */
+/*              comparison syntaxes using the equality or */
+/*              inequality operators. */
 
-/*                    The LIKE operator allows comparison of a string */
-/*                    value against a template.  The template syntax */
-/*                    is that allowed by the SPICELIB routine MATCHI. */
-/*                    Templates may include literal characters, the */
-/*                    wild string marker '*', and the wild character */
-/*                    marker '%'.  Case is significant in templates. */
+/*              The LIKE operator allows comparison of a string */
+/*              value against a template. The template syntax */
+/*              is that allowed by the SPICELIB routine MATCHI. */
+/*              Templates may include literal characters, the */
+/*              wild string marker '*', and the wild character */
+/*              marker '%'. Case is significant in templates. */
 
-/*                    Templates are bracketed by quote characters, just */
-/*                    as are literal strings. */
+/*              Templates are bracketed by quote characters, just */
+/*              as are literal strings. */
 
-/*                    The query language also supports the BETWEEN and */
-/*                    NOT BETWEEN constructs */
+/*              The query language also supports the BETWEEN and */
+/*              NOT BETWEEN constructs */
 
-/*                       <column> BETWEEN <symbol 1> AND <symbol 2> */
+/*                 <column> BETWEEN <symbol 1> AND <symbol 2> */
 
-/*                       <column> NOT BETWEEN <symbol 1> AND <symbol 2> */
+/*                 <column> NOT BETWEEN <symbol 1> AND <symbol 2> */
 
-/*                    The tokens */
+/*              The tokens */
 
-/*                       <symbol 1> */
-/*                       <symbol 2> */
+/*                 <symbol 1> */
+/*                 <symbol 2> */
 
-/*                    may be literal values or column names. */
+/*              may be literal values or column names. */
 
-/*                    The BETWEEN operator considers values that match */
-/*                    the bounds to satisfy the condition:  the BETWEEN */
-/*                    operator tests for inclusion in the closed interval */
-/*                    defined by the bounds. */
+/*              The BETWEEN operator considers values that match */
+/*              the bounds to satisfy the condition: the BETWEEN */
+/*              operator tests for inclusion in the closed interval */
+/*              defined by the bounds. */
 
-/*                    In the WHERE clause, simple relational expressions */
-/*                    may be combined using the logical operators AND, */
-/*                    OR, and NOT, as in the Fortran programming */
-/*                    language.  Parentheses may be used to enforce a */
-/*                    desired order of evaluation of logical expressions. */
-
-/*                    The expression syntax is NOT symmetric:  literal */
-/*                    values must not appear on the left hand side of the */
-/*                    operators that apply to them. */
-
-/*                    The columns named in a constraint clause must */
-/*                    belong to the tables listed in the FROM clause. */
-/*                    If the query is a join, qualifying table names or */
-/*                    aliases are required wherever their omission would */
-/*                    result in ambiguity. */
-
-/*                    Data types of the columns or constants used on the */
-/*                    right-hand-sides of operators must match the data */
-/*                    types of the corresponding columns on the */
-/*                    left-hand-sides, except that comparison of integer */
-/*                    and double precision quantities is permitted. */
-
-/*                    Literal strings used in constraints are always */
-/*                    bracketed by quotes.  Either single  quotes (') */
-/*                    or double quotes (") may be used, but the same */
-/*                    quote character must be used to start and end any */
-/*                    literal string. Within character string values, */
-/*                    quote characters must be doubled in order to be */
-/*                    recognized.  Case is significant in character */
-/*                    except in comparisions using the LIKE and NOT LIKE */
-/*                    operators, which ignore case:  the expression */
-
-/*                       ANIMAL LIKE "*A*" */
-
-/*                    would be considered true when ANIMAL takes the */
-/*                    value */
-
-/*                       "cat" */
-
-/*                    Time values are considered to be strings and */
-/*                    require bracketing quotes.  Currently, the */
-/*                    only time values allowed are UTC times in ISO */
-/*                    format, UTC times represented in forms accepted by */
-/*                    the SPICELIB routine TPARSE, and SCLK strings in */
-/*                    NAIF format. */
-
-/*                    The ORDER BY clause indicates which columns to */
-/*                    use to order the output generated by the query. */
-/*                    The columns in the ORDER BY clause define a */
-/*                    dictionary ordering, with the first listed column */
-/*                    acting as a primary key, the second column acting */
-/*                    as a secondary key, and so on. */
-
-/*                    For each ORDER BY column, the keywords ASC or DESC */
-/*                    may be supplied to indicate whether the items in */
-/*                    that column are to be listed in ascending or */
-/*                    descending order.  Ascending order is the default. */
-/*                    The direction in which data items increase is */
-/*                    referred to as the `order sense'. */
-
-/*                    The ORDER BY clause, if present, must appear */
-/*                    last in the query. */
-
-/*                    The form of the ORDER BY clause is */
-
-/*                       ORDER BY <column name> [<order sense>] */
-/*                                [ ,<column name> [<order sense>]...] */
-
-/*                    Rows satisfying the query constraints will be */
-/*                    returned so that the entries of the first column */
-/*                    specified in the ORDER BY clause will be appear in */
-/*                    the order specified by the order sense keyword, */
-/*                    which is assumed to be ASC if absent.  When entries */
-/*                    in the first through Nth ORDER BY column are equal, */
-/*                    the entries in the (N+1)st ORDER BY column */
-/*                    determine the order of the rows, and so on. */
-
-/*                    As in the WHERE clause, column names must be */
-/*                    qualified by table names or table aliases where */
-/*                    they would otherwise be ambiguous. */
-
-/*                    The query language is word-oriented, and some */
-/*                    indicate whether the words are reserved.  Reserved */
-/*                    words must be separated from other words by white */
-/*                    space.  It is not necessary to use white space */
-/*                    to separate words and punctuation characters. */
-/*                    The list of reserved words is */
-
-/*                       AND */
-/*                       BETWEEN */
-/*                       BY */
-/*                       COLUMN */
-/*                       EQ */
-/*                       FROM */
-/*                       GE */
-/*                       GT */
-/*                       IS */
-/*                       LE */
-/*                       LT */
-/*                       LIKE */
-/*                       NE */
-/*                       NOT */
-/*                       NULL */
-/*                       OR */
-/*                       ORDER */
-/*                       SELECT */
-/*                       WHERE */
-
-/*                    The left and right parenthesis characters are also */
-/*                    reserved; they may not be used in queries outside */
-/*                    of quoted strings. */
-
-/*                    Case is not significant in queries, except within */
-/*                    literal strings. */
+/*              In the WHERE clause, simple relational expressions */
+/*              may be combined using the logical operators AND, */
+/*              OR, and NOT, as in the Fortran programming */
+/*              language. Parentheses may be used to enforce a */
+/*              desired order of evaluation of logical expressions. */
+
+/*              The expression syntax is NOT symmetric: literal */
+/*              values must not appear on the left hand side of the */
+/*              operators that apply to them. */
+
+/*              The columns named in a constraint clause must */
+/*              belong to the tables listed in the FROM clause. */
+/*              If the query is a join, qualifying table names or */
+/*              aliases are required wherever their omission would */
+/*              result in ambiguity. */
+
+/*              Data types of the columns or constants used on the */
+/*              right-hand-sides of operators must match the data */
+/*              types of the corresponding columns on the */
+/*              left-hand-sides, except that comparison of integer */
+/*              and double precision quantities is permitted. */
+
+/*              Literal strings used in constraints are always */
+/*              bracketed by quotes. Either single  quotes (') */
+/*              or double quotes (") may be used, but the same */
+/*              quote character must be used to start and end any */
+/*              literal string. Within character string values, */
+/*              quote characters must be doubled in order to be */
+/*              recognized. Case is significant in character */
+/*              except in comparisons using the LIKE and NOT LIKE */
+/*              operators, which ignore case: the expression */
+
+/*                 ANIMAL LIKE "*A*" */
+
+/*              would be considered true when ANIMAL takes the */
+/*              value */
+
+/*                 "cat" */
+
+/*              Time values are considered to be strings and */
+/*              require bracketing quotes. Currently, the */
+/*              only time values allowed are UTC times in ISO */
+/*              format, UTC times represented in forms accepted by */
+/*              the SPICELIB routine TPARSE, and SCLK strings in */
+/*              NAIF format. */
+
+/*              The ORDER BY clause indicates which columns to */
+/*              use to order the output generated by the query. */
+/*              The columns in the ORDER BY clause define a */
+/*              dictionary ordering, with the first listed column */
+/*              acting as a primary key, the second column acting */
+/*              as a secondary key, and so on. */
+
+/*              For each ORDER BY column, the keywords ASC or DESC */
+/*              may be supplied to indicate whether the items in */
+/*              that column are to be listed in ascending or */
+/*              descending order. Ascending order is the default. */
+/*              The direction in which data items increase is */
+/*              referred to as the `order sense'. */
+
+/*              The ORDER BY clause, if present, must appear */
+/*              last in the query. */
+
+/*              The form of the ORDER BY clause is */
+
+/*                 ORDER BY <column name> [<order sense>] */
+/*                          [ ,<column name> [<order sense>]...] */
+
+/*              Rows satisfying the query constraints will be */
+/*              returned so that the entries of the first column */
+/*              specified in the ORDER BY clause will be appear in */
+/*              the order specified by the order sense keyword, */
+/*              which is assumed to be ASC if absent. When entries */
+/*              in the first through Nth ORDER BY column are equal, */
+/*              the entries in the (N+1)st ORDER BY column */
+/*              determine the order of the rows, and so on. */
+
+/*              As in the WHERE clause, column names must be */
+/*              qualified by table names or table aliases where */
+/*              they would otherwise be ambiguous. */
+
+/*              The query language is word-oriented, and some */
+/*              indicate whether the words are reserved. Reserved */
+/*              words must be separated from other words by white */
+/*              space. It is not necessary to use white space */
+/*              to separate words and punctuation characters. */
+/*              The list of reserved words is */
+
+/*                 AND */
+/*                 BETWEEN */
+/*                 BY */
+/*                 COLUMN */
+/*                 EQ */
+/*                 FROM */
+/*                 GE */
+/*                 GT */
+/*                 IS */
+/*                 LE */
+/*                 LT */
+/*                 LIKE */
+/*                 NE */
+/*                 NOT */
+/*                 NULL */
+/*                 OR */
+/*                 ORDER */
+/*                 SELECT */
+/*                 WHERE */
+
+/*              The left and right parenthesis characters are also */
+/*              reserved; they may not be used in queries outside */
+/*              of quoted strings. */
+
+/*              Case is not significant in queries, except within */
+/*              literal strings. */
 
 /* $ Detailed_Output */
 
-/*     NMROWS         is the number of rows that match the query */
-/*                    criteria.  NMROWS is defined if and only if */
-/*                    ERROR is returned .FALSE. */
+/*     NMROWS   is the number of rows that match the query */
+/*              criteria. NMROWS is defined if and only if */
+/*              ERROR is returned .FALSE. */
 
-/*     ERROR          is a logical flag indicating whether the query */
-/*                    failed to parse correctly. */
+/*     ERROR    is a logical flag indicating whether the query */
+/*              failed to parse correctly. */
 
-/*     ERRMSG         is a character string that describes EKFIND's */
-/*                    diagnosis of a parse error, should one occur. */
-/*                    Otherwise, ERRMSG will be returned blank. */
+/*     ERRMSG   is a character string that describes EKFIND's */
+/*              diagnosis of a parse error, should one occur. */
+/*              Otherwise, ERRMSG will be returned blank. */
 
 /* $ Parameters */
 
@@ -1008,9 +1008,9 @@ static integer c__500 = 500;
 /* $ Exceptions */
 
 /*     1)  Most of the exceptions that can occur on a call to */
-/*         EKFIND are caused by errors in the input query.  EKFIND */
+/*         EKFIND are caused by errors in the input query. EKFIND */
 /*         attempts to diagnose these via the output error flag and */
-/*         error message, instead of signalling errors.  The following */
+/*         error message, instead of signaling errors. The following */
 /*         classes of errors are detected: */
 
 /*            Scanning errors---these result from badly formed query */
@@ -1034,22 +1034,21 @@ static integer c__500 = 500;
 
 
 /*     Some problems with queries are not trapped by EKFIND but */
-/*     instead cause errors to be signalled.  These are listed below. */
-
+/*     instead cause errors to be signaled. These are listed below. */
 
 /*     2)  If no E-kernels are loaded at the time this routine is called, */
-/*         an error will be signalled by routines called by this routine. */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     3)  If a leapseconds kernel is is not loaded before this routine */
-/*         is called, UTC time values may not be used in queries.  If */
-/*         they are, an error will be signalled by routines called by */
+/*         is called, UTC time values may not be used in queries. If they */
+/*         are, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
-/*     4)  If an SCLK kernel for the appropriate spacecraft clock */
-/*         has not been loaded before this routine is called, SCLK */
-/*         values for that clock may not be used in queries.  If */
-/*         they are, an error will be signalled by routines called by */
-/*         this routine. */
+/*     4)  If an SCLK kernel for the appropriate spacecraft clock has not */
+/*         been loaded before this routine is called, SCLK values for */
+/*         that clock may not be used in queries. If they are, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -1057,15 +1056,118 @@ static integer c__500 = 500;
 
 /* $ Particulars */
 
-/*     This routine operates almost entirely by side effects:  it */
+/*     This routine operates almost entirely by side effects: it */
 /*     prepares the EK fetch routines to return event data that */
-/*     satisfy the input query.  See the header of the routine */
-/*     EKQMGR or the EK Required Reading for examples of use of this */
-/*     routine in conjunction with the EK fetch routines. */
+/*     satisfy the input query. See the EK Required Reading for */
+/*     examples of use of this routine in conjunction with the EK */
+/*     fetch routines. */
 
 /* $ Examples */
 
-/*     1)  Examples of strings containing syntactically valid queries: */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Perform a query on an EK file that contains a database with */
+/*        the different commands of the Deep Impact spacecraft */
+/*        subsystem, and a table with the subsystem id, the parameter */
+/*        name, and the description of that parameters, ordered by */
+/*        subsystem name. Print the number of records of that table. */
+
+/*        Use the EK kernel below to load the Deep Impact spacecraft */
+/*        subsystem commands dictionary. */
+
+/*           dif_cmdict_128_20050620.bdb */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EKFIND_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Include the EK Maximum length of an input query, */
+/*        C     MAXQRY, and the maximum length of literal string */
+/*        C     values, MAXSTR, from eklimit.inc. */
+/*        C */
+/*              INCLUDE 'ekqlimit.inc' */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         EKNAME */
+/*              PARAMETER           ( EKNAME = */
+/*             .                         'dif_cmdict_128_20050620.bdb' ) */
+
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN = 1840 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(ERRLEN)    ERRMSG */
+/*              CHARACTER*(MAXQRY)    QUERY */
+
+/*              INTEGER               NMROWS */
+
+/*              LOGICAL               ERROR */
+
+/*        C */
+/*        C     Open an EK file. */
+/*        C */
+/*              CALL FURNSH ( EKNAME ) */
+
+/*        C */
+/*        C     The EK file contains the table 'DIF_COMMANDS', */
+/*        C     and that 'DIF_COMMANDS' contains columns named: */
+/*        C */
+/*        C       SUBSYSTEM, COMMAND, PARAMETER_NAME, DESCRIPTION */
+/*        C */
+/*        C     Define a set of constraints to perform a query on all */
+/*        C     loaded EK files (the SELECT clause). */
+/*        C */
+/*              QUERY = 'Select SUBSYSTEM, COMMAND, PARAMETER_NAME, ' */
+/*             .   //   'DESCRIPTION from DIF_COMMANDS ' */
+/*             .   //   'order by SUBSYSTEM' */
+
+/*        C */
+/*        C     Query the EK system for data rows matching the */
+/*        C     SELECT constraints. */
+/*        C */
+/*              CALL EKFIND ( QUERY, NMROWS, ERROR, ERRMSG ) */
+
+/*        C */
+/*        C     Check whether an error occurred while processing the */
+/*        C     SELECT clause. If so, output the error message. */
+/*        C */
+/*              IF ( ERROR ) THEN */
+
+/*                 WRITE(*,*) 'SELECT clause error: ', ERRMSG */
+
+/*              ELSE */
+
+/*        C */
+/*        C        If no error, NMROWS contains the number of rows */
+/*        C        matching the constraints specified in the query */
+/*        C        string. */
+/*        C */
+/*                 WRITE(*,*) 'Number of matching rows: ', NMROWS */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Number of matching rows:         5798 */
+
+
+/*     2) Examples of strings containing syntactically valid queries: */
 
 /*            SELECT COL1 FROM TAB1 */
 
@@ -1120,7 +1222,7 @@ static integer c__500 = 500;
 /*            ORDER BY T1.COL1, T2.COL2 */
 
 
-/*     2)  Examples of syntactically invalid queries: */
+/*     3) Examples of syntactically invalid queries: */
 
 /*            SELECT TIME WHERE TIME */
 /*            LT 1991 JAN 1                      {FROM clause is absent} */
@@ -1203,7 +1305,7 @@ static integer c__500 = 500;
 /*         may be called, if SCLK values are used in input queries. */
 
 /*     3)  Data found in response to a query become unavailable */
-/*         when a fast load is initiated via EKIFLD.  Any desired */
+/*         when a fast load is initiated via EKIFLD. Any desired */
 /*         fetches of the data must be performed before a fast */
 /*         load or any other operation that modifies the EK scratch */
 /*         area is initiated. */
@@ -1214,9 +1316,18 @@ static integer c__500 = 500;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
 
 /* -    SPICELIB Version 1.0.4, 18-MAY-2010 (BVS) */
 
@@ -1224,20 +1335,20 @@ static integer c__500 = 500;
 
 /* -    SPICELIB Version 1.0.3, 19-DEC-2001 (NJB) */
 
-/*        Restrictions section was updated. */
+/*        $Restrictions section was updated. */
 
 /* -    SPICELIB Version 1.0.2, 14-JAN-1997 (NJB) */
 
 /*        Syntax descriptions for comparisons using null values have been */
-/*        added.  The $Examples section was augmented with sample queries */
+/*        added. The $Examples section was augmented with sample queries */
 /*        demonstrating use of the IS NULL and IS NOT NULL comparison */
 /*        operators. */
 
 /* -    SPICELIB Version 1.0.1, 16-AUG-1996 (NJB) */
 
-/*        Exceptions section of header was updated to indicate that */
+/*        $Exceptions section of header was updated to indicate that */
 /*        calling this routine while no E-kernels are loaded will cause */
-/*        an error to be signalled.  Previous version line was changed */
+/*        an error to be signaled. Previous version line was changed */
 /*        from "Beta" to "SPICELIB," and the previous version was */
 /*        corrected to 1.0.0. */
 

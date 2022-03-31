@@ -82,7 +82,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Target epoch state transformation. */
 /*     RECORD     I   Data record valid for epoch ET. */
@@ -90,18 +90,18 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     ET          is a target epoch, at which a state transformation */
-/*                 matrix is to be calculated. */
+/*     ET       is a target epoch, at which a state transformation */
+/*              matrix is to be calculated. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will give RA, DEC, and W and angular velocity */
-/*                 for a body.  The RA, DEC and W are relative to */
-/*                 some inertial frame.  The angular velocity is */
-/*                 expressed relative to the body fixed coordinate frame. */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will give RA, DEC, and W and angular velocity */
+/*              for a body. The RA, DEC and W are relative to */
+/*              some inertial frame. The angular velocity is */
+/*              expressed relative to the body fixed coordinate frame. */
 
 /* $ Detailed_Output */
 
-/*     ROTMAT      is the state transformation matrix at epoch ET. */
+/*     ROTMAT   is the state transformation matrix at epoch ET. */
 
 /* $ Parameters */
 
@@ -122,13 +122,13 @@ static integer c__1 = 1;
 
 /*     A type 03 segment contains six sets of Chebyshev coefficients, */
 /*     one set each for RA, DEC, and W and one set each for the */
-/*     components of the angular velocity of the body.  The coefficients */
+/*     components of the angular velocity of the body. The coefficients */
 /*     for RA, DEC, and W are relative to some inertial reference */
-/*     frame.  The coefficients for the components of angular velocity */
+/*     frame. The coefficients for the components of angular velocity */
 /*     are relative to the body fixed frame and must be transformed */
 /*     via the position transformation corresponding to RA, DEC and W. */
 
-/*     PCKE03 calls the routine CHBVAL to evalute each polynomial, */
+/*     PCKE03 calls the routine CHBVAL to evaluate each polynomial, */
 /*     to obtain a complete set of values. These values are then */
 /*     used to determine a state transformation matrix that will */
 /*     rotate an inertially referenced state into the bodyfixed */
@@ -141,9 +141,9 @@ static integer c__1 = 1;
 /*     binary PCK files. */
 
 /*     The data returned by the PCKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the PCKRnn */
+/*     completely. Given that understanding, however, the PCKRnn */
 /*     routines might be used to examine raw segment data before */
 /*     evaluating it with the PCKEnn routines. */
 
@@ -181,30 +181,36 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.0.2, 20-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 3.0.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
-/*        Removed unneeded Revisions section. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
+/*        Removed unneeded $Revisions section. */
 
-/* -    SPICELIB Version 3.0.0, 6-OCT-1995 (WLT) */
+/* -    SPICELIB Version 3.0.0, 06-OCT-1995 (WLT) */
 
 /*        Brian Carcich at Cornell discovered that the Euler */
-/*        angles were being re-arranged unnecessarily.  As a */
+/*        angles were being re-arranged unnecessarily. As a */
 /*        result the state transformation matrix computed was */
-/*        not the one we expected.  (The re-arrangement was */
-/*        a left-over from  implementation 1.0.0.  This problem */
+/*        not the one we expected. (The re-arrangement was */
+/*        a left-over from  implementation 1.0.0. This problem */
 /*        has now been corrected. */
 
 /* -    SPICELIB Version 2.0.0, 28-JUL-1995 (WLT) */
 
 /*        Version 1.0.0 was written under the assumption that */
 /*        RA, DEC, W and dRA/dt, dDEC/dt and dW/dt were supplied */
-/*        in the input RECORD.  This version repairs the */
+/*        in the input RECORD. This version repairs the */
 /*        previous misinterpretation. */
 
 /* -    SPICELIB Version 1.0.0, 14-MAR-1995 (KRG) */
@@ -212,7 +218,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_03 pck segment */
+/*     evaluate type_03 PCK segment */
 
 /* -& */
 
@@ -275,14 +281,14 @@ static integer c__1 = 1;
 
 	chbval_(&record[cofloc - 1], &degree, &record[1], et, &eulang[(i__1 = 
 		i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("eulang", i__1, 
-		"pcke03_", (ftnlen)262)]);
+		"pcke03_", (ftnlen)270)]);
 
 /*        Convert to radians. */
 
 	eulang[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("eulang", 
-		i__1, "pcke03_", (ftnlen)267)] = rpd_() * eulang[(i__2 = i__ 
+		i__1, "pcke03_", (ftnlen)275)] = rpd_() * eulang[(i__2 = i__ 
 		- 1) < 6 && 0 <= i__2 ? i__2 : s_rnge("eulang", i__2, "pcke0"
-		"3_", (ftnlen)267)];
+		"3_", (ftnlen)275)];
     }
 
 /*     EULANG(1) is RA make it PHI */
@@ -373,19 +379,19 @@ static integer c__1 = 1;
     for (i__ = 1; i__ <= 3; ++i__) {
 	for (j = 1; j <= 3; ++j) {
 	    rotmat[(i__1 = i__ + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rotmat", i__1, "pcke03_", (ftnlen)362)] = rot[(i__2 = 
+		    "rotmat", i__1, "pcke03_", (ftnlen)370)] = rot[(i__2 = 
 		    i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge("rot", 
-		    i__2, "pcke03_", (ftnlen)362)];
+		    i__2, "pcke03_", (ftnlen)370)];
 	    rotmat[(i__1 = i__ + 3 + j * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rotmat", i__1, "pcke03_", (ftnlen)363)] = drotdt[(
+		    s_rnge("rotmat", i__1, "pcke03_", (ftnlen)371)] = drotdt[(
 		    i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-		    "drotdt", i__2, "pcke03_", (ftnlen)363)];
+		    "drotdt", i__2, "pcke03_", (ftnlen)371)];
 	    rotmat[(i__1 = i__ + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? i__1 : 
-		    s_rnge("rotmat", i__1, "pcke03_", (ftnlen)364)] = 0.;
+		    s_rnge("rotmat", i__1, "pcke03_", (ftnlen)372)] = 0.;
 	    rotmat[(i__1 = i__ + 3 + (j + 3) * 6 - 7) < 36 && 0 <= i__1 ? 
-		    i__1 : s_rnge("rotmat", i__1, "pcke03_", (ftnlen)365)] = 
+		    i__1 : s_rnge("rotmat", i__1, "pcke03_", (ftnlen)373)] = 
 		    rot[(i__2 = i__ + j * 3 - 4) < 9 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rot", i__2, "pcke03_", (ftnlen)365)];
+		    s_rnge("rot", i__2, "pcke03_", (ftnlen)373)];
 	}
     }
     chkout_("PCKE03", (ftnlen)6);

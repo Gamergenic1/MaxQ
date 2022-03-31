@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LPARSM ( Parse a list of items ) */
+/* $Procedure LPARSM ( Parse a list of items ) */
 /* Subroutine */ int lparsm_(char *list, char *delims, integer *nmax, integer 
 	*n, char *items, ftnlen list_len, ftnlen delims_len, ftnlen items_len)
 {
@@ -53,10 +53,10 @@
 
 /* $ Keywords */
 
-/*      CHARACTER */
-/*      LIST */
-/*      PARSING */
-/*      STRING */
+/*     CHARACTER */
+/*     LIST */
+/*     PARSING */
+/*     STRING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -71,37 +71,37 @@
 
 /* $ Detailed_Input */
 
-/*     LIST        is a list of items delimited by any one of the */
-/*                 characters in the string DELIMS. Consecutive */
-/*                 delimiters, and delimiters at the beginning and */
-/*                 end of the list, are considered to delimit blank */
-/*                 items. A blank list is considered to contain */
-/*                 a single (blank) item. */
+/*     LIST     is a list of items delimited by any one of the */
+/*              characters in the string DELIMS. Consecutive */
+/*              delimiters, and delimiters at the beginning and */
+/*              end of the list, are considered to delimit blank */
+/*              items. A blank list is considered to contain */
+/*              a single (blank) item. */
 
-/*     DELIMS      contains the individual characters which delimit */
-/*                 the items in the list. These may be any ASCII */
-/*                 characters, including blanks. */
+/*     DELIMS   contains the individual characters which delimit */
+/*              the items in the list. These may be any ASCII */
+/*              characters, including blanks. */
 
-/*                 However, by definition, consecutive blanks are NOT */
-/*                 considered to be consecutive delimiters. Nor are */
-/*                 a blank and any other delimiter considered to be */
-/*                 consecutive delimiters. In addition, leading and */
-/*                 trailing blanks are ignored. */
+/*              However, by definition, consecutive blanks are NOT */
+/*              considered to be consecutive delimiters. Nor are */
+/*              a blank and any other delimiter considered to be */
+/*              consecutive delimiters. In addition, leading and */
+/*              trailing blanks are ignored. */
 
-/*     NMAX        is the maximum number of items to be returned from */
-/*                 the list. This allows the user to guard against */
-/*                 overflow from a list containing more items than */
-/*                 expected. */
+/*     NMAX     is the maximum number of items to be returned from */
+/*              the list. This allows the user to guard against */
+/*              overflow from a list containing more items than */
+/*              expected. */
 
 /* $ Detailed_Output */
 
-/*     N           is the number of items in the list. N may be */
-/*                 any number between one and NMAX. N is always the */
-/*                 number of delimiters plus one. */
+/*     N        is the number of items in the list. N may be */
+/*              any number between one and NMAX. N is always the */
+/*              number of delimiters plus one. */
 
-/*     ITEMS       are the items in the list, left justified. Any item */
-/*                 in the list to long to fit into an element of ITEMS */
-/*                 is truncated on the right. */
+/*     ITEMS    are the items in the list, left justified. Any item */
+/*              in the list to long to fit into an element of ITEMS */
+/*              is truncated on the right. */
 
 /* $ Parameters */
 
@@ -111,8 +111,8 @@
 
 /*     Error free. */
 
-/*     1) If the string length of ITEMS is too short to accommodate */
-/*        an item, the item will be truncated on the right. */
+/*     1)  If the string length of ITEMS is too short to accommodate */
+/*         an item, the item will be truncated on the right. */
 
 /* $ Files */
 
@@ -124,52 +124,180 @@
 
 /* $ Examples */
 
-/*     The following examples illustrate the operation of LPARSM. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*      1) Let */
-/*               LIST   = '  A number of words   separated   by spaces */
-/*               DELIMS = ' ' */
-/*               NMAX   = 20 */
+/*     1) Parse a character string to retrieve the words contained */
+/*        within. */
 
-/*         Then */
-/*               ITEMS(1) = 'A' */
-/*               ITEMS(2) = 'number' */
-/*               ITEMS(3) = 'of' */
-/*               ITEMS(4) = 'words' */
-/*               ITEMS(5) = 'separated' */
-/*               ITEMS(6) = 'by' */
-/*               ITEMS(7) = 'spaces' */
 
-/*      2) Let */
-/*               LIST   = '  1986-187// 13:15:12.184 ' */
-/*               DELIMS = ' ,/-:' */
-/*               NMAX   = 20 */
+/*        Example code begins here. */
 
-/*         Then */
-/*               ITEMS(1) = '1986' */
-/*               ITEMS(2) = '187' */
-/*               ITEMS(3) = ' ' */
-/*               ITEMS(4) = '13' */
-/*               ITEMS(5) = '15' */
-/*               ITEMS(6) = '12.184' */
+
+/*              PROGRAM LPARSM_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER                 DELMLN */
+/*              PARAMETER             ( DELMLN = 1   ) */
+
+/*              INTEGER                 NMAX */
+/*              PARAMETER             ( NMAX   = 25  ) */
+
+/*              INTEGER                 STRLEN */
+/*              PARAMETER             ( STRLEN = 255 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(DELMLN)      DELIMS */
+/*              CHARACTER*(STRLEN)      ITEMS  ( NMAX ) */
+/*              CHARACTER*(STRLEN)      LIST */
+
+/*              INTEGER                 I */
+/*              INTEGER                 N */
+
+/*        C */
+/*        C     Define the list of delimited items. */
+/*        C */
+/*        C     Think of a sentence as a list delimited by a space. */
+/*        C     DELIMS is assigned to a space. */
+/*        C */
+/*              LIST   = 'Run and find out.' */
+/*              DELIMS = ' ' */
+
+/*        C */
+/*        C     Parse the items from LIST. */
+/*        C */
+/*              CALL LPARSM ( LIST, DELIMS, NMAX, N, ITEMS ) */
+
+/*        C */
+/*        C     Output the ITEMS. */
+/*        C */
+/*              DO I = 1, N */
+
+/*                 WRITE(*,'(A,I3,2A)') 'Item', I, ': ', ITEMS(I) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Item  1: Run */
+/*        Item  2: and */
+/*        Item  3: find */
+/*        Item  4: out. */
+
+
+/*     2) Parse a character string to retrieve the items contained */
+/*        within, when then items are separated by multiple delimiters. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM LPARSM_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER                 RTRIM */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER                 DELMLN */
+/*              PARAMETER             ( DELMLN = 5   ) */
+
+/*              INTEGER                 NMAX */
+/*              PARAMETER             ( NMAX   = 25  ) */
+
+/*              INTEGER                 STRLEN */
+/*              PARAMETER             ( STRLEN = 255 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(DELMLN)      DELIMS */
+/*              CHARACTER*(STRLEN)      ITEMS  ( NMAX ) */
+/*              CHARACTER*(STRLEN)      LIST */
+
+/*              INTEGER                 I */
+/*              INTEGER                 N */
+
+/*        C */
+/*        C     Define the list of delimited items. */
+/*        C */
+/*        C     Think of a sentence as a list delimited by a space. */
+/*        C     DELIMS is assigned to a space. */
+/*        C */
+/*              LIST   = '  1986-187// 13:15:12.184 ' */
+/*              DELIMS = ' ,/-:' */
+
+/*        C */
+/*        C     Parse the items from LIST. */
+/*        C */
+/*              CALL LPARSM ( LIST, DELIMS, NMAX, N, ITEMS ) */
+
+/*        C */
+/*        C     Output the ITEMS. */
+/*        C */
+/*              DO I = 1, N */
+
+/*                 WRITE(*,'(A,I3,3A)') 'Item', I, ': ''', */
+/*             .                        ITEMS(I)(:RTRIM(ITEMS(I))), '''' */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Item  1: '1986' */
+/*        Item  2: '187' */
+/*        Item  3: ' ' */
+/*        Item  4: '13' */
+/*        Item  5: '15' */
+/*        Item  6: '12.184' */
+
 
 /* $ Restrictions */
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     I.M. Underwood  (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 13-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
 
 /* -    SPICELIB Version 1.1.0, 26-OCT-2005 (NJB) */
 
-/*        Bug fix:  code was modified to avoid out-of-range */
+/*        Bug fix: code was modified to avoid out-of-range */
 /*        substring bound conditions. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -189,8 +317,8 @@
 
 /* -    SPICELIB Version 1.1.0, 26-OCT-2005 (NJB) */
 
-/*        Bug fix:  code was modified to avoid out-of-range */
-/*        substring bound conditions.  The previous version */
+/*        Bug fix: code was modified to avoid out-of-range */
+/*        substring bound conditions. The previous version */
 /*        of this routine used DO WHILE statements of the form */
 
 /*                  DO WHILE (      ( B         .LE. EOL   ) */

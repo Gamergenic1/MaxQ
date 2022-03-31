@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            WDINDX ( Index of a Word Within a String ) */
+/* $Procedure WDINDX ( Index of a Word Within a String ) */
 integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
 {
     /* System generated locals */
@@ -23,7 +23,7 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
 
 /* $ Abstract */
 
-/*     Find the index of a word within a string.  If the word does not */
+/*     Find the index of a word within a string. If the word does not */
 /*     exist as a word within the string, the value zero is returned. */
 
 /* $ Disclaimer */
@@ -57,81 +57,101 @@ integer wdindx_(char *string, char *word, ftnlen string_len, ftnlen word_len)
 
 /* $ Keywords */
 
-/*      PARSING,  SEARCH,  WORD */
+/*     PARSING */
+/*     SEARCH */
+/*     WORD */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STRING     I   String of characters, potentially containing words */
-/*      WORD       I   A string of consecutive non-blank letters. */
-/*      WDINDX     O   The location of the word within the string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STRING     I   String of characters, potentially containing words */
+/*     WORD       I   A string of consecutive printable letters. */
+
+/*     The function returns the location of WORD within STRING. */
 
 /* $ Detailed_Input */
 
-/*      STRING     String of characters, potentially containing words. */
-/*      WORD       A string of consecutive non-blank letters. */
+/*     STRING   is a string of characters, potentially containing the */
+/*              word. */
+
+/*              Leading and trailing blanks are not significant in */
+/*              STRING. */
+
+/*     WORD     is a string of consecutive printable characters. */
+
+/*              Leading and trailing blanks are not significant in */
+/*              WORD. */
 
 /* $ Detailed_Output */
 
-/*      WDINDX     The location of the word within the string. */
+/*     The function returns the location of WORD within STRING, providing */
+/*     the index of the first letter of WORD within the input STRING. If */
+/*     WORD does not exist or WORD is blank, the function returns zero. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      A word within a string is a substring beginning and ending with */
-/*      a non-blank characters that is delimited by blanks on each end. */
-/*      ( A blank is assumed to precede and follow the first and last */
-/*      characters of a string. ) */
-
-/*      Given a word, this routine returns the index of the first letter */
-/*      of the first word of STRING that matches the word. */
-
-/* $ Examples */
-
-/*              STRING: */
-/*                       1         2         3         4 */
-/*      WORD    1234567890123456789012345678901234567890123456    WDINDX */
-/*      ------  ----------------------------------------------    ------ */
-/*     'POT'   'PUT THE POTATOES IN THE POT'                      25 */
-/*     'TOES'                                                     0 */
-/*     'PUT'                                                      1 */
-/*     'THE'                                                      5 */
-/*     'IN THE'                                                   18 */
-/*     'THE PO'                                                   0 */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
+/*     A word within a string is a substring beginning and ending with a */
+/*     non-blank characters that is delimited by blanks on each end. (A */
+/*     blank is assumed to precede and follow the first and last */
+/*     characters of a string.) */
+
+/*     Given a word, this routine returns the index of the first letter */
+/*     of the first word of STRING that matches the word. */
+
+/* $ Examples */
+
+/*     STRING: */
+/*                      1         2         3         4 */
+/*     WORD    1234567890123456789012345678901234567890123456    WDINDX */
+/*     ------  ----------------------------------------------    ------ */
+/*     'POT'   'PUT THE POTATOES IN THE POT'                     25 */
+/*     'TOES'                                                    0 */
+/*     'PUT'                                                     1 */
+/*     'THE'                                                     5 */
+/*     'IN THE'                                                  18 */
+/*     'THE PO'                                                  0 */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 03-OCT-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

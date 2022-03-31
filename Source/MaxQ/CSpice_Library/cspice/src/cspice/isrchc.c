@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure             ISRCHC  ( Search in a character array ) */
+/* $Procedure ISRCHC  ( Search in a character array ) */
 integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len, 
 	ftnlen array_len)
 {
@@ -20,9 +20,9 @@ integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /* $ Abstract */
 
-/*      Search for a given value within a character string array. Return */
-/*      the index of the first matching array entry, or zero if the key */
-/*      value was not found. */
+/*     Search for a given value within a character string array. Return */
+/*     the index of the first matching array entry, or zero if the key */
+/*     value was not found. */
 
 /* $ Disclaimer */
 
@@ -55,75 +55,90 @@ integer isrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /* $ Keywords */
 
-/*      ARRAY,  SEARCH */
+/*     ARRAY */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O              DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       VALUE     I     Key value to be found in ARRAY. */
-/*       NDIM      I     Dimension of ARRAY. */
-/*       ARRAY     I     Character string array to search. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     VALUE      I   Key value to be found in ARRAY. */
+/*     NDIM       I   Dimension of ARRAY. */
+/*     ARRAY      I   Character string array to search. */
 
-/*       The function returns the index of the first matching array */
-/*       element or zero if the value is not found. */
+/*     The function returns the index of the first matching array */
+/*     element or zero if the value is not found. */
 
 /* $ Detailed_Input */
 
-/*      VALUE      is the key value to be found in the array. */
+/*     VALUE    is the key value to be found in the array. Trailing */
+/*              blanks in this key are not significant: string matches */
+/*              found by this routine do not require trailing blanks in */
+/*              value to match those in the corresponding element of */
+/*              array. */
 
-/*      NDIM       is the dimension of the array. */
+/*     NDIM     is the dimension of the array. */
 
-/*      ARRAY      is the character array to be searched. */
+/*     ARRAY    is the character array to be searched. Trailing */
+/*              blanks in the strings in this array are not significant. */
 
 /* $ Detailed_Output */
 
-/*      The function returns the index of the first matching array */
-/*      element in ARRAY. If VALUE is not found, ISRCHC is zero. */
+/*     The function returns the index of the first matching array */
+/*     element in ARRAY. If VALUE is not found, ISRCHC is zero. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      The following table shows the value of ISRCHC given the contents */
-/*      of ARRAY and VALUE: */
-
-/*        ARRAY                 VALUE     ISRCHC */
-/*      -----------------       -----     ------ */
-/*      '1', '0', '4', '2'       '4'        3 */
-/*      '1', '0', '4', '2'       '2'        4 */
-/*      '1', '0', '4', '2'       '3'        0 */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If NDIM < 1 the function value is zero. */
+/*     1)  If NDIM < 1, the function value is zero. */
 
 /* $ Files */
 
-/*      None */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     None. */
+
+/* $ Examples */
+
+/*     The following table shows the value of ISRCHC given the contents */
+/*     of ARRAY and VALUE: */
+
+/*       ARRAY                 VALUE     ISRCHC */
+/*     -----------------       -----     ------ */
+/*     '1', '0', '4', '2'       '4'        3 */
+/*     '1', '0', '4', '2'       '2'        4 */
+/*     '1', '0', '4', '2'       '3'        0 */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Extended */
+/*        description of input arguments. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

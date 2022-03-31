@@ -65,11 +65,13 @@
 
 /* $ Detailed_Output */
 
-/*     None.    The segment in the PCK file associated with HANDLE will */
-/*              be ended, making the addition of the data permanent. */
+/*     None. */
 
-/*              See the $ Particulars section for details about the */
-/*              structure of a type 03 PCK segment. */
+/*     The segment in the PCK file associated with HANDLE will */
+/*     be ended, making the addition of the data permanent. */
+
+/*     See the $Particulars section for details about the */
+/*     structure of a type 03 PCK segment. */
 
 /* $ Parameters */
 
@@ -77,7 +79,9 @@
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If there is no segment being written to the file associated */
+/*         with HANDLE, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
 /* $ Files */
 
@@ -211,7 +215,7 @@
 /*     Example 2: */
 
 /*        In this example we want to add type O3 PCK records, as */
-/*        described above in the $ Particulars section, to the segment */
+/*        described above in the $Particulars section, to the segment */
 /*        being written as they are generated. The ability to write the */
 /*        records in this way is useful if computer memory is limited. It */
 /*        may also be convenient from a programming perspective to write */
@@ -286,9 +290,9 @@
 
 /* $ Restrictions */
 
-/*     1) The type 03 binary PCK segment being closed must have been */
-/*        started by the routine PCK03B, the routine which begins a type */
-/*        03 PCK segment. */
+/*     1)  The type 03 binary PCK segment being closed must have been */
+/*         started by the routine PCK03B, the routine which begins a type */
+/*         03 PCK segment. */
 
 /* $ Literature_References */
 
@@ -296,13 +300,20 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added entry #1 */
+/*        to $Exceptions section. */
+
 /* -    SPICELIB Version 1.0.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 /*        Corrected order of header sections to conform to NAIF */
 /*        standard. */
 
@@ -311,7 +322,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     end a type_03 pck segment */
+/*     end a type_03 PCK segment */
 
 /* -& */
 

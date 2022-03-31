@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      BODDEF ( Body name/ID code definition ) */
+/* $Procedure BODDEF ( Body name/ID code definition ) */
 /* Subroutine */ int boddef_(char *name__, integer *code, ftnlen name_len)
 {
     extern /* Subroutine */ int zzboddef_(char *, integer *, ftnlen), chkin_(
@@ -54,7 +54,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   Common name of some body. */
 /*     CODE       I   Integer code for that body. */
@@ -62,40 +62,40 @@
 
 /* $ Detailed_Input */
 
-/*     NAME        is an arbitrary name of a body which could be */
-/*                 a planet, satellite, barycenter, spacecraft, */
-/*                 asteroid, comet, or other ephemeris object. */
+/*     NAME     is an arbitrary name of a body which could be */
+/*              a planet, satellite, barycenter, spacecraft, */
+/*              asteroid, comet, or other ephemeris object. */
 
-/*                 The case and positions of blanks in a name are */
-/*                 significant. BODC2N returns the same string */
-/*                 (case and space) most recently mapped to a code. */
-/*                 When NAME consists of more than one word, the */
-/*                 words require separation by at least one blank. */
+/*              The case and positions of blanks in a name are */
+/*              significant. BODC2N returns the same string */
+/*              (case and space) most recently mapped to a code. */
+/*              When NAME consists of more than one word, the */
+/*              words require separation by at least one blank. */
 
-/*                 The kernel sub-system stores NAME as described in */
-/*                 the BODDEF call, but creates an equivalence class */
-/*                 based on NAME for comparisons in BODN2C. This class */
-/*                 ignores leading/trailing whitespace, compresses */
-/*                 interior whitespace to a single space, and ignores */
-/*                 character case. */
+/*              The kernel sub-system stores NAME as described in */
+/*              the BODDEF call, but creates an equivalence class */
+/*              based on NAME for comparisons in BODN2C. This class */
+/*              ignores leading/trailing whitespace, compresses */
+/*              interior whitespace to a single space, and ignores */
+/*              character case. */
 
-/*                 The following strings belong to the same equivalence */
-/*                 class: */
+/*              The following strings belong to the same equivalence */
+/*              class: */
 
-/*                         'JUPITER BARYCENTER' */
-/*                         'Jupiter Barycenter' */
-/*                         'JUPITER BARYCENTER   ' */
-/*                         'JUPITER    BARYCENTER' */
-/*                         '   JUPITER BARYCENTER' */
+/*                      'JUPITER BARYCENTER' */
+/*                      'Jupiter Barycenter' */
+/*                      'JUPITER BARYCENTER   ' */
+/*                      'JUPITER    BARYCENTER' */
+/*                      '   JUPITER BARYCENTER' */
 
-/*                 However, 'JUPITERBARYCENTER' is distinct from */
-/*                 the names above. */
+/*              However, 'JUPITERBARYCENTER' is distinct from */
+/*              the names above. */
 
-/*                 When ignoring trailing blanks, NAME must be short */
-/*                 enough to fit into the space defined by parameter */
-/*                 MAXL. */
+/*              When ignoring trailing blanks, NAME must be short */
+/*              enough to fit into the space defined by parameter */
+/*              MAXL. */
 
-/*     CODE        is the integer ID code for assignment to body NAME. */
+/*     CODE     is the integer ID code for assignment to body NAME. */
 
 /* $ Detailed_Output */
 
@@ -103,23 +103,27 @@
 
 /* $ Parameters */
 
-/*     MAXL        is the maximum allowed length of a body NAME. */
-/*                 Names exceeding this length will be truncated */
-/*                 on assignment to a code with BODDEF.  The value */
-/*                 of this parameter may be found in the include */
-/*                 file 'zzbodtrn.inc'. */
+/*     MAXL     is the maximum allowed length of a body NAME. */
+/*              Names exceeding this length will be truncated */
+/*              on assignment to a code with BODDEF. The value */
+/*              of this parameter may be found in the include */
+/*              file 'zzbodtrn.inc'. */
 
 /* $ Exceptions */
 
-/*     1) Routines in the call tree of this routine may signal errors */
-/*        if improper inputs are supplied, or if there is insufficient */
-/*        room to store the requested addition. */
+/*     1)  If improper inputs are supplied, or if there is insufficient */
+/*         room to store the requested addition, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
-/*     2) If a name-code definition inserted into this routine seems to */
-/*        have no effect, it is possible that the contents of the */
-/*        definition are masked by the higher precedence kernel pool */
-/*        assignments. See the "Particulars" section of this document */
-/*        for more information. */
+/*     2)  If the length of NAME exceeds the maximum allowed length for a */
+/*         body name, the name stored in the kernel pool will be */
+/*         truncated on the right. */
+
+/*     3)  If a name-code definition inserted into this routine seems to */
+/*         have no effect, it is possible that the contents of the */
+/*         definition are masked by the higher precedence kernel pool */
+/*         assignments. See the $Particulars section of this document */
+/*         for more information. */
 
 /* $ Files */
 
@@ -164,10 +168,10 @@
 
 /*     CODE may already have a name as defined by a previous */
 /*     call to BODDEF or as part of the set of default */
-/*     definitions.  That previous definition will remain, */
+/*     definitions. That previous definition will remain, */
 /*     and a translation of that name will still give the */
-/*     same CODE.  However, future translations of CODE will */
-/*     give the new NAME instead of the previous one.  This */
+/*     same CODE. However, future translations of CODE will */
+/*     give the new NAME instead of the previous one. This */
 /*     feature is useful for assigning a more familiar or */
 /*     abbreviated name to a body. For example, in addition */
 /*     to the default name for body 5, 'JUPITER BARYCENTER', */
@@ -185,7 +189,7 @@
 /*        BODDEF( 'spud', 23) */
 
 /*     results in the state 'spud' maps to 23, 23 maps to 'spud', */
-/*     and 22 maps to nothing (FOUND in BODC2N returns FALSE). */
+/*     and 22 maps to nothing (FOUND in BODC2N returns .FALSE.). */
 
 /* $ Examples */
 
@@ -225,20 +229,28 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added entry #2 */
+/*        to $Exceptions section. */
+
 /* -    SPICELIB Version 1.1.2, 16-MAY-2009 (EDW) */
 
-/*        Edit to Particulars section to document the BODC2S routine. */
+/*        Edit to $Particulars section to document the BODC2S routine. */
 
 /* -    SPICELIB Version 1.1.1, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section. */
+/*        Corrected the contents of the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.1.0, 23-JAN-2004 (EDW) */
 
@@ -248,7 +260,7 @@
 /* -    SPICELIB Version 1.0.2, 26-AUG-2002 (FST) */
 
 /*        Updated header to describe the parameter MAXL and */
-/*        its effect on this module.  The exceptions section */
+/*        its effect on this module. The $Exceptions section */
 /*        was updated to include a more general discussion */
 /*        of errors that routines in the call tree of this */
 /*        routine may signal. */
@@ -265,7 +277,7 @@
 /*        This was the BODDEF entry point from the original BODTRN */
 /*        subroutine that was in the NAIF toolkit SUPPORT library. */
 /*        When the private subroutine ZZBODTRN was added to SPICELIB, */
-/*        superceding the BODTRN from SUPPORT, the body ID code/name */
+/*        superseding the BODTRN from SUPPORT, the body ID code/name */
 /*        translation interface from the original BODTRN was moved to */
 /*        SPICELIB so that ID codes did not have to be hard coded by */
 /*        users of the toolkit. */

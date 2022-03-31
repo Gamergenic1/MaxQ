@@ -97,18 +97,18 @@ static integer c__128 = 128;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAF, opened for writing. */
 /*     RESV       I   Number of records to remove. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF that has been */
-/*                 opened with write access. */
+/*     HANDLE   is the handle associated with a DAF that has been */
+/*              opened with write access. */
 
-/*     RESV        is the number of reserved records to be removed */
-/*                 from the specified file. */
+/*     RESV     is the number of reserved records to be removed */
+/*              from the specified file. */
 
 /* $ Detailed_Output */
 
@@ -120,10 +120,10 @@ static integer c__128 = 128;
 
 /* $ Exceptions */
 
-/*     1) If RESV is less than one, the file is not changed. */
+/*     1)  If RESV is less than one, the file is not changed. */
 
-/*     2) If RESV is greater than the number of reserved records in the */
-/*        file, all of the reserved records are removed. */
+/*     2)  If RESV is greater than the number of reserved records in the */
+/*         file, all of the reserved records are removed. */
 
 /* $ Files */
 
@@ -155,9 +155,9 @@ static integer c__128 = 128;
 
 /* $ Restrictions */
 
-/*     1) This routine will only remove reserve records from DAFs open */
-/*        for write.  These files are implicitly of the native binary */
-/*        file format. */
+/*     1)  This routine will only remove reserve records from DAFs open */
+/*         for write. These files are implicitly of the native binary */
+/*         file format. */
 
 /* $ Literature_References */
 
@@ -165,10 +165,19 @@ static integer c__128 = 128;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 02-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 16-NOV-2001 (FST) */
 
@@ -179,7 +188,7 @@ static integer c__128 = 128;
 
 /* -    SPICELIB Version 1.1.0, 30-SEP-1993 (KRG) */
 
-/*        Detailed_Input and Examples section of the header were */
+/*        $Detailed_Input and $Examples section of the header were */
 /*        modified. */
 
 /*        Added calls to the FORTRAN intrinsic functions INT and */
@@ -195,20 +204,20 @@ static integer c__128 = 128;
 /* -& */
 /* $ Index_Entries */
 
-/*     remove daf reserved records */
+/*     remove DAF reserved records */
 
 /* -& */
 /* $ Revisions */
 
 /* -    SPICELIB Version 1.1.0, 30-SEP-1993 (KRG) */
 
-/*        $ Detailed_Input section was modified. References to any */
+/*        $Detailed_Input section was modified. References to any */
 /*        specific routines by name as a method for opening a DAF file */
 /*        for write access were removed. The assumption is that a person */
 /*        using DAF files would already know something about opening and */
 /*        closing the files. */
 
-/*        $ Examples section was modified. References to any specific */
+/*        $Examples section was modified. References to any specific */
 /*        routines by name as a method for opening a DAF file for writing */
 /*        were removed, and the example was reworded in such a way that */
 /*        the use of the subroutine remained clear. */
@@ -375,12 +384,12 @@ static integer c__128 = 128;
 	dafgs_(sum);
 	dafus_(sum, &nd, &ni, dc, ic);
 	ic[(i__1 = ni - 2) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
-		"dafrrr_", (ftnlen)393)] = ic[(i__2 = ni - 2) < 250 && 0 <= 
-		i__2 ? i__2 : s_rnge("ic", i__2, "dafrrr_", (ftnlen)393)] - 
+		"dafrrr_", (ftnlen)407)] = ic[(i__2 = ni - 2) < 250 && 0 <= 
+		i__2 ? i__2 : s_rnge("ic", i__2, "dafrrr_", (ftnlen)407)] - 
 		decr;
 	ic[(i__1 = ni - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
-		"dafrrr_", (ftnlen)394)] = ic[(i__2 = ni - 1) < 250 && 0 <= 
-		i__2 ? i__2 : s_rnge("ic", i__2, "dafrrr_", (ftnlen)394)] - 
+		"dafrrr_", (ftnlen)408)] = ic[(i__2 = ni - 1) < 250 && 0 <= 
+		i__2 ? i__2 : s_rnge("ic", i__2, "dafrrr_", (ftnlen)408)] - 
 		decr;
 	dafps_(&nd, &ni, dc, ic, sum);
 	dafws_(sum);

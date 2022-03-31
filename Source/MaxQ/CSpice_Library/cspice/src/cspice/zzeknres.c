@@ -683,7 +683,7 @@ static integer c__1 = 1;
 /*         will not be modified. */
 
 /*     2)  If the input query has not been parsed, the error */
-/*         SPICE(QUERYNOTPARSED) will be signalled.  The outputs */
+/*         SPICE(QUERYNOTPARSED) will be signaled.  The outputs */
 /*         will not be modified. */
 
 /*     3)  If any sort of name resolution error or semantic error is */
@@ -737,6 +737,10 @@ static integer c__1 = 1;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
+
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */
 
 /* -& */
@@ -783,9 +787,9 @@ static integer c__1 = 1;
     i__1 = ntab;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	zzekqtab_(eqryi, eqryc, &i__, table + (((i__2 = i__ - 1) < 10 && 0 <= 
-		i__2 ? i__2 : s_rnge("table", i__2, "zzeknres_", (ftnlen)254))
+		i__2 ? i__2 : s_rnge("table", i__2, "zzeknres_", (ftnlen)258))
 		 << 6), alias + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-		s_rnge("alias", i__3, "zzeknres_", (ftnlen)254)) << 6), 
+		s_rnge("alias", i__3, "zzeknres_", (ftnlen)258)) << 6), 
 		eqryc_len, (ftnlen)64, (ftnlen)64);
     }
 
@@ -797,12 +801,12 @@ static integer c__1 = 1;
 	i__2 = ntab;
 	for (j = i__ + 1; j <= i__2; ++j) {
 	    if (s_cmp(alias + (((i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : 
-		    s_rnge("alias", i__3, "zzeknres_", (ftnlen)265)) << 6), 
+		    s_rnge("alias", i__3, "zzeknres_", (ftnlen)269)) << 6), 
 		    alias + (((i__4 = j - 1) < 10 && 0 <= i__4 ? i__4 : 
-		    s_rnge("alias", i__4, "zzeknres_", (ftnlen)265)) << 6), (
+		    s_rnge("alias", i__4, "zzeknres_", (ftnlen)269)) << 6), (
 		    ftnlen)64, (ftnlen)64) == 0 && s_cmp(alias + (((i__5 = 
 		    i__ - 1) < 10 && 0 <= i__5 ? i__5 : s_rnge("alias", i__5, 
-		    "zzeknres_", (ftnlen)265)) << 6), " ", (ftnlen)64, (
+		    "zzeknres_", (ftnlen)269)) << 6), " ", (ftnlen)64, (
 		    ftnlen)1) != 0) {
 		*error = TRUE_;
 		s_copy(errmsg, "Non-distinct alias <#> was found.", 
@@ -827,7 +831,7 @@ static integer c__1 = 1;
     i__1 = ntab;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	j = isrchc_(alias + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		s_rnge("alias", i__2, "zzeknres_", (ftnlen)295)) << 6), &ntab,
+		s_rnge("alias", i__2, "zzeknres_", (ftnlen)299)) << 6), &ntab,
 		 table, (ftnlen)64, (ftnlen)64);
 	if (j != 0) {
 	    if (j != i__) {
@@ -855,7 +859,7 @@ static integer c__1 = 1;
 	while(j <= nload && ! fnd) {
 	    ektnam_(&j, ltable, (ftnlen)64);
 	    if (s_cmp(table + (((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : 
-		    s_rnge("table", i__2, "zzeknres_", (ftnlen)336)) << 6), 
+		    s_rnge("table", i__2, "zzeknres_", (ftnlen)340)) << 6), 
 		    ltable, (ftnlen)64, (ftnlen)64) == 0) {
 
 /*              When we find a loaded table, save the column count for */
@@ -863,7 +867,7 @@ static integer c__1 = 1;
 
 		fnd = TRUE_;
 		ekccnt_(table, &cc[(i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 :
-			 s_rnge("cc", i__2, "zzeknres_", (ftnlen)342)], (
+			 s_rnge("cc", i__2, "zzeknres_", (ftnlen)346)], (
 			ftnlen)64);
 	    } else {
 		++j;

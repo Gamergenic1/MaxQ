@@ -1,13 +1,13 @@
 /*
 
--Procedure  rotvec_c ( Transform a vector via a rotation )
+-Procedure rotvec_c ( Transform a vector via a rotation )
 
 -Abstract
- 
-   Transform a vector to a new coordinate system rotated by angle 
-   radians about axis iaxis.  This transformation rotates v1 by 
+
+   Transform a vector to a new coordinate system rotated by `angle'
+   radians about axis `iaxis'. This transformation rotates `v1' by
    -angle radians about the specified axis.
- 
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,13 +34,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
+
    None.
- 
+
 -Keywords
- 
-   ROTATION,  VECTOR 
- 
+
+   ROTATION
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
@@ -49,124 +50,192 @@
 
 
    void rotvec_c ( ConstSpiceDouble  v1    [3],
-                   SpiceDouble       angle, 
-                   SpiceInt          iaxis, 
-                   SpiceDouble       vout  [3] ) 
+                   SpiceDouble       angle,
+                   SpiceInt          iaxis,
+                   SpiceDouble       vout  [3] )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   v1        I    Vector whose coordinate system is to be rotated. 
-   angle     I    Angle of rotation in radians. 
-   iaxis     I    Axis of rotation (X=1, Y=2, Z=3). 
-   vout      O    Resulting vector [angle]      * v1 expressed in 
-                                          iaxis 
-                  the new coordinate system. vout can overwrite v1. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I   Vector whose coordinate system is to be rotated.
+   angle      I   Angle of rotation in radians.
+   iaxis      I   Axis of rotation (X=1, Y=2, Z=3).
+   vout       O   Resulting vector expressed in the new coordinate
+                  system.
+
 -Detailed_Input
- 
-   v1      This is a vector (typically representing a vector fixed 
-           in inertial space) which is to be expressed in another 
-           coordinate system.  The vector remains fixed but the 
-           coordinate system changes. 
- 
-   angle   The angle given in radians, through which the rotation 
-           is performed. 
- 
-   iaxis   The index of the axis of rotation.  The X, Y, and Z 
-           axes have indices 1, 2 and 3 respectively. 
- 
+
+   v1          is a vector (typically representing a vector fixed
+               in inertial space) which is to be expressed in another
+               coordinate system. The vector remains fixed but the
+               coordinate system changes.
+
+   angle       is an angle given in radians, through which the rotation
+               is performed.
+
+   iaxis       is the index of the axis of rotation. The X, Y, and Z
+               axes have indices 1, 2 and 3 respectively.
+
 -Detailed_Output
- 
-   vout    This is the vector expressed in the new coordinate system 
-           specified by the angle of rotation and axis. If 
-           [angle]       represents the rotation matrix described by 
-                  iaxis 
-           the angle and axis, (refer to the routine ROTATE) 
-           then vout = [angle]      * v1 
-                              iaxis 
- 
+
+   vout        is the vector expressed in the new coordinate system
+               specified by the angle of rotation and axis. If
+
+                  m = [angle]
+                             iaxis
+
+               represents the rotation matrix described by the `angle'
+               and `iaxis', (refer to the routine rotate_c) then
+
+                  vout =  m * v1  = [angle]      * v1
+                                           iaxis
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   A rotation about the first, i.e. x-axis, is described by 
- 
-   |  1        0          0      | 
-   |  0   cos(theta) sin(theta)  | 
-   |  0  -sin(theta) cos(theta)  | 
- 
-   A rotation about the second, i.e. y-axis, is described by 
- 
-   |  cos(theta)  0  -sin(theta)  | 
-   |      0       1        0      | 
-   |  sin(theta)  1   cos(theta)  | 
- 
-   A rotation about the third, i.e. z-axis, is described by 
- 
-   |  cos(theta) sin(theta)   0   | 
-   | -sin(theta) cos(theta)   0   | 
-   |       0          0       1   | 
- 
-   rotvec_c decides which form is appropriate according to the value 
-   of iaxis and applies the rotation to the input vector. 
- 
--Examples
- 
-   Suppose that 
-   v1 = (1.414, 0, 0), angle = PI/4, iaxis = 3 
-   then after calling rotvec_c according to 
- 
-          rotvec_c (v1, angle, iaxis, vout) 
- 
-   vout will be equal to (1, -1, 0). 
- 
--Restrictions
- 
-   None 
- 
--Exceptions 
- 
-   1) If the axis index is not in the range 1 to 3 it will be treated 
-      the same as that integer 1, 2, or 3 that is congruent to it mod 
-      3. 
- 
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+   1)  If the `iaxis' index is not in the range 1 to 3, it will be
+       treated the same as that integer 1, 2, or 3 that is congruent
+       to it mod 3.
+
 -Files
- 
-   None 
- 
--Author_and_Institution
- 
-   W.M. Owen       (JPL) 
-   W.L. Taber      (JPL) 
- 
+
+   None.
+
+-Particulars
+
+   A rotation about the first, i.e. X-axis, is described by
+
+      .-                              -.
+      |   1       0            0       |
+      |   0   cos(theta)   sin(theta)  |
+      |   0  -sin(theta)   cos(theta)  |
+      `-                              -'
+
+   A rotation about the second, i.e. Y-axis, is described by
+
+      .-                              -.
+      |   cos(theta)   0  -sin(theta)  |
+      |       0        1       0       |
+      |   sin(theta)   1   cos(theta)  |
+      `-                              -'
+
+   A rotation about the third, i.e. Z-axis, is described by
+
+      .-                              -.
+      |   cos(theta)   sin(theta)   0  |
+      |  -sin(theta)   cos(theta)   0  |
+      |       0            0        1  |
+      `-                              -'
+
+   rotvec_c decides which form is appropriate according to the value
+   of `iaxis' and applies the rotation to the input vector.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Apply a rotation of -45.0 degrees about the +Z axis to
+      a 3 dimensional vector.
+
+      Example code begins here.
+
+
+      /.
+         Program rotvec_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          angle;
+         SpiceDouble          vout   [3];
+
+         SpiceInt             iaxis;
+
+         /.
+         Input values.
+         ./
+         SpiceDouble          v1     [3] = { 1.414, 0.0, 0.0 };
+
+         angle = pi_c ( )/4;
+         iaxis = 3;
+
+         /.
+         Rotate `v1' by `angle' radians about `iaxis'.
+         ./
+         rotvec_c ( v1, angle, iaxis, vout );
+
+         printf( "Input vector  : %9.3f %9.3f %9.3f\n",
+                                   v1[0], v1[1], v1[2] );
+         printf( "Rotated vector: %9.3f %9.3f %9.3f\n",
+                             vout[0], vout[1], vout[2] );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector  :     1.414     0.000     0.000
+      Rotated vector:     1.000    -1.000     0.000
+
+
+-Restrictions
+
+   None.
+
 -Literature_References
- 
-   None 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.2, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Created complete code example from existing code fragments.
+
    -CSPICE Version 1.1.1, 04-OCT-1999 (NJB)
- 
-      Procedure line and abstract and were changed to dispel the
-      impression that the input vector is rotated by +angle
-      radians about the specified axis.
- 
+
+       Procedure line and abstract and were changed to dispel the
+       impression that the input vector is rotated by +angle
+       radians about the specified axis.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vector const.
+       Made input vector const.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
 
 -Index_Entries
- 
-   rotate a vector 
- 
+
+   rotate a vector
+
 -&
 */
 
@@ -200,7 +269,7 @@
 
 
    /*
-   Get indices for axes. The first index is for the axis of rotation. 
+   Get indices for axes. The first index is for the axis of rotation.
    The next two axes follow in right hand order (XYZ).  First get the
    non-negative value of iaxis mod 3.
    */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PLTNP ( Nearest point on triangular plate ) */
+/* $Procedure PLTNP ( Nearest point on triangular plate ) */
 /* Subroutine */ int pltnp_(doublereal *point, doublereal *v1, doublereal *v2,
 	 doublereal *v3, doublereal *pnear, doublereal *dist)
 {
@@ -61,7 +61,7 @@
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     DSK */
 
 /* $ Keywords */
 
@@ -71,7 +71,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     POINT      I   A point in 3-dimensional space. */
 /*     V1, */
@@ -82,22 +82,22 @@
 
 /* $ Detailed_Input */
 
-/*     POINT      is an arbitrary point in 3-dimensional space. */
+/*     POINT    is an arbitrary point in 3-dimensional space. */
 
 /*     V1, */
 /*     V2, */
-/*     V3         are 3-vectors constituting the vertices of */
-/*                a triangular plate. */
+/*     V3       are 3-vectors constituting the vertices of */
+/*              a triangular plate. */
 
-/*                The plate is allowed to be degenerate: it may */
-/*                consist of a line segment or of a single point. */
+/*              The plate is allowed to be degenerate: it may */
+/*              consist of a line segment or of a single point. */
 
 /* $ Detailed_Output */
 
-/*     PNEAR      is the closest point on the plate to POINT. */
-/*                PNEAR is unique, since the plate is convex. */
+/*     PNEAR    is the closest point on the plate to POINT. */
+/*              PNEAR is unique, since the plate is convex. */
 
-/*     DIST       is the distance between POINT and PNEAR. */
+/*     DIST     is the distance between POINT and PNEAR. */
 
 /* $ Parameters */
 
@@ -105,8 +105,8 @@
 
 /* $ Exceptions */
 
-/*     1) The input plate is allowed to be degenerate: it may be */
-/*        a line segment or a single point. */
+/*     1)  The input plate is allowed to be degenerate: it may be */
+/*         a line segment or a single point. */
 
 /* $ Files */
 
@@ -118,7 +118,7 @@
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as input */
 /*     (if any), the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
@@ -132,14 +132,14 @@
 /*        Example code begins here. */
 
 
-/*              PROGRAM EX1 */
+/*              PROGRAM PLTNP_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
 /*        C     Local parameters */
 /*        C */
 /*              CHARACTER*(*)         FMT1 */
-/*              PARAMETER           ( FMT1 = '(A,3E16.8)' ) */
+/*              PARAMETER           ( FMT1 = '(A,3E15.7)' ) */
 /*        C */
 /*        C     Local variables */
 /*        C */
@@ -167,7 +167,7 @@
 
 /*              WRITE (*,*) ' ' */
 /*              WRITE (*,FMT1) 'Plate vertex 1 = ', V1 */
-/*              WRITE (*,FMT1) 'Plate vertex 3 = ', V2 */
+/*              WRITE (*,FMT1) 'Plate vertex 2 = ', V2 */
 /*              WRITE (*,FMT1) 'Plate vertex 3 = ', V3 */
 /*              WRITE (*,FMT1) 'Input point    = ', POINT */
 /*              WRITE (*,*)    ' ' */
@@ -178,17 +178,17 @@
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran platform, */
-/*     the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*      Plate vertex 1 =   0.10000000E+01  0.00000000E+00  0.00000000E+00 */
-/*      Plate vertex 3 =   0.00000000E+00  0.10000000E+01  0.00000000E+00 */
-/*      Plate vertex 3 =   0.00000000E+00  0.00000000E+00  0.10000000E+01 */
-/*      Input point    =   0.20000000E+01  0.20000000E+01  0.20000000E+01 */
+/*        Plate vertex 1 =   0.1000000E+01  0.0000000E+00  0.0000000E+00 */
+/*        Plate vertex 2 =   0.0000000E+00  0.1000000E+01  0.0000000E+00 */
+/*        Plate vertex 3 =   0.0000000E+00  0.0000000E+00  0.1000000E+01 */
+/*        Input point    =   0.2000000E+01  0.2000000E+01  0.2000000E+01 */
 
-/*      Near point     =   0.33333333E+00  0.33333333E+00  0.33333333E+00 */
-/*      Distance       =   0.28867513E+01 */
+/*        Near point     =   0.3333333E+00  0.3333333E+00  0.3333333E+00 */
+/*        Distance       =   0.2886751E+01 */
 
 
 /* $ Restrictions */
@@ -201,24 +201,33 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.3, 04-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Edited code example output format for the solution to fit */
+/*        within the $Examples section without modifications. Added */
+/*        DSK to $Required_Readings. */
 
 /* -    SPICELIB Version 1.1.2, 01-FEB-2016 (NJB) */
 
 /*        Added code example to header. */
 
-/* -    DSKLIB Version 1.1.1, 19-MAR-2015 (NJB) */
+/*     DSKLIB Version 1.1.1, 19-MAR-2015 (NJB) */
 
 /*        Fixed spelling error in header. */
 
-/* -    DSKLIB Version 1.1.0, 31-DEC-2014 (NJB) */
+/*     DSKLIB Version 1.1.0, 31-DEC-2014 (NJB) */
 
 /*        Bug fix: vertex indices for outside case, near */
 /*        point on 3rd edge were corrected. */
 
-/* -    DSKLIB Version 1.0.0, 29-SEP-2014 (NJB) */
+/*     DSKLIB Version 1.0.0, 29-SEP-2014 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

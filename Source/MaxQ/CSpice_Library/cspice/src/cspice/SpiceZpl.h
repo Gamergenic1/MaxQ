@@ -58,7 +58,15 @@
  
 -Version
  
-   -CSPICE Version 2.1.0, 10-MAR-2014 (BVS)
+   -CSPICE Version 2.4.0, 28-NOV-2021 (BVS)
+ 
+      Updated for the:
+ 
+         MAC-OSX-M1-64BIT-CLANG_C
+ 
+      environment.
+ 
+   -CSPICE Version 2.3.0, 10-MAR-2014 (BVS)
  
       Updated for the:
  

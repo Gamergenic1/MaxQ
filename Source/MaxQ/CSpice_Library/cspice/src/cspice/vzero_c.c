@@ -3,9 +3,9 @@
 -Procedure vzero_c ( Is a vector the zero vector? )
 
 -Abstract
- 
-   Indicate whether a 3-vector is the zero vector. 
- 
+
+   Indicate whether a 3-vector is the zero vector.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,134 +32,140 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   MATH 
-   VECTOR 
- 
+
+   MATH
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
    #undef    vzero_c
-   
 
-   SpiceBoolean vzero_c ( ConstSpiceDouble v[3] ) 
+
+   SpiceBoolean vzero_c ( ConstSpiceDouble v[3] )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   v          I   Vector to be tested. 
- 
-   The function returns the value SPICETRUE if and only if v is the 
-   zero vector. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v          I   Vector to be tested.
+
+   The function returns the value SPICETRUE if and only if `v' is the
+   zero vector.
+
 -Detailed_Input
- 
-   v          is a vector in 3-space. 
- 
+
+   v           is a vector in 3-space.
+
 -Detailed_Output
- 
-   The function returns the value SPICETRUE if and only if v is the 
-   zero vector. 
- 
+
+   The function returns the value SPICETRUE if and only if `v' is the
+   zero vector.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   This function has the same truth value as the logical expression 
- 
-      vnorm_c ( v )  ==  0. 
- 
-   Replacing the above expression by 
- 
+
+   This function has the same truth value as the logical expression
+
+      vnorm_c ( v )  ==  0.
+
+   Replacing the above expression by
+
       vzero_c ( v );
- 
-   has several advantages:  the latter expresses the test more 
-   clearly, looks better, and doesn't go through the work of scaling, 
-   squaring, taking a square root, and re-scaling (all of which 
-   vnorm_c must do) just to find out that a vector is non-zero. 
- 
-   A related function is vzerog_, which accepts vectors of arbitrary 
-   dimension. 
- 
+
+   has several advantages: the latter expresses the test more
+   clearly, looks better, and doesn't go through the work of scaling,
+   squaring, taking a square root, and re-scaling (all of which
+   vnorm_c must do) just to find out that a vector is non-zero.
+
+   A related function is vzerog_c, which accepts vectors of arbitrary
+   dimension.
+
 -Examples
- 
-   1)  When testing whether a vector is the zero vector, one 
-       normally constructs tests like 
- 
+
+   1)  When testing whether a vector is the zero vector, one
+       normally constructs tests like
+
           if (  vnorm_c ( v ) ==  0.  )
-             { 
-                      . 
-                      . 
-                      . 
- 
- 
-       These can be replaced with the code 
- 
-          if (  vzero_c ( v )  ) 
              {
-                      . 
-                      . 
-                      . 
- 
- 
-    2)  Check that a normal vector is non-zero before creating 
-       a plane with PNV2PL: 
- 
+                      .
+                      .
+                      .
+
+
+       These can be replaced with the code
+
+          if (  vzero_c ( v )  )
+             {
+                      .
+                      .
+                      .
+
+
+    2) Check that a normal vector is non-zero before creating
+       a plane with pnv2pl_c:
+
        if (  vzero_c ( NORMAL )  )
           {
-          [ handle error ] 
+          [ handle error ]
           }
- 
+
        else
-          { 
-          pnv2pl_ ( POINT, NORMAL, PLANE ) 
-                        . 
-                        . 
-                        . 
+          {
+          pnv2pl_c ( POINT, NORMAL, PLANE )
+                        .
+                        .
+                        .
           }
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
-   I.M. Underwood (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 05-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vector const.  Removed #include of SpiceZfc.h.
+       Made input vector const. Removed #include of SpiceZfc.h.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (IMU)
 
 -Index_Entries
- 
-   test whether a 3-dimensional vector is the zero vector 
- 
+
+   test whether a 3-dimensional vector is the zero vector
+
 -&
 */
 

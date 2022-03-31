@@ -126,20 +126,21 @@ static integer c__2 = 2;
 
 /* $ Required_Reading */
 
+/*     DAF */
 /*     PCK */
 
 /* $ Keywords */
 
-/*     PCK */
 /*     FILES */
+/*     PCK */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   PCKLOF */
-/*     HANDLE    I/O  PCKLOF, PCKUOF, PCKSFS */
+/*     HANDLE    I-O  PCKLOF, PCKUOF, PCKSFS */
 /*     BODY       I   PCKSFS */
 /*     ET         I   PCKSFS */
 /*     DESCR      O   PCKSFS */
@@ -147,56 +148,56 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
-/*     FNAME      is the name of an PCK file to be loaded. */
+/*     FNAME    is the name of an PCK file to be loaded. */
 
-/*     HANDLE     on input is the handle of an PCK file to be */
-/*                unloaded. */
+/*     HANDLE   on input, is the handle of an PCK file to be */
+/*              unloaded. */
 
-/*     BODY       is the NAIF integer code of an ephemeris object, */
-/*                typically a solar system body. */
+/*     BODY     is the NAIF integer code of an ephemeris object, */
+/*              typically a solar system body. */
 
-/*     ET         is a time, in seconds past the epoch J2000 TDB. */
+/*     ET       is a time, in seconds past the epoch J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE     on output is the handle of the binary PCK file */
-/*                containing a located segment. */
+/*     HANDLE   on output, is the handle of the binary PCK file */
+/*              containing a located segment. */
 
-/*     DESCR      is the descriptor of a located segment. */
+/*     DESCR    is the descriptor of a located segment. */
 
-/*     IDENT      is the identifier of a located segment. */
+/*     IDENT    is the identifier of a located segment. */
 
-/*     FOUND      is a logical flag indicating whether a segment meeting */
-/*                the search criteria was found. FOUND will have the */
-/*                value .TRUE. if an appropriate segment was found during */
-/*                the search; it will have the value of .FALSE. */
-/*                otherwise. If FOUND has the value .FALSE., then either */
-/*                an appropriate segment could not be found in any of the */
-/*                loaded files or there were no PCK kernel files loaded */
-/*                when the request for a segment was made. */
+/*     FOUND    is a logical flag indicating whether a segment meeting */
+/*              the search criteria was found. FOUND will have the */
+/*              value .TRUE. if an appropriate segment was found during */
+/*              the search; it will have the value of .FALSE. */
+/*              otherwise. If FOUND has the value .FALSE., then either */
+/*              an appropriate segment could not be found in any of the */
+/*              loaded files or there were no PCK kernel files loaded */
+/*              when the request for a segment was made. */
 
 /* $ Parameters */
 
-/*     FTSIZE     is the maximum number of files that may be loaded */
-/*                by PCKLOF at any given time for use by the PCK readers. */
+/*     FTSIZE   is the maximum number of files that may be loaded */
+/*              by PCKLOF at any given time for use by the PCK readers. */
 
-/*     BTSIZE     is the maximum number of bodies whose segments can be */
-/*                buffered by PCKSFS. */
+/*     BTSIZE   is the maximum number of bodies whose segments can be */
+/*              buffered by PCKSFS. */
 
-/*     STSIZE     Maximum number of segments that can be buffered at any */
-/*                given time by PCKSFS. */
+/*     STSIZE   is the maximum number of segments that can be buffered at */
+/*              any given time by PCKSFS. */
 
 /* $ Exceptions */
 
-/*     1) If PCKBSR is called directly, the error 'SPICE(BOGUSENTRY)' */
-/*        is signaled. */
+/*     1)  If PCKBSR is called directly, the error SPICE(BOGUSENTRY) */
+/*         is signaled. */
 
-/*     2) See entry points PCKLOF, PCKUOF, and PCKSFS for exceptions */
-/*        specific to them. */
+/*     2)  See entry points PCKLOF, PCKUOF, and PCKSFS for exceptions */
+/*         specific to them. */
 
 /* $ Files */
 
-/*     PCK kernel  files are indicated by filename before loading */
+/*     PCK kernel files are indicated by filename before loading */
 /*     (see PCKLOF) and handle after loading (all other places). */
 
 /* $ Particulars */
@@ -224,10 +225,10 @@ static integer c__2 = 2;
 /*     PCKUOF to unload it. */
 
 /*     PCKSFS performs the search for segments within a file for the */
-/*     PCK kernel readers.  It searches through the most recently loaded */
-/*     files first.  Within a single file, PCKSFS searches through */
+/*     PCK kernel readers. It searches through the most recently loaded */
+/*     files first. Within a single file, PCKSFS searches through */
 /*     the segments in reverse order, beginning with the last segment in */
-/*     the file.  The search stops when the first appropriate segment is */
+/*     the file. The search stops when the first appropriate segment is */
 /*     found or all files and segments have been searched without a */
 /*     match. */
 
@@ -236,157 +237,437 @@ static integer c__2 = 2;
 
 /* $ Examples */
 
-/*     Example 1: */
-/*     --------- */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Suppose that the data of interest are contained in the file */
-/*     THE_MISSION.PCK, and that we want to generate a table containing */
-/*     the descriptors of the PCK segments, or a message indicating that */
-/*     no segment was found, for various request times. We are interested */
-/*     in the data coverage of the segments in the file. */
+/*     1) Suppose that the data of interest are contained in a PCK file, */
+/*        and that we want to generate a table containing the */
+/*        descriptors of the PCK segments, or a message indicating that */
+/*        no segment was found, for various request times. We are */
+/*        interested in the data coverage of the segments in the file. */
 
-/*     Let */
+/*        The code example below loads PCK files and performs searches */
+/*        for various epochs, generating a table containing the segment */
+/*        descriptors, if found, or a message indicating that a segment */
+/*        descriptor was not found. */
 
-/*        PCK_HANDL      be the handle for the mission PCK file. */
-/*        HANDLE         be the handle obtained from a segment search. In */
-/*                       this example, because there is only a single */
-/*                       file, this will always have the same value. */
-/*        BODY           be the NAIF ID code for the body of interest. */
-/*        BEG_ET         be the beginning epoch for a data table that */
-/*                       is generated. */
-/*        END_ET         be the ending epoch for a data table that is */
-/*                       generated. */
-/*        DELTA          be the time step, in seconds, between */
-/*                       consecutive times for a data table that is */
-/*                       generated. */
-/*        ET             be the epoch of interest for a segment */
-/*                       search to get a data table entry. */
-/*        DESCR ( 5 )    be the descriptor of the PCK segment that is */
-/*                       found. */
-/*        IDENT          be the identifier of the PCK segment that is */
-/*                       found. */
-/*        TABLE          be the logical unit for the data table that is */
-/*                       generated. */
-/*        ENTRY          be a string to hold a formatted PCK segment */
-/*                       descriptor which is to be written to the table. */
-/*        FOUND          be a logical flag indicating that an */
-/*                       appropriate PCK segment has been found. */
+/*        Use the PCK kernel below as input file for the code example. */
 
-/*     The two routine names FORMAT_ENTRY and WRITE_ENTRY are used here */
-/*     for purposes of demonstration only. Routines with these names do */
-/*     not exist in SPICELIB. FORMAT_ENTRY is used to format a PCK */
-/*     segment descriptor into a character string for the table */
-/*     generated, and WRITE_ENTRY is used to write an entry to the file. */
+/*           earth_latest_high_prec.bpc */
 
-/*     The code fragment below loads PCK files and performs searches for */
-/*     various epochs, generating a table containing the segment */
-/*     descriptors, if found, or a message indicating that a segment */
-/*     descriptor was not found. */
 
-/*     C */
-/*     C     Load the mission PCK file. */
-/*     C */
-/*           CALL PCKLOF ( 'THE_MISSION.PCK',  PCK_HANDL ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Search for segments using evenly spaced epochs between */
-/*     C     BEG_ET and END_ET. */
-/*     C */
-/*           ET = BEG_ET */
 
-/*           DO WHILE ( ET .LE. END_ET ) */
+/*              PROGRAM PCKBSR_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C        Locate the applicable segment (handle and descriptor). */
-/*     C */
-/*              CALL PCKSFS ( BODY, ET, HANDLE, DESCR, IDENT, FOUND ) */
 
-/*              IF ( FOUND ) THEN */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              DOUBLE PRECISION      DELTA */
+/*              PARAMETER           ( DELTA  = 50000000.D0 ) */
 
-/*                 CALL FORMAT_ENTRY ( DESCR, ENTRY ) */
+/*              INTEGER               BODY */
+/*              PARAMETER           ( BODY   = 3000        ) */
 
-/*              ELSE */
+/*              INTEGER               DESCSZ */
+/*              PARAMETER           ( DESCSZ = 5           ) */
 
-/*                 ENTRY = '***** SEGMENT NOT FOUND *****' */
+/*              INTEGER               IDSIZE */
+/*              PARAMETER           ( IDSIZE = 40          ) */
 
-/*              END IF */
+/*              INTEGER               NEPOCH */
+/*              PARAMETER           ( NEPOCH = 10          ) */
 
-/*              CALL WRITE_ENTRY ( ET, ENTRY, TABLE ) */
 
-/*     C */
-/*     C        Increment the epoch. */
-/*     C */
-/*              ET = ET + DELTA */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(IDSIZE)    SEGID */
 
-/*           END DO */
+/*              DOUBLE PRECISION      BEGET */
+/*              DOUBLE PRECISION      DESCR ( DESCSZ ) */
+/*              DOUBLE PRECISION      ENDET */
+/*              DOUBLE PRECISION      ET */
 
-/*     Example 2: */
-/*     --------- */
+/*              INTEGER               BADDR */
+/*              INTEGER               BODYID */
+/*              INTEGER               EADDR */
+/*              INTEGER               FRAMID */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               PCKHDL */
+/*              INTEGER               PCKTYP */
 
-/*     In this example multiple PCK files are loaded and searched for */
-/*     segments. */
+/*              LOGICAL               FOUND */
 
-/*     Let */
+/*        C */
+/*        C     Load the PCK file. */
+/*        C */
+/*              CALL PCKLOF ( 'earth_latest_high_prec.bpc', PCKHDL ) */
 
-/*        PCK_HANDL      be the handle used when loading PCK files. */
-/*        HANDLE         be the handle obtained from a segment search. In */
-/*                       this example, because there is only a single */
-/*                       file, this will always have the same value. */
-/*        BODY           be the NAIF ID code for the body of interest. */
-/*        ET             be the epoch of interest for a segment */
-/*                       search to get a data table entry. */
-/*        DESCR ( 5 )    be the descriptor of the PCK segment that is */
-/*                       found. */
-/*        IDENT          be the identifier of the PCK segment that is */
-/*                       found. */
-/*        FOUND          be a logical flag indicating that an */
-/*                       appropriate PCK segment has been found. */
+/*        C */
+/*        C     Search for segments using evenly spaced epochs. */
+/*        C */
+/*              ET = -86400.D0 */
 
-/*     The code fragment below loads several PCK files and then performs */
-/*     a search for an appropriate segment. */
+/*              DO I = 1, NEPOCH */
 
-/*     C */
-/*     C     Load the PCK files. We can reuse the variable PCK_HANDL */
-/*     C     because the handle for the appropriate file is returned by */
-/*     C     the search. */
-/*     C */
-/*           CALL PCKLOF ( 'FIRST.PCK',   PCK_HNDL ) */
-/*           CALL PCKLOF ( 'SECOND.PCK',  PCK_HNDL ) */
-/*           CALL PCKLOF ( 'THIRD.PCK',   PCK_HNDL ) */
-/*           CALL PCKLOF ( 'FOURTH.PCK',  PCK_HNDL ) */
-/*           CALL PCKLOF ( 'FIFTH.PCK',   PCK_HNDL ) */
+/*                 WRITE(*,*) 'Epoch = ', ET */
 
-/*     C */
-/*     C     Do some computation that yields a body and epoch */
-/*     C     of interest. */
-/*     C */
-/*                              . */
-/*                              . */
-/*                              . */
-/*     C */
-/*     C     Search for an appropriate segment in the loaded files. */
-/*     C */
+/*        C */
+/*        C        Locate the applicable segment (handle and */
+/*        C        descriptor). */
+/*        C */
+/*                 CALL PCKSFS ( BODY, ET, HANDLE, DESCR, SEGID, FOUND ) */
 
-/*           CALL PCKSFS ( BODY, ET, HANDLE, DESCR, IDENT, FOUND ) */
+/*                 IF ( FOUND ) THEN */
 
-/*           IF ( FOUND ) THEN */
+/*        C */
+/*        C           Unpack the segment. */
+/*        C */
+/*                    CALL PCKUDS ( DESCR, BODYID, FRAMID, PCKTYP, */
+/*             .                    BEGET, ENDET,  BADDR,  EADDR  ) */
 
-/*              Display results. */
+/*                    WRITE(*,*) '   Segment ID: ', SEGID */
+/*                    WRITE(*,*) '   Body ID   : ', BODYID */
+/*                    WRITE(*,*) '   Frame ID  : ', FRAMID */
+/*                    WRITE(*,*) '   PCK Type  : ', PCKTYP */
+/*                    WRITE(*,*) '   Start ET  : ', BEGET */
+/*                    WRITE(*,*) '   End ET    : ', ENDET */
 
-/*           ELSE */
+/*                 ELSE */
 
-/*              WRITE (*,*) 'Sorry, no segment was found.' */
+/*                    WRITE(*,*) '   ***** SEGMENT NOT FOUND *****' */
 
-/*           END IF */
+/*                 END IF */
+
+/*                 WRITE(*,*) ' ' */
+
+/*        C */
+/*        C        Increment the epoch. */
+/*        C */
+/*                 ET = ET + DELTA */
+
+/*              END DO */
+
+/*        C */
+/*        C     Unload the PCK file. */
+/*        C */
+/*              CALL PCKUOF ( PCKHDL ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Epoch =   -86400.000000000000 */
+/*            ***** SEGMENT NOT FOUND ***** */
+
+/*         Epoch =    49913600.000000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :   -43135.816087188054 */
+/*            End ET    :    86343752.179112613 */
+
+/*         Epoch =    99913600.000000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    86343752.179112613 */
+/*            End ET    :    172730640.17431438 */
+
+/*         Epoch =    149913600.00000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    86343752.179112613 */
+/*            End ET    :    172730640.17431438 */
+
+/*         Epoch =    199913600.00000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    172730640.17431438 */
+/*            End ET    :    259117528.16951615 */
+
+/*         Epoch =    249913600.00000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    172730640.17431438 */
+/*            End ET    :    259117528.16951615 */
+
+/*         Epoch =    299913600.00000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    259117528.16951615 */
+/*            End ET    :    345504416.16470283 */
+
+/*         Epoch =    349913600.00000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    345504416.16470283 */
+/*            End ET    :    431891304.15988630 */
+
+/*         Epoch =    399913600.00000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    345504416.16470283 */
+/*            End ET    :    431891304.15988630 */
+
+/*         Epoch =    449913600.00000000 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    431891304.15988630 */
+/*            End ET    :    518278192.15506977 */
+
+
+/*     2) In this example multiple PCK files are loaded and searched for */
+/*        segments. */
+
+/*        Use the PCK kernel below as the first input file for the code */
+/*        example. */
+
+/*           earth_latest_high_prec.bpc */
+
+
+/*        Use the PCK kernel below as the second input file for the code */
+/*        example. */
+
+/*           earth_720101_070426.bpc */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM PCKBSR_EX2 */
+/*              IMPLICIT NONE */
+
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              DOUBLE PRECISION      DELTA */
+/*              PARAMETER           ( DELTA  = 50000000.D0 ) */
+
+/*              INTEGER               BODY */
+/*              PARAMETER           ( BODY   = 3000        ) */
+
+/*              INTEGER               DESCSZ */
+/*              PARAMETER           ( DESCSZ = 5           ) */
+
+/*              INTEGER               IDSIZE */
+/*              PARAMETER           ( IDSIZE = 40          ) */
+
+/*              INTEGER               NEPOCH */
+/*              PARAMETER           ( NEPOCH = 10          ) */
+
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(IDSIZE)    SEGID */
+
+/*              DOUBLE PRECISION      BEGET */
+/*              DOUBLE PRECISION      DESCR ( DESCSZ ) */
+/*              DOUBLE PRECISION      ENDET */
+/*              DOUBLE PRECISION      ET */
+
+/*              INTEGER               BADDR */
+/*              INTEGER               BODYID */
+/*              INTEGER               EADDR */
+/*              INTEGER               FRAMID */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               PCKHD1 */
+/*              INTEGER               PCKHD2 */
+/*              INTEGER               PCKTYP */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load the PCK files. */
+/*        C */
+/*              CALL PCKLOF ( 'earth_latest_high_prec.bpc', PCKHD1 ) */
+/*              CALL PCKLOF ( 'earth_720101_070426.bpc',    PCKHD2 ) */
+
+/*        C */
+/*        C     Search for segments using evenly spaced epochs. */
+/*        C */
+/*              ET = -86400.D0 */
+
+/*              DO I = 1, NEPOCH */
+
+/*                 WRITE(*,*) 'Epoch = ', ET */
+
+/*        C */
+/*        C        Locate the applicable segment (handle and */
+/*        C        descriptor). */
+/*        C */
+/*                 CALL PCKSFS ( BODY, ET, HANDLE, DESCR, SEGID, FOUND ) */
+
+/*                 IF ( FOUND ) THEN */
+
+/*        C */
+/*        C           Unpack the segment. */
+/*        C */
+/*                    CALL PCKUDS ( DESCR, BODYID, FRAMID, PCKTYP, */
+/*             .                    BEGET, ENDET,  BADDR,  EADDR  ) */
+
+/*                    WRITE(*,*) '   Handle    : ', HANDLE */
+/*                    WRITE(*,*) '   Segment ID: ', SEGID */
+/*                    WRITE(*,*) '   Body ID   : ', BODYID */
+/*                    WRITE(*,*) '   Frame ID  : ', FRAMID */
+/*                    WRITE(*,*) '   PCK Type  : ', PCKTYP */
+/*                    WRITE(*,*) '   Start ET  : ', BEGET */
+/*                    WRITE(*,*) '   End ET    : ', ENDET */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) '   ***** SEGMENT NOT FOUND *****' */
+
+/*                 END IF */
+
+/*                 WRITE(*,*) ' ' */
+
+/*        C */
+/*        C        Increment the epoch. */
+/*        C */
+/*                 ET = ET + DELTA */
+
+/*              END DO */
+
+/*        C */
+/*        C     Unload the PCK files. */
+/*        C */
+/*              CALL PCKUOF ( PCKHD1 ) */
+/*              CALL PCKUOF ( PCKHD2 ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Epoch =   -86400.000000000000 */
+/*            Handle    :            2 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :   -74415076.797098771 */
+/*            End ET    :    11979698.742793124 */
+
+/*         Epoch =    49913600.000000000 */
+/*            Handle    :            2 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    11979698.742793124 */
+/*            End ET    :    98374474.282683983 */
+
+/*         Epoch =    99913600.000000000 */
+/*            Handle    :            2 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    98374474.282683983 */
+/*            End ET    :    184769249.82257757 */
+
+/*         Epoch =    149913600.00000000 */
+/*            Handle    :            2 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    98374474.282683983 */
+/*            End ET    :    184769249.82257757 */
+
+/*         Epoch =    199913600.00000000 */
+/*            Handle    :            2 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    184769249.82257757 */
+/*            End ET    :    230817665.18534085 */
+
+/*         Epoch =    249913600.00000000 */
+/*            Handle    :            1 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    172730640.17431438 */
+/*            End ET    :    259117528.16951615 */
+
+/*         Epoch =    299913600.00000000 */
+/*            Handle    :            1 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    259117528.16951615 */
+/*            End ET    :    345504416.16470283 */
+
+/*         Epoch =    349913600.00000000 */
+/*            Handle    :            1 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    345504416.16470283 */
+/*            End ET    :    431891304.15988630 */
+
+/*         Epoch =    399913600.00000000 */
+/*            Handle    :            1 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    345504416.16470283 */
+/*            End ET    :    431891304.15988630 */
+
+/*         Epoch =    449913600.00000000 */
+/*            Handle    :            1 */
+/*            Segment ID: Earth PCK, ITRF93 Frame */
+/*            Body ID   :         3000 */
+/*            Frame ID  :           17 */
+/*            PCK Type  :            2 */
+/*            Start ET  :    431891304.15988630 */
+/*            End ET    :    518278192.15506977 */
 
 
 /* $ Restrictions */
 
-/*     1) If Fortran I/O errors occur while searching a loaded PCK */
-/*        file, the internal state of this suite of routines may */
-/*        be corrupted.  It may be possible to correct the state */
-/*        by unloading the pertinent PCK files and then re-loading */
-/*        them. */
+/*     1)  If Fortran I/O errors occur while searching a loaded PCK */
+/*         file, the internal state of this suite of routines may */
+/*         be corrupted. It may be possible to correct the state */
+/*         by unloading the pertinent PCK files and then re-loading */
+/*         them. */
 
 /* $ Literature_References */
 
@@ -394,14 +675,23 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.S. Zukor      (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 26-OCT-2021 (JDR) (BVS) (NJB) */
+
+/*        Updated entry point PCKSFS to always initialize FOUND. */
+
+/*        Edited the header of the PCKBSR umbrella and all its entry */
+/*        points to comply with NAIF standard. Added complete code */
+/*        examples from existing fragments. */
+
+/*        Changed SAVE statements to save each variable individually. */
 
 /* -    SPICELIB Version 2.0.1, 30-JAN-2017 (NJB) */
 
@@ -413,9 +703,9 @@ static integer c__2 = 2;
 /*        point PCKLOF so that the pool is initialized only if the file */
 /*        table is empty. */
 
-/* -    SPICELIB Version 1.4.0, 03-JAN-2014 (BVS)(EDW) */
+/* -    SPICELIB Version 1.4.0, 03-JAN-2014 (BVS) (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 
 /*        Increased FTSIZE (from 1000 to 5000). */
 
@@ -425,11 +715,11 @@ static integer c__2 = 2;
 
 /*        Bug fix: */
 
-/*          In the PCKSFS 'MAKE ROOM' state, when the suspended activity */
-/*          is 'ADD TO FRONT' and no segment table room is available, */
-/*          the body table's pointer to the current segment list */
-/*          is now set to null. Previously the pointer was allowed to go */
-/*          stale. */
+/*           In the PCKSFS 'MAKE ROOM' state, when the suspended */
+/*           activity is 'ADD TO FRONT' and no segment table room is */
+/*           available, the body table's pointer to the current segment */
+/*           list is now set to null. Previously the pointer was allowed */
+/*           to go stale. */
 
 /* -    SPICELIB Version 1.2.0, 08-SEP-2005 (NJB) */
 
@@ -448,7 +738,7 @@ static integer c__2 = 2;
 /*           2) An algorithm change has eliminated a bug caused by not */
 /*              updating the current body index when body table entries */
 /*              having empty segment lists were compressed out of the */
-/*              body table.  Previously the body table pointer BINDEX */
+/*              body table. Previously the body table pointer BINDEX */
 /*              could go stale after the compression. */
 
 /*           3) When a already loaded kernel is re-opened with DAFOPR, */
@@ -470,14 +760,14 @@ static integer c__2 = 2;
 
 /*        The "re-use interval" feature was introduced to improve speed */
 /*        in the case where repeated, consecutive requests are satisfied */
-/*        by the same segment.  For each body, the associated re-use */
+/*        by the same segment. For each body, the associated re-use */
 /*        interval marks the time interval containing the previous */
 /*        request time for which the previously returned segment provides */
 /*        the  highest-priority data available. */
 
 /*        The segment list cost algorithm was modified slightly: */
 /*        the contribution of a file search to the cost of a list */
-/*        is included only when the file search is completed.  The */
+/*        is included only when the file search is completed. The */
 /*        cost of finding the re-use interval is accounted for when */
 /*        unbuffered searches are required. */
 
@@ -643,8 +933,7 @@ static integer c__2 = 2;
 L_pcklof:
 /* $ Abstract */
 
-
-/*     Load a binary PCK file for use by the readers.  Return the */
+/*     Load a binary PCK file for use by the readers. Return the */
 /*     handle of the loaded file which is used by other PCK routines to */
 /*     refer to the file. */
 
@@ -675,12 +964,13 @@ L_pcklof:
 
 /* $ Required_Reading */
 
+/*     DAF */
 /*     PCK */
 
 /* $ Keywords */
 
-/*     PCK */
 /*     FILES */
+/*     PCK */
 
 /* $ Declarations */
 
@@ -689,7 +979,7 @@ L_pcklof:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of the file to be loaded. */
 /*     HANDLE     O   Loaded file's handle. */
@@ -697,48 +987,55 @@ L_pcklof:
 
 /* $ Detailed_Input */
 
-/*     FNAME      Character name of the file to be loaded. */
+/*     FNAME    is the character name of the file to be loaded. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE     Integer handle assigned to the file upon loading. */
-/*                Almost every other PCK routine will subsequently use */
-/*                this number to refer to the file. */
+/*     HANDLE   is the integer handle assigned to the file upon loading. */
+/*              Other PCK routines will subsequently use this number to */
+/*              refer to the file. */
 
 /* $ Parameters */
 
-/*     FTSIZE     is the maximum number of PCK files that may */
-/*                be loaded simultaneously under any circumstances. */
-/*                FTSIZE is currently set to match the maximum number */
-/*                of DAF files that may be loaded simultaneously. */
+/*     FTSIZE   is the maximum number of PCK files that may be loaded */
+/*              simultaneously under any circumstances. FTSIZE is */
+/*              currently set to match the maximum number of DAF files */
+/*              that may be loaded simultaneously. */
 
 /* $ Exceptions */
 
-/*     1) If an attempt is made to open more DAF files than is specified */
-/*        by the parameter FTSIZE in DAFAH, an error is signaled by a */
-/*        routine in the call tree of this routine. */
+/*     1)  If an attempt is made to open more DAF files than is */
+/*         specified by the parameter FTSIZE in DAF system, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     2) If an attempt is made to load more files than is specified */
-/*        by the local parameter FTSIZE, and if the DAF system has */
-/*        room to load another file, the error SPICE(PCKFILETABLEFULL) */
-/*        signaled.  The current setting of FTSIZE does not allow this */
-/*        situation to arise:  the DAF system will trap the error */
-/*        before this routine has the chance. */
+/*     2)  If an attempt is made to load more files than is specified */
+/*         by the parameter FTSIZE in the PCK subsystem, and if the DAF */
+/*         system has room to load another file, the error */
+/*         SPICE(PCKFILETABLEFULL) is signaled. The current setting of */
+/*         FTSIZE does not allow this situation to arise: the DAF system */
+/*         will trap the error before this routine has the chance. */
+
+/*     3)  This routine makes use of DAF file system routines and is */
+/*         subject to all of the constraints imposed by the DAF file */
+/*         system. See the DAF Required Reading daf.req or individual DAF */
+/*         routines for details. */
 
 /* $ Files */
 
-/*     A file specified by FNAME, to be loaded.  The file is assigned a */
-/*     handle by PCKLOF, which will be used by most other routines to */
-/*     refer to it. */
+/*     A file specified by FNAME, to be loaded. The file is assigned a */
+/*     handle by PCKLOF, which will be used by other routines to refer */
+/*     to it. */
 
 /* $ Particulars */
 
 /*     If there is room for a new file in the file table, PCKLOF creates */
-/*     an entry for it and loads the file for reading using DAFOPR. */
+/*     an entry for it, and opens the file for reading. */
+
+/*     Also, if the file table is empty, PCKLOF initializes it. */
 
 /* $ Examples */
 
-/*     See the Example above, in PCKBSR. */
+/*     See $Examples in PCKBSR. */
 
 /* $ Restrictions */
 
@@ -750,13 +1047,16 @@ L_pcklof:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.S. Zukor      (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.2, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.1, 30-JAN-2017 (NJB) */
 
@@ -770,23 +1070,23 @@ L_pcklof:
 
 /* -    SPICELIB Version 1.1.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
-/*        Removed unneeded Revisions section. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
+/*        Removed unneeded $Revisions section. */
 
 /* -    SPICELIB Version 1.1.0, 08-NOV-2001 (NJB) */
 
 /*        Bug fixes: */
 
-/*        1) When an already loaded kernel is opened with DAFOPR, */
-/*           it now has its link count reset to 1 via a call to */
-/*           DAFCLS. */
+/*           1) When an already loaded kernel is opened with DAFOPR, */
+/*              it now has its link count reset to 1 via a call to */
+/*              DAFCLS. */
 
-/*        2) This routine now resets all file numbers when */
-/*           the next file number reaches INTMAX()-1, thereby avoiding */
-/*           arithmetic overflow.  The numbers in the file table */
-/*           are replaced with consecutive integers in the range */
-/*           1 : NFT, such that the ordering of the numbers is not */
-/*           changed.  The HFS and LFS arrays are updated accordingly. */
+/*           2) This routine now resets all file numbers when */
+/*              the next file number reaches INTMAX()-1, thereby avoiding */
+/*              arithmetic overflow. The numbers in the file table */
+/*              are replaced with consecutive integers in the range */
+/*              1 : NFT, such that the ordering of the numbers is not */
+/*              changed. The HFS and LFS arrays are updated accordingly. */
 
 /*        Also, the flags indicating validity of the re-use intervals */
 /*        are set to .FALSE. here. */
@@ -817,7 +1117,7 @@ L_pcklof:
     i__1 = nbt;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	btchkp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btchkp", 
-		i__2, "pckbsr_", (ftnlen)874)] = FALSE_;
+		i__2, "pckbsr_", (ftnlen)1177)] = FALSE_;
     }
 
 /*     Nothing works unless at least one file has been loaded, so this */
@@ -858,25 +1158,25 @@ L_pcklof:
 	i__1 = nft;
 	for (i__ = findex; i__ <= i__1; ++i__) {
 	    fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan"
-		    , i__2, "pckbsr_", (ftnlen)920)] = fthan[(i__3 = i__) < 
+		    , i__2, "pckbsr_", (ftnlen)1223)] = fthan[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "pckbsr_"
-		    , (ftnlen)920)];
+		    , (ftnlen)1223)];
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "pckbsr_", (ftnlen)921)] = ftnum[(i__3 = i__) < 
+		    , i__2, "pckbsr_", (ftnlen)1224)] = ftnum[(i__3 = i__) < 
 		    5000 && 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "pckbsr_"
-		    , (ftnlen)921)];
+		    , (ftnlen)1224)];
 	}
 	i__ = 1;
 	while(i__ <= nbt) {
 	    p = btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "pckbsr_", (ftnlen)928)];
+		    "btbeg", i__1, "pckbsr_", (ftnlen)1231)];
 	    while(p > 0) {
 
 /*              Find the successor of P, if any. */
 
 		nxtseg = lnknxt_(&p, stpool);
 		if (sthan[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-			"sthan", i__1, "pckbsr_", (ftnlen)936)] == *handle) {
+			"sthan", i__1, "pckbsr_", (ftnlen)1239)] == *handle) {
 
 /*                 The segment corresponding to node P came from */
 /*                 the file we're unloading.  Delete the node for */
@@ -886,10 +1186,11 @@ L_pcklof:
 
 		    lnkfsl_(&p, &p, stpool);
 		    if (p == btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 :
-			     s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)946)]) {
+			     s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1249)]) 
+			    {
 			btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-				s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)947)]
-				 = nxtseg;
+				s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1250)
+				] = nxtseg;
 		    }
 		}
 
@@ -903,7 +1204,7 @@ L_pcklof:
 /*           table into the space occupied by the one we've deleted. */
 
 	    if (btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "pckbsr_", (ftnlen)963)] <= 0) {
+		    "btbeg", i__1, "pckbsr_", (ftnlen)1266)] <= 0) {
 
 /*              Because all of the re-use intervals are invalid, we need */
 /*              not copy the saved items associated with them.  The */
@@ -918,25 +1219,25 @@ L_pcklof:
 /*                 BTUB */
 
 		btbod[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbod", i__1, "pckbsr_", (ftnlen)977)] = btbod[(i__2 
-			= nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btbod", 
-			i__2, "pckbsr_", (ftnlen)977)];
+			"btbod", i__1, "pckbsr_", (ftnlen)1280)] = btbod[(
+			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
+			"btbod", i__2, "pckbsr_", (ftnlen)1280)];
 		btexp[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "pckbsr_", (ftnlen)978)] = btexp[(i__2 
-			= nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btexp", 
-			i__2, "pckbsr_", (ftnlen)978)];
+			"btexp", i__1, "pckbsr_", (ftnlen)1281)] = btexp[(
+			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
+			"btexp", i__2, "pckbsr_", (ftnlen)1281)];
 		bthfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"bthfs", i__1, "pckbsr_", (ftnlen)979)] = bthfs[(i__2 
-			= nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("bthfs", 
-			i__2, "pckbsr_", (ftnlen)979)];
+			"bthfs", i__1, "pckbsr_", (ftnlen)1282)] = bthfs[(
+			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
+			"bthfs", i__2, "pckbsr_", (ftnlen)1282)];
 		btlfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "pckbsr_", (ftnlen)980)] = btlfs[(i__2 
-			= nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btlfs", 
-			i__2, "pckbsr_", (ftnlen)980)];
+			"btlfs", i__1, "pckbsr_", (ftnlen)1283)] = btlfs[(
+			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
+			"btlfs", i__2, "pckbsr_", (ftnlen)1283)];
 		btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "pckbsr_", (ftnlen)981)] = btbeg[(i__2 
-			= nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btbeg", 
-			i__2, "pckbsr_", (ftnlen)981)];
+			"btbeg", i__1, "pckbsr_", (ftnlen)1284)] = btbeg[(
+			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
+			"btbeg", i__2, "pckbsr_", (ftnlen)1284)];
 		--nbt;
 	    } else {
 		++i__;
@@ -988,7 +1289,7 @@ L_pcklof:
 /*           Re-map the HFS table for the Ith body. */
 
 	    j = isrchi_(&bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)1043)], &nft, 
+		    s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)1346)], &nft, 
 		    ftnum);
 	    if (j > 0) {
 
@@ -996,7 +1297,7 @@ L_pcklof:
 /*              in the file table. */
 
 		bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "pckbsr_", (ftnlen)1050)] = j;
+			"bthfs", i__2, "pckbsr_", (ftnlen)1353)] = j;
 	    } else {
 
 /*              The highest file searched for body I is not in the file */
@@ -1005,13 +1306,13 @@ L_pcklof:
 /*              appear to be "new" when a lookup for body I is performed. */
 
 		bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "pckbsr_", (ftnlen)1059)] = 0;
+			"bthfs", i__2, "pckbsr_", (ftnlen)1362)] = 0;
 	    }
 
 /*           Re-map the LFS table for the Ith body. */
 
 	    j = isrchi_(&btlfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("btlfs", i__2, "pckbsr_", (ftnlen)1066)], &nft, 
+		    s_rnge("btlfs", i__2, "pckbsr_", (ftnlen)1369)], &nft, 
 		    ftnum);
 	    if (j > 0) {
 
@@ -1019,7 +1320,7 @@ L_pcklof:
 /*              in the file table. */
 
 		btlfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "pckbsr_", (ftnlen)1073)] = j;
+			"btlfs", i__2, "pckbsr_", (ftnlen)1376)] = j;
 	    } else {
 
 /*              The lowest file searched for body I is not in the file */
@@ -1028,9 +1329,9 @@ L_pcklof:
 /*              making all files "new." */
 
 		btlfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "pckbsr_", (ftnlen)1082)] = 0;
+			"btlfs", i__2, "pckbsr_", (ftnlen)1385)] = 0;
 		bthfs[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "pckbsr_", (ftnlen)1083)] = 0;
+			"bthfs", i__2, "pckbsr_", (ftnlen)1386)] = 0;
 	    }
 	}
 
@@ -1039,7 +1340,7 @@ L_pcklof:
 	i__1 = nft;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum"
-		    , i__2, "pckbsr_", (ftnlen)1094)] = i__;
+		    , i__2, "pckbsr_", (ftnlen)1397)] = i__;
 	}
 
 /*        Assign a new file number. */
@@ -1048,9 +1349,9 @@ L_pcklof:
     }
     ++nft;
     fthan[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fthan", i__1, 
-	    "pckbsr_", (ftnlen)1107)] = *handle;
+	    "pckbsr_", (ftnlen)1410)] = *handle;
     ftnum[(i__1 = nft - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("ftnum", i__1, 
-	    "pckbsr_", (ftnlen)1108)] = next;
+	    "pckbsr_", (ftnlen)1411)] = next;
     chkout_("PCKLOF", (ftnlen)6);
     return 0;
 /* $Procedure PCKUOF ( PCK, unload binary file ) */
@@ -1088,12 +1389,13 @@ L_pckuof:
 
 /* $ Required_Reading */
 
+/*     DAF */
 /*     PCK */
 
 /* $ Keywords */
 
-/*     PCK */
 /*     FILES */
+/*     PCK */
 
 /* $ Declarations */
 
@@ -1101,13 +1403,14 @@ L_pckuof:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of file to be unloaded */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     Integer handle assigned to the file upon loading. */
+/*     HANDLE   is the integer handle assigned to the PCK file upon */
+/*              loading. */
 
 /* $ Detailed_Output */
 
@@ -1119,8 +1422,8 @@ L_pckuof:
 
 /* $ Exceptions */
 
-/*     1) Unloading a file that has not been loaded is a no-op. */
-/*        No error is signaled. */
+/*     1)  Unloading a file that has not been loaded is a no-op. */
+/*         No error is signaled. */
 
 /* $ Files */
 
@@ -1128,15 +1431,19 @@ L_pckuof:
 
 /* $ Particulars */
 
-/*     A file is removed from consideration by the readers by a call to */
-/*     PCKUOF. */
+/*     A PCK file is removed from consideration during a search by the */
+/*     readers by a call to PCKUOF. */
+
+/*     The file table entry corresponding to the file referenced by */
+/*     HANDLE is removed and the file is closed. Any segment table */
+/*     entry which came from the specified file is also deleted. */
 
 /*     If the file specified by HANDLE is not currently loaded in the */
 /*     PCK system, no action is taken. */
 
 /* $ Examples */
 
-/*     See the Example above, in PCKBSR. */
+/*     See $Examples in PCKBSR. */
 
 /* $ Restrictions */
 
@@ -1148,13 +1455,19 @@ L_pckuof:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.S. Zukor      (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.1.3, 09-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Improved documentation of $Detailed_Input and $Particulars */
+/*        sections. */
 
 /* -    SPICELIB Version 4.1.2, 30-JAN-2017 (NJB) */
 
@@ -1162,8 +1475,8 @@ L_pckuof:
 
 /* -    SPICELIB Version 4.1.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
-/*        Removed unneeded Revisions section. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
+/*        Removed unneeded $Revisions section. */
 
 /* -    SPICELIB Version 4.1.0, 08-SEP-2005 (NJB) */
 
@@ -1207,18 +1520,18 @@ L_pckuof:
 /*     before wiping out the handle. */
 
     dafcls_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-	    "fthan", i__1, "pckbsr_", (ftnlen)1274)]);
+	    "fthan", i__1, "pckbsr_", (ftnlen)1591)]);
     --nft;
     i__1 = nft;
     for (i__ = findex; i__ <= i__1; ++i__) {
 	fthan[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("fthan", 
-		i__2, "pckbsr_", (ftnlen)1279)] = fthan[(i__3 = i__) < 5000 &&
+		i__2, "pckbsr_", (ftnlen)1596)] = fthan[(i__3 = i__) < 5000 &&
 		 0 <= i__3 ? i__3 : s_rnge("fthan", i__3, "pckbsr_", (ftnlen)
-		1279)];
+		1596)];
 	ftnum[(i__2 = i__ - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		i__2, "pckbsr_", (ftnlen)1280)] = ftnum[(i__3 = i__) < 5000 &&
+		i__2, "pckbsr_", (ftnlen)1597)] = ftnum[(i__3 = i__) < 5000 &&
 		 0 <= i__3 ? i__3 : s_rnge("ftnum", i__3, "pckbsr_", (ftnlen)
-		1280)];
+		1597)];
     }
 
 /*     Check each body list individually. Note that the first node */
@@ -1227,15 +1540,15 @@ L_pckuof:
     i__ = 1;
     while(i__ <= nbt) {
 	p = btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btbeg", 
-		i__1, "pckbsr_", (ftnlen)1291)];
+		i__1, "pckbsr_", (ftnlen)1608)];
 	while(p > 0) {
 	    nxtseg = lnknxt_(&p, stpool);
 	    if (sthan[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "sthan", i__1, "pckbsr_", (ftnlen)1297)] == *handle) {
+		    "sthan", i__1, "pckbsr_", (ftnlen)1614)] == *handle) {
 		if (p == btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1299)]) {
+			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1616)]) {
 		    btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			    "btbeg", i__1, "pckbsr_", (ftnlen)1300)] = nxtseg;
+			    "btbeg", i__1, "pckbsr_", (ftnlen)1617)] = nxtseg;
 		}
 		lnkfsl_(&p, &p, stpool);
 	    }
@@ -1248,58 +1561,58 @@ L_pckuof:
 /*        space occupied by the deleted body. */
 
 	if (btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btbeg", 
-		i__1, "pckbsr_", (ftnlen)1317)] <= 0) {
+		i__1, "pckbsr_", (ftnlen)1634)] <= 0) {
 	    if (i__ != nbt) {
 		btbod[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbod", i__1, "pckbsr_", (ftnlen)1321)] = btbod[(
+			"btbod", i__1, "pckbsr_", (ftnlen)1638)] = btbod[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbod", i__2, "pckbsr_", (ftnlen)1321)];
+			"btbod", i__2, "pckbsr_", (ftnlen)1638)];
 		btexp[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "pckbsr_", (ftnlen)1322)] = btexp[(
+			"btexp", i__1, "pckbsr_", (ftnlen)1639)] = btexp[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "pckbsr_", (ftnlen)1322)];
+			"btexp", i__2, "pckbsr_", (ftnlen)1639)];
 		bthfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"bthfs", i__1, "pckbsr_", (ftnlen)1323)] = bthfs[(
+			"bthfs", i__1, "pckbsr_", (ftnlen)1640)] = bthfs[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"bthfs", i__2, "pckbsr_", (ftnlen)1323)];
+			"bthfs", i__2, "pckbsr_", (ftnlen)1640)];
 		btlfs[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "pckbsr_", (ftnlen)1324)] = btlfs[(
+			"btlfs", i__1, "pckbsr_", (ftnlen)1641)] = btlfs[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btlfs", i__2, "pckbsr_", (ftnlen)1324)];
+			"btlfs", i__2, "pckbsr_", (ftnlen)1641)];
 		btbeg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "pckbsr_", (ftnlen)1325)] = btbeg[(
+			"btbeg", i__1, "pckbsr_", (ftnlen)1642)] = btbeg[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btbeg", i__2, "pckbsr_", (ftnlen)1325)];
+			"btbeg", i__2, "pckbsr_", (ftnlen)1642)];
 		btlb[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btlb"
-			, i__1, "pckbsr_", (ftnlen)1326)] = btlb[(i__2 = nbt 
+			, i__1, "pckbsr_", (ftnlen)1643)] = btlb[(i__2 = nbt 
 			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btlb", i__2, 
-			"pckbsr_", (ftnlen)1326)];
+			"pckbsr_", (ftnlen)1643)];
 		btub[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btub"
-			, i__1, "pckbsr_", (ftnlen)1327)] = btub[(i__2 = nbt 
+			, i__1, "pckbsr_", (ftnlen)1644)] = btub[(i__2 = nbt 
 			- 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btub", i__2, 
-			"pckbsr_", (ftnlen)1327)];
+			"pckbsr_", (ftnlen)1644)];
 		btprvh[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btprvh", i__1, "pckbsr_", (ftnlen)1328)] = btprvh[(
+			"btprvh", i__1, "pckbsr_", (ftnlen)1645)] = btprvh[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btprvh", i__2, "pckbsr_", (ftnlen)1328)];
+			"btprvh", i__2, "pckbsr_", (ftnlen)1645)];
 		s_copy(btprvi + ((i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)1329)) * 40,
+			s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)1646)) * 40,
 			 btprvi + ((i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 :
-			 s_rnge("btprvi", i__2, "pckbsr_", (ftnlen)1329)) * 
+			 s_rnge("btprvi", i__2, "pckbsr_", (ftnlen)1646)) * 
 			40, (ftnlen)40, (ftnlen)40);
 		btchkp[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btchkp", i__1, "pckbsr_", (ftnlen)1330)] = btchkp[(
+			"btchkp", i__1, "pckbsr_", (ftnlen)1647)] = btchkp[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btchkp", i__2, "pckbsr_", (ftnlen)1330)];
+			"btchkp", i__2, "pckbsr_", (ftnlen)1647)];
 		btruex[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btruex", i__1, "pckbsr_", (ftnlen)1331)] = btruex[(
+			"btruex", i__1, "pckbsr_", (ftnlen)1648)] = btruex[(
 			i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btruex", i__2, "pckbsr_", (ftnlen)1331)];
+			"btruex", i__2, "pckbsr_", (ftnlen)1648)];
 		moved_(&btprvd[(i__1 = nbt * 5 - 5) < 100 && 0 <= i__1 ? i__1 
-			: s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)1333)], &
+			: s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)1650)], &
 			c__5, &btprvd[(i__2 = i__ * 5 - 5) < 100 && 0 <= i__2 
 			? i__2 : s_rnge("btprvd", i__2, "pckbsr_", (ftnlen)
-			1333)]);
+			1650)]);
 	    }
 	    --nbt;
 	} else {
@@ -1316,11 +1629,11 @@ L_pckuof:
     i__1 = nbt;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (btchkp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btchkp"
-		, i__2, "pckbsr_", (ftnlen)1356)]) {
+		, i__2, "pckbsr_", (ftnlen)1673)]) {
 	    if (btprvh[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-		    "btprvh", i__2, "pckbsr_", (ftnlen)1358)] == *handle) {
+		    "btprvh", i__2, "pckbsr_", (ftnlen)1675)] == *handle) {
 		btchkp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btchkp", i__2, "pckbsr_", (ftnlen)1359)] = FALSE_;
+			"btchkp", i__2, "pckbsr_", (ftnlen)1676)] = FALSE_;
 	    }
 	}
     }
@@ -1331,7 +1644,7 @@ L_pcksfs:
 /* $ Abstract */
 
 /*     Search through loaded files to find the first segment applicable */
-/*     to the body and time specified.  Buffer searched segments in the */
+/*     to the body and time specified. Buffer searched segments in the */
 /*     process, to attempt to avoid re-reading files. */
 
 /* $ Disclaimer */
@@ -1365,8 +1678,8 @@ L_pcksfs:
 
 /* $ Keywords */
 
-/*     PCK */
 /*     FILES */
+/*     PCK */
 
 /* $ Declarations */
 
@@ -1379,7 +1692,7 @@ L_pcksfs:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BODY       I   Body ID. */
 /*     ET         I   Ephemeris time. */
@@ -1390,21 +1703,22 @@ L_pcksfs:
 
 /* $ Detailed_Input */
 
-/*     BODY       is the NAIF integer code of an ephemeris object, */
-/*                typically a solar system body. */
+/*     BODY     is the NAIF integer code of an ephemeris object, */
+/*              typically a solar system body. */
 
-/*     ET         is a time, in seconds past the epoch J2000 TDB. */
+/*     ET       is a time, in seconds past the epoch J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     HANDLE     on output is the handle of the binary PCK file */
-/*                containing a located segment. */
+/*     HANDLE   is the handle of the binary PCK file containing a */
+/*              located segment. */
 
-/*     DESCR      is the descriptor of a located segment. */
+/*     DESCR    is the descriptor of a located segment. */
 
-/*     IDENT      is the identifier of a located segment. */
+/*     IDENT    is the identifier of a located segment. */
 
-/*     FOUND      indicates whether a requested segment was found or not. */
+/*     FOUND    is a logical flag indicating whether a requested segment */
+/*              was found or not. */
 
 /* $ Parameters */
 
@@ -1412,8 +1726,8 @@ L_pcksfs:
 
 /* $ Exceptions */
 
-/*     1) If an attempt is made to call PCKSFS when there aren't any */
-/*        files loaded, the error SPICE(NOLOADEDFILES) is signaled. */
+/*     1)  If an attempt is made to call PCKSFS when there aren't any */
+/*         files loaded, the error SPICE(NOLOADEDFILES) is signaled. */
 
 /* $ Files */
 
@@ -1428,15 +1742,15 @@ L_pcksfs:
 
 /* $ Examples */
 
-/*     See the Example above, in PCKBSR. */
+/*     See $Examples in PCKBSR. */
 
 /* $ Restrictions */
 
-/*     1) If Fortran I/O errors occur while searching a loaded PCK */
-/*        file, the internal state of this suite of routines may */
-/*        be corrupted.  It may be possible to correct the state */
-/*        by unloading the pertinent PCK files and then re-loading */
-/*        them. */
+/*     1)  If Fortran I/O errors occur while searching a loaded PCK */
+/*         file, the internal state of this suite of routines may */
+/*         be corrupted. It may be possible to correct the state */
+/*         by unloading the pertinent PCK files and then re-loading */
+/*         them. */
 
 /* $ Literature_References */
 
@@ -1444,11 +1758,19 @@ L_pcksfs:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.S. Zukor      (JPL) */
-/*     R.E. Thurman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 4.3.0, 13-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Relocated initialization of FOUND so it is always */
+/*        executed, even if an error state is indicated by RETURN(). */
 
 /* -    SPICELIB Version 4.2.2, 30-JAN-2017 (NJB) */
 
@@ -1456,18 +1778,18 @@ L_pcksfs:
 
 /* -    SPICELIB Version 4.2.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
-/*        Removed unneeded Revisions section. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
+/*        Removed unneeded $Revisions section. */
 
 /* -    SPICELIB Version 4.2.0, 01-MAR-2011 (NJB) */
 
 /*        Bug fix: */
 
-/*          In the PCKSFS 'MAKE ROOM' state, when the suspended activity */
-/*          is 'ADD TO FRONT' and no segment table room is available, */
-/*          the body table's pointer to the current segment list */
-/*          is now set to null. Previously the pointer was allowed to go */
-/*          stale. */
+/*           In the PCKSFS 'MAKE ROOM' state, when the suspended */
+/*           activity is 'ADD TO FRONT' and no segment table room is */
+/*           available, the body table's pointer to the current segment */
+/*           list is now set to null. Previously the pointer was allowed */
+/*           to go stale. */
 
 /* -    SPICELIB Version 4.1.0, 08-SEP-2005 (NJB) */
 
@@ -1486,14 +1808,14 @@ L_pcksfs:
 /*           2) An algorithm change has eliminated a bug caused by not */
 /*              updating the current body index when body table entries */
 /*              having empty segment lists were compressed out of the */
-/*              body table.  Previously the body table pointer BINDEX */
+/*              body table. Previously the body table pointer BINDEX */
 /*              could go stale after the compression. */
 
 /*           3) DAF calls are now followed by tests of FAILED() */
 /*              in order to ensure that the main state loop terminates. */
 
 /*           4) A subscript bound violation in a loop termination test */
-/*              was corrected.  The loop is located in the */
+/*              was corrected. The loop is located in the */
 /*              'SEARCH W/O BUFFERING' block; it finds the start of a */
 /*              partial list that is to be freed. */
 
@@ -1503,7 +1825,7 @@ L_pcksfs:
 
 /*        The segment list cost algorithm was modified slightly: */
 /*        the contribution of a file search to the cost of a list */
-/*        is included only when the file search is completed.  The */
+/*        is included only when the file search is completed. The */
 /*        cost of finding the re-use interval is accounted for when */
 /*        unbuffered searches are required. */
 
@@ -1527,7 +1849,7 @@ L_pcksfs:
 
 /*        This differs only slightly from the SPKXXX code. */
 /*        The main difference is that the SFS subroutine returns */
-/*        FOUND = FALSE if no files are found, rather than returning */
+/*        FOUND = .FALSE. if no files are found, rather than returning */
 /*        an error. */
 
 /* -& */
@@ -1537,17 +1859,16 @@ L_pcksfs:
 
 /* -& */
 
+/*     Assume the segment is not found, until it actually is. */
+
+    *found = FALSE_;
+
 /*     Standard SPICE error handling. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("PCKSFS", (ftnlen)6);
     }
-
-/*     Assume the segment is not found, until it actually is. */
-
-    *found = FALSE_;
+    chkin_("PCKSFS", (ftnlen)6);
 
 /*     Buffering segments involves maintaining three tables:  the */
 /*     file table, the body table, and the segment table.  The routine */
@@ -1687,7 +2008,7 @@ L_pcksfs:
 /*        for data for that body.  Check whether this is the case. */
 
 	if (btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"btchkp", i__1, "pckbsr_", (ftnlen)1744)]) {
+		"btchkp", i__1, "pckbsr_", (ftnlen)2071)]) {
 
 /*           The previous segment found for the current body is a */
 /*           viable candidate for the current request.  See whether */
@@ -1701,9 +2022,9 @@ L_pcksfs:
 /*           segments. */
 
 	    if (*et > btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)1757)] && *et < 
+		    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2084)] && *et < 
 		    btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("btub", i__2, "pckbsr_", (ftnlen)1757)]) {
+		    s_rnge("btub", i__2, "pckbsr_", (ftnlen)2084)]) {
 
 /*              The request time is covered by the segment found on */
 /*              the previous request for data for the current body, */
@@ -1712,12 +2033,12 @@ L_pcksfs:
 /*              the request. */
 
 		*handle = btprvh[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 
-			: s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)1766)];
+			: s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)2093)];
 		s_copy(ident, btprvi + ((i__1 = bindex - 1) < 20 && 0 <= i__1 
 			? i__1 : s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)
-			1767)) * 40, ident_len, (ftnlen)40);
+			2094)) * 40, ident_len, (ftnlen)40);
 		moved_(&btprvd[(i__1 = bindex * 5 - 5) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)1769)
+			i__1 : s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)2096)
 			], &c__5, descr);
 		*found = TRUE_;
 		chkout_("PCKSFS", (ftnlen)6);
@@ -1730,13 +2051,13 @@ L_pcksfs:
 /*           that component from the expense. */
 
 	    btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("bte"
-		    "xp", i__1, "pckbsr_", (ftnlen)1784)] = btexp[(i__2 = 
+		    "xp", i__1, "pckbsr_", (ftnlen)2111)] = btexp[(i__2 = 
 		    bindex - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("btexp", 
-		    i__2, "pckbsr_", (ftnlen)1784)] - btruex[(i__3 = bindex - 
+		    i__2, "pckbsr_", (ftnlen)2111)] - btruex[(i__3 = bindex - 
 		    1) < 20 && 0 <= i__3 ? i__3 : s_rnge("btruex", i__3, 
-		    "pckbsr_", (ftnlen)1784)];
+		    "pckbsr_", (ftnlen)2111)];
 	    btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btruex", i__1, "pckbsr_", (ftnlen)1785)] = 0;
+		    "btruex", i__1, "pckbsr_", (ftnlen)2112)] = 0;
 
 /*           The re-use interval becomes invalid if it didn't satisfy */
 /*           the request.  The validity flag gets re-set below. */
@@ -1751,16 +2072,16 @@ L_pcksfs:
 /*                recently loaded segment. */
 
 	    btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btchkp", i__1, "pckbsr_", (ftnlen)1800)] = FALSE_;
+		    "btchkp", i__1, "pckbsr_", (ftnlen)2127)] = FALSE_;
 	}
 
 /*        If the segment list for this body is empty, make sure the */
 /*        expense is reset to 0. */
 
 	if (btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btb"
-		"eg", i__1, "pckbsr_", (ftnlen)1809)] == 0) {
+		"eg", i__1, "pckbsr_", (ftnlen)2136)] == 0) {
 	    btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("bte"
-		    "xp", i__1, "pckbsr_", (ftnlen)1811)] = 0;
+		    "xp", i__1, "pckbsr_", (ftnlen)2138)] = 0;
 	}
 	s_copy(status, "?", (ftnlen)15, (ftnlen)1);
     }
@@ -1781,9 +2102,9 @@ L_pcksfs:
 /*               a new file. */
 
 	    if (bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bthfs", i__1, "pckbsr_", (ftnlen)1838)] < ftnum[(i__2 = 
+		    "bthfs", i__1, "pckbsr_", (ftnlen)2165)] < ftnum[(i__2 = 
 		    nft - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "pckbsr_", (ftnlen)1838)]) {
+		    i__2, "pckbsr_", (ftnlen)2165)]) {
 		s_copy(status, "NEW FILES", (ftnlen)15, (ftnlen)9);
 	    } else {
 		s_copy(status, "CHECK LIST", (ftnlen)15, (ftnlen)10);
@@ -1827,12 +2148,12 @@ L_pcksfs:
 		i__1 = nbt;
 		for (i__ = 2; i__ <= i__1; ++i__) {
 		    if (btexp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btexp", i__2, "pckbsr_", (ftnlen)1887)] < 
+			    s_rnge("btexp", i__2, "pckbsr_", (ftnlen)2214)] < 
 			    minexp) {
 			cheap = i__;
 			minexp = btexp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? 
 				i__2 : s_rnge("btexp", i__2, "pckbsr_", (
-				ftnlen)1889)];
+				ftnlen)2216)];
 		    }
 		}
 
@@ -1841,7 +2162,7 @@ L_pcksfs:
 /*              list. */
 
 		head = btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)1899)];
+			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2226)];
 		if (head > 0) {
 		    tail = -lnkprv_(&head, stpool);
 		    lnkfsl_(&head, &tail, stpool);
@@ -1851,21 +2172,21 @@ L_pcksfs:
 /*           Set up a body table entry for the new body. */
 
 	    btbod[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btbod"
-		    , i__1, "pckbsr_", (ftnlen)1913)] = *body;
+		    , i__1, "pckbsr_", (ftnlen)2240)] = *body;
 	    btexp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btexp"
-		    , i__1, "pckbsr_", (ftnlen)1914)] = 0;
+		    , i__1, "pckbsr_", (ftnlen)2241)] = 0;
 	    bthfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("bthfs"
-		    , i__1, "pckbsr_", (ftnlen)1915)] = ftnum[(i__2 = nft - 1)
+		    , i__1, "pckbsr_", (ftnlen)2242)] = ftnum[(i__2 = nft - 1)
 		     < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "pck"
-		    "bsr_", (ftnlen)1915)];
+		    "bsr_", (ftnlen)2242)];
 	    btlfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btlfs"
-		    , i__1, "pckbsr_", (ftnlen)1916)] = ftnum[(i__2 = nft - 1)
+		    , i__1, "pckbsr_", (ftnlen)2243)] = ftnum[(i__2 = nft - 1)
 		     < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", i__2, "pck"
-		    "bsr_", (ftnlen)1916)] + 1;
+		    "bsr_", (ftnlen)2243)] + 1;
 	    btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btbeg"
-		    , i__1, "pckbsr_", (ftnlen)1917)] = 0;
+		    , i__1, "pckbsr_", (ftnlen)2244)] = 0;
 	    btchkp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btc"
-		    "hkp", i__1, "pckbsr_", (ftnlen)1918)] = FALSE_;
+		    "hkp", i__1, "pckbsr_", (ftnlen)2245)] = FALSE_;
 
 /*           The following items associated with the re-use interval */
 /*           need not be initialized at this point: */
@@ -1882,18 +2203,18 @@ L_pcksfs:
 /*           compilers. */
 
 	    btruex[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btr"
-		    "uex", i__1, "pckbsr_", (ftnlen)1935)] = 0;
+		    "uex", i__1, "pckbsr_", (ftnlen)2262)] = 0;
 	    btlb[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btlb", 
-		    i__1, "pckbsr_", (ftnlen)1936)] = dpmin_();
+		    i__1, "pckbsr_", (ftnlen)2263)] = dpmin_();
 	    btub[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btub", 
-		    i__1, "pckbsr_", (ftnlen)1937)] = dpmax_();
+		    i__1, "pckbsr_", (ftnlen)2264)] = dpmax_();
 	    btprvh[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btp"
-		    "rvh", i__1, "pckbsr_", (ftnlen)1938)] = 0;
+		    "rvh", i__1, "pckbsr_", (ftnlen)2265)] = 0;
 	    s_copy(btprvi + ((i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)1939)) * 40, 
+		    s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)2266)) * 40, 
 		    " ", (ftnlen)40, (ftnlen)1);
 	    cleard_(&c__5, &btprvd[(i__1 = cheap * 5 - 5) < 100 && 0 <= i__1 ?
-		     i__1 : s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)1940)]);
+		     i__1 : s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)2267)]);
 
 /*           BINDEX is the body table index of the new entry. */
 
@@ -1924,17 +2245,17 @@ L_pcksfs:
 
 	    findex = 1;
 	    while(bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "bthfs", i__1, "pckbsr_", (ftnlen)1976)] >= ftnum[(i__2 = 
+		    "bthfs", i__1, "pckbsr_", (ftnlen)2303)] >= ftnum[(i__2 = 
 		    findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "pckbsr_", (ftnlen)1976)]) {
+		    i__2, "pckbsr_", (ftnlen)2303)]) {
 		++findex;
 	    }
 	    bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("bth"
-		    "fs", i__1, "pckbsr_", (ftnlen)1980)] = ftnum[(i__2 = 
+		    "fs", i__1, "pckbsr_", (ftnlen)2307)] = ftnum[(i__2 = 
 		    findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "pckbsr_", (ftnlen)1980)];
+		    i__2, "pckbsr_", (ftnlen)2307)];
 	    dafbfs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "pckbsr_", (ftnlen)1982)]);
+		    s_rnge("fthan", i__1, "pckbsr_", (ftnlen)2309)]);
 	    if (failed_()) {
 		chkout_("PCKSFS", (ftnlen)6);
 		return 0;
@@ -1970,9 +2291,9 @@ L_pcksfs:
 
 		s_copy(status, "?", (ftnlen)15, (ftnlen)1);
 		btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "pckbsr_", (ftnlen)2024)] = btexp[(
+			"btexp", i__1, "pckbsr_", (ftnlen)2351)] = btexp[(
 			i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "pckbsr_", (ftnlen)2024)] + cost;
+			"btexp", i__2, "pckbsr_", (ftnlen)2351)] + cost;
 	    } else {
 		dafgs_(descr);
 		dafus_(descr, &c__2, &c__5, dcd, icd);
@@ -2013,13 +2334,13 @@ L_pcksfs:
 /*              have some files left that have not been searched. */
 	    findex = nft;
 	    while(btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btlfs", i__1, "pckbsr_", (ftnlen)2076)] <= ftnum[(i__2 = 
+		    "btlfs", i__1, "pckbsr_", (ftnlen)2403)] <= ftnum[(i__2 = 
 		    findex - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge("ftnum", 
-		    i__2, "pckbsr_", (ftnlen)2076)]) {
+		    i__2, "pckbsr_", (ftnlen)2403)]) {
 		--findex;
 	    }
 	    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		    s_rnge("fthan", i__1, "pckbsr_", (ftnlen)2080)]);
+		    s_rnge("fthan", i__1, "pckbsr_", (ftnlen)2407)]);
 	    if (failed_()) {
 		chkout_("PCKSFS", (ftnlen)6);
 		return 0;
@@ -2059,13 +2380,13 @@ L_pcksfs:
 /*              to be the current file, and go check the current list. */
 
 		btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btlfs", i__1, "pckbsr_", (ftnlen)2125)] = ftnum[(
+			"btlfs", i__1, "pckbsr_", (ftnlen)2452)] = ftnum[(
 			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)2125)];
+			s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)2452)];
 		btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btexp", i__1, "pckbsr_", (ftnlen)2126)] = btexp[(
+			"btexp", i__1, "pckbsr_", (ftnlen)2453)] = btexp[(
 			i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			"btexp", i__2, "pckbsr_", (ftnlen)2126)] + cost;
+			"btexp", i__2, "pckbsr_", (ftnlen)2453)] + cost;
 		s_copy(status, "CHECK LIST", (ftnlen)15, (ftnlen)10);
 	    } else {
 		dafgs_(descr);
@@ -2103,14 +2424,14 @@ L_pcksfs:
 /*           associated with the current body. */
 
 	    btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btlb",
-		     i__1, "pckbsr_", (ftnlen)2173)] = dpmin_();
+		     i__1, "pckbsr_", (ftnlen)2500)] = dpmin_();
 	    btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btub",
-		     i__1, "pckbsr_", (ftnlen)2174)] = dpmax_();
+		     i__1, "pckbsr_", (ftnlen)2501)] = dpmax_();
 	    p = btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btbeg", i__1, "pckbsr_", (ftnlen)2175)];
+		    "btbeg", i__1, "pckbsr_", (ftnlen)2502)];
 	    while(p > 0) {
 		if (*et > stdes[(i__1 = p * 5 - 4) < 25000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stdes", i__1, "pckbsr_", (ftnlen)2179)]
+			i__1 : s_rnge("stdes", i__1, "pckbsr_", (ftnlen)2506)]
 			) {
 
 /*                 ET is to the right of the coverage interval of this */
@@ -2118,28 +2439,28 @@ L_pcksfs:
 
 /* Computing MAX */
 		    d__1 = btlb[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 :
-			     s_rnge("btlb", i__2, "pckbsr_", (ftnlen)2184)], 
+			     s_rnge("btlb", i__2, "pckbsr_", (ftnlen)2511)], 
 			    d__2 = stdes[(i__3 = p * 5 - 4) < 25000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "pckbsr_", (
-			    ftnlen)2184)];
+			    ftnlen)2511)];
 		    btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2184)] = 
+			    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2511)] = 
 			    max(d__1,d__2);
 		} else if (*et < stdes[(i__1 = p * 5 - 5) < 25000 && 0 <= 
 			i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_", (
-			ftnlen)2187)]) {
+			ftnlen)2514)]) {
 
 /*                 ET is to the left of the coverage interval of this */
 /*                 segment. */
 
 /* Computing MIN */
 		    d__1 = btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 :
-			     s_rnge("btub", i__2, "pckbsr_", (ftnlen)2192)], 
+			     s_rnge("btub", i__2, "pckbsr_", (ftnlen)2519)], 
 			    d__2 = stdes[(i__3 = p * 5 - 5) < 25000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "pckbsr_", (
-			    ftnlen)2192)];
+			    ftnlen)2519)];
 		    btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btub", i__1, "pckbsr_", (ftnlen)2192)] = 
+			    s_rnge("btub", i__1, "pckbsr_", (ftnlen)2519)] = 
 			    min(d__1,d__2);
 		} else {
 
@@ -2147,49 +2468,49 @@ L_pcksfs:
 
 		    moved_(&stdes[(i__1 = p * 5 - 5) < 25000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("stdes", i__1, "pckbsr_", (ftnlen)
-			    2198)], &c__5, descr);
+			    2525)], &c__5, descr);
 		    s_copy(ident, stidnt + ((i__1 = p - 1) < 5000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("stidnt", i__1, "pckbsr_", (
-			    ftnlen)2199)) * 40, ident_len, (ftnlen)40);
+			    ftnlen)2526)) * 40, ident_len, (ftnlen)40);
 		    *handle = sthan[(i__1 = p - 1) < 5000 && 0 <= i__1 ? i__1 
-			    : s_rnge("sthan", i__1, "pckbsr_", (ftnlen)2200)];
+			    : s_rnge("sthan", i__1, "pckbsr_", (ftnlen)2527)];
 		    *found = TRUE_;
 
 /*                 Set the re-use interval for the current body. */
 
 /* Computing MAX */
 		    d__1 = btlb[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 :
-			     s_rnge("btlb", i__2, "pckbsr_", (ftnlen)2206)], 
+			     s_rnge("btlb", i__2, "pckbsr_", (ftnlen)2533)], 
 			    d__2 = stdes[(i__3 = p * 5 - 5) < 25000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "pckbsr_", (
-			    ftnlen)2206)];
+			    ftnlen)2533)];
 		    btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2206)] = 
+			    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2533)] = 
 			    max(d__1,d__2);
 /* Computing MIN */
 		    d__1 = btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? i__2 :
-			     s_rnge("btub", i__2, "pckbsr_", (ftnlen)2207)], 
+			     s_rnge("btub", i__2, "pckbsr_", (ftnlen)2534)], 
 			    d__2 = stdes[(i__3 = p * 5 - 4) < 25000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("stdes", i__3, "pckbsr_", (
-			    ftnlen)2207)];
+			    ftnlen)2534)];
 		    btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btub", i__1, "pckbsr_", (ftnlen)2207)] = 
+			    s_rnge("btub", i__1, "pckbsr_", (ftnlen)2534)] = 
 			    min(d__1,d__2);
 
 /*                 Save the returned output items, in case this segment */
 /*                 may satisfy the next request. */
 
 		    btprvh[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)2213)] =
+			    s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)2540)] =
 			     *handle;
 		    s_copy(btprvi + ((i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
 			    i__1 : s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)
-			    2214)) * 40, ident, (ftnlen)40, ident_len);
+			    2541)) * 40, ident, (ftnlen)40, ident_len);
 		    moved_(descr, &c__5, &btprvd[(i__1 = bindex * 5 - 5) < 
 			    100 && 0 <= i__1 ? i__1 : s_rnge("btprvd", i__1, 
-			    "pckbsr_", (ftnlen)2215)]);
+			    "pckbsr_", (ftnlen)2542)]);
 		    btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)2216)] =
+			    s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)2543)] =
 			     TRUE_;
 		    chkout_("PCKSFS", (ftnlen)6);
 		    return 0;
@@ -2199,7 +2520,7 @@ L_pcksfs:
 /*              to speed up the operation. */
 
 		p = stpool[(i__1 = (p << 1) + 10) < 10012 && 0 <= i__1 ? i__1 
-			: s_rnge("stpool", i__1, "pckbsr_", (ftnlen)2227)];
+			: s_rnge("stpool", i__1, "pckbsr_", (ftnlen)2554)];
 	    }
 
 /*           If we're still here we didn't have information for this */
@@ -2209,7 +2530,7 @@ L_pcksfs:
 /*           Otherwise, things are hopeless, set the status that way. */
 
 	    if (btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btlfs", i__1, "pckbsr_", (ftnlen)2238)] > ftnum[0]) {
+		    "btlfs", i__1, "pckbsr_", (ftnlen)2565)] > ftnum[0]) {
 		s_copy(status, "OLD FILES", (ftnlen)15, (ftnlen)9);
 	    } else {
 		s_copy(status, "HOPELESS", (ftnlen)15, (ftnlen)8);
@@ -2257,7 +2578,7 @@ L_pcksfs:
 /*                 one. */
 
 		    if (btexp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btexp", i__2, "pckbsr_", (ftnlen)2289)] < 
+			    s_rnge("btexp", i__2, "pckbsr_", (ftnlen)2616)] < 
 			    minexp || cheap == 0) {
 
 /*                    This list is the cheapest seen so far, */
@@ -2268,7 +2589,7 @@ L_pcksfs:
 			cheap = i__;
 			minexp = btexp[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? 
 				i__2 : s_rnge("btexp", i__2, "pckbsr_", (
-				ftnlen)2298)];
+				ftnlen)2625)];
 		    }
 		}
 	    }
@@ -2279,7 +2600,7 @@ L_pcksfs:
 /*              'MAKE ROOM'. */
 
 		if (s_cmp(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : 
-			s_rnge("stack", i__1, "pckbsr_", (ftnlen)2313)) * 15, 
+			s_rnge("stack", i__1, "pckbsr_", (ftnlen)2640)) * 15, 
 			"ADD TO END", (ftnlen)15, (ftnlen)10) == 0) {
 
 /*                 There's nothing left to do but search the remaining */
@@ -2304,7 +2625,7 @@ L_pcksfs:
 /*                 node. */
 
 		    p = btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2338)];
+			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2665)];
 		    tail = -lnkprv_(&p, stpool);
 		    lnkfsl_(&p, &tail, stpool);
 
@@ -2313,19 +2634,19 @@ L_pcksfs:
 /*                 Also, reset the suspended task stack to be empty. */
 
 		    btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2348)] = 
+			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2675)] = 
 			    0;
 		    btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2349)] = 
+			    s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2676)] = 
 			    0;
 		    bthfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)2350)] = 
+			    s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)2677)] = 
 			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)2350)];
+			    : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)2677)];
 		    btlfs[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)2351)] = 
+			    s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)2678)] = 
 			    ftnum[(i__2 = nft - 1) < 5000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)2351)] 
+			    : s_rnge("ftnum", i__2, "pckbsr_", (ftnlen)2678)] 
 			    + 1;
 		    s_copy(status, "OLD FILES", (ftnlen)15, (ftnlen)9);
 		    top = 0;
@@ -2335,7 +2656,7 @@ L_pcksfs:
 /*              Return this cheapest list to the segment pool. */
 
 		p = btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2361)];
+			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2688)];
 		if (p > 0) {
 		    tail = -lnkprv_(&p, stpool);
 		    lnkfsl_(&p, &tail, stpool);
@@ -2346,58 +2667,58 @@ L_pcksfs:
 
 		if (cheap != nbt) {
 		    btbod[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbod", i__1, "pckbsr_", (ftnlen)2376)] = 
+			    s_rnge("btbod", i__1, "pckbsr_", (ftnlen)2703)] = 
 			    btbod[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btbod", i__2, "pckbsr_", (ftnlen)2376)];
+			    s_rnge("btbod", i__2, "pckbsr_", (ftnlen)2703)];
 		    btexp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2377)] = 
+			    s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2704)] = 
 			    btexp[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btexp", i__2, "pckbsr_", (ftnlen)2377)];
+			    s_rnge("btexp", i__2, "pckbsr_", (ftnlen)2704)];
 		    bthfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)2378)] = 
+			    s_rnge("bthfs", i__1, "pckbsr_", (ftnlen)2705)] = 
 			    bthfs[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)2378)];
+			    s_rnge("bthfs", i__2, "pckbsr_", (ftnlen)2705)];
 		    btlfs[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)2379)] = 
+			    s_rnge("btlfs", i__1, "pckbsr_", (ftnlen)2706)] = 
 			    btlfs[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btlfs", i__2, "pckbsr_", (ftnlen)2379)];
+			    s_rnge("btlfs", i__2, "pckbsr_", (ftnlen)2706)];
 		    btbeg[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2380)] = 
+			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2707)] = 
 			    btbeg[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : 
-			    s_rnge("btbeg", i__2, "pckbsr_", (ftnlen)2380)];
+			    s_rnge("btbeg", i__2, "pckbsr_", (ftnlen)2707)];
 		    btlb[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			    "btlb", i__1, "pckbsr_", (ftnlen)2381)] = btlb[(
+			    "btlb", i__1, "pckbsr_", (ftnlen)2708)] = btlb[(
 			    i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			    "btlb", i__2, "pckbsr_", (ftnlen)2381)];
+			    "btlb", i__2, "pckbsr_", (ftnlen)2708)];
 		    btub[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			    "btub", i__1, "pckbsr_", (ftnlen)2382)] = btub[(
+			    "btub", i__1, "pckbsr_", (ftnlen)2709)] = btub[(
 			    i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge(
-			    "btub", i__2, "pckbsr_", (ftnlen)2382)];
+			    "btub", i__2, "pckbsr_", (ftnlen)2709)];
 		    btprvh[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)2383)] =
+			    s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)2710)] =
 			     btprvh[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 
-			    : s_rnge("btprvh", i__2, "pckbsr_", (ftnlen)2383)]
+			    : s_rnge("btprvh", i__2, "pckbsr_", (ftnlen)2710)]
 			    ;
 		    s_copy(btprvi + ((i__1 = cheap - 1) < 20 && 0 <= i__1 ? 
 			    i__1 : s_rnge("btprvi", i__1, "pckbsr_", (ftnlen)
-			    2384)) * 40, btprvi + ((i__2 = nbt - 1) < 20 && 0 
+			    2711)) * 40, btprvi + ((i__2 = nbt - 1) < 20 && 0 
 			    <= i__2 ? i__2 : s_rnge("btprvi", i__2, "pckbsr_",
-			     (ftnlen)2384)) * 40, (ftnlen)40, (ftnlen)40);
+			     (ftnlen)2711)) * 40, (ftnlen)40, (ftnlen)40);
 		    btruex[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)2385)] =
+			    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)2712)] =
 			     btruex[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 
-			    : s_rnge("btruex", i__2, "pckbsr_", (ftnlen)2385)]
+			    : s_rnge("btruex", i__2, "pckbsr_", (ftnlen)2712)]
 			    ;
 		    btchkp[(i__1 = cheap - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)2386)] =
+			    s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)2713)] =
 			     btchkp[(i__2 = nbt - 1) < 20 && 0 <= i__2 ? i__2 
-			    : s_rnge("btchkp", i__2, "pckbsr_", (ftnlen)2386)]
+			    : s_rnge("btchkp", i__2, "pckbsr_", (ftnlen)2713)]
 			    ;
 		    moved_(&btprvd[(i__1 = nbt * 5 - 5) < 100 && 0 <= i__1 ? 
 			    i__1 : s_rnge("btprvd", i__1, "pckbsr_", (ftnlen)
-			    2389)], &c__5, &btprvd[(i__2 = cheap * 5 - 5) < 
+			    2716)], &c__5, &btprvd[(i__2 = cheap * 5 - 5) < 
 			    100 && 0 <= i__2 ? i__2 : s_rnge("btprvd", i__2, 
-			    "pckbsr_", (ftnlen)2389)]);
+			    "pckbsr_", (ftnlen)2716)]);
 		}
 
 /*              If the final entry in the table happened to be the */
@@ -2445,14 +2766,14 @@ L_pcksfs:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-			"sthan", i__1, "pckbsr_", (ftnlen)2443)] = fthan[(
+			"sthan", i__1, "pckbsr_", (ftnlen)2770)] = fthan[(
 			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("fthan", i__2, "pckbsr_", (ftnlen)2443)];
+			s_rnge("fthan", i__2, "pckbsr_", (ftnlen)2770)];
 		moved_(descr, &c__5, &stdes[(i__1 = new__ * 5 - 5) < 25000 && 
 			0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_", (
-			ftnlen)2444)]);
+			ftnlen)2771)]);
 		dafgn_(stidnt + ((i__1 = new__ - 1) < 5000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "pckbsr_", (ftnlen)2445)
+			i__1 : s_rnge("stidnt", i__1, "pckbsr_", (ftnlen)2772)
 			) * 40, (ftnlen)40);
 		if (failed_()) {
 		    chkout_("PCKSFS", (ftnlen)6);
@@ -2463,10 +2784,10 @@ L_pcksfs:
 /*              is a no-op. */
 
 		lnkilb_(&new__, &btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ?
-			 i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2456)
+			 i__1 : s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2783)
 			], stpool);
 		btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-			"btbeg", i__1, "pckbsr_", (ftnlen)2457)] = new__;
+			"btbeg", i__1, "pckbsr_", (ftnlen)2784)] = new__;
 		s_copy(status, "RESUME", (ftnlen)15, (ftnlen)6);
 	    }
 	} else if (s_cmp(status, "ADD TO END", (ftnlen)15, (ftnlen)10) == 0) {
@@ -2491,27 +2812,27 @@ L_pcksfs:
 
 		lnkan_(stpool, &new__);
 		sthan[(i__1 = new__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-			"sthan", i__1, "pckbsr_", (ftnlen)2488)] = fthan[(
+			"sthan", i__1, "pckbsr_", (ftnlen)2815)] = fthan[(
 			i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 : 
-			s_rnge("fthan", i__2, "pckbsr_", (ftnlen)2488)];
+			s_rnge("fthan", i__2, "pckbsr_", (ftnlen)2815)];
 		moved_(descr, &c__5, &stdes[(i__1 = new__ * 5 - 5) < 25000 && 
 			0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_", (
-			ftnlen)2489)]);
+			ftnlen)2816)]);
 		dafgn_(stidnt + ((i__1 = new__ - 1) < 5000 && 0 <= i__1 ? 
-			i__1 : s_rnge("stidnt", i__1, "pckbsr_", (ftnlen)2490)
+			i__1 : s_rnge("stidnt", i__1, "pckbsr_", (ftnlen)2817)
 			) * 40, (ftnlen)40);
 		if (failed_()) {
 		    chkout_("PCKSFS", (ftnlen)6);
 		    return 0;
 		}
 		if (btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2497)] <= 0) 
+			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2824)] <= 0) 
 			{
 
 /*                 This is the first node in the list for this body. */
 
 		    btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2501)] = 
+			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2828)] = 
 			    new__;
 		} else {
 
@@ -2519,7 +2840,7 @@ L_pcksfs:
 
 		    tail = -lnkprv_(&btbeg[(i__1 = bindex - 1) < 20 && 0 <= 
 			    i__1 ? i__1 : s_rnge("btbeg", i__1, "pckbsr_", (
-			    ftnlen)2507)], stpool);
+			    ftnlen)2834)], stpool);
 		    lnkila_(&tail, &new__, stpool);
 		}
 		s_copy(status, "RESUME", (ftnlen)15, (ftnlen)6);
@@ -2541,7 +2862,7 @@ L_pcksfs:
 /*           the re-use interval. */
 
 	    btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btruex", i__1, "pckbsr_", (ftnlen)2533)] = 0;
+		    "btruex", i__1, "pckbsr_", (ftnlen)2860)] = 0;
 
 /*           Need to find the portion of the current body's segment */
 /*           list which comes from the current file of interest.  It */
@@ -2549,13 +2870,13 @@ L_pcksfs:
 /*           remainder of the file's segments can't be added to the list. */
 
 	    crflbg = btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-		    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2541)];
+		    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2868)];
 	    fndhan = FALSE_;
 	    while(! fndhan && crflbg > 0) {
 		fndhan = sthan[(i__1 = crflbg - 1) < 5000 && 0 <= i__1 ? i__1 
-			: s_rnge("sthan", i__1, "pckbsr_", (ftnlen)2546)] == 
+			: s_rnge("sthan", i__1, "pckbsr_", (ftnlen)2873)] == 
 			fthan[(i__2 = findex - 1) < 5000 && 0 <= i__2 ? i__2 :
-			 s_rnge("fthan", i__2, "pckbsr_", (ftnlen)2546)];
+			 s_rnge("fthan", i__2, "pckbsr_", (ftnlen)2873)];
 		if (! fndhan) {
 
 /*                 Get the next node.  We avoid LNKNXT here in order */
@@ -2563,7 +2884,7 @@ L_pcksfs:
 
 		    crflbg = stpool[(i__1 = (crflbg << 1) + 10) < 10012 && 0 
 			    <= i__1 ? i__1 : s_rnge("stpool", i__1, "pckbsr_",
-			     (ftnlen)2553)];
+			     (ftnlen)2880)];
 		}
 	    }
 	    if (crflbg > 0) {
@@ -2581,19 +2902,19 @@ L_pcksfs:
 /*              a non-positive value to indicate an empty segment list. */
 
 		if (p == btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2574)]) {
+			s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2901)]) {
 		    btbeg[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2576)] = 
+			    s_rnge("btbeg", i__1, "pckbsr_", (ftnlen)2903)] = 
 			    0;
 
 /*                 Also in this case, we must initialize the re-use */
 /*                 interval for this body. */
 
 		    btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2581)] = 
+			    s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2908)] = 
 			    dpmin_();
 		    btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btub", i__1, "pckbsr_", (ftnlen)2582)] = 
+			    s_rnge("btub", i__1, "pckbsr_", (ftnlen)2909)] = 
 			    dpmax_();
 		}
 
@@ -2606,13 +2927,13 @@ L_pcksfs:
 /*                 to the expense of the re-use interval. */
 
 		    btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)2595)] =
+			    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)2922)] =
 			     btruex[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btruex", i__2, "pckbsr_", (ftnlen)
-			    2595)] + 1;
+			    2922)] + 1;
 		    if (*et > stdes[(i__1 = crflbg * 5 - 4) < 25000 && 0 <= 
 			    i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_", (
-			    ftnlen)2598)]) {
+			    ftnlen)2925)]) {
 
 /*                    ET is to the right of the coverage interval of this */
 /*                    segment. */
@@ -2620,15 +2941,15 @@ L_pcksfs:
 /* Computing MAX */
 			d__1 = btlb[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
 				i__2 : s_rnge("btlb", i__2, "pckbsr_", (
-				ftnlen)2603)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)2930)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 4) < 25000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "pckbsr_", (ftnlen)2603)];
+				"stdes", i__3, "pckbsr_", (ftnlen)2930)];
 			btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-				s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2603)]
+				s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2930)]
 				 = max(d__1,d__2);
 		    } else if (*et < stdes[(i__1 = crflbg * 5 - 5) < 25000 && 
 			    0 <= i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_"
-			    , (ftnlen)2606)]) {
+			    , (ftnlen)2933)]) {
 
 /*                    ET is to the left of the coverage interval of this */
 /*                    segment. */
@@ -2636,11 +2957,11 @@ L_pcksfs:
 /* Computing MIN */
 			d__1 = btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
 				i__2 : s_rnge("btub", i__2, "pckbsr_", (
-				ftnlen)2611)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)2938)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 5) < 25000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "pckbsr_", (ftnlen)2611)];
+				"stdes", i__3, "pckbsr_", (ftnlen)2938)];
 			btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-				s_rnge("btub", i__1, "pckbsr_", (ftnlen)2611)]
+				s_rnge("btub", i__1, "pckbsr_", (ftnlen)2938)]
 				 = min(d__1,d__2);
 		    } else {
 
@@ -2648,14 +2969,14 @@ L_pcksfs:
 
 			moved_(&stdes[(i__1 = crflbg * 5 - 5) < 25000 && 0 <= 
 				i__1 ? i__1 : s_rnge("stdes", i__1, "pckbsr_",
-				 (ftnlen)2617)], &c__5, descr);
+				 (ftnlen)2944)], &c__5, descr);
 			s_copy(ident, stidnt + ((i__1 = crflbg - 1) < 5000 && 
 				0 <= i__1 ? i__1 : s_rnge("stidnt", i__1, 
-				"pckbsr_", (ftnlen)2619)) * 40, ident_len, (
+				"pckbsr_", (ftnlen)2946)) * 40, ident_len, (
 				ftnlen)40);
 			*handle = sthan[(i__1 = crflbg - 1) < 5000 && 0 <= 
 				i__1 ? i__1 : s_rnge("sthan", i__1, "pckbsr_",
-				 (ftnlen)2620)];
+				 (ftnlen)2947)];
 			*found = TRUE_;
 
 /*                    Set the re-use interval for the current body. */
@@ -2663,20 +2984,20 @@ L_pcksfs:
 /* Computing MAX */
 			d__1 = btlb[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
 				i__2 : s_rnge("btlb", i__2, "pckbsr_", (
-				ftnlen)2626)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)2953)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 5) < 25000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "pckbsr_", (ftnlen)2626)];
+				"stdes", i__3, "pckbsr_", (ftnlen)2953)];
 			btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-				s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2626)]
+				s_rnge("btlb", i__1, "pckbsr_", (ftnlen)2953)]
 				 = max(d__1,d__2);
 /* Computing MIN */
 			d__1 = btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
 				i__2 : s_rnge("btub", i__2, "pckbsr_", (
-				ftnlen)2627)], d__2 = stdes[(i__3 = crflbg * 
+				ftnlen)2954)], d__2 = stdes[(i__3 = crflbg * 
 				5 - 4) < 25000 && 0 <= i__3 ? i__3 : s_rnge(
-				"stdes", i__3, "pckbsr_", (ftnlen)2627)];
+				"stdes", i__3, "pckbsr_", (ftnlen)2954)];
 			btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-				s_rnge("btub", i__1, "pckbsr_", (ftnlen)2627)]
+				s_rnge("btub", i__1, "pckbsr_", (ftnlen)2954)]
 				 = min(d__1,d__2);
 
 /*                    Save the output items, in case this */
@@ -2684,28 +3005,28 @@ L_pcksfs:
 
 			btprvh[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
 				s_rnge("btprvh", i__1, "pckbsr_", (ftnlen)
-				2633)] = *handle;
+				2960)] = *handle;
 			s_copy(btprvi + ((i__1 = bindex - 1) < 20 && 0 <= 
 				i__1 ? i__1 : s_rnge("btprvi", i__1, "pckbsr_"
-				, (ftnlen)2634)) * 40, ident, (ftnlen)40, 
+				, (ftnlen)2961)) * 40, ident, (ftnlen)40, 
 				ident_len);
 			moved_(descr, &c__5, &btprvd[(i__1 = bindex * 5 - 5) <
 				 100 && 0 <= i__1 ? i__1 : s_rnge("btprvd", 
-				i__1, "pckbsr_", (ftnlen)2635)]);
+				i__1, "pckbsr_", (ftnlen)2962)]);
 			btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
 				s_rnge("btchkp", i__1, "pckbsr_", (ftnlen)
-				2636)] = TRUE_;
+				2963)] = TRUE_;
 
 /*                    Update the expense of the list to reflect */
 /*                    the cost of locating this segment. */
 
 			btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-				s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2642)
+				s_rnge("btexp", i__1, "pckbsr_", (ftnlen)2969)
 				] = btexp[(i__2 = bindex - 1) < 20 && 0 <= 
 				i__2 ? i__2 : s_rnge("btexp", i__2, "pckbsr_",
-				 (ftnlen)2642)] + btruex[(i__3 = bindex - 1) <
+				 (ftnlen)2969)] + btruex[(i__3 = bindex - 1) <
 				 20 && 0 <= i__3 ? i__3 : s_rnge("btruex", 
-				i__3, "pckbsr_", (ftnlen)2642)];
+				i__3, "pckbsr_", (ftnlen)2969)];
 
 /*                    Free the sub-list we were searching. */
 
@@ -2719,7 +3040,7 @@ L_pcksfs:
 
 		    crflbg = stpool[(i__1 = (crflbg << 1) + 10) < 10012 && 0 
 			    <= i__1 ? i__1 : s_rnge("stpool", i__1, "pckbsr_",
-			     (ftnlen)2658)];
+			     (ftnlen)2985)];
 		}
 
 /*              Return the sub-list to the segment table pool. */
@@ -2746,10 +3067,10 @@ L_pcksfs:
 /*                 re-use interval. */
 
 		    btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : 
-			    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)2689)] =
+			    s_rnge("btruex", i__1, "pckbsr_", (ftnlen)3016)] =
 			     btruex[(i__2 = bindex - 1) < 20 && 0 <= i__2 ? 
 			    i__2 : s_rnge("btruex", i__2, "pckbsr_", (ftnlen)
-			    2689)] + 1;
+			    3016)] + 1;
 		    dafgs_(descr);
 		    dafus_(descr, &c__2, &c__5, dcd, icd);
 		    if (failed_()) {
@@ -2769,10 +3090,10 @@ L_pcksfs:
 /* Computing MAX */
 			    d__1 = btlb[(i__2 = bindex - 1) < 20 && 0 <= i__2 
 				    ? i__2 : s_rnge("btlb", i__2, "pckbsr_", (
-				    ftnlen)2709)];
+				    ftnlen)3036)];
 			    btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 
 				    : s_rnge("btlb", i__1, "pckbsr_", (ftnlen)
-				    2709)] = max(d__1,dcd[1]);
+				    3036)] = max(d__1,dcd[1]);
 			} else if (*et < dcd[0]) {
 
 /*                       ET is to the left of the coverage interval */
@@ -2781,10 +3102,10 @@ L_pcksfs:
 /* Computing MIN */
 			    d__1 = btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 
 				    ? i__2 : s_rnge("btub", i__2, "pckbsr_", (
-				    ftnlen)2717)];
+				    ftnlen)3044)];
 			    btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 
 				    : s_rnge("btub", i__1, "pckbsr_", (ftnlen)
-				    2717)] = min(d__1,dcd[0]);
+				    3044)] = min(d__1,dcd[0]);
 			} else {
 
 /*                       The segment coverage interval includes ET. */
@@ -2796,7 +3117,7 @@ L_pcksfs:
 			    }
 			    *handle = fthan[(i__1 = findex - 1) < 5000 && 0 <=
 				     i__1 ? i__1 : s_rnge("fthan", i__1, 
-				    "pckbsr_", (ftnlen)2730)];
+				    "pckbsr_", (ftnlen)3057)];
 			    *found = TRUE_;
 
 /*                       Set the re-use interval for the current body. */
@@ -2804,47 +3125,47 @@ L_pcksfs:
 /* Computing MAX */
 			    d__1 = btlb[(i__2 = bindex - 1) < 20 && 0 <= i__2 
 				    ? i__2 : s_rnge("btlb", i__2, "pckbsr_", (
-				    ftnlen)2736)];
+				    ftnlen)3063)];
 			    btlb[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 
 				    : s_rnge("btlb", i__1, "pckbsr_", (ftnlen)
-				    2736)] = max(d__1,dcd[0]);
+				    3063)] = max(d__1,dcd[0]);
 /* Computing MIN */
 			    d__1 = btub[(i__2 = bindex - 1) < 20 && 0 <= i__2 
 				    ? i__2 : s_rnge("btub", i__2, "pckbsr_", (
-				    ftnlen)2737)];
+				    ftnlen)3064)];
 			    btub[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 
 				    : s_rnge("btub", i__1, "pckbsr_", (ftnlen)
-				    2737)] = min(d__1,dcd[1]);
+				    3064)] = min(d__1,dcd[1]);
 
 /*                       Save the output items, in case this */
 /*                       segment may satisfy the next request. */
 
 			    btprvh[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btprvh", i__1, "pckbsr_", (
-				    ftnlen)2743)] = *handle;
+				    ftnlen)3070)] = *handle;
 			    s_copy(btprvi + ((i__1 = bindex - 1) < 20 && 0 <= 
 				    i__1 ? i__1 : s_rnge("btprvi", i__1, 
-				    "pckbsr_", (ftnlen)2744)) * 40, ident, (
+				    "pckbsr_", (ftnlen)3071)) * 40, ident, (
 				    ftnlen)40, ident_len);
 			    moved_(descr, &c__5, &btprvd[(i__1 = bindex * 5 - 
 				    5) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-				    "btprvd", i__1, "pckbsr_", (ftnlen)2745)])
+				    "btprvd", i__1, "pckbsr_", (ftnlen)3072)])
 				    ;
 			    btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btchkp", i__1, "pckbsr_", (
-				    ftnlen)2746)] = TRUE_;
+				    ftnlen)3073)] = TRUE_;
 
 /*                       Update the expense of the list to reflect */
 /*                       the cost of locating this segment. */
 
 			    btexp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? 
 				    i__1 : s_rnge("btexp", i__1, "pckbsr_", (
-				    ftnlen)2752)] = btexp[(i__2 = bindex - 1) 
+				    ftnlen)3079)] = btexp[(i__2 = bindex - 1) 
 				    < 20 && 0 <= i__2 ? i__2 : s_rnge("btexp",
-				     i__2, "pckbsr_", (ftnlen)2752)] + btruex[
+				     i__2, "pckbsr_", (ftnlen)3079)] + btruex[
 				    (i__3 = bindex - 1) < 20 && 0 <= i__3 ? 
 				    i__3 : s_rnge("btruex", i__3, "pckbsr_", (
-				    ftnlen)2752)];
+				    ftnlen)3079)];
 			    chkout_("PCKSFS", (ftnlen)6);
 			    return 0;
 			}
@@ -2862,7 +3183,7 @@ L_pcksfs:
 		if (findex > 0) {
 		    dafbbs_(&fthan[(i__1 = findex - 1) < 5000 && 0 <= i__1 ? 
 			    i__1 : s_rnge("fthan", i__1, "pckbsr_", (ftnlen)
-			    2777)]);
+			    3104)]);
 		    daffpa_(&fnd);
 		    if (failed_()) {
 			chkout_("PCKSFS", (ftnlen)6);
@@ -2874,7 +3195,7 @@ L_pcksfs:
 /*           If you get to here, sorry. */
 
 	    btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		    "btruex", i__1, "pckbsr_", (ftnlen)2792)] = 0;
+		    "btruex", i__1, "pckbsr_", (ftnlen)3119)] = 0;
 	    s_copy(status, "HOPELESS", (ftnlen)15, (ftnlen)8);
 
 /*        When a task is suspended, the current activity is placed on */
@@ -2884,7 +3205,7 @@ L_pcksfs:
 	} else if (s_cmp(status, "SUSPEND", (ftnlen)15, (ftnlen)7) == 0) {
 	    ++top;
 	    s_copy(stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge(
-		    "stack", i__1, "pckbsr_", (ftnlen)2803)) * 15, doing, (
+		    "stack", i__1, "pckbsr_", (ftnlen)3130)) * 15, doing, (
 		    ftnlen)15, (ftnlen)15);
 	    s_copy(status, urgent, (ftnlen)15, (ftnlen)15);
 	} else if (s_cmp(status, "RESUME", (ftnlen)15, (ftnlen)6) == 0) {
@@ -2892,7 +3213,7 @@ L_pcksfs:
 /*           Pop the status stack. */
 
 	    s_copy(status, stack + ((i__1 = top - 1) < 2 && 0 <= i__1 ? i__1 :
-		     s_rnge("stack", i__1, "pckbsr_", (ftnlen)2810)) * 15, (
+		     s_rnge("stack", i__1, "pckbsr_", (ftnlen)3137)) * 15, (
 		    ftnlen)15, (ftnlen)15);
 	    --top;
 	}
@@ -2905,9 +3226,9 @@ L_pcksfs:
 
     if (bindex > 0) {
 	btchkp[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btchkp",
-		 i__1, "pckbsr_", (ftnlen)2825)] = FALSE_;
+		 i__1, "pckbsr_", (ftnlen)3152)] = FALSE_;
 	btruex[(i__1 = bindex - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("btruex",
-		 i__1, "pckbsr_", (ftnlen)2826)] = 0;
+		 i__1, "pckbsr_", (ftnlen)3153)] = 0;
     }
     chkout_("PCKSFS", (ftnlen)6);
     return 0;

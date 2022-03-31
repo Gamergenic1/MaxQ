@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      REMLAI ( Remove elements from an integer array ) */
+/* $Procedure REMLAI ( Remove elements from an integer array ) */
 /* Subroutine */ int remlai_(integer *ne, integer *loc, integer *array, 
 	integer *na)
 {
@@ -21,8 +21,8 @@
 
 /* $ Abstract */
 
-/*      Remove one or more elements from an integer array at the */
-/*      indicated location. */
+/*     Remove one or more elements from an integer array at the */
+/*     indicated location. */
 
 /* $ Disclaimer */
 
@@ -55,115 +55,124 @@
 
 /* $ Keywords */
 
-/*      ARRAY,  ASSIGNMENT */
+/*     ARRAY */
+/*     ASSIGNMENT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      NE         I   Number of elements to be removed. */
-/*      LOC        I   Location of the first removed element. */
-/*      ARRAY     I/O  Input/output array. */
-/*      NA        I/O  Number of elements in the input/output array. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     NE         I   Number of elements to be removed. */
+/*     LOC        I   Location of the first removed element. */
+/*     ARRAY     I-O  Input/output array. */
+/*     NA        I-O  Number of elements in the input/output array. */
 
 /* $ Detailed_Input */
 
-/*      NE          is the number of elements to be removed. */
+/*     NE       is the number of elements to be removed. */
 
-/*      LOC         is the location in the array at which the first */
-/*                  element is to be removed. */
+/*     LOC      is the location in the array at which the first */
+/*              element is to be removed. */
 
-/*      ARRAY       on input, is the original array. */
+/*     ARRAY    on input, is the original array. */
 
-/*      NA          on input, is the number of elements in ARRAY. */
+/*     NA       on input, is the number of elements in ARRAY. */
 
 /* $ Detailed_Output */
 
-/*      ARRAY       on output, is the original array with elements */
-/*                  LOC through LOC+NE-1 removed. Succeeding elements */
-/*                  are moved forward to fill the vacated spaces. */
+/*     ARRAY    on output, is the original array with elements */
+/*              LOC through LOC+NE-1 removed. Succeeding elements */
+/*              are moved forward to fill the vacated spaces. */
 
-/*      NA          on output, is the number of elements in ARRAY. */
+/*     NA       on output, is the number of elements in ARRAY. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The elements in positions LOC through LOC+NE-1 are overwritten */
-/*      as the elements beginning at LOC+NE are moved back. */
-
-/* $ Examples */
-
-/*      Let */
-
-/*            NA = 7      ARRAY(1) = 1 */
-/*                        ARRAY(2) = 2 */
-/*                        ARRAY(3) = 3 */
-/*                        ARRAY(4) = 4 */
-/*                        ARRAY(5) = 5 */
-/*                        ARRAY(6) = 6 */
-/*                        ARRAY(7) = 7 */
-
-/*      Then the call */
-
-/*            CALL REMLAI ( 3, 3, ARRAY, NA ) */
-
-/*      yields the following result: */
-
-/*            NA = 4      ARRAY(1) = 1 */
-/*                        ARRAY(2) = 2 */
-/*                        ARRAY(3) = 6 */
-/*                        ARRAY(4) = 7 */
-
-
-/*      The following calls would signal errors: */
-
-/*      CALL REMLAI ( 3,  1, ARRAY, -1 ) */
-/*      CALL REMLAI ( 3, -1, ARRAY,  7 ) */
-/*      CALL REMLAI ( 3,  6, ARRAY,  7 ) */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      1) If LOC is not in the interval [1, NA], the error */
-/*         SPICE(INVALIDINDEX) is signalled. */
+/*     1)  If LOC is not in the interval [1, NA], the error */
+/*         SPICE(INVALIDINDEX) is signaled. */
 
-/*      2) If the number of elements to be removed is greater than the */
+/*     2)  If the number of elements to be removed is greater than the */
 /*         number of elements that can be removed, the error */
-/*         SPICE(NONEXISTELEMENTS) is signalled. */
+/*         SPICE(NONEXISTELEMENTS) is signaled. */
 
-/*      3) If NE is less than one, the array is not modified. */
+/*     3)  If NE is less than one, the array is not modified. */
 
-/*      4) If NA is less than one, any location is invalid, and the */
-/*         error SPICE(INVALIDINDEX) is signalled. */
+/*     4)  If NA is less than one, any location is invalid, and, the */
+/*         error SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      H.A. Neilan     (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     The elements in positions LOC through LOC+NE-1 are overwritten */
+/*     as the elements beginning at LOC+NE are moved back. */
+
+/* $ Examples */
+
+/*     Let */
+
+/*           NA = 7      ARRAY(1) = 1 */
+/*                       ARRAY(2) = 2 */
+/*                       ARRAY(3) = 3 */
+/*                       ARRAY(4) = 4 */
+/*                       ARRAY(5) = 5 */
+/*                       ARRAY(6) = 6 */
+/*                       ARRAY(7) = 7 */
+
+/*     Then the call */
+
+/*           CALL REMLAI ( 3, 3, ARRAY, NA ) */
+
+/*     yields the following result: */
+
+/*           NA = 4      ARRAY(1) = 1 */
+/*                       ARRAY(2) = 2 */
+/*                       ARRAY(3) = 6 */
+/*                       ARRAY(4) = 7 */
+
+
+/*     The following calls would signal errors: */
+
+/*     CALL REMLAI ( 3,  1, ARRAY, -1 ) */
+/*     CALL REMLAI ( 3, -1, ARRAY,  7 ) */
+/*     CALL REMLAI ( 3,  6, ARRAY,  7 ) */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 03-OCT-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -173,26 +182,26 @@
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 2.0.0, 1-JAN-1989 (HAN) */
+/* -     Beta Version 2.0.0, 01-JAN-1989 (HAN) */
 
-/*         Code was added to handle the following exceptinoal */
+/*         Code was added to handle the following exceptional */
 /*         inputs. */
 
 /*         If the dimension of the array is less than one, any */
-/*         value of LOC is invalid. The old verison did not check */
+/*         value of LOC is invalid. The old version did not check */
 /*         the dimension of the array, and as a result, its output */
 /*         was unpredictable. */
 
 /*         If the location at which the elements are to be removed is */
-/*         not in the interval [1, NA], an error is signalled. */
+/*         not in the interval [1, NA], an error is signaled. */
 /*         Locations not within that interval refer to non-existent */
 /*         array elements. The old routine did not signal an error. */
 /*         It just returned the original array. */
 
 /*         If the number of elements to be removed is greater than the */
-/*         number of elements can be removed, an error is signalled. */
+/*         number of elements can be removed, an error is signaled. */
 /*         In the old version, only those elements that could be */
-/*         removed were removed, and no error was signalled. */
+/*         removed were removed, and no error was signaled. */
 
 /* -& */
 
@@ -212,7 +221,7 @@
 
 /*     If LOC does not point to an actual element, signal an error and */
 /*     check out. If the dimension of the array is less than one, any */
-/*     value of LOC is invalid, and an error is signalled. */
+/*     value of LOC is invalid, and an error is signaled. */
 
     if (*loc < 1 || *loc > *na) {
 	setmsg_("Location was *.", (ftnlen)15);

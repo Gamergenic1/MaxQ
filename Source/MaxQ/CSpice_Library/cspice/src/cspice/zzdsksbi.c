@@ -514,8 +514,14 @@ static integer c__3 = 3;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman   (JPL) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-OCT-2021 (BVS) */
+
+/*        Bug fix: fixed routine name in CHKIN/CHKOUT calls */
+/*        (ZZDSKBSI -> ZZDSKSBI). */
 
 /* -    SPICELIB Version 1.0.0, 11-FEB-2016 (NJB) */
 
@@ -534,7 +540,7 @@ static integer c__3 = 3;
     if (return_()) {
 	return 0;
     }
-    chkin_("ZZDSKBSI", (ftnlen)8);
+    chkin_("ZZDSKSBI", (ftnlen)8);
 
 /*     Clear the body table. */
 
@@ -558,7 +564,7 @@ static integer c__3 = 3;
 	strad[i__ - 1] = 0.;
     }
     *stfree = 1;
-    chkout_("ZZDSKBSI", (ftnlen)8);
+    chkout_("ZZDSKSBI", (ftnlen)8);
     return 0;
 } /* zzdsksbi_ */
 

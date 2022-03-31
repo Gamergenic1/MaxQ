@@ -646,10 +646,11 @@ static integer c__128 = 128;
     logical native;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
+    extern integer intmax_(void);
     logical stored;
-    extern /* Subroutine */ int setmsg_(char *, ftnlen);
     integer iostat;
-    extern /* Subroutine */ int errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int setmsg_(char *, ftnlen), errint_(char *, 
+	    integer *, ftnlen);
     extern logical return_(void);
 
     /* Fortran I/O blocks */
@@ -697,7 +698,7 @@ static integer c__128 = 128;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAFGDR. DAFGSR, DAFRDR (Obsolete), DAFWDR */
 /*     RECNO      I   DAFGDR. DAFGSR, DAFRDR (Obsolete), DAFWDR */
@@ -712,57 +713,56 @@ static integer c__128 = 128;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF. */
+/*     HANDLE   is the handle associated with a DAF. */
 
-/*     RECNO       is the record number of a double precision record */
-/*                 within a DAF to be read or written. */
+/*     RECNO    is the record number of a double precision record */
+/*              within a DAF to be read or written. */
 
-/*     BEGIN       is the first in word in a double precision record */
-/*                 to be read. */
+/*     BEGIN    is the first in word in a double precision record */
+/*              to be read. */
 
-/*     END         is the last in word in a double precision record */
-/*                 to be read. */
+/*     END      is the last in word in a double precision record */
+/*              to be read. */
 
-/*     DREC        contains a single double precision record, to be */
-/*                 written to the specified DAF. */
+/*     DREC     contains a single double precision record, to be */
+/*              written to the specified DAF. */
 
 /* $ Detailed_Output */
 
-/*     DATA        contains a portion of a single double precision */
-/*                 record, read from the specified DAF. */
+/*     DATA     contains a portion of a single double precision */
+/*              record, read from the specified DAF. */
 
-/*     FOUND       is true when the specified record is found, and is */
-/*                 false otherwise. */
+/*     FOUND    is .TRUE. when the specified record is found, and is */
+/*              .FALSE. otherwise. */
 
 /*     READS, */
-/*     REQS        are the number of physical reads and the number */
-/*                 of requests processed by DAFRDR during the current */
-/*                 execution of the calling program. */
-
+/*     REQS     are the number of physical reads and the number */
+/*              of requests processed by DAFRDR during the current */
+/*              execution of the calling program. */
 
 /* $ Parameters */
 
-/*     RBSIZE      is the size of the record buffer maintained by */
-/*                 DAFRWD. In effect, RBSIZE is the maximum number */
-/*                 of records that can be stored (buffered) at any */
-/*                 one time. Higher values of RBSIZE reduce the */
-/*                 amount of time spent reading from disk at the */
-/*                 cost of increasing the amount of space required */
-/*                 by the calling program. The optimal value of */
-/*                 RBSIZE may differ from environment to environment, */
-/*                 and may even vary from application to application. */
+/*     RBSIZE   is the size of the record buffer maintained by */
+/*              DAFRWD. In effect, RBSIZE is the maximum number */
+/*              of records that can be stored (buffered) at any */
+/*              one time. Higher values of RBSIZE reduce the */
+/*              amount of time spent reading from disk at the */
+/*              cost of increasing the amount of space required */
+/*              by the calling program. The optimal value of */
+/*              RBSIZE may differ from environment to environment, */
+/*              and may even vary from application to application. */
+
+/* $ Exceptions */
+
+/*     1)  If DAFRWD is called directly, the error SPICE(BOGUSENTRY) */
+/*         is signaled. */
+
+/*     2)  See entry points DAFGDR, DAFGSR, DAFRDR, DAFWDR, and DAFNRR */
+/*         for exceptions specific to those entry points. */
 
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If DAFRWD is called directly, the error SPICE(BOGUSENTRY) */
-/*        is signalled. */
-
-/*     2) See entry points DAFGDR, DAFGSR, DAFRDR, DAFWDR, and DAFNRR */
-/*        for exceptions specific to those entry points. */
 
 /* $ Particulars */
 
@@ -783,7 +783,7 @@ static integer c__128 = 128;
 /*     DAFGDR, DAFGSR, and DAFWDR are the only approved means for */
 /*     reading and writing double precision records to and from DAFs. */
 /*     DAFRDR continues to function, but only on files of the native */
-/*     binary format.  They keep track of which records have been read */
+/*     binary format. They keep track of which records have been read */
 /*     most recently, and of which records have been requested most */
 /*     often, in order to minimize the amount of time spent actually */
 /*     reading from external storage. */
@@ -799,7 +799,7 @@ static integer c__128 = 128;
 /*     optimal value of RBSIZE empirically. */
 
 /*     All data records in a DAF can be treated as an undifferentiated */
-/*     collection of double precision numbers.  Summary records must */
+/*     collection of double precision numbers. Summary records must */
 /*     be read using the DAFGSR interface, but their contents are */
 /*     properly buffered in a single buffer with the data records. */
 /*     No special buffers are required for each new data type, or to */
@@ -812,20 +812,38 @@ static integer c__128 = 128;
 
 /* $ Restrictions */
 
-/*     1) An integer overflow may occur if the number of requests */
-/*        by a single program exceeds the maximum number that can */
-/*        be stored in an integer variable. */
+/*     1)  An integer overflow may occur if the number of requests */
+/*         by a single program exceeds the maximum number that can */
+/*         be stored in an integer variable. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 12-AUG-2021 (NJB) (JDR) */
+
+/*        Bug fixes: now NREAD is not incremented once it reaches */
+/*        INTMAX(), if it does. */
+
+/*        Re-ordered header sections in all entry points. Corrected */
+/*        typos in comments. */
+
+/*        Edited the header of the DAFRWD umbrella routine and all its */
+/*        entry entry points to comply with NAIF standard. */
+
+/*        Removed DAF required reading from $Literature_References. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
@@ -839,7 +857,7 @@ static integer c__128 = 128;
 /*        a sufficient number of successful read requests are made. */
 
 /*        DAFWDR no longer uses DAFHLU to retrieve a logical unit */
-/*        for HANDLE.  This call has been replaced with the handle */
+/*        for HANDLE. This call has been replaced with the handle */
 /*        manager interface, which does not lock handles to their */
 /*        logical units. */
 
@@ -879,7 +897,7 @@ static integer c__128 = 128;
 /* -& */
 /* $ Index_Entries */
 
-/*     read write d.p. daf */
+/*     read write d.p. DAF */
 
 /* -& */
 /* $ Revisions */
@@ -887,11 +905,11 @@ static integer c__128 = 128;
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /*        Updated this umbrella and its entry points in preparation */
-/*        for DAF's utilization of the handle manager.  DAFRDR is */
+/*        for DAF's utilization of the handle manager. DAFRDR is */
 /*        obsolete, and will now signal errors when used to read */
 /*        records from DAFs using non-native, binary file formats. */
 
-/*        Two new entry points were added: DAFGDR and DAFGDR.  These */
+/*        Two new entry points were added: DAFGDR and DAFGDR. These */
 /*        are the translation-aware 'get data record' and 'get */
 /*        summary record' routines that all new software developed */
 /*        should utilize. */
@@ -938,7 +956,7 @@ static integer c__128 = 128;
 /*     As double precision records are processed, they are stored in a */
 /*     record buffer. (File and character records are not buffered.) */
 /*     The user controls the number of records that may be stored at */
-/*     any one time by setting the value of the paramater RBSIZE before */
+/*     any one time by setting the value of the parameter RBSIZE before */
 /*     compiling the routine. */
 
 /*     The record buffer contains one entry for each record that has */
@@ -1027,46 +1045,46 @@ L_dafgdr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF. */
 /*     RECNO      I   Record number. */
 /*     BEGIN      I   First word to read from record. */
 /*     END        I   Last word to read from record. */
 /*     DATA       O   Contents of record. */
-/*     FOUND      O   True if record is found. */
+/*     FOUND      O   .TRUE. if record is found. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF. */
+/*     HANDLE   is the handle associated with a DAF. */
 
-/*     RECNO       is the record number of a particular double precision */
-/*                 record within the DAF, whose contents are to be read. */
+/*     RECNO    is the record number of a particular double precision */
+/*              record within the DAF, whose contents are to be read. */
 
-/*     BEGIN       is the first word in the specified record to be */
-/*                 returned. */
+/*     BEGIN    is the first word in the specified record to be */
+/*              returned. */
 
-/*     END         is the final word in the specified record to be */
-/*                 returned. */
+/*     END      is the final word in the specified record to be */
+/*              returned. */
 
 /* $ Detailed_Output */
 
-/*     DATA        contains the specified portion (from BEGIN to END, */
-/*                 inclusize) of the specified record from the specified */
-/*                 file, specifically. */
+/*     DATA     contains the specified portion (from BEGIN to END, */
+/*              inclusive) of the specified record from the specified */
+/*              file, specifically. */
 
-/*     FOUND       is true when the specified record is found, and is */
-/*                 false otherwise. */
+/*     FOUND    is .TRUE. when the specified record is found, and is */
+/*              .FALSE. otherwise. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
+
+/*     None. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -1115,34 +1133,45 @@ L_dafgdr:
 
 /* $ Restrictions */
 
-/*     1) Bad values for BEGIN and END ( BEGIN < 1, END > 128, */
-/*        END < BEGIN ) are not signalled as errors. The effects of */
-/*        such assignments on the returned data are defined by the */
-/*        following control structure: */
+/*     1)  Bad values for BEGIN and END ( BEGIN < 1, END > 128, */
+/*         END < BEGIN ) are not signaled as errors. The effects of */
+/*         such assignments on the returned data are defined by the */
+/*         following control structure: */
 
-/*           J = 1 */
-/*           DO I = MAX( 1, BEGIN ), MIN( 128, END ) */
-/*              DATA( J ) = Buffered record ( I ) */
-/*              J = J + 1 */
-/*           END DO */
+/*            J = 1 */
+/*            DO I = MAX( 1, BEGIN ), MIN( 128, END ) */
+/*               DATA( J ) = Buffered record ( I ) */
+/*               J = J + 1 */
+/*            END DO */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     F.S. Turner     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 12-AUG-2021 (NJB) (JDR) */
+
+/*        Bug fix: now NREAD is not incremented once it reaches */
+/*        INTMAX(), if it does. */
+
+/*        Re-ordered header sections. Corrected typos in comments. */
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Removed DAF required reading from $Literature_References. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read daf d.p. record */
+/*     read DAF d.p. record */
 
 /* -& */
 
@@ -1168,9 +1197,9 @@ L_dafgdr:
     while(! done) {
 	++bufloc;
 	stored = *handle == rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? 
-		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)592)] && *
+		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)626)] && *
 		recno == rbrec[(i__2 = bufloc - 1) < 100 && 0 <= i__2 ? i__2 :
-		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)592)];
+		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)626)];
 	done = stored || bufloc == rbnbr;
     }
 
@@ -1186,7 +1215,7 @@ L_dafgdr:
 	minai_(rbreq, &rbnbr, &minval, &bufloc);
 	zzdafgdr_(handle, recno, &rbdat[(i__1 = (bufloc << 7) - 128) < 12800 
 		&& 0 <= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_", (
-		ftnlen)612)], &locfnd);
+		ftnlen)646)], &locfnd);
 
 /*        If the call to ZZDAFGDR failed, or the record was not found, */
 /*        then clean up. */
@@ -1194,17 +1223,19 @@ L_dafgdr:
 	if (failed_() || ! locfnd) {
 	    *found = FALSE_;
 	    rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbhan", i__1, "dafrwd_", (ftnlen)620)] = 0;
+		    "rbhan", i__1, "dafrwd_", (ftnlen)654)] = 0;
 	    rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbrec", i__1, "dafrwd_", (ftnlen)621)] = 0;
+		    "rbrec", i__1, "dafrwd_", (ftnlen)655)] = 0;
 	    rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbreq", i__1, "dafrwd_", (ftnlen)622)] = 0;
+		    "rbreq", i__1, "dafrwd_", (ftnlen)656)] = 0;
 	} else {
-	    ++nread;
+	    if (nread < intmax_()) {
+		++nread;
+	    }
 	    rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbhan", i__1, "dafrwd_", (ftnlen)625)] = *handle;
+		    "rbhan", i__1, "dafrwd_", (ftnlen)663)] = *handle;
 	    rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbrec", i__1, "dafrwd_", (ftnlen)626)] = *recno;
+		    "rbrec", i__1, "dafrwd_", (ftnlen)664)] = *recno;
 	    if (rbnbr < 100) {
 		++rbnbr;
 	    }
@@ -1220,7 +1251,7 @@ L_dafgdr:
 	e = min(128,*end);
 	count = e - b + 1;
 	moved_(&rbdat[(i__1 = b + (bufloc << 7) - 129) < 12800 && 0 <= i__1 ? 
-		i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)646)], &count,
+		i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)684)], &count,
 		 data);
 
 /*        Increment the request counter in such a way that integer */
@@ -1230,7 +1261,7 @@ L_dafgdr:
 
 	zzddhrcm_(&rbnbr, rbreq, &nreq);
 	rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("rbreq", 
-		i__1, "dafrwd_", (ftnlen)655)] = nreq;
+		i__1, "dafrwd_", (ftnlen)693)] = nreq;
     }
     return 0;
 /* $Procedure DAFGSR ( DAF, get summary/descriptor record ) */
@@ -1238,8 +1269,7 @@ L_dafgdr:
 L_dafgsr:
 /* $ Abstract */
 
-/*     Read a portion of the contents of a summary record in a */
-/*     DAF file. */
+/*     Read a portion of the contents of a summary record in a DAF file. */
 
 /* $ Disclaimer */
 
@@ -1285,52 +1315,63 @@ L_dafgsr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF. */
 /*     RECNO      I   Record number. */
 /*     BEGIN      I   First word to read from record. */
 /*     END        I   Last word to read from record. */
 /*     DATA       O   Contents of record. */
-/*     FOUND      O   True if record is found. */
+/*     FOUND      O   .TRUE. if record is found. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF. */
+/*     HANDLE   is the handle associated with a DAF. */
 
-/*     RECNO       is the record number of a particular double precision */
-/*                 record within the DAF, whose contents are to be read. */
+/*     RECNO    is the record number of a particular double precision */
+/*              record within the DAF, whose contents are to be read. DAF */
+/*              record numbers start at 1. */
 
-/*     BEGIN       is the first word in the specified record to be */
-/*                 returned. */
+/*     BEGIN    is the first word in the specified record to be returned. */
+/*              Word numbers range from 1 to 128. */
 
-/*     END         is the final word in the specified record to be */
-/*                 returned. */
+/*     END      is the final word in the specified record to be returned. */
+/*              Word numbers range from 1 to 128. */
 
 /* $ Detailed_Output */
 
-/*     DATA        contains the specified portion (from BEGIN to END, */
-/*                 inclusize) of the specified record from the specified */
-/*                 file, specifically. */
+/*     DATA     contains the specified portion (from BEGIN to END, */
+/*              inclusive) of the specified record from the specified */
+/*              file. */
 
-/*     FOUND       is true when the specified record is found, and is */
-/*                 false otherwise. */
+/*     FOUND    is .TRUE. when the specified record is found, and is */
+/*              .FALSE. otherwise. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If HANDLE does not belong to any file that is currently open, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
+
+/*     2)  If an error occurs while reading the record, the error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     3)  Bad values for BEGIN and END ( BEGIN < 1, END > 128, */
+/*         END < BEGIN ) are not diagnosed. See $Particulars and */
+/*         $Restrictions for the effect of this routine in this case. */
+
+/* $ Files */
+
+/*     The input HANDLE must refer to a DAF file that is open for read */
+/*     or write access. */
 
 /* $ Particulars */
 
-/*     DAFGSR checks the record buffer to see if the requested */
+/*     DAFGSR checks the DAF record buffer to see if the requested */
 /*     record can be returned without actually reading it from */
 /*     external storage. If not, it reads the record and stores */
 /*     it in the buffer, typically removing another record from */
@@ -1346,7 +1387,7 @@ L_dafgsr:
 /*        END DO */
 
 /*     Therefore bad values for BEGIN and END (BEGIN < 1, END < BEGIN, */
-/*     etc.) are not signalled as errors, but result in the actions */
+/*     etc.) are not signaled as errors, but result in the actions */
 /*     implied by the above. */
 
 /* $ Examples */
@@ -1373,34 +1414,46 @@ L_dafgsr:
 
 /* $ Restrictions */
 
-/*     1) Bad values for BEGIN and END ( BEGIN < 1, END > 128, */
-/*        END < BEGIN ) are not signalled as errors. The effects of */
-/*        such assignments on the returned data are defined by the */
-/*        following control structure: */
+/*     1)  Bad values for BEGIN and END ( BEGIN < 1, END > 128, */
+/*         END < BEGIN ) are not signaled as errors. The effects of */
+/*         such assignments on the returned data are defined by the */
+/*         following control structure: */
 
-/*           J = 1 */
-/*           DO I = MAX( 1, BEGIN ), MIN( 128, END ) */
-/*              DATA( J ) = Buffered record ( I ) */
-/*              J = J + 1 */
-/*           END DO */
+/*            J = 1 */
+/*            DO I = MAX( 1, BEGIN ), MIN( 128, END ) */
+/*               DATA( J ) = Buffered record ( I ) */
+/*               J = J + 1 */
+/*            END DO */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     F.S. Turner     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 09-AUG-2021 (NJB) (JDR) */
+
+/*        Bug fix: now NREAD is not incremented once it reaches */
+/*        INTMAX(), if it does. */
+
+/*        Corrected typos in comments. Edited the header to comply with */
+/*        NAIF standard. Added $Exceptions and $Files sections and */
+/*        extended $Detailed_Input. */
+
+/*        Removed DAF required reading from $Literature_References. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read daf summary record */
+/*     read DAF summary record */
 
 /* -& */
 
@@ -1426,9 +1479,9 @@ L_dafgsr:
     while(! done) {
 	++bufloc;
 	stored = *handle == rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? 
-		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)862)] && *
+		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)924)] && *
 		recno == rbrec[(i__2 = bufloc - 1) < 100 && 0 <= i__2 ? i__2 :
-		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)862)];
+		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)924)];
 	done = stored || bufloc == rbnbr;
     }
 
@@ -1445,7 +1498,7 @@ L_dafgsr:
 	dafhsf_(handle, &nd, &ni);
 	zzdafgsr_(handle, recno, &nd, &ni, &rbdat[(i__1 = (bufloc << 7) - 128)
 		 < 12800 && 0 <= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_"
-		, (ftnlen)884)], &locfnd);
+		, (ftnlen)946)], &locfnd);
 
 /*        If the call to ZZDAFGSR or DAFHSF failed, or the record */
 /*        was not found, then clean up. */
@@ -1453,17 +1506,19 @@ L_dafgsr:
 	if (failed_() || ! locfnd) {
 	    *found = FALSE_;
 	    rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbhan", i__1, "dafrwd_", (ftnlen)893)] = 0;
+		    "rbhan", i__1, "dafrwd_", (ftnlen)955)] = 0;
 	    rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbrec", i__1, "dafrwd_", (ftnlen)894)] = 0;
+		    "rbrec", i__1, "dafrwd_", (ftnlen)956)] = 0;
 	    rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbreq", i__1, "dafrwd_", (ftnlen)895)] = 0;
+		    "rbreq", i__1, "dafrwd_", (ftnlen)957)] = 0;
 	} else {
-	    ++nread;
+	    if (nread < intmax_()) {
+		++nread;
+	    }
 	    rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbhan", i__1, "dafrwd_", (ftnlen)898)] = *handle;
+		    "rbhan", i__1, "dafrwd_", (ftnlen)964)] = *handle;
 	    rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbrec", i__1, "dafrwd_", (ftnlen)899)] = *recno;
+		    "rbrec", i__1, "dafrwd_", (ftnlen)965)] = *recno;
 	    if (rbnbr < 100) {
 		++rbnbr;
 	    }
@@ -1479,7 +1534,7 @@ L_dafgsr:
 	e = min(128,*end);
 	count = e - b + 1;
 	moved_(&rbdat[(i__1 = b + (bufloc << 7) - 129) < 12800 && 0 <= i__1 ? 
-		i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)919)], &count,
+		i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)985)], &count,
 		 data);
 
 /*        Increment the request counter in such a way that integer */
@@ -1489,7 +1544,7 @@ L_dafgsr:
 
 	zzddhrcm_(&rbnbr, rbreq, &nreq);
 	rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("rbreq", 
-		i__1, "dafrwd_", (ftnlen)928)] = nreq;
+		i__1, "dafrwd_", (ftnlen)994)] = nreq;
     }
     return 0;
 /* $Procedure DAFRDR ( DAF, read double precision record ) */
@@ -1499,7 +1554,7 @@ L_dafrdr:
 
 /*     Read a portion of the contents of a double precision record in a */
 /*     DAF file. */
-/*     Obsolete: This routine has been superceded by DAFGDR, and it is */
+/*     Obsolete: This routine has been superseded by DAFGDR, and it is */
 /*     supported for purposes of backwards compatibility only. */
 
 /* $ Disclaimer */
@@ -1546,50 +1601,50 @@ L_dafrdr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF. */
 /*     RECNO      I   Record number. */
 /*     BEGIN      I   First word to read from record. */
 /*     END        I   Last word to read from record. */
 /*     DATA       O   Contents of record. */
-/*     FOUND      O   True if record is found. */
+/*     FOUND      O   .TRUE. if record is found. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF. */
+/*     HANDLE   is the handle associated with a DAF. */
 
-/*     RECNO       is the record number of a particular double precision */
-/*                 record within the DAF, whose contents are to be read. */
+/*     RECNO    is the record number of a particular double precision */
+/*              record within the DAF, whose contents are to be read. */
 
-/*     BEGIN       is the first word in the specified record to be */
-/*                 returned. */
+/*     BEGIN    is the first word in the specified record to be */
+/*              returned. */
 
-/*     END         is the final word in the specified record to be */
-/*                 returned. */
+/*     END      is the final word in the specified record to be */
+/*              returned. */
 
 /* $ Detailed_Output */
 
-/*     DATA        contains the specified portion (from BEGIN to END, */
-/*                 inclusize) of the specified record from the specified */
-/*                 file, specifically. */
+/*     DATA     contains the specified portion (from BEGIN to END, */
+/*              inclusive) of the specified record from the specified */
+/*              file, specifically. */
 
-/*     FOUND       is true when the specified record is found, and is */
-/*                 false otherwise. */
+/*     FOUND    is .TRUE. when the specified record is found, and is */
+/*              .FALSE. otherwise. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the file associated with HANDLE is not of the native */
-/*        binary file format, this routine signals the error */
-/*        SPICE(UNSUPPORTEDBFF). */
+/*     1)  If the file associated with HANDLE is not of the native */
+/*         binary file format, the error SPICE(UNSUPPORTEDBFF) is */
+/*         signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -1609,12 +1664,12 @@ L_dafrdr:
 /*        END DO */
 
 /*     Therefore bad values for BEGIN and END (BEGIN < 1, END < BEGIN, */
-/*     etc.) are not signalled as errors, but result in the actions */
+/*     etc.) are not signaled as errors, but result in the actions */
 /*     implied by the above. */
 
 /*     This routine has been made obsolete by the routine DAFGDR, */
 /*     and it is supported for reasons of backwards compatibility */
-/*     only.  New software development should utilize DAFGDA. */
+/*     only. New software development should utilize DAFGDA. */
 
 /* $ Examples */
 
@@ -1640,32 +1695,48 @@ L_dafrdr:
 
 /* $ Restrictions */
 
-/*     1) An integer overflow may occur if the number of requests */
-/*        by a single program exceeds the maximum number that can */
-/*        be stored in an integer variable. */
+/*     1)  An integer overflow may occur if the number of requests */
+/*         by a single program exceeds the maximum number that can */
+/*         be stored in an integer variable. */
 
-/*     2) Bad values for BEGIN and END ( BEGIN < 1, END > 128, */
-/*        END < BEGIN ) are not signalled as errors. The effects of */
-/*        such assignments on the returned data are defined by the */
-/*        following control structure: */
+/*     2)  Bad values for BEGIN and END ( BEGIN < 1, END > 128, */
+/*         END < BEGIN ) are not signaled as errors. The effects of */
+/*         such assignments on the returned data are defined by the */
+/*         following control structure: */
 
-/*           J = 1 */
-/*           DO I = MAX( 1, BEGIN ), MIN( 128, END ) */
-/*              DATA( J ) = Buffered record ( I ) */
-/*              J = J + 1 */
-/*           END DO */
+/*            J = 1 */
+/*            DO I = MAX( 1, BEGIN ), MIN( 128, END ) */
+/*               DATA( J ) = Buffered record ( I ) */
+/*               J = J + 1 */
+/*            END DO */
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 12-AUG-2021 (NJB) (JDR) */
+
+/*        Bug fix: now NREAD is not incremented once it reaches */
+/*        INTMAX(), if it does. */
+
+/*        Tweaked one line of code to suppress ftnchek warning. */
+
+/*        Re-ordered header sections. Corrected typos in comments. */
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Removed DAF required reading from $Literature_References. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
@@ -1706,7 +1777,7 @@ L_dafrdr:
 /* -& */
 /* $ Index_Entries */
 
-/*     read daf d.p. record */
+/*     read DAF d.p. record */
 
 /* -& */
 /* $ Revisions */
@@ -1716,7 +1787,7 @@ L_dafrdr:
 /*        The exception SPICE(UNSUPPORTEDBFF) was added to guarantee */
 /*        this routine's functionality remains unchanged as a result */
 /*        of the updates to the underlying DAF software's utilization of */
-/*        the handle manager.  In versions of the toolkit prior to this, */
+/*        the handle manager. In versions of the toolkit prior to this, */
 /*        all DAFs loaded were of the native binary file format. */
 /*        Previously, this routine was used to read the contents of */
 /*        summary records in addition to the usual data records. */
@@ -1734,8 +1805,8 @@ L_dafrdr:
 /* -    SPICELIB Version 1.2.0, 01-AUG-1997 (NJB) */
 
 /*        Unnecessary CHKIN and CHKOUT calls were removed from entry */
-/*        point DAFRDR.  These calls were placed together prior to */
-/*        a RETURN statement.  It's unclear why they were there in the */
+/*        point DAFRDR. These calls were placed together prior to */
+/*        a RETURN statement. It's unclear why they were there in the */
 /*        first place. */
 
 /* -    SPICELIB Version 1.1.0, 25-NOV-1992 (JML) */
@@ -1807,9 +1878,9 @@ L_dafrdr:
     while(! done) {
 	++bufloc;
 	stored = *handle == rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? 
-		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1264)] && *
+		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1348)] && *
 		recno == rbrec[(i__2 = bufloc - 1) < 100 && 0 <= i__2 ? i__2 :
-		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)1264)];
+		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)1348)];
 	done = stored || bufloc == rbnbr;
     }
 
@@ -1825,7 +1896,7 @@ L_dafrdr:
 	minai_(rbreq, &rbnbr, &minval, &bufloc);
 	zzdafgdr_(handle, recno, &rbdat[(i__1 = (bufloc << 7) - 128) < 12800 
 		&& 0 <= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_", (
-		ftnlen)1284)], &locfnd);
+		ftnlen)1368)], &locfnd);
 
 /*        If the call to ZZDAFGDR failed, or the record was not found, */
 /*        then clean up. */
@@ -1833,17 +1904,19 @@ L_dafrdr:
 	if (failed_() || ! locfnd) {
 	    *found = FALSE_;
 	    rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbhan", i__1, "dafrwd_", (ftnlen)1292)] = 0;
+		    "rbhan", i__1, "dafrwd_", (ftnlen)1376)] = 0;
 	    rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbrec", i__1, "dafrwd_", (ftnlen)1293)] = 0;
+		    "rbrec", i__1, "dafrwd_", (ftnlen)1377)] = 0;
 	    rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbreq", i__1, "dafrwd_", (ftnlen)1294)] = 0;
+		    "rbreq", i__1, "dafrwd_", (ftnlen)1378)] = 0;
 	} else {
-	    ++nread;
+	    if (nread < intmax_()) {
+		++nread;
+	    }
 	    rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbhan", i__1, "dafrwd_", (ftnlen)1297)] = *handle;
+		    "rbhan", i__1, "dafrwd_", (ftnlen)1385)] = *handle;
 	    rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbrec", i__1, "dafrwd_", (ftnlen)1298)] = *recno;
+		    "rbrec", i__1, "dafrwd_", (ftnlen)1386)] = *recno;
 	    if (rbnbr < 100) {
 		++rbnbr;
 	    }
@@ -1859,7 +1932,7 @@ L_dafrdr:
 	e = min(128,*end);
 	count = e - b + 1;
 	moved_(&rbdat[(i__1 = b + (bufloc << 7) - 129) < 12800 && 0 <= i__1 ? 
-		i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)1318)], &
+		i__1 : s_rnge("rbdat", i__1, "dafrwd_", (ftnlen)1406)], &
 		count, data);
 
 /*        Increment the request counter in such a way that integer */
@@ -1869,7 +1942,7 @@ L_dafrdr:
 
 	zzddhrcm_(&rbnbr, rbreq, &nreq);
 	rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("rbreq", 
-		i__1, "dafrwd_", (ftnlen)1327)] = nreq;
+		i__1, "dafrwd_", (ftnlen)1415)] = nreq;
     }
     return 0;
 /* $Procedure DAFWDR ( DAF, write double precision record ) */
@@ -1921,7 +1994,7 @@ L_dafwdr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DAF. */
 /*     RECNO      I   Record number. */
@@ -1929,14 +2002,14 @@ L_dafwdr:
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF. */
+/*     HANDLE   is the handle associated with a DAF. */
 
-/*     RECNO       is the record number of a particular double */
-/*                 precision record within the file, whose */
-/*                 contents are to be written (if the record does */
-/*                 not yet exist) or overwritten (if it does). */
+/*     RECNO    is the record number of a particular double */
+/*              precision record within the file, whose */
+/*              contents are to be written (if the record does */
+/*              not yet exist) or overwritten (if it does). */
 
-/*     DREC        contains the new contents of the record. */
+/*     DREC     contains the new contents of the record. */
 
 /* $ Detailed_Output */
 
@@ -1944,19 +2017,19 @@ L_dafwdr:
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the file is not open for write access, the error */
-/*        SPICE(DAFILLEGWRITE) is signalled. */
+/*     1)  If the file is not open for write access, the error */
+/*         SPICE(DAFILLEGWRITE) is signaled. */
 
-/*     2) If (for some reason) the record cannot be written the */
-/*        error SPICE(DAFDPWRITEFAIL) is signalled. */
+/*     2)  If (for some reason) the record cannot be written, the */
+/*         error SPICE(DAFDPWRITEFAIL) is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -1990,18 +2063,30 @@ L_dafwdr:
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.0.1, 09-AUG-2021 (NJB) (JDR) */
+
+/*        Re-ordered header sections. Corrected typos in comments. */
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Removed DAF required reading from $Literature_References. */
+
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
-/*        Replaced the call to DAFHLU to ZZDDHHLU.  This prevents */
+/*        Replaced the call to DAFHLU to ZZDDHHLU. This prevents */
 /*        DAFWDR from tying up resources in the handle manager. */
 
 /* -    SPICELIB Version 1.3.0, 24-MAR-2000 (WLT) */
@@ -2028,7 +2113,7 @@ L_dafwdr:
 /* -& */
 /* $ Index_Entries */
 
-/*     write daf d.p. record */
+/*     write DAF d.p. record */
 
 /* -& */
 
@@ -2059,9 +2144,9 @@ L_dafwdr:
     while(! done) {
 	++bufloc;
 	stored = *handle == rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? 
-		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1532)] && *
+		i__1 : s_rnge("rbhan", i__1, "dafrwd_", (ftnlen)1632)] && *
 		recno == rbrec[(i__2 = bufloc - 1) < 100 && 0 <= i__2 ? i__2 :
-		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)1532)];
+		 s_rnge("rbrec", i__2, "dafrwd_", (ftnlen)1632)];
 	done = stored || bufloc == 100;
     }
 
@@ -2089,14 +2174,14 @@ L100001:
 	if (iostat == 0) {
 	    moved_(drec, &c__128, &rbdat[(i__1 = (bufloc << 7) - 128) < 12800 
 		    && 0 <= i__1 ? i__1 : s_rnge("rbdat", i__1, "dafrwd_", (
-		    ftnlen)1555)]);
+		    ftnlen)1655)]);
 	} else {
 	    rbhan[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbhan", i__1, "dafrwd_", (ftnlen)1557)] = 0;
+		    "rbhan", i__1, "dafrwd_", (ftnlen)1657)] = 0;
 	    rbrec[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbrec", i__1, "dafrwd_", (ftnlen)1558)] = 0;
+		    "rbrec", i__1, "dafrwd_", (ftnlen)1658)] = 0;
 	    rbreq[(i__1 = bufloc - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "rbreq", i__1, "dafrwd_", (ftnlen)1559)] = 0;
+		    "rbreq", i__1, "dafrwd_", (ftnlen)1659)] = 0;
 	}
     }
 
@@ -2157,7 +2242,7 @@ L_dafnrr:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     READS, */
 /*     REQS       O   Reads, requests in this execution. */
@@ -2169,21 +2254,21 @@ L_dafnrr:
 /* $ Detailed_Output */
 
 /*     READS, */
-/*     REQS        are the number of physical reads and the number */
-/*                 of requests processed by DAFRDR during the current */
-/*                 execution of the calling program. */
+/*     REQS     are the number of physical reads and the number */
+/*              of requests processed by DAFRDR during the current */
+/*              execution of the calling program. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -2219,14 +2304,24 @@ L_dafnrr:
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.1, 09-AUG-2021 (NJB) */
+
+/*        Re-ordered header sections. Corrected typos in comments. */
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Removed DAF required reading from $Literature_References. */
 
 /* -    SPICELIB Version 1.3.0, 24-MAR-2000 (WLT) */
 
@@ -2252,7 +2347,7 @@ L_dafnrr:
 /* -& */
 /* $ Index_Entries */
 
-/*     number of daf read requests */
+/*     number of DAF read requests */
 
 /* -& */
     *reads = nread;

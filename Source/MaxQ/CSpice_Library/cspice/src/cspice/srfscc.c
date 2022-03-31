@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure SRFSCC (Surface string and body ID code to surface ID code ) */
+/* $Procedure SRFSCC (Surface string and body ID code to surface ID code) */
 /* Subroutine */ int srfscc_(char *srfstr, integer *bodyid, integer *code, 
 	logical *found, ftnlen srfstr_len)
 {
@@ -66,7 +66,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SRFSTR     I   Surface name or ID string. */
 /*     BODYID     I   Body ID code. */
@@ -75,43 +75,47 @@
 
 /* $ Detailed_Input */
 
-/*     SRFSTR     is a string designating a surface. SRFSTR may contain */
-/*                a surface name or a string representation of the */
-/*                surface's integer ID code. */
+/*     SRFSTR   is a string designating a surface. SRFSTR may contain */
+/*              a surface name or a string representation of the */
+/*              surface's integer ID code. */
 
-/*                Case and leading and trailing blanks in a surface name */
-/*                are not significant. Sequences of consecutive embedded */
-/*                blanks are considered equivalent to a single blank. */
-/*                For example, all of the strings below are considered */
-/*                to be equivalent: */
+/*              If, for the body specified by BODYID, multiple surface */
+/*              names are associated with one surface ID code, then any */
+/*              of these names may be used as the value of SRFSTR. */
 
-/*                   'MGS MOLA 128 PIXEL/DEG' */
-/*                   'MGS MOLA 128 pixel/deg' */
-/*                   'MGS MOLA 128 PIXEL/DEG   ' */
-/*                   'MGS MOLA 128    PIXEL/DEG' */
-/*                   '   MGS MOLA 128 PIXEL/DEG' */
+/*              Case and leading and trailing blanks in a surface name */
+/*              are not significant. Sequences of consecutive embedded */
+/*              blanks are considered equivalent to a single blank. */
+/*              For example, all of the strings below are considered */
+/*              to be equivalent: */
 
-/*                However, */
+/*                 'MGS MOLA 128 PIXEL/DEG' */
+/*                 'MGS MOLA 128 pixel/deg' */
+/*                 'MGS MOLA 128 PIXEL/DEG   ' */
+/*                 'MGS MOLA 128    PIXEL/DEG' */
+/*                 '   MGS MOLA 128 PIXEL/DEG' */
 
-/*                   'MGSMOLA 128PIXEL/DEG' */
+/*              However, */
 
-/*                is not equivalent to the names above. */
+/*                 'MGSMOLA 128PIXEL/DEG' */
+
+/*              is not equivalent to the names above. */
 
 
-/*     BODYID     is the integer ID code of the body associated with the */
-/*                surface designated by SRFSTR. */
+/*     BODYID   is the integer ID code of the body associated with the */
+/*              surface designated by SRFSTR. */
 
 /* $ Detailed_Output */
 
-/*     CODE       is integer ID code of the surface designated by */
-/*                SRFSTR, for the body designated by BODYID, if for this */
-/*                body an association exists between the input surface */
-/*                string and a surface ID code. CODE is defined if and */
-/*                only if the output flag FOUND is .TRUE. */
+/*     CODE     is integer ID code of the surface designated by */
+/*              SRFSTR, for the body designated by BODYID, if for this */
+/*              body an association exists between the input surface */
+/*              string and a surface ID code. CODE is defined if and */
+/*              only if the output flag FOUND is .TRUE. */
 
-/*     FOUND      is a logical flag that is .TRUE. if a surface code */
-/*                corresponding to the input surface string and body ID */
-/*                code was found. FOUND is .FALSE. otherwise. */
+/*     FOUND    is a logical flag that is .TRUE. if a surface code */
+/*              corresponding to the input surface string and body ID */
+/*              code was found. FOUND is .FALSE. otherwise. */
 
 /* $ Parameters */
 
@@ -228,107 +232,107 @@
 /*           \begintext */
 
 
-/*       Example code begins here. */
+/*        Example code begins here. */
 
 
-/*          PROGRAM EX1 */
-/*          IMPLICIT NONE */
+/*              PROGRAM SRFSCC_EX1 */
+/*              IMPLICIT NONE */
 
-/*          INCLUDE 'srftrn.inc' */
+/*              INCLUDE 'srftrn.inc' */
 
-/*          INTEGER               FILSIZ */
-/*          PARAMETER           ( FILSIZ = 255 ) */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*          INTEGER               NCASE */
-/*          PARAMETER           ( NCASE = 7 ) */
+/*              INTEGER               NCASE */
+/*              PARAMETER           ( NCASE = 7 ) */
 
-/*          INTEGER               BDNMLN */
-/*          PARAMETER           ( BDNMLN = 36 ) */
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
 
-/*          CHARACTER*(FILSIZ)    META */
-/*          CHARACTER*(SFNMLN)    SRFSTR ( NCASE ) */
+/*              CHARACTER*(FILSIZ)    META */
+/*              CHARACTER*(SFNMLN)    SRFSTR ( NCASE ) */
 
-/*          INTEGER               BODYID ( NCASE ) */
-/*          INTEGER               I */
-/*          INTEGER               SURFID */
+/*              INTEGER               BODYID ( NCASE ) */
+/*              INTEGER               I */
+/*              INTEGER               SURFID */
 
-/*          LOGICAL               FOUND */
-
-
-/*          DATA  ( SRFSTR(I), BODYID(I), I = 1, NCASE )  / */
-/*         . */
-/*         .        'MGS MOLA  64 pixel/deg',    499, */
-/*         .        'PHOBOS GASKELL Q512',       401, */
-/*         .        'MGS MOLA 128 pixel/deg',    499, */
-/*         .        '1',                         499, */
-/*         .        '1',                         401, */
-/*         .        '2',                         499, */
-/*         .        'ZZZ',                       499      / */
+/*              LOGICAL               FOUND */
 
 
-/*          META = 'srfscc_ex1.tm' */
-
-/*          CALL FURNSH ( META ) */
-
-/*          WRITE (*,*) ' ' */
-
-/*          DO I = 1, NCASE */
-
-/*             CALL SRFSCC ( SRFSTR(I), BODYID(I), */
-/*         .                 SURFID,    FOUND     ) */
-
-/*             WRITE (*,*) 'surface string   = ', SRFSTR(I) */
-/*             WRITE (*,*) 'body ID          = ', BODYID(I) */
-/*             WRITE (*,*) 'surface ID found = ', FOUND */
-
-/*             IF ( FOUND ) THEN */
-/*                WRITE (*,*) 'surface ID       = ', SURFID */
-/*             END IF */
-
-/*             WRITE (*,*) ' ' */
-
-/*          END DO */
-
-/*          END */
+/*              DATA  ( SRFSTR(I), BODYID(I), I = 1, NCASE )  / */
+/*             . */
+/*             .        'MGS MOLA  64 pixel/deg',    499, */
+/*             .        'PHOBOS GASKELL Q512',       401, */
+/*             .        'MGS MOLA 128 pixel/deg',    499, */
+/*             .        '1',                         499, */
+/*             .        '1',                         401, */
+/*             .        '2',                         499, */
+/*             .        'ZZZ',                       499      / */
 
 
-/*     When this program was executed on a PC/Linux/gfortran/64-bit */
-/*     platform, the output was: */
+/*              META = 'srfscc_ex1.tm' */
+
+/*              CALL FURNSH ( META ) */
+
+/*              WRITE (*,*) ' ' */
+
+/*              DO I = 1, NCASE */
+
+/*                 CALL SRFSCC ( SRFSTR(I), BODYID(I), */
+/*             .                 SURFID,    FOUND     ) */
+
+/*                 WRITE (*,*) 'surface string   = ', SRFSTR(I) */
+/*                 WRITE (*,*) 'body ID          = ', BODYID(I) */
+/*                 WRITE (*,*) 'surface ID found = ', FOUND */
+
+/*                 IF ( FOUND ) THEN */
+/*                    WRITE (*,*) 'surface ID       = ', SURFID */
+/*                 END IF */
+
+/*                 WRITE (*,*) ' ' */
+
+/*              END DO */
+
+/*              END */
 
 
-/*        surface string   = MGS MOLA  64 pixel/deg */
-/*        body ID          =          499 */
-/*        surface ID found =  T */
-/*        surface ID       =            1 */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*        surface string   = PHOBOS GASKELL Q512 */
-/*        body ID          =          401 */
-/*        surface ID found =  T */
-/*        surface ID       =            1 */
 
-/*        surface string   = MGS MOLA 128 pixel/deg */
-/*        body ID          =          499 */
-/*        surface ID found =  T */
-/*        surface ID       =            2 */
+/*         surface string   = MGS MOLA  64 pixel/deg */
+/*         body ID          =          499 */
+/*         surface ID found =  T */
+/*         surface ID       =            1 */
 
-/*        surface string   = 1 */
-/*        body ID          =          499 */
-/*        surface ID found =  T */
-/*        surface ID       =            1 */
+/*         surface string   = PHOBOS GASKELL Q512 */
+/*         body ID          =          401 */
+/*         surface ID found =  T */
+/*         surface ID       =            1 */
 
-/*        surface string   = 1 */
-/*        body ID          =          401 */
-/*        surface ID found =  T */
-/*        surface ID       =            1 */
+/*         surface string   = MGS MOLA 128 pixel/deg */
+/*         body ID          =          499 */
+/*         surface ID found =  T */
+/*         surface ID       =            2 */
 
-/*        surface string   = 2 */
-/*        body ID          =          499 */
-/*        surface ID found =  T */
-/*        surface ID       =            2 */
+/*         surface string   = 1 */
+/*         body ID          =          499 */
+/*         surface ID found =  T */
+/*         surface ID       =            1 */
 
-/*        surface string   = ZZZ */
-/*        body ID          =          499 */
-/*        surface ID found =  F */
+/*         surface string   = 1 */
+/*         body ID          =          401 */
+/*         surface ID found =  T */
+/*         surface ID       =            1 */
+
+/*         surface string   = 2 */
+/*         body ID          =          499 */
+/*         surface ID found =  T */
+/*         surface ID       =            2 */
+
+/*         surface string   = ZZZ */
+/*         body ID          =          499 */
+/*         surface ID found =  F */
 
 
 /* $ Restrictions */
@@ -341,11 +345,19 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 22-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated description of SRFSTR to indicate that any */
+/*        surface name alias may be used. */
 
 /* -    SPICELIB Version 1.0.0, 14-JAN-2016 (NJB) (EDW) (BVS) */
 
@@ -356,7 +368,7 @@
 
 /* -& */
 
-/*     SPICELLIB functions */
+/*     SPICELIB functions */
 
 
 /*     Local parameters */

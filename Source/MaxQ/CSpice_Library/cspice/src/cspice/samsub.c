@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SAMSUB (Same substrings) */
+/* $Procedure SAMSUB (Same substrings) */
 logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 	 integer *e2, ftnlen str1_len, ftnlen str2_len)
 {
@@ -46,11 +46,11 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -68,39 +68,39 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 
 /* $ Detailed_Input */
 
-/*     STR1       is a character string */
+/*     STR1     is a character string */
 
-/*     B1         are integers giving the beginning and ending of a */
-/*     E1         substring in STR1 */
+/*     B1       are integers giving the beginning and ending of a */
+/*     E1       substring in STR1 */
 
-/*     STR2       is a character string */
+/*     STR2     is a character string */
 
-/*     B2         are integers giving the beginning and ending of a */
-/*     E2         substring in STR2 */
+/*     B2       are integers giving the beginning and ending of a */
+/*     E2       substring in STR2 */
 
 /* $ Detailed_Output */
 
-/*     The function returns TRUE if the two substrings STR(B1:E1) and */
+/*     The function returns .TRUE. if the two substrings STR(B1:E1) and */
 /*     STR(B2:E2) have the same length and the same characters. */
 
 /*     If any of the indices B1, E1, B2, E2 are out of range or out */
-/*     of order the function returns FALSE. */
+/*     of order the function returns .FALSE. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If any of the B1, E1, B2, E2 are out of range or if an */
-/*        ending substring index is before a beginning substring */
-/*        index, the function returns false. */
+/*     1)  If any of the B1, E1, B2, E2 are out of range or if an */
+/*         ending substring index is before a beginning substring */
+/*         index, the function returns false. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -116,7 +116,7 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 /*     end of the string. */
 
 /*     If one ignores boundary constraints this can easily be */
-/*     coded as shown here:  We assume the particular substring is */
+/*     coded as shown here: We assume the particular substring is */
 
 /*     '/beg' */
 
@@ -143,7 +143,7 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 
 /*     Unfortunately, you can't rely upon FORTRAN to check the boundary */
 /*     condition: E .LE. LEN(STR) and skip the second test if the first */
-/*     condition if false.  As a result you can get an out of range */
+/*     condition if false. As a result you can get an out of range */
 /*     error. */
 
 /*     Instead you could code: */
@@ -171,7 +171,7 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 /*     END DO */
 
 
-/*     However, this is code is far more effort.  Using this routine */
+/*     However, this is code is far more effort. Using this routine */
 /*     you can make a much simpler block of code. */
 
 /*     B = 1 */
@@ -184,24 +184,26 @@ logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2,
 
 /*     END DO */
 
-
-
 /* $ Restrictions */
+
+/*     None. */
+
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*      W.L. Taber      (JPL) */
-
-/* $ Literature_References */
-
-/*      None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 31-MAR-1995 (WLT) */
+/* -    SPICELIB Version 1.0.1, 12-AUG-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 31-MAR-1995 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      SPKPDS ( SPK pack descriptor ) */
+/* $Procedure SPKPDS ( SPK pack descriptor ) */
 /* Subroutine */ int spkpds_(integer *body, integer *center, char *frame, 
 	integer *type__, doublereal *first, doublereal *last, doublereal *
 	descr, ftnlen frame_len)
@@ -82,41 +82,66 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     BODY       is the NAIF ID code for the body of the segment. */
+/*     BODY     is the NAIF ID code for the body of the segment. */
 
-/*     CENTER     is the center of motion for BODY. */
+/*     CENTER   is the center of motion for BODY. */
 
-/*     FRAME      is a string that names the frame to which states for */
-/*                the body shall be referenced. */
+/*     FRAME    is a string that names the frame to which states for */
+/*              the body shall be referenced. */
 
-/*     TYPE       is the type of SPK segment to create. */
+/*     TYPE     is the type of SPK segment to create. */
 
-/*     FIRST      is the first epoch for which the segment will have */
-/*                ephemeris data. */
+/*     FIRST    is the first epoch for which the segment will have */
+/*              ephemeris data. */
 
-/*     LAST       is the last epoch for which the segment will have */
-/*                ephemeris data. */
+/*     LAST     is the last epoch for which the segment will have */
+/*              ephemeris data. */
 
 /* $ Detailed_Output */
 
-/*     DESCR       is a valid SPK segment descriptor to use */
-/*                 when creating a DAF segment for this body. */
+/*     DESCR    is a valid SPK segment descriptor to use */
+/*              when creating a DAF segment for this body. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If the value of BODY is 0, the error SPICE(BARYCENTEREPHEM) is */
+/*         signaled. */
+
+/*     2)  If the values of BODY and CENTER are the same, the error */
+/*         SPICE(BODYANDCENTERSAME) is signaled. */
+
+/*     3)  If FRAME is not one of the known SPICE reference frames, the */
+/*         error SPICE(INVALIDREFFRAME) is signaled. */
+
+/*     4)  If FIRST is greater than or equal to LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
+
+/*     5)  If the value of TYPE is outside the range 1 to 1000 */
+/*         (inclusive), the error SPICE(UNKNOWNSPKTYPE) is signaled. This */
+/*         does not ensure that the TYPE is a legitimate SPK segment */
+/*         type, but it is a simple check that helps avoid problems that */
+/*         arise from uninitialized values or improperly ordered calling */
+/*         arguments. */
+
+/* $ Files */
 
 /*     None. */
 
 /* $ Particulars */
 
 /*     This is a utility routine for validating and creating */
-/*     the descriptor for an SPK segment.  It is intended for */
+/*     the descriptor for an SPK segment. It is intended for */
 /*     use only by routines that create SPK segments. */
 
 /* $ Examples */
 
 /*     Suppose that you wish to create an SPK segment of type X */
 /*     and that you are writing a routine to handle the details */
-/*     of the segment creation.  This routine can be used to */
+/*     of the segment creation. This routine can be used to */
 /*     ensure that the descriptor needed for the segment is */
 /*     properly formed and that the information in that descriptor */
 /*     is reasonable. */
@@ -131,47 +156,27 @@ static integer c__6 = 6;
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1) The error 'SPICE(BARYCENTEREPHEM)' is signalled if the */
-/*        value of BODY is 0. */
-
-/*     2) The error 'SPICE(BODYANDCENTERSAME)' is signalled if the */
-/*        values of BODY and CENTER are the same. */
-
-/*     3) The error 'SPICE(INVALIDREFFRAME)' is signalled if FRAME */
-/*        is not one of the known SPICE reference frames. */
-
-/*     4) The error 'SPICE(BADDESCRTIMES)' is signalled if FIRST */
-/*        is greater than or equal to LAST */
-
-/*     5) The error 'SPICE(UNKNOWNSPKTYPE)' is signalled if the */
-/*        value of TYPE is outside the range 1 to 1000 (inclusive). */
-/*        This does not ensure that the TYPE is a legitimate SPK */
-/*        segment type, but it is a simple check that helps avoid */
-/*        problems that arise from uninitialized values or improperly */
-/*        ordered calling arguments. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     K.R. Gehringer    (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.0, 1995-SEP-19 (WLT) */
+/* -    SPICELIB Version 2.0.1, 05-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 19-SEP-1995 (WLT) */
 
 /*        Upgraded the routine to support non-inertial frames. */
 
-/* -    SPICELIB Version 1.0.0, 1994-JAN-4 (WLT) (KRG) */
+/* -    SPICELIB Version 1.0.0, 04-JAN-1994 (WLT) (KRG) */
 
 /* -& */
 /* $ Index_Entries */

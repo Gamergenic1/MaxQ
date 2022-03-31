@@ -44,7 +44,7 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
    #undef    mtxm_c
-   
+
 
    void mtxm_c ( ConstSpiceDouble    m1  [3][3],
                  ConstSpiceDouble    m2  [3][3],
@@ -62,80 +62,26 @@
 
 -Detailed_Input
 
-   m1         is any 3x3 double precision matrix. Typically,
-              m1 will be a rotation matrix since then its
-              transpose is its inverse (but this is not a
-              requirement).
+   m1          is any 3x3 double precision matrix. Typically,
+               m1 will be a rotation matrix since then its
+               transpose is its inverse (but this is not a
+               requirement).
 
-   m2         is any 3x3 double precision matrix.
+   m2          is any 3x3 double precision matrix.
 
 -Detailed_Output
 
-   mout       is a 3x3 double precision matrix. mout is the
-              product
+   mout        is a 3x3 double precision matrix. mout is the
+               product
 
-                          t
-                 mout = m1  m2
+                           t
+                  mout = m1  m2
 
-              mout may overwrite either m1 or m2.
+               mout may overwrite either m1 or m2.
 
 -Parameters
 
    None.
-
--Particulars
-
-   The code reflects precisely the following mathematical expression
-
-   For each value of the subscripts i and j from 0 to 2:
-
-                     2
-                    __
-                    \
-      mout[i][j] =  /_  m1[k][i] * m2[k][j]
-                    k=0
-
-   Note that the reversal of the k and i subscripts in the left-hand
-   matrix m1 is what makes mout the product of the TRANSPOSE of M1
-   and not simply of m1 itself.  Also, the intermediate results of
-   the operation above are buffered in a temporary matrix which is
-   later moved to the output matrix.  Thus mout can be actually be
-   m1 or m2 if desired without interfering with the computations.
-
--Examples
-
-   Let m1 = | 1.  2.  3. |
-            |            |
-            | 4.  5.  6. |
-            |            |
-            | 7.  8.  9. |
-
-
-       m2 = |  1.   1.  0. |
-            |              |
-            | -1.   1.  0. |
-            |              |
-            |  0.   0.  1. |
-
-   then the call
-
-   mtxm_c ( m1, m2, mout );
-
-   produces the matrix
-
-   mout = | -3.   5.  7. |
-          |              |
-          | -3.   7.  8. |
-          |              |
-          | -3.   9.  9. |
-
-
--Restrictions
-
-   The user is responsible for checking the magnitudes of the
-   elements of m1 and m2 so that a floating point overflow does
-   not occur.  (In the typical use where m1 and m2 are rotation
-   matrices, this not a risk at all.)
 
 -Exceptions
 
@@ -143,20 +89,121 @@
 
 -Files
 
-   None
+   None.
 
--Author_and_Institution
+-Particulars
 
-   W.M. Owen       (JPL)
-   E.D  Wright     (JPL)
+   The code reflects precisely the following mathematical expression
+
+   For each value of the subscripts `i' and `j' from 0 to 2:
+
+                     2
+                    __
+                    \
+      mout[i][j] =  /_  m1[k][i] * m2[k][j]
+                    k=0
+
+   Note that the reversal of the `k' and `i' subscripts in the left-hand
+   matrix `m1' is what makes `mout' the product of the TRANSPOSE of `m1'
+   and not simply of `m1' itself. Also, the intermediate results of
+   the operation above are buffered in a temporary matrix which is
+   later moved to the output matrix. Thus `mout' can be actually be
+   `m1' or `m2' if desired without interfering with the computations.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Given two 3x3 matrices, multiply the transpose of the first
+      matrix by the second one.
+
+
+      Example code begins here.
+
+
+      /.
+         Program mtxm_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          mout   [3][3];
+
+         SpiceInt             i;
+
+         /.
+         Define `m1' and `m2'.
+         ./
+         SpiceDouble          m1     [3][3] = { {1.0,  2.0,  3.0},
+                                                {4.0,  5.0,  6.0},
+                                                {7.0,  8.0,  9.0} };
+
+         SpiceDouble          m2     [3][3] = { { 1.0,  1.0,  0.0},
+                                                {-1.0,  1.0,  0.0},
+                                                { 0.0,  0.0,  1.0} };
+
+         /.
+         Multiply the transpose of `m1' by `m2'.
+         ./
+         mtxm_c ( m1, m2, mout );
+
+         printf( "Transpose of M1 times M2:\n" );
+         for ( i = 0; i < 3; i++ )
+         {
+
+            printf( "%10.3f %9.3f %9.3f\n",
+                    mout[i][0], mout[i][1], mout[i][2] );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Transpose of M1 times M2:
+          -3.000     5.000     7.000
+          -3.000     7.000     8.000
+          -3.000     9.000     9.000
+
+
+-Restrictions
+
+   1)  The user is responsible for checking the magnitudes of the
+       elements of `m1' and `m2' so that a floating point overflow does
+       not occur. (In the typical use where `m1' and `m2' are rotation
+       matrices, this not a risk at all.)
 
 -Literature_References
 
    None.
 
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.0.0, 16-APR-1999 (EDW)
+   -CSPICE Version 1.0.1, 04-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+       Added complete code example based on the existing example.
+
+   -CSPICE Version 1.0.0, 16-APR-1999 (EDW) (WMO)
 
 -Index_Entries
 
@@ -164,7 +211,6 @@
 
 -&
 */
-
 
 { /* Begin mtxm_c */
 
@@ -197,4 +243,3 @@
 
 
 } /* End mtxm_c */
-

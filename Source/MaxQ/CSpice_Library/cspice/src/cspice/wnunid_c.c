@@ -3,10 +3,10 @@
 -Procedure wnunid_c ( Union two DP windows )
 
 -Abstract
- 
-   Place the union of two double precision windows into a third 
-   window. 
- 
+
+   Place the union of two double precision windows into a third
+   window.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 -Keywords
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 */
 
    #include "SpiceUsr.h"
@@ -48,91 +48,122 @@
 
    void wnunid_c ( SpiceCell   * a,
                    SpiceCell   * b,
-                   SpiceCell   * c ) 
+                   SpiceCell   * c )
 
 /*
 
 -Brief_I/O
 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   a, 
-   b          I   Input windows. 
-   c          O   Union of a and b. 
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   a,
+   b          I   Input windows.
+   c          O   Union of `a' and `b'.
+
 -Detailed_Input
- 
-   a, 
-   b           are CSPICE windows, each of which contains zero or more 
-               intervals. 
 
-               a and b must be declared as double precision 
-               SpiceCells.
- 
+   a,
+   b           are SPICE windows, each of which contains zero or more
+               intervals.
+
+               `a' and `b' must be declared as double precision SpiceCells.
+
+               CSPICE provides the following macros, which declare and
+               initialize the cells
+
+                  SPICEDOUBLE_CELL        ( a, ASZ );
+                  SPICEDOUBLE_CELL        ( b, BSZ );
+
+               where ASZ and BSZ are the maximum capacity of `a' and `b',
+               respectively.
+
 -Detailed_Output
- 
-   c           is the output CSPICE  window, containing the union of 
-               a and b---every point contained in a, or in b, 
-               or in both. 
- 
-               c must be declared as a double precision SpiceCell.
 
-               c must be distinct from both a and b. 
- 
+   c           is the output SPICE window, containing the union of `a'
+               and `b' --- every point contained in `a', or in `b', or in
+               both.
+
+               `c' must be distinct from both `a' and `b'.
+
+               `c' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( c, CSZ );
+
+               where CSZ is the maximum capacity of `c'.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If any of the function arguments are SpiceCells of type
-      other than double precision, the error SPICE(TYPEMISMATCH)
-      is signaled.
 
-   2) If the union of the two windows results in an excess of 
-      elements, the error SPICE(WINDOWEXCESS) is signaled. 
- 
+   1)  If the union of the two windows results in an excess of
+       elements, the error SPICE(WINDOWEXCESS) is signaled by a
+       routine in the call tree of this routine.
+
+   2)  The cardinality of the input windows must be even. Left
+       endpoints of stored intervals must be strictly greater than
+       preceding right endpoints. Right endpoints must be greater
+       than or equal to corresponding left endpoints. Invalid window
+       data are not diagnosed by this routine and may lead to
+       unpredictable results.
+
+   3)  If any the `a', `b' or `c' cell arguments has a type other
+       than SpiceDouble, the error SPICE(TYPEMISMATCH) is signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   The union of two windows contains every point contained in the 
-   first window, or the second window, or both. 
- 
+
+   The union of two windows contains every point contained in the
+   first window, or the second window, or both.
+
 -Examples
- 
-   Let a contain the intervals 
 
-         [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] 
+   Let a contain the intervals
 
-   and b contain the intervals 
+         [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ]
 
-         [ 2, 6 ]  [ 8, 10 ]  [ 16, 18 ] 
+   and b contain the intervals
 
-   Then the union of a and b contains the intervals 
+         [ 2, 6 ]  [ 8, 10 ]  [ 16, 18 ]
 
-         [ 1, 6 ]  [ 7, 11 ]  [ 16, 18 ]  [ 23, 27 ] 
- 
+   Then the union of a and b contains the intervals
+
+         [ 1, 6 ]  [ 7, 11 ]  [ 16, 18 ]  [ 23, 27 ]
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   H.A. Neilan     (JPL) 
-   B.V. Semenov    (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   B.V. Semenov        (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.2, 24-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added entry #2
+       in -Exceptions section.
+
+       Extended description of arguments "a", "b" and "c" to include
+       type and preferred declaration method.
+
    -CSPICE Version 1.0.1, 11-FEB-2013 (BVS)
 
        Corrected typo in Brief I/O section.
@@ -140,15 +171,15 @@
    -CSPICE Version 1.0.0, 29-JUL-2002 (NJB) (HAN) (WLT) (IMU)
 
 -Index_Entries
- 
-   union two d.p. windows 
- 
+
+   union two d.p. windows
+
 -&
 */
 
 { /* Begin wnunid_c */
 
- 
+
 
    /*
    Participate in error tracing.
@@ -161,26 +192,26 @@
 
 
    /*
-   Make sure cell data types are d.p. 
+   Make sure cell data types are d.p.
    */
    CELLTYPECHK3 ( CHK_STANDARD, "wnunid_c", SPICE_DP, a, b, c );
 
 
    /*
-   Initialize the cells if necessary. 
+   Initialize the cells if necessary.
    */
    CELLINIT3 ( a, b, c );
-   
+
 
    /*
-   Let the f2c'd routine do the work. 
+   Let the f2c'd routine do the work.
    */
    wnunid_ ( (doublereal *) (a->base),
-             (doublereal *) (b->base), 
+             (doublereal *) (b->base),
              (doublereal *) (c->base)  );
 
    /*
-   Sync the output cell. 
+   Sync the output cell.
    */
    if ( !failed_c() )
    {

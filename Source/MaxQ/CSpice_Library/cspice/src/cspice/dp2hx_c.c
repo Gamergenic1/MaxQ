@@ -5,7 +5,7 @@
 -Abstract
 
    Convert a double precision number to an equivalent character
-   string using base 16 ``scientific notation.''
+   string using a base 16 "scientific notation."
 
 -Disclaimer
 
@@ -45,138 +45,156 @@
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
-   #include "SpiceZst.h"
    #include "SpiceZmc.h"
+   #include "SpiceZst.h"
 
-   void dp2hx_c ( SpiceDouble   number,
-                  SpiceInt      lenout,
-                  SpiceChar   * string,
-                  SpiceInt    * length
-                 )
+   void dp2hx_c  ( SpiceDouble         number,
+                   SpiceInt            hxslen,
+                   SpiceChar           hxstr  [],
+                   SpiceInt          * hxssiz    )
 
 /*
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
+   STRLEN     P   Max number of characters allowed in output string.
    number     I   D.p. number to be converted.
-   lenout     I   Available space for output string 'string'.
-   string     O   Equivalent character string, left justified.
-   length     O   Length of the character string produced.
+   hxslen     I   Available space for output string `hxstr'.
+   hxstr      O   Equivalent character string, left justified.
+   hxssiz     O   Length of the character string produced.
 
 -Detailed_Input
 
-   number   The double precision number to be converted to a
-            character string representation.
+   number      is the double precision number to be converted to a
+               character string representation.
 
-   lenout   is the maximum length of the output 'string'. The value
-            defined by lenout should be one plus the value large 
-            enough to hold any possible output.
+   hxslen      is the maximum length of the output `hxstr'. The value
+               defined by `hxslen' should be one plus the value large
+               enough to hold any possible output.
 
 -Detailed_Output
 
-   string   The character string produced by this routine that
-            represents 'number' in base 16 ``scientific notation,''
-            e.g.:
+   hxstr       is the character string produced by this routine that
+               represents `number' in a base 16 "scientific notation,"
+               e.g.:
 
-               672.0 = '2A^3' = ( 2/16 + 10/( 16**2 ) ) * 16**3
+                  672.0 = "2A^3" = ( 2/16 + 10/( 16^2 ) ) * 16^3
 
-            and
+               and
 
-               -11.0 = '-B^1' = - ( 11/16 ) * 16**1.
+                  -11.0 = "-B^1" = - ( 11/16 ) * 16^1.
 
-            The following table describes the character set used to
-            represent the hexadecimal digits and their corresponding
-            values.
+               The following table describes the character set used to
+               represent the hexadecimal digits and their corresponding
+               values.
 
-                 Character    Value         Character    Value
-                 ---------    ------        ---------    ------
-                   '0'         0.0D0          '8'         8.0D0
-                   '1'         1.0D0          '9'         9.0D0
-                   '2'         2.0D0          'A'        10.0D0
-                   '3'         3.0D0          'B'        11.0D0
-                   '4'         4.0D0          'C'        12.0D0
-                   '5'         5.0D0          'D'        13.0D0
-                   '6'         6.0D0          'E'        14.0D0
-                   '7'         7.0D0          'F'        15.0D0
+                  Character    Value         Character    Value
+                  ---------    ------        ---------    ------
+                    "0"         0.0e0          "8"         8.0e0
+                    "1"         1.0e0          "9"         9.0e0
+                    "2"         2.0e0          "A"        10.0e0
+                    "3"         3.0e0          "B"        11.0e0
+                    "4"         4.0e0          "C"        12.0e0
+                    "5"         5.0e0          "D"        13.0e0
+                    "6"         6.0e0          "E"        14.0e0
+                    "7"         7.0e0          "F"        15.0e0
 
-            The caret, or hat, character, '^', is used to distinguish 
-            the exponent.
+               The caret, or hat, character, "^", is used to
+               distinguish the exponent.
 
-            The plus sign, '+', and the minus sign, '-' have the expected 
-            meanings.
+               The plus sign, "+", and the minus sign, "-", are used,
+               and they have their usual meanings.
 
-            In order to obtain the entire character string produced
-            by this routine, the output character string should be
-            at least N characters long, where
+               In order to obtain the entire character string produced
+               by this routine, the output character string should be
+               at least `n' characters long, where
 
 
-                      # of bits per double precision mantissa + 3
-            N = 3 + ----------------------------------------------
-                                          4
+                           # of bits per double precision mantissa + 3
+                  n = 3 + ---------------------------------------------
+                                                4
 
-                      # of bits per double precision exponent + 3
-                  + ---------------------------------------------- .
-                                          4
+                           # of bits per double precision exponent + 3
+                        + ---------------------------------------------
+                                                4
 
-            There should be one character position for the sign of
-            the mantissa, one for the sign of the exponent, one for
-            the exponentiation character, and one for each
-            hexadecimal digit that could be produced from a mantissa
-            and an exponent.
+               There should be one character position for the sign of
+               the mantissa, one for the sign of the exponent, one for
+               the exponentiation character, and one for each
+               hexadecimal digit that could be produced from a mantissa
+               and an exponent.
 
-            The following table contains minimum output string
-            lengths necessary to obtain the complete character
-            string produced by this routine for some typical
-            implementations of double precision numbers.
+               The following table contains minimum output string
+               lengths necessary to obtain the complete character
+               string produced by this routine for some typical
+               implementations of double precision numbers.
 
-            Double precision number
-            Size Mantissa Exponent    Minimum output string length
-            bits   bits     bits
-            ---- -------- --------    ----------------------------
-            64   48       15          3 + 12 + 4 = 19
-            64   55+1     8           3 + 14 + 2 = 19 (VAX)
-            64   52       11          3 + 13 + 3 = 19 (IEEE)
+                  Double precision number
+                  Size Mantissa Exponent   Minimum output string
+                  bits   bits     bits     length
+                  ---- -------- --------   ----------------------
+                  64   48       15         3 + 12 + 4 = 19
+                  64   55+1     8          3 + 14 + 2 = 19 (VAX)
+                  64   52       11         3 + 13 + 3 = 19 (IEEE)
 
-            The base 16 ``scientific notation'' character string
-            produced by this routine will be left justified and
-            consist of a contiguous sequence of characters with one
-            of the following formats:
+               The base 16 "scientific notation" character string
+               produced by this routine will be left justified and
+               consist of a contiguous sequence of characters with one
+               of the following formats:
 
-                (1)   h h h h  ... h ^H H  ... H
-                       1 2 3 4      n  1 2      m
+                  (1)   h h h h  ... h ^H H  ... H
+                         1 2 3 4      n  1 2      m
 
-                (2)   -h h h h  ... h ^H H  ... H
-                        1 2 3 4      n  1 2      m
+                  (2)   -h h h h  ... h ^H H  ... H
+                          1 2 3 4      n  1 2      m
 
-                (3)   h h h h  ... h ^-H H  ... H
-                       1 2 3 4      n   1 2      m
+                  (3)   h h h h  ... h ^-H H  ... H
+                         1 2 3 4      n   1 2      m
 
-                (4)   -h h h h  ... h ^-H H  ... H
-                        1 2 3 4      n   1 2      m
+                  (4)   -h h h h  ... h ^-H H  ... H
+                          1 2 3 4      n   1 2      m
 
-            where
+               where
 
-               h   and  H   denote hexadecimal digits
-                i        j
+                  h   and  H   denote hexadecimal digits
+                   i        j
 
-               '^'          denotes exponentiation ( base 16 )
+                  "^"          denotes exponentiation ( base 16 )
 
-            and
+               and
 
-               '+' and '-'  have their usual interpretations.
+                  "+" and "-"  have their usual interpretations.
 
-   length   the length of the base 16 ``scientific notation'' character
-            'string' returned by this routine.
+               The character string produced will be blank padded on
+               the right if hxssiz < hxslen.
+
+   hxssiz      is the length of the base 16 "scientific notation"
+               character string produced by this routine.
 
 -Parameters
 
-   None.
+   STRLEN      is the maximum number of characters permitted in the
+               output string, excluding the null terminator character.
+               The value of STRLEN is 255.
 
 -Exceptions
 
-   None.
+   1)  If the output character string is not long enough to
+       contain the entire character string that was produced,
+       the string will be truncated on the right.
+
+   2)  If hxslen > hxssiz, the output character string will be blank
+       padded on the right.
+
+   3)  If the `hxstr' output string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   4)  If the `hxstr' output string has length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled, since
+       the output string is too short to contain one character of
+       output data plus a null terminator.
 
 -Files
 
@@ -184,44 +202,104 @@
 
 -Particulars
 
-     This routine converts a double precision number into an equivalent
-     character string using a base 16 ``scientific notation.'' This
-     representation allows the full precision of a number to be placed
-     in a format that is suitable for porting or archival storage.
+   This routine converts a double precision number into an equivalent
+   character string using a base 16 "scientific notation." This
+   representation allows the full precision of a number to be placed
+   in a format that is suitable for porting or archival storage.
 
-     This routine is one of a pair of routines which are used to
-     perform conversions between double precision numbers and
-     an equivalent base 16 ``scientific notation'' character string
-     representation:
+   This routine is one of a pair of routines which are used to
+   perform conversions between double precision numbers and
+   an equivalent base 16 "scientific notation" character string
+   representation:
 
-        dp2hx_c -- Convert a double precision number into a base 16
-                   ``scientific notation'' character string.
+      dp2hx_c  -- Convert a double precision number into a base 16
+                  "scientific notation" character string.
 
-        hx2dp_c -- Convert a base 16 ``scientific notation''
-                   character string into a double precision number.
+      hx2dp_c  -- Convert a base 16 "scientific notation"
+                  character string into a double precision number.
 
 -Examples
 
-   The following input and output argument values illustrate the
-   action of dp2hx_c for various input values of 'number'.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   Note: The hat or caret, '^', signals an exponent.
+   1) Convert a set of double precision numbers to their equivalent
+      character string using a base 16 "scientific notation."
 
-      number             string                         length
-      -----------------  -----------------------------  ------
-           2.0D-9         89705F4136B4A6^-7             17
-           1.0D0          1^1                           3
-          -1.0D0         -1^1                           4
-        1024.0D0          4^3                           3
-       -1024.0D0         -4^3                           4
-      521707.0D0          7F5EB^5                       7
-          27.0D0          1B^2                          4
-           0.0D0          0^0                           3
+
+      Example code begins here.
+
+
+      /.
+         Program dp2hx_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main()
+      {
+         /.
+         Local constants.
+         ./
+         #define   HXSLEN        40
+
+         /.
+         Local variables.
+         ./
+         SpiceChar               strval [HXSLEN];
+
+         SpiceInt                i;
+         SpiceInt                len;
+
+         /.
+         Assign an array of double precision numbers.
+         ./
+         SpiceDouble             number[] = { 2.0e-9,     1.0,     -1.0,
+                                              1024.0, -1024.0, 521707.0,
+                                                27.0,     0.0        };
+
+         /.
+         Loop over the `number' array, call dp2hx_c for each
+         element of `number'.
+         ./
+         printf( "number       string             length\n" );
+         printf( "-----------  -----------------  ------\n" );
+
+         for ( i = 0; i < 8; i++ )
+         {
+            dp2hx_c ( number[i], HXSLEN, strval, &len );
+            printf( "%11.4e  %17s  %d\n", number[i], strval, (int)len );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      number       string             length
+      -----------  -----------------  ------
+       2.0000e-09  89705F4136B4A8^-7  17
+       1.0000e+00                1^1  3
+      -1.0000e+00               -1^1  4
+       1.0240e+03                4^3  3
+      -1.0240e+03               -4^3  4
+       5.2171e+05            7F5EB^5  7
+       2.7000e+01               1B^2  4
+       0.0000e+00                0^0  3
+
+
+      Note: the hat or caret, "^", signals an exponent.
 
 -Restrictions
 
-   The maximum number of characters permitted in the output string
-   is specified by the variable 'lenout'.
+   1)  The maximum number of characters permitted in the output
+       string is specified by the parameter STRLEN.
 
 -Literature_References
 
@@ -229,11 +307,28 @@
 
 -Author_and_Institution
 
-   K.R. Gehringer   (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   CSPICE Version 1.0.0, 10-APR-2010 (EDW)
+   -CSPICE Version 1.1.0, 09-JUL-2021 (JDR)
+
+       Changed the argument names "lenout", "string" and "length" to
+       "hxslen", "hxstr" and "hxssiz" for consistency with other
+       routines.
+
+       Updated wrapper code to remove unnecessary chkin_c/chkout_c
+       calls. Modified error tracing strategy in the "CHKOSTR" call to
+       CHK_DISCOVER.
+
+       Added the exceptions present in SPICELIB version and those derived
+       from the use of "CHKOSTR".
+
+       Edited the header to comply with NAIF standard. Added
+       complete code example.
+
+   -CSPICE Version 1.0.0, 10-APR-2010 (EDW)
 
 -Index_Entries
 
@@ -247,29 +342,27 @@
 { /* Begin dp2hx_c */
 
    /*
-   Participate in error tracing.
+   Error free:  no error tracing required.
    */
-   chkin_c ( "dp2hx_c" );
 
    /*
-   Make sure the output string has at least enough room for one
-   output character and a null terminator.  Also check for a null
-   pointer.
+   Check the output string `hxstr' to make sure the pointer is non-null
+   and the string has enough room for one output character and a null
+   terminator.
    */
-
-   CHKOSTR ( CHK_STANDARD, "dp2hx_c", string, lenout );
-
-   (void) dp2hx_( ( doublereal  * ) &number,
-                  ( char        * ) string,
-                  ( integer     * ) length,
-                  ( ftnlen        ) lenout -1 );
-
+   CHKOSTR ( CHK_DISCOVER, "dp2hx_c", hxstr, hxslen );
 
    /*
-   Convert the output string from Fortran to C style.
+   Call the f2c'd Fortran routine.
    */
-   F2C_ConvertStr( lenout, string );
+   dp2hx_  (  ( doublereal * ) &number,
+              ( char       * )  hxstr,
+              ( integer    * )  hxssiz,
+              ( ftnlen       )  hxslen - 1  );
 
-   chkout_c ( "dp2hx_c" );
+   /*
+   Convert `hxstr' to a C-style string.
+   */
+   F2C_ConvertStr ( hxslen, hxstr );
 
 } /* End dp2hx_c */

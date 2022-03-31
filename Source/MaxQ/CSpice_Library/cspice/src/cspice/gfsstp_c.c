@@ -3,9 +3,9 @@
 -Procedure gfsstp_c ( Geometry finder set step size )
 
 -Abstract
- 
+
    Set the step size to be returned by gfstep_c.
- 
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,77 +32,76 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
+
    GF
    TIME
 
 -Keywords
 
-   GEOMETRY 
-   SEARCH 
-   UTILITY 
- 
+   GEOMETRY
+   SEARCH
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZst.h"
 
-   void gfsstp_c ( SpiceDouble  step ) 
+   void gfsstp_c ( SpiceDouble  step )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   step       I   Time step to take. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   step       I   Time step to take.
+
 -Detailed_Input
- 
-   step      is the output step size to be returned by the next call 
-             to gfstep_c. Units are TDB seconds. 
- 
-             `step' is used in the GF search root-bracketing process.
-             `step' indicates how far to advance the gfstep_c input
-             argument `time' so that `time' and time+step may bracket a
-             state transition and definitely do not bracket more than
-             one state transition.
- 
+
+   step        is the output step size to be returned by the next call
+               to gfstep_c. Units are TDB seconds.
+
+               `step' is used in the GF search root-bracketing process.
+               `step' indicates how far to advance the gfstep_c input
+               argument `time' so that `time' and time+step may bracket a
+               state transition and definitely do not bracket more than
+               one state transition.
+
 -Detailed_Output
- 
-   None. 
- 
+
+   None.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If the input step size is non-positive, the error 
-      SPICE(INVALIDSTEP) is signaled. The stored step value  
-      is not updated. 
- 
+
+   1)  If the input step size is non-positive, the error
+       SPICE(INVALIDSTEP) is signaled by a routine in the call tree
+       of this routine. The stored step value is not updated.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
+
    This routine sets the step size to be returned by the
    next call to gfstep_c.
- 
--Examples
- 
 
-   1) User applications can pass gfstep_c to mid-level GF API routines 
+-Examples
+
+   1) User applications can pass gfstep_c to mid-level GF API routines
       expecting a step size routine as an input argument. Before such
       a call is made, the value of the step to be returned by gfstep_c
       must be set via a call to this routine.
 
-      For example, the GF API routine gfocce_c can be called as shown 
+      For example, the GF API routine gfocce_c can be called as shown
       in the code fragment below.
-      
+
             /.
             Select a twenty-second step. We'll ignore any occultations
             lasting less than 20 seconds.
@@ -113,44 +112,47 @@
             /.
             Perform the search.
             ./
-            gfocce_c ( "ANY",                            
-                       "MOON",     "ellipsoid",  "IAU_MOON", 
-                       "SUN",      "ellipsoid",  "IAU_SUN",  
-                       "LT",       "EARTH",      CNVTOL,    
-                       gfstep_c,   gfrefn_c,     rpt,       
-                       gfrepi_c,   gfrepu_c,     gfrepf_c, 
-                       bail,       gfbail_c,     cnfine,   
-                       &result                              );   
- 
+            gfocce_c ( "ANY",
+                       "MOON",     "ellipsoid",  "IAU_MOON",
+                       "SUN",      "ellipsoid",  "IAU_SUN",
+                       "LT",       "EARTH",      CNVTOL,
+                       gfstep_c,   gfrefn_c,     rpt,
+                       gfrepi_c,   gfrepu_c,     gfrepf_c,
+                       bail,       gfbail_c,     cnfine,
+                       &result                              );
+
 -Restrictions
- 
+
    None.
- 
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL)
-   W.L. Taber     (JPL) 
-   I.M. Underwood (JPL) 
-   L.S. Elson     (JPL) 
-   E.D. Wright    (JPL)  
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   L.S. Elson          (JPL)
+
 -Version
- 
-   -CSPICE Version 2.0.1, 15-APR-2009 (LSE) (NJB)
+
+   -CSPICE Version 1.0.1, 06-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 15-APR-2009 (LSE) (NJB)
 
 -Index_Entries
- 
+
    GF set constant step size
+
 -&
 */
 
 { /* Begin gfsstp_c */
 
- 
+
 
    /*
    Participate in error tracing.

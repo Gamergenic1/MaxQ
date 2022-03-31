@@ -3,10 +3,10 @@
 -Procedure dafcs_c ( DAF, continue search )
 
 -Abstract
- 
-   Select a DAF that already has a search in progress as the 
-   one to continue searching. 
- 
+
+   Select a DAF that already has a search in progress as the
+   one to continue searching.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,63 +33,63 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   DAF 
- 
+
+   DAF
+
 -Keywords
- 
-   FILES 
- 
+
+   FILES
+
 */
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
 
-   void dafcs_c ( SpiceInt handle ) 
+   void dafcs_c ( SpiceInt handle )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   handle     I   Handle of DAF to continue searching. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   handle     I   Handle of DAF to continue searching.
+
 -Detailed_Input
- 
-   handle         is the handle of a DAF in which either a forward 
-                  or backward search has already been started by 
-                  dafbfs_c or dafbbs_c.  The DAF may be open for read 
-                  or write access. 
- 
+
+   handle      is the handle of a DAF in which either a forward
+               or backward search has already been started by
+               dafbfs_c or dafbbs_c. The DAF may be open for read
+               or write access.
+
 -Detailed_Output
- 
-   None. 
- 
+
+   None.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If the input handle is invalid, the error will be diagnosed 
-       by routines called by this routine. 
- 
-   2)  If this routine is called when no search is in progress in the 
-       the current DAF, the error SPICE(DAFNOSEARCH) is signalled. 
- 
+
+   1)  If the input handle is invalid, an error is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If this routine is called when no search is in progress in the
+       the current DAF, the error SPICE(DAFNOSEARCH) is signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   dafcs_c supports simultaneous searching of multiple DAFs.  In
+
+   dafcs_c supports simultaneous searching of multiple DAFs. In
    applications that use this capability, dafcs_c should be called
    prior to each call to daffna_c, daffpa_c, dafgn_c, or dafgs_c to
    specify which DAF is to be acted upon.
- 
+
    The DAF search routines are:
 
       dafbfs_c       Begin forward search.
@@ -113,7 +113,7 @@
    backward. It is possible to search multiple DAFs simultaneously.
 
    dafbfs_c (begin forward search) and daffna are used to search the
-   arrays in a DAF in forward order.  In applications that search a
+   arrays in a DAF in forward order. In applications that search a
    single DAF at a time, the normal usage is
 
       dafbfs_c ( handle );
@@ -131,7 +131,7 @@
 
 
    dafbbs_c (begin backward search) and daffpa_c are used to search the
-   arrays in a DAF in backward order.  In applications that search
+   arrays in a DAF in backward order. In applications that search
    a single DAF at a time, the normal usage is
 
       dafbbs_c ( handle );
@@ -151,10 +151,10 @@
    In applications that conduct multiple searches simultaneously,
    the above usage must be modified to specify the handle of the
    file to operate on, in any case where the file may not be the
-   last one specified by dafbfs_c or dafbbs_c.  The routine dafcs_c
-   (DAF, continue search) is used for this purpose.  Below, we
+   last one specified by dafbfs_c or dafbbs_c. The routine dafcs_c
+   (DAF, continue search) is used for this purpose. Below, we
    give an example of an interleaved search of two files specified
-   by the handles handl1 and handl2.  The directions of searches
+   by the handles handl1 and handl2. The directions of searches
    in different DAFs are independent; here we conduct a forward
    search on one file and a backward search on the other.
    Throughout, we use dafcs to specify which file to operate on,
@@ -172,18 +172,18 @@
 
       while ( found1 || found2 )
       {
-         if ( found1 )  
+         if ( found1 )
          {
             dafcs_c ( handl1 );
             dafgs_c ( sum    );
             dafgn_c ( name   );
              .
              .
-            dafcs_c  ( &handl1 );
+            dafcs_c  ( handl1  );
             daffna_c ( &found1 );
          }
 
-         if ( found2 )  
+         if ( found2 )
          {
             dafcs_c ( handl2 );
             dafgs_c ( sum    );
@@ -198,11 +198,11 @@
 
    At any time, the latest array found (whether by daffna_c or daffpa_c)
    is regarded as the "current" array for the file in which the
-   array was found.  The last DAF in which a search was started,
-   executed, or continued by any of dafbfs_c, dafbbs_c, daffna_c, 
-   daffpa_c or dafcs_c is regarded as the "current" DAF.  The summary 
+   array was found. The last DAF in which a search was started,
+   executed, or continued by any of dafbfs_c, dafbbs_c, daffna_c,
+   daffpa_c or dafcs_c is regarded as the "current" DAF. The summary
    and name for the current array in the current DAF can be obtained
-   separately, as shown above, by calls to DAFGS (get summary) and
+   separately, as shown above, by calls to dafgs_c (get summary) and
    dafgn_c (get name).  The handle of the current DAF can also be
    obtained by calling dafgh_c (get handle).
 
@@ -210,32 +210,37 @@
    direction. That is, daffpa_c may be used to back up during a
    forward search, and daffna_c may be used to advance during a
    backward search.
- 
+
 -Examples
- 
-   1) See Particulars. 
- 
+
+   1) See -Particulars.
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
-   W.L. Taber     (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 25-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 31-JUL-1999 (NJB) (WLT)
 
 -Index_Entries
- 
-   select a daf to continue searching 
- 
+
+   select a DAF to continue searching
+
 -&
 */
 
@@ -247,7 +252,7 @@
    */
    chkin_c ( "dafcs_c" );
 
-   
+
    dafcs_ ( ( integer * ) &handle );
 
 

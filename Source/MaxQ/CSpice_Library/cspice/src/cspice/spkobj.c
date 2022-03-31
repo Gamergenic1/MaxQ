@@ -10,8 +10,8 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      SPKOBJ ( SPK objects ) */
-/* Subroutine */ int spkobj_(char *spk, integer *ids, ftnlen spk_len)
+/* $Procedure SPKOBJ ( SPK objects ) */
+/* Subroutine */ int spkobj_(char *spkfnm, integer *ids, ftnlen spkfnm_len)
 {
     /* Builtin functions */
     integer s_cmp(char *, char *, ftnlen, ftnlen);
@@ -69,6 +69,7 @@ static integer c__6 = 6;
 
 /*     CELLS */
 /*     DAF */
+/*     NAIF_IDS */
 /*     SETS */
 /*     SPK */
 
@@ -80,37 +81,35 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     SPK        I   Name of SPK file. */
-/*     IDS       I/O  Set of ID codes of objects in SPK file. */
+/*     SPKFNM     I   Name of SPK file. */
+/*     IDS       I-O  Set of ID codes of objects in SPK file. */
 
 /* $ Detailed_Input */
 
-/*     SPK            is the name of an SPK file. */
+/*     SPKFNM   is the name of an SPK file. */
 
-/*     IDS            is an initialized SPICELIB set data structure. */
-/*                    IDS optionally may contain a set of ID codes on */
-/*                    input; on output, the data already present in */
-/*                    IDS will be combined with ID code set found for the */
-/*                    file SPK. */
+/*     IDS      is an initialized SPICE set data structure. IDS */
+/*              optionally may contain a set of ID codes on input; on */
+/*              output, the data already present in IDS will be combined */
+/*              with ID code set found for the file SPKFNM. */
 
-/*                    If IDS contains no data on input, its size and */
-/*                    cardinality still must be initialized. */
+/*              If IDS contains no data on input, its size and */
+/*              cardinality still must be initialized. */
 
 /* $ Detailed_Output */
 
-/*     IDS            is a SPICELIB set data structure which contains */
-/*                    the union of its contents upon input with the set */
-/*                    of ID codes of each object for which ephemeris */
-/*                    data are present in the indicated SPK file. The */
-/*                    elements of SPICELIB sets are unique; hence each */
-/*                    ID code in IDS appears only once, even if the SPK */
-/*                    file contains multiple segments for that ID code. */
+/*     IDS      is a SPICE set data structure which contains the union */
+/*              of its contents upon input with the set of ID codes of */
+/*              each object for which ephemeris data are present in the */
+/*              indicated SPK file. The elements of SPICE sets are */
+/*              unique; hence each ID code in IDS appears only once, even */
+/*              if the SPK file contains multiple segments for that ID */
+/*              code. */
 
-/*                    See the Examples section below for a complete */
-/*                    example program showing how to retrieve the ID */
-/*                    codes from IDS. */
+/*              See the $Examples section below for a complete example */
+/*              program showing how to retrieve the ID codes from IDS. */
 
 /* $ Parameters */
 
@@ -122,18 +121,18 @@ static integer c__6 = 6;
 /*         SPICE(INVALIDFORMAT) is signaled. */
 
 /*     2)  If the input file is not a transfer file but has architecture */
-/*         other than DAF, the error SPICE(BADARCHTYPE) is signaled. */
+/*         other than DAF, the error SPICE(INVALIDARCHTYPE) is signaled. */
 
-/*     3)  If the input file is a binary DAF file of type other than */
-/*         SPK, the error SPICE(BADFILETYPE) is signaled. */
+/*     3)  If the input file is a binary DAF file of type other than SPK, */
+/*         the error SPICE(INVALIDFILETYPE) is signaled. */
 
-/*     4)  If the SPK file cannot be opened or read, the error will */
-/*         be diagnosed by routines called by this routine. */
+/*     4)  If the SPK file cannot be opened or read, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /*     5)  If the size of the output set argument IDS is insufficient to */
 /*         contain the actual number of ID codes of objects covered by */
-/*         the indicated SPK file, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*         the indicated SPK file, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
 /* $ Files */
 
@@ -147,12 +146,24 @@ static integer c__6 = 6;
 
 /* $ Examples */
 
-/*     1)  Display the coverage for each object in a specified SPK file. */
-/*         Find the set of objects in the file.  Loop over the contents */
-/*         of the ID code set:  find the coverage for each item in the */
-/*         set and display the coverage. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*              PROGRAM IDCOV */
+/*     1) This example demonstrates combined usage of SPKOBJ and the */
+/*        related SPK utility SPKCOV. */
+
+/*        Display the coverage for each object in a specified SPK file. */
+/*        Find the set of objects in the file. Loop over the contents */
+/*        of the ID code set: find the coverage for each item in the */
+/*        set and display the coverage. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM SPKOBJ_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
@@ -189,7 +200,7 @@ static integer c__6 = 6;
 /*        C     Local variables */
 /*        C */
 /*              CHARACTER*(FILSIZ)    LSK */
-/*              CHARACTER*(FILSIZ)    SPK */
+/*              CHARACTER*(FILSIZ)    SPKFNM */
 /*              CHARACTER*(TIMLEN)    TIMSTR */
 
 /*              DOUBLE PRECISION      B */
@@ -212,7 +223,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Get name of SPK file. */
 /*        C */
-/*              CALL PROMPT ( 'Name of SPK file           > ', SPK ) */
+/*              CALL PROMPT ( 'Name of SPK file           > ', SPKFNM ) */
 
 /*        C */
 /*        C     Initialize the set IDS. */
@@ -227,7 +238,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Find the set of objects in the SPK file. */
 /*        C */
-/*              CALL SPKOBJ ( SPK, IDS ) */
+/*              CALL SPKOBJ ( SPKFNM, IDS ) */
 
 /*        C */
 /*        C     We want to display the coverage for each object.  Loop */
@@ -240,8 +251,8 @@ static integer c__6 = 6;
 /*        C        object. Empty the coverage window each time */
 /*        C        so we don't include data for the previous object. */
 /*        C */
-/*                 CALL SCARDD ( 0,   COVER ) */
-/*                 CALL SPKCOV ( SPK, IDS(I), COVER ) */
+/*                 CALL SCARDD ( 0,      COVER ) */
+/*                 CALL SPKCOV ( SPKFNM, IDS(I), COVER ) */
 
 /*        C */
 /*        C        Get the number of intervals in the coverage */
@@ -292,10 +303,75 @@ static integer c__6 = 6;
 /*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the LSK file named naif0012.tls and the SPK */
+/*        file named mar097.bsp, the output was: */
+
+
+/*        Name of leapseconds kernel > naif0012.tls */
+/*        Name of SPK file           > mar097.bsp */
+/*         ======================================== */
+/*         Coverage for object            3 */
+
+/*         Interval:            1 */
+/*         Start:    1900 JAN 04 00:00:41.184 (TDB) */
+/*         Stop:     2100 JAN 01 00:01:07.183 (TDB) */
+
+/*         ======================================== */
+/*         ======================================== */
+/*         Coverage for object            4 */
+
+/*         Interval:            1 */
+/*         Start:    1900 JAN 04 00:00:41.184 (TDB) */
+/*         Stop:     2100 JAN 01 00:01:07.183 (TDB) */
+
+/*         ======================================== */
+/*         ======================================== */
+/*         Coverage for object           10 */
+
+/*         Interval:            1 */
+/*         Start:    1900 JAN 04 00:00:41.184 (TDB) */
+/*         Stop:     2100 JAN 01 00:01:07.183 (TDB) */
+
+/*         ======================================== */
+/*         ======================================== */
+/*         Coverage for object          399 */
+
+/*         Interval:            1 */
+/*         Start:    1900 JAN 04 00:00:41.184 (TDB) */
+/*         Stop:     2100 JAN 01 00:01:07.183 (TDB) */
+
+/*         ======================================== */
+/*         ======================================== */
+/*         Coverage for object          401 */
+
+/*         Interval:            1 */
+/*         Start:    1900 JAN 04 00:00:41.184 (TDB) */
+/*         Stop:     2100 JAN 01 00:01:07.183 (TDB) */
+
+/*         ======================================== */
+/*         ======================================== */
+/*         Coverage for object          402 */
+
+/*         Interval:            1 */
+/*         Start:    1900 JAN 04 00:00:41.184 (TDB) */
+/*         Stop:     2100 JAN 01 00:01:07.183 (TDB) */
+
+/*         ======================================== */
+/*         ======================================== */
+/*         Coverage for object          499 */
+
+/*         Interval:            1 */
+/*         Start:    1900 JAN 04 00:00:41.184 (TDB) */
+/*         Stop:     2100 JAN 01 00:01:07.183 (TDB) */
+
+/*         ======================================== */
+
+
 /* $ Restrictions */
 
-/*     1) If an error occurs while this routine is updating the set */
-/*        IDS, the set may be corrupted. */
+/*     1)  If an error occurs while this routine is updating the set */
+/*         IDS, the set may be corrupted. */
 
 /* $ Literature_References */
 
@@ -303,9 +379,24 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 08-OCT-2021 (JDR) (NJB) */
+
+/*        Changed input argument name "SPK" to "SPKFNM" for consistency */
+/*        with other routines. */
+
+/*        Bug fix: added call to FAILED after call to GETFAT. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        solution to code example. */
+
+/*        Corrected short error message in entries #2 and #3 in */
+/*        $Exceptions section. Added NAIF_IDS to $Required_Reading */
+/*        section. */
 
 /* -    SPICELIB Version 1.0.2, 01-JUL-2014 (NJB) */
 
@@ -313,7 +404,7 @@ static integer c__6 = 6;
 
 /* -    SPICELIB Version 1.0.1, 30-NOV-2007 (NJB) */
 
-/*        Corrected bug in program in header Examples section: */
+/*        Corrected bug in program in header $Examples section: */
 /*        program now empties the coverage window prior to collecting */
 /*        data for the current object. Deleted declaration of unused */
 /*        parameter NAMLEN in example program. Updated example to */
@@ -324,8 +415,8 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     find id codes of ephemeris objects in spk file */
-/*     find id codes of bodies in spk file */
+/*     find id codes of ephemeris objects in SPK file */
+/*     find id codes of bodies in SPK file */
 
 /* -& */
 
@@ -347,13 +438,17 @@ static integer c__6 = 6;
 
 /*     See whether GETFAT thinks we've got an SPK file. */
 
-    getfat_(spk, arch, kertyp, spk_len, (ftnlen)80, (ftnlen)80);
+    getfat_(spkfnm, arch, kertyp, spkfnm_len, (ftnlen)80, (ftnlen)80);
+    if (failed_()) {
+	chkout_("SPKOBJ", (ftnlen)6);
+	return 0;
+    }
     if (s_cmp(arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) {
 	setmsg_("Input file # has architecture #. The file must be a binary "
 		"SPK file to be readable by this routine.  If the input file "
 		"is an SPK file in transfer format, run TOBIN on the file to "
 		"convert it to binary format.", (ftnlen)207);
-	errch_("#", spk, (ftnlen)1, spk_len);
+	errch_("#", spkfnm, (ftnlen)1, spkfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("SPKOBJ", (ftnlen)6);
@@ -365,7 +460,7 @@ static integer c__6 = 6;
 		"ry SPK file, the problem may be due to the file being an old"
 		" non-native file lacking binary file format information. It'"
 		"s also possible the file has been corrupted.", (ftnlen)343);
-	errch_("#", spk, (ftnlen)1, spk_len);
+	errch_("#", spkfnm, (ftnlen)1, spkfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
 	chkout_("SPKOBJ", (ftnlen)6);
@@ -377,7 +472,7 @@ static integer c__6 = 6;
 		"le being an old non-native file lacking binary file format i"
 		"nformation. It's also possible the file has been corrupted.", 
 		(ftnlen)298);
-	errch_("#", spk, (ftnlen)1, spk_len);
+	errch_("#", spkfnm, (ftnlen)1, spkfnm_len);
 	errch_("#", kertyp, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
 	chkout_("SPKOBJ", (ftnlen)6);
@@ -386,7 +481,7 @@ static integer c__6 = 6;
 
 /*     Open the file for reading. */
 
-    dafopr_(spk, &handle, spk_len);
+    dafopr_(spkfnm, &handle, spkfnm_len);
     if (failed_()) {
 	chkout_("SPKOBJ", (ftnlen)6);
 	return 0;

@@ -38,7 +38,8 @@
 
 -Keywords
 
-   ERROR, CONVERSION
+   CONVERSION
+   ERROR
 
 */
 
@@ -49,7 +50,7 @@
 
 
    void errdp_c ( ConstSpiceChar  * marker,
-                  SpiceDouble       number  )
+                  SpiceDouble       dpnum  )
 
 /*
 
@@ -58,27 +59,26 @@
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    marker     I   A substring of the error message to be replaced.
-   number     I   The d.p. number to substitute for marker.
+   dpnum      I   The d.p. number to substitute for `marker'.
 
 -Detailed_Input
 
+   marker      is a character string which marks a position in
+               the long error message where a character string
+               representing an double precision number is to be
+               substituted. Leading and trailing blanks in `marker'
+               are not significant.
 
-   marker     is a character string which marks a position in
-              the long error message where a character string
-              representing an double precision number is to be
-              substituted.  Leading and trailing blanks in marker
-              are not significant.
+               Case IS significant;  "XX" is considered to be
+               a different marker from "xx".
 
-              Case IS significant;  "XX" is considered to be
-              a different marker from "xx".
-
-   number     is an double precision number whose character
-              representation will be substituted for the first
-              occurrence of marker in the long error message.
-              This occurrence of the substring indicated by marker
-              will be removed, and replaced by a character string,
-              with no leading or trailing blanks, representing
-              number.
+   dpnum       is an double precision number whose character
+               representation will be substituted for the first
+               occurrence of `marker' in the long error message.
+               This occurrence of the substring indicated by `marker'
+               will be removed, and replaced by a character string,
+               with no leading or trailing blanks, representing
+               `dpnum'.
 
 -Detailed_Output
 
@@ -90,13 +90,11 @@
 
 -Exceptions
 
-   1) The error SPICE(EMPTYSTRING) is signalled if the input
-      string does not contain at least one character, since the
-      input string cannot be converted to a Fortran-style string
-      in this case.
+   1)  If the `marker' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   2) The error SPICE(NULLPOINTER) is signalled if the input string
-      pointer is null.
+   2)  If the `marker' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -105,64 +103,105 @@
 -Particulars
 
    The effect of this routine is to update the current long
-   error message.  If no marker is found, (e.g., in the
+   error message. If no marker is found, (e.g., in the
    case that the long error message is blank), the routine
-   has no effect.  If multiple instances of the marker
-   designated by marker are found, only the first one is
+   has no effect. If multiple instances of the marker
+   designated by `marker' are found, only the first one is
    replaced.
 
    If the character string resulting from the substitution
    exceeds the maximum length of the long error message, the
-   characters on the right are lost.  No error is signalled.
+   characters on the right are lost. No error is signaled.
 
    This routine has no effect if changes to the long message
    are not allowed.
 
 -Examples
 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-    1.   In this example, the marker is:   #
-
-
-         The current long error message is:
-
-            "Invalid operation value.  The value was #".
-
-
-         After the call,
-
-            errdp_c ( "#",  5.0  );
-
-         The long error message becomes:
-
-         "Invalid operation value.  The value was 5.0".
+   1) Create a user-defined error message, including both the
+      short and long messages, providing the value of two double
+      precision variables within the long message, and signal the
+      error.
 
 
+      Example code begins here.
 
 
-    2.   In this example, the marker is:   XX
+      /.
+         Program errdp_ex1
+      ./
+      #include "SpiceUsr.h"
+
+      int main()
+      {
+
+         /.
+         Set long error message, with two different `marker'
+         strings where the value of the double precision variables
+         will go.  Our markers are "#" and "XX".
+         ./
+         setmsg_c ( "LONG MESSAGE.  Invalid operation value. "
+                    "  The value was #.  Left endpoint "
+                    "exceeded right endpoint.  The left "
+                    "endpoint was:  XX.  The right endpoint "
+                    "was:  XX." );
+
+         /.
+         Insert a double precision where the # is now.
+         ./
+         errdp_c ( "#", 5.0 );
+
+         /.
+         Insert another double precision number in the long
+         message where the first XX is now.
+         ./
+         errdp_c ( "XX", 73.4567 );
+
+         /.
+         Signal the error.
+         ./
+         sigerr_c ( "SPICE(USERDEFINED)" );
+
+         return ( 0 );
+      }
 
 
-         The current long error message is:
-
-            "Left endpoint exceeded right endpoint.  The left"//
-            "endpoint was:  XX.  The right endpoint was:  XX."
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
 
 
-         After the call,
+      =====================================================================
 
-            errdp_c ( "XX",  5.0  );
+      Toolkit version: N0066
 
-         The long error message becomes:
+      SPICE(USERDEFINED) --
 
-            "Left endpoint exceeded right endpoint.  The left"//
-            "endpoint was:  5.0.  The right endpoint was:  XX."
+      LONG MESSAGE. Invalid operation value. The value was
+      5.0000000000000E+00. Left endpoint exceeded right endpoint. The left
+      endpoint was: 7.3456700000000E+01. The right endpoint was: XX.
 
+      Oh, by the way:  The SPICELIB error handling actions are USER-
+      TAILORABLE.  You can choose whether the Toolkit aborts or continues
+      when errors occur, which error messages to output, and where to send
+      the output.  Please read the ERROR "Required Reading" file, or see
+      the routines ERRACT, ERRDEV, and ERRPRT.
+
+      =====================================================================
+
+
+      Note that the execution of this program produces the error
+      SPICE(USERDEFINED), which follows the NAIF standard as
+      described in the ERROR required reading.
 
 -Restrictions
 
-   The caller must ensure that the message length, after sub-
-   stitution is performed, doesn't exceed LMSGLN characters.
+   1)  The caller must ensure that the message length, after sub-
+       stitution is performed, doesn't exceed LMSGLN characters.
 
 -Literature_References
 
@@ -170,14 +209,24 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.3.0, 13-AUG-2021 (JDR)
+
+       Changed the argument name "number" to "dpnum" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard. Added
+       complete code example based on existing code fragments.
+
    -CSPICE Version 1.2.0, 08-FEB-1998 (NJB)
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.  Made various header fixes.
+       Re-implemented routine without dynamically allocated, temporary
+       strings. Made various header fixes.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 
@@ -201,7 +250,7 @@
    Call the f2c'd Fortran routine.
    */
    errdp_ ( ( char       * ) marker,
-            ( doublereal * ) &number,
+            ( doublereal * ) &dpnum,
             ( ftnlen       ) strlen(marker)  );
 
 

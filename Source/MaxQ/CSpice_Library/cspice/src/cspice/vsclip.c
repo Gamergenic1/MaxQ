@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      VSCLIP ( Vector scaling, 3 dimensions, in place ) */
+/* $Procedure VSCLIP ( Vector scaling, 3 dimensions, in place ) */
 /* Subroutine */ int vsclip_(doublereal *s, doublereal *v)
 {
 /* $ Abstract */
@@ -56,18 +56,18 @@
 
 /* $ Detailed_Input */
 
-/*     S    This is a double precision scalar used to multiply the */
-/*          vector V. */
+/*     S        is a double precision scalar used to multiply the vector */
+/*              V. */
 
-/*     V    This is a 3-dimensional, double precision vector which is */
-/*          to be scaled by S. */
+/*     V        is a 3-dimensional, double precision vector which is to */
+/*              be scaled by S. */
 
 /* $ Detailed_Output */
 
-/*     V    This is a 3-dimensional, double precision vector resulting */
-/*          from the scalar multiplication */
+/*     V        is the 3-dimensional, double precision vector resulting */
+/*              from the scalar multiplication */
 
-/*             S * V */
+/*                 S * V */
 
 /* $ Parameters */
 
@@ -85,7 +85,7 @@
 
 /*     This routine is provided for situation where it is convenient to */
 /*     scale a vector in place rather than store the result in a */
-/*     separate variable.  Note that the call */
+/*     separate variable. Note that the call */
 
 /*        CALL VSCL ( S, V, V ) */
 
@@ -93,7 +93,7 @@
 /*     can be called instead to achieve the same result. */
 
 /*     VSCLIP multiplies each component of V by S to form the respective */
-/*     components of the output vector.  No error checking is performed. */
+/*     components of the output vector. No error checking is performed. */
 
 /* $ Examples */
 
@@ -107,21 +107,28 @@
 
 /* $ Restrictions */
 
-/*     The user is responsible for insuring that no floating point */
-/*     overflow occurs from multiplying S by any component of V. No */
-/*     error recovery or reporting scheme is incorporated in this */
-/*     subroutine. */
-
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     W.M. Owen       (JPL) */
+/*     1)  The user is responsible for insuring that no floating point */
+/*         overflow occurs from multiplying S by any component of V. No */
+/*         error recovery or reporting scheme is incorporated in this */
+/*         subroutine. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 16-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-SEP-2005 (NJB) (WMO) */
 

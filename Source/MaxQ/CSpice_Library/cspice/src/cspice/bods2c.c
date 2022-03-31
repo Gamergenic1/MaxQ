@@ -63,7 +63,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   String to be translated to an ID code. */
 /*     CODE       O   Integer ID code corresponding to NAME. */
@@ -71,64 +71,75 @@
 
 /* $ Detailed_Input */
 
-/*     NAME        is a string containing the name or ID code of a */
-/*                 body or object, such as a planet, satellite, comet, */
-/*                 asteroid, barycenter, DSN station, spacecraft, or */
-/*                 instrument. */
+/*     NAME     is a string containing the name or ID code of a */
+/*              body or object, such as a planet, satellite, comet, */
+/*              asteroid, barycenter, DSN station, spacecraft, or */
+/*              instrument. */
 
-/*                 If NAME contains the name of a body or object, that */
-/*                 name must be "known" to the SPICE system, whether */
-/*                 through hard-coded registration or run-time */
-/*                 registration in the SPICE kernel pool. */
+/*              If NAME contains the name of a body or object, that */
+/*              name must be "known" to the SPICE system, whether */
+/*              through hard-coded registration or run-time */
+/*              registration in the SPICE kernel pool. */
 
-/*                 Case and leading and trailing blanks in a name are */
-/*                 not significant.  However when a name is made up of */
-/*                 more than one word, adjacent words must be separated */
-/*                 by at least one blank.  That is, all of the following */
-/*                 strings are equivalent names: */
+/*              Case and leading and trailing blanks in a name are */
+/*              not significant. However when a name is made up of */
+/*              more than one word, adjacent words must be separated */
+/*              by at least one blank. That is, all of the following */
+/*              strings are equivalent names: */
 
-/*                    'JUPITER BARYCENTER' */
-/*                    'Jupiter Barycenter' */
-/*                    'JUPITER BARYCENTER   ' */
-/*                    'JUPITER    BARYCENTER' */
-/*                    '   JUPITER BARYCENTER' */
+/*                 'JUPITER BARYCENTER' */
+/*                 'Jupiter Barycenter' */
+/*                 'JUPITER BARYCENTER   ' */
+/*                 'JUPITER    BARYCENTER' */
+/*                 '   JUPITER BARYCENTER' */
 
-/*                 However, 'JUPITERBARYCENTER' is not equivalent to */
-/*                 the names above. */
+/*              However, 'JUPITERBARYCENTER' is not equivalent to */
+/*              the names above. */
 
-/*                 If NAME is a string representation of an integer, */
-/*                 for example */
+/*              If NAME is a string representation of an integer, */
+/*              for example */
 
-/*                    '399' */
+/*                 '399' */
 
-/*                 the string will be translated to the equivalent */
-/*                 INTEGER datum.  The input integer need not be one */
-/*                 recognized by the SPICE system:  the integer need not */
-/*                 be a built-in NAIF ID code, nor need it be associated */
-/*                 with a name via run-time registration. */
+/*              the string will be translated to the equivalent */
+/*              INTEGER datum. The input integer need not be one */
+/*              recognized by the SPICE system: the integer need not */
+/*              be a built-in NAIF ID code, nor need it be associated */
+/*              with a name via run-time registration. */
 
 /* $ Detailed_Output */
 
-/*     CODE        is, if NAME contains the name of a body or object, */
-/*                 the corresponding NAIF or user-defined integer ID */
-/*                 code, as determined by the SPICE name-code mapping */
-/*                 subsystem. If NAME represents an integer, the same */
-/*                 integer is returned in CODE. */
+/*     CODE     is, if NAME contains the name of a body or object, */
+/*              the corresponding NAIF or user-defined integer ID */
+/*              code, as determined by the SPICE name-code mapping */
+/*              subsystem. If NAME represents an integer, the same */
+/*              integer is returned in CODE. */
 
-/*                 CODE is assigned a value only if FOUND is returned */
-/*                 as .TRUE.; otherwise it is returned unchanged. */
+/*              CODE is assigned a value only if FOUND is returned */
+/*              as .TRUE.; otherwise it is returned unchanged. */
 
-
-/*     FOUND       is .TRUE. if NAME has a translation or represents an */
-/*                 integer.  Otherwise, FOUND is .FALSE. */
+/*     FOUND    is .TRUE. if NAME has a translation or represents an */
+/*              integer within the bounds of representable integers */
+/*              as defined by the SPICELIB routines INTMAX and INTMIN. */
+/*              Otherwise, FOUND is .FALSE. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     MAXL     is the maximum allowable length of a body name. The */
+/*              current value of this parameter is 36. See the SPICELIB */
+/*              include file zzbodtrn.inc for details. */
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If there is any problem with the body name-ID mapping kernel */
+/*         variables present in the kernel pool, an error is signaled by */
+/*         a routine in the call tree of this routine. */
+
+/*     2)  Body name strings are upper-cased, their leading and trailing */
+/*         blanks removed, and embedded blanks are compressed out, after */
+/*         which they get truncated to the maximum body name length MAXL. */
+/*         Therefore, two body names that differ only after that maximum */
+/*         length are considered equal. */
 
 /* $ Files */
 
@@ -138,7 +149,7 @@
 /*        NAIF_BODY_NAME += ( <name 1>, ... ) */
 /*        NAIF_BODY_CODE += ( <code 1>, ... ) */
 
-/*     See NAIF_IDs for details. */
+/*     See naif_ids.req for details. */
 
 /* $ Particulars */
 
@@ -166,13 +177,13 @@
 /*     BODDEF assigns a body name to ID mapping. The mapping has */
 /*     priority in name-to-ID and ID-to-name translations. */
 
-/*     Refer to NAIF_IDs for the list of name/code associations built */
+/*     Refer to naif_ids.req for the list of name/code associations built */
 /*     into SPICE, and for details concerning adding new name/code */
 /*     associations at run time by loading text kernels. */
 
 /* $ Examples */
 
-/*     1.  In the following code fragment, BODEUL returns the Euler */
+/*     1)  In the following code fragment, BODEUL returns the Euler */
 /*         angles representing the orientation of Jupiter relative to */
 /*         the J2000 reference frame. BODEUL requires the NAIF integer */
 /*         ID code for Jupiter, so we use BODS2C to convert the name to */
@@ -186,7 +197,7 @@
 /*            CALL BODEUL ( JUPID, ET, RA, DEC, W, LAMBDA ) */
 
 
-/*     2.  In this example, we assume that only the set of default */
+/*     2)  In this example, we assume that only the set of default */
 /*         name/code pairs has been defined. */
 
 /*         Given these names, BODS2C will return the following codes: */
@@ -219,10 +230,9 @@
 /*             11          -                          No */
 /*     1000000000          -                          No */
 
-
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  See exception <2>. */
 
 /* $ Literature_References */
 
@@ -230,27 +240,35 @@
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 07-AUG-2020 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated output argument FOUND description in $Detailed_Output. */
+
+/*        Edited the header to comply with NAIF standard. Fixed minor */
+/*        typos in header. Added description of MAXL parameter. Added */
+/*        $Exceptions and $Restrictions. */
+
 /* -    SPICELIB Version 1.0.2, 16-MAY-2009 (EDW) */
 
-/*        Edit to Particulars section to document the BODC2S routine. */
+/*        Edit to $Particulars section to document the BODC2S routine. */
 
 /* -    SPICELIB Version 1.0.1, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section. */
+/*        Corrected the contents of the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 23-JUL-2003 (CHA) (NJB) (KRG) (FST) (EDW) */
-
-/*        Based on SPICELIB Version 1.0.3, 29-JUL-2003 */
-/*        (CHA) (NJB) (KEG) (FST) (EDW) */
 
 /* -& */
 /* $ Index_Entries */

@@ -5,11 +5,7 @@
 
 #include "f2c.h"
 
-/* Table of constant values */
-
-static integer c__3 = 3;
-
-/* $Procedure      SUBPT ( Sub-observer point ) */
+/* $Procedure SUBPT ( Sub-observer point ) */
 /* Subroutine */ int subpt_(char *method, char *target, doublereal *et, char *
 	abcorr, char *obsrvr, doublereal *spoint, doublereal *alt, ftnlen 
 	method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsrvr_len)
@@ -21,7 +17,7 @@ static integer c__3 = 3;
 
     extern /* Subroutine */ int zzbods2c_(integer *, char *, integer *, 
 	    logical *, char *, integer *, logical *, ftnlen, ftnlen), 
-	    zzctruin_(integer *);
+	    zzgftreb_(integer *, doublereal *), zzctruin_(integer *);
     doublereal radii[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
@@ -32,14 +28,12 @@ static integer c__3 = 3;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     static logical svfnd1, svfnd2;
     static integer svctr1[2], svctr2[2];
+    extern logical failed_(void);
     integer obscde;
     doublereal lt;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
     integer frcode;
     extern /* Subroutine */ int cidfrm_(integer *, integer *, char *, logical 
 	    *, ftnlen);
-    integer nradii;
     char frname[80];
     integer trgcde;
     static integer svtcde;
@@ -65,9 +59,9 @@ static integer c__3 = 3;
 
 /*     Compute the rectangular coordinates of the sub-observer point on */
 /*     a target body at a particular epoch, optionally corrected for */
-/*     planetary (light time) and stellar aberration.  Return these */
+/*     planetary (light time) and stellar aberration. Return these */
 /*     coordinates expressed in the body-fixed frame associated with the */
-/*     target body.  Also, return the observer's altitude above the */
+/*     target body. Also, return the observer's altitude above the */
 /*     target body. */
 
 /* $ Disclaimer */
@@ -162,7 +156,7 @@ static integer c__3 = 3;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     METHOD     I   Computation method. */
 /*     TARGET     I   Name of target body. */
@@ -174,135 +168,135 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     METHOD      is a short string specifying the computation method */
-/*                 to be used.  The choices are: */
+/*     METHOD   is a short string specifying the computation method */
+/*              to be used. The choices are: */
 
-/*                    'Near point'       The sub-observer point is */
-/*                                       defined as the nearest point on */
-/*                                       the target relative to the */
-/*                                       observer. */
+/*                 'Near point'       The sub-observer point is */
+/*                                    defined as the nearest point on */
+/*                                    the target relative to the */
+/*                                    observer. */
 
-/*                    'Intercept'        The sub-observer point is */
-/*                                       defined as the target surface */
-/*                                       intercept of the line */
-/*                                       containing the observer and the */
-/*                                       target's center. */
+/*                 'Intercept'        The sub-observer point is */
+/*                                    defined as the target surface */
+/*                                    intercept of the line */
+/*                                    containing the observer and the */
+/*                                    target's center. */
 
-/*                 In both cases, the intercept computation treats the */
-/*                 surface of the target body as a triaxial ellipsoid. */
-/*                 The ellipsoid's radii must be available in the kernel */
-/*                 pool. */
+/*              In both cases, the intercept computation treats the */
+/*              surface of the target body as a triaxial ellipsoid. */
+/*              The ellipsoid's radii must be available in the kernel */
+/*              pool. */
 
-/*                 Neither case nor white space are significant in */
-/*                 METHOD.  For example, the string ' NEARPOINT' is */
-/*                 valid. */
-
-
-/*     TARGET      is the name of a target body.  Optionally, you may */
-/*                 supply the integer ID code for the object as */
-/*                 an integer string.  For example both 'MOON' and */
-/*                 '301' are legitimate strings that indicate the */
-/*                 moon is the target body. This routine assumes */
-/*                 that this body is modeled by a tri-axial ellipsoid, */
-/*                 and that a PCK file containing its radii has been */
-/*                 loaded into the kernel pool via FURNSH. */
-
-/*     ET          is the epoch in ephemeris seconds past J2000 at which */
-/*                 the sub-observer point on the target body is to be */
-/*                 computed. */
+/*              Neither case nor white space are significant in */
+/*              METHOD. For example, the string ' NEARPOINT' is */
+/*              valid. */
 
 
-/*     ABCORR      indicates the aberration corrections to be applied */
-/*                 when computing the observer-target state.  ABCORR */
-/*                 may be any of the following. */
+/*     TARGET   is the name of a target body. Optionally, you may */
+/*              supply the integer ID code for the object as */
+/*              an integer string. For example both 'MOON' and */
+/*              '301' are legitimate strings that indicate the */
+/*              moon is the target body. This routine assumes */
+/*              that this body is modeled by a tri-axial ellipsoid, */
+/*              and that a PCK file containing its radii has been */
+/*              loaded into the kernel pool via FURNSH. */
 
-/*                    'NONE'     Apply no correction. Return the */
-/*                               geometric sub-observer point on the */
-/*                               target body. */
-
-/*                    'LT'       Correct for planetary (light time) */
-/*                               aberration.  Both the state and rotation */
-/*                               of the target body are corrected for */
-/*                               light time. */
-
-/*                    'LT+S'     Correct for planetary (light time) and */
-/*                               stellar aberrations. Both the state and */
-/*                               rotation of the target body are */
-/*                               corrected for light time. */
+/*     ET       is the epoch in ephemeris seconds past J2000 at which */
+/*              the sub-observer point on the target body is to be */
+/*              computed. */
 
 
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equation, the 'CN' correction iterates */
-/*                               until the solution converges (three */
-/*                               iterations on all supported platforms). */
-/*                               Whether the 'CN+S' solution is */
-/*                               substantially more accurate than the */
-/*                               'LT' solution depends on the geometry */
-/*                               of the participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. See the Particulars section */
-/*                               of SPKEZR for a discussion of precision */
-/*                               of light time corrections. */
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              when computing the observer-target state.  ABCORR */
+/*              may be any of the following. */
 
-/*                               Both the state and rotation of the */
-/*                               target body are corrected for light */
-/*                               time. */
+/*                 'NONE'     Apply no correction. Return the */
+/*                            geometric sub-observer point on the */
+/*                            target body. */
 
-/*                    'CN+S'     Converged Newtonian light time */
-/*                               correction and stellar aberration */
-/*                               correction. */
+/*                 'LT'       Correct for planetary (light time) */
+/*                            aberration. Both the state and rotation */
+/*                            of the target body are corrected for */
+/*                            light time. */
 
-/*                               Both the state and rotation of the */
-/*                               target body are corrected for light */
-/*                               time. */
+/*                 'LT+S'     Correct for planetary (light time) and */
+/*                            stellar aberrations. Both the state and */
+/*                            rotation of the target body are */
+/*                            corrected for light time. */
 
-/*     OBSRVR      is the name of the observing body.  This is typically */
-/*                 a spacecraft, the earth, or a surface point on the */
-/*                 earth. Optionally, you  may supply the ID code of */
-/*                 the object as an integer string. For example, both */
-/*                 'EARTH' and '399' are legitimate strings to supply */
-/*                 to indicate the observer is Earth. */
+
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equation, the 'CN' correction iterates */
+/*                            until the solution converges (three */
+/*                            iterations on all supported platforms). */
+/*                            Whether the 'CN+S' solution is */
+/*                            substantially more accurate than the */
+/*                            'LT' solution depends on the geometry */
+/*                            of the participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. See the $Particulars section */
+/*                            of SPKEZR for a discussion of precision */
+/*                            of light time corrections. */
+
+/*                            Both the state and rotation of the */
+/*                            target body are corrected for light */
+/*                            time. */
+
+/*                 'CN+S'     Converged Newtonian light time */
+/*                            correction and stellar aberration */
+/*                            correction. */
+
+/*                            Both the state and rotation of the */
+/*                            target body are corrected for light */
+/*                            time. */
+
+/*     OBSRVR   is the name of the observing body. This is typically */
+/*              a spacecraft, the earth, or a surface point on the */
+/*              earth. Optionally, you  may supply the ID code of */
+/*              the object as an integer string. For example, both */
+/*              'EARTH' and '399' are legitimate strings to supply */
+/*              to indicate the observer is Earth. */
 
 /* $ Detailed_Output */
 
-/*     SPOINT      is the sub-observer point on the target body at ET */
-/*                 expressed relative to the body-fixed frame of the */
-/*                 target body. */
+/*     SPOINT   is the sub-observer point on the target body at ET */
+/*              expressed relative to the body-fixed frame of the */
+/*              target body. */
 
-/*                 The sub-observer point is defined either as the point */
-/*                 on the target body that is closest to the observer, */
-/*                 or the target surface intercept of the line from the */
-/*                 observer to the target's center; the input argument */
-/*                 METHOD selects the definition to be used. */
+/*              The sub-observer point is defined either as the point */
+/*              on the target body that is closest to the observer, */
+/*              or the target surface intercept of the line from the */
+/*              observer to the target's center; the input argument */
+/*              METHOD selects the definition to be used. */
 
-/*                 The body-fixed frame, which is time-dependent, is */
-/*                 evaluated at ET if ABCORR is 'NONE'; otherwise the */
-/*                 frame is evaluated at ET-LT, where LT is the one-way */
-/*                 light time from target to observer. */
+/*              The body-fixed frame, which is time-dependent, is */
+/*              evaluated at ET if ABCORR is 'NONE'; otherwise the */
+/*              frame is evaluated at ET-LT, where LT is the one-way */
+/*              light time from target to observer. */
 
-/*                 The state of the target body is corrected for */
-/*                 aberration as specified by ABCORR; the corrected */
-/*                 state is used in the geometric computation.  As */
-/*                 indicated above, the rotation of the target is */
-/*                 retarded by one-way light time if ABCORR specifies */
-/*                 that light time correction is to be done. */
+/*              The state of the target body is corrected for */
+/*              aberration as specified by ABCORR; the corrected */
+/*              state is used in the geometric computation. As */
+/*              indicated above, the rotation of the target is */
+/*              retarded by one-way light time if ABCORR specifies */
+/*              that light time correction is to be done. */
 
 
-/*     ALT         is the "altitude" of the observer above the target */
-/*                 body.  When METHOD specifies a "near point" */
-/*                 computation, ALT is truly altitude in the standard */
-/*                 geometric sense:  the length of a segment dropped from */
-/*                 the observer to the target's surface, such that the */
-/*                 segment is perpendicular to the surface at the */
-/*                 contact point SPOINT. */
+/*     ALT      is the "altitude" of the observer above the target */
+/*              body. When METHOD specifies a "near point" */
+/*              computation, ALT is truly altitude in the standard */
+/*              geometric sense: the length of a segment dropped from */
+/*              the observer to the target's surface, such that the */
+/*              segment is perpendicular to the surface at the */
+/*              contact point SPOINT. */
 
-/*                 When METHOD specifies an "intercept" computation, ALT */
-/*                 is still the length of the segment from the observer */
-/*                 to the surface point SPOINT, but this segment in */
-/*                 general is not perpendicular to the surface. */
+/*              When METHOD specifies an "intercept" computation, ALT */
+/*              is still the length of the segment from the observer */
+/*              to the surface point SPOINT, but this segment in */
+/*              general is not perpendicular to the surface. */
 
 /* $ Parameters */
 
@@ -313,44 +307,45 @@ static integer c__3 = 3;
 /*     If any of the listed errors occur, the output arguments are */
 /*     left unchanged. */
 
+/*     1)  If the input argument METHOD is not recognized, the error */
+/*         SPICE(DUBIOUSMETHOD) is signaled. */
 
-/*     1) If the input argument METHOD is not recognized, the error */
-/*        SPICE(DUBIOUSMETHOD) is signaled. */
+/*     2)  If either of the input body names TARGET or OBSRVR cannot be */
+/*         mapped to NAIF integer codes, the error SPICE(IDCODENOTFOUND) */
+/*         is signaled. */
 
-/*     2) If either of the input body names TARGET or OBSRVR cannot be */
-/*        mapped to NAIF integer codes, the error SPICE(IDCODENOTFOUND) */
-/*        is signaled. */
+/*     3)  If OBSRVR and TARGET map to the same NAIF integer ID codes, */
+/*         the error SPICE(BODIESNOTDISTINCT) is signaled. */
 
-/*     3) If OBSRVR and TARGET map to the same NAIF integer ID codes, the */
-/*        error SPICE(BODIESNOTDISTINCT) is signaled. */
+/*     4)  If frame definition data enabling the evaluation of the state */
+/*         of the target relative to the observer in target body-fixed */
+/*         coordinates have not been loaded prior to calling SUBPT, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     4) If frame definition data enabling the evaluation of the state */
-/*        of the target relative to the observer in target body-fixed */
-/*        coordinates have not been loaded prior to calling SUBPT, the */
-/*        error will be diagnosed and signaled by a routine in the call */
-/*        tree of this routine. */
+/*     5)  If the specified aberration correction is not recognized, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     5) If the specified aberration correction is not recognized, the */
-/*        error will be diagnosed and signaled by a routine in the call */
-/*        tree of this routine. */
+/*     6)  If insufficient ephemeris data have been loaded prior to */
+/*         calling SUBPT, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     6) If insufficient ephemeris data have been loaded prior to */
-/*        calling SUBPT, the error will be diagnosed and signaled by a */
-/*        routine in the call tree of this routine. */
+/*     7)  If the triaxial radii of the target body have not been loaded */
+/*         into the kernel pool prior to calling SUBPT, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     7) If the triaxial radii of the target body have not been loaded */
-/*        into the kernel pool prior to calling SUBPT, the error will be */
-/*        diagnosed and signaled by a routine in the call tree of this */
-/*        routine. */
+/*     8)  If the size of the TARGET body radii kernel variable is not */
+/*         three, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     8) The target must be an extended body:  if any of the radii of */
-/*        the target body are non-positive, the error will be diagnosed */
-/*        and signaled by routines in the call tree of this routine. */
+/*     9)  If any of the three TARGET body radii is less-than or equal to */
+/*         zero, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     9) If PCK data supplying a rotation model for the target body */
-/*        have not been loaded prior to calling SUBPT, the error will be */
-/*        diagnosed and signaled by a routine in the call tree of this */
-/*        routine. */
+/*     10) If PCK data supplying a rotation model for the target body */
+/*         have not been loaded prior to calling SUBPT, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -359,26 +354,26 @@ static integer c__3 = 3;
 
 /*     The following data are required: */
 
-/*        - SPK data:  ephemeris data for target and observer must be */
-/*          loaded.  If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for target and observer must be */
+/*        loaded. If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - PCK data:  triaxial radii for the target body must be loaded */
-/*          into the kernel pool.  Typically this is done by loading a */
-/*          text PCK file via FURNSH. */
+/*     -  PCK data: triaxial radii for the target body must be loaded */
+/*        into the kernel pool. Typically this is done by loading a */
+/*        text PCK file via FURNSH. */
 
-/*        - Further PCK data:  rotation data for the target body must */
-/*          be loaded.  These may be provided in a text or binary PCK */
-/*          file.  Either type of file may be loaded via FURNSH. */
+/*     -  Further PCK data: rotation data for the target body must */
+/*        be loaded. These may be provided in a text or binary PCK */
+/*        file. Either type of file may be loaded via FURNSH. */
 
-/*        - Frame data:  if a frame definition is required to convert */
-/*          the observer and target states to the body-fixed frame of */
-/*          the target, that definition must be available in the kernel */
-/*          pool.  Typically the definition is supplied by loading a */
-/*          frame kernel via FURNSH. */
+/*     -  Frame data: if a frame definition is required to convert */
+/*        the observer and target states to the body-fixed frame of */
+/*        the target, that definition must be available in the kernel */
+/*        pool. Typically the definition is supplied by loading a */
+/*        frame kernel via FURNSH. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
@@ -387,12 +382,12 @@ static integer c__3 = 3;
 
 /*     SUBPT computes the sub-observer point on a target body. */
 /*     (The sub-observer point is commonly called the sub-spacecraft */
-/*     point when the observer is a spacecraft.)  SUBPT also */
+/*     point when the observer is a spacecraft.) SUBPT also */
 /*     determines the altitude of the observer above the target body. */
 
 /*     There are two different popular ways to define the sub-observer */
 /*     point:  "nearest point on target to observer" or "target surface */
-/*     intercept of line containing observer and target."  These */
+/*     intercept of line containing observer and target." These */
 /*     coincide when the target is spherical and generally are distinct */
 /*     otherwise. */
 
@@ -403,7 +398,7 @@ static integer c__3 = 3;
 /* $ Examples */
 
 /*     The numerical results shown for this example may differ across */
-/*     platforms.  The results depend on the SPICE kernels used as */
+/*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
@@ -417,11 +412,11 @@ static integer c__3 = 3;
 /*         2004 JAN 1 12:00:00 UTC. */
 
 /*     pck00007.tpc is a planetary constants kernel file containing */
-/*     radii and rotation model constants.  naif0007.tls is a */
+/*     radii and rotation model constants. naif0007.tls is a */
 /*     leapseconds kernel. */
 
 /*     Find the sub-observer point of the Mars Global Surveyor (MGS) */
-/*     spacecraft on Mars for a specified time.  Perform the computation */
+/*     spacecraft on Mars for a specified time. Perform the computation */
 /*     twice, using both the "intercept" and "near point" options. */
 
 
@@ -511,7 +506,6 @@ static integer c__3 = 3;
 /*          Planetocentric Longitude (deg) =  -159.226663 */
 /*          Altitude                 (km)  =   373.166636 */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -522,12 +516,20 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton     (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     J.E. McLean    (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.0, 01-NOV-2021 (EDW) (JDR) */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.3.0, 04-JUL-2014 (NJB) (BVS) */
 
@@ -547,12 +549,12 @@ static integer c__3 = 3;
 
 /* -    SPICELIB Version 1.2.2, 17-MAR-2009 (EDW) */
 
-/*        Typo correction in Required_Reading, changed */
+/*        Typo correction in $Required_Reading, changed */
 /*        FRAME to FRAMES. */
 
 /* -    SPICELIB Version 1.2.1, 07-FEB-2008 (NJB) */
 
-/*        Abstract now states that this routine is deprecated. */
+/*        $Abstract now states that this routine is deprecated. */
 
 /* -    SPICELIB Version 1.2.0, 24-OCT-2005 (NJB) */
 
@@ -562,11 +564,11 @@ static integer c__3 = 3;
 
 /*        Changed BODN2C call to BODS2C giving the routine */
 /*        the capability to accept string representations of */
-/*        interger IDs for TARGET and OBSRVR. */
+/*        integer IDs for TARGET and OBSRVR. */
 
 /* -    SPICELIB Version 1.0.1, 27-JUL-2003 (NJB) (CHA) */
 
-/*        Various header corrections were made.  The example program */
+/*        Various header corrections were made. The example program */
 /*        was upgraded to use real kernels, and the program's output is */
 /*        shown. */
 
@@ -669,7 +671,11 @@ static integer c__3 = 3;
 
 /*     Get the radii of the target body from the kernel pool. */
 
-    bodvcd_(&trgcde, "RADII", &c__3, &nradii, radii, (ftnlen)5);
+    zzgftreb_(&trgcde, radii);
+    if (failed_()) {
+	chkout_("SUBPT", (ftnlen)5);
+	return 0;
+    }
 
 /*     Find the name of the body-fixed frame associated with the */
 /*     target body.  We'll want the state of the target relative to */

@@ -512,7 +512,7 @@ logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *
 /*     ELTS       I   Indices of column entry elements to match. */
 /*     OPS        I   Operators used in query constraints. */
 /*     VTYPES     I   Data types of values on RHS of constraints. */
-/*     CHRBUF     I   Buffer containting query tokens. */
+/*     CHRBUF     I   Buffer containing query tokens. */
 /*     CBEGS      I   Begin indices of character query tokens. */
 /*     CENDS      I   End indices of character query tokens. */
 /*     DVALS      I   D.p. values used in query constraints. */
@@ -670,6 +670,10 @@ logical zzekrmch_(integer *ncnstr, logical *active, integer *handle, integer *
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */
 

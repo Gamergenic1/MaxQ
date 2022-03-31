@@ -3,9 +3,9 @@
 -Procedure det_c  ( Determinant of a double precision 3x3 matrix )
 
 -Abstract
- 
-    Compute the determinant of a double precision 3x3 matrix. 
- 
+
+   Compute the determinant of a double precision 3x3 matrix.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,94 +32,144 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-    MATRIX,  MATH 
- 
+
+   MATH
+   MATRIX
+
 */
 
    #include "SpiceUsr.h"
    #undef    det_c
-   
 
-   SpiceDouble det_c ( ConstSpiceDouble m1[3][3] ) 
+
+   SpiceDouble det_c ( ConstSpiceDouble m1[3][3] )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   m1         I     Matrix whose determinant is to be found. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   m1         I   Matrix whose determinant is to be found.
+
+   The function returns the value of the determinant found by direct
+   application of the definition of the determinant.
+
 -Detailed_Input
- 
-   m1      This variable may be any double precision, 3x3 matrix. 
- 
+
+   m1          is any double precision, 3x3 matrix.
+
 -Detailed_Output
- 
-   det_c   This is the value of the determinant found by direct 
-           application of the definition of the determinant. 
- 
+
+   The function returns the value of the determinant found by direct
+   application of the definition of the determinant.
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   det_c calculates the determinant of m1 in a single arithmetic 
-   expression which is, effectively, the expansion of m1 about its 
-   first row.  Since the calculation of the determinant involves 
-   the multiplication of numbers whose magnitudes are unrestricted, 
-   there is the possibility of floating point overflow or underflow. 
-   NO error checking or recovery is implemented in this routine. 
- 
--Examples
- 
-          | 1  2  3 | 
-     M1 = | 4  5  6 |   ---->   det_c(m1) = 0 
-          | 7  8  9 | 
-  
-          | 1  2  3 | 
-     M1 = | 0  5  6 |   ---->   det_c(m1) = 45 
-          | 0  0  9 | 
- 
--Restrictions
- 
-   No checking is implemented to determine whether M1 will cause 
-   overflow or underflow in the process of calculating the 
-   determinant.  In most cases, this will not pose a problem. 
-   The user is required to determine if M1 is suitable matrix 
-   for det_c to operate on. 
+
+   None.
 
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
+
    None.
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.M. Owen       (JPL) 
- 
+
+-Particulars
+
+   det_c calculates the determinant of `m1' in a single arithmetic
+   expression which is, effectively, the expansion of `m1' about its
+   first row. Since the calculation of the determinant involves
+   the multiplication of numbers whose magnitudes are unrestricted,
+   there is the possibility of floating point overflow or underflow.
+   NO error checking or recovery is implemented in this routine.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Given a 3x3 double precision matrix, compute its determinant.
+
+      Example code begins here.
+
+
+      /.
+         Program det_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Set `m1' and `m2'.
+         ./
+         SpiceDouble          m1     [3][3] = { {1.0,  2.0,  3.0},
+                                                {4.0,  5.0,  6.0},
+                                                {7.0,  8.0,  9.0} };
+
+         SpiceDouble          m2     [3][3] = { {1.0,  2.0,  3.0},
+                                                {0.0,  5.0,  6.0},
+                                                {0.0,  0.0,  9.0} };
+
+         /.
+         Display the determinant of `m1' and `m2'.
+         ./
+         printf( "Determinant of M1: %5.2f\n", det_c ( m1 ) );
+         printf( "Determinant of M2: %5.2f\n", det_c ( m2 ) );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Determinant of M1:  0.00
+      Determinant of M2: 45.00
+
+
+-Restrictions
+
+   1)  No checking is implemented to determine whether `m1' will cause
+       overflow or underflow in the process of calculating the
+       determinant. In most cases, this will not pose a problem.
+       The user is required to determine if `m1' is suitable matrix
+       for det_c to operate on.
+
 -Literature_References
- 
-   None 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+
 -Version
- 
-   -CSPICE Version 1.0.0, 21-OCT-1998 (NJB)
+
+   -CSPICE Version 1.0.1, 02-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing fragment.
+
+   -CSPICE Version 1.0.0, 21-OCT-1998 (NJB) (WMO)
 
 -Index_Entries
- 
-   determinant of a d.p. 3x3_matrix 
- 
+
+   determinant of a d.p. 3x3_matrix
+
 -&
 */
 

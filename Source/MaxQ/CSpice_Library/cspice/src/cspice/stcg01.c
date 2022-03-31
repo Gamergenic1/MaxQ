@@ -15,7 +15,7 @@ static integer c__5 = 5;
 static integer c__6 = 6;
 static integer c__7 = 7;
 
-/* $Procedure   STCG01 ( STAR catalog type 1, get star data ) */
+/* $Procedure STCG01 ( STAR catalog type 1, get star data ) */
 /* Subroutine */ int stcg01_(integer *index, doublereal *ra, doublereal *dec, 
 	doublereal *rasig, doublereal *decsig, integer *catnum, char *sptype, 
 	doublereal *vmag, ftnlen sptype_len)
@@ -73,44 +73,44 @@ static integer c__7 = 7;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     INDEX       I   Star index. */
-/*     RA          O   Right ascension in radians. */
-/*     DEC         O   Declination in radians. */
-/*     RAS         O   Right ascension uncertainty in radians. */
-/*     DECS        O   Declination uncertainty in radians. */
-/*     CATNUM      O   Catalog number. */
-/*     SPTYPE      O   Spectral type. */
-/*     VMAG        O   Visual magnitude. */
+/*     INDEX      I   Star index. */
+/*     RA         O   Right ascension in radians. */
+/*     DEC        O   Declination in radians. */
+/*     RASIG      O   Right ascension uncertainty in radians. */
+/*     DECSIG     O   Declination uncertainty in radians. */
+/*     CATNUM     O   Catalog number. */
+/*     SPTYPE     O   Spectral type. */
+/*     VMAG       O   Visual magnitude. */
 
 /* $ Detailed_Input */
 
-/*     INDEX       is the index of the star in the list of stars */
-/*                 that satisfy the selection criteria specified in */
-/*                 the last call to STCF01. */
+/*     INDEX    is the index of the star in the list of stars */
+/*              that satisfy the selection criteria specified in */
+/*              the last call to STCF01. */
 
 /* $ Detailed_Output */
 
-/*     RA          is right ascension of the star at the catalog epoch */
-/*                 in radians relative to the J2000 inertial frame. */
+/*     RA       is right ascension of the star at the catalog epoch */
+/*              in radians relative to the J2000 inertial frame. */
 
-/*     DEC         is declination of the star at the catalog epoch in */
-/*                 radians relative to the J2000 inertial frame. */
+/*     DEC      is declination of the star at the catalog epoch in */
+/*              radians relative to the J2000 inertial frame. */
 
-/*     RASIG       is the uncertainty in right ascension of the star at */
-/*                 the catalog epoch in radians. */
+/*     RASIG    is the uncertainty in right ascension of the star at */
+/*              the catalog epoch in radians. */
 
-/*     DECSIG      is the uncertainty in declination of the star at */
-/*                 the catalog epoch in radians. */
+/*     DECSIG   is the uncertainty in declination of the star at */
+/*              the catalog epoch in radians. */
 
-/*     CATNUM      is the star number in the catalog. */
+/*     CATNUM   is the star number in the catalog. */
 
-/*     SPTYPE      is the star's spectral type. See catalog description */
-/*                 for more information regarding encoding of spectral */
-/*                 type values. */
+/*     SPTYPE   is the star's spectral type. See catalog description */
+/*              for more information regarding encoding of spectral */
+/*              type values. */
 
-/*     VMAG        is the visual magnitude of the star. */
+/*     VMAG     is the visual magnitude of the star. */
 
 /* $ Parameters */
 
@@ -118,14 +118,15 @@ static integer c__7 = 7;
 
 /* $ Exceptions */
 
-/*     1) If fetching of any of output values fails, then */
-/*        the error 'SPICE(BADSTARINDEX)' is signalled. */
+/*     1)  If fetching of any of output values fails, the error */
+/*         SPICE(BADSTARINDEX) is signaled. */
 
-/*     2) If no star catalog has been loaded, the error is dianosed */
-/*        by a routine called by this one. */
+/*     2)  If no star catalog has been loaded, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     3) If STCF01 was not called first, the EK query */
-/*        error 'SPICE(INVALIDINDEX)' is signalled. */
+/*     3)  If a star catalog type 1 was not queried by calling STCF01 */
+/*         before calling this routine, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /* $ Files */
 
@@ -137,7 +138,7 @@ static integer c__7 = 7;
 /*     segments. This table MUST include the following columns: */
 
 /*        column name                data type          units */
-/*     ------------------------------------------------------- */
+/*        ---------------------------------------------------- */
 /*        RA                   DOUBLE PRECISION        DEGREES */
 /*        DEC                  DOUBLE PRECISION        DEGREES */
 /*        RA_SIGMA             DOUBLE PRECISION        DEGREES */
@@ -197,12 +198,12 @@ static integer c__7 = 7;
 
 /* $ Restrictions */
 
-/*     1) The catalog file STCG01 reads data from MUST be loaded */
-/*        by STCL01 and a search through the catalog MUST be done by */
-/*        STCF01 before STCG01 is called. */
+/*     1)  The catalog file STCG01 reads data from MUST be loaded */
+/*         by STCL01 and a search through the catalog MUST be done by */
+/*         STCF01 before STCG01 is called. */
 
-/*     2) No other EK queries can be made between the call to STCF01 */
-/*        and the call to STCG01. */
+/*     2)  No other EK queries can be made between the call to STCF01 */
+/*         and the call to STCG01. */
 
 /* $ Literature_References */
 
@@ -210,9 +211,19 @@ static integer c__7 = 7;
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 16-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated header to comply with NAIF standard. Corrected argument */
+/*        names "RASIG" and "DECSIG" in $Brief_I/O. */
+
+/*        Updated entry #3 in $Exceptions section. */
 
 /* -    SPICELIB Version 1.0.0, 15-MAY-1996 (BVS) */
 
@@ -220,9 +231,6 @@ static integer c__7 = 7;
 /* $ Index_Entries */
 
 /*     get data for single star from a type 1 star catalog */
-
-/* -& */
-/* $ Revisions */
 
 /* -& */
 

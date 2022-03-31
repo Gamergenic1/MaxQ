@@ -64,10 +64,9 @@ static integer c__2 = 2;
 	    char *, char *, ftnlen, ftnlen, ftnlen);
     extern logical return_(void);
     doublereal pv1[6], pv2[6];
+    extern doublereal zzsepq_(doublereal *, integer *, integer *, doublereal *
+	    , doublereal *, integer *, char *, char *, ftnlen, ftnlen);
     integer ctr1, ctr2;
-    extern /* Subroutine */ int zzgfspq_(doublereal *, integer *, integer *, 
-	    doublereal *, doublereal *, integer *, char *, char *, doublereal 
-	    *, ftnlen, ftnlen);
 
 /* $ Abstract */
 
@@ -227,17 +226,24 @@ static integer c__2 = 2;
 
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  Entry points */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     OF         I   ZZGFSPIN */
 /*     FROM       I   ZZGFSPIN */
 /*     SHAPE      I   ZZGFSPIN */
 /*     FRAME      I   ZZGFSPIN */
 /*     ET         I   ZZGFSPDC, ZZGFSPGQ */
-/*     ABCORR     I   ZZGFSPIN */
 /*     UDFUNC     I   ZZGFSPDC */
+/*     ABCORR     I   ZZGFSPIN */
 /*     DECRES     O   ZZGFSPDC */
 /*     SEP        O   ZZGFSPGQ */
+/*     XABCR      O   ZZGFSPX */
+/*     XBOD       O   ZZGFSPX */
+/*     YREF       O   ZZGFSPX */
+/*     XREF       O   ZZGFSPX */
+/*     XOBS       O   ZZGFSPX */
+/*     XRAD       O   ZZGFSPX */
+/*     XSHP       O   ZZGFSPX */
 
 /* $ Detailed_Input */
 
@@ -281,35 +287,35 @@ static integer c__2 = 2;
 
 /*                 'NONE'     Apply no correction. */
 
-/*                 'LT'       "Reception" case:  correct for */
+/*                 'LT'       "Reception" case: correct for */
 /*                            one-way light time using a Newtonian */
 /*                            formulation. */
 
-/*                 'LT+S'     "Reception" case:  correct for */
+/*                 'LT+S'     "Reception" case: correct for */
 /*                            one-way light time and stellar */
 /*                            aberration using a Newtonian */
 /*                            formulation. */
 
-/*                 'CN'       "Reception" case:  converged */
+/*                 'CN'       "Reception" case: converged */
 /*                            Newtonian light time correction. */
 
-/*                 'CN+S'     "Reception" case:  converged */
+/*                 'CN+S'     "Reception" case: converged */
 /*                            Newtonian light time and stellar */
 /*                            aberration corrections. */
 
-/*                 'XLT'      "Transmission" case:  correct for */
+/*                 'XLT'      "Transmission" case: correct for */
 /*                            one-way light time using a Newtonian */
 /*                            formulation. */
 
-/*                 'XLT+S'    "Transmission" case:  correct for */
+/*                 'XLT+S'    "Transmission" case: correct for */
 /*                            one-way light time and stellar */
 /*                            aberration using a Newtonian */
 /*                            formulation. */
 
-/*                 'XCN'      "Transmission" case:  converged */
+/*                 'XCN'      "Transmission" case: converged */
 /*                            Newtonian light time correction. */
 
-/*                 'XCN+S'    "Transmission" case:  converged */
+/*                 'XCN+S'    "Transmission" case: converged */
 /*                            Newtonian light time and stellar */
 /*                            aberration corrections. */
 
@@ -317,7 +323,7 @@ static integer c__2 = 2;
 /*                 and trailing blanks. */
 
 /*     DECRES   is .TRUE. if the angular separation between the */
-/*              objects is decreasing.  Otherwise it is .FALSE. */
+/*              objects is decreasing. Otherwise it is .FALSE. */
 
 /*     SEP      is the angular separation between SVBOD1 and SVBOD2 as */
 /*              seen from SVOBS at time ET. */
@@ -334,7 +340,8 @@ static integer c__2 = 2;
 
 /* $ Exceptions */
 
-/*     1) SPICE(BOGUSENTRY) signals if a direct call to ZZGFSPU occurs. */
+/*     1)  If a direct call to ZZGFSPU occurs, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
@@ -363,8 +370,8 @@ static integer c__2 = 2;
 
 /* $ Restrictions */
 
-/*     ZZGFSPIN must be called prior to use of any of the */
-/*     other entry points. */
+/*     1)  ZZGFSPIN must be called prior to use of any of the */
+/*         other entry points. */
 
 /* $ Literature_References */
 
@@ -372,13 +379,24 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     L.S. Elson     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 2.0.0 27-JUN-2012 (EDW) */
+/* -    SPICELIB Version 3.0.0, 31-MAY-2021 (EDW) (JDR) */
+
+/*        Edited umbrella routine and all its entry points' headers to */
+/*        comply with NAIF standard. Extended $Brief_I/O to list all */
+/*        arguments and refer to corresponding entry points. */
+
+/*        Moved UDFUNC declaration to $Declarations section. */
+
+/*        Routine ZZGFSPGQ now calls ZZSEPQ, a copy of ZZGFSPQ cast as */
+/*        a function. */
+
+/* -    SPICELIB Version 2.0.0, 27-JUN-2012 (EDW) */
 
 /*        Code edits to implement use of ZZGFRELX. */
 /*        These edits include removal of unneeded routines: */
@@ -391,7 +409,7 @@ static integer c__2 = 2;
 /*        Routine ZZGFGSEP renamed to ZZGFSPGQ to match geometry finder */
 /*        naming convention. */
 
-/*        Implemented a proper Exceptions section. Update to header */
+/*        Implemented a proper $Exceptions section. Update to header */
 /*        entries. */
 
 /* -    SPICELIB Version 1.1.0, 29-DEC-2009 (NJB) (EDW) */
@@ -406,7 +424,7 @@ static integer c__2 = 2;
 
 /*        Rename of the ZZDHA call to DHFA. */
 
-/* -    SPICELIB Version 1.0.0 19-FEB-2009 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.0, 19-FEB-2009 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -561,35 +579,35 @@ L_zzgfspin:
 
 /*                 'NONE'     Apply no correction. */
 
-/*                 'LT'       "Reception" case:  correct for */
+/*                 'LT'       "Reception" case: correct for */
 /*                            one-way light time using a Newtonian */
 /*                            formulation. */
 
-/*                 'LT+S'     "Reception" case:  correct for */
+/*                 'LT+S'     "Reception" case: correct for */
 /*                            one-way light time and stellar */
 /*                            aberration using a Newtonian */
 /*                            formulation. */
 
-/*                 'CN'       "Reception" case:  converged */
+/*                 'CN'       "Reception" case: converged */
 /*                            Newtonian light time correction. */
 
-/*                 'CN+S'     "Reception" case:  converged */
+/*                 'CN+S'     "Reception" case: converged */
 /*                            Newtonian light time and stellar */
 /*                            aberration corrections. */
 
-/*                 'XLT'      "Transmission" case:  correct for */
+/*                 'XLT'      "Transmission" case: correct for */
 /*                            one-way light time using a Newtonian */
 /*                            formulation. */
 
-/*                 'XLT+S'    "Transmission" case:  correct for */
+/*                 'XLT+S'    "Transmission" case: correct for */
 /*                            one-way light time and stellar */
 /*                            aberration using a Newtonian */
 /*                            formulation. */
 
-/*                 'XCN'      "Transmission" case:  converged */
+/*                 'XCN'      "Transmission" case: converged */
 /*                            Newtonian light time correction. */
 
-/*                 'XCN+S'    "Transmission" case:  converged */
+/*                 'XCN+S'    "Transmission" case: converged */
 /*                            Newtonian light time and stellar */
 /*                            aberration corrections. */
 
@@ -598,7 +616,7 @@ L_zzgfspin:
 
 /* $ Detailed_Output */
 
-/*     None */
+/*     None. */
 
 /* $ Parameters */
 
@@ -606,41 +624,46 @@ L_zzgfspin:
 
 /* $ Exceptions */
 
-/*     1) SPICE(IDCODENOTFOUND) signals if the object name for target 1, */
-/*        OF(1), is not a recognized name. */
+/*     1)  If the object name for target 1, OF(1), is not a recognized */
+/*         name, the error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     2) SPICE(IDCODENOTFOUND) signals if the object name for target 2, */
-/*        OF(2), is not a recognized name. */
+/*     2)  If the object name for target 2, OF(2), is not a recognized */
+/*         name, the error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     3) SPICE(IDCODENOTFOUND) signals if the object name for the */
-/*        observer, FROM, is not a recognized name. */
+/*     3)  If the object name for the observer, FROM, is not a recognized */
+/*         name, the error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     4) SPICE(BODIESNOTDISTINCT) signals if the three objects */
-/*        associated with an ANGULAR SEPARATION search are not distinct. */
+/*     4)  If the three objects associated with an ANGULAR SEPARATION */
+/*         search are not distinct, the error SPICE(BODIESNOTDISTINCT) is */
+/*         signaled. */
 
-/*     5) SPICE(NOTRECOGNIZED) signals if the body shape for target 1, */
-/*        SHAPE(1), is not recognized. */
+/*     5)  If the body shape for target 1, SHAPE(1), is not recognized, */
+/*         the error SPICE(NOTRECOGNIZED) is signaled. */
 
-/*     6) SPICE(BUG) signals if the SHAPE(1) value lacks a corresponding */
-/*        case block. This indicates a programming error. */
+/*     6)  If the SHAPE(1) value lacks a corresponding case block, the */
+/*         error SPICE(BUG) is signaled. This indicates a programming */
+/*         error. */
 
-/*     7) SPICE(NOTRECOGNIZED) signals if the body shape for target 2, */
-/*        SHAPE(2), is not recognized. */
+/*     7)  If the body shape for target 2, SHAPE(2), is not recognized, */
+/*         the error SPICE(NOTRECOGNIZED) is signaled. */
 
-/*     8) SPICE(BUG) signals if the SHAPE(2) value lacks a corresponding */
-/*        case block. This indicates a programming error. */
+/*     8)  If the SHAPE(2) value lacks a corresponding case block, the */
+/*         error SPICE(BUG) is signaled. This indicates a programming */
+/*         error. */
 
-/*     9) SPICE(NOFRAME) signals if frame subsystem did not recognize */
-/*         frame name FRAME(1). */
+/*     9)  If frame subsystem did not recognize frame name FRAME(1), the */
+/*         error SPICE(NOFRAME) is signaled. */
 
-/*     10) SPICE(INVALIDFRAME) signals if the reference frame associated */
-/*         with target body 1, OF(1), is not centered on target body 1. */
+/*     10) If the reference frame associated with target body 1, OF(1), */
+/*         is not centered on target body 1, the error */
+/*         SPICE(INVALIDFRAME) is signaled. */
 
-/*     11) SPICE(NOFRAME) signals if frame subsystem did not recognize */
-/*         frame name FRAME(2). */
+/*     11) If frame subsystem did not recognize frame name FRAME(2), the */
+/*         error SPICE(NOFRAME) is signaled. */
 
-/*     12) SPICE(INVALIDFRAME) signals if the reference frame associated */
-/*         with target body 2, OF(2), is not centered on target body 2. */
+/*     12) If the reference frame associated with target body 2, OF(2), */
+/*         is not centered on target body 2, the error */
+/*         SPICE(INVALIDFRAME) is signaled. */
 
 /* $ Files */
 
@@ -664,20 +687,23 @@ L_zzgfspin:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     L.S. Elson     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 2.0.0 27-JUN-2012 (EDW) */
+/* -    SPICELIB Version 2.0.1, 31-MAY-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 27-JUN-2012 (EDW) */
 
 /*        REFVAL removed from routine argument list due to the use */
 /*        of ZZGFRELX to calculate the events. */
 
-/*        Implemented a proper Exceptions section. Update to */
-/*        Author_and_Institution section. */
+/*        Implemented a proper $Exceptions section. Update to */
+/*        $Author_and_Institution section. */
 
 /* -    SPICELIB Version 1.1.0, 29-DEC-2009 (NJB) (EDW) */
 
@@ -689,7 +715,7 @@ L_zzgfspin:
 /*        to "POINT" or "SPHERE" shape targets, and so will not */
 /*        execute for this version of the routine. */
 
-/* -    SPICELIB Version 1.0.0 14-APR-2008 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.0, 14-APR-2008 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -956,14 +982,14 @@ L_zzgfspdc:
 
 /* $ Detailed_Input */
 
-/*     ET         time in seconds past J2000 at which one wishes to */
-/*                determine whether or not the angular separation of the */
-/*                two bodies is decreasing. */
+/*     ET       time in seconds past J2000 at which one wishes to */
+/*              determine whether or not the angular separation of the */
+/*              two bodies is decreasing. */
 
 /* $ Detailed_Output */
 
-/*     DECRES     is .TRUE. if the angular separation between the objects */
-/*                is decreasing.  Otherwise it is .FALSE. */
+/*     DECRES   is .TRUE. if the angular separation between the objects */
+/*              is decreasing. Otherwise it is .FALSE. */
 
 /* $ Parameters */
 
@@ -971,8 +997,8 @@ L_zzgfspdc:
 
 /* $ Exceptions */
 
-/*     If the observer is inside one of the objects, the object will */
-/*     be regarded as having a 90 degree apparent radius. */
+/*     1)  If the observer is inside one of the objects, the object will */
+/*         be regarded as having a 90 degree apparent radius. */
 
 /* $ Files */
 
@@ -1011,23 +1037,26 @@ L_zzgfspdc:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     L.S. Elson     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 2.0.0 18-FEB-2011 (EDW) */
+/* -    SPICELIB Version 2.0.1, 30-MAY-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 18-FEB-2011 (EDW) */
 
 /*        Added UDFUNC to argument list for use of ZZGFRELX when */
 /*        calculating the events. */
 
-/* -    SPICELIB Version 1.0.1 06-JUL-2009 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.1, 06-JUL-2009 (NJB) (EDW) */
 
 /*        Rename of the ZZDHA call to DHFA. */
 
-/* -    SPICELIB Version 1.0.0 29-APR-2008 (NJB) */
+/* -    SPICELIB Version 1.0.0, 29-APR-2008 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1150,15 +1179,14 @@ L_zzgfspgq:
 
 /* $ Detailed_Input */
 
-/*     ET         time in ephemeris seconds past J2000 when the */
-/*                angular separation between the two bodies is */
-/*                to be computed. */
+/*     ET       time in ephemeris seconds past J2000 when the */
+/*              angular separation between the two bodies is */
+/*              to be computed. */
 
 /* $ Detailed_Output */
 
-/*     SEP        is the angular separation between SVBOD1 and SVBOD2 as */
-/*                seen from SVOBS at time ET. */
-
+/*     SEP      is the angular separation between SVBOD1 and SVBOD2 as */
+/*              seen from SVOBS at time ET. */
 
 /* $ Parameters */
 
@@ -1192,18 +1220,25 @@ L_zzgfspgq:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     L.S. Elson     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.0 17-FEB-2011 (EDW) */
+/* -    SPICELIB Version 3.0.0, 30-MAY-2021 (EDW) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Routine now calls ZZSEPQ, a copy of ZZGFSPQ cast as */
+/*        a function. */
+
+/* -    SPICELIB Version 2.0.0, 17-FEB-2011 (EDW) */
 
 /*        Routine renamed from ZZGFGSEP to ZZGFSPGQ to match geometry */
 /*        finder naming convention. */
 
-/* -    SPICELIB Version 1.0.0 26-AUG-2003 (LSE) */
+/* -    SPICELIB Version 1.0.0, 26-AUG-2003 (LSE) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1211,8 +1246,8 @@ L_zzgfspgq:
 /*     angular separation between two bodies */
 
 /* -& */
-    zzgfspq_(et, &svbod1, &svbod2, &svrad1, &svrad2, &svobs, svabcr, svref, 
-	    sep, (ftnlen)32, (ftnlen)32);
+    *sep = zzsepq_(et, &svbod1, &svbod2, &svrad1, &svrad2, &svobs, svabcr, 
+	    svref, (ftnlen)32, (ftnlen)32);
     return 0;
 /* $Procedure ZZGFSPX ( Private -- GF, retrieve ZZGFSPIN values ) */
 
@@ -1256,23 +1291,25 @@ L_zzgfspx:
 
 /* $ Declarations */
 
-/*     None. */
+/*     CHARACTER*(*)         XABCR */
+/*     INTEGER               XBOD  (2) */
+/*     CHARACTER*(*)         YREF */
+/*     CHARACTER*(*)         XREF  (2) */
+/*     INTEGER               XOBS */
+/*     DOUBLE PRECISION      XRAD  (2) */
+/*     INTEGER               XSHP  (2) */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     XABCR      O   Saved value for */
-/*     XBOD1      O   Saved value for */
-/*     XBOD2      O   Saved value for */
-/*     XREF       O   Saved value for */
-/*     XREF1      O   Saved value for */
-/*     XREF2      O   Saved value for */
-/*     XOBS       O   Saved value for */
-/*     XRAD1      O   Saved value for */
-/*     XRAD2      O   Saved value for */
-/*     XSHP1      O   Saved value for */
-/*     XSHP2      O   Saved value for */
+/*     XABCR      O   Saved value SVABCR. */
+/*     XBOD       O   Saved values SVBOD1 and SVBOD2. */
+/*     YREF       O   Saved value SVREF. */
+/*     XREF       O   Saved values SVREF1 and SVREF2. */
+/*     XOBS       O   Saved value SVOBS. */
+/*     XRAD       O   Saved values SVRAD1 and SVRAD2. */
+/*     XSHP       O   Saved values SVSHP1 and SVSHP2. */
 
 /* $ Detailed_Input */
 
@@ -1286,7 +1323,7 @@ L_zzgfspx:
 
 /*     XBOD2    initialized via ZZGFSPIN. */
 
-/*     XREF     initialized via ZZGFSPIN. */
+/*     YREF     initialized via ZZGFSPIN. */
 
 /*     XREF1    initialized via ZZGFSPIN. */
 
@@ -1332,12 +1369,18 @@ L_zzgfspx:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.0.0 24-SEP-2012 (EDW) */
+/* -    SPICELIB Version 1.0.1, 30-MAY-2021 (EDW) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Completed descriptions for $Brief_I/O. */
+
+/* -    SPICELIB Version 1.0.0, 24-SEP-2012 (EDW) */
 
 /* -& */
 /* $ Index_Entries */

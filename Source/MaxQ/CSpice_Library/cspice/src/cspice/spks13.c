@@ -56,7 +56,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of file containing source segment. */
 /*     BADDR      I   Beginning address in file of source segment. */
@@ -68,20 +68,20 @@
 
 /*     HANDLE, */
 /*     BADDR, */
-/*     EADDR       are the file handle assigned to an SPK file, and the */
-/*                 beginning and ending addresses of a segment within */
-/*                 that file.  Together they determine a complete set of */
-/*                 ephemeris data, from which a subset is to be */
-/*                 extracted. */
+/*     EADDR    are the file handle assigned to an SPK file, and the */
+/*              beginning and ending addresses of a segment within */
+/*              that file. Together they determine a complete set of */
+/*              ephemeris data, from which a subset is to be */
+/*              extracted. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset. */
+/*     END      are the initial and final epochs (ephemeris time) */
+/*              of the subset. */
 
-/*                 The output segment will be padded to the left of */
-/*                 BEGIN and the right of END with sufficient states to */
-/*                 ensure that the segment yields an ephemeris identical */
-/*                 to that given by the source segment. */
+/*              The output segment will be padded to the left of */
+/*              BEGIN and the right of END with sufficient states to */
+/*              ensure that the segment yields an ephemeris identical */
+/*              to that given by the source segment. */
 
 /* $ Detailed_Output */
 
@@ -105,7 +105,7 @@
 /*     handle, and written to the current DAF open for writing. */
 
 /*     The segment descriptor and summary must already have been written */
-/*     prior to calling this routine.  The segment must be ended */
+/*     prior to calling this routine. The segment must be ended */
 /*     external to this routine. */
 
 /* $ Particulars */
@@ -136,7 +136,7 @@
 
 /*        End the array to which this routine writes data. */
 
-/*     Much of this procedure is carried out by the routine SPKSUB.  The */
+/*     Much of this procedure is carried out by the routine SPKSUB. The */
 /*     examples of that routine illustrate more fully the process */
 /*     described above. */
 
@@ -150,16 +150,21 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 25-FEB-2000 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_13 spk segment */
+/*     subset type_13 SPK segment */
 
 /* -& */
 

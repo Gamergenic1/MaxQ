@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      DELFIL ( Delete a file  ) */
+/* $Procedure DELFIL ( Delete a file  ) */
 /* Subroutine */ int delfil_(char *filnam, ftnlen filnam_len)
 {
     /* System generated locals */
@@ -71,16 +71,16 @@
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      FILNAM     I   The name of a file to be deleted. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     FILNAM     I   The name of a file to be deleted. */
 
 /* $ Detailed_Input */
 
-/*     FILNAM      is the name of a file that is to be deleted. Upon */
-/*                 successful completion of this routine this file will */
-/*                 no longer exist. The file to be deleted must be closed */
-/*                 when this routine is called. */
+/*     FILNAM   is the name of a file that is to be deleted. Upon */
+/*              successful completion of this routine this file will */
+/*              no longer exist. The file to be deleted must be closed */
+/*              when this routine is called. */
 
 /* $ Detailed_Output */
 
@@ -88,27 +88,27 @@
 
 /* $ Parameters */
 
-/*     None */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      1)  If the file name is blank, the error SPICE(BLANKFILENAME) */
-/*          is signalled. */
+/*     1)  If the file name is blank, the error SPICE(BLANKFILENAME) */
+/*         is signaled. */
 
-/*      2)  If the inquire on the filename specified by FILNAM fails for */
-/*          some reason, the error SPICE(INQUIREERROR) will be signalled. */
+/*     2)  If the inquire on the filename specified by FILNAM fails for */
+/*         some reason, the error SPICE(INQUIREERROR) is signaled. */
 
-/*      3)  If the file specified by FILNAM is already open, the error */
-/*          SPICE(FILECURRENTLYOPEN) will be signalled. */
+/*     3)  If the file specified by FILNAM is already open, the error */
+/*         SPICE(FILECURRENTLYOPEN) is signaled. */
 
-/*      4)  If the file specified by FILNAM does not exist, the error */
-/*          SPICE(NOSUCHFILE) will be signalled. */
+/*     4)  If the file specified by FILNAM does not exist, the error */
+/*         SPICE(NOSUCHFILE) is signaled. */
 
-/*      5)  If the attempt to open the file specified by FILNAM fails, */
-/*          the error SPICE(FILEOPENFAILED) will be signalled. */
+/*     5)  If the attempt to open the file specified by FILNAM fails, */
+/*         the error SPICE(FILEOPENFAILED) is signaled. */
 
-/*      6)  If the attempt to close the file with STATUS='DELETE' fails */
-/*          the error SPICE(FILEDELETEFAILED) will be signalled. */
+/*     6)  If the attempt to close the file with STATUS='DELETE' fails, */
+/*         the error SPICE(FILEDELETEFAILED) is signaled. */
 
 /* $ Files */
 
@@ -130,8 +130,8 @@
 
 /* $ Restrictions */
 
-/*     The file to be deleted must be closed when this routine is */
-/*     invoked. */
+/*     1)  The file to be deleted must be closed when this routine is */
+/*         invoked. */
 
 /* $ Literature_References */
 
@@ -139,14 +139,18 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.0, 20-DEC-1995 (KRG) */
+/* -    SPICELIB Version 1.0.1, 02-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 20-DEC-1995 (KRG) */
 
 /* -& */
-
 /* $ Index_Entries */
 
 /*     delete a file */

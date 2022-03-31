@@ -417,274 +417,273 @@ static logical c_false = FALSE_;
 /*     STEP       I   Step size in seconds for finding occultation */
 /*                    events. */
 /*     CNFINE     I   SPICE window to which the search is restricted. */
-/*     RESULT     O   SPICE window containing results. */
+/*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
+/*     OCCTYP   indicates the type of occultation that is to be found. */
+/*              Note that transits are considered to be a type of */
+/*              occultation. */
 
-/*     OCCTYP     indicates the type of occultation that is to be found. */
-/*                Note that transits are considered to be a type of */
-/*                occultation. */
+/*              Supported values and corresponding definitions are: */
 
-/*                Supported values and corresponding definitions are: */
+/*                 'FULL'      denotes the full occultation of the */
+/*                             body designated by BACK by the body */
+/*                             designated by FRONT, as seen from the */
+/*                             location of the observer. In other */
+/*                             words, the occulted body is completely */
+/*                             invisible as seen from the observer's */
+/*                             location. */
 
-/*                   'FULL'      denotes the full occultation of the */
-/*                               body designated by BACK by the body */
-/*                               designated by FRONT, as seen from the */
-/*                               location of the observer. In other */
-/*                               words, the occulted body is completely */
-/*                               invisible as seen from the observer's */
-/*                               location. */
+/*                 'ANNULAR'   denotes an annular occultation: the */
+/*                             body designated by FRONT blocks part */
+/*                             of, but not the limb of, the body */
+/*                             designated by BACK, as seen from the */
+/*                             location of the observer. */
 
-/*                   'ANNULAR'   denotes an annular occultation: the */
-/*                               body designated by FRONT blocks part */
-/*                               of, but not the limb of, the body */
-/*                               designated by BACK, as seen from the */
-/*                               location of the observer. */
+/*                 'PARTIAL'   denotes a partial, non-annular */
+/*                             occultation: the body designated by */
+/*                             FRONT blocks part, but not all, of the */
+/*                             limb of the body designated by BACK, as */
+/*                             seen from the location of the observer. */
 
-/*                   'PARTIAL'   denotes a partial, non-annular */
-/*                               occultation: the body designated by */
-/*                               FRONT blocks part, but not all, of the */
-/*                               limb of the body designated by BACK, as */
-/*                               seen from the location of the observer. */
+/*                 'ANY'       denotes any of the above three types of */
+/*                             occultations: 'PARTIAL', 'ANNULAR', or */
+/*                             'FULL'. */
 
-/*                   'ANY'       denotes any of the above three types of */
-/*                               occultations: 'PARTIAL', 'ANNULAR', or */
-/*                               'FULL'. */
+/*                             'ANY' should be used to search for */
+/*                             times when the body designated by FRONT */
+/*                             blocks any part of the body designated */
+/*                             by BACK. */
 
-/*                               'ANY' should be used to search for */
-/*                               times when the body designated by FRONT */
-/*                               blocks any part of the body designated */
-/*                               by BACK. */
+/*                             The option 'ANY' must be used if either */
+/*                             the front or back target body is */
+/*                             modeled as a point. */
 
-/*                               The option 'ANY' must be used if either */
-/*                               the front or back target body is */
-/*                               modeled as a point. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string OCCTYP. */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string OCCTYP. */
+/*     FRONT    is the name of the target body that occults---that is, */
+/*              passes in front of---the other. Optionally, you may */
+/*              supply the integer NAIF ID code for the body as a */
+/*              string. For example both 'MOON' and '301' are */
+/*              legitimate strings that designate the Moon. */
 
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string FRONT. */
 
-/*     FRONT      is the name of the target body that occults---that is, */
-/*                passes in front of---the other. Optionally, you may */
-/*                supply the integer NAIF ID code for the body as a */
-/*                string. For example both 'MOON' and '301' are */
-/*                legitimate strings that designate the Moon. */
+/*     FSHAPE   is a string indicating the geometric model used to */
+/*              represent the shape of the front target body. The */
+/*              supported options are: */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string FRONT. */
+/*                 'ELLIPSOID' */
 
+/*                     Use a triaxial ellipsoid model with radius */
+/*                     values provided via the kernel pool. A kernel */
+/*                     variable having a name of the form */
 
-/*     FSHAPE     is a string indicating the geometric model used to */
-/*                represent the shape of the front target body. The */
-/*                supported options are: */
+/*                        BODYnnn_RADII */
+
+/*                     where nnn represents the NAIF integer code */
+/*                     associated with the body, must be present in */
+/*                     the kernel pool. This variable must be */
+/*                     associated with three numeric values giving the */
+/*                     lengths of the ellipsoid's X, Y, and Z */
+/*                     semi-axes. */
+
+/*                 'POINT' */
 
-/*                   'ELLIPSOID' */
+/*                     Treat the body as a single point. When a point */
+/*                     target is specified, the occultation type must */
+/*                     be set to 'ANY'. */
 
-/*                       Use a triaxial ellipsoid model with radius */
-/*                       values provided via the kernel pool. A kernel */
-/*                       variable having a name of the form */
+/*                 'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
 
-/*                          'BODYnnn_RADII' */
+/*                     Use topographic data provided by DSK files to */
+/*                     model the body's shape. These data must be */
+/*                     provided by loaded DSK files. */
 
-/*                       where nnn represents the NAIF integer code */
-/*                       associated with the body, must be present in */
-/*                       the kernel pool. This variable must be */
-/*                       associated with three numeric values giving the */
-/*                       lengths of the ellipsoid's X, Y, and Z */
-/*                       semi-axes. */
+/*                     The surface list specification is optional. The */
+/*                     syntax of the list is */
 
-/*                   'POINT' */
+/*                        <surface 1> [, <surface 2>...] */
 
-/*                       Treat the body as a single point. When a point */
-/*                       target is specified, the occultation type must */
-/*                       be set to 'ANY'. */
+/*                     If present, it indicates that data only for the */
+/*                     listed surfaces are to be used; however, data */
+/*                     need not be available for all surfaces in the */
+/*                     list. If absent, loaded DSK data for any surface */
+/*                     associated with the target body are used. */
 
-/*                   'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
+/*                     The surface list may contain surface names or */
+/*                     surface ID codes. Names containing blanks must */
+/*                     be delimited by double quotes, for example */
 
-/*                       Use topographic data provided by DSK files to */
-/*                       model the body's shape. These data must be */
-/*                       provided by loaded DSK files. */
+/*                        SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
+
+/*                     If multiple surfaces are specified, their names */
+/*                     or IDs must be separated by commas. */
+
+/*                     See the $Particulars section below for details */
+/*                     concerning use of DSK data. */
+
+/*              The combinations of the shapes of the target bodies */
+/*              FRONT and BACK must be one of: */
+
+/*                 One ELLIPSOID, one POINT */
+/*                 Two ELLIPSOIDs */
+/*                 One DSK, one POINT */
+
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string FSHAPE. */
+
+/*     FFRAME   is the name of the body-fixed, body-centered reference */
+/*              frame associated with the front target body. Examples of */
+/*              such names are 'IAU_SATURN' (for Saturn) and 'ITRF93' */
+/*              (for the Earth). */
+
+/*              If the front target body is modeled as a point, FFRAME */
+/*              should be left blank. */
+
+/*              Case and leading or trailing blanks bracketing a */
+/*              non-blank frame name are not significant in the string */
+/*              FFRAME. */
+
+/*     BACK     is the name of the target body that is occulted */
+/*              by---that is, passes in back of---the other. */
+/*              Optionally, you may supply the integer NAIF ID code */
+/*              for the body as a string. For example both 'MOON' and */
+/*              '301' are legitimate strings that designate the Moon. */
 
-/*                       The surface list specification is optional. The */
-/*                       syntax of the list is */
-
-/*                          <surface 1> [, <surface 2>...] */
-
-/*                       If present, it indicates that data only for the */
-/*                       listed surfaces are to be used; however, data */
-/*                       need not be available for all surfaces in the */
-/*                       list. If absent, loaded DSK data for any surface */
-/*                       associated with the target body are used. */
-
-/*                       The surface list may contain surface names or */
-/*                       surface ID codes. Names containing blanks must */
-/*                       be delimited by double quotes, for example */
-
-/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
-
-/*                       If multiple surfaces are specified, their names */
-/*                       or IDs must be separated by commas. */
-
-/*                       See the Particulars section below for details */
-/*                       concerning use of DSK data. */
-
-/*                The combinations of the shapes of the target bodies */
-/*                FRONT and BACK must be one of: */
-
-/*                   One ELLIPSOID, one POINT */
-/*                   Two ELLIPSOIDs */
-/*                   One DSK, one POINT */
-
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string FSHAPE. */
-
-
-/*     FFRAME     is the name of the body-fixed, body-centered reference */
-/*                frame associated with the front target body. Examples */
-/*                of such names are 'IAU_SATURN' (for Saturn) and */
-/*                'ITRF93' (for the Earth). */
-
-/*                If the front target body is modeled as a point, FFRAME */
-/*                should be left blank. */
-
-/*                Case and leading or trailing blanks bracketing a */
-/*                non-blank frame name are not significant in the string */
-/*                FFRAME. */
-
-
-/*     BACK       is the name of the target body that is occulted */
-/*                by---that is, passes in back of---the other. */
-/*                Optionally, you may supply the integer NAIF ID code */
-/*                for the body as a string. For example both 'MOON' and */
-/*                '301' are legitimate strings that designate the Moon. */
-
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string BACK. */
-
-
-/*     BSHAPE     is the shape specification for the body designated */
-/*                by BACK. The supported options are those for */
-/*                FSHAPE. See the description of FSHAPE above for */
-/*                details. */
-
-
-/*     BFRAME     is the name of the body-fixed, body-centered reference */
-/*                frame associated with the ``back'' target body. */
-/*                Examples of such names are 'IAU_SATURN' (for Saturn) */
-/*                and 'ITRF93' (for the Earth). */
-
-/*                If the back target body is modeled as a point, BFRAME */
-/*                should be left blank. */
-
-/*                Case and leading or trailing blanks bracketing a */
-/*                non-blank frame name are not significant in the string */
-/*                BFRAME. */
-
-
-/*     ABCORR     indicates the aberration corrections to be applied to */
-/*                the state of each target body to account for one-way */
-/*                light time.  Stellar aberration corrections are */
-/*                ignored if specified, since these corrections don't */
-/*                improve the accuracy of the occultation determination. */
-
-/*                See the header of the SPICE routine SPKEZR for a */
-/*                detailed description of the aberration correction */
-/*                options. For convenience, the options supported by */
-/*                this routine are listed below: */
-
-/*                   'NONE'     Apply no correction. */
-
-/*                   'LT'       "Reception" case:  correct for */
-/*                              one-way light time using a Newtonian */
-/*                              formulation. */
-
-/*                   'CN'       "Reception" case:  converged */
-/*                              Newtonian light time correction. */
-
-/*                   'XLT'      "Transmission" case:  correct for */
-/*                              one-way light time using a Newtonian */
-/*                              formulation. */
-
-/*                   'XCN'      "Transmission" case:  converged */
-/*                              Newtonian light time correction. */
-
-/*                Case and blanks are not significant in the string */
-/*                ABCORR. */
-
-
-/*     OBSRVR     is the name of the body from which the occultation is */
-/*                observed. Optionally, you may supply the integer NAIF */
-/*                ID code for the body as a string. */
-
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string OBSRVR. */
-
-
-/*     STEP       is the step size to be used in the search. STEP must */
-/*                be shorter than any interval, within the confinement */
-/*                window, over which the specified occultation condition */
-/*                is met. In other words, STEP must be shorter than the */
-/*                shortest occultation event that the user wishes to */
-/*                detect; STEP must also be shorter than the shortest */
-/*                time interval between two occultation events that */
-/*                occur within the confinement window (see below). */
-/*                However, STEP must not be *too* short, or the search */
-/*                will take an unreasonable amount of time. */
-
-/*                The choice of STEP affects the completeness but not */
-/*                the precision of solutions found by this routine; the */
-/*                precision is controlled by the convergence tolerance. */
-/*                See the discussion of the parameter CNVTOL for */
-/*                details. */
-
-/*                STEP has units of TDB seconds. */
-
-
-/*     CNFINE     is a SPICE window that confines the time period over */
-/*                which the specified search is conducted. CNFINE may */
-/*                consist of a single interval or a collection of */
-/*                intervals. */
-
-/*                The endpoints of the time intervals comprising CNFINE */
-/*                are interpreted as seconds past J2000 TDB. */
-
-/*                See the Examples section below for a code example */
-/*                that shows how to create a confinement window. */
-
-/*                CNFINE must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
-
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string BACK. */
+
+/*     BSHAPE   is the shape specification for the body designated */
+/*              by BACK. The supported options are those for */
+/*              FSHAPE. See the description of FSHAPE above for */
+/*              details. */
+
+/*     BFRAME   is the name of the body-fixed, body-centered reference */
+/*              frame associated with the ``back'' target body. Examples */
+/*              of such names are 'IAU_SATURN' (for Saturn) and 'ITRF93' */
+/*              (for the Earth). */
+
+/*              If the back target body is modeled as a point, BFRAME */
+/*              should be left blank. */
+
+/*              Case and leading or trailing blanks bracketing a */
+/*              non-blank frame name are not significant in the string */
+/*              BFRAME. */
+
+/*     ABCORR   indicates the aberration corrections to be applied to */
+/*              the state of each target body to account for one-way */
+/*              light time. Stellar aberration corrections are */
+/*              ignored if specified, since these corrections don't */
+/*              improve the accuracy of the occultation determination. */
+
+/*              See the header of the SPICE routine SPKEZR for a */
+/*              detailed description of the aberration correction */
+/*              options. For convenience, the options supported by */
+/*              this routine are listed below: */
+
+/*                 'NONE'     Apply no correction. */
+
+/*                 'LT'       "Reception" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
+
+/*                 'CN'       "Reception" case: converged */
+/*                            Newtonian light time correction. */
+
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
+
+/*                 'XCN'      "Transmission" case: converged */
+/*                            Newtonian light time correction. */
+
+/*              Case and blanks are not significant in the string */
+/*              ABCORR. */
+
+/*     OBSRVR   is the name of the body from which the occultation is */
+/*              observed. Optionally, you may supply the integer NAIF */
+/*              ID code for the body as a string. */
+
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string OBSRVR. */
+
+/*     STEP     is the step size to be used in the search. STEP must */
+/*              be shorter than any interval, within the confinement */
+/*              window, over which the specified occultation condition */
+/*              is met. In other words, STEP must be shorter than the */
+/*              shortest occultation event that the user wishes to */
+/*              detect; STEP must also be shorter than the shortest */
+/*              time interval between two occultation events that */
+/*              occur within the confinement window (see below). */
+/*              However, STEP must not be *too* short, or the search */
+/*              will take an unreasonable amount of time. */
+
+/*              The choice of STEP affects the completeness but not */
+/*              the precision of solutions found by this routine; the */
+/*              precision is controlled by the convergence tolerance. */
+/*              See the discussion of the parameter CNVTOL for */
+/*              details. */
+
+/*              STEP has units of TDB seconds. */
+
+/*     CNFINE   is a SPICE window that confines the time period over */
+/*              which the specified search is conducted. CNFINE may */
+/*              consist of a single interval or a collection of */
+/*              intervals. */
+
+/*              The endpoints of the time intervals comprising CNFINE */
+/*              are interpreted as seconds past J2000 TDB. */
+
+/*              See the $Examples section below for a code example */
+/*              that shows how to create a confinement window. */
+
+/*              CNFINE must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
+
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFOCLT conducts its search. */
 
 /* $ Detailed_Output */
 
-/*     RESULT     is a SPICE window representing the set of time */
-/*                intervals, within the confinement window, when the */
-/*                specified occultation occurs. */
+/*     RESULT   is a SPICE window representing the set of time intervals, */
+/*              within the confinement window, when the specified */
+/*              occultation occurs. */
 
-/*                The endpoints of the time intervals comprising RESULT */
-/*                are interpreted as seconds past J2000 TDB. */
+/*              The endpoints of the time intervals comprising RESULT are */
+/*              interpreted as seconds past J2000 TDB. */
 
-/*                If RESULT is non-empty on input, its contents */
-/*                will be discarded before GFOCLT conducts its */
-/*                search. */
+/*              If no times within the confinement window satisfy the */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL     is the lower bound for SPICE cell arrays. */
+/*     LBCELL   is the lower bound for SPICE cell arrays. */
 
-/*     CNVTOL     is the convergence tolerance used for finding */
-/*                endpoints of the intervals comprising the result */
-/*                window. CNVTOL is used to determine when binary */
-/*                searches for roots should terminate: when a root is */
-/*                bracketed within an interval of length CNVTOL, the */
-/*                root is considered to have been found. */
+/*     CNVTOL   is the convergence tolerance used for finding */
+/*              endpoints of the intervals comprising the result */
+/*              window. CNVTOL is used to determine when binary */
+/*              searches for roots should terminate: when a root is */
+/*              bracketed within an interval of length CNVTOL, the */
+/*              root is considered to have been found. */
 
-/*                The accuracy, as opposed to precision, of roots found */
-/*                by this routine depends on the accuracy of the input */
-/*                data. In most cases, the accuracy of solutions will be */
-/*                inferior to their precision. */
-
+/*              The accuracy, as opposed to precision, of roots found */
+/*              by this routine depends on the accuracy of the input */
+/*              data. In most cases, the accuracy of solutions will be */
+/*              inferior to their precision. */
 
 /*     See INCLUDE file gf.inc for declarations and descriptions of */
 /*     parameters used throughout the GF system. */
@@ -699,8 +698,8 @@ static logical c_false = FALSE_;
 /*         roots. */
 
 /*         This routine does not diagnose invalid step sizes, except */
-/*         that if the step size is non-positive, the error */
-/*         SPICE(INVALIDSTEPSIZE) will be signaled. */
+/*         that if the step size is non-positive, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
 /*     2)  Due to numerical errors, in particular, */
 
@@ -717,7 +716,7 @@ static logical c_false = FALSE_;
 /*         WNCOND can be used to contract the result window. */
 
 /*     3)  If name of either target or the observer cannot be translated */
-/*         to a NAIF ID code, the error will be diagnosed by a routine */
+/*         to a NAIF ID code, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /*     4)  If the radii of a target body modeled as an ellipsoid cannot */
@@ -727,69 +726,74 @@ static logical c_false = FALSE_;
 /*            'BODYnnn_RADII' */
 
 /*         where nnn represents the NAIF integer code associated with */
-/*         the body, the error will be diagnosed by a routine in the */
+/*         the body, an error is signaled by a routine in the */
 /*         call tree of this routine. */
 
 /*     5)  If either of the target bodies FRONT or BACK coincides with */
-/*         the observer body OBSRVR, the error will be diagnosed by a */
+/*         the observer body OBSRVR, an error is signaled by a */
 /*         routine in the call tree of this routine. */
 
 /*     6)  If the body designated by FRONT coincides with that */
-/*         designated by BACK, the error will be diagnosed by a routine */
+/*         designated by BACK, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /*     7)  If either of the body model specifiers FSHAPE or BSHAPE */
-/*         is not recognized, the error will be diagnosed by a routine */
+/*         is not recognized, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /*     8)  If both of the body model specifiers FSHAPE and BSHAPE */
-/*         specify point targets, the error will be diagnosed by a */
+/*         specify point targets, an error is signaled by a */
 /*         routine in the call tree of this routine. */
 
-/*     9)  If a target body-fixed reference frame associated with a */
-/*         non-point target is not recognized, the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*     9)  If one of the body model specifiers FSHAPE and BSHAPE */
+/*         specifies a DSK model, and the other argument does not */
+/*         specify a point target, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     10) If a target body-fixed reference frame is not centered at */
-/*         the corresponding target body,  the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*     10) If a target body-fixed reference frame associated with a */
+/*         non-point target is not recognized, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     11) If the loaded kernels provide insufficient data to */
-/*         compute any required state vector, the deficiency will */
-/*         be diagnosed by a routine in the call tree of this routine. */
+/*     11) If a target body-fixed reference frame is not centered at the */
+/*         corresponding target body, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     12) If an error occurs while reading an SPK or other kernel file, */
-/*         the error will be diagnosed by a routine in the call tree */
+/*     12) If the loaded kernels provide insufficient data to compute any */
+/*         required state vector, an error is signaled by a routine in */
+/*         the call tree of this routine. */
+
+/*     13) If an error occurs while reading an SPK or other kernel file, */
+/*         the error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*     13) If a point target is specified and the occultation */
-/*         type is set to a valid value other than 'ANY', the */
-/*         error will be diagnosed by a routine in the call tree */
-/*         of this routine. */
+/*     14) If a point target is specified and the occultation type is set */
+/*         to a valid value other than 'ANY', an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     14) If the output SPICE window RESULT has insufficient capacity */
+/*     15) If the output SPICE window RESULT has size less than 2, the */
+/*         error SPICE(WINDOWTOOSMALL) is signaled. */
+
+/*     16) If the output SPICE window RESULT has insufficient capacity */
 /*         to contain the number of intervals on which the specified */
-/*         occultation condition is met, the error will be diagnosed */
-/*         by a routine in the call tree of this routine. If the result */
-/*         window has size less than 2, the error SPICE(WINDOWTOOSMALL) */
-/*         will be signaled by this routine. */
+/*         occultation condition is met, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
-/*     15) Invalid occultation types will be diagnosed by a routine in */
-/*         the call tree of this routine. */
+/*     17) If the occultation type OCCTYP is invalid, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     16) Invalid aberration correction specifications will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*     18) If the aberration correction specification ABCORR is invalid, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     17) If either FSHAPE or BSHAPE specifies that the target surface */
+/*     19) If either FSHAPE or BSHAPE specifies that the target surface */
 /*         is represented by DSK data, and no DSK files are loaded for */
-/*         the specified target, the error is signaled by a routine in */
+/*         the specified target, an error is signaled by a routine in */
 /*         the call tree of this routine. */
 
-/*     18) If either FSHAPE or BSHAPE specifies that the target surface */
+/*     20) If either FSHAPE or BSHAPE specifies that the target surface */
 /*         is represented by DSK data, but the shape specification is */
-/*         invalid, the error is signaled by a routine in the call tree */
+/*         invalid, an error is signaled by a routine in the call tree */
 /*         of this routine. */
-
 
 /* $ Files */
 
@@ -798,58 +802,58 @@ static logical c_false = FALSE_;
 
 /*     The following data are required: */
 
-/*        - SPK data: the calling application must load ephemeris data */
-/*          for the targets, source and observer that cover the time */
-/*          period specified by the window CNFINE. If aberration */
-/*          corrections are used, the states of the target bodies and of */
-/*          the observer relative to the solar system barycenter must be */
-/*          calculable from the available ephemeris data. Typically */
-/*          ephemeris data are made available by loading one or more SPK */
-/*          files via FURNSH. */
+/*     -  SPK data: the calling application must load ephemeris data */
+/*        for the targets, source and observer that cover the time */
+/*        period specified by the window CNFINE. If aberration */
+/*        corrections are used, the states of the target bodies and of */
+/*        the observer relative to the solar system barycenter must be */
+/*        calculable from the available ephemeris data. Typically */
+/*        ephemeris data are made available by loading one or more SPK */
+/*        files via FURNSH. */
 
-/*        - PCK data: bodies modeled as triaxial ellipsoids must have */
-/*          semi-axis lengths provided by variables in the kernel pool. */
-/*          Typically these data are made available by loading a text */
-/*          PCK file via FURNSH. */
+/*     -  PCK data: bodies modeled as triaxial ellipsoids must have */
+/*        semi-axis lengths provided by variables in the kernel pool. */
+/*        Typically these data are made available by loading a text */
+/*        PCK file via FURNSH. */
 
-/*        - FK data: if either of the reference frames designated by */
-/*          BFRAME or FFRAME are not built in to the SPICE system, */
-/*          one or more FKs specifying these frames must be loaded. */
+/*     -  FK data: if either of the reference frames designated by */
+/*        BFRAME or FFRAME are not built in to the SPICE system, */
+/*        one or more FKs specifying these frames must be loaded. */
 
 /*     The following data may be required: */
 
-/*        - DSK data: if either FSHAPE or BSHAPE indicates that DSK */
-/*          data are to be used, DSK files containing topographic data */
-/*          for the target body must be loaded. If a surface list is */
-/*          specified, data for at least one of the listed surfaces must */
-/*          be loaded. */
+/*     -  DSK data: if either FSHAPE or BSHAPE indicates that DSK */
+/*        data are to be used, DSK files containing topographic data */
+/*        for the target body must be loaded. If a surface list is */
+/*        specified, data for at least one of the listed surfaces must */
+/*        be loaded. */
 
-/*        - Surface name-ID associations: if surface names are specified */
-/*          in FSHAPE or BSHAPE, the association of these names with */
-/*          their corresponding surface ID codes must be established by */
-/*          assignments of the kernel variables */
+/*     -  Surface name-ID associations: if surface names are specified */
+/*        in FSHAPE or BSHAPE, the association of these names with */
+/*        their corresponding surface ID codes must be established by */
+/*        assignments of the kernel variables */
 
-/*             NAIF_SURFACE_NAME */
-/*             NAIF_SURFACE_CODE */
-/*             NAIF_SURFACE_BODY */
+/*           NAIF_SURFACE_NAME */
+/*           NAIF_SURFACE_CODE */
+/*           NAIF_SURFACE_BODY */
 
-/*          Normally these associations are made by loading a text */
-/*          kernel containing the necessary assignments. An example */
-/*          of such a set of assignments is */
+/*        Normally these associations are made by loading a text */
+/*        kernel containing the necessary assignments. An example */
+/*        of such a set of assignments is */
 
-/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
-/*             NAIF_SURFACE_CODE += 1 */
-/*             NAIF_SURFACE_BODY += 499 */
+/*           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*           NAIF_SURFACE_CODE += 1 */
+/*           NAIF_SURFACE_BODY += 499 */
 
-/*        - CK data: either of the body-fixed frames to which FFRAME or */
-/*          BFRAME refer might be a CK frame. If so, at least one CK */
-/*          file will be needed to permit transformation of vectors */
-/*          between that frame and the J2000 frame. */
+/*     -  CK data: either of the body-fixed frames to which FFRAME or */
+/*        BFRAME refer might be a CK frame. If so, at least one CK */
+/*        file will be needed to permit transformation of vectors */
+/*        between that frame and the J2000 frame. */
 
-/*        - SCLK data: if a CK file is needed, an associated SCLK */
-/*          kernel is required to enable conversion between encoded SCLK */
-/*          (used to time-tag CK data) and barycentric dynamical time */
-/*          (TDB). */
+/*     -  SCLK data: if a CK file is needed, an associated SCLK */
+/*        kernel is required to enable conversion between encoded SCLK */
+/*        (used to time-tag CK data) and barycentric dynamical time */
+/*        (TDB). */
 
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
@@ -1079,9 +1083,7 @@ static logical c_false = FALSE_;
 
 /*          'DSK/UNPRIORITIZED/SURFACES = "Mars MEGDR 64 PIXEL/DEG", 3' */
 
-
 /* $ Examples */
-
 
 /*     The numerical results shown for these examples may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
@@ -1103,9 +1105,10 @@ static logical c_false = FALSE_;
 /*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
+
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: gfoclt_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -1116,6 +1119,16 @@ static logical c_false = FALSE_;
 /*           kernels referenced here must be present in the user's */
 /*           current working directory. */
 
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00008.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
 
 /*           \begindata */
 
@@ -1125,120 +1138,141 @@ static logical c_false = FALSE_;
 
 /*           \begintext */
 
-
-/*       Example code begins here. */
-
-
-/*           PROGRAM EX1 */
-
-/*           IMPLICIT NONE */
-
-/*           INTEGER               WNCARD */
-
-/*           CHARACTER*(*)         TIMFMT */
-/*           PARAMETER           ( TIMFMT = */
-/*          .   'YYYY MON DD HR:MN:SC.###### (TDB)::TDB' ) */
-
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 2 * 100 ) */
-
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 40 ) */
-
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
-
-/*           CHARACTER*(TIMLEN)    WIN0 */
-/*           CHARACTER*(TIMLEN)    WIN1 */
-/*           CHARACTER*(TIMLEN)    BEGSTR */
-/*           CHARACTER*(TIMLEN)    ENDSTR */
-
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      ET1 */
-/*           DOUBLE PRECISION      LEFT */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      RIGHT */
-/*           DOUBLE PRECISION      STEP */
-
-/*           INTEGER               I */
-
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ( 'standard.tm' ) */
-
-/*     C */
-/*     C     Initialize the confinement and result windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, CNFINE ) */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
-
-/*     C */
-/*     C     Obtain the TDB time bounds of the confinement */
-/*     C     window, which is a single interval in this case. */
-/*     C */
-/*           WIN0 = '2001 DEC 01 00:00:00 TDB' */
-/*           WIN1 = '2002 JAN 01 00:00:00 TDB' */
-
-/*           CALL STR2ET ( WIN0, ET0 ) */
-/*           CALL STR2ET ( WIN1, ET1 ) */
-
-/*     C */
-/*     C     Insert the time bounds into the confinement */
-/*     C     window. */
-/*     C */
-/*           CALL WNINSD ( ET0, ET1, CNFINE ) */
-
-/*     C */
-/*     C     Select a 3-minute step. We'll ignore any occultations */
-/*     C     lasting less than 3 minutes. Units are TDB seconds. */
-/*     C */
-/*           STEP = 180.D0 */
-
-/*     C */
-/*     C     Perform the search. */
-/*     C */
-/*           CALL GFOCLT ( 'ANY', */
-/*          .              'MOON',  'ellipsoid', 'IAU_MOON', */
-/*          .              'SUN',   'ellipsoid', 'IAU_SUN', */
-/*          .              'LT',    'EARTH',     STEP, */
-/*          .              CNFINE,  RESULT                  ) */
+/*           End of meta-kernel */
 
 
-/*           IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
-
-/*              WRITE (*,*) 'No occultation was found.' */
-
-/*           ELSE */
-
-/*              DO I = 1, WNCARD(RESULT) */
-/*     C */
-/*     C           Fetch and display each occultation interval. */
-/*     C */
-/*                 CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
-
-/*                 CALL TIMOUT ( LEFT,  TIMFMT, BEGSTR ) */
-/*                 CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
-
-/*                 WRITE (*,*) 'Interval ', I */
-/*                 WRITE (*,*) '   Start time: '//BEGSTR */
-/*                 WRITE (*,*) '   Stop time:  '//ENDSTR */
-
-/*              END DO */
-
-/*           END IF */
-
-/*           END */
+/*        Example code begins here. */
 
 
-/*     When this program was executed on a PC/Linux/g77 platform, the */
-/*     output was: */
+/*              PROGRAM GFOCLT_EX1 */
+/*              IMPLICIT NONE */
 
-/*        Interval  1 */
-/*           Start time: 2001 DEC 14 20:10:14.195952 (TDB) */
-/*           Stop time:  2001 DEC 14 21:35:50.317994 (TDB) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
 
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         TIMFMT */
+/*              PARAMETER           ( TIMFMT = */
+/*             .   'YYYY MON DD HR:MN:SC.###### (TDB)::TDB' ) */
+
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 2 * 100 ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 40 ) */
+
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(TIMLEN)    WIN0 */
+/*              CHARACTER*(TIMLEN)    WIN1 */
+/*              CHARACTER*(TIMLEN)    BEGSTR */
+/*              CHARACTER*(TIMLEN)    ENDSTR */
+
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      RIGHT */
+/*              DOUBLE PRECISION      STEP */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE and RESULT are */
+/*        C     saved because this practice helps to prevent stack */
+/*        C     overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfoclt_ex1.tm' ) */
+
+/*        C */
+/*        C     Initialize the confinement and result windows. */
+/*        C */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+
+/*        C */
+/*        C     Obtain the TDB time bounds of the confinement */
+/*        C     window, which is a single interval in this case. */
+/*        C */
+/*              WIN0 = '2001 DEC 01 00:00:00 TDB' */
+/*              WIN1 = '2002 JAN 01 00:00:00 TDB' */
+
+/*              CALL STR2ET ( WIN0, ET0 ) */
+/*              CALL STR2ET ( WIN1, ET1 ) */
+
+/*        C */
+/*        C     Insert the time bounds into the confinement */
+/*        C     window. */
+/*        C */
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
+
+/*        C */
+/*        C     Select a 3-minute step. We'll ignore any occultations */
+/*        C     lasting less than 3 minutes. Units are TDB seconds. */
+/*        C */
+/*              STEP = 180.D0 */
+
+/*        C */
+/*        C     Perform the search. */
+/*        C */
+/*              CALL GFOCLT ( 'ANY', */
+/*             .              'MOON',  'ellipsoid', 'IAU_MOON', */
+/*             .              'SUN',   'ellipsoid', 'IAU_SUN', */
+/*             .              'LT',    'EARTH',     STEP, */
+/*             .              CNFINE,  RESULT                  ) */
+
+
+/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+
+/*                 WRITE (*,*) 'No occultation was found.' */
+
+/*              ELSE */
+
+/*                 DO I = 1, WNCARD(RESULT) */
+
+/*        C */
+/*        C           Fetch and display each occultation interval. */
+/*        C */
+/*                    CALL WNFETD ( RESULT, I, LEFT, RIGHT ) */
+
+/*                    CALL TIMOUT ( LEFT,  TIMFMT, BEGSTR ) */
+/*                    CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
+
+/*                    WRITE (*,*) 'Interval ', I */
+/*                    WRITE (*,*) '   Start time: '//BEGSTR */
+/*                    WRITE (*,*) '   Stop time:  '//ENDSTR */
+
+/*                 END DO */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Interval            1 */
+/*            Start time: 2001 DEC 14 20:10:14.195952 (TDB) */
+/*            Stop time:  2001 DEC 14 21:35:50.317994 (TDB) */
 
 
 /*     2) Find occultations of Titan by Saturn or of Saturn by */
@@ -1277,7 +1311,7 @@ static logical c_false = FALSE_;
 /*              File name                     Contents */
 /*              ---------                     -------- */
 /*              de421.bsp                     Planetary ephemeris */
-/*              sat288.bsp                    Satellite ephemeris for */
+/*              sat427.bsp                    Satellite ephemeris for */
 /*                                            Saturn */
 /*              pck00008.tpc                  Planet orientation and */
 /*                                            radii */
@@ -1286,7 +1320,7 @@ static logical c_false = FALSE_;
 /*           \begindata */
 
 /*              KERNELS_TO_LOAD = ( 'de421.bsp', */
-/*                                  'sat286.bsp', */
+/*                                  'sat427.bsp', */
 /*                                  'pck00008.tpc', */
 /*                                  'naif0009.tls'  ) */
 
@@ -1295,308 +1329,328 @@ static logical c_false = FALSE_;
 /*           End of meta-kernel */
 
 
-/*       Example code begins here. */
+/*        Example code begins here. */
 
 
-/*           PROGRAM EX2 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           INTEGER               WNCARD */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           CHARACTER*(*)         TIMFMT */
-/*           PARAMETER           ( TIMFMT = */
-/*          .   'YYYY MON DD HR:MN:SC.###### (TDB)::TDB' ) */
+/*              PROGRAM GFOCLT_EX2 */
+/*              IMPLICIT NONE */
 
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 2 * 100 ) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
 
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 40 ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         TIMFMT */
+/*              PARAMETER           ( TIMFMT = */
+/*             .   'YYYY MON DD HR:MN:SC.######::TDB' ) */
 
-/*           INTEGER               BDNMLN */
-/*           PARAMETER           ( BDNMLN = 36 ) */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 2 * 100 ) */
 
-/*           INTEGER               FRNMLN */
-/*           PARAMETER           ( FRNMLN = 32 ) */
-/*     C */
-/*     C     Number of occultation types: */
-/*     C */
-/*           INTEGER               NTYPES */
-/*           PARAMETER           ( NTYPES = 4 ) */
-/*     C */
-/*     C     Occultation type name length: */
-/*     C */
-/*           INTEGER               OCNMLN */
-/*           PARAMETER           ( OCNMLN = 10 ) */
-/*     C */
-/*     C     Output line length: */
-/*     C */
-/*           INTEGER               LNSIZE */
-/*           PARAMETER           ( LNSIZE = 80 ) */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 40 ) */
 
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
 
-/*           CHARACTER*(BDNMLN)    BACK */
-/*           CHARACTER*(FRNMLN)    BFRAME */
-/*           CHARACTER*(FRNMLN)    FFRAME */
-/*           CHARACTER*(BDNMLN)    FRONT */
-/*           CHARACTER*(LNSIZE)    LINE */
-/*           CHARACTER*(BDNMLN)    OBSRVR */
-/*           CHARACTER*(OCNMLN)    OCCTYP ( NTYPES ) */
-/*           CHARACTER*(LNSIZE)    TEMPLT ( NTYPES ) */
-/*           CHARACTER*(TIMLEN)    TIMSTR */
-/*           CHARACTER*(LNSIZE)    TITLE */
-/*           CHARACTER*(TIMLEN)    WIN0 */
-/*           CHARACTER*(TIMLEN)    WIN1 */
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
 
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      ET1 */
-/*           DOUBLE PRECISION      FINISH */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      START */
-/*           DOUBLE PRECISION      STEP */
+/*        C */
+/*        C     Number of occultation types */
+/*        C */
+/*              INTEGER               NTYPES */
+/*              PARAMETER           ( NTYPES = 4 ) */
 
-/*           INTEGER               I */
-/*           INTEGER               J */
-/*           INTEGER               K */
-/*     C */
-/*     C     Saved variables */
-/*     C */
-/*     C     The confinement and result windows CNFINE */
-/*     C     and RESULT are saved because this practice */
-/*     C     helps to prevent stack overflow. */
-/*     C */
-/*     C     The variables OCCTYP and TEMPLT are */
-/*     C     saved to facilitate turning this main program into */
-/*     C     a subroutine. In a main program, it's not */
-/*     C     necessary to save these variables. */
-/*     C */
-/*           SAVE                  CNFINE */
-/*           SAVE                  OCCTYP */
-/*           SAVE                  RESULT */
-/*           SAVE                  TEMPLT */
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*           DATA                  OCCTYP / 'FULL', */
-/*          .                               'ANNULAR', */
-/*          .                               'PARTIAL', */
-/*          .                               'ANY'     / */
+/*        C */
+/*        C     Occultation type name length */
+/*        C */
+/*              INTEGER               OCNMLN */
+/*              PARAMETER           ( OCNMLN = 10 ) */
 
-/*           DATA                  TEMPLT / */
-/*          .      'Condition: # occultation of # by #', */
-/*          .      'Condition: # occultation of # by #', */
-/*          .      'Condition: # occultation of # by #', */
-/*          .      'Condition: # occultation of # by #'      / */
+/*        C */
+/*        C     Output line length */
+/*        C */
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
 
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ( 'gfoclt_ex2.tm' ) */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*     C */
-/*     C     Initialize the confinement and result windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, CNFINE ) */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(BDNMLN)    BACK */
+/*              CHARACTER*(FRNMLN)    BFRAME */
+/*              CHARACTER*(FRNMLN)    FFRAME */
+/*              CHARACTER*(BDNMLN)    FRONT */
+/*              CHARACTER*(LNSIZE)    LINE */
+/*              CHARACTER*(BDNMLN)    OBSRVR */
+/*              CHARACTER*(OCNMLN)    OCCTYP ( NTYPES ) */
+/*              CHARACTER*(LNSIZE)    TEMPLT ( NTYPES ) */
+/*              CHARACTER*(TIMLEN)    TIMSTR */
+/*              CHARACTER*(LNSIZE)    TITLE */
+/*              CHARACTER*(TIMLEN)    WIN0 */
+/*              CHARACTER*(TIMLEN)    WIN1 */
 
-/*     C */
-/*     C     Obtain the TDB time bounds of the confinement */
-/*     C     window, which is a single interval in this case. */
-/*     C */
-/*           WIN0 = '2008 SEP 01 00:00:00 TDB' */
-/*           WIN1 = '2009 JAN 01 00:00:00 TDB' */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      FINISH */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      START */
+/*              DOUBLE PRECISION      STEP */
 
-/*           CALL STR2ET ( WIN0, ET0 ) */
-/*           CALL STR2ET ( WIN1, ET1 ) */
-/*     C */
-/*     C     Insert the time bounds into the confinement */
-/*     C     window. */
-/*     C */
-/*           CALL WNINSD ( ET0, ET1, CNFINE ) */
-/*     C */
-/*     C     Select a 15-minute step. We'll ignore any occultations */
-/*     C     lasting less than 15 minutes. Units are TDB seconds. */
-/*     C */
-/*           STEP = 900.D0 */
-/*     C */
-/*     C     The observation location is the Earth. */
-/*     C */
-/*           OBSRVR = 'EARTH' */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               K */
 
-/*     C */
-/*     C     Loop over the occultation types. */
-/*     C */
-/*           DO I = 1, NTYPES */
-/*     C */
-/*     C        For each type, do a search for both transits of */
-/*     C        Titan across Saturn and occultations of Titan by */
-/*     C        Saturn. */
-/*     C */
-/*              DO J = 1, 2 */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE */
+/*        C     and RESULT are saved because this practice */
+/*        C     helps to prevent stack overflow. */
+/*        C */
+/*        C     The variables OCCTYP and TEMPLT are */
+/*        C     saved to facilitate turning this main program into */
+/*        C     a subroutine. In a main program, it's not */
+/*        C     necessary to save these variables. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  OCCTYP */
+/*              SAVE                  RESULT */
+/*              SAVE                  TEMPLT */
 
-/*                 IF ( J .EQ. 1 ) THEN */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  OCCTYP / 'FULL', */
+/*             .                               'ANNULAR', */
+/*             .                               'PARTIAL', */
+/*             .                               'ANY'     / */
 
-/*                    FRONT  = 'TITAN' */
-/*                    FFRAME = 'IAU_TITAN' */
-/*                    BACK   = 'SATURN' */
-/*                    BFRAME = 'IAU_SATURN' */
+/*              DATA                  TEMPLT / */
+/*             .      'Condition: # occultation of # by #', */
+/*             .      'Condition: # occultation of # by #', */
+/*             .      'Condition: # occultation of # by #', */
+/*             .      'Condition: # occultation of # by #'      / */
 
-/*                 ELSE */
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfoclt_ex2.tm' ) */
 
-/*                    FRONT  = 'SATURN' */
-/*                    FFRAME = 'IAU_SATURN' */
-/*                    BACK   = 'TITAN' */
-/*                    BFRAME = 'IAU_TITAN' */
+/*        C */
+/*        C     Initialize the confinement and result windows. */
+/*        C */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
 
-/*                 END IF */
-/*     C */
-/*     C           Perform the search. The target body shapes */
-/*     C           are modeled as ellipsoids. */
-/*     C */
-/*                 CALL GFOCLT ( OCCTYP(I), */
-/*          .                    FRONT,  'ELLIPSOID', FFRAME, */
-/*          .                    BACK,   'ELLIPSOID', BFRAME, */
-/*          .                    'LT',   OBSRVR,      STEP, */
-/*          .                    CNFINE, RESULT              ) */
-/*     C */
-/*     C           Display the results. */
-/*     C */
-/*                 WRITE (*,*) ' ' */
-/*     C */
-/*     C           Substitute the occultation type and target */
-/*     C           body names into the title string: */
-/*     C */
-/*                 CALL REPMC ( TEMPLT(I), '#', OCCTYP(I), TITLE ) */
-/*                 CALL REPMC ( TITLE,     '#', BACK,      TITLE ) */
-/*                 CALL REPMC ( TITLE,     '#', FRONT,     TITLE ) */
+/*        C */
+/*        C     Obtain the TDB time bounds of the confinement */
+/*        C     window, which is a single interval in this case. */
+/*        C */
+/*              WIN0 = '2008 SEP 01 00:00:00 TDB' */
+/*              WIN1 = '2009 JAN 01 00:00:00 TDB' */
 
-/*                 WRITE (*, '(A)' ) TITLE */
+/*              CALL STR2ET ( WIN0, ET0 ) */
+/*              CALL STR2ET ( WIN1, ET1 ) */
 
-/*                 IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+/*        C */
+/*        C     Insert the time bounds into the confinement */
+/*        C     window. */
+/*        C */
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
 
-/*                    WRITE (*, '(A)' ) ' Result window is empty: ' */
-/*          .         //                'no occultation was found.' */
+/*        C */
+/*        C     Select a 15-minute step. We'll ignore any occultations */
+/*        C     lasting less than 15 minutes. Units are TDB seconds. */
+/*        C */
+/*              STEP = 900.D0 */
 
-/*                 ELSE */
+/*        C */
+/*        C     The observation location is the Earth. */
+/*        C */
+/*              OBSRVR = 'EARTH' */
 
-/*                    WRITE (*, '(A)' ) ' Result window start, ' */
-/*          .         //                'stop times:' */
+/*        C */
+/*        C     Loop over the occultation types. */
+/*        C */
+/*              DO I = 1, NTYPES */
 
-/*                    DO K = 1, WNCARD(RESULT) */
-/*     C */
-/*     C                 Fetch the endpoints of the Kth interval */
-/*     C                 of the result window. */
-/*     C */
-/*                       CALL WNFETD ( RESULT, K, START, FINISH ) */
+/*        C */
+/*        C        For each type, do a search for both transits of */
+/*        C        Titan across Saturn and occultations of Titan by */
+/*        C        Saturn. */
+/*        C */
+/*                 DO J = 1, 2 */
 
-/*                       LINE = '  #  #' */
+/*                    IF ( J .EQ. 1 ) THEN */
 
-/*                       CALL TIMOUT ( START, TIMFMT, TIMSTR ) */
+/*                       FRONT  = 'TITAN' */
+/*                       FFRAME = 'IAU_TITAN' */
+/*                       BACK   = 'SATURN' */
+/*                       BFRAME = 'IAU_SATURN' */
 
-/*                       CALL REPMC  ( LINE, '#', TIMSTR, LINE ) */
+/*                    ELSE */
 
-/*                       CALL TIMOUT ( FINISH, TIMFMT, TIMSTR ) */
+/*                       FRONT  = 'SATURN' */
+/*                       FFRAME = 'IAU_SATURN' */
+/*                       BACK   = 'TITAN' */
+/*                       BFRAME = 'IAU_TITAN' */
 
-/*                       CALL REPMC  ( LINE, '#', TIMSTR, LINE ) */
+/*                    END IF */
 
-/*                       WRITE ( *, '(A)' ) LINE */
+/*        C */
+/*        C           Perform the search. The target body shapes */
+/*        C           are modeled as ellipsoids. */
+/*        C */
+/*                    CALL GFOCLT ( OCCTYP(I), */
+/*             .                    FRONT,  'ELLIPSOID', FFRAME, */
+/*             .                    BACK,   'ELLIPSOID', BFRAME, */
+/*             .                    'LT',   OBSRVR,      STEP, */
+/*             .                    CNFINE, RESULT              ) */
 
-/*                    END DO */
+/*        C */
+/*        C           Display the results. */
+/*        C */
+/*                    WRITE (*,*) ' ' */
 
-/*                 END IF */
-/*     C */
-/*     C           We've finished displaying the results of the */
-/*     C           current search. */
-/*     C */
+/*        C */
+/*        C           Substitute the occultation type and target */
+/*        C           body names into the title string: */
+/*        C */
+/*                    CALL REPMC ( TEMPLT(I), '#', OCCTYP(I), TITLE ) */
+/*                    CALL REPMC ( TITLE,     '#', BACK,      TITLE ) */
+/*                    CALL REPMC ( TITLE,     '#', FRONT,     TITLE ) */
+
+/*                    WRITE (*, '(A)' ) TITLE */
+
+/*                    IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+
+/*                       WRITE (*, '(A)' ) ' Result window is empty: ' */
+/*             .         //                'no occultation was found.' */
+
+/*                    ELSE */
+
+/*                       WRITE (*, '(A)' ) ' Result window start, ' */
+/*             .         //                'stop times (TDB):' */
+
+/*                       DO K = 1, WNCARD(RESULT) */
+
+/*        C */
+/*        C                 Fetch the endpoints of the Kth interval */
+/*        C                 of the result window. */
+/*        C */
+/*                          CALL WNFETD ( RESULT, K, START, FINISH ) */
+
+/*                          LINE = '  #    #' */
+
+/*                          CALL TIMOUT ( START, TIMFMT, TIMSTR ) */
+
+/*                          CALL REPMC  ( LINE, '#', TIMSTR, LINE ) */
+
+/*                          CALL TIMOUT ( FINISH, TIMFMT, TIMSTR ) */
+
+/*                          CALL REPMC  ( LINE, '#', TIMSTR, LINE ) */
+
+/*                          WRITE ( *, '(A)' ) LINE */
+
+/*                       END DO */
+
+/*                    END IF */
+
+/*        C */
+/*        C           We've finished displaying the results of the */
+/*        C           current search. */
+/*        C */
+/*                 END DO */
+
+/*        C */
+/*        C        We've finished displaying the results of the */
+/*        C        searches using the current occultation type. */
+/*        C */
 /*              END DO */
-/*     C */
-/*     C        We've finished displaying the results of the */
-/*     C        searches using the current occultation type. */
-/*     C */
-/*           END DO */
 
-/*           WRITE (*,*) ' ' */
+/*              WRITE (*,*) ' ' */
 
-/*           END */
-
-/*     When this program was executed on a PC/Linux/g77 platform, the */
-/*     output was: */
+/*              END */
 
 
-/* Condition: FULL occultation of SATURN by TITAN */
-/* Result window is empty: no occultation was found. */
-
-/* Condition: FULL occultation of TITAN by SATURN */
-/*  Result window start, stop times: */
-/*   2008 OCT 27 22:08:01.627053 (TDB)  2008 OCT 28 01:05:03.375236 (TDB) */
-/*   2008 NOV 12 21:21:59.252262 (TDB)  2008 NOV 13 02:06:05.053051 (TDB) */
-/*   2008 NOV 28 20:49:02.402832 (TDB)  2008 NOV 29 02:13:58.986344 (TDB) */
-/*   2008 DEC 14 20:05:09.246177 (TDB)  2008 DEC 15 01:44:53.523002 (TDB) */
-/*   2008 DEC 30 19:00:56.577073 (TDB)  2008 DEC 31 00:42:43.222909 (TDB) */
-
-/* Condition: ANNULAR occultation of SATURN by TITAN */
-/*  Result window start, stop times: */
-/*   2008 OCT 19 21:29:20.599087 (TDB)  2008 OCT 19 22:53:34.518737 (TDB) */
-/*   2008 NOV 04 20:15:38.620368 (TDB)  2008 NOV 05 00:18:59.139978 (TDB) */
-/*   2008 NOV 20 19:38:59.647712 (TDB)  2008 NOV 21 00:35:26.725908 (TDB) */
-/*   2008 DEC 06 18:58:34.073268 (TDB)  2008 DEC 07 00:16:17.647040 (TDB) */
-/*   2008 DEC 22 18:02:46.288289 (TDB)  2008 DEC 22 23:26:52.712459 (TDB) */
-
-/* Condition: ANNULAR occultation of TITAN by SATURN */
-/*  Result window is empty: no occultation was found. */
-
-/* Condition: PARTIAL occultation of SATURN by TITAN */
-/*  Result window start, stop times: */
-/*   2008 OCT 19 20:44:30.326771 (TDB)  2008 OCT 19 21:29:20.599087 (TDB) */
-/*   2008 OCT 19 22:53:34.518737 (TDB)  2008 OCT 19 23:38:26.250580 (TDB) */
-/*   2008 NOV 04 19:54:40.339331 (TDB)  2008 NOV 04 20:15:38.620368 (TDB) */
-/*   2008 NOV 05 00:18:59.139978 (TDB)  2008 NOV 05 00:39:58.612935 (TDB) */
-/*   2008 NOV 20 19:21:46.689523 (TDB)  2008 NOV 20 19:38:59.647712 (TDB) */
-/*   2008 NOV 21 00:35:26.725908 (TDB)  2008 NOV 21 00:52:40.604703 (TDB) */
-/*   2008 DEC 06 18:42:36.100544 (TDB)  2008 DEC 06 18:58:34.073268 (TDB) */
-/*   2008 DEC 07 00:16:17.647040 (TDB)  2008 DEC 07 00:32:16.324244 (TDB) */
-/*   2008 DEC 22 17:47:10.776722 (TDB)  2008 DEC 22 18:02:46.288289 (TDB) */
-/*   2008 DEC 22 23:26:52.712459 (TDB)  2008 DEC 22 23:42:28.850542 (TDB) */
-
-/* Condition: PARTIAL occultation of TITAN by SATURN */
-/*  Result window start, stop times: */
-/*   2008 OCT 27 21:37:16.970175 (TDB)  2008 OCT 27 22:08:01.627053 (TDB) */
-/*   2008 OCT 28 01:05:03.375236 (TDB)  2008 OCT 28 01:35:49.266506 (TDB) */
-/*   2008 NOV 12 21:01:47.105498 (TDB)  2008 NOV 12 21:21:59.252262 (TDB) */
-/*   2008 NOV 13 02:06:05.053051 (TDB)  2008 NOV 13 02:26:18.227357 (TDB) */
-/*   2008 NOV 28 20:31:28.522707 (TDB)  2008 NOV 28 20:49:02.402832 (TDB) */
-/*   2008 NOV 29 02:13:58.986344 (TDB)  2008 NOV 29 02:31:33.691598 (TDB) */
-/*   2008 DEC 14 19:48:27.094229 (TDB)  2008 DEC 14 20:05:09.246177 (TDB) */
-/*   2008 DEC 15 01:44:53.523002 (TDB)  2008 DEC 15 02:01:36.360243 (TDB) */
-/*   2008 DEC 30 18:44:23.485898 (TDB)  2008 DEC 30 19:00:56.577073 (TDB) */
-/*   2008 DEC 31 00:42:43.222909 (TDB)  2008 DEC 31 00:59:17.030568 (TDB) */
-
-/* Condition: ANY occultation of SATURN by TITAN */
-/*  Result window start, stop times: */
-/*   2008 OCT 19 20:44:30.326771 (TDB)  2008 OCT 19 23:38:26.250580 (TDB) */
-/*   2008 NOV 04 19:54:40.339331 (TDB)  2008 NOV 05 00:39:58.612935 (TDB) */
-/*   2008 NOV 20 19:21:46.689523 (TDB)  2008 NOV 21 00:52:40.604703 (TDB) */
-/*   2008 DEC 06 18:42:36.100544 (TDB)  2008 DEC 07 00:32:16.324244 (TDB) */
-/*   2008 DEC 22 17:47:10.776722 (TDB)  2008 DEC 22 23:42:28.850542 (TDB) */
-
-/* Condition: ANY occultation of TITAN by SATURN */
-/*  Result window start, stop times: */
-/*   2008 OCT 27 21:37:16.970175 (TDB)  2008 OCT 28 01:35:49.266506 (TDB) */
-/*   2008 NOV 12 21:01:47.105498 (TDB)  2008 NOV 13 02:26:18.227357 (TDB) */
-/*   2008 NOV 28 20:31:28.522707 (TDB)  2008 NOV 29 02:31:33.691598 (TDB) */
-/*   2008 DEC 14 19:48:27.094229 (TDB)  2008 DEC 15 02:01:36.360243 (TDB) */
-/*   2008 DEC 30 18:44:23.485898 (TDB)  2008 DEC 31 00:59:17.030568 (TDB) */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
+/*        Condition: FULL occultation of SATURN by TITAN */
+/*         Result window is empty: no occultation was found. */
 
-/*     3) Find occultations of the Mars Reconaissance Orbiter (MRO) */
+/*        Condition: FULL occultation of TITAN by SATURN */
+/*         Result window start, stop times (TDB): */
+/*          2008 OCT 27 22:08:01.672540    2008 OCT 28 01:05:03.332576 */
+/*          2008 NOV 12 21:21:59.270691    2008 NOV 13 02:06:05.034713 */
+/*          2008 NOV 28 20:49:02.415745    2008 NOV 29 02:13:58.978004 */
+/*          2008 DEC 14 20:05:09.258916    2008 DEC 15 01:44:53.517960 */
+/*          2008 DEC 30 19:00:56.586894    2008 DEC 31 00:42:43.219311 */
+
+/*        Condition: ANNULAR occultation of SATURN by TITAN */
+/*         Result window start, stop times (TDB): */
+/*          2008 OCT 19 21:29:20.694709    2008 OCT 19 22:53:34.442728 */
+/*          2008 NOV 04 20:15:38.652650    2008 NOV 05 00:18:59.130645 */
+/*          2008 NOV 20 19:38:59.674043    2008 NOV 21 00:35:26.726756 */
+/*          2008 DEC 06 18:58:34.093679    2008 DEC 07 00:16:17.653066 */
+/*          2008 DEC 22 18:02:46.308375    2008 DEC 22 23:26:52.721881 */
+
+/*        Condition: ANNULAR occultation of TITAN by SATURN */
+/*         Result window is empty: no occultation was found. */
+
+/*        Condition: PARTIAL occultation of SATURN by TITAN */
+/*         Result window start, stop times (TDB): */
+/*          2008 OCT 19 20:44:30.377189    2008 OCT 19 21:29:20.694709 */
+/*          2008 OCT 19 22:53:34.442728    2008 OCT 19 23:38:26.219865 */
+/*          2008 NOV 04 19:54:40.368045    2008 NOV 04 20:15:38.652650 */
+/*          2008 NOV 05 00:18:59.130645    2008 NOV 05 00:39:58.607159 */
+/*          2008 NOV 20 19:21:46.714396    2008 NOV 20 19:38:59.674043 */
+/*          2008 NOV 21 00:35:26.726756    2008 NOV 21 00:52:40.606954 */
+/*          2008 DEC 06 18:42:36.120122    2008 DEC 06 18:58:34.093679 */
+/*          2008 DEC 07 00:16:17.653066    2008 DEC 07 00:32:16.331199 */
+/*          2008 DEC 22 17:47:10.796147    2008 DEC 22 18:02:46.308375 */
+/*          2008 DEC 22 23:26:52.721881    2008 DEC 22 23:42:28.860689 */
+
+/*        Condition: PARTIAL occultation of TITAN by SATURN */
+/*         Result window start, stop times (TDB): */
+/*          2008 OCT 27 21:37:17.003993    2008 OCT 27 22:08:01.672540 */
+/*          2008 OCT 28 01:05:03.332576    2008 OCT 28 01:35:49.235670 */
+/*          2008 NOV 12 21:01:47.121213    2008 NOV 12 21:21:59.270691 */
+/*          2008 NOV 13 02:06:05.034713    2008 NOV 13 02:26:18.211753 */
+/*          2008 NOV 28 20:31:28.534248    2008 NOV 28 20:49:02.415745 */
+/*          2008 NOV 29 02:13:58.978004    2008 NOV 29 02:31:33.684575 */
+/*          2008 DEC 14 19:48:27.106157    2008 DEC 14 20:05:09.258916 */
+/*          2008 DEC 15 01:44:53.517960    2008 DEC 15 02:01:36.356012 */
+/*          2008 DEC 30 18:44:23.495003    2008 DEC 30 19:00:56.586894 */
+/*          2008 DEC 31 00:42:43.219311    2008 DEC 31 00:59:17.027816 */
+
+/*        Condition: ANY occultation of SATURN by TITAN */
+/*         Result window start, stop times (TDB): */
+/*          2008 OCT 19 20:44:30.377189    2008 OCT 19 23:38:26.219865 */
+/*          2008 NOV 04 19:54:40.368045    2008 NOV 05 00:39:58.607159 */
+/*          2008 NOV 20 19:21:46.714396    2008 NOV 21 00:52:40.606954 */
+/*          2008 DEC 06 18:42:36.120122    2008 DEC 07 00:32:16.331199 */
+/*          2008 DEC 22 17:47:10.796147    2008 DEC 22 23:42:28.860689 */
+
+/*        Condition: ANY occultation of TITAN by SATURN */
+/*         Result window start, stop times (TDB): */
+/*          2008 OCT 27 21:37:17.003993    2008 OCT 28 01:35:49.235670 */
+/*          2008 NOV 12 21:01:47.121213    2008 NOV 13 02:26:18.211753 */
+/*          2008 NOV 28 20:31:28.534248    2008 NOV 29 02:31:33.684575 */
+/*          2008 DEC 14 19:48:27.106157    2008 DEC 15 02:01:36.356012 */
+/*          2008 DEC 30 18:44:23.495003    2008 DEC 31 00:59:17.027816 */
+
+
+/*     3) Find occultations of the Mars Reconnaissance Orbiter (MRO) */
 /*        by Mars or transits of the MRO spacecraft across Mars */
 /*        as seen from the DSN station DSS-14 over a period of a */
 /*        few hours on FEB 28 2015. */
@@ -1615,70 +1669,63 @@ static logical c_false = FALSE_;
 /*        kernels. */
 
 
-/*          KPL/MK */
+/*           KPL/MK */
 
-/*          File: gfoclt_ex3.tm */
+/*           File: gfoclt_ex3.tm */
 
-/*          This meta-kernel is intended to support operation of SPICE */
-/*          example programs. The kernels shown here should not be */
-/*          assumed to contain adequate or correct versions of data */
-/*          required by SPICE-based user applications. */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*          In order for an application to use this meta-kernel, the */
-/*          kernels referenced here must be present in the user's */
-/*          current working directory. */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*          The names and contents of the kernels referenced */
-/*          by this meta-kernel are as follows: */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*             File name                        Contents */
-/*             ---------                        -------- */
-/*             de410.bsp                        Planetary ephemeris */
-/*             mar063.bsp                       Mars satellite ephemeris */
-/*             pck00010.tpc                     Planet orientation and */
-/*                                              radii */
-/*             naif0011.tls                     Leapseconds */
-/*             earthstns_itrf93_050714.bsp      DSN station ephemeris */
-/*             earth_latest_high_prec.bpc       Earth orientation */
-/*             mro_psp34.bsp                    MRO ephemeris */
-/*             megr90n000cb_plate.bds           Plate model based on */
-/*                                              MEGDR DEM, resolution */
-/*                                              4 pixels/degree. */
+/*              File name                        Contents */
+/*              ---------                        -------- */
+/*              de410.bsp                        Planetary ephemeris */
+/*              mar063.bsp                       Mars satellite ephemeris */
+/*              pck00010.tpc                     Planet orientation and */
+/*                                               radii */
+/*              naif0011.tls                     Leapseconds */
+/*              earthstns_itrf93_050714.bsp      DSN station ephemeris */
+/*              earth_latest_high_prec.bpc       Earth orientation */
+/*              mro_psp34.bsp                    MRO ephemeris */
+/*              megr90n000cb_plate.bds           Plate model based on */
+/*                                               MEGDR DEM, resolution */
+/*                                               4 pixels/degree. */
 
-/*          \begindata */
+/*           \begindata */
 
-/*             PATH_SYMBOLS    = ( 'MRO', 'GEN' ) */
+/*              KERNELS_TO_LOAD = ( 'de410.bsp', */
+/*                                  'mar063.bsp', */
+/*                                  'mro_psp34.bsp', */
+/*                                  'earthstns_itrf93_050714.bsp', */
+/*                                  'earth_latest_high_prec.bpc', */
+/*                                  'pck00010.tpc', */
+/*                                  'naif0011.tls', */
+/*                                  'megr90n000cb_plate.bds' */
+/*                                ) */
+/*           \begintext */
 
-/*             PATH_VALUES     = ( */
-/*                                 '/ftp/pub/naif/pds/data+' */
-/*                                 '/mro-m-spice-6-v1.0/+' */
-/*                                 'mrosp_1000/data/spk', */
-/*                                 '/ftp/pub/naif/generic_kernels' */
-/*                               ) */
-
-/*             KERNELS_TO_LOAD = ( '$MRO/de410.bsp', */
-/*                                 '$MRO/mar063.bsp', */
-/*                                 '$MRO/mro_psp34.bsp', */
-/*                                 '$GEN/spk/stations/+' */
-/*                                 'earthstns_itrf93_050714.bsp', */
-/*                                 '$GEN/pck/earth_latest_high_prec.bpc', */
-/*                                 'pck00010.tpc', */
-/*                                 'naif0011.tls', */
-/*                                 'megr90n000cb_plate.bds' */
-/*                               ) */
-/*          \begintext */
+/*           End of meta-kernel */
 
 
-/*       Example code begins here. */
+/*        Example code begins here. */
 
 
-/*              PROGRAM EX3 */
-
+/*              PROGRAM GFOCLT_EX3 */
 /*              IMPLICIT NONE */
+
 /*        C */
 /*        C     SPICELIB functions */
 /*        C */
 /*              INTEGER               WNCARD */
+
 /*        C */
 /*        C     Local parameters */
 /*        C */
@@ -1730,7 +1777,7 @@ static logical c_false = FALSE_;
 /*              CHARACTER*(TIMLEN)    BEGSTR */
 /*              CHARACTER*(TIMLEN)    ENDSTR */
 
-/*              DOUBLE PRECISION      CNFINE ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
 /*              DOUBLE PRECISION      ET0 */
 /*              DOUBLE PRECISION      ET1 */
 /*              DOUBLE PRECISION      LEFT */
@@ -1741,6 +1788,17 @@ static logical c_false = FALSE_;
 /*              INTEGER               I */
 /*              INTEGER               J */
 /*              INTEGER               K */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE and RESULT are */
+/*        C     saved because this practice helps to prevent stack */
+/*        C     overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+
 /*        C */
 /*        C     Load kernels. */
 /*        C */
@@ -1751,15 +1809,18 @@ static logical c_false = FALSE_;
 /*        C */
 /*              CALL SSIZED ( MAXWIN, CNFINE ) */
 /*              CALL SSIZED ( MAXWIN, RESULT ) */
+
 /*        C */
 /*        C     Set the observer and aberration correction. */
 /*        C */
 /*              OBSRVR = 'DSS-14' */
 /*              ABCORR = 'CN' */
+
 /*        C */
 /*        C     Set the occultation type. */
 /*        C */
 /*              OCCTYP = 'ANY' */
+
 /*        C */
 /*        C     Set the TDB time bounds of the confinement */
 /*        C     window, which is a single interval in this case. */
@@ -1769,11 +1830,13 @@ static logical c_false = FALSE_;
 
 /*              CALL STR2ET ( WIN0, ET0 ) */
 /*              CALL STR2ET ( WIN1, ET1 ) */
+
 /*        C */
 /*        C     Insert the time bounds into the confinement */
 /*        C     window. */
 /*        C */
 /*              CALL WNINSD ( ET0, ET1, CNFINE ) */
+
 /*        C */
 /*        C     Select a 3-minute step. We'll ignore any occultations */
 /*        C     lasting less than 3 minutes. Units are TDB seconds. */
@@ -1789,6 +1852,7 @@ static logical c_false = FALSE_;
 /*              DO I = 1, 2 */
 
 /*                 IF ( I .EQ. 1 ) THEN */
+
 /*        C */
 /*        C           Perform a spacecraft occultation search. */
 /*        C */
@@ -1800,6 +1864,7 @@ static logical c_false = FALSE_;
 /*                    BFRAME = ' ' */
 
 /*                 ELSE */
+
 /*        C */
 /*        C           Perform a spacecraft transit search. */
 /*        C */
@@ -1816,6 +1881,7 @@ static logical c_false = FALSE_;
 /*                 DO J = 1, 2 */
 
 /*                    IF ( J .EQ. 1 ) THEN */
+
 /*        C */
 /*        C              Model the planet shape as an ellipsoid. */
 /*        C */
@@ -1826,6 +1892,7 @@ static logical c_false = FALSE_;
 /*                       END IF */
 
 /*                    ELSE */
+
 /*        C */
 /*        C              Model the planet shape using DSK data. */
 /*        C */
@@ -1862,6 +1929,7 @@ static logical c_false = FALSE_;
 /*                    ELSE */
 
 /*                       DO K = 1, WNCARD(RESULT) */
+
 /*        C */
 /*        C                 Fetch and display each event interval. */
 /*        C */
@@ -1887,8 +1955,8 @@ static logical c_false = FALSE_;
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
 /*        Using shape model ELLIPSOID */
@@ -1942,22 +2010,37 @@ static logical c_false = FALSE_;
 
 /* $ Restrictions */
 
-/*     The kernel files to be used by GFOCLT must be loaded (normally */
-/*     via the SPICELIB routine FURNSH) before GFOCLT is called. */
+/*     1)  The kernel files to be used by GFOCLT must be loaded (normally */
+/*         via the SPICELIB routine FURNSH) before GFOCLT is called. */
 
 /* $ Literature_References */
 
-/*    None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*    N. J. Bachman  (JPL) */
-/*    L. S. Elson    (JPL) */
-/*    E. D. Wright   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.0 29-FEB-2016 (NJB) */
+/* -    SPICELIB Version 2.0.1, 25-NOV-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Modified code example #2 output to comply with maximum line */
+/*        length of header comments. Added SAVE statements for CNFINE and */
+/*        RESULT variables in code examples. */
+
+/*        The $Exceptions section now lists the case of the combination */
+/*        of DSK and non-point target shapes. */
+
+/*        Updated description of RESULT argument in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. */
+
+/* -    SPICELIB Version 2.0.0, 29-FEB-2016 (NJB) */
 
 /*        Header was updated. An example program demonstrating */
 /*        DSK usage was added. */
@@ -1966,7 +2049,7 @@ static logical c_false = FALSE_;
 
 /*        Upgraded to support surfaces represented by DSKs. */
 
-/* -    SPICELIB Version 1.1.0  31-AUG-2010 (EDW) */
+/* -    SPICELIB Version 1.1.0, 31-AUG-2010 (EDW) */
 
 /*        Implemented use of ZZHOLDD to allow user to alter convergence */
 /*        tolerance. */
@@ -1974,17 +2057,12 @@ static logical c_false = FALSE_;
 /*        Removed the STEP > 0 error check. The GFSSTP call includes */
 /*        the check. */
 
-/* -    SPICELIB Version 1.0.0  07-APR-2009 (NJB) (LSE) (EDW) */
+/* -    SPICELIB Version 1.0.0, 07-APR-2009 (NJB) (LSE) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     GF occultation search */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 

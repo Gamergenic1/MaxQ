@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /* $Procedure DRDLAT ( Derivative of rectangular w.r.t. latitudinal ) */
-/* Subroutine */ int drdlat_(doublereal *r__, doublereal *long__, doublereal *
+/* Subroutine */ int drdlat_(doublereal *r__, doublereal *lon, doublereal *
 	lat, doublereal *jacobi)
 {
     /* Builtin functions */
@@ -14,8 +14,8 @@
 
 /* $ Abstract */
 
-/*     Compute the Jacobian of the transformation from latitudinal to */
-/*     rectangular coordinates. */
+/*     Compute the Jacobian matrix of the transformation from */
+/*     latitudinal to rectangular coordinates. */
 
 /* $ Disclaimer */
 
@@ -55,44 +55,45 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     RADIUS     I   Distance of a point from the origin. */
-/*     LONG       I   Angle of the point from the XZ plane in radians. */
+/*     R          I   Distance of a point from the origin. */
+/*     LON        I   Angle of the point from the XZ plane in radians. */
 /*     LAT        I   Angle of the point from the XY plane in radians. */
 /*     JACOBI     O   Matrix of partial derivatives. */
 
 /* $ Detailed_Input */
 
-/*      RADIUS     Distance of a point from the origin. */
+/*     R        is the distance of a point from the origin. */
 
-/*      LONG       Angle of the point from the XZ plane in radians. */
-/*                 The angle increases in the counterclockwise sense */
-/*                 about the +Z axis. */
+/*     LON      is the angle of the point from the XZ plane in */
+/*              radians. The angle increases in the counterclockwise */
+/*              sense about the +Z axis. */
 
-/*      LAT        Angle of the point from the XY plane in radians. */
-/*                 The angle increases in the direction of the +Z axis. */
+/*     LAT      is the angle of the point from the XY plane in */
+/*              radians. The angle increases in the direction of the */
+/*              +Z axis. */
 
 /* $ Detailed_Output */
 
-/*     JACOBI     is the matrix of partial derivatives of the conversion */
-/*                between latitudinal and rectangular coordinates. It has */
-/*                the form */
+/*     JACOBI   is the matrix of partial derivatives of the conversion */
+/*              between latitudinal and rectangular coordinates. It has */
+/*              the form */
 
-/*                    .-                                 -. */
-/*                    |  DX/DR     DX/DLONG     DX/DLAT   | */
-/*                    |                                   | */
-/*                    |  DY/DR     DY/DLONG     DY/DLAT   | */
-/*                    |                                   | */
-/*                    |  DZ/DR     DZ/DLONG     DZ/DLAT   | */
-/*                    `-                                 -' */
+/*                  .-                               -. */
+/*                  |  DX/DR     DX/DLON     DX/DLAT  | */
+/*                  |                                 | */
+/*                  |  DY/DR     DY/DLON     DY/DLAT  | */
+/*                  |                                 | */
+/*                  |  DZ/DR     DZ/DLON     DZ/DLAT  | */
+/*                  `-                               -' */
 
-/*               evaluated at the input values of R, LONG and LAT. */
-/*               Here X, Y, and Z are given by the familiar formulae */
+/*              evaluated at the input values of R, LON and LAT. */
+/*              Here X, Y, and Z are given by the familiar formulae */
 
-/*                   X = R * COS(LONG) * COS(LAT) */
-/*                   Y = R * SIN(LONG) * COS(LAT) */
-/*                   Z = R *             SIN(LAT) */
+/*                 X = R * COS(LON) * COS(LAT) */
+/*                 Y = R * SIN(LON) * COS(LAT) */
+/*                 Z = R *            SIN(LAT) */
 
 /* $ Parameters */
 
@@ -118,52 +119,223 @@
 
 /*     Given a state in latitudinal coordinates, */
 
-/*          ( r, long, lat, dr, dlong, dlat ) */
+/*          ( r, lon, lat, dr, dlon, dlat ) */
 
 /*     the velocity in rectangular coordinates is given by the matrix */
 /*     equation */
-/*                    t          |                                t */
-/*        (dx, dy, dz)   = JACOBI|             * (dr, dlong, dlat) */
-/*                               |(r,long,lat) */
+/*                    t          |                               t */
+/*        (dx, dy, dz)   = JACOBI|             * (dr, dlon, dlat) */
+/*                               |(r,lon,lat) */
 
 /*     This routine computes the matrix */
 
 /*              | */
 /*        JACOBI| */
-/*              |(r,long,lat) */
+/*              |(r,lon,lat) */
 
 /* $ Examples */
 
-/*     Suppose you have a model that gives radius, longitude, and */
-/*     latitude as functions of time (r(t), long(t), lat(t)), and */
-/*     that the derivatives (dr/dt, dlong/dt, dlat/dt) are computable. */
-/*     To find the velocity of the object in rectangular coordinates, */
-/*     multiply the Jacobian of the transformation from latitudinal */
-/*     to rectangular (evaluated at r(t), long(t), lat(t)) by the */
-/*     vector of derivatives of the latitudinal coordinates. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     This is illustrated by the following code fragment. */
+/*     1) Find the latitudinal state of the Earth as seen from */
+/*        Mars in the IAU_MARS reference frame at January 1, 2005 TDB. */
+/*        Map this state back to rectangular coordinates as a check. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: drdlat_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00010.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00010.tpc', */
+/*                                  'naif0009.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DRDLAT_EX1 */
+/*              IMPLICIT NONE */
 
 /*        C */
-/*        C     Load the derivatives of r, long and lat into the */
-/*        C     latitudinal velocity vector LATV. */
+/*        C     SPICELIB functions */
 /*        C */
-/*              LATV(1) = DR_DT    ( T ) */
-/*              LATV(2) = DLONG_DT ( T ) */
-/*              LATV(3) = DLAT_DT  ( T ) */
+/*              DOUBLE PRECISION      RPD */
 
 /*        C */
-/*        C     Determine the Jacobian of the transformation from */
-/*        C     latitudinal to rectangular coordinates, using the */
-/*        C     latitudinal coordinates at time T. */
+/*        C     Local parameters */
 /*        C */
-/*              CALL DRDLAT ( R(T), LONG(T), LAT(T), JACOBI ) */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,E18.8)' ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      DRECTN ( 3 ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      JACOBI ( 3, 3 ) */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      LATVEL ( 3 ) */
+/*              DOUBLE PRECISION      RECTAN ( 3 ) */
+/*              DOUBLE PRECISION      R */
+/*              DOUBLE PRECISION      STATE  ( 6 ) */
 
 /*        C */
-/*        C     Multiply the Jacobian by the latitudinal velocity to */
-/*        C     obtain the rectangular velocity RECV. */
+/*        C     Load SPK, PCK and LSK kernels, use a meta kernel for */
+/*        C     convenience. */
 /*        C */
-/*              CALL MXV ( JACOBI, LATV, RECV ) */
+/*              CALL FURNSH ( 'drdlat_ex1.tm' ) */
+
+/*        C */
+/*        C     Look up the apparent state of earth as seen from Mars at */
+/*        C     January 1, 2005 TDB, relative to the IAU_MARS reference */
+/*        C     frame. */
+/*        C */
+/*              CALL STR2ET ( 'January 1, 2005 TDB', ET ) */
+
+/*              CALL SPKEZR ( 'Earth', ET,    'IAU_MARS', 'LT+S', */
+/*             .              'Mars',  STATE, LT                ) */
+
+/*        C */
+/*        C     Convert position to latitudinal coordinates. */
+/*        C */
+/*              CALL RECLAT ( STATE, R, LON, LAT ) */
+
+/*        C */
+/*        C     Convert velocity to latitudinal coordinates. */
+/*        C */
+
+/*              CALL DLATDR ( STATE(1), STATE(2), STATE(3), JACOBI ) */
+
+/*              CALL MXV ( JACOBI, STATE(4), LATVEL ) */
+
+/*        C */
+/*        C     As a check, convert the latitudinal state back to */
+/*        C     rectangular coordinates. */
+/*        C */
+/*              CALL LATREC ( R, LON, LAT, RECTAN ) */
+
+/*              CALL DRDLAT ( R, LON, LAT, JACOBI ) */
+
+/*              CALL MXV ( JACOBI, LATVEL, DRECTN ) */
+
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X (km)                 = ', STATE(1) */
+/*              WRITE(*,FMT1) '  Y (km)                 = ', STATE(2) */
+/*              WRITE(*,FMT1) '  Z (km)                 = ', STATE(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular velocity:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  dX/dt (km/s)           = ', STATE(4) */
+/*              WRITE(*,FMT1) '  dY/dt (km/s)           = ', STATE(5) */
+/*              WRITE(*,FMT1) '  dZ/dt (km/s)           = ', STATE(6) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Latitudinal coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Radius    (km)         = ', R */
+/*              WRITE(*,FMT1) '  Longitude (deg)        = ', LON/RPD() */
+/*              WRITE(*,FMT1) '  Latitude  (deg)        = ', LAT/RPD() */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Latitudinal velocity:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  d Radius/dt    (km/s)  = ', LATVEL(1) */
+/*              WRITE(*,FMT1) '  d Longitude/dt (deg/s) = ', */
+/*             .                                         LATVEL(2)/RPD() */
+/*              WRITE(*,FMT1) '  d Latitude/dt  (deg/s) = ', */
+/*             .                                         LATVEL(3)/RPD() */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates from inverse ' // */
+/*             .           'mapping:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X (km)                 = ', RECTAN(1) */
+/*              WRITE(*,FMT1) '  Y (km)                 = ', RECTAN(2) */
+/*              WRITE(*,FMT1) '  Z (km)                 = ', RECTAN(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular velocity from inverse mapping:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  dX/dt (km/s)           = ', DRECTN(1) */
+/*              WRITE(*,FMT1) '  dY/dt (km/s)           = ', DRECTN(2) */
+/*              WRITE(*,FMT1) '  dZ/dt (km/s)           = ', DRECTN(3) */
+/*              WRITE(*,*) ' ' */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Rectangular coordinates: */
+
+/*          X (km)                 =    -0.76096183E+08 */
+/*          Y (km)                 =     0.32436380E+09 */
+/*          Z (km)                 =     0.47470484E+08 */
+
+/*         Rectangular velocity: */
+
+/*          dX/dt (km/s)           =     0.22952075E+05 */
+/*          dY/dt (km/s)           =     0.53760111E+04 */
+/*          dZ/dt (km/s)           =    -0.20881149E+02 */
+
+/*         Latitudinal coordinates: */
+
+/*          Radius    (km)         =     0.33653522E+09 */
+/*          Longitude (deg)        =     0.10320290E+03 */
+/*          Latitude  (deg)        =     0.81089866E+01 */
+
+/*         Latitudinal velocity: */
+
+/*          d Radius/dt    (km/s)  =    -0.11211601E+02 */
+/*          d Longitude/dt (deg/s) =    -0.40539288E-02 */
+/*          d Latitude/dt  (deg/s) =    -0.33189930E-05 */
+
+/*         Rectangular coordinates from inverse mapping: */
+
+/*          X (km)                 =    -0.76096183E+08 */
+/*          Y (km)                 =     0.32436380E+09 */
+/*          Z (km)                 =     0.47470484E+08 */
+
+/*         Rectangular velocity from inverse mapping: */
+
+/*          dX/dt (km/s)           =     0.22952075E+05 */
+/*          dY/dt (km/s)           =     0.53760111E+04 */
+/*          dZ/dt (km/s)           =    -0.20881149E+02 */
+
 
 /* $ Restrictions */
 
@@ -175,9 +347,21 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2020 (JDR) */
+
+/*        Changed the input argument name LONG to LON for consistency */
+/*        with other routines. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/*        Updated $Brief_I/O and $Detailed_Input sections to correct R */
+/*        argument name, which in previous version was RADIUS. */
 
 /* -    SPICELIB Version 1.0.0, 19-JUL-2001 (WLT) */
 
@@ -187,25 +371,20 @@
 /*     Jacobian of rectangular w.r.t. latitudinal coordinates */
 
 /* -& */
-/* $ Revisions */
-
-/*     None. */
-
-/* -& */
 
 /*     Local variables */
 
 
 /*     Construct the matrix directly. */
 
-    jacobi[0] = cos(*long__) * cos(*lat);
-    jacobi[1] = sin(*long__) * cos(*lat);
+    jacobi[0] = cos(*lon) * cos(*lat);
+    jacobi[1] = sin(*lon) * cos(*lat);
     jacobi[2] = sin(*lat);
-    jacobi[3] = -(*r__) * sin(*long__) * cos(*lat);
-    jacobi[4] = *r__ * cos(*long__) * cos(*lat);
+    jacobi[3] = -(*r__) * sin(*lon) * cos(*lat);
+    jacobi[4] = *r__ * cos(*lon) * cos(*lat);
     jacobi[5] = 0.;
-    jacobi[6] = -(*r__) * cos(*long__) * sin(*lat);
-    jacobi[7] = -(*r__) * sin(*long__) * sin(*lat);
+    jacobi[6] = -(*r__) * cos(*lon) * sin(*lat);
+    jacobi[7] = -(*r__) * sin(*lon) * sin(*lat);
     jacobi[8] = *r__ * cos(*lat);
     return 0;
 } /* drdlat_ */

@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      WNINSD ( Insert an interval into a DP window ) */
+/* $Procedure WNINSD ( Insert an interval into a DP window ) */
 /* Subroutine */ int wninsd_(doublereal *left, doublereal *right, doublereal *
 	window)
 {
@@ -30,7 +30,7 @@ static integer c__2 = 2;
 
 /* $ Abstract */
 
-/*      Insert an interval into a double precision window. */
+/*     Insert an interval into a double precision window. */
 
 /* $ Disclaimer */
 
@@ -59,132 +59,214 @@ static integer c__2 = 2;
 
 /* $ Required_Reading */
 
-/*      WINDOWS */
+/*     WINDOWS */
 
 /* $ Keywords */
 
-/*      WINDOWS */
+/*     WINDOWS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      LEFT, */
-/*      RIGHT      I   Left, right endpoints of new interval. */
-/*      WINDOW    I,O  Input, output window. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     LEFT, */
+/*     RIGHT      I   Left, right endpoints of new interval. */
+/*     WINDOW    I-O  Input, output window. */
 
 /* $ Detailed_Input */
 
-/*      LEFT, */
-/*      RIGHT       are the left and right endpoints of the interval */
-/*                  to be inserted. */
+/*     LEFT, */
+/*     RIGHT    are the left and right endpoints of the interval to be */
+/*              inserted. */
 
-/*      WINDOW      on input, is a window containing zero or more */
-/*                  intervals. */
+/*     WINDOW   on input, is a SPICE window containing zero or more */
+/*              intervals. */
 
 /* $ Detailed_Output */
 
-/*      WINDOW      on output, is the original window following the */
-/*                  insertion of the interval from LEFT to RIGHT. */
+/*     WINDOW   on output, is the original window following the insertion */
+/*              of the interval from LEFT to RIGHT. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      This routine inserts the interval from LEFT to RIGHT into the */
-/*      input window. If the new interval overlaps any of the intervals */
-/*      in the window, the intervals are merged. Thus, the cardinality */
-/*      of the input window can actually decrease as the result of an */
-/*      insertion. However, because inserting an interval that is */
-/*      disjoint from the other intervals in the window can increase the */
-/*      cardinality of the window, the routine signals an error. */
-
-/*      This is the only unary routine to signal an error. No */
-/*      other unary routine can increase the number of intervals in */
-/*      the input window. */
-
-/* $ Examples */
-
-/*      Let WINDOW contain the intervals */
-
-/*            [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
-
-/*      Then the following series of calls */
-
-/*            CALL WNINSD ( 5,  5, WINDOW )                  (1) */
-/*            CALL WNINSD ( 4,  8, WINDOW )                  (2) */
-/*            CALL WNINSD ( 0, 30, WINDOW )                  (3) */
-
-/*      produces the following series of windows */
-
-/*            [ 1,  3 ]  [ 5,  5 ]  [  7, 11 ]  [ 23, 27 ]   (1) */
-/*            [ 1,  3 ]  [ 4, 11 ]  [ 23, 27 ]               (2) */
-/*            [ 0, 30 ]                                      (3) */
-
 /* $ Exceptions */
 
-/*     1) If LEFT is greater than RIGHT, the error SPICE(BADENDPOINTS) is */
-/*        signalled. */
+/*     1)  If LEFT is greater than RIGHT, the error SPICE(BADENDPOINTS) */
+/*         is signaled. */
 
-/*     2) If the insertion of the interval causes an excess of elements, */
-/*        the error SPICE(WINDOWEXCESS) is signalled. */
+/*     2)  If the insertion of the interval causes an excess of elements, */
+/*         the error SPICE(WINDOWEXCESS) is signaled. */
+
+/*     3)  The cardinality of the input WINDOW must be even. Left */
+/*         endpoints of stored intervals must be strictly greater than */
+/*         preceding right endpoints. Right endpoints must be greater */
+/*         than or equal to corresponding left endpoints. Invalid window */
+/*         data are not diagnosed by this routine and may lead to */
+/*         unpredictable results. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     This routine inserts the interval from LEFT to RIGHT into the */
+/*     input window. If the new interval overlaps any of the intervals */
+/*     in the window, the intervals are merged. Thus, the cardinality */
+/*     of the input window can actually decrease as the result of an */
+/*     insertion. However, because inserting an interval that is */
+/*     disjoint from the other intervals in the window can increase the */
+/*     cardinality of the window, the routine signals an error. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
+
+/*     1) The following code example demonstrates how to insert an */
+/*        interval into an existing double precision SPICE window, and */
+/*        how to loop over all its intervals to extract their left and */
+/*        right points. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM WNINSD_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER               WNCARD */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
+
+/*              INTEGER               WNSIZE */
+/*              PARAMETER           ( WNSIZE = 10 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      WINDOW      ( LBCELL:WNSIZE ) */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RIGHT */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Validate the window with size WNSIZE and zero elements. */
+/*        C */
+/*              CALL WNVALD( WNSIZE, 0, WINDOW ) */
+
+/*        C */
+/*        C     Insert the intervals */
+/*        C */
+/*        C        [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
+/*        C */
+/*        C     into WINDOW. */
+/*        C */
+/*              CALL WNINSD(  1.D0,  3.D0, WINDOW ) */
+/*              CALL WNINSD(  7.D0, 11.D0, WINDOW ) */
+/*              CALL WNINSD( 23.D0, 27.D0, WINDOW ) */
+
+/*        C */
+/*        C     Loop over the number of intervals in WINDOW, output */
+/*        C     the LEFT and RIGHT endpoints for each interval. */
+/*        C */
+/*              DO I=1, WNCARD(WINDOW) */
+
+/*                 CALL WNFETD( WINDOW, I, LEFT, RIGHT ) */
+
+/*                 WRITE(*,'(A,I2,2(A,F8.3),A)') 'Interval', I, */
+/*             .                  ' [', LEFT,',',  RIGHT, ']' */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Interval 1 [   1.000,   3.000] */
+/*        Interval 2 [   7.000,  11.000] */
+/*        Interval 3 [  23.000,  27.000] */
+
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      K.R. Gehringer  (JPL) */
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     Beta Version 1.3.0, 04-MAR-1993  (KRG) */
+/* -    SPICELIB Version 1.4.0, 25-AUG-2021 (JDR) (NJB) */
 
-/*         There was a bug when moving the intervals in the cell */
-/*         to the right when inserting a new interval to the left */
-/*         of the left most interval. the incrementing in the DO */
-/*         loop was incorrect. */
+/*        Added IMPLICIT NONE statement. */
 
-/*         The loop used to read: */
+/*        Updated to remove unnecessary lines of code in the */
+/*        Standard SPICE error handling CHKIN statements. */
 
-/*            DO J = I-1, CARD */
-/*               WINDOW(J+2) = WINDOW(J) */
-/*            END DO */
+/*        Edited the header to comply to NAIF standard. Added complete */
+/*        code example, problem statement and solution. Added entry #3 in */
+/*        $Exceptions section. */
 
-/*         which squashed everything to the right of the first interval */
-/*         with the values of the first interval. */
+/*        Removed irrelevant information related to other unary window */
+/*        routines from $Particulars section. */
 
-/*         The loop now reads: */
+/* -    SPICELIB Version 1.3.0, 04-MAR-1993 (KRG) */
 
-/*            DO J = CARD, I-1, -1 */
-/*               WINDOW(J+2) = WINDOW(J) */
-/*            END DO */
+/*        There was a bug when moving the intervals in the cell */
+/*        to the right when inserting a new interval to the left */
+/*        of the left most interval. The incrementing in the DO */
+/*        loop was incorrect. */
 
-/*         which correctly scoots the elements in reverse order, */
-/*         preserving their values. */
+/*        The loop used to read: */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*           DO J = I-1, CARD */
+/*              WINDOW(J+2) = WINDOW(J) */
+/*           END DO */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        which squashed everything to the right of the first interval */
+/*        with the values of the first interval. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/*        The loop now reads: */
+
+/*           DO J = CARD, I-1, -1 */
+/*              WINDOW(J+2) = WINDOW(J) */
+/*           END DO */
+
+/*        which correctly scoots the elements in reverse order, */
+/*        preserving their values. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -194,42 +276,43 @@ static integer c__2 = 2;
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.3.0, 04-MAR-1993  (KRG) */
+/* -    SPICELIB Version 1.3.0, 04-MAR-1993 (KRG) */
 
-/*         There was a bug when moving the intervals in the cell */
-/*         to the right when inserting a new interval to the left */
-/*         of the left most interval. the incrementing in the DO */
-/*         loop was incorrect. */
+/*        There was a bug when moving the intervals in the cell */
+/*        to the right when inserting a new interval to the left */
+/*        of the left most interval. the incrementing in the DO */
+/*        loop was incorrect. */
 
-/*         The loop used to read: */
+/*        The loop used to read: */
 
-/*            DO J = I-1, CARD */
-/*               WINDOW(J+2) = WINDOW(J) */
-/*            END DO */
+/*           DO J = I-1, CARD */
+/*              WINDOW(J+2) = WINDOW(J) */
+/*           END DO */
 
-/*         which squashed everything to the right of the first interval */
-/*         with the values of the first interval. */
+/*        which squashed everything to the right of the first interval */
+/*        with the values of the first interval. */
 
-/*         The loop now reads: */
+/*        The loop now reads: */
 
-/*            DO J = CARD, I-1, -1 */
-/*               WINDOW(J+2) = WINDOW(J) */
-/*            END DO */
+/*           DO J = CARD, I-1, -1 */
+/*              WINDOW(J+2) = WINDOW(J) */
+/*           END DO */
 
-/*         which correctly scoots the elements in reverse order, */
-/*         preserving their values. */
+/*        which correctly scoots the elements in reverse order, */
+/*        preserving their values. */
 
-/* -     Beta Version 1.2.0, 27-FEB-1989  (HAN) */
+/* -    Beta Version 1.2.0, 27-FEB-1989 (HAN) */
 
-/*         Due to the calling sequence and functionality changes */
-/*         in the routine EXCESS, the method of signalling an */
-/*         excess of elements needed to be changed. */
+/*        Due to the calling sequence and functionality changes */
+/*        in the routine EXCESS, the method of signaling an */
+/*        excess of elements needed to be changed. */
 
-/* -     Beta Version 1.1.0, 17-FEB-1989 (HAN) (NJB) */
+/* -    Beta Version 1.1.0, 17-FEB-1989 (HAN) (NJB) */
 
-/*         Contents of the Required_Reading section was */
-/*         changed from "None." to "WINDOWS".  Also, the */
-/*         declaration of the unused variable K was removed. */
+/*        Contents of the $Required_Reading section was */
+/*        changed from "None." to "WINDOWS".  Also, the */
+/*        declaration of the unused variable K was removed. */
+
 /* -& */
 
 /*     SPICELIB functions */
@@ -242,9 +325,8 @@ static integer c__2 = 2;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("WNINSD", (ftnlen)6);
     }
+    chkin_("WNINSD", (ftnlen)6);
 
 /*     Get the size and cardinality of the window. */
 

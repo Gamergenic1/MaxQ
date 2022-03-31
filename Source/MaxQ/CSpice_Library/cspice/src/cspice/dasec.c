@@ -10,7 +10,7 @@
 static logical c_false = FALSE_;
 static integer c__5000 = 5000;
 
-/* $Procedure  DASEC  ( DAS extract comments ) */
+/* $Procedure DASEC  ( DAS extract comments ) */
 /* Subroutine */ int dasec_(integer *handle, integer *bufsiz, integer *n, 
 	char *buffer, logical *done, ftnlen buffer_len)
 {
@@ -98,13 +98,62 @@ static integer c__5000 = 5000;
 /*     UTILITY */
 
 /* $ Declarations */
+/* $ Abstract */
 
-/*     Include file das.inc */
+/*     This file contains public, global parameter declarations */
+/*     for the SPICELIB Direct Access Segregated (DAS) subsystem. */
 
-/*     This include file declares public parameters for the DAS */
-/*     subsystem. */
+/* $ Disclaimer */
 
-/*        Version 1.0.0 10-FEB-2017 (NJB) */
+/*     THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE */
+/*     CALIFORNIA INSTITUTE OF TECHNOLOGY (CALTECH) UNDER A U.S. */
+/*     GOVERNMENT CONTRACT WITH THE NATIONAL AERONAUTICS AND SPACE */
+/*     ADMINISTRATION (NASA). THE SOFTWARE IS TECHNOLOGY AND SOFTWARE */
+/*     PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS" */
+/*     TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY */
+/*     WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A */
+/*     PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC */
+/*     SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE */
+/*     SOFTWARE AND RELATED MATERIALS, HOWEVER USED. */
+
+/*     IN NO EVENT SHALL CALTECH, ITS JET PROPULSION LABORATORY, OR NASA */
+/*     BE LIABLE FOR ANY DAMAGES AND/OR COSTS, INCLUDING, BUT NOT */
+/*     LIMITED TO, INCIDENTAL OR CONSEQUENTIAL DAMAGES OF ANY KIND, */
+/*     INCLUDING ECONOMIC DAMAGE OR INJURY TO PROPERTY AND LOST PROFITS, */
+/*     REGARDLESS OF WHETHER CALTECH, JPL, OR NASA BE ADVISED, HAVE */
+/*     REASON TO KNOW, OR, IN FACT, SHALL KNOW OF THE POSSIBILITY. */
+
+/*     RECIPIENT BEARS ALL RISK RELATING TO QUALITY AND PERFORMANCE OF */
+/*     THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY */
+/*     CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE */
+/*     ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE. */
+
+/* $ Required_Reading */
+
+/*     DAS */
+
+/* $ Keywords */
+
+/*     None. */
+
+/* $ Restrictions */
+
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+
+/* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 07-APR-2020 (JDR) */
+
+/*        Added CHARDT, DPDT and INTDT parameters. */
+
+/* -    SPICELIB Version 1.0.0, 10-FEB-2017 (NJB) */
+
+/* -& */
 
 /*     Parameter declarations follow. */
 
@@ -126,34 +175,47 @@ static integer c__5000 = 5000;
 /*        -- NWD double precision numbers. */
 /*        -- NWI integers. */
 /*        -- NWC characters. */
+
 /*     These parameters are named to enhance ease of maintenance of */
 /*     the code; the values should not be changed. */
+
+/*     DAS data type specifiers used in all DAS routines that require */
+/*     a data type either as input or to extract data from an output */
+/*     array. */
+
+/*     CHARDT, */
+/*     DPDT, */
+/*     INTDT    are data type specifiers which indicate CHARACTER, */
+/*              DOUBLE PRECISION, and INTEGER respectively. These */
+/*              parameters are used in all DAS routines that require a */
+/*              data type specifier. */
+
 
 /*     End of include file das.inc */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I   Handle of binary DAS file open with read access. */
-/*      BUFSIZ    I   Maximum size, in lines, of BUFFER. */
-/*      N         O   Number of comments extracted from the DAS file. */
-/*      BUFFER    O   Buffer in which extracted comments are placed. */
-/*      DONE      O   Indicates whether all comments have been extracted. */
+/*     HANDLE     I   Handle of binary DAS file open with read access. */
+/*     BUFSIZ     I   Maximum size, in lines, of BUFFER. */
+/*     N          O   Number of comments extracted from the DAS file. */
+/*     BUFFER     O   Buffer in which extracted comments are placed. */
+/*     DONE       O   Indicates whether all comments have been extracted. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE   The file handle of a binary DAS file which has been */
+/*     HANDLE   is the file handle of a binary DAS file which has been */
 /*              opened with read access. */
 
-/*     BUFSIZ   The maximum number of comments that may be placed into */
+/*     BUFSIZ   is the maximum number of comments that may be placed into */
 /*              BUFFER. This would typically be the declared array size */
 /*              for the Fortran character string array passed into this */
 /*              routine. */
 
 /* $ Detailed_Output */
 
-/*     N        The number of comment lines extracted from the comment */
+/*     N        is the number of comment lines extracted from the comment */
 /*              area of the binary DAS file attached to HANDLE. This */
 /*              number will be <= BUFSIZ on output. If N = BUFSIZ and */
 /*              DONE <> .TRUE. then there are more comments left to to */
@@ -162,11 +224,11 @@ static integer c__5000 = 5000;
 /*              in the comment area, or comments remaining after the */
 /*              extraction process has begun, N > 0, always. */
 
-/*     BUFFER   A list of at most BUFSIZ comments which have been */
+/*     BUFFER   is a list of at most BUFSIZ comments which have been */
 /*              extracted from the comment area of the binary DAS */
 /*              file attached to HANDLE. */
 
-/*     DONE     A logical flag indicating whether or not all of the */
+/*     DONE     is a logical flag indicating whether or not all of the */
 /*              comment lines from the comment area of the DAS file have */
 /*              been read. This variable has the value .TRUE. after the */
 /*              last comment line has been read. It will have the value */
@@ -181,25 +243,24 @@ static integer c__5000 = 5000;
 
 /* $ Exceptions */
 
-/*     1)   If the size of the output line buffer is is not positive, */
-/*          the error SPICE(INVALIDARGUMENT) will be signaled. */
+/*     1)  If the size of the output line buffer is is not positive, */
+/*         the error SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     3)   If a comment line in a DAS file is longer than the length */
-/*          of a character string array element of BUFFER, the error */
-/*          SPICE(COMMENTTOOLONG) will be signaled. */
+/*     2)  If a comment line in a DAS file is longer than the length */
+/*         of a character string array element of BUFFER, the error */
+/*         SPICE(COMMENTTOOLONG) is signaled. */
 
-/*     3)   If there is a mismatch between the number of comment */
-/*          characters found and the number of comment characters */
-/*          expected, the error SPICE(BADDASCOMMENTAREA) will be */
-/*          signaled. */
+/*     3)  If there is a mismatch between the number of comment */
+/*         characters found and the number of comment characters */
+/*         expected, the error SPICE(BADDASCOMMENTAREA) is signaled. */
 
-/*     4)   If the binary DAS file attached to HANDLE is not open for */
-/*          reading, an error will be signaled by a routine called by */
-/*          this routine. */
+/*     4)  If the binary DAS file attached to HANDLE is not open for */
+/*         reading, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
-/*     See argument HANDLE in $ Detailed_Input. */
+/*     See argument HANDLE in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -219,13 +280,13 @@ static integer c__5000 = 5000;
 /*     a binary DAS file, placing them into a line buffer. If the line */
 /*     buffer is not large enough to hold the entire comment area, */
 /*     the portion read will be returned to the caller, and the DONE */
-/*     flag will be set to .FALSE.. This allows the comment area to be */
+/*     flag will be set to .FALSE. This allows the comment area to be */
 /*     read in ``chunks,'' a buffer at a time. After all of the comment */
-/*     lines have been read, the DONE flag will be set to .TRUE.. */
+/*     lines have been read, the DONE flag will be set to .TRUE. */
 
 /*     This routine can be used to ``simultaneously'' extract comments */
 /*     from the comment areas of multiple binary DAS files. See Example */
-/*     2 in the $ Examples section. */
+/*     2 in the $Examples section. */
 
 /* $ Examples */
 
@@ -341,17 +402,16 @@ static integer c__5000 = 5000;
 
 /* $ Restrictions */
 
-/*     1) The comment area may consist only of printing ASCII characters, */
-/*        decimal values 32 - 126. See the MAXPCH and MINPCH parameters */
-/*        defined in the $ Local Parameters section. */
+/*     1)  The comment area may consist only of printing ASCII */
+/*         characters, decimal values 32 - 126. */
 
-/*     2) There is NO maximum length imposed on the significant portion */
-/*        of a text line that may be placed into the comment area of a */
-/*        DAS file. The maximum length of a line stored in the comment */
-/*        area should be kept reasonable, so that they may be easily */
-/*        extracted. A good value for this would be 255 characters, as */
-/*        this can easily accommodate ``screen width'' lines as well as */
-/*        long lines which may contain some other form of information. */
+/*     2)  There is NO maximum length imposed on the significant portion */
+/*         of a text line that may be placed into the comment area of a */
+/*         DAS file. The maximum length of a line stored in the comment */
+/*         area should be kept reasonable, so that they may be easily */
+/*         extracted. A good value for this would be 255 characters, as */
+/*         this can easily accommodate "screen width" lines as well as */
+/*         long lines which may contain some other form of information. */
 
 /* $ Literature_References */
 
@@ -359,9 +419,18 @@ static integer c__5000 = 5000;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.1, 20-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        reference to non-described parameters from entry #1 in */
+/*        $Restrictions section. */
 
 /* -    SPICELIB Version 1.4.0, 10-FEB-2017 (NJB) */
 
@@ -400,7 +469,7 @@ static integer c__5000 = 5000;
 /* -& */
 /* $ Index_Entries */
 
-/*      extract comments from a das file */
+/*     extract comments from a DAS file */
 
 /* -& */
 /* $ Revisions */
@@ -492,15 +561,15 @@ static integer c__5000 = 5000;
 	lsthan = -1;
 	for (i__ = 1; i__ <= 5000; ++i__) {
 	    filcnt[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "cnt", i__1, "dasec_", (ftnlen)485)] = 0;
+		    "cnt", i__1, "dasec_", (ftnlen)494)] = 0;
 	    filchr[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "chr", i__1, "dasec_", (ftnlen)486)] = 0;
+		    "chr", i__1, "dasec_", (ftnlen)495)] = 0;
 	    filhan[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("fil"
-		    "han", i__1, "dasec_", (ftnlen)487)] = 0;
+		    "han", i__1, "dasec_", (ftnlen)496)] = 0;
 	    lstrec[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "rec", i__1, "dasec_", (ftnlen)488)] = 0;
+		    "rec", i__1, "dasec_", (ftnlen)497)] = 0;
 	    lstpos[(i__1 = i__ - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge("lst"
-		    "pos", i__1, "dasec_", (ftnlen)489)] = 0;
+		    "pos", i__1, "dasec_", (ftnlen)498)] = 0;
 	}
     }
 
@@ -551,17 +620,17 @@ static integer c__5000 = 5000;
 
     if (index > 0) {
 
-/*        Set the record number and the starting position accocrdingly, */
+/*        Set the record number and the starting position accordingly, */
 /*        i.e., where we left off when we last read from that file. */
 
 	recno = lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"lstrec", i__1, "dasec_", (ftnlen)557)];
+		"lstrec", i__1, "dasec_", (ftnlen)566)];
 	curpos = lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("lstpos", i__1, "dasec_", (ftnlen)558)];
+		s_rnge("lstpos", i__1, "dasec_", (ftnlen)567)];
 	nchars = filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : 
-		s_rnge("filchr", i__1, "dasec_", (ftnlen)559)];
+		s_rnge("filchr", i__1, "dasec_", (ftnlen)568)];
 	ncomc = filcnt[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		"filcnt", i__1, "dasec_", (ftnlen)560)];
+		"filcnt", i__1, "dasec_", (ftnlen)569)];
     } else {
 
 /*        We have not yet read any comments from this file, so start at */
@@ -707,25 +776,25 @@ static integer c__5000 = 5000;
 		i__1 = nfiles - 1;
 		for (k = index; k <= i__1; ++k) {
 		    filcnt[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filcnt", i__2, "dasec_", (ftnlen)736)] = filcnt[(
+			    "filcnt", i__2, "dasec_", (ftnlen)745)] = filcnt[(
 			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filcnt", i__3, "dasec_", (ftnlen)736)];
+			    "filcnt", i__3, "dasec_", (ftnlen)745)];
 		    filchr[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filchr", i__2, "dasec_", (ftnlen)737)] = filchr[(
+			    "filchr", i__2, "dasec_", (ftnlen)746)] = filchr[(
 			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filchr", i__3, "dasec_", (ftnlen)737)];
+			    "filchr", i__3, "dasec_", (ftnlen)746)];
 		    filhan[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "filhan", i__2, "dasec_", (ftnlen)738)] = filhan[(
+			    "filhan", i__2, "dasec_", (ftnlen)747)] = filhan[(
 			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "filhan", i__3, "dasec_", (ftnlen)738)];
+			    "filhan", i__3, "dasec_", (ftnlen)747)];
 		    lstrec[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstrec", i__2, "dasec_", (ftnlen)739)] = lstrec[(
+			    "lstrec", i__2, "dasec_", (ftnlen)748)] = lstrec[(
 			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "lstrec", i__3, "dasec_", (ftnlen)739)];
+			    "lstrec", i__3, "dasec_", (ftnlen)748)];
 		    lstpos[(i__2 = k - 1) < 5000 && 0 <= i__2 ? i__2 : s_rnge(
-			    "lstpos", i__2, "dasec_", (ftnlen)740)] = lstpos[(
+			    "lstpos", i__2, "dasec_", (ftnlen)749)] = lstpos[(
 			    i__3 = k) < 5000 && 0 <= i__3 ? i__3 : s_rnge(
-			    "lstpos", i__3, "dasec_", (ftnlen)740)];
+			    "lstpos", i__3, "dasec_", (ftnlen)749)];
 		}
 		--nfiles;
 	    }
@@ -762,15 +831,15 @@ static integer c__5000 = 5000;
 	    }
 	    ++nfiles;
 	    filcnt[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filcnt", i__1, "dasec_", (ftnlen)784)] = ncomc;
+		    "filcnt", i__1, "dasec_", (ftnlen)793)] = ncomc;
 	    filchr[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filchr", i__1, "dasec_", (ftnlen)785)] = nchars;
+		    "filchr", i__1, "dasec_", (ftnlen)794)] = nchars;
 	    filhan[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filhan", i__1, "dasec_", (ftnlen)786)] = *handle;
+		    "filhan", i__1, "dasec_", (ftnlen)795)] = *handle;
 	    lstrec[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstrec", i__1, "dasec_", (ftnlen)787)] = recno;
+		    "lstrec", i__1, "dasec_", (ftnlen)796)] = recno;
 	    lstpos[(i__1 = nfiles - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstpos", i__1, "dasec_", (ftnlen)788)] = curpos;
+		    "lstpos", i__1, "dasec_", (ftnlen)797)] = curpos;
 	    lsthan = *handle;
 	} else {
 
@@ -778,11 +847,11 @@ static integer c__5000 = 5000;
 /*           so just update its information. */
 
 	    filchr[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "filchr", i__1, "dasec_", (ftnlen)796)] = nchars;
+		    "filchr", i__1, "dasec_", (ftnlen)805)] = nchars;
 	    lstrec[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstrec", i__1, "dasec_", (ftnlen)797)] = recno;
+		    "lstrec", i__1, "dasec_", (ftnlen)806)] = recno;
 	    lstpos[(i__1 = index - 1) < 5000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lstpos", i__1, "dasec_", (ftnlen)798)] = curpos;
+		    "lstpos", i__1, "dasec_", (ftnlen)807)] = curpos;
 	    lsthan = *handle;
 	}
     }

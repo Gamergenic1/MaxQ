@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ORDERD ( Order of a double precision array ) */
+/* $Procedure ORDERD ( Order of a double precision array ) */
 /* Subroutine */ int orderd_(doublereal *array, integer *ndim, integer *
 	iorder)
 {
@@ -52,7 +52,8 @@
 
 /* $ Keywords */
 
-/*     ARRAY,  SORT */
+/*     ARRAY */
+/*     SORT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -65,16 +66,16 @@
 
 /* $ Detailed_Input */
 
-/*     ARRAY       is the input array. */
+/*     ARRAY    is the input array. */
 
-/*     NDIM        is the number of elements in the input array. */
+/*     NDIM     is the number of elements in the input array. */
 
 /* $ Detailed_Output */
 
-/*     IORDER      is the order vector for the input array. */
-/*                 IORDER(1) is the index of the smallest element */
-/*                 of ARRAY; IORDER(2) is the index of the next */
-/*                 smallest; and so on. */
+/*     IORDER   is the order vector for the input array. */
+/*              IORDER(1) is the index of the smallest element */
+/*              of ARRAY; IORDER(2) is the index of the next */
+/*              smallest; and so on. */
 
 /* $ Parameters */
 
@@ -82,10 +83,10 @@
 
 /* $ Exceptions */
 
-/*     1) A negative input dimension causes this routine to */
-/*        leave the output order vector unchanged. */
+/*     Error free. */
 
-/*     This routine is error free. */
+/*     1)  A negative input dimension causes this routine to leave the */
+/*         output order vector unchanged. */
 
 /* $ Files */
 
@@ -129,14 +130,21 @@
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 04-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 23-MAR-2010 (NJB) */
 
 /*        Header example was updated to show use of this routine. */
-/*        Exceptions section was updated. Header sections were */
+/*        $Exceptions section was updated. Header sections were */
 /*        re-ordered. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */

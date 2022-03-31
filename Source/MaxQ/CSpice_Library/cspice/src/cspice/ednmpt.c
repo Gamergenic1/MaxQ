@@ -78,39 +78,40 @@ static doublereal c_b25 = -.5;
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     A          I   Length of the ellipsoid semi-axis along the x-axis. */
-/*     B          I   Length of the ellipsoid semi-axis along the y-axis. */
-/*     C          I   Length of the ellipsoid semi-axis along the z-axis. */
+/*     A          I   Length of the ellipsoid semi-axis along the X-axis. */
+/*     B          I   Length of the ellipsoid semi-axis along the Y-axis. */
+/*     C          I   Length of the ellipsoid semi-axis along the Z-axis. */
 /*     NORMAL     I   Outward normal direction. */
 /*     POINT      O   Point where outward normal is parallel to NORMAL. */
 
 /* $ Detailed_Input */
 
-/*     A          is the length of the semi-axis of the ellipsoid */
-/*                that is parallel to the x-axis of the body-fixed */
-/*                coordinate system. */
+/*     A        is the length of the semi-axis of the ellipsoid */
+/*              that is parallel to the X-axis of the body-fixed */
+/*              coordinate system. */
 
-/*     B          is the length of the semi-axis of the ellipsoid */
-/*                that is parallel to the y-axis of the body-fixed */
-/*                coordinate system. */
+/*     B        is the length of the semi-axis of the ellipsoid */
+/*              that is parallel to the Y-axis of the body-fixed */
+/*              coordinate system. */
 
-/*     C          is the length of the semi-axis of the ellipsoid */
-/*                that is parallel to the z-axis of the body-fixed */
-/*                coordinate system. */
+/*     C        is the length of the semi-axis of the ellipsoid */
+/*              that is parallel to the Z-axis of the body-fixed */
+/*              coordinate system. */
 
-/*     NORMAL     is a non-zero vector. The unique point on the */
-/*                ellipsoid at which NORMAL is an outward normal vector */
-/*                is sought. */
+/*     NORMAL   is a non-zero vector. The unique point on the */
+/*              ellipsoid at which NORMAL is an outward normal vector */
+/*              is sought. */
 
 /* $ Detailed_Output */
 
-/*     POINT      is the unique point on the ellipsoid at which NORMAL */
-/*                is an outward normal vector. */
+/*     POINT    is the unique point on the ellipsoid at which NORMAL */
+/*              is an outward normal vector. */
 
-/*                POINT is a 3-vector giving the bodyfixed coordinates */
-/*                of a point on the ellipsoid. In bodyfixed coordinates, */
-/*                the semi-axes of the ellipsoid are aligned with the x, */
-/*                y, and z-axes of the coordinate system. */
+/*              POINT is a 3-vector giving the body-fixed coordinates */
+/*              of a point on the ellipsoid. In body-fixed */
+/*              coordinates, the semi-axes of the ellipsoid are */
+/*              aligned with the X, Y, and Z-axes of the coordinate */
+/*              system. */
 
 /* $ Parameters */
 
@@ -119,19 +120,19 @@ static doublereal c_b25 = -.5;
 /* $ Exceptions */
 
 /*     1)  If any of the semi-axis lengths is non-positive, the error */
-/*         SPICE(BADAXISLENGTH) will be signaled. */
+/*         SPICE(BADAXISLENGTH) is signaled. */
 
 /*     2)  If any of the semi-axis lengths underflows to zero when */
 /*         divided by the largest semi-axis length, the error */
-/*         SPICE(AXISUNDERFLOW) will be signaled. */
+/*         SPICE(AXISUNDERFLOW) is signaled. */
 
 /*     3)  If NORMAL is the zero vector, the error SPICE(ZEROVECTOR) */
-/*         will be signaled. */
+/*         is signaled. */
 
 /*     4)  If the input pass the above checks but lead to a */
 /*         divide-by-zero error or to an computing an invalid argument */
 /*         of a fractional exponential expression, the error */
-/*         SPICE(DEGENERATECASE) will be signaled. */
+/*         SPICE(DEGENERATECASE) is signaled. */
 
 /* $ Files */
 
@@ -162,31 +163,37 @@ static doublereal c_b25 = -.5;
 /*        of the function */
 
 /*                             2        2         2 */
-/*           f(x, y, z) = (x/a)  + (y/b)  +  (z/c) */
+/*           f(x, y, z) = (x/A)  + (y/B)  +  (z/C) */
 
-/*        where a, b, c are the semi-axis lengths of the ellipsoid. */
+/*        where A, B, C are the semi-axis lengths of the ellipsoid. */
 /*        Specifically, the ellipsoid is the set */
 
 /*           { (x, y, z) : f(x, y, z)  =  1 } */
 
-/*        We can evaluate f at a point to determine whether that point */
+/*        We can evaluate F at a point to determine whether that point */
 /*        is close to the ellipsoid's surface. */
 
 
 /*        Example code begins here. */
 
 
-/*              PROGRAM EX1 */
+/*              PROGRAM EDNMPT_EX1 */
 /*              IMPLICIT NONE */
+
 /*        C */
 /*        C     SPICELIB functions */
 /*        C */
 /*              DOUBLE PRECISION      VSEP */
+
 /*        C */
 /*        C     Local parameters */
 /*        C */
 /*              CHARACTER*(*)         FMT1 */
-/*              PARAMETER           ( FMT1 = '(A,3F15.9)' ) */
+/*              PARAMETER           ( FMT1 = '(A,F14.8)'  ) */
+
+/*              CHARACTER*(*)         FMT3 */
+/*              PARAMETER           ( FMT3 = '(A,3F14.8)' ) */
+
 /*        C */
 /*        C     Local variables */
 /*        C */
@@ -196,12 +203,14 @@ static doublereal c_b25 = -.5;
 /*              DOUBLE PRECISION      NORMAL ( 3 ) */
 /*              DOUBLE PRECISION      POINT  ( 3 ) */
 /*              DOUBLE PRECISION      XNORML ( 3 ) */
+
 /*        C */
 /*        C     Initialize the ellipsoid semi-axes. */
 /*        C */
 /*              A = 10.D0 */
 /*              B =  5.D0 */
 /*              C =  2.D0 */
+
 /*        C */
 /*        C     Pick several vectors; find the points */
 /*        C     on the ellipsoid where the respective */
@@ -213,10 +222,10 @@ static doublereal c_b25 = -.5;
 /*              CALL SURFNM ( A,    B,    C,    POINT,  NORMAL ) */
 
 /*              WRITE (*,*   ) ' ' */
-/*              WRITE (*,FMT1) 'Semi-axis lengths:   ', A, B, C */
-/*              WRITE (*,FMT1) 'Input vector:        ', XNORML */
-/*              WRITE (*,FMT1) 'Point:               ', POINT */
-/*              WRITE (*,FMT1) 'Outward normal:      ', NORMAL */
+/*              WRITE (*,FMT3) 'Semi-axis lengths:   ', A, B, C */
+/*              WRITE (*,FMT3) 'Input vector:        ', XNORML */
+/*              WRITE (*,FMT3) 'Point:               ', POINT */
+/*              WRITE (*,FMT3) 'Outward normal:      ', NORMAL */
 /*              WRITE (*,FMT1) 'Angular error (rad): ', VSEP(NORMAL, */
 /*             .                                          XNORML ) */
 /*              WRITE (*,FMT1) 'Off-surface error:   ', */
@@ -229,10 +238,10 @@ static doublereal c_b25 = -.5;
 /*              CALL EDNMPT ( A,      B,    C,    XNORML, POINT  ) */
 /*              CALL SURFNM ( A,      B,    C,    POINT,  NORMAL ) */
 
-/*              WRITE (*,FMT1) 'Semi-axis lengths:   ', A, B, C */
-/*              WRITE (*,FMT1) 'Input vector:        ', XNORML */
-/*              WRITE (*,FMT1) 'Point:               ', POINT */
-/*              WRITE (*,FMT1) 'Outward normal:      ', NORMAL */
+/*              WRITE (*,FMT3) 'Semi-axis lengths:   ', A, B, C */
+/*              WRITE (*,FMT3) 'Input vector:        ', XNORML */
+/*              WRITE (*,FMT3) 'Point:               ', POINT */
+/*              WRITE (*,FMT3) 'Outward normal:      ', NORMAL */
 /*              WRITE (*,FMT1) 'Angular error (rad): ', VSEP(NORMAL, */
 /*             .                                             XNORML ) */
 /*              WRITE (*,FMT1) 'Off-surface error:   ', */
@@ -244,10 +253,10 @@ static doublereal c_b25 = -.5;
 /*              CALL EDNMPT ( A,      B,    C,    XNORML, POINT  ) */
 /*              CALL SURFNM ( A,      B,    C,    POINT,  NORMAL ) */
 
-/*              WRITE (*,FMT1) 'Semi-axis lengths:   ', A, B, C */
-/*              WRITE (*,FMT1) 'Input vector:        ', XNORML */
-/*              WRITE (*,FMT1) 'Point:               ', POINT */
-/*              WRITE (*,FMT1) 'Outward normal:      ', NORMAL */
+/*              WRITE (*,FMT3) 'Semi-axis lengths:   ', A, B, C */
+/*              WRITE (*,FMT3) 'Input vector:        ', XNORML */
+/*              WRITE (*,FMT3) 'Point:               ', POINT */
+/*              WRITE (*,FMT3) 'Outward normal:      ', NORMAL */
 /*              WRITE (*,FMT1) 'Angular error (rad): ', VSEP(NORMAL, */
 /*             .                                             XNORML ) */
 /*              WRITE (*,FMT1) 'Off-surface error:   ', */
@@ -259,10 +268,10 @@ static doublereal c_b25 = -.5;
 /*              CALL EDNMPT ( A,   B,    C,   XNORML, POINT  ) */
 /*              CALL SURFNM ( A,   B,    C,   POINT,  NORMAL ) */
 
-/*              WRITE (*,FMT1) 'Semi-axis lengths:   ', A, B, C */
-/*              WRITE (*,FMT1) 'Input vector:        ', XNORML */
-/*              WRITE (*,FMT1) 'Point:               ', POINT */
-/*              WRITE (*,FMT1) 'Outward normal:      ', NORMAL */
+/*              WRITE (*,FMT3) 'Semi-axis lengths:   ', A, B, C */
+/*              WRITE (*,FMT3) 'Input vector:        ', XNORML */
+/*              WRITE (*,FMT3) 'Point:               ', POINT */
+/*              WRITE (*,FMT3) 'Outward normal:      ', NORMAL */
 /*              WRITE (*,FMT1) 'Angular error (rad): ', VSEP(NORMAL, */
 /*             .                                             XNORML ) */
 /*              WRITE (*,FMT1) 'Off-surface error:   ', */
@@ -272,37 +281,37 @@ static doublereal c_b25 = -.5;
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*     Semi-axis lengths:      10.000000000    5.000000000    2.000000000 */
-/*     Input vector:            0.000000000    0.000000000    3.000000000 */
-/*     Point:                   0.000000000    0.000000000    2.000000000 */
-/*     Outward normal:          0.000000000    0.000000000    1.000000000 */
-/*     Angular error (rad):     0.000000000 */
-/*     Off-surface error:       0.000000000 */
+/*        Semi-axis lengths:      10.00000000    5.00000000    2.00000000 */
+/*        Input vector:            0.00000000    0.00000000    3.00000000 */
+/*        Point:                   0.00000000    0.00000000    2.00000000 */
+/*        Outward normal:          0.00000000    0.00000000    1.00000000 */
+/*        Angular error (rad):     0.00000000 */
+/*        Off-surface error:       0.00000000 */
 
-/*     Semi-axis lengths:      10.000000000    5.000000000    2.000000000 */
-/*     Input vector:           15.000000000   -7.000000000    3.000000000 */
-/*     Point:                   9.731032027   -1.135287070    0.077848256 */
-/*     Outward normal:          0.891657447   -0.416106809    0.178331489 */
-/*     Angular error (rad):     0.000000000 */
-/*     Off-surface error:       0.000000000 */
+/*        Semi-axis lengths:      10.00000000    5.00000000    2.00000000 */
+/*        Input vector:           15.00000000   -7.00000000    3.00000000 */
+/*        Point:                   9.73103203   -1.13528707    0.07784826 */
+/*        Outward normal:          0.89165745   -0.41610681    0.17833149 */
+/*        Angular error (rad):     0.00000000 */
+/*        Off-surface error:       0.00000000 */
 
-/*     Semi-axis lengths:      10.000000000    5.000000000    2.000000000 */
-/*     Input vector:           15.000000000   -7.000000000    3.000000000 */
-/*     Point:                   9.731032027   -1.135287070    0.077848256 */
-/*     Outward normal:          0.891657447   -0.416106809    0.178331489 */
-/*     Angular error (rad):     0.000000000 */
-/*     Off-surface error:       0.000000000 */
+/*        Semi-axis lengths:      10.00000000    5.00000000    2.00000000 */
+/*        Input vector:           15.00000000   -7.00000000    3.00000000 */
+/*        Point:                   9.73103203   -1.13528707    0.07784826 */
+/*        Outward normal:          0.89165745   -0.41610681    0.17833149 */
+/*        Angular error (rad):     0.00000000 */
+/*        Off-surface error:       0.00000000 */
 
-/*     Semi-axis lengths:      10.000000000    5.000000000    2.000000000 */
-/*     Input vector:            5.000000000    2.500000000    1.000000000 */
-/*     Point:                   9.694128639    1.211766080    0.077553029 */
-/*     Outward normal:          0.880450906    0.440225453    0.176090181 */
-/*     Angular error (rad):     0.000000000 */
-/*     Off-surface error:       0.000000000 */
+/*        Semi-axis lengths:      10.00000000    5.00000000    2.00000000 */
+/*        Input vector:            5.00000000    2.50000000    1.00000000 */
+/*        Point:                   9.69412864    1.21176608    0.07755303 */
+/*        Outward normal:          0.88045091    0.44022545    0.17609018 */
+/*        Angular error (rad):     0.00000000 */
+/*        Off-surface error:       0.00000000 */
 
 
 /* $ Restrictions */
@@ -315,10 +324,18 @@ static doublereal c_b25 = -.5;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 09-JUL-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Modified the output format FMT1 in the code example for the */
+/*        output to fit in the $Examples section without modifications. */
 
 /* -    SPICELIB Version 1.0.0, 17-MAY-2016 (NJB) (WLT) */
 

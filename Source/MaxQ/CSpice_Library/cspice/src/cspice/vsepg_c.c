@@ -4,9 +4,9 @@
 
 -Abstract
 
-   vsepg_c finds the separation angle in radians between two double
-   precision vectors of arbitrary dimension. This angle is defined
-   as zero if either vector is zero.
+   Find the separation angle in radians between two double precision
+   vectors of arbitrary dimension. This angle is defined as zero if
+   either vector is zero.
 
 -Disclaimer
 
@@ -39,8 +39,8 @@
 
 -Keywords
 
-    ANGLE
-    VECTOR
+   ANGLE
+   VECTOR
 
 */
 
@@ -56,84 +56,41 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-     v1        I     First vector.
-     v2        I     Second vector.
-     ndim      I     The number of elements in v1 and v2.
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I   First vector.
+   v2         I   Second vector.
+   ndim       I   The number of elements in `v1' and `v2'.
+
+   The function returns the angle between `v1' and `v2' expressed in
+   radians.
 
 -Detailed_Input
 
-    v1      is any double precision vector of arbitrary dimension.
-    v2      is also a double precision vector of arbitrary dimension.
-            v1 or v2 or both may be the zero vector.
-    ndim    is the dimension of the both of the input vectors
-            v1 and v2.
+   v1,
+   v2          are two double precision vectors of arbitrary dimension.
+               Either `v1' or `v2', or both, may be the zero vector.
+
+               An implicit assumption exists that `v1' and `v2' are
+               specified in the same reference space. If this is not
+               the case, the numerical result of this routine has no
+               meaning.
+
+   ndim        is the dimension of both `v1' and `v2'.
 
 -Detailed_Output
 
-    vsepg_c the angle between v1 and v2 expressed in radians.
-            vsepg_c is strictly non-negative.  For input vectors of
-            four or more dimensions, the angle is defined as the
-            generalization of the definition for three dimensions.
-            If either v1 or v2 is the zero vector, then vsepg_c is
-            defined to be 0 radians.
+   The function returns the angle between `v1' and `v2' expressed in
+   radians.
+
+   vsepg_c is strictly non-negative. For input vectors of four or more
+   dimensions, the angle is defined as the generalization of the
+   definition for three dimensions. If either `v1' or `v2' is the zero
+   vector, then vsepg_c is defined to be 0 radians.
 
 -Parameters
 
-    None.
-
--Particulars
-
-    In four or more dimensions this angle does not have a physically
-    realizable interpretation.  However, the angle is defined as
-    the generalization of the following definition which is valid in
-    three or two dimensions:
-
-    In the plane, it is a simple matter to calculate the angle
-    between two vectors once the two vectors have been made to be
-    unit length.  Then, since the two vectors form the two equal
-    sides of an isosceles triangle, the length of the third side
-    is given by the expression
-
-          length = 2.0 * sine ( vsepg/2.0 )
-
-    The length is given by the magnitude of the difference of the
-    two unit vectors
-
-          length = norm ( u1 - u2 )
-
-    Once the length is found, the value of vsepg_c may be calculated
-    by inverting the first expression given above as
-
-          vsepg_c = 2.0 * arcsine ( length/2.0 )
-
-    This expression becomes increasingly unstable when vsepg_c gets
-    larger than pi/2 or 90 degrees.  In this situation (which is
-    easily detected by determining the sign of the dot product of
-    v1 and v2) the supplementary angle is calculated first and
-    then vsepg_c is given by
-
-          vsepg_c = pi - SUPPLEMENTARY_ANGLE
-
--Examples
-
-    The following table gives sample values for v1, v2 and vsepg_c
-    implied by the inputs.
-
-    v1               v2               ndim          vsepg_c
-    -----------------------------------------------------------------
-    (1, 0, 0, 0)     (1, 0, 0, 0)       4           0.0
-    (1, 0, 0)        (0, 1, 0)          3           pi/2 (=1.71...)
-    (3, 0)           (-5, 0)            2           pi   (=3.14...)
-
--Restrictions
-
-    The user is required to insure that the input vectors will not
-    cause floating point overflow upon calculation of the vector
-    dot product since no error detection or correction code is
-    implemented.  In practice, this is not a significant
-    restriction.
+   None.
 
 -Exceptions
 
@@ -141,23 +98,156 @@
 
 -Files
 
-    None
+   None.
 
--Author_and_Institution
+-Particulars
 
-   C.A. Curzon     (JPL)
-   K.R. Gehringer  (JPL)
-   H.A. Neilan     (JPL)
-   W.L. Taber      (JPL)
-   E.D. Wright     (JPL)
+   In four or more dimensions this angle does not have a physically
+   realizable interpretation. However, the angle is defined as
+   the generalization of the following definition which is valid in
+   three or two dimensions:
+
+      In the plane, it is a simple matter to calculate the angle
+      between two vectors once the two vectors have been made to be
+      unit length. Then, since the two vectors form the two equal
+      sides of an isosceles triangle, the length of the third side
+      is given by the expression
+
+         length = 2.0 * sin ( vsepg_c/2.0 )
+
+      The length is given by the magnitude of the difference of the
+      two unit vectors
+
+         length = norm ( u1 - u2 )
+
+      Once the length is found, the value of vsepg_c may be calculated
+      by inverting the first expression given above as
+
+         vsepg_c = 2.0 * arcsin ( length/2.0 )
+
+      This expression becomes increasingly unstable when vsepg_c gets
+      larger than pi/2 radians or 90 degrees. In this situation
+      (which is easily detected by determining the sign of the dot
+      product of `v1' and `v2') the supplementary angle is calculated
+      first and then vsepg_c is given by
+
+         vsepg_c = pi - supplementary_angle
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Define two sets of n-dimensional vectors and compute the
+      angular separation between each vector in first set and the
+      corresponding vector in the second set.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vsepg_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NDIM         4
+         #define SETSIZ       3
+
+         /.
+         Local variables.
+         ./
+         SpiceInt             i;
+
+         /.
+         Define the two vector sets.
+         ./
+         SpiceDouble          v1     [SETSIZ][NDIM] = {
+                                   {1.0,  0.0,  0.0,  0.0},
+                                   {1.0,  0.0,  0.0,  0.0},
+                                   {3.0,  0.0,  0.0,  0.0} };
+
+         SpiceDouble          v2     [SETSIZ][NDIM] = {
+                                   { 1.0,  0.0,  0.0,  0.0},
+                                   { 0.0,  1.0,  0.0,  0.0},
+                                   {-5.0,  0.0,  0.0,  0.0} };
+
+         /.
+         Calculate the angular separation between each pair
+         of vectors.
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            printf( "First vector            :  %5.1f %5.1f %5.1f %5.1f\n",
+                                     v1[i][0], v1[i][1], v1[i][2], v1[i][3] );
+            printf( "Second vector           :  %5.1f %5.1f %5.1f %5.1f\n",
+                                     v2[i][0], v2[i][1], v2[i][2], v2[i][3] );
+            printf( "Angular separation (rad):  %14.10f\n",
+                             vsepg_c ( v1[i], v2[i], NDIM ) );
+            printf( "\n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      First vector            :    1.0   0.0   0.0   0.0
+      Second vector           :    1.0   0.0   0.0   0.0
+      Angular separation (rad):    0.0000000000
+
+      First vector            :    1.0   0.0   0.0   0.0
+      Second vector           :    0.0   1.0   0.0   0.0
+      Angular separation (rad):    1.5707963268
+
+      First vector            :    3.0   0.0   0.0   0.0
+      Second vector           :   -5.0   0.0   0.0   0.0
+      Angular separation (rad):    3.1415926536
+
+
+-Restrictions
+
+   1)  The user is required to insure that the input vectors will not
+       cause floating point overflow upon calculation of the vector
+       dot product since no error detection or correction code is
+       implemented. In practice, this is not a significant
+       restriction.
 
 -Literature_References
 
-    None
+   None.
+
+-Author_and_Institution
+
+   C.A. Curzon         (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 29-JUN-1999
+   -CSPICE Version 1.0.1, 31-JUL-2020 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
+   -CSPICE Version 1.0.0, 29-JUN-1999 (EDW) (WLT) (HAN) (KRG) (CAC)
 
 -Index_Entries
 

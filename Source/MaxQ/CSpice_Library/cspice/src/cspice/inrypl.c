@@ -10,7 +10,7 @@
 static integer c__3 = 3;
 static doublereal c_b16 = 1.;
 
-/* $Procedure      INRYPL ( Intersection of ray and plane ) */
+/* $Procedure INRYPL ( Intersection of ray and plane ) */
 /* Subroutine */ int inrypl_(doublereal *vertex, doublereal *dir, doublereal *
 	plane, integer *nxpts, doublereal *xpt)
 {
@@ -81,41 +81,41 @@ static doublereal c_b16 = 1.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     VERTEX, */
 /*     DIR        I   Vertex and direction vector of ray. */
-/*     PLANE      I   A SPICELIB plane. */
+/*     PLANE      I   A SPICE plane. */
 /*     NXPTS      O   Number of intersection points of ray and plane. */
 /*     XPT        O   Intersection point, if NXPTS = 1. */
 
 /* $ Detailed_Input */
 
 /*     VERTEX, */
-/*     DIR            are a point and direction vector that define a */
-/*                    ray in three-dimensional space. */
+/*     DIR      are a point and direction vector that define a */
+/*              ray in three-dimensional space. */
 
-/*     PLANE          is a SPICELIB plane. */
+/*     PLANE    is a SPICE plane. */
 
 /* $ Detailed_Output */
 
-/*     NXPTS          is the number of points of intersection of the */
-/*                    input ray and plane.  Values and meanings of */
-/*                    NXPTS are: */
+/*     NXPTS    is the number of points of intersection of the */
+/*              input ray and plane. Values and meanings of */
+/*              NXPTS are: */
 
-/*                       0     No intersection. */
+/*                 0     No intersection. */
 
-/*                       1     One point of intersection.  Note that */
-/*                             this case may occur when the ray's */
-/*                             vertex is in the plane. */
+/*                 1     One point of intersection. Note that */
+/*                       this case may occur when the ray's */
+/*                       vertex is in the plane. */
 
-/*                      -1     An infinite number of points of */
-/*                             intersection; the ray lies in the plane. */
+/*                -1     An infinite number of points of */
+/*                       intersection; the ray lies in the plane. */
 
 
-/*     XPT            is the point of intersection of the input ray */
-/*                    and plane, when there is exactly one point of */
-/*                    intersection.  Otherwise, XPT is the zero vector. */
+/*     XPT      is the point of intersection of the input ray */
+/*              and plane, when there is exactly one point of */
+/*              intersection. Otherwise, XPT is the zero vector. */
 
 /* $ Parameters */
 
@@ -124,19 +124,16 @@ static doublereal c_b16 = 1.;
 /* $ Exceptions */
 
 /*     1)  If the ray's direction vector is the zero vector, the error */
-/*         SPICE(ZEROVECTOR) is signaled.  NXPTS and XPT are not */
+/*         SPICE(ZEROVECTOR) is signaled. NXPTS and XPT are not */
 /*         modified. */
 
-
-/*     2)  If the ray's vertex is further than DPMAX() / 3 from the */
+/*     2)  If the ray's vertex is further than DPMAX / 3 from the */
 /*         origin, the error SPICE(VECTORTOOBIG) is signaled.  NXPTS */
 /*         and XPT are not modified. */
 
-
-/*     3)  If the input plane is further than DPMAX() / 3 from the */
+/*     3)  If the input plane is further than DPMAX / 3 from the */
 /*         origin, the error SPICE(VECTORTOOBIG) is signaled.  NXPTS */
 /*         and XPT are not modified. */
-
 
 /*     4)  The input plane should be created by one of the SPICELIB */
 /*         routines */
@@ -147,12 +144,11 @@ static doublereal c_b16 = 1.;
 
 /*         Invalid input planes will cause unpredictable results. */
 
-
 /*     5)  In the interest of good numerical behavior, in the case */
 /*         where the ray's vertex is not in the plane, this routine */
 /*         considers that an intersection of the ray and plane occurs */
 /*         only if the distance between the ray's vertex and the */
-/*         intersection point is less than DPMAX() / 3. */
+/*         intersection point is less than DPMAX / 3. */
 
 /*         If VERTEX is not in the plane and this condition is not */
 /*         met, then NXPTS is set to 0 and XPT is set to the zero */
@@ -170,7 +166,7 @@ static doublereal c_b16 = 1.;
 /* $ Examples */
 
 /*     1)  Find the camera projection of the center of an extended */
-/*         body.  For simplicity, we assume: */
+/*         body. For simplicity, we assume: */
 
 /*            -- The camera has no distortion;  the image of a point */
 /*               is determined by the intersection of the focal plane */
@@ -216,7 +212,7 @@ static doublereal c_b16 = 1.;
 
 /*            C */
 /*            C     Find the observer-target vector at the observation */
-/*            C     epoch.  In this example, we'll use a light-time */
+/*            C     epoch. In this example, we'll use a light-time */
 /*            C     corrected state vector. */
 /*            C */
 /*                  CALL SPKEZ ( TARGET,  ET,  'J2000',  'LT',  SC, */
@@ -252,7 +248,7 @@ static doublereal c_b16 = 1.;
 /*            C */
 /*            C     The camera's focal plane contains the origin in */
 /*            C     camera coordinates, and the z-vector is orthogonal */
-/*            C     to the plane.  Make a SPICELIB plane representing */
+/*            C     to the plane.  Make a SPICE plane representing */
 /*            C     the focal plane. */
 /*            C */
 /*                  CALL NVC2PL ( ZVEC, 0.D0, FPLANE ) */
@@ -408,7 +404,7 @@ static doublereal c_b16 = 1.;
 /*      C */
 /*      C     The inverse of the stellar aberration correction */
 /*      C     applicable to CORVEC should be a very good estimate of */
-/*      C     the correction we need to apply to BORVEC.  Apply */
+/*      C     the correction we need to apply to BORVEC. Apply */
 /*      C     this correction to BORVEC to obtain an improved estimate */
 /*      C     of CORVEC. */
 /*      C */
@@ -463,7 +459,7 @@ static doublereal c_b16 = 1.;
 /*               CALL MOVED  ( TPMI(1,3), 3, ZVEC ) */
 
 /*      C */
-/*      C        Make a SPICELIB plane representing the ring plane. */
+/*      C        Make a SPICE plane representing the ring plane. */
 /*      C        We're treating Saturn's center as the origin, so */
 /*      C        the plane constant is 0. */
 /*      C */
@@ -500,7 +496,7 @@ static doublereal c_b16 = 1.;
 /*      C     At this point, if FOUND is .TRUE., we iterated */
 /*      C     3 times, and XPT is our estimate of the */
 /*      C     position of the ring plane intercept point */
-/*      C     relative to Saturn in the J2000 frame.  This is the */
+/*      C     relative to Saturn in the J2000 frame. This is the */
 /*      C     point observed by an instrument pointed in direction */
 /*      C     BORVEC at ET at mounted on the spacecraft SC. */
 /*      C */
@@ -518,8 +514,6 @@ static doublereal c_b16 = 1.;
 
 /*            END */
 
-
-
 /* $ Restrictions */
 
 /*     None. */
@@ -530,10 +524,18 @@ static doublereal c_b16 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 29-SEP-2016 (NJB) */
 
@@ -551,14 +553,14 @@ static doublereal c_b16 = 1.;
 
 /* -    SPICELIB Version 1.0.3, 12-DEC-2002 (NJB) */
 
-/*        Header fix:  ring plane intercept algorithm was corrected. */
+/*        Header fix: ring plane intercept algorithm was corrected. */
 /*        Now light time is computed accurately, and stellar aberration */
-/*        is accounted for.  Example was turned into a complete */
+/*        is accounted for. Example was turned into a complete */
 /*        subroutine. */
 
 /* -    SPICELIB Version 1.0.2, 09-MAR-1999 (NJB) */
 
-/*        Reference to SCE2T replaced by reference to SCE2C.  An */
+/*        Reference to SCE2T replaced by reference to SCE2C. An */
 /*        occurrence of ENDIF was replaced by END IF. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -572,14 +574,6 @@ static doublereal c_b16 = 1.;
 /* $ Index_Entries */
 
 /*     intersection of ray and plane */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 02-SEP-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSCL call. */
 
 /* -& */
 

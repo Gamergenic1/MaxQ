@@ -432,9 +432,16 @@ logical zzdsksel_0_(int n__, integer *surfid, integer *nsurf, integer *srflst,
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 23-NOV-2020 (JDR) (NJB) */
+
+/*        Fixed typo in short error message in entry point ZZDSKMRC. */
+/*        Corrected Brief_I/O descriptions of input DSKDSC in all entry */
+/*        points that accept this input argument. */
 
 /* -    SPICELIB Version 1.0.0, 11-JUL-2016 (NJB) */
 
@@ -729,7 +736,7 @@ L_zzdskbdc:
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DSK containing segment to be checked. */
 /*     DLADSC     I   DLA descriptor of segment to be checked. */
-/*     DSKDSC     I   DLA descriptor of segment to be checked. */
+/*     DSKDSC     I   DSK descriptor of segment to be checked. */
 
 /*     The function returns .TRUE. if and only if the specified segment */
 /*     matches the body ID set via ZZDSKSBD. */
@@ -790,6 +797,10 @@ L_zzdskbdc:
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 23-NOV-2020 (NJB) */
+
+/*        Corrected Brief_I/O description of input DSKDSC. */
 
 /* -    SPICELIB Version 1.0.0, 11-JUL-2016 (NJB) */
 
@@ -863,7 +874,7 @@ L_zzdsknot:
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DSK containing segment to be checked. */
 /*     DLADSC     I   DLA descriptor of segment to be checked. */
-/*     DSKDSC     I   DLA descriptor of segment to be checked. */
+/*     DSKDSC     I   DSK descriptor of segment to be checked. */
 
 /*     The function returns .FALSE. for all segments. */
 
@@ -922,6 +933,10 @@ L_zzdsknot:
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 23-NOV-2020 (JDR) (NJB) */
+
+/*        Corrected Brief_I/O description of input DSKDSC. */
 
 /* -    SPICELIB Version 1.0.0, 11-JUL-2016 (NJB) */
 
@@ -1096,7 +1111,7 @@ L_zzdsksit:
     i__1 = *nsurf;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	savsrf[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("savsrf", 
-		i__2, "zzdsksel_", (ftnlen)958)] = srflst[i__ - 1];
+		i__2, "zzdsksel_", (ftnlen)973)] = srflst[i__ - 1];
     }
     shelli_(nsurf, savsrf);
     return ret_val;
@@ -1159,7 +1174,7 @@ L_zzdskcit:
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DSK containing segment to be checked. */
 /*     DLADSC     I   DLA descriptor of segment to be checked. */
-/*     DSKDSC     I   DLA descriptor of segment to be checked. */
+/*     DSKDSC     I   DSK descriptor of segment to be checked. */
 
 /*     The function returns .TRUE. if and only if the specified segment */
 /*     matches the body ID set via ZZDSKSIT. */
@@ -1220,6 +1235,10 @@ L_zzdskcit:
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 23-NOV-2020 (JDR) (NJB) */
+
+/*        Corrected Brief_I/O description of input DSKDSC. */
 
 /* -    SPICELIB Version 1.0.0, 11-JUL-2016 (NJB) */
 
@@ -1459,7 +1478,7 @@ L_zzdskumc:
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DSK containing segment to be checked. */
 /*     DLADSC     I   DLA descriptor of segment to be checked. */
-/*     DSKDSC     I   DLA descriptor of segment to be checked. */
+/*     DSKDSC     I   DSK descriptor of segment to be checked. */
 
 /*     The function returns .TRUE. if and only if the specified segment */
 /*     matches the body ID set via ZZDSKUSC. */
@@ -1524,6 +1543,10 @@ L_zzdskumc:
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 23-NOV-2020 (JDR) (NJB) */
+
+/*        Corrected Brief_I/O description of input DSKDSC. */
 
 /* -    SPICELIB Version 1.0.0, 11-JUL-2016 (NJB) */
 
@@ -1858,7 +1881,7 @@ L_zzdskmmc:
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DSK containing segment to be checked. */
 /*     DLADSC     I   DLA descriptor of segment to be checked. */
-/*     DSKDSC     I   DLA descriptor of segment to be checked. */
+/*     DSKDSC     I   DSK descriptor of segment to be checked. */
 
 /*     The function returns .TRUE. if and only if the specified segment */
 /*     matches the body ID set via ZZDSKMSC. */
@@ -1935,6 +1958,10 @@ L_zzdskmmc:
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 23-NOV-2020 (JDR) (NJB) */
+
+/*        Corrected Brief_I/O description of input DSKDSC. */
 
 /* -    SPICELIB Version 1.0.0, 11-JUL-2016 (NJB) */
 
@@ -2281,7 +2308,7 @@ L_zzdskmrc:
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of DSK containing segment to be checked. */
 /*     DLADSC     I   DLA descriptor of segment to be checked. */
-/*     DSKDSC     I   DLA descriptor of segment to be checked. */
+/*     DSKDSC     I   DSK descriptor of segment to be checked. */
 
 /*     The function returns .TRUE. if and only if the specified segment */
 /*     matches the body ID set via ZZDSKSRC. */
@@ -2351,9 +2378,15 @@ L_zzdskmrc:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 23-NOV-2020 (JDR) (NJB) */
+
+/*        Fixed typo in short error message SPICE(NOTSUPPORTED). */
+/*        Corrected Brief_I/O description of input DSKDSC. */
 
 /* -    SPICELIB Version 1.0.0, 11-JUL-2016 (NJB) */
 
@@ -2460,7 +2493,7 @@ L_zzdskmrc:
 		"ted by this entry point. Segment coordinate system was #.", (
 		ftnlen)116);
 	errint_("#", &segsys, (ftnlen)1);
-	sigerr_("SPICE(NOTSUPPORTED", (ftnlen)18);
+	sigerr_("SPICE(NOTSUPPORTED)", (ftnlen)19);
 	chkout_("ZZDSKMRC", (ftnlen)8);
 	return ret_val;
     }

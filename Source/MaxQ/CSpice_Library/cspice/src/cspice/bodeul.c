@@ -9,10 +9,10 @@
 
 static integer c__1 = 1;
 static integer c__3 = 3;
+static integer c__800 = 800;
 static integer c__200 = 200;
-static integer c__100 = 100;
 
-/* $Procedure      BODEUL ( Return Euler angles for a body ) */
+/* $Procedure BODEUL ( Return Euler angles for a body ) */
 /* Subroutine */ int bodeul_(integer *body, doublereal *et, doublereal *ra, 
 	doublereal *dec, doublereal *w, doublereal *lambda)
 {
@@ -22,58 +22,69 @@ static integer c__100 = 100;
     static logical found = FALSE_;
 
     /* System generated locals */
-    integer i__1, i__2, i__3;
+    integer i__1, i__2, i__3, i__4;
     doublereal d__1;
 
     /* Builtin functions */
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
     double d_mod(doublereal *, doublereal *);
     integer i_dnnt(doublereal *), s_rnge(char *, integer, char *, integer);
-    double sin(doublereal), cos(doublereal);
+    double pow_di(doublereal *, integer *), sin(doublereal), cos(doublereal);
 
     /* Local variables */
-    char bref[32], item[32];
-    doublereal j2ref[9]	/* was [3][3] */, j2bfx[9]	/* was [3][3] */;
+    static char bref[32], item[32];
+    static doublereal j2ref[9]	/* was [3][3] */, j2bfx[9]	/* was [3][3] 
+	    */;
+    static char item2[32];
     extern integer zzbodbry_(integer *);
     extern /* Subroutine */ int eul2m_(doublereal *, doublereal *, doublereal 
 	    *, integer *, integer *, integer *, doublereal *), m2eul_(
 	    doublereal *, integer *, integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *);
-    doublereal d__;
-    integer i__;
-    doublereal dcoef[3], t;
-    integer refid;
-    doublereal delta;
+    static doublereal d__;
+    static integer i__, j, k, m;
+    static doublereal dcoef[3], t, delta;
+    static integer refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal epoch, rcoef[3], tcoef[200]	/* was [2][100] */, wcoef[3], 
-	    theta;
+    static doublereal epoch, rcoef[3], tcoef[800], wcoef[3];
+    extern /* Subroutine */ int errch_(char *, char *, ftnlen, ftnlen);
+    static doublereal theta, dpval;
     extern /* Subroutine */ int repmi_(char *, char *, integer *, char *, 
 	    ftnlen, ftnlen, ftnlen), errdp_(char *, doublereal *, ftnlen);
-    doublereal costh[100];
+    static doublereal costh[200];
     extern doublereal vdotg_(doublereal *, doublereal *, integer *);
-    doublereal sinth[100];
+    static char dtype[1];
+    static doublereal sinth[200];
     extern doublereal twopi_(void);
     static integer j2code;
-    doublereal rf2bfx[9]	/* was [3][3] */, ac[100], dc[100];
-    integer na, nd, nl;
-    doublereal wc[100];
+    static doublereal rf2bfx[9]	/* was [3][3] */;
+    static logical found2;
+    static doublereal ac[200], dc[200];
+    static integer na, nd;
+    extern logical failed_(void);
+    static doublereal wc[200];
+    static integer nl;
     extern logical bodfnd_(integer *, char *, ftnlen);
     extern /* Subroutine */ int cleard_(integer *, doublereal *), bodvcd_(
 	    integer *, char *, integer *, integer *, doublereal *, ftnlen);
     extern doublereal halfpi_(void);
-    integer nw;
-    doublereal conepc, conref, eulang[6];
-    integer ntheta;
+    static integer nw;
+    static doublereal conepc, eulang[6];
+    static integer nphase, ntheta;
     extern /* Subroutine */ int pckeul_(integer *, doublereal *, logical *, 
 	    char *, doublereal *, ftnlen), gdpool_(char *, integer *, integer 
-	    *, integer *, doublereal *, logical *, ftnlen), sigerr_(char *, 
-	    ftnlen), chkout_(char *, ftnlen), irfnum_(char *, integer *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
-	    ftnlen), irfrot_(integer *, integer *, doublereal *);
+	    *, integer *, doublereal *, logical *, ftnlen), gipool_(char *, 
+	    integer *, integer *, integer *, integer *, logical *, ftnlen);
+    static integer nphsco;
+    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
+	    ftnlen), irfnum_(char *, integer *, ftnlen), dtpool_(char *, 
+	    logical *, integer *, char *, ftnlen, ftnlen), setmsg_(char *, 
+	    ftnlen), errint_(char *, integer *, ftnlen), irfrot_(integer *, 
+	    integer *, doublereal *);
     extern logical return_(void);
     extern doublereal j2000_(void);
-    integer dim, ref;
-    doublereal phi;
+    static integer deg, dim, ref;
+    static doublereal phi;
     extern doublereal rpd_(void), spd_(void);
     extern /* Subroutine */ int mxm_(doublereal *, doublereal *, doublereal *)
 	    ;
@@ -136,35 +147,35 @@ static integer c__100 = 100;
 
 /* $ Detailed_Input */
 
-/*     BODY        is the integer ID code of the body for which the */
-/*                 transformation is requested. Bodies are numbered */
-/*                 according to the standard NAIF numbering scheme. */
+/*     BODY     is the integer ID code of the body for which the */
+/*              transformation is requested. Bodies are numbered */
+/*              according to the standard NAIF numbering scheme. */
 
-/*     ET          is the epoch at which the transformation is */
-/*                 requested. */
+/*     ET       is the epoch at which the transformation is */
+/*              requested. */
 
 /* $ Detailed_Output */
 
 /*     RA, */
-/*     DEC         are the right ascension and declination of the */
-/*                 (IAU) north pole of the body at the epoch of */
-/*                 transformation. RA and DEC are given in radians. */
+/*     DEC      are the right ascension and declination of the */
+/*              (IAU) north pole of the body at the epoch of */
+/*              transformation. RA and DEC are given in radians. */
 
-/*     W           is the angle between the ascending node of the */
-/*                 body-fixed equatorial plane on the inertial */
-/*                 equatorial plane and the prime meridian of the body. */
-/*                 The node is the cross product of the inertial */
-/*                 frame's Z-axis with the Z-axis of the body-fixed */
-/*                 frame. The angle is measured in the positive */
-/*                 (counterclockwise) sense about the body-fixed */
-/*                 Z-axis, from the node to the prime meridian. W is */
-/*                 given in radians. */
+/*     W        is the angle between the ascending node of the */
+/*              body-fixed equatorial plane on the inertial */
+/*              equatorial plane and the prime meridian of the body. */
+/*              The node is the cross product of the inertial */
+/*              frame's Z-axis with the Z-axis of the body-fixed */
+/*              frame. The angle is measured in the positive */
+/*              (counterclockwise) sense about the body-fixed */
+/*              Z-axis, from the node to the prime meridian. W is */
+/*              given in radians. */
 
-/*     LAMBDA      is the angle between the prime meridian and the */
-/*                 longest axis of the tri-axial ellipsoid which */
-/*                 models the body. LAMBDA is given in radians. */
-/*                 See the Particulars section below for further */
-/*                 discussion. */
+/*     LAMBDA   is the angle between the prime meridian and the */
+/*              longest axis of the tri-axial ellipsoid which */
+/*              models the body. LAMBDA is given in radians. */
+/*              See the $Particulars section below for further */
+/*              discussion. */
 
 /* $ Parameters */
 
@@ -172,21 +183,48 @@ static integer c__100 = 100;
 
 /* $ Exceptions */
 
-/*     1) If the number of phase terms is insufficient, the error */
-/*        SPICE(KERNELVARNOTFOUND) is signaled. */
+/*     1)  If any of the PCK keywords required to compute the angles are */
+/*         not available in the kernel pool, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2) If any of the PCK keywords required to compute the angles are */
-/*        not available in the kernel pool, the error will be signaled */
-/*        by routines in the call tree of this routine. */
+/*     2)  If the number of phase terms is insufficient, the error */
+/*         SPICE(INSUFFICIENTANGLES) is signaled. */
+
+/*     3)  If, for a given body, both forms of the kernel variable names */
+
+/*            BODY<body ID>_CONSTANTS_JED_EPOCH */
+/*            BODY<body ID>_CONSTS_JED_EPOCH */
+
+/*         are found in the kernel pool, the error */
+/*         SPICE(COMPETINGEPOCHSPEC) is signaled. This is done */
+/*         regardless of whether the values assigned to the kernel */
+/*         variable names match. */
+
+/*     4)  If, for a given body, both forms of the kernel variable names */
+
+/*            BODY<body ID>_CONSTANTS_REF_FRAME */
+/*            BODY<body ID>_CONSTS_REF_FRAME */
+
+/*         are found in the kernel pool, the error */
+/*         SPICE(COMPETINGFRAMESPEC) is signaled. This is done */
+/*         regardless of whether the values assigned to the kernel */
+/*         variable names match. */
+
+/*     5)  If the central body associated with the input BODY, whether */
+/*         a system barycenter or BODY itself, has associated phase */
+/*         angles (aka nutation precession angles), and the kernel */
+/*         variable BODY<body ID>_MAX_PHASE_DEGREE for the central */
+/*         body is present but has a value outside the range 1:3, */
+/*         the error SPICE(DEGREEOUTOFRANGE) is signaled. */
 
 /* $ Files */
 
-/*     1) A text or binary PCK containing orientation data for the */
-/*        body designated by BODY must be loaded at the time this */
-/*        routine is called. */
+/*     A text or binary PCK containing orientation data for the */
+/*     body designated by BODY must be loaded at the time this */
+/*     routine is called. */
 
-/*        Normally PCK files are loaded during program initialization; */
-/*        they need not be re-loaded prior to each call to this routine. */
+/*     Normally PCK files are loaded during program initialization; */
+/*     they need not be re-loaded prior to each call to this routine. */
 
 /* $ Particulars */
 
@@ -197,10 +235,10 @@ static integer c__100 = 100;
 
 /*     If there exists high-precision binary PCK kernel information for */
 /*     the body at the requested time, the angles, W, DELTA and PHI are */
-/*     computed directly from that file.  These angles are then used to */
-/*     compute RA, DEC and W.  The most recently loaded binary PCK file */
+/*     computed directly from that file. These angles are then used to */
+/*     compute RA, DEC and W. The most recently loaded binary PCK file */
 /*     has first priority followed by previously loaded binary PCK files */
-/*     in backward time order.  If no binary PCK file has been loaded, */
+/*     in backward time order. If no binary PCK file has been loaded, */
 /*     the text P_constants kernel file (PCK) is used. */
 
 /*     If there is only text PCK kernel information, it is expressed in */
@@ -281,19 +319,42 @@ static integer c__100 = 100;
 
 /* $ Literature_References */
 
-/*     1)  Refer to the NAIF_IDS required reading file for a complete */
-/*         list of the NAIF integer ID codes for bodies. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     K.S. Zukor      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 14-APR-2021 (NJB) (JDR) */
+
+/*        The routine was updated to support user-defined maximum phase */
+/*        angle degrees. The additional text kernel kernel variable name */
+/*        BODYnnn_MAX_PHASE_DEGREE must be used when the phase angle */
+/*        polynomials have degree higher than 1. The maximum allowed */
+/*        degree is 3. */
+
+/*        The kernel variable names */
+
+/*           BODY#_CONSTS_REF_FRAME */
+/*           BODY#_CONSTS_JED_EPOCH */
+
+/*        are now recognized. */
+
+/*        Error handling was upgraded to check FAILED() between kernel */
+/*        data lookups and computations. */
+
+/*        Now SAVEs all local variables. */
+
+/*        Edited the header to comply with NAIF standard. Moved NAIF_IDS */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 4.2.0, 02-MAR-2016 (BVS) */
 
@@ -342,12 +403,12 @@ static integer c__100 = 100;
 /*        Updated to handle P_constants referenced to different epochs */
 /*        and inertial reference frames. */
 
-/* -    SPICELIB Version 1.1.0, 02-NOV-1990  (NJB) */
+/* -    SPICELIB Version 1.1.0, 02-NOV-1990 (NJB) */
 
 /*        Allowed number of nutation precession angles increased to */
 /*        100. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990  (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -385,7 +446,7 @@ static integer c__100 = 100;
 /*        existence of binary PCK files, search the for */
 /*        data corresponding to the requested body and time, */
 /*        and return the appropriate Euler angles, using the */
-/*        new routine PCKEUL.  Otherwise the code calculates */
+/*        new routine PCKEUL. Otherwise the code calculates */
 /*        the Euler angles from the P_constants kernel file. */
 
 /* -    SPICELIB Version 2.0.0, 04-SEP-1991 (NJB) */
@@ -407,7 +468,7 @@ static integer c__100 = 100;
 
 /*        where # is the NAIF integer code of the barycenter of a */
 /*        planetary system or of a body other than a planet or */
-/*        satellite.  If either or both of these variables are */
+/*        satellite. If either or both of these variables are */
 /*        present, the P_constants for BODY are presumed to be */
 /*        referenced to the specified inertial frame or epoch. */
 /*        If the epoch of the constants is not J2000, the input */
@@ -433,7 +494,7 @@ static integer c__100 = 100;
 
 /* -    Beta Version 1.1.0, 16-FEB-1989 (IMU) (NJB) */
 
-/*        Examples section completed.  Declarations of unused variables */
+/*        $Examples section completed. Declarations of unused variables */
 /*        HALFPI and N removed. */
 
 /* -& */
@@ -442,6 +503,9 @@ static integer c__100 = 100;
 
 
 /*     Local parameters */
+
+
+/*     Maximum number of coefficients per phase angle polynomial. */
 
 
 /*     Local variables */
@@ -457,9 +521,8 @@ static integer c__100 = 100;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("BODEUL", (ftnlen)6);
     }
+    chkin_("BODEUL", (ftnlen)6);
 
 /*     Get the code for the J2000 frame, if we don't have it yet. */
 
@@ -471,11 +534,19 @@ static integer c__100 = 100;
 /*     Get Euler angles from high precision data file. */
 
     pckeul_(body, et, &found, bref, eulang, (ftnlen)32);
+    if (failed_()) {
+	chkout_("BODEUL", (ftnlen)6);
+	return 0;
+    }
     if (found) {
 	phi = eulang[0];
 	delta = eulang[1];
 	*w = eulang[2];
 	irfnum_(bref, &ref, (ftnlen)32);
+	if (failed_()) {
+	    chkout_("BODEUL", (ftnlen)6);
+	    return 0;
+	}
 
 /*        The offset of the prime meridian is optional. */
 
@@ -501,13 +572,43 @@ static integer c__100 = 100;
 
 	refid = zzbodbry_(body);
 
-/*        Look up the epoch of the constants.  The epoch is specified */
-/*        as a Julian ephemeris date.  The epoch defaults to J2000. */
+/*        Look up the epoch of the constants. The epoch is specified */
+/*        as a Julian ephemeris date. The epoch defaults to J2000. */
+
+/*        Look for both forms of the JED epoch kernel variable. At */
+/*        most one is allowed to be present. */
 
 	s_copy(item, "BODY#_CONSTANTS_JED_EPOCH", (ftnlen)32, (ftnlen)25);
 	repmi_(item, "#", &refid, item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
+	s_copy(item2, "BODY#_CONSTS_JED_EPOCH", (ftnlen)32, (ftnlen)22);
+	repmi_(item2, "#", &refid, item2, (ftnlen)32, (ftnlen)1, (ftnlen)32);
 	gdpool_(item, &c__1, &c__1, &dim, &conepc, &found, (ftnlen)32);
-	if (found) {
+	if (! found) {
+	    gdpool_(item2, &c__1, &c__1, &dim, &conepc, &found2, (ftnlen)32);
+	    if (! found2) {
+		conepc = j2000_();
+	    }
+	} else {
+
+/*           Check for presence of both forms of the variable names. */
+
+	    dtpool_(item2, &found2, &dim, dtype, (ftnlen)32, (ftnlen)1);
+	    if (found2) {
+		setmsg_("Both kernel variables # and # are present in the ke"
+			"rnel pool. At most one form of the kernel variable n"
+			"ame may be present.", (ftnlen)122);
+		errch_("#", item, (ftnlen)1, (ftnlen)32);
+		errch_("#", item2, (ftnlen)1, (ftnlen)32);
+		sigerr_("SPICE(COMPETINGEPOCHSPEC)", (ftnlen)25);
+		chkout_("BODEUL", (ftnlen)6);
+		return 0;
+	    }
+	}
+	if (failed_()) {
+	    chkout_("BODEUL", (ftnlen)6);
+	    return 0;
+	}
+	if (found || found2) {
 
 /*           The reference epoch is returned as a JED.  Convert to */
 /*           ephemeris seconds past J2000.  Then convert the input ET to */
@@ -526,11 +627,30 @@ static integer c__100 = 100;
 	irfnum_("J2000", &j2code, (ftnlen)5);
 	s_copy(item, "BODY#_CONSTANTS_REF_FRAME", (ftnlen)32, (ftnlen)25);
 	repmi_(item, "#", &refid, item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
-	gdpool_(item, &c__1, &c__1, &dim, &conref, &found, (ftnlen)32);
-	if (found) {
-	    ref = i_dnnt(&conref);
+	s_copy(item2, "BODY#_CONSTS_REF_FRAME", (ftnlen)32, (ftnlen)22);
+	repmi_(item2, "#", &refid, item2, (ftnlen)32, (ftnlen)1, (ftnlen)32);
+	repmi_(item, "#", &refid, item, (ftnlen)32, (ftnlen)1, (ftnlen)32);
+	gipool_(item, &c__1, &c__1, &dim, &ref, &found, (ftnlen)32);
+	if (! found) {
+	    gipool_(item2, &c__1, &c__1, &dim, &ref, &found2, (ftnlen)32);
+	    if (! found2) {
+		ref = j2code;
+	    }
 	} else {
-	    ref = j2code;
+
+/*           Check for presence of both forms of the variable names. */
+
+	    dtpool_(item2, &found2, &dim, dtype, (ftnlen)32, (ftnlen)1);
+	    if (found2) {
+		setmsg_("Both kernel variables # and # are present in the ke"
+			"rnel pool. At most one form of the kernel variable n"
+			"ame may be present.", (ftnlen)122);
+		errch_("#", item, (ftnlen)1, (ftnlen)32);
+		errch_("#", item2, (ftnlen)1, (ftnlen)32);
+		sigerr_("SPICE(COMPETINGFRAMESPEC)", (ftnlen)25);
+		chkout_("BODEUL", (ftnlen)6);
+		return 0;
+	    }
 	}
 
 /*        Whatever the body, it has quadratic time polynomials for */
@@ -555,6 +675,10 @@ static integer c__100 = 100;
 	} else {
 	    *lambda = 0.;
 	}
+	if (failed_()) {
+	    chkout_("BODEUL", (ftnlen)6);
+	    return 0;
+	}
 
 /*        There may be additional nutation and libration (THETA) terms. */
 
@@ -564,20 +688,67 @@ static integer c__100 = 100;
 	nw = 0;
 	s_copy(item, "NUT_PREC_ANGLES", (ftnlen)32, (ftnlen)15);
 	if (bodfnd_(&refid, item, (ftnlen)32)) {
-	    bodvcd_(&refid, item, &c__200, &ntheta, tcoef, (ftnlen)32);
-	    ntheta /= 2;
+
+/*           Find out whether the maximum phase angle degree has been */
+/*           explicitly set. */
+
+	    s_copy(item2, "MAX_PHASE_DEGREE", (ftnlen)32, (ftnlen)16);
+	    if (bodfnd_(&refid, item2, (ftnlen)32)) {
+		bodvcd_(&refid, item2, &c__1, &dim, &dpval, (ftnlen)32);
+		deg = i_dnnt(&dpval);
+		if (deg < 1 || deg > 3) {
+		    setmsg_("Maximum phase angle degree for body # must be i"
+			    "n the range 1:# but was #.", (ftnlen)73);
+		    errint_("#", &refid, (ftnlen)1);
+		    errint_("#", &c__3, (ftnlen)1);
+		    errint_("#", &deg, (ftnlen)1);
+		    sigerr_("SPICE(DEGREEOUTOFRANGE)", (ftnlen)23);
+		    chkout_("BODEUL", (ftnlen)6);
+		    return 0;
+		}
+		nphsco = deg + 1;
+	    } else {
+
+/*              The default degree is 1, yielding two coefficients. */
+
+		nphsco = 2;
+	    }
+
+/*           There is something a bit obscure going on below. BODVCD */
+/*           loads the array TCOEF in the following order */
+
+/*              TCOEF(1,1), TCOEF(2,1), ... TCOEF(NPHSCO), */
+/*              TCOEF(1,2), TCOEF(2,2), ... */
+
+/*           The NTHETA that comes back is the total number of items */
+/*           loaded, but we will need the actual limit on the second */
+/*           dimension. That is --- NTHETA / NPHSCO. */
+
+	    bodvcd_(&refid, item, &c__800, &ntheta, tcoef, (ftnlen)32);
+	    if (failed_()) {
+		chkout_("BODEUL", (ftnlen)6);
+		return 0;
+	    }
+
+/*           NPHSCO is at least 1; this division is safe. */
+
+	    nphase = ntheta / nphsco;
 	}
 	s_copy(item, "NUT_PREC_RA", (ftnlen)32, (ftnlen)11);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__100, &na, ac, (ftnlen)32);
+	    bodvcd_(body, item, &c__200, &na, ac, (ftnlen)32);
 	}
 	s_copy(item, "NUT_PREC_DEC", (ftnlen)32, (ftnlen)12);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__100, &nd, dc, (ftnlen)32);
+	    bodvcd_(body, item, &c__200, &nd, dc, (ftnlen)32);
 	}
 	s_copy(item, "NUT_PREC_PM", (ftnlen)32, (ftnlen)11);
 	if (bodfnd_(body, item, (ftnlen)32)) {
-	    bodvcd_(body, item, &c__100, &nw, wc, (ftnlen)32);
+	    bodvcd_(body, item, &c__200, &nw, wc, (ftnlen)32);
+	}
+	if (failed_()) {
+	    chkout_("BODEUL", (ftnlen)6);
+	    return 0;
 	}
 /* Computing MAX */
 	i__1 = max(na,nd);
@@ -586,7 +757,7 @@ static integer c__100 = 100;
 		    "ody * at time #.", (ftnlen)71);
 	    errint_("*", body, (ftnlen)1);
 	    errdp_("#", et, (ftnlen)1);
-	    sigerr_("SPICE(KERNELVARNOTFOUND)", (ftnlen)24);
+	    sigerr_("SPICE(INSUFFICIENTANGLES)", (ftnlen)25);
 	    chkout_("BODEUL", (ftnlen)6);
 	    return 0;
 	}
@@ -601,17 +772,49 @@ static integer c__100 = 100;
 
 /*        Add nutation and libration as appropriate. */
 
-	i__1 = ntheta;
+	i__1 = nphase;
 	for (i__ = 1; i__ <= i__1; ++i__) {
-	    theta = (tcoef[(i__2 = (i__ << 1) - 2) < 200 && 0 <= i__2 ? i__2 :
-		     s_rnge("tcoef", i__2, "bodeul_", (ftnlen)645)] + t * 
-		    tcoef[(i__3 = (i__ << 1) - 1) < 200 && 0 <= i__3 ? i__3 : 
-		    s_rnge("tcoef", i__3, "bodeul_", (ftnlen)645)]) * rpd_();
-	    sinth[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("sinth",
-		     i__2, "bodeul_", (ftnlen)647)] = sin(theta);
-	    costh[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("costh",
-		     i__2, "bodeul_", (ftnlen)648)] = cos(theta);
+	    if (nphsco == 2) {
+
+/*              This case is so common that we'll deal with it */
+/*              separately. We'll avoid unnecessary arithmetic */
+/*              operations. */
+
+		k = (i__ - 1 << 1) + 1;
+		m = k + 1;
+		theta = (tcoef[(i__2 = k - 1) < 800 && 0 <= i__2 ? i__2 : 
+			s_rnge("tcoef", i__2, "bodeul_", (ftnlen)868)] + t * 
+			tcoef[(i__3 = m - 1) < 800 && 0 <= i__3 ? i__3 : 
+			s_rnge("tcoef", i__3, "bodeul_", (ftnlen)868)]) * 
+			rpd_();
+	    } else {
+
+/*              THETA and DTHETA have higher-order terms; there are */
+/*              NPHSCO coefficients for each angle. */
+
+		theta = 0.;
+		i__2 = nphsco;
+		for (j = 1; j <= i__2; ++j) {
+
+/*                 K is the start index for the coefficients of the */
+/*                 Ith angle. */
+
+		    k = j + nphsco * (i__ - 1);
+		    i__4 = j - 1;
+		    theta += pow_di(&t, &i__4) * tcoef[(i__3 = k - 1) < 800 &&
+			     0 <= i__3 ? i__3 : s_rnge("tcoef", i__3, "bodeu"
+			    "l_", (ftnlen)884)];
+		}
+		theta *= rpd_();
+	    }
+	    sinth[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("sinth",
+		     i__2, "bodeul_", (ftnlen)892)] = sin(theta);
+	    costh[(i__2 = i__ - 1) < 200 && 0 <= i__2 ? i__2 : s_rnge("costh",
+		     i__2, "bodeul_", (ftnlen)893)] = cos(theta);
 	}
+
+/*        Adjust RA, DEC, W by their librations and nutations. */
+
 	*ra += vdotg_(ac, sinth, &na);
 	*dec += vdotg_(dc, costh, &nd);
 	*w += vdotg_(wc, sinth, &nw);
@@ -637,8 +840,8 @@ static integer c__100 = 100;
 	delta = halfpi_() - *dec;
     }
 
-/*        Convert the angles to the J2000 frame if they are not already */
-/*        referenced to J2000. */
+/*     Convert the angles to the J2000 frame if they are not already */
+/*     referenced to J2000. */
 
     if (ref != j2code) {
 
@@ -653,6 +856,10 @@ static integer c__100 = 100;
 	eul2m_(w, &delta, &phi, &c__3, &c__1, &c__3, rf2bfx);
 	mxm_(rf2bfx, j2ref, j2bfx);
 	m2eul_(j2bfx, &c__3, &c__1, &c__3, w, &delta, &phi);
+	if (failed_()) {
+	    chkout_("BODEUL", (ftnlen)6);
+	    return 0;
+	}
     }
 
 /*     The Euler angles now give the transformation from J2000 to */

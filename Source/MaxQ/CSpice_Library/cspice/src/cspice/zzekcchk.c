@@ -772,7 +772,7 @@
 /*         will not be modified. */
 
 /*     2)  If the input query has not been parsed, the error */
-/*         SPICE(QUERYNOTPARSED) will be signalled.  The outputs */
+/*         SPICE(QUERYNOTPARSED) will be signaled.  The outputs */
 /*         will not be modified. */
 
 /*     3)  If any sort of name resolution error or semantic error is */
@@ -820,6 +820,10 @@
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.1.0, 15-OCT-1996 (NJB) */
 

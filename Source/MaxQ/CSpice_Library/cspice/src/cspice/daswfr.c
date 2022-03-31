@@ -96,7 +96,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAS file handle. */
 /*     IDWORD     I   ID word. */
@@ -108,26 +108,26 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is a file handle for a DAS file open for writing. */
+/*     HANDLE   is a file handle for a DAS file open for writing. */
 
-/*     IDWORD     is the `ID word' contained in the first eight */
-/*                characters of the file record. */
+/*     IDWORD   is the `ID word' contained in the first eight */
+/*              characters of the file record. */
 
-/*     IFNAME     is the internal file name of the DAS file.  The */
-/*                maximum length of the internal file name is 60 */
-/*                characters. */
+/*     IFNAME   is the internal file name of the DAS file. The */
+/*              maximum length of the internal file name is 60 */
+/*              characters. */
 
-/*     NRESVR     is the number of reserved records in the DAS file */
-/*                specified by HANDLE. */
+/*     NRESVR   is the number of reserved records in the DAS file */
+/*              specified by HANDLE. */
 
-/*     NRESVC     is the number of characters in use in the reserved */
-/*                record area of the DAS file specified by HANDLE. */
+/*     NRESVC   is the number of characters in use in the reserved */
+/*              record area of the DAS file specified by HANDLE. */
 
-/*     NCOMR      is the number of comment records in the DAS file */
-/*                specified by HANDLE. */
+/*     NCOMR    is the number of comment records in the DAS file */
+/*              specified by HANDLE. */
 
-/*     NCOMC      is the number of characters in use in the comment area */
-/*                of the DAS file specified by HANDLE. */
+/*     NCOMC    is the number of characters in use in the comment area */
+/*              of the DAS file specified by HANDLE. */
 
 /* $ Detailed_Output */
 
@@ -139,18 +139,19 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If the handle passed to this routine is not the handle of an */
-/*        open DAS file, the error will be signaled by a routine called */
-/*        by this routine. */
+/*     1)  If the handle passed to this routine is not the handle of an */
+/*         open DAS file, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*     2) If the specified DAS file is not open for write access, the */
-/*        error will be diagnosed by a routine called by this routine. */
+/*     2)  If the specified DAS file is not open for write access, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     3) If the attempt to read the file record fails, the error */
-/*        SPICE(DASREADFAIL) is signaled. */
+/*     3)  If the attempt to read the file record fails, the error */
+/*         SPICE(DASREADFAIL) is signaled. */
 
-/*     4) If the file write attempted by this routine fails, the error */
-/*        SPICE(DASFILEWRITEFAILED) is signaled. */
+/*     4)  If the file write attempted by this routine fails, the error */
+/*         SPICE(DASFILEWRITEFAILED) is signaled. */
 
 /* $ Files */
 
@@ -200,11 +201,10 @@ static integer c__1 = 1;
 /*                 .              NCOMR, */
 /*                 .              NCOMC  ) */
 
-
 /* $ Restrictions */
 
-/*     1) The DAS file must have a binary file format native to the host */
-/*        system. */
+/*     1)  The DAS file must have a binary file format native to the host */
+/*         system. */
 
 /* $ Literature_References */
 
@@ -212,12 +212,17 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     F.S. Turner    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.1, 02-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.1.0, 05-FEB-2015 (NJB) */
 
@@ -233,7 +238,7 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 2.0.0, 27-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -243,7 +248,7 @@ static integer c__1 = 1;
 /*        to DASHLU will not be executed. */
 
 /*        Reworded some of the descriptions contained in the */
-/*        $ Detailed_Output section of the header so that they were more */
+/*        $Detailed_Output section of the header so that they were more */
 /*        clear. */
 
 /* -    SPICELIB Version 1.0.0, 24-NOV-1992 (NJB) (WLT) */
@@ -282,7 +287,7 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 2.0.0, 27-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if these open routines ever */
 /*        change. */
 
@@ -292,7 +297,7 @@ static integer c__1 = 1;
 /*        to DASHLU will not be executed. */
 
 /*        Reworded some of the descriptions contained in the */
-/*        $ Detailed_Output section of the header so that they were more */
+/*        $Detailed_Output section of the header so that they were more */
 /*        clear. */
 
 /* -    SPICELIB Version 1.0.0, 24-NOV-1992 (NJB) (WLT) */

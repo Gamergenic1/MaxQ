@@ -64,10 +64,14 @@ static integer c__19 = 19;
 
 /* $ Abstract */
 
-/*     This routine converts date-time strings represented in */
-/*     the format adopted by the International Standards Organization */
-/*     (ISO) to equivalent UTC time strings recognized by the SPICELIB */
-/*     routine TPARSE. */
+/*     Deprecated: This routine is deprecated because all high-level */
+/*     time conversion routines (STR2ET, UTC2ET, TPARSE) were updated */
+/*     to accept ISO formatted times on input.  This routine is */
+/*     supported for purposes of backward compatibility only. */
+
+/*     Convert date-time strings represented in the format adopted by the */
+/*     International Standards Organization (ISO) to equivalent UTC time */
+/*     strings recognized by the SPICELIB routine TPARSE. */
 
 /* $ Disclaimer */
 
@@ -105,7 +109,7 @@ static integer c__19 = 19;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TSTRNG     I   String representing a calendar or julian date epoch */
 /*     UTCSTR     O   SPICELIB UTC string corresponding to TSTRNG */
@@ -113,41 +117,41 @@ static integer c__19 = 19;
 
 /* $ Detailed_Input */
 
-/*     TSTRNG       is an input time string, containing a time string */
-/*                  in ISO format. This routine is not sensitive to */
-/*                  the case of the characters that make up TSTRNG. */
-/*                  Thus 1992-192t12:29:28 and 1992-192T12:29:28 */
-/*                  are equivalent. */
+/*     TSTRNG   is an input time string, containing a time string */
+/*              in ISO format. This routine is not sensitive to */
+/*              the case of the characters that make up TSTRNG. */
+/*              Thus 1992-192t12:29:28 and 1992-192T12:29:28 */
+/*              are equivalent. */
 
-/*                  The ISO standard time formats are: */
+/*              The ISO standard time formats are: */
 
-/*                     Year Month Day    yyyy-mm-ddThh:mm:ss[.sss...] */
-/*                                       yyyy-mm-dd */
+/*                 Year Month Day    yyyy-mm-ddThh:mm:ss[.sss...] */
+/*                                   yyyy-mm-dd */
 
-/*                     Day of Year       yyyy-dddThh:mm:ss[.sss...] */
-/*                                       yyyy-ddd */
+/*                 Day of Year       yyyy-dddThh:mm:ss[.sss...] */
+/*                                   yyyy-ddd */
 
-/*                  The letters y,m,d,h,m,s can stand for any digit. */
-/*                  All digits are required in these formats.  Moreover */
-/*                  the year portion of these strings must be between */
-/*                  1000 and 2999 inclusive. */
+/*              The letters y,m,d,h,m,s can stand for any digit. */
+/*              All digits are required in these formats. Moreover */
+/*              the year portion of these strings must be between */
+/*              1000 and 2999 inclusive. */
 
-/*                  The length of TSTRNG should not exceed 80 characters. */
+/*              The length of TSTRNG should not exceed 80 characters. */
 
-/*                  We point out that the format yyyy-ddd may be */
-/*                  interpreted very differently by routine UTC2ET. */
-/*                  1992-003 is interpreted by UTC2ET as March 1, 1992 */
-/*                  whereas it is interpret as January 3, 1992 by ISO2ET. */
+/*              We point out that the format yyyy-ddd may be */
+/*              interpreted very differently by routine UTC2ET. */
+/*              1992-003 is interpreted by UTC2ET as March 1, 1992 */
+/*              whereas it is interpret as January 3, 1992 by ISO2ET. */
 
-/*                  User's should be aware of these differences in */
-/*                  interpretation and exercise adequate care in their */
-/*                  programs to avoid this possible confusion. */
+/*              User's should be aware of these differences in */
+/*              interpretation and exercise adequate care in their */
+/*              programs to avoid this possible confusion. */
 
 /* $ Detailed_Output */
 
-/*     UTCSTR       is the equivalent of TSTRNG, expressed in a UTC */
-/*                  time string that can be parsed by the SPICELIB */
-/*                  routine TPARSE. */
+/*     UTCSTR   is the equivalent of TSTRNG, expressed in a UTC */
+/*              time string that can be parsed by the SPICELIB */
+/*              routine TPARSE. */
 
 /* $ Parameters */
 
@@ -155,14 +159,14 @@ static integer c__19 = 19;
 
 /* $ Exceptions */
 
-/*     1) If the string is interpreted as an ISO format string and */
-/*        the year portion is not within the range [1000, 2999] the */
-/*        error SPICE(YEAROUTOFBOUNDS) is signalled.  UTCSTR is */
-/*        not changed. */
+/*     1)  If the string is interpreted as an ISO format string and */
+/*         the year portion is not within the range [1000, 2999], the */
+/*         error SPICE(YEAROUTOFBOUNDS) is signaled. UTCSTR is */
+/*         not changed. */
 
-/*     2) If the string does not clearly match the ISO format */
-/*        the error SPICE(NOTISOFORMAT) is signalled. UTCSTR is not */
-/*        changed. */
+/*     2)  If the string does not clearly match the ISO format, */
+/*         the error SPICE(NOTISOFORMAT) is signaled. UTCSTR is not */
+/*         changed. */
 
 /* $ Files */
 
@@ -170,8 +174,8 @@ static integer c__19 = 19;
 
 /* $ Particulars */
 
-/*      The input string is converted to a UTC time string as defined */
-/*      by the SPICELIB routine TPARSE. */
+/*     The input string is converted to a UTC time string as defined */
+/*     by the SPICELIB routine TPARSE. */
 
 /* $ Examples */
 
@@ -190,53 +194,62 @@ static integer c__19 = 19;
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      Jesperson and Fitz-Randolph, From Sundials to Atomic Clocks, */
-/*      Dover Publications, New York, 1977. */
-
-/*      Software Interface Specification: SFOC-2-SYS-Any-TimeForms */
-/*      prepared by D. Wagner, Revision Date: Feb 6, 1990. */
-/*      Document Identifier SFOC0038-01-09-03  (NAIF Document 268.00) */
+/*     [1]  J. Jespersen and J. Fitz-Randolph, "From Sundials to Atomic */
+/*          Clocks, Understanding Time and Frequency," Dover */
+/*          Publications, Inc. New York, 1877. */
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 23-DEC-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Remove obsolete */
+/*        reference to NAIF document 268 from $Literature_References. */
+
 /* -    SPICELIB Version 1.1.2, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section. */
+/*        Corrected the contents of the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.1.1, 19-SEP-2006 (EDW) */
 
-/*        Added text to previously empty Restrictions section. */
+/*        Added text to previously empty $Restrictions section. */
 
-/* -    EKLIB Version 1.1.0, 11-JUL-1995 (KRG) */
+/* -    SPICELIB Version 1.0.0, 11-JUL-1995 (KRG) (JML) */
 
-/*        Fixed a typo in the $ Detailed_Output section of the header. */
-/*        The output variable was listed as ET when it should have been */
-/*        UTCSTR. */
+/*        Based on */
 
-/*        Changed the length of ASCII to be 100 rather than 128. This */
-/*        removes possible wcompiler warning messages for truncating */
-/*        character variables on assignments. The maximum nonblank length */
-/*        for an input time ISO string is 80 characters, so placing it */
-/*        into a temporary array of 100 characters should pose no */
-/*        difficulties. */
+/*        EKLIB Version 1.1.0, 11-JUL-1995 (KRG) */
 
-/* -    EKLIB Version 1.0.0, 25-FEB-1993 (JML) */
+/*           Fixed a typo in the $Detailed_Output section of the header. */
+/*           The output variable was listed as ET when it should have */
+/*           been UTCSTR. */
+
+/*           Changed the length of ASCII to be 100 rather than 128. This */
+/*           removes possible compiler warning messages for truncating */
+/*           character variables on assignments. The maximum nonblank */
+/*           length for an input time ISO string is 80 characters, so */
+/*           placing it into a temporary array of 100 characters should */
+/*           pose no difficulties. */
+
+/*        EKLIB Version 1.0.0, 25-FEB-1993 (JML) */
 
 /* -& */
 /* $ Index_Entries */
 
-
-/*     Transform ISO time strings to UTC strings */
+/*     DEPRECATED Transform ISO time strings to UTC strings */
 
 /* -& */
 
@@ -324,7 +337,7 @@ static integer c__19 = 19;
 /* Writing concatenation */
 	    i__1[0] = 5, a__1[0] = ascii;
 	    i__1[1] = 3, a__1[1] = months + ((i__2 = m) < 13 && 0 <= i__2 ? 
-		    i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)318)) * 
+		    i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)332)) * 
 		    3;
 	    i__1[2] = 93, a__1[2] = ascii + 7;
 	    s_cat(mystr, a__1, i__1, &c__3, (ftnlen)128);
@@ -400,7 +413,7 @@ static integer c__19 = 19;
 /* Writing concatenation */
 	    i__3[0] = 5, a__2[0] = ascii;
 	    i__3[1] = 3, a__2[1] = months + ((i__2 = m) < 13 && 0 <= i__2 ? 
-		    i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)365)) * 
+		    i__2 : s_rnge("months", i__2, "iso2utc_", (ftnlen)379)) * 
 		    3;
 	    i__3[2] = 3, a__2[2] = ascii + 7;
 	    i__3[3] = 1, a__2[3] = " ";

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  VTMVG  ( Vector transpose times matrix times vector ) */
+/* $Procedure VTMVG  ( Vector transpose times matrix times vector ) */
 doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer 
 	*nrow, integer *ncol)
 {
@@ -22,8 +22,8 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
 
 /* $ Abstract */
 
-/*      Multiply the transpose of a n-dimensional column vector, */
-/*      a nxm matrix, and a m-dimensional column vector. */
+/*     Multiply the transpose of a n-dimensional column vector, */
+/*     a nxm matrix, and a m-dimensional column vector. */
 
 /* $ Disclaimer */
 
@@ -52,92 +52,52 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      MATRIX,  VECTOR */
+/*     MATRIX */
+/*     VECTOR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       V1        I   N-dimensional double precision column vector. */
-/*       MATRIX    I   NxM double precision matrix. */
-/*       V2        I   M-dimensional double porecision column vector. */
-/*       NROW      I   Number of rows in MATRIX (number of rows in V1.) */
-/*       NCOL      I   Number of columns in MATRIX (number of rows in */
-/*                     V2.) */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     V1         I   N-dimensional double precision column vector. */
+/*     MATRIX     I   NxM double precision matrix. */
+/*     V2         I   M-dimensional double precision column vector. */
+/*     NROW       I   Number of rows in MATRIX (number of rows in V1.) */
+/*     NCOL       I   Number of columns in MATRIX (number of rows in V2.) */
 
-/*       The function returns the result of (V1**T * MATRIX * V2 ). */
+/*     The function returns the result of (V1**T * MATRIX * V2 ). */
 
 /* $ Detailed_Input */
 
-/*      V1         is an n-dimensional double precision vector. */
+/*     V1       is an n-dimensional double precision vector. */
 
-/*      MATRIX     is an n x m double precision matrix. */
+/*     MATRIX   is an n x m double precision matrix. */
 
-/*      V2         is an m-dimensional double precision vector. */
+/*     V2       is an m-dimensional double precision vector. */
 
-/*      NROW       is the number of rows in MATRIX.  This is also */
-/*                 equivalent to the number of rows in the vector V1. */
+/*     NROW     is the number of rows in MATRIX. This is also */
+/*              equivalent to the number of rows in the vector V1. */
 
-/*      NCOL       is the number of columns in MATRIX. This is also */
-/*                 equivalent to the number of rows in the vector V2. */
+/*     NCOL     is the number of columns in MATRIX. This is also */
+/*              equivalent to the number of rows in the vector V2. */
 
 /* $ Detailed_Output */
 
-/*      The function returns the double precision value of the equation */
-/*      (V1**T * MATRIX * V2 ). */
+/*     The function returns the double precision value of the equation */
+/*     (V1**T * MATRIX * V2 ). */
 
-/*      Notice that VTMVG is actually the dot product of the vector */
-/*      resulting from multiplying the transpose of V1 and MATRIX and the */
-/*      vector V2. */
+/*     Notice that VTMVG is actually the dot product of the vector */
+/*     resulting from multiplying the transpose of V1 and MATRIX and the */
+/*     vector V2. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      This routine implements the following vector/matrix/vector */
-/*      multiplication: */
-
-/*                       T */
-/*         VTMVG = [   V1   ] |          |  |  | */
-/*                            |  MATRIX  |  |V2| */
-/*                            |          |  |  | */
-
-/*      by calculating over all values of the indices K and L from 1 to */
-/*      NROW and 1 to NCOL, respectively, the expression */
-
-/*         VTMVG = Summation of ( V1(K)*MATRIX(K,L)*V2(L) ) . */
-
-/*      V1 is a column vector which becomes a row vector when transposed. */
-/*      V2 is a column vector. */
-
-/*      No checking is performed to determine whether floating point */
-/*      overflow has occurred. */
-
-/* $ Examples */
-
-/*      If  V1 = | 1.0D0 |  MATRIX = | 2.0D0  0.0D0 |  V2 = | 1.0D0 | */
-/*               |       |           |              |       |       | */
-/*               | 2.0D0 |           | 1.0D0  2.0D0 |       | 2.0D0 | */
-/*               |       |           |              | */
-/*               | 3.0D0 |           | 1.0D0  1.0D0 | */
-
-/*      NROW = 3 */
-/*      NCOL = 2 */
-
-/*      then the value of the function is  21.0D0. */
-
-/* $ Restrictions */
-
-/*      Since no error detection or recovery is implemented, the */
-/*      programmer is required to insure that the inputs to this routine */
-/*      are both valid and within the proper range. */
+/*     None. */
 
 /* $ Exceptions */
 
@@ -145,17 +105,66 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.M. Owen       (JPL) */
+/*     This routine implements the following vector/matrix/vector */
+/*     multiplication: */
+
+/*                      T    |          |  |  | */
+/*        VTMVG = [   V1   ] |  MATRIX  |  |V2| */
+/*                           |          |  |  | */
+
+/*     by calculating over all values of the indices K and L from 1 to */
+/*     NROW and 1 to NCOL, respectively, the expression */
+
+/*        VTMVG = Summation of ( V1(K)*MATRIX(K,L)*V2(L) ) . */
+
+/*     V1 is a column vector which becomes a row vector when transposed. */
+/*     V2 is a column vector. */
+
+/*     No checking is performed to determine whether floating point */
+/*     overflow has occurred. */
+
+/* $ Examples */
+
+/*     If  V1 = | 1.0D0 |  MATRIX = | 2.0D0  0.0D0 |  V2 = | 1.0D0 | */
+/*              |       |           |              |       |       | */
+/*              | 2.0D0 |           | 1.0D0  2.0D0 |       | 2.0D0 | */
+/*              |       |           |              | */
+/*              | 3.0D0 |           | 1.0D0  1.0D0 | */
+
+/*     NROW = 3 */
+/*     NCOL = 2 */
+
+/*     then the value of the function is  21.0D0. */
+
+/* $ Restrictions */
+
+/*     1)  Since no error detection or recovery is implemented, the */
+/*         programmer is required to insure that the inputs to this */
+/*         routine are both valid and within the proper range. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added comments */
+/*        to the code and moved the declaration of each local variable to */
+/*        a separate line. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -170,6 +179,9 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
 /*     n-dimensional vector_transpose times matrix times vector */
 
 /* -& */
+
+/*     Local variables */
+
 
 /*  Perform the multiplication */
 
@@ -187,12 +199,12 @@ doublereal vtmvg_(doublereal *v1, doublereal *matrix, doublereal *v2, integer
 	i__2 = *ncol;
 	for (l = 1; l <= i__2; ++l) {
 	    ret_val += v1[(i__3 = k - 1) < v1_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("v1", i__3, "vtmvg_", (ftnlen)171)] * matrix[(i__4 
+		    s_rnge("v1", i__3, "vtmvg_", (ftnlen)189)] * matrix[(i__4 
 		    = k + l * matrix_dim1 - matrix_offset) < matrix_dim1 * 
 		    matrix_dim2 && 0 <= i__4 ? i__4 : s_rnge("matrix", i__4, 
-		    "vtmvg_", (ftnlen)171)] * v2[(i__5 = l - 1) < v2_dim1 && 
+		    "vtmvg_", (ftnlen)189)] * v2[(i__5 = l - 1) < v2_dim1 && 
 		    0 <= i__5 ? i__5 : s_rnge("v2", i__5, "vtmvg_", (ftnlen)
-		    171)];
+		    189)];
 	}
     }
     return ret_val;

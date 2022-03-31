@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      FOVTRG ( Is target in FOV at time? ) */
+/* $Procedure FOVTRG ( Is target in FOV at time? ) */
 /* Subroutine */ int fovtrg_(char *inst, char *target, char *tshape, char *
 	tframe, char *abcorr, char *obsrvr, doublereal *et, logical *visibl, 
 	ftnlen inst_len, ftnlen target_len, ftnlen tshape_len, ftnlen 
@@ -252,174 +252,174 @@
 /*     ABCORR     I   Aberration correction flag. */
 /*     OBSRVR     I   Name or ID code string of the observer. */
 /*     ET         I   Time of the observation (seconds past J2000). */
-/*     VISIBL     O   Visibility flag (true/false). */
+/*     VISIBL     O   Visibility flag (.TRUE./.FALSE.). */
 
 /* $ Detailed_Input */
 
-/*     INST       indicates the name of an instrument, such as a */
-/*                spacecraft-mounted framing camera. The field of view */
-/*                (FOV) of the instrument will be used to determine if */
-/*                the target is visible with respect to the instrument. */
+/*     INST     indicates the name of an instrument, such as a */
+/*              spacecraft-mounted framing camera. The field of view */
+/*              (FOV) of the instrument will be used to determine if */
+/*              the target is visible with respect to the instrument. */
 
-/*                The position of the instrument INST is considered to */
-/*                coincide with that of the ephemeris object OBSRVR (see */
-/*                description below). */
+/*              The position of the instrument INST is considered to */
+/*              coincide with that of the ephemeris object OBSRVR (see */
+/*              description below). */
 
-/*                The size of the instrument's FOV is constrained by the */
-/*                following: There must be a vector A such that all of */
-/*                the instrument's FOV boundary vectors have an angular */
-/*                separation from A of less than (pi/2)-MARGIN radians */
-/*                (see description below). For FOVs that are circular or */
-/*                elliptical, the vector A is the boresight. For FOVs */
-/*                that are rectangular or polygonal, the vector A is */
-/*                calculated. */
+/*              The size of the instrument's FOV is constrained by the */
+/*              following: There must be a vector A such that all of */
+/*              the instrument's FOV boundary vectors have an angular */
+/*              separation from A of less than (pi/2)-MARGIN radians */
+/*              (see description below). For FOVs that are circular or */
+/*              elliptical, the vector A is the boresight. For FOVs */
+/*              that are rectangular or polygonal, the vector A is */
+/*              calculated. */
 
-/*                See the header of the SPICELIB routine GETFOV for a */
-/*                description of the required parameters associated with */
-/*                an instrument. */
+/*              See the header of the SPICELIB routine GETFOV for a */
+/*              description of the required parameters associated with */
+/*              an instrument. */
 
-/*                Both object names and NAIF IDs are accepted. For */
-/*                example, both 'CASSINI_ISS_NAC' and '-82360' are */
-/*                accepted. Case and leading or trailing blanks are not */
-/*                significant in the string. */
+/*              Both object names and NAIF IDs are accepted. For */
+/*              example, both 'CASSINI_ISS_NAC' and '-82360' are */
+/*              accepted. Case and leading or trailing blanks are not */
+/*              significant in the string. */
 
-/*     TARGET     is the name of the target body. This routine determines */
-/*                if the target body appears in the instrument's field of */
-/*                view. */
+/*     TARGET   is the name of the target body. This routine determines */
+/*              if the target body appears in the instrument's field of */
+/*              view. */
 
-/*                Both object names and NAIF IDs are accepted. For */
-/*                example, both 'Moon' and '301' are accepted. Case and */
-/*                leading or trailing blanks are not significant in the */
-/*                string. */
+/*              Both object names and NAIF IDs are accepted. For */
+/*              example, both 'Moon' and '301' are accepted. Case and */
+/*              leading or trailing blanks are not significant in the */
+/*              string. */
 
-/*     TSHAPE     is a string indicating the geometric model used to */
-/*                represent the shape of the target body. The supported */
-/*                options are: */
+/*     TSHAPE   is a string indicating the geometric model used to */
+/*              represent the shape of the target body. The supported */
+/*              options are: */
 
-/*                   'ELLIPSOID'     Use a triaxial ellipsoid model, */
-/*                                   with radius values provided via the */
-/*                                   kernel pool. A kernel variable */
-/*                                   having a name of the form */
+/*                 'ELLIPSOID'     Use a triaxial ellipsoid model, */
+/*                                 with radius values provided via the */
+/*                                 kernel pool. A kernel variable */
+/*                                 having a name of the form */
 
-/*                                      'BODYnnn_RADII' */
+/*                                    'BODYnnn_RADII' */
 
-/*                                   where nnn represents the NAIF */
-/*                                   integer code associated with the */
-/*                                   body, must be present in the kernel */
-/*                                   pool. This variable must be */
-/*                                   associated with three numeric */
-/*                                   values giving the lengths of the */
-/*                                   ellipsoid's X, Y, and Z semi-axes. */
+/*                                 where nnn represents the NAIF */
+/*                                 integer code associated with the */
+/*                                 body, must be present in the kernel */
+/*                                 pool. This variable must be */
+/*                                 associated with three numeric */
+/*                                 values giving the lengths of the */
+/*                                 ellipsoid's X, Y, and Z semi-axes. */
 
-/*                   'POINT'         Treat the body as a single point. */
+/*                 'POINT'         Treat the body as a single point. */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string. */
 
-/*     TFRAME     is the name of the body-fixed, body-centered reference */
-/*                frame associated with the target body. Examples of */
-/*                such names are 'IAU_SATURN' (for Saturn) and 'ITRF93' */
-/*                (for Earth). */
+/*     TFRAME   is the name of the body-fixed, body-centered reference */
+/*              frame associated with the target body. Examples of */
+/*              such names are 'IAU_SATURN' (for Saturn) and 'ITRF93' */
+/*              (for Earth). */
 
-/*                If the target body is modeled as a point, TFRAME */
-/*                is ignored and should be left blank. (Ex: ' '). */
+/*              If the target body is modeled as a point, TFRAME */
+/*              is ignored and should be left blank. (Ex: ' '). */
 
-/*                Case and leading or trailing blanks bracketing a */
-/*                non-blank frame name are not significant in the string. */
+/*              Case and leading or trailing blanks bracketing a */
+/*              non-blank frame name are not significant in the string. */
 
-/*     ABCORR     indicates the aberration corrections to be applied */
-/*                when computing the target's position and orientation. */
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              when computing the target's position and orientation. */
 
-/*                For remote sensing applications, where the apparent */
-/*                position and orientation of the target seen by the */
-/*                observer are desired, normally either of the */
-/*                corrections: */
+/*              For remote sensing applications, where the apparent */
+/*              position and orientation of the target seen by the */
+/*              observer are desired, normally either of the */
+/*              corrections: */
 
-/*                   'LT+S' */
-/*                   'CN+S' */
+/*                 'LT+S' */
+/*                 'CN+S' */
 
-/*                should be used. These and the other supported options */
-/*                are described below. */
+/*              should be used. These and the other supported options */
+/*              are described below. */
 
-/*                Supported aberration correction options for */
-/*                observation (the case where radiation is received by */
-/*                observer at ET) are: */
+/*              Supported aberration correction options for */
+/*              observation (the case where radiation is received by */
+/*              observer at ET) are: */
 
-/*                   'NONE'         No correction. */
-/*                   'LT'           Light time only */
-/*                   'LT+S'         Light time and stellar aberration. */
-/*                   'CN'           Converged Newtonian (CN) light time. */
-/*                   'CN+S'         CN light time and stellar aberration. */
+/*                 'NONE'         No correction. */
+/*                 'LT'           Light time only */
+/*                 'LT+S'         Light time and stellar aberration. */
+/*                 'CN'           Converged Newtonian (CN) light time. */
+/*                 'CN+S'         CN light time and stellar aberration. */
 
-/*                Supported aberration correction options for */
-/*                transmission (the case where radiation is emitted from */
-/*                observer at ET) are: */
+/*              Supported aberration correction options for */
+/*              transmission (the case where radiation is emitted from */
+/*              observer at ET) are: */
 
-/*                   'XLT'          Light time only. */
-/*                   'XLT+S'        Light time and stellar aberration. */
-/*                   'XCN'          Converged Newtonian (CN) light time. */
-/*                   'XCN+S'        CN light time and stellar aberration. */
+/*                 'XLT'          Light time only. */
+/*                 'XLT+S'        Light time and stellar aberration. */
+/*                 'XCN'          Converged Newtonian (CN) light time. */
+/*                 'XCN+S'        CN light time and stellar aberration. */
 
-/*                Case, leading and trailing blanks are not significant */
-/*                in the string. */
+/*              Case, leading and trailing blanks are not significant */
+/*              in the string. */
 
-/*     OBSRVR     is the name of the body from which the target is */
-/*                observed. The instrument INST is treated as if it were */
-/*                co-located with the observer. */
+/*     OBSRVR   is the name of the body from which the target is */
+/*              observed. The instrument INST is treated as if it were */
+/*              co-located with the observer. */
 
-/*                Both object names and NAIF IDs are accepted. For */
-/*                example, both 'CASSINI' and '-82' are accepted. Case */
-/*                and leading or trailing blanks are not significant in */
-/*                the string. */
+/*              Both object names and NAIF IDs are accepted. For */
+/*              example, both 'CASSINI' and '-82' are accepted. Case */
+/*              and leading or trailing blanks are not significant in */
+/*              the string. */
 
-/*     ET         is the observation time in seconds past the J2000 */
-/*                epoch. */
+/*     ET       is the observation time in seconds past the J2000 */
+/*              epoch. */
 
 /* $ Detailed_Output */
 
-/*     VISIBL     is .TRUE. if TARGET is fully or partially in the */
-/*                field-of-view of INST at the time ET. Otherwise, */
-/*                VISIBL is .FALSE. */
+/*     VISIBL   is .TRUE. if TARGET is fully or partially in the */
+/*              field-of-view of INST at the time ET. Otherwise, */
+/*              VISIBL is .FALSE. */
 
 /* $ Parameters */
 
-/*     MAXVRT     is the maximum number of vertices that may be used */
-/*                to define the boundary of the specified instrument's */
-/*                field of view. See the INCLUDE file gf.inc for details. */
+/*     MAXVRT   is the maximum number of vertices that may be used */
+/*              to define the boundary of the specified instrument's */
+/*              field of view. See the INCLUDE file gf.inc for details. */
 
-/*     MARGIN     is a small positive number used to constrain the */
-/*                orientation of the boundary vectors of polygonal */
-/*                FOVs. Such FOVs must satisfy the following constraints: */
+/*     MARGIN   is a small positive number used to constrain the */
+/*              orientation of the boundary vectors of polygonal */
+/*              FOVs. Such FOVs must satisfy the following constraints: */
 
-/*                   1)  The boundary vectors must be contained within */
-/*                       a right circular cone of angular radius less */
-/*                       than (pi/2) - MARGIN radians; in other */
-/*                       words, there must be a vector A such that all */
-/*                       boundary vectors have angular separation from */
-/*                       A of less than (pi/2)-MARGIN radians. */
+/*                 1)  The boundary vectors must be contained within */
+/*                     a right circular cone of angular radius less */
+/*                     than (pi/2) - MARGIN radians; in other */
+/*                     words, there must be a vector A such that all */
+/*                     boundary vectors have angular separation from */
+/*                     A of less than (pi/2)-MARGIN radians. */
 
-/*                   2)  There must be a pair of boundary vectors U, V */
-/*                       such that all other boundary vectors lie in */
-/*                       the same half space bounded by the plane */
-/*                       containing U and V. Furthermore, all other */
-/*                       boundary vectors must have orthogonal */
-/*                       projections onto a specific plane normal to */
-/*                       this plane (the normal plane contains the angle */
-/*                       bisector defined by U and V) such that the */
-/*                       projections have angular separation of at least */
-/*                       2*MARGIN radians from the plane spanned by U */
-/*                       and V. */
+/*                 2)  There must be a pair of boundary vectors U, V */
+/*                     such that all other boundary vectors lie in */
+/*                     the same half space bounded by the plane */
+/*                     containing U and V. Furthermore, all other */
+/*                     boundary vectors must have orthogonal */
+/*                     projections onto a specific plane normal to */
+/*                     this plane (the normal plane contains the angle */
+/*                     bisector defined by U and V) such that the */
+/*                     projections have angular separation of at least */
+/*                     2*MARGIN radians from the plane spanned by U */
+/*                     and V. */
 
-/*                MARGIN is currently set to 1.D-6. */
+/*              MARGIN is currently set to 1.D-12. */
 
 /* $ Exceptions */
 
 /*     1)  If the name of either the target or observer cannot be */
-/*         translated to a NAIF ID code, the error will be diagnosed by */
+/*         translated to a NAIF ID code, an error is signaled by */
 /*         a routine in the call tree of this routine. */
 
 /*     2)  If the specified aberration correction is an unrecognized */
-/*         value, the error will be diagnosed and signaled by a routine */
+/*         value, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /*     3)  If the radii of a target body modeled as an ellipsoid cannot */
@@ -429,51 +429,50 @@
 /*            'BODYnnn_RADII' */
 
 /*         where nnn represents the NAIF integer code associated with */
-/*         the body, the error will be diagnosed by a routine in the */
+/*         the body, an error is signaled by a routine in the */
 /*         call tree of this routine. */
 
-/*     4)  If the target and observer bodies are the same, the error will */
-/*         be diagnosed by a routine in the call tree of this routine. */
+/*     4)  If the target and observer bodies are the same, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
-/*     5)  If the body model specifier TSHAPE is invalid, the error will */
-/*         be diagnosed either here or by a routine in the call tree of */
-/*         this routine. */
+/*     5)  If the body model specifier TSHAPE is invalid, an error is */
+/*         signaled by either this routine or a routine in the call tree */
+/*         of this routine. */
 
 /*     6)  If a target body-fixed reference frame associated with a */
-/*         non-point target is not recognized, the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*         non-point target is not recognized, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     7)  If a target body-fixed reference frame is not centered at */
-/*         the corresponding target body, the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*     7)  If a target body-fixed reference frame is not centered at the */
+/*         corresponding target body, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /*     8)  If the instrument name INST does not have a corresponding NAIF */
-/*         ID code, the error will be diagnosed by a routine in the call */
+/*         ID code, an error is signaled by a routine in the call */
 /*         tree of this routine. */
 
 /*     9)  If the FOV parameters of the instrument are not present in */
-/*         the kernel pool, the error will be diagnosed by routines */
+/*         the kernel pool, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
-/*     10) If the FOV boundary has more than MAXVRT vertices, the error */
-/*         will be diagnosed by routines in the call tree of this */
+/*     10) If the FOV boundary has more than MAXVRT vertices, an error */
+/*         is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /*     11) If the instrument FOV shape is a polygon or rectangle, and */
-/*         this routine cannot find a ray R emanating from the FOV */
-/*         vertex such that maximum angular separation of R and any FOV */
-/*         boundary vector is within the limit (pi/2)-MARGIN radians, */
-/*         the error will be diagnosed by a routine in the call tree of */
-/*         this routine. If the FOV is any other shape, the same error */
-/*         check will be applied with the instrument boresight vector */
-/*         serving the role of R. */
+/*         this routine cannot find a ray R emanating from the FOV vertex */
+/*         such that maximum angular separation of R and any FOV boundary */
+/*         vector is within the limit (pi/2)-MARGIN radians, an error is */
+/*         signaled by a routine in the call tree of this routine. If the */
+/*         FOV is any other shape, the same error check will be applied */
+/*         with the instrument boresight vector serving the role of R. */
 
 /*     12) If the loaded kernels provide insufficient data to compute a */
-/*         requested state vector, the error will be diagnosed by a */
+/*         requested state vector, an error is signaled by a */
 /*         routine in the call tree of this routine. */
 
 /*     13) If an error occurs while reading an SPK or other kernel file, */
-/*         the error will be diagnosed by a routine in the call tree */
+/*         the error is signaled by a routine in the call tree */
 /*         of this routine. */
 
 /* $ Files */
@@ -483,44 +482,44 @@
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target and observer that */
-/*          describe the ephemerides of these objects at the time ET. */
-/*          If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
+/*     -  SPK data: ephemeris data for target and observer that */
+/*        describe the ephemerides of these objects at the time ET. */
+/*        If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
 
-/*        - Frame data: if a frame definition is required to convert */
-/*          the observer and target states to the body-fixed frame of */
-/*          the target, that definition must be available in the kernel */
-/*          pool. Typically the definitions of frames not already */
-/*          built-in to SPICE are supplied by loading a frame kernel. */
+/*     -  Frame data: if a frame definition is required to convert */
+/*        the observer and target states to the body-fixed frame of */
+/*        the target, that definition must be available in the kernel */
+/*        pool. Typically the definitions of frames not already */
+/*        built-in to SPICE are supplied by loading a frame kernel. */
 
-/*        - Data defining the reference frame in which the instrument's */
-/*          FOV is defined must be available in the kernel pool. */
-/*          Additionally the name INST must be associated with an ID */
-/*          code. */
+/*     -  Data defining the reference frame in which the instrument's */
+/*        FOV is defined must be available in the kernel pool. */
+/*        Additionally the name INST must be associated with an ID */
+/*        code. */
 
-/*        - IK data: the kernel pool must contain data such that */
-/*          the SPICELIB routine GETFOV may be called to obtain */
-/*          parameters for INST. */
+/*     -  IK data: the kernel pool must contain data such that */
+/*        the SPICELIB routine GETFOV may be called to obtain */
+/*        parameters for INST. */
 
 /*     The following data may be required: */
 
-/*        - PCK data: bodies modeled as triaxial ellipsoids must have */
-/*          orientation data provided by variables in the kernel pool. */
+/*     -  PCK data: bodies modeled as triaxial ellipsoids must have */
+/*        orientation data provided by variables in the kernel pool. */
 
-/*          Bodies modeled as triaxial ellipsoids must have radii */
-/*          lengths provided by variables in the kernel pool. */
+/*        Bodies modeled as triaxial ellipsoids must have radii */
+/*        lengths provided by variables in the kernel pool. */
 
-/*        - CK data: if the frame in which the instrument's FOV is */
-/*          defined is fixed to a spacecraft, at least one CK file will */
-/*          be needed to permit transformation of vectors between that */
-/*          frame and both J2000 and the target body-fixed frame. */
+/*     -  CK data: if the frame in which the instrument's FOV is */
+/*        defined is fixed to a spacecraft, at least one CK file will */
+/*        be needed to permit transformation of vectors between that */
+/*        frame and both J2000 and the target body-fixed frame. */
 
-/*        - SCLK data: if a CK file is needed, an associated SCLK */
-/*          kernel is required to enable conversion between encoded SCLK */
-/*          (used to time-tag CK data) and barycentric dynamical time */
-/*          (TDB). */
+/*     -  SCLK data: if a CK file is needed, an associated SCLK */
+/*        kernel is required to enable conversion between encoded SCLK */
+/*        (used to time-tag CK data) and barycentric dynamical time */
+/*        (TDB). */
 
 /*     Kernel data are normally loaded via FURNSH once per program run, */
 /*     NOT every time this routine is called. */
@@ -535,7 +534,7 @@
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
@@ -543,7 +542,7 @@
 /*     1) A spectacular picture was taken by Cassini's */
 /*        narrow-angle camera on Oct. 6, 2010 that shows */
 /*        six of Saturn's moons. Let's verify that the moons */
-/*        in the picture are Epimetheus, Atlas, Daphnis, Pan */
+/*        in the picture are Epimetheus, Atlas, Daphnis, Pan, */
 /*        Janus, and Enceladus. */
 
 /*        To see this picture, visit: */
@@ -556,15 +555,12 @@
 /*        PDS Imaging Node changes. */
 
 /*        Use the meta-kernel shown below to load the required SPICE */
-/*        kernels. For project meta-kernels similar to the one shown */
-/*        below, please see the PDS section of the NAIF FTP server. */
-/*        For example, look at the following path for Cassini */
-/*        meta-kernels: ftp://naif.jpl.nasa.gov//pub/naif/pds/data/ */
-/*        co-s_j_e_v-spice-6-v1.0/cosp_1000/extras/mk */
+/*        kernels. */
+
 
 /*           KPL/MK */
 
-/*           File name: fovtrg_ex.tm */
+/*           File name: fovtrg_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -611,121 +607,133 @@
 
 /*           \begintext */
 
+/*           For project meta-kernels similar to the one shown */
+/*           here, please see the CASSINI SPICE PDS archive. */
+
+
 /*        Example code begins here. */
 
-/*           PROGRAM FOVTRG_EX */
-/*           IMPLICIT NONE */
 
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META   =  'fovtrg_ex.tm' ) */
+/*              PROGRAM FOVTRG_EX1 */
+/*              IMPLICIT NONE */
 
-/*           CHARACTER*(*)         TIMFMT */
-/*           PARAMETER           ( TIMFMT = */
-/*          .      'YYYY-MON-DD HR:MN:SC.#####::TDB (TDB)' ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   =  'fovtrg_ex1.tm' ) */
 
-/*     C */
-/*     C     This is the spacecraft clock time of the image. */
-/*     C */
-/*           CHARACTER*(*)         SCLK */
-/*           PARAMETER           ( SCLK = '1665078907.122' ) */
+/*              CHARACTER*(*)         TIMFMT */
+/*              PARAMETER           ( TIMFMT = */
+/*             .      'YYYY-MON-DD HR:MN:SC.#####::TDB (TDB)' ) */
 
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(32)        BODY */
-/*           CHARACTER*(32)        FRNAME */
-/*           CHARACTER*(32)        TIME */
-/*           DOUBLE PRECISION      ET */
-/*           INTEGER               BODYID */
-/*           INTEGER               CAS_ID */
-/*           INTEGER               FRCODE */
-/*           LOGICAL               FOUND */
-/*           LOGICAL               VISIBL */
+/*        C */
+/*        C     This is the spacecraft clock time of the image. */
+/*        C */
+/*              CHARACTER*(*)         SCLK */
+/*              PARAMETER           ( SCLK = '1665078907.122' ) */
 
-/*     C */
-/*     C     Load the kernels. */
-/*     C */
-/*           CALL FURNSH ( META ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(32)        BODY */
+/*              CHARACTER*(32)        FRNAME */
+/*              CHARACTER*(32)        TIME */
+/*              DOUBLE PRECISION      ET */
+/*              INTEGER               BODYID */
+/*              INTEGER               CAS_ID */
+/*              INTEGER               FRCODE */
+/*              LOGICAL               FOUND */
+/*              LOGICAL               VISIBL */
 
-/*     C */
-/*     C     Retrieve Cassini's NAIF ID. */
-/*     C */
-/*           CALL BODN2C ( 'CASSINI', CAS_ID, FOUND ) */
+/*        C */
+/*        C     Load the kernels. */
+/*        C */
+/*              CALL FURNSH ( META ) */
 
-/*           IF (.NOT. FOUND) THEN */
-/*              CALL SETMSG ( 'Could not find ID code for Cassini.' ) */
-/*              CALL SIGERR ( 'SPICE(NOTRANSLATION)' ) */
-/*           ENDIF */
+/*        C */
+/*        C     Retrieve Cassini's NAIF ID. */
+/*        C */
+/*              CALL BODN2C ( 'CASSINI', CAS_ID, FOUND ) */
 
-/*     C */
-/*     C     Convert the image tag SCLK to ET. */
-/*     C */
-/*           CALL SCS2E ( CAS_ID, SCLK, ET ) */
+/*              IF (.NOT. FOUND) THEN */
+/*                 CALL SETMSG ( 'Could not find ID code for Cassini.' ) */
+/*                 CALL SIGERR ( 'SPICE(NOTRANSLATION)' ) */
+/*              END IF */
 
-/*     C */
-/*     C     Convert the ET to a string format for the output. */
-/*     C */
-/*           CALL TIMOUT ( ET, TIMFMT, TIME ) */
+/*        C */
+/*        C     Convert the image tag SCLK to ET. */
+/*        C */
+/*              CALL SCS2E ( CAS_ID, SCLK, ET ) */
 
-/*     C */
-/*     C     Search through all of Saturn's moons to see if each */
-/*     C     satellite was in the ISS NAC's field-of-view at */
-/*     C     the image time. We're going to take advantage of the */
-/*     C     fact that all Saturn's moons have a NAIF ID of 6xx. */
-/*     C */
-/*           WRITE (*,*) 'At time ', TIME, ' the following were ' */
-/*           WRITE (*,*) 'in the field of view of CASSINI_ISS_NAC' */
+/*        C */
+/*        C     Convert the ET to a string format for the output. */
+/*        C */
+/*              CALL TIMOUT ( ET, TIMFMT, TIME ) */
 
-/*           DO BODYID = 600, 699 */
-/*     C */
-/*     C        Check to see if the BODYID has a translation. */
-/*     C */
-/*              CALL BODC2N ( BODYID, BODY, FOUND ) */
-/*              IF ( FOUND ) THEN */
-/*     C */
-/*     C           Check to see if a body-fixed frame for this ID exists. */
-/*     C           If the frame is not in the kernel pool, we cannot */
-/*     C           perform the visibility test. The main cause of a */
-/*     C           failure is a missing kernel. */
-/*     C */
-/*                 CALL CIDFRM ( BODYID, FRCODE, FRNAME, FOUND ) */
+/*        C */
+/*        C     Search through all of Saturn's moons to see if each */
+/*        C     satellite was in the ISS NAC's field-of-view at */
+/*        C     the image time. We're going to take advantage of the */
+/*        C     fact that all Saturn's moons have a NAIF ID of 6xx. */
+/*        C */
+/*              WRITE (*,*) 'At time ', TIME, ' the following were ' */
+/*              WRITE (*,*) 'in the field of view of CASSINI_ISS_NAC' */
+
+/*              DO BODYID = 600, 699 */
+/*        C */
+/*        C        Check to see if the BODYID has a translation. */
+/*        C */
+/*                 CALL BODC2N ( BODYID, BODY, FOUND ) */
+
 /*                 IF ( FOUND ) THEN */
-/*     C */
-/*     C              Is this body in the field-of-view of Cassini's */
-/*     C              ISS narrow-angle camera? */
-/*     C */
-/*                    CALL FOVTRG ( 'CASSINI_ISS_NAC', */
-/*          .                        BODY,  'ellipsoid', FRNAME, */
-/*          .                       'CN+S', 'CASSINI', ET, VISIBL ) */
+/*        C */
+/*        C           Check to see if a body-fixed frame for this ID */
+/*        C           exists.  If the frame is not in the kernel pool, */
+/*        C           we cannot perform the visibility test.  The main */
+/*        C           cause of a failure is a missing kernel. */
+/*        C */
+/*                    CALL CIDFRM ( BODYID, FRCODE, FRNAME, FOUND ) */
 
-/*     C */
-/*     C              Report results. */
-/*     C */
-/*                    IF ( VISIBL ) THEN */
-/*                       WRITE (*,*) '  ', BODY */
+/*                    IF ( FOUND ) THEN */
+/*        C */
+/*        C              Is this body in the field-of-view of Cassini's */
+/*        C              ISS narrow-angle camera? */
+/*        C */
+/*                       CALL FOVTRG ( 'CASSINI_ISS_NAC', */
+/*             .                        BODY,  'ellipsoid', FRNAME, */
+/*             .                       'CN+S', 'CASSINI', ET, VISIBL ) */
+
+/*        C */
+/*        C              Report results. */
+/*        C */
+/*                       IF ( VISIBL ) THEN */
+/*                          WRITE (*,*) '  ', BODY */
+/*                       END IF */
 
 /*                    END IF */
+
 /*                 END IF */
-/*              END IF */
-/*           END DO */
 
-/*           END */
+/*              END DO */
 
-/*        When this program was executed using gfortran on a PC Linux */
-/*        64 bit environment, the output was: */
+/*              END */
 
-/*           At time 2010-OCT-06 17:09:45.34695 (TDB) the following were */
-/*           in the field of view of CASSINI_ISS_NAC */
-/*             ENCELADUS */
-/*             JANUS */
-/*             EPIMETHEUS */
-/*             ATLAS */
-/*             PAN */
-/*             DAPHNIS */
-/*             ANTHE */
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         At time 2010-OCT-06 17:09:45.34695 (TDB) the following were */
+/*         in the field of view of CASSINI_ISS_NAC */
+/*           ENCELADUS */
+/*           JANUS */
+/*           EPIMETHEUS */
+/*           ATLAS */
+/*           PAN */
+/*           DAPHNIS */
+/*           ANTHE */
+
 
 /*        Note: there were actually 7 of Saturn's satellites in the */
 /*        field-of-view of Cassini's narrow-angle camera. However, Anthe */
@@ -734,8 +742,9 @@
 
 /* $ Restrictions */
 
-/*     The reference frame associated with INST must be centered at the */
-/*     observer or must be inertial. No check is done to ensure this. */
+/*     1)  The reference frame associated with INST must be centered at */
+/*         the observer or must be inertial. No check is done to ensure */
+/*         this. */
 
 /* $ Literature_References */
 
@@ -743,23 +752,24 @@
 
 /* $ Author_and_Institution */
 
-/*     S.C. Krening  (JPL) */
-/*     N.J. Bachman  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     S.C. Krening       (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0  15-FEB-2012 (SCK) (NJB) */
+/* -    SPICELIB Version 1.0.1, 13-AUG-2021 (JDR) */
+
+/*        Edited header to comply with NAIF standard. Corrected the */
+/*        value of MARGIN in the $Parameters section. */
+
+/* -    SPICELIB Version 1.0.0, 15-FEB-2012 (SCK) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     Target in instrument FOV at specified time */
 /*     Target in instrument field_of_view at specified time */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 

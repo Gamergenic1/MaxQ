@@ -3,9 +3,9 @@
 -Procedure sphrec_c ( Spherical to rectangular coordinates )
 
 -Abstract
- 
-   Convert from spherical coordinates to rectangular coordinates. 
- 
+
+   Convert from spherical coordinates to rectangular coordinates.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-    CONVERSION,  COORDINATES 
- 
+
+   CONVERSION
+   COORDINATES
+
 */
 
    #include <math.h>
@@ -46,120 +47,329 @@
 
 
    void sphrec_c ( SpiceDouble    r,
-                   SpiceDouble    colat, 
-                   SpiceDouble    lon,
-                   SpiceDouble    rectan[3] ) 
+                   SpiceDouble    colat,
+                   SpiceDouble    slon,
+                   SpiceDouble    rectan[3] )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   r          I   Distance of a point from the origin. 
-   colat      I   Angle of the point from the Z-axis in radians. 
-   lon        I   Angle of the point from the XZ plane in radians. 
-   rectan     O   Rectangular coordinates of the point. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   r          I   Distance of a point from the origin.
+   colat      I   Angle of the point from the Z-axis in radians.
+   slon       I   Angle of the point from the XZ plane in radians.
+   rectan     O   Rectangular coordinates of the point.
+
 -Detailed_Input
- 
-   r          Distance of the point from the origin. 
- 
-   colat      Angle between the point and the positive z-axis in
-              radians.
- 
-   lon        Angle of the projection of the point to the XY plane from
-              the positive X-axis in radians. The positive Y-axis is
-              at longitude PI/2 radians.
- 
+
+   r           is the distance of the point from the origin.
+
+   colat       is the angle between the point and the positive z-axis in
+               radians.
+
+   slon        is the angle of the projection of the point to the XY plane
+               from the positive X-axis in radians. The positive Y-axis is
+               at longitude PI/2 radians.
+
 -Detailed_Output
- 
-   rectan     The rectangular coordinates of a point. 
- 
+
+   rectan      are the rectangular coordinates of a point.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   This routine returns the rectangular coordinates of a point 
-   whose position is input in spherical coordinates. 
- 
-   Spherical coordinates are defined by a distance from a central 
-   reference point, an angle from a reference meridian, and an angle 
-   from the z-axis.  The co-latitude of the positive Z-axis is 
-   zero.  The longitude of the posive Y-axis is PI/2 radians. 
- 
+
+   This routine returns the rectangular coordinates of a point
+   whose position is input in spherical coordinates.
+
+   Spherical coordinates are defined by a distance from a central
+   reference point, an angle from a reference meridian, and an angle
+   from the z-axis. The co-latitude of the positive Z-axis is
+   zero. The longitude of the posive Y-axis is PI/2 radians.
+
 -Examples
- 
-   Below are two tables. 
- 
-   Listed in the first table (under r, colat and lon  ) are 
-   spherical coordinate triples that approximately represent points 
-   whose rectangular coordinates are taken from the set {-1, 0, 1}. 
-   (Angular quantities are given in degrees.) 
- 
-   The result of the code fragment 
- 
-        Use the CSPICE routine convrt_c to convert the angular 
-        quantities to radians 
- 
-        convrt_c ( colat, "DEGREES", "RADIANS", lat  ) 
-        convrt_c (  lon,  "DEGREES", "RADIANS", lon  ) 
- 
-        sphrec_c ( r, colat,  lon, X ) 
- 
- 
-   are listed in the second parallel table under X(1), X(2) and X(3). 
- 
-     r          colat      lon            X(1)       X(2)     X(3) 
-     ----------------------------         -------------------------- 
-     0.0000     0.0000     0.0000         0.0000     0.0000   0.0000 
-     1.0000    90.0000     0.0000         1.0000     0.0000   0.0000 
-     1.0000    90.0000    90.0000         0.0000     1.0000   0.0000 
-     1.0000     0.0000     0.0000         0.0000     0.0000   1.0000 
-     1.0000    90.0000   180.0000        -1.0000     0.0000   0.0000 
-     1.0000    90.0000   -90.0000         0.0000    -1.0000   0.0000 
-     1.0000   180.0000     0.0000         0.0000     0.0000  -1.0000 
-     1.4142    90.0000    45.0000         1.0000     1.0000   0.0000 
-     1.4142    45.0000     0.0000         1.0000     0.0000   1.0000 
-     1.4142    45.0000    90.0000         0.0000     1.0000   1.0000 
-     1.7320    54.7356    45.0000         1.0000     1.0000   1.0000 
- 
- 
+
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Compute the spherical coordinates of the position of the Moon
+      as seen from the Earth, and convert them to rectangular
+      coordinates.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: sphrec_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de421.bsp                     Planetary ephemeris
+            naif0012.tls                  Leapseconds
+
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de421.bsp',
+                                'naif0012.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      /.
+         Program sphrec_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+            SpiceDouble          colat;
+         SpiceDouble          et;
+         SpiceDouble          lt;
+         SpiceDouble          pos    [3];
+         SpiceDouble          radius;
+         SpiceDouble          rectan [3];
+         SpiceDouble          slon;
+
+         /.
+         Load SPK and LSK kernels, use a meta kernel for
+         convenience.
+         ./
+         furnsh_c ( "sphrec_ex1.tm" );
+
+         /.
+         Look up the geometric state of the Moon as seen from
+         the Earth at 2017 Mar 20, relative to the J2000
+         reference frame.
+         ./
+         str2et_c ( "2017 Mar 20", &et );
+
+         spkpos_c ( "Moon", et, "J2000", "NONE", "Earth", pos, &lt );
+
+         /.
+         Convert the position vector `pos' to spherical
+         coordinates.
+         ./
+         recsph_c ( pos, &radius, &colat, &slon );
+
+         /.
+         Convert the spherical coordinates to rectangular.
+         ./
+         sphrec_c ( radius, colat, slon, rectan );
+
+         printf( " \n" );
+         printf( "Original rectangular coordinates:\n" );
+         printf( " \n" );
+         printf( " X           (km):  %19.8f\n", pos[0] );
+         printf( " Y           (km):  %19.8f\n", pos[1] );
+         printf( " Z           (km):  %19.8f\n", pos[2] );
+         printf( " \n" );
+         printf( "Spherical coordinates:\n" );
+         printf( " \n" );
+         printf( " Radius      (km):  %19.8f\n", radius );
+         printf( " Colatitude (deg):  %19.8f\n", colat*dpr_c ( ) );
+         printf( " Longitude  (deg):  %19.8f\n", slon*dpr_c ( ) );
+         printf( " \n" );
+         printf( "Rectangular coordinates from sphrec_c:\n" );
+         printf( " \n" );
+         printf( " X           (km):  %19.8f\n", rectan[0] );
+         printf( " Y           (km):  %19.8f\n", rectan[1] );
+         printf( " Z           (km):  %19.8f\n", rectan[2] );
+         printf( " \n" );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Original rectangular coordinates:
+
+       X           (km):      -55658.44323296
+       Y           (km):     -379226.32931475
+       Z           (km):     -126505.93063865
+
+      Spherical coordinates:
+
+       Radius      (km):      403626.33912495
+       Colatitude (deg):         108.26566077
+       Longitude  (deg):         -98.34959789
+
+      Rectangular coordinates from sphrec_c:
+
+       X           (km):      -55658.44323296
+       Y           (km):     -379226.32931475
+       Z           (km):     -126505.93063865
+
+
+   2) Create a table showing a variety of spherical coordinates
+      and the corresponding rectangular coordinates.
+
+      Corresponding spherical and rectangular coordinates are
+      listed to three decimal places. Input angles are in degrees.
+
+
+      Example code begins here.
+
+
+      /.
+         Program sphrec_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NREC         11
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          rcolat;
+         SpiceDouble          rslon;
+         SpiceDouble          rectan [3];
+
+         SpiceInt             i;
+
+         /.
+         Define the input spherical coordinates. Angles in degrees.
+         ./
+         SpiceDouble          radius [NREC] = {  0.0,  1.0,     1.0,
+                                                 1.0,  1.0,     1.0,
+                                                 1.0,  1.4142,  1.4142,
+                                              1.4142,  1.7320          };
+
+         SpiceDouble          colat  [NREC] = {  0.0,  90.0,  90.0,
+                                                 0.0,  90.0,  90.0,
+                                               180.0,  90.0,  45.0,
+                                                45.0,  54.7356     };
+
+         SpiceDouble          slon   [NREC] = {  0.0,   0.0,  90.0,
+                                                 0.0, 180.0, -90.0,
+                                                 0.0,  45.0,   0.0,
+                                                90.0,  45.0        };
+
+         /.
+         Print the banner.
+         ./
+         printf( "  radius   colat     slon   rect[0]  rect[1]  rect[2]\n" );
+         printf( " -------  -------  -------  -------  -------  -------\n" );
+
+         /.
+         Do the conversion.
+         ./
+         for ( i = 0; i < NREC; i++ )
+         {
+
+            rcolat = colat[i] * rpd_c ( );
+            rslon  = slon[i]  * rpd_c ( );
+
+            sphrec_c ( radius[i], rcolat, rslon, rectan );
+
+            printf( "%8.3f %8.3f %8.3f ",  radius[i], colat[i],  slon[i]   );
+            printf( "%8.3f %8.3f %8.3f\n", rectan[0], rectan[1], rectan[2] );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+        radius   colat     slon   rect[0]  rect[1]  rect[2]
+       -------  -------  -------  -------  -------  -------
+         0.000    0.000    0.000    0.000    0.000    0.000
+         1.000   90.000    0.000    1.000    0.000    0.000
+         1.000   90.000   90.000    0.000    1.000    0.000
+         1.000    0.000    0.000    0.000    0.000    1.000
+         1.000   90.000  180.000   -1.000    0.000    0.000
+         1.000   90.000  -90.000    0.000   -1.000    0.000
+         1.000  180.000    0.000    0.000    0.000   -1.000
+         1.414   90.000   45.000    1.000    1.000    0.000
+         1.414   45.000    0.000    1.000    0.000    1.000
+         1.414   45.000   90.000    0.000    1.000    1.000
+         1.732   54.736   45.000    1.000    1.000    1.000
+
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   W.L. Taber      (JPL) 
-   E.D. Wright     (JPL)
- 
+
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.0, 05-JUL-2021 (JDR)
+
+       Changed the output argument name "lon" to "slon" for
+       consistency with other routines.
+
+       Edited the header to comply with NAIF standard.
+       Added complete code examples.
+
    -CSPICE Version 1.0.1, 26-JUL-2016 (BVS)
 
-      Minor headers edits.
+       Minor headers edits.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT)
 
 -Index_Entries
- 
-   spherical to rectangular coordinates 
- 
+
+   spherical to rectangular coordinates
+
 -&
 */
 
@@ -176,8 +386,8 @@
 
    /* Function Body */
 
-   x = r * cos( lon  ) * sin( colat );
-   y = r * sin( lon  ) * sin( colat );
+   x = r * cos( slon  ) * sin( colat );
+   y = r * sin( slon  ) * sin( colat );
    z = r * cos( colat );
 
 

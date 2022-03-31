@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure   EKRCEI ( EK, read column entry element, integer ) */
+/* $Procedure EKRCEI ( EK, read column entry element, integer ) */
 /* Subroutine */ int ekrcei_(integer *handle, integer *segno, integer *recno, 
 	char *column, integer *nvals, integer *ivals, logical *isnull, ftnlen 
 	column_len)
@@ -350,7 +350,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle attached to EK file. */
 /*     SEGNO      I   Index of segment containing record. */
@@ -362,35 +362,32 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is an EK file handle.  The file may be open for */
-/*                    read or write access. */
+/*     HANDLE   is an EK file handle. The file may be open for read or */
+/*              write access. */
 
-/*     SEGNO          is the index of the segment from which data is to */
-/*                    be read. */
+/*     SEGNO    is the index of the segment from which data is to be */
+/*              read. */
 
-/*     RECNO          is the index of the record from which data is to be */
-/*                    read.  This record number is relative to the start */
-/*                    of the segment indicated by SEGNO; the first */
-/*                    record in the segment has index 1. */
+/*     RECNO    is the index of the record from which data is to be read. */
+/*              This record number is relative to the start of the */
+/*              segment indicated by SEGNO; the first record in the */
+/*              segment has index 1. */
 
-/*     COLUMN         is the name of the column from which data is to be */
-/*                    read. */
-
+/*     COLUMN   is the name of the column from which data is to be read. */
 
 /* $ Detailed_Output */
 
 /*     NVALS, */
-/*     IVALS          are, respectively, the number of values found in */
-/*                    the specified column entry and the set of values */
-/*                    themselves. */
+/*     IVALS    are, respectively, the number of values found in the */
+/*              specified column entry and the set of values themselves. */
 
-/*                    For columns having fixed-size entries, when a */
-/*                    a column entry is null, NVALS is still set to the */
-/*                    column entry size.  For columns having variable- */
-/*                    size entries, NVALS is set to 1 for null entries. */
+/*              For columns having fixed-size entries, when a a column */
+/*              entry is null, NVALS is still set to the column entry */
+/*              size. For columns having variable-size entries, NVALS is */
+/*              set to 1 for null entries. */
 
-/*     ISNULL         is a logical flag indicating whether the returned */
-/*                    column entry is null. */
+/*     ISNULL   is a logical flag indicating whether the returned column */
+/*              entry is null. */
 
 /* $ Parameters */
 
@@ -398,38 +395,37 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1)  If HANDLE is invalid, the error will be diagnosed by routines */
-/*         called by this routine. */
+/*     1)  If HANDLE is invalid, an error is signaled by a routine in the */
+/*         call tree of this routine. */
 
-/*     2)  If SEGNO is out of range, the error will diagnosed by routines */
-/*         called by this routine. */
+/*     2)  If SEGNO is out of range, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     3)  If RECNO is out of range, the error will diagnosed by routines */
-/*         called by this routine. */
+/*     3)  If RECNO is out of range, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     4)  If COLUMN is not the name of a declared column, the error */
-/*         will be diagnosed by routines called by this routine. */
+/*     4)  If COLUMN is not the name of a declared column, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /*     5)  If COLUMN specifies a column of whose data type is not */
-/*         integer, the error SPICE(WRONGDATATYPE) will be */
-/*         signaled. */
+/*         integer, the error SPICE(WRONGDATATYPE) is signaled. */
 
 /*     6)  If COLUMN specifies a column of whose class is not */
 /*         an integer class known to this routine, the error */
-/*         SPICE(NOCLASS) will be signaled. */
+/*         SPICE(NOCLASS) is signaled. */
 
 /*     7)  If an attempt is made to read an uninitialized column entry, */
-/*         the error will be diagnosed by routines called by this */
-/*         routine.  A null entry is considered to be initialized, but */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. A null entry is considered to be initialized, but */
 /*         entries do not contain null values by default. */
 
-/*     8)  If an I/O error occurs while reading the indicated file, */
-/*         the error will be diagnosed by routines called by this */
+/*     8)  If an I/O error occurs while reading the indicated file, the */
+/*         error is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /* $ Files */
 
-/*     See the EK Required Reading for a discussion of the EK file */
+/*     See the EK Required Reading ek.req for a discussion of the EK file */
 /*     format. */
 
 /* $ Particulars */
@@ -446,10 +442,10 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     1) EK files open for write access are not necessarily readable. */
-/*        In particular, a column entry can be read only if it has been */
-/*        initialized. The caller is responsible for determining */
-/*        when it is safe to read from files open for write access. */
+/*     1)  EK files open for write access are not necessarily readable. */
+/*         In particular, a column entry can be read only if it has been */
+/*         initialized. The caller is responsible for determining */
+/*         when it is safe to read from files open for write access. */
 
 /* $ Literature_References */
 
@@ -457,9 +453,15 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.1, 26-MAY-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.3.0, 06-FEB-2015 (NJB) */
 
@@ -472,8 +474,8 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.1.0, 28-JUL-1997 (NJB) */
 
-/*        Bug fix:  Record number, not record pointer, is now supplied */
-/*        to look up data in the class 7 case.  Miscellaneous header */
+/*        Bug fix: Record number, not record pointer, is now supplied */
+/*        to look up data in the class 7 case. Miscellaneous header */
 /*        changes were made as well. */
 
 /* -    SPICELIB Version 1.0.0, 06-NOV-1995 (NJB) */
@@ -488,8 +490,8 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.1.0, 28-JUL-1997 (NJB) */
 
-/*        Bug fix:  Record number, not record pointer, is now supplied */
-/*        to look up data in the class 7 case.  For class 7 columns, */
+/*        Bug fix: Record number, not record pointer, is now supplied */
+/*        to look up data in the class 7 case. For class 7 columns, */
 /*        column entry locations are calculated directly from record */
 /*        numbers; no indirection is used. */
 

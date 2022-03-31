@@ -262,8 +262,8 @@ static integer c__7 = 7;
 
 /* $ Keywords */
 
-/*     EVENT */
 /*     EPHEMERIS */
+/*     EVENT */
 /*     GEOMETRY */
 /*     SEARCH */
 
@@ -690,6 +690,9 @@ static integer c__7 = 7;
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
+/*     MAXPAR     P   Maximum number of parameters required to define */
+/*                    any quantity. */
+/*     CNVTOL     P   Default convergence tolerance. */
 /*     UDSTEP     I   Name of the routine that computes and returns a */
 /*                    time step. */
 /*     UDREFN     I   Name of the routine that computes a refined time. */
@@ -708,785 +711,812 @@ static integer c__7 = 7;
 /*     TOL        I   Convergence tolerance in seconds */
 /*     ADJUST     I   Absolute extremum adjustment value. */
 /*     CNFINE     I   SPICE window to which the search is restricted. */
-/*     RPT        I   Progress reporter on (.TRUE.) or off (.FALSE.) */
+/*     RPT        I   Progress reporter on (.TRUE.) or off (.FALSE.). */
 /*     UDREPI     I   Function that initializes progress reporting. */
 /*     UDREPU     I   Function that updates the progress report. */
 /*     UDREPF     I   Function that finalizes progress reporting. */
 /*     MW         I   Size of workspace windows. */
 /*     NW         I   The number of workspace windows needed for the */
 /*                    search. */
-/*     WORK      I-O  Array containing workspace windows. */
+/*     WORK       O   Array containing workspace windows. */
 /*     BAIL       I   Logical indicating program interrupt monitoring. */
 /*     UDBAIL     I   Name of a routine that signals a program interrupt. */
-/*     RESULT     O   SPICE window containing results. */
-
+/*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
-/*     UDSTEP     the name of the user specified routine that computes */
-/*                a time step in an attempt to find a transition of the */
-/*                state of the specified coordinate. In the context */
-/*                of this routine's algorithm, a "state transition" */
-/*                occurs where the geometric state changes from being */
-/*                in the desired geometric condition event to not, */
-/*                or vice versa. */
+/*     UDSTEP   is the name of the user specified routine that computes a */
+/*              time step in an attempt to find a transition of the state */
+/*              of the specified coordinate. In the context of this */
+/*              routine's algorithm, a "state transition" occurs where */
+/*              the geometric state changes from being in the desired */
+/*              geometric condition event to not, or vice versa. */
 
-/*                This routine relies on UDSTEP returning step sizes */
-/*                small enough so that state transitions within the */
-/*                confinement window are not overlooked.  There must */
-/*                never be two roots A and B separated by less than */
-/*                STEP, where STEP is the minimum step size returned by */
-/*                UDSTEP for any value of ET in the interval [A, B]. */
+/*              This routine relies on UDSTEP returning step sizes small */
+/*              enough so that state transitions within the confinement */
+/*              window are not overlooked. There must never be two roots */
+/*              A and B separated by less than STEP, where STEP is the */
+/*              minimum step size returned by UDSTEP for any value of ET */
+/*              in the interval [A, B]. */
 
-/*                The calling sequence for UDSTEP is: */
+/*              The calling sequence for UDSTEP is: */
 
-/*                   CALL UDSTEP ( ET, STEP ) */
+/*                 CALL UDSTEP ( ET, STEP ) */
 
-/*                where: */
+/*              where: */
 
-/*                   ET      is the input start time from which the */
-/*                           algorithm is to search forward for a state */
-/*                           transition. ET is expressed as seconds past */
-/*                           J2000 TDB. */
+/*                 ET      is the input start time from which the */
+/*                         algorithm is to search forward for a state */
+/*                         transition. ET is expressed as seconds past */
+/*                         J2000 TDB. */
 
-/*                   STEP    is the output step size.  STEP indicates */
-/*                           how far to advance ET so that ET and */
-/*                           ET+STEP may bracket a state transition and */
-/*                           definitely do not bracket more than one */
-/*                           state transition. Units are TDB seconds. */
+/*                 STEP    is the output step size. STEP indicates how */
+/*                         far to advance ET so that ET and ET+STEP may */
+/*                         bracket a state transition and definitely do */
+/*                         not bracket more than one state transition. */
+/*                         Units are TDB seconds. */
 
-/*                If a constant step size is desired, the routine */
+/*              If a constant step size is desired, the SPICELIB routine */
 
-/*                   GFSTEP */
+/*                 GFSTEP */
 
-/*                may be used. This is the default option. If using */
-/*                GFSTEP, the step size must be set by calling */
+/*              may be used as the step size function. This is the */
+/*              default option. If GFSTEP is used, the step size must be */
+/*              set by calling */
 
-/*                   GFSSTP(STEP) */
+/*                 CALL GFSSTP ( STEP ) */
 
-/*                prior to calling this routine. */
+/*              prior to calling this routine. */
 
-/*     UDREFN     the name of the user specified routine that computes */
-/*                a refinement in the times that bracket a transition */
-/*                point. In other words, once a pair of times have been */
-/*                detected such that the system is in different states at */
-/*                each of the two times, UDREFN selects an intermediate */
-/*                time which should be closer to the transition state */
-/*                than one of the two known times. */
+/*     UDREFN   is the name of the user specified routine that computes a */
+/*              refinement in the times that bracket a transition point. */
+/*              In other words, once a pair of times have been detected */
+/*              such that the system is in different states at each of */
+/*              the two times, UDREFN selects an intermediate time which */
+/*              should be closer to the transition state than one of the */
+/*              two known times. */
 
-/*                The calling sequence for UDREFN is: */
+/*              The calling sequence for UDREFN is: */
 
-/*                   CALL UDREFN ( T1, T2, S1, S2, T ) */
+/*                 CALL UDREFN ( T1, T2, S1, S2, T ) */
 
-/*                where the inputs are: */
+/*              where the inputs are: */
 
-/*                   T1    is a time when the system is in state S1. T1 */
-/*                         is expressed as seconds past J2000 TDB. */
+/*                 T1    is a time when the system is in state S1. T1 is */
+/*                       expressed as seconds past J2000 TDB. */
 
-/*                   T2    is a time when the system is in state S2. T2 */
-/*                         is expressed as seconds past J2000 TDB. T2 */
-/*                         is assumed to be larger than T1. */
+/*                 T2    is a time when the system is in state S2. T2 is */
+/*                       expressed as seconds past J2000 TDB. T2 is */
+/*                       assumed to be larger than T1. */
 
-/*                   S1    is the state of the system at time T1. */
-/*                         S1 is a LOGICAL value. */
+/*                 S1    is the state of the system at time T1. S1 is a */
+/*                       LOGICAL value. */
 
-/*                   S2    is the state of the system at time T2. */
-/*                         S2 is a LOGICAL value. */
+/*                 S2    is the state of the system at time T2. S2 is a */
+/*                       LOGICAL value. */
 
-/*                UDREFN may use or ignore the S1 and S2 values. */
+/*              UDREFN may use or ignore the S1 and S2 values. */
 
-/*                The output is: */
+/*              The output is: */
 
-/*                   T    is next time to check for a state transition. */
-/*                        T has value between T1 and T2. T is */
-/*                        expressed as seconds past J2000 TDB. */
+/*                 T     is next time to check for a state transition. */
+/*                       T has value between T1 and T2. T is expressed */
+/*                       as seconds past J2000 TDB. */
 
-/*                If a simple bisection method is desired, the routine */
+/*              If a simple bisection method is desired, the SPICELIB */
+/*              routine */
 
-/*                   GFREFN */
+/*                 GFREFN */
 
-/*                may be used. This is the default option. */
+/*              may be used as the refinement function. This is the */
+/*              default option. */
 
-/*     GQUANT     is a string containing the name of a geometric */
-/*                quantity.  The times when this quantity satisfies */
-/*                a condition specified by the arguments OP */
-/*                and ADJUST (described below) are to be found. */
+/*     GQUANT   is a string containing the name of a geometric quantity. */
+/*              The times when this quantity satisfies a condition */
+/*              specified by the arguments OP and ADJUST (described */
+/*              below) are to be found. */
 
-/*                Each quantity is specified by the quantity name */
-/*                given in argument GQUANT, and by a set of parameters */
-/*                specified by the arguments */
+/*              Each quantity is specified by the quantity name given in */
+/*              argument GQUANT, and by a set of parameters specified by */
+/*              the arguments */
 
-/*                   QNPARS */
-/*                   QPNAMS */
-/*                   QCPARS */
-/*                   QDPARS */
-/*                   QIPARS */
-/*                   QLPARS */
+/*                 QNPARS */
+/*                 QPNAMS */
+/*                 QCPARS */
+/*                 QDPARS */
+/*                 QIPARS */
+/*                 QLPARS */
+
+/*              For each quantity listed here, we also show how to set up */
+/*              these input arguments to define the quantity. See the */
+/*              detailed discussion of these arguments below for further */
+/*              information. */
+
+/*              GQUANT may be any of the strings: */
+
+/*                 'ANGULAR SEPARATION' */
+/*                 'COORDINATE' */
+/*                 'DISTANCE' */
+/*                 'ILLUMINATION ANGLE' */
+/*                 'PHASE ANGLE' */
+/*                 'RANGE RATE' */
+
+/*              GQUANT strings are case insensitive. Values, meanings, */
+/*              and associated parameters are discussed below. */
+
+/*              The aberration correction parameter indicates the */
+/*              aberration corrections to be applied to the state of the */
+/*              target body to account for one-way light time and stellar */
+/*              aberration. If relevant, it applies to the rotation of */
+/*              the target body as well. */
 
-/*                For each quantity listed here, we also show how to */
-/*                set up the input arguments to define the quantity. */
-/*                See the detailed discussion of these arguments */
-/*                below for further information. */
-
-/*                GQUANT may be any of the strings: */
-
-/*                   'ANGULAR SEPARATION' */
-/*                   'COORDINATE' */
-/*                   'DISTANCE' */
-/*                   'ILLUMINATION ANGLE' */
-/*                   'PHASE ANGLE' */
-/*                   'RANGE RATE' */
-
-/*                GQUANT strings are case insensitive.  Values, */
-/*                meanings, and associated parameters are discussed */
-/*                below. */
-
-/*                The aberration correction parameter indicates the */
-/*                aberration corrections to be applied to the state of */
-/*                the target body to account for one-way light time and */
-/*                stellar aberration. If relevant, it applies to the */
-/*                rotation of the target body as well. */
-
-/*                Supported aberration correction options for */
-/*                observation (case where radiation is received by */
-/*                observer at ET) are: */
-
-/*                  'NONE'          No correction. */
-/*                  'LT'            Light time only. */
-/*                  'LT+S'          Light time and stellar aberration. */
-/*                  'CN'            Converged Newtonian (CN) light time. */
-/*                  'CN+S'          CN light time and stellar aberration. */
-
-/*                Supported aberration correction options for */
-/*                transmission (case where radiation is emitted from */
-/*                observer at ET) are: */
-
-/*                  'XLT'           Light time only. */
-/*                  'XLT+S'         Light time and stellar aberration. */
-/*                  'XCN'           Converged Newtonian (CN) light time. */
-/*                  'XCN+S'         CN light time and stellar aberration. */
-
-/*                For detailed information, see the geometry finder */
-/*                required reading, gf.req. */
+/*              Supported aberration correction options for observation */
+/*              (case where radiation is received by observer at ET) are: */
 
-/*                Case, leading and trailing blanks are not significant */
-/*                in aberration correction parameter strings. */
+/*                 'NONE'          No correction. */
+/*                 'LT'            Light time only. */
+/*                 'LT+S'          Light time and stellar aberration. */
+/*                 'CN'            Converged Newtonian (CN) light time. */
+/*                 'CN+S'          CN light time and stellar aberration. */
 
+/*              Supported aberration correction options for transmission */
+/*              (case where radiation is emitted from observer at ET) */
+/*              are: */
 
-/*             ANGULAR SEPARATION */
+/*                 'XLT'           Light time only. */
+/*                 'XLT+S'         Light time and stellar aberration. */
+/*                 'XCN'           Converged Newtonian (CN) light time. */
+/*                 'XCN+S'         CN light time and stellar aberration. */
 
-/*                   is the apparent angular separation of two target */
-/*                   bodies as seen from an observing body. */
+/*              For detailed information, see the geometry finder */
+/*              required reading, gf.req. */
 
-/*                      Quantity Parameters: */
+/*              Case, leading and trailing blanks are not significant in */
+/*              aberration correction parameter strings. */
 
-/*                      QNPARS    = 8 */
-/*                      QPNAMS(1) = 'TARGET1' */
-/*                      QPNAMS(2) = 'FRAME1' */
-/*                      QPNAMS(3) = 'SHAPE1' */
-/*                      QPNAMS(4) = 'TARGET2' */
-/*                      QPNAMS(5) = 'FRAME2' */
-/*                      QPNAMS(6) = 'SHAPE2' */
-/*                      QPNAMS(7) = 'OBSERVER' */
-/*                      QPNAMS(8) = 'ABCORR' */
 
-/*                      QCPARS(1) = <name of first target> */
-/*                      QCPARS(2) = <name of body-fixed frame */
-/*                                            of first target> */
-/*                      QCPARS(3) = <shape of first target> */
-/*                      QCPARS(4) = <name of second target> */
-/*                      QCPARS(5) = <name of body-fixed frame */
-/*                                            of second target> */
-/*                      QCPARS(6) = <shape of second target> */
-/*                      QCPARS(7) = <name of observer> */
-/*                      QCPARS(8) = <aberration correction> */
+/*              ANGULAR SEPARATION */
 
-/*                   The target shape model specifiers may be set to */
-/*                   either of the values */
+/*                 is the apparent angular separation of two target */
+/*                 bodies as seen from an observing body. */
 
-/*                      'POINT' */
-/*                      'SPHERE' */
+/*                 Quantity Parameters: */
 
-/*                   The shape models for the two bodies need not match. */
+/*                    QNPARS    = 8 */
+/*                    QPNAMS(1) = 'TARGET1' */
+/*                    QPNAMS(2) = 'FRAME1' */
+/*                    QPNAMS(3) = 'SHAPE1' */
+/*                    QPNAMS(4) = 'TARGET2' */
+/*                    QPNAMS(5) = 'FRAME2' */
+/*                    QPNAMS(6) = 'SHAPE2' */
+/*                    QPNAMS(7) = 'OBSERVER' */
+/*                    QPNAMS(8) = 'ABCORR' */
 
-/*                   Spherical models have radii equal to the longest */
-/*                   equatorial radius of the PCK-based tri-axial */
-/*                   ellipsoids used to model the respective bodies. */
-/*                   When both target bodies are modeled as spheres, the */
-/*                   angular separation between the bodies is the angle */
-/*                   between the closest points on the limbs of the */
-/*                   spheres, as viewed from the vantage point of the */
-/*                   observer. If the limbs overlap, the angular */
-/*                   separation is negative. */
+/*                    QCPARS(1) = <name of first target> */
+/*                    QCPARS(2) = <name of body-fixed frame */
+/*                                          of first target> */
+/*                    QCPARS(3) = <shape of first target> */
+/*                    QCPARS(4) = <name of second target> */
+/*                    QCPARS(5) = <name of body-fixed frame */
+/*                                         of second target> */
+/*                    QCPARS(6) = <shape of second target> */
+/*                    QCPARS(7) = <name of observer> */
+/*                    QCPARS(8) = <aberration correction> */
 
-/*                   (In this case, the angular separation is the angle */
-/*                   between the centers of the spheres minus the sum of */
-/*                   the apparent angular radii of the spheres.) */
+/*                 The target shape model specifiers may be set to either */
+/*                 of the values */
 
+/*                    'POINT' */
+/*                    'SPHERE' */
 
-/*             COORDINATE */
+/*                 The shape models for the two bodies need not match. */
 
-/*                   is a coordinate of a specified vector in a specified */
-/*                   reference frame and coordinate system.  For example, */
-/*                   a coordinate can be the Z component of the earth-sun */
-/*                   vector in the J2000 reference frame, or the latitude */
-/*                   of the nearest point on Mars to an orbiting */
-/*                   spacecraft, expressed relative to the IAU_MARS */
-/*                   reference frame. */
+/*                 Spherical models have radii equal to the longest */
+/*                 equatorial radius of the PCK-based tri-axial */
+/*                 ellipsoids used to model the respective bodies. When */
+/*                 both target bodies are modeled as spheres, the angular */
+/*                 separation between the bodies is the angle between the */
+/*                 closest points on the limbs of the spheres, as viewed */
+/*                 from the vantage point of the observer. If the limbs */
+/*                 overlap, the angular separation is negative. */
 
-/*                   The method by which the vector is defined is */
-/*                   indicated by the */
+/*                 (In this case, the angular separation is the angle */
+/*                 between the centers of the spheres minus the sum of */
+/*                 the apparent angular radii of the spheres.) */
 
-/*                      'VECTOR DEFINITION' */
 
-/*                   parameter.  Allowed values and meanings of this */
-/*                   parameter are: */
+/*              COORDINATE */
 
-/*                      'POSITION' */
+/*                 is a coordinate of a specified vector in a specified */
+/*                 reference frame and coordinate system. For example, a */
+/*                 coordinate can be the Z component of the earth-sun */
+/*                 vector in the J2000 reference frame, or the latitude */
+/*                 of the nearest point on Mars to an orbiting */
+/*                 spacecraft, expressed relative to the IAU_MARS */
+/*                 reference frame. */
 
-/*                         The vector is defined by the */
-/*                         position of a target relative to */
-/*                         an observer. */
+/*                 The method by which the vector is defined is indicated */
+/*                 by the */
 
-/*                      'SUB-OBSERVER POINT' */
+/*                    'VECTOR DEFINITION' */
 
-/*                         The vector is the sub-observer point */
-/*                         on a specified target body. */
+/*                 parameter. Allowed values and meanings of this */
+/*                 parameter are: */
 
-/*                      'SURFACE INTERCEPT POINT' */
+/*                    'POSITION' */
 
-/*                         The vector is defined as the */
-/*                         intercept point of a vector from the */
-/*                         observer to the target body. */
+/*                       The vector is defined by the position of a */
+/*                       target relative to an observer. */
 
-/*                   Some vector definitions such as the sub-observer */
-/*                   point may be specified by a variety of methods, so */
-/*                   a parameter is provided to select the computation */
-/*                   method. The computation method parameter name is */
+/*                    'SUB-OBSERVER POINT' */
 
-/*                      'METHOD' */
+/*                       The vector is the sub-observer point on a */
+/*                       specified target body. */
 
-/*                   If the vector definition is */
+/*                    'SURFACE INTERCEPT POINT' */
 
-/*                      'POSITION' */
+/*                       The vector is defined as the intercept point of */
+/*                       a vector from the observer to the target body. */
 
-/*                   the METHOD parameter must be set to blank: */
+/*                 Some vector definitions, such as the sub-observer */
+/*                 point, may be specified by a variety of methods, so a */
+/*                 parameter is provided to select the computation */
+/*                 method. The computation method parameter name is */
 
-/*                      ' ' */
+/*                    'METHOD' */
 
-/*                   If the vector definition is */
+/*                 If the vector definition is */
 
-/*                      'SUB-OBSERVER POINT' */
+/*                    'POSITION' */
 
-/*                   the METHOD parameter must be set to either: */
+/*                 the 'METHOD' parameter must be set to blank: */
 
-/*                      'Near point: ellipsoid' */
-/*                      'Intercept: ellipsoid' */
+/*                    ' ' */
 
-/*                   If the vector definition is */
+/*                 If the vector definition is */
 
-/*                      'SURFACE INTERCEPT POINT' */
+/*                    'SUB-OBSERVER POINT' */
 
-/*                   the METHOD parameter must be set to: */
+/*                 the 'METHOD' parameter must be set to either: */
 
-/*                      'Ellipsoid' */
+/*                    'Near point: ellipsoid' */
+/*                    'Intercept: ellipsoid' */
 
-/*                         The intercept computation uses */
-/*                         a triaxial ellipsoid to model */
-/*                         the surface of the target body. */
-/*                         The ellipsoid's radii must be */
-/*                         available in the kernel pool. */
+/*                 If the vector definition is */
 
-/*                   The supported coordinate systems and coordinate */
-/*                   names: */
+/*                    'SURFACE INTERCEPT POINT' */
 
-/*                   Coordinate System  Coordinates        Range */
+/*                 the 'METHOD' parameter must be set to: */
 
-/*                  'RECTANGULAR'       'X' */
-/*                                      'Y' */
-/*                                      'Z' */
+/*                    'Ellipsoid' */
 
-/*                  'LATITUDINAL'       'RADIUS' */
-/*                                      'LONGITUDE'        (-Pi,Pi] */
-/*                                      'LATITUDE'         [-Pi/2,Pi/2] */
+/*                       The intercept computation uses a triaxial */
+/*                       ellipsoid to model the surface of the target */
+/*                       body. The ellipsoid's radii must be available in */
+/*                       the kernel pool. */
 
-/*                  'RA/DEC'            'RANGE' */
-/*                                      'RIGHT ASCENSION'  [0,2Pi) */
-/*                                      'DECLINATION'      [-Pi/2,Pi/2] */
+/*                 The supported coordinate systems and coordinate names: */
 
-/*                  'SPHERICAL'         'RADIUS' */
-/*                                      'COLATITUDE'       [0,Pi] */
-/*                                      'LONGITUDE'        (-Pi,Pi] */
+/*                    Coordinate System  Coordinates        Range */
+/*                    -----------------  -----------------  ------------ */
 
-/*                  'CYLINDRICAL'       'RADIUS' */
-/*                                      'LONGITUDE'        [0,2Pi) */
-/*                                      'Z' */
+/*                    'RECTANGULAR'      'X' */
+/*                                       'Y' */
+/*                                       'Z' */
 
-/*                  'GEODETIC'          'LONGITUDE'        (-Pi,Pi] */
-/*                                      'LATITUDE'         [-Pi/2,Pi/2] */
-/*                                      'ALTITUDE' */
+/*                    'LATITUDINAL'      'RADIUS' */
+/*                                       'LONGITUDE'        (-Pi,Pi] */
+/*                                       'LATITUDE'         [-Pi/2,Pi/2] */
 
-/*                  'PLANETOGRAPHIC'    'LONGITUDE'        [0,2Pi) */
-/*                                      'LATITUDE'         [-Pi/2,Pi/2] */
-/*                                      'ALTITUDE' */
+/*                    'RA/DEC'           'RANGE' */
+/*                                       'RIGHT ASCENSION'  [0,2Pi) */
+/*                                       'DECLINATION'      [-Pi/2,Pi/2] */
 
-/*                   When geodetic coordinates are selected, the radii */
-/*                   used are those of the central body associated with */
-/*                   the reference frame. For example, if IAU_MARS is the */
-/*                   reference frame, then geodetic coordinates are */
-/*                   calculated using the radii of Mars taken from a */
-/*                   SPICE planetary constants kernel. One cannot ask for */
-/*                   geodetic coordinates for a frame which doesn't have */
-/*                   an extended body as its center. */
+/*                    'SPHERICAL'        'RADIUS' */
+/*                                       'COLATITUDE'       [0,Pi] */
+/*                                       'LONGITUDE'        (-Pi,Pi] */
 
-/*                   Reference frame names must be recognized by the */
-/*                   SPICE frame subsystem. */
+/*                    'CYLINDRICAL'      'RADIUS' */
+/*                                       'LONGITUDE'        [0,2Pi) */
+/*                                       'Z' */
 
-/*                   Quantity Parameters: */
+/*                    'GEODETIC'         'LONGITUDE'        (-Pi,Pi] */
+/*                                       'LATITUDE'         [-Pi/2,Pi/2] */
+/*                                       'ALTITUDE' */
 
-/*                      QNPARS    = 10 */
-/*                      QPNAMS(1) = 'TARGET' */
-/*                      QPNAMS(2) = 'OBSERVER' */
-/*                      QPNAMS(3) = 'ABCORR' */
-/*                      QPNAMS(4) = 'COORDINATE SYSTEM' */
-/*                      QPNAMS(5) = 'COORDINATE' */
-/*                      QPNAMS(6) = 'REFERENCE FRAME' */
-/*                      QPNAMS(7) = 'VECTOR DEFINITION' */
-/*                      QPNAMS(8) = 'METHOD' */
-/*                      QPNAMS(9) = 'DREF' */
-/*                      QPNAMS(10) = 'DVEC' */
+/*                    'PLANETOGRAPHIC'   'LONGITUDE'        [0,2Pi) */
+/*                                       'LATITUDE'         [-Pi/2,Pi/2] */
+/*                                       'ALTITUDE' */
 
-/*                   Only 'SURFACE INTERCEPT POINT' searches make */
-/*                   use of the DREF and DVEC parameters. */
+/*                 When geodetic coordinates are selected, the radii used */
+/*                 are those of the central body associated with the */
+/*                 reference frame. For example, if IAU_MARS is the */
+/*                 reference frame, then geodetic coordinates are */
+/*                 calculated using the radii of Mars taken from a SPICE */
+/*                 planetary constants kernel. One cannot ask for */
+/*                 geodetic coordinates for a frame which doesn't have an */
+/*                 extended body as its center. */
 
-/*                      QCPARS(1) = <name of target> */
-/*                      QCPARS(2) = <name of observer> */
-/*                      QCPARS(3) = <aberration correction> */
-/*                      QCPARS(4) = <coordinate system name> */
-/*                      QCPARS(5) = <coordinate name> */
-/*                      QCPARS(6) = <body reference frame name> */
-/*                      QCPARS(7) = <vector definition> */
-/*                      QCPARS(8) = <computation method> */
-/*                      QCPARS(9) = <reference frame of DVEC pointing */
-/*                                             vector, defined in QDPAR> */
+/*                 Reference frame names must be recognized by the SPICE */
+/*                 frame subsystem. */
 
-/*                      QDPARS(1) = <DVEC pointing vector x component */
-/*                                                        from observer> */
-/*                      QDPARS(2) = <DVEC pointing vector y component */
-/*                                                        from observer> */
-/*                      QDPARS(3) = <DVEC pointing vector z component */
-/*                                                        from observer> */
+/*                 Quantity Parameters: */
 
-/*             DISTANCE */
+/*                    QNPARS     = 10 */
+/*                    QPNAMS(1)  = 'TARGET' */
+/*                    QPNAMS(2)  = 'OBSERVER' */
+/*                    QPNAMS(3)  = 'ABCORR' */
+/*                    QPNAMS(4)  = 'COORDINATE SYSTEM' */
+/*                    QPNAMS(5)  = 'COORDINATE' */
+/*                    QPNAMS(6)  = 'REFERENCE FRAME' */
+/*                    QPNAMS(7)  = 'VECTOR DEFINITION' */
+/*                    QPNAMS(8)  = 'METHOD' */
+/*                    QPNAMS(9)  = 'DREF' */
+/*                    QPNAMS(10) = 'DVEC' */
 
-/*                   is the apparent distance between a target body and */
-/*                   an observing body. Distances are always measured */
-/*                   between centers of mass. */
+/*                 Only 'SURFACE INTERCEPT POINT' searches make use of */
+/*                 the 'DREF' and 'DVEC' parameters. */
 
-/*                      Quantity Parameters: */
+/*                    QCPARS(1) = <name of target> */
+/*                    QCPARS(2) = <name of observer> */
+/*                    QCPARS(3) = <aberration correction> */
+/*                    QCPARS(4) = <coordinate system name> */
+/*                    QCPARS(5) = <coordinate name> */
+/*                    QCPARS(6) = <target reference frame name> */
+/*                    QCPARS(7) = <vector definition> */
+/*                    QCPARS(8) = <computation method> */
+/*                    QCPARS(9) = <reference frame of DVEC pointing */
+/*                                        vector, defined in QDPARS> */
 
-/*                      QNPARS    = 3 */
-/*                      QPNAMS(1) = 'TARGET' */
-/*                      QPNAMS(2) = 'OBSERVER' */
-/*                      QPNAMS(3) = 'ABCORR' */
+/*                    QDPARS(1) = <DVEC pointing vector x component */
+/*                                                      from observer> */
+/*                    QDPARS(2) = <DVEC pointing vector y component */
+/*                                                      from observer> */
+/*                    QDPARS(3) = <DVEC pointing vector z component */
+/*                                                      from observer> */
 
-/*                      QCPARS(1) = <name of target> */
-/*                      QCPARS(2) = <name of observer> */
-/*                      QCPARS(3) = <aberration correction> */
+/*              DISTANCE */
 
+/*                 is the apparent distance between a target body and an */
+/*                 observing body. Distances are always measured between */
+/*                 centers of mass. */
 
-/*             ILLUMINATION ANGLE */
+/*                 Quantity Parameters: */
 
-/*                   is any of the illumination angles */
+/*                    QNPARS    = 3 */
+/*                    QPNAMS(1) = 'TARGET' */
+/*                    QPNAMS(2) = 'OBSERVER' */
+/*                    QPNAMS(3) = 'ABCORR' */
 
-/*                      emission */
-/*                      phase */
-/*                      solar incidence */
+/*                    QCPARS(1) = <name of target> */
+/*                    QCPARS(2) = <name of observer> */
+/*                    QCPARS(3) = <aberration correction> */
 
-/*                   defined at a surface point on a target body. */
-/*                   These angles are defined as in the SPICELIB */
-/*                   routine ILUMIN. */
 
-/*                      Quantity Parameters: */
+/*              ILLUMINATION ANGLE */
 
-/*                      QNPARS    = 8 */
-/*                      QPNAMS(1) = 'TARGET' */
-/*                      QPNAMS(2) = 'ILLUM' */
-/*                      QPNAMS(3) = 'OBSERVER' */
-/*                      QPNAMS(4) = 'ABCORR' */
-/*                      QPNAMS(5) = 'FRAME' */
-/*                      QPNAMS(6) = 'ANGTYP' */
-/*                      QPNAMS(7) = 'METHOD' */
-/*                      QPNAMS(8) = 'SPOINT' */
+/*                 is any of the illumination angles */
 
-/*                      QCPARS(1) =  <name of target> */
-/*                      QCPARS(1) =  <name of illumination source> */
-/*                      QCPARS(3) =  <name of observer> */
-/*                      QCPARS(4) =  <aberration correction> */
-/*                      QCPARS(5) =  <target body-fixed frame> */
-/*                      QCPARS(6) =  <type of illumination angle> */
-/*                      QCPARS(7) =  <computation method> */
+/*                    emission */
+/*                    phase */
+/*                    solar incidence */
 
-/*                      The surface point is specified using rectangular */
-/*                      coordinates in the specified body-fixed frame. */
+/*                 defined at a surface point on a target body. These */
+/*                 angles are defined as in the SPICELIB routine ILUMIN. */
 
-/*                      QDPARS(1) =  <X coordinate of surface point> */
-/*                      QDPARS(2) =  <Y coordinate of surface point> */
-/*                      QDPARS(3) =  <Z coordinate of surface point> */
+/*                 Quantity Parameters: */
 
-/*             PHASE ANGLE */
+/*                    QNPARS    = 8 */
+/*                    QPNAMS(1) = 'TARGET' */
+/*                    QPNAMS(2) = 'ILLUM' */
+/*                    QPNAMS(3) = 'OBSERVER' */
+/*                    QPNAMS(4) = 'ABCORR' */
+/*                    QPNAMS(5) = 'FRAME' */
+/*                    QPNAMS(6) = 'ANGTYP' */
+/*                    QPNAMS(7) = 'METHOD' */
+/*                    QPNAMS(8) = 'SPOINT' */
 
-/*                   is the apparent phase angle between a target body */
-/*                   center and an illuminating body center as seen from */
-/*                   an observer. */
+/*                    QCPARS(1) =  <name of target> */
+/*                    QCPARS(1) =  <name of illumination source> */
+/*                    QCPARS(3) =  <name of observer> */
+/*                    QCPARS(4) =  <aberration correction> */
+/*                    QCPARS(5) =  <target body-fixed frame> */
+/*                    QCPARS(6) =  <type of illumination angle> */
+/*                    QCPARS(7) =  <computation method> */
 
-/*                      Quantity Parameters: */
+/*                 The surface point is specified using rectangular */
+/*                 coordinates in the specified body-fixed frame. */
 
-/*                      QNPARS    = 4 */
-/*                      QPNAMS(1) = 'TARGET' */
-/*                      QPNAMS(2) = 'OBSERVER' */
-/*                      QPNAMS(3) = 'ABCORR' */
-/*                      QPNAMS(4) = 'ILLUM' */
+/*                    QDPARS(1) =  <X coordinate of surface point> */
+/*                    QDPARS(2) =  <Y coordinate of surface point> */
+/*                    QDPARS(3) =  <Z coordinate of surface point> */
 
-/*                      QCPARS(1) =  <name of target> */
-/*                      QCPARS(2) =  <name of observer> */
-/*                      QCPARS(3) =  <aberration correction> */
-/*                      QCPARS(4) =  <name of illuminating body> */
 
+/*              PHASE ANGLE */
 
-/*             RANGE RATE */
+/*                 is the apparent phase angle between a target body */
+/*                 center and an illuminating body center as seen from an */
+/*                 observer. */
 
-/*                   is the apparent range rate between a target body */
-/*                   and an observing body. */
+/*                 Quantity Parameters: */
 
-/*                      Quantity Parameters: */
+/*                    QNPARS    = 4 */
+/*                    QPNAMS(1) = 'TARGET' */
+/*                    QPNAMS(2) = 'OBSERVER' */
+/*                    QPNAMS(3) = 'ABCORR' */
+/*                    QPNAMS(4) = 'ILLUM' */
 
-/*                      QNPARS    = 3 */
-/*                      QPNAMS(1) = 'TARGET' */
-/*                      QPNAMS(2) = 'OBSERVER' */
-/*                      QPNAMS(3) = 'ABCORR' */
+/*                    QCPARS(1) =  <name of target> */
+/*                    QCPARS(2) =  <name of observer> */
+/*                    QCPARS(3) =  <aberration correction> */
+/*                    QCPARS(4) =  <name of illuminating body> */
 
-/*                      QCPARS(1) = <name of target> */
-/*                      QCPARS(2) = <name of observer> */
-/*                      QCPARS(3) = <aberration correction> */
 
+/*              RANGE RATE */
 
+/*                 is the apparent range rate between a target body and */
+/*                 an observing body. */
 
-/*     QNPARS     is the count of quantity parameter definition */
-/*                parameters.  These parameters supply the quantity- */
-/*                specific information needed to fully define the */
-/*                quantity used in the search performed by this routine. */
+/*                 Quantity Parameters: */
 
-/*     QPNAMS     is an array of names of quantity definition parameters. */
-/*                The names occupy elements 1:QNPARS of this array. */
-/*                The value associated with the Ith element of QPNAMS */
-/*                is located in element I of the parameter value argument */
-/*                having data type appropriate for the parameter: */
+/*                    QNPARS    = 3 */
+/*                    QPNAMS(1) = 'TARGET' */
+/*                    QPNAMS(2) = 'OBSERVER' */
+/*                    QPNAMS(3) = 'ABCORR' */
 
-/*                   Data Type                      Argument */
-/*                   ---------                      -------- */
-/*                   Character strings              QCPARS */
-/*                   Double precision numbers       QDPARS */
-/*                   Integers                       QIPARS */
-/*                   Logicals                       QLPARS */
+/*                    QCPARS(1) = <name of target> */
+/*                    QCPARS(2) = <name of observer> */
+/*                    QCPARS(3) = <aberration correction> */
 
-/*                The order in which the parameter names are listed */
-/*                is unimportant, as long as the corresponding */
-/*                parameter values are listed in the same order. */
+/*     QNPARS   is the count of quantity parameter definition parameters. */
+/*              These parameters supply the quantity-specific information */
+/*              needed to fully define the quantity used in the search */
+/*              performed by this routine. */
 
-/*                The names in QPNAMS are case-insensitive. */
+/*     QPNAMS   is an array of names of quantity definition parameters. */
+/*              The names occupy elements 1:QNPARS of this array. The */
+/*              value associated with the Ith element of QPNAMS is */
+/*              located in element I of the parameter value argument */
+/*              having data type appropriate for the parameter: */
 
-/*                See the description of the input argument GQUANT */
-/*                for a discussion of the parameter names and values */
-/*                associated with a given quantity. */
+/*                 Data Type                      Argument */
+/*                 ---------                      -------- */
+/*                 Character strings              QCPARS */
+/*                 Double precision numbers       QDPARS */
+/*                 Integers                       QIPARS */
+/*                 Logicals                       QLPARS */
+
+/*              The order in which the parameter names are listed is */
+/*              unimportant, as long as the corresponding parameter */
+/*              values are listed in the same order. */
+
+/*              The names in QPNAMS are case-insensitive. */
+
+/*              See the description of the input argument GQUANT for a */
+/*              discussion of the parameter names and values associated */
+/*              with a given quantity. */
 
 /*     QCPARS, */
 /*     QDPARS, */
 /*     QIPARS, */
-/*     QLPARS     are, respectively, parameter value arrays of types */
+/*     QLPARS   are, respectively, parameter value arrays of types */
 
-/*                   CHARACTER*(*)       QCPARS */
-/*                   DOUBLE PRECISION    QDPARS */
-/*                   INTEGER             QIPARS */
-/*                   LOGICAL             QLPARS */
+/*                  CHARACTER*(*)       QCPARS */
+/*                  DOUBLE PRECISION    QDPARS */
+/*                  INTEGER             QIPARS */
+/*                  LOGICAL             QLPARS */
 
-/*                The value associated with the Ith name in the array */
-/*                QPNAMS resides in the Ith element of whichever of */
-/*                these arrays has the appropriate data type. */
+/*              The value associated with the Ith name in the array */
+/*              QPNAMS resides in the Ith element of whichever of these */
+/*              arrays has the appropriate data type. */
 
-/*                All of these arrays should be declared with dimension */
-/*                at least QNPARS. */
+/*              All of these arrays should be declared with dimension at */
+/*              least QNPARS. */
 
-/*                The names in the array QCPARS are case-insensitive. */
+/*              The names in the array QCPARS are case-insensitive. */
 
-/*                Note that there is no required order for QPNAMS/Q*PARS */
-/*                pairs. */
+/*              Note that there is no required order for QPNAMS/Q*PARS */
+/*              pairs. */
 
-/*                See the description of the input argument GQUANT */
-/*                for a discussion of the parameter names and values */
-/*                associated with a given quantity. */
+/*              See the description of the input argument GQUANT for a */
+/*              discussion of the parameter names and values associated */
+/*              with a given quantity. */
 
-/*     OP         is a scalar string comparison operator indicating */
-/*                the numeric constraint of interest. Values are: */
+/*     OP       is a scalar string comparison operator indicating the */
+/*              numeric constraint of interest. Values are: */
 
-/*                   '>'   value of geometric quantity greater than some */
-/*                         reference (REFVAL). */
+/*                 '>'        value of geometric quantity greater than */
+/*                            some reference (REFVAL). */
 
-/*                   '='   value of geometric quantity equal to some */
-/*                         reference (REFVAL). */
+/*                 '='        value of geometric quantity equal to some */
+/*                            reference (REFVAL). */
 
-/*                   '<'   value of geometric quantity less than some */
-/*                         reference (REFVAL). */
+/*                 '<'        value of geometric quantity less than some */
+/*                            reference (REFVAL). */
 
-/*                   'ABSMAX'  The geometric quantity is at an absolute */
-/*                             maximum. */
+/*                 'ABSMAX'   The geometric quantity is at an absolute */
+/*                            maximum. */
 
-/*                   'ABSMIN'  The geometric quantity is at an absolute */
-/*                              minimum. */
+/*                 'ABSMIN'   The geometric quantity is at an absolute */
+/*                            minimum. */
 
-/*                   'LOCMAX'  The geometric quantity is at a local */
-/*                             maximum. */
+/*                 'LOCMAX'   The geometric quantity is at a local */
+/*                            maximum. */
 
-/*                   'LOCMIN'  The geometric quantity is at a local */
-/*                             minimum. */
+/*                 'LOCMIN'   The geometric quantity is at a local */
+/*                            minimum. */
 
-/*                The caller may indicate that the region of interest */
-/*                is the set of time intervals where the quantity is */
-/*                within a specified distance of an absolute extremum. */
-/*                The argument ADJUST (described below) is used to */
-/*                specified this distance. */
+/*              The caller may indicate that the region of interest is */
+/*              the set of time intervals where the quantity is within a */
+/*              specified distance of an absolute extremum. The argument */
+/*              ADJUST (described below) is used to specified this */
+/*              distance. */
 
-/*                Local extrema are considered to exist only in the */
-/*                interiors of the intervals comprising the confinement */
-/*                window:  a local extremum cannot exist at a boundary */
-/*                point of the confinement window. */
+/*              Local extrema are considered to exist only in the */
+/*              interiors of the intervals comprising the confinement */
+/*              window: a local extremum cannot exist at a boundary point */
+/*              of the confinement window. */
 
-/*                Case is not significant in the string OP. */
+/*              Case is not significant in the string OP. */
 
-/*     REFVAL     is the reference value used to define an equality or */
-/*                inequality to be satisfied by the geometric quantity. */
-/*                The units of REFVAL are radians, radians/sec, km, or */
-/*                km/sec as appropriate. */
+/*     REFVAL   is the reference value used to define an equality or */
+/*              inequality to be satisfied by the geometric quantity. The */
+/*              units of REFVAL are radians, radians/sec, km, or km/sec */
+/*              as appropriate. */
 
-/*     TOL        is a tolerance value used to determine convergence of */
-/*                root-finding operations.  TOL is measured in ephemeris */
-/*                seconds and must be greater than zero. */
+/*     TOL      is a tolerance value used to determine convergence of */
+/*              root-finding operations. TOL is measured in ephemeris */
+/*              seconds and must be greater than zero. */
 
-/*     ADJUST     the amount by which the quantity is allowed to vary */
-/*                from an absolute extremum. */
+/*     ADJUST   is the amount by which the quantity is allowed to vary */
+/*              from an absolute extremum. */
 
-/*                If the search is for an absolute minimum is performed, */
-/*                the resulting window contains time intervals when the */
-/*                geometric quantity 'gquant' has values between */
-/*                ABSMIN and ABSMIN + 'adjust'. */
+/*              If the search is for an absolute minimum is performed, */
+/*              the resulting window contains time intervals when the */
+/*              geometric quantity GQUANT has values between ABSMIN and */
+/*              ABSMIN + ADJUST. */
 
-/*                If the search is for an absolute maximum, the */
-/*                corresponding range is  between ABSMAX - 'adjust' and */
-/*                ABSMAX. */
+/*              If the search is for an absolute maximum, the */
+/*              corresponding range is  between ABSMAX - ADJUST and */
+/*              ABSMAX. */
 
-/*                ADJUST is not used for searches for local extrema, */
-/*                equality or inequality conditions and must have value */
-/*                zero for such searches. ADJUST must not be */
-/*                negative. */
+/*              ADJUST is not used for searches for local extrema, */
+/*              equality or inequality conditions and must have value */
+/*              zero for such searches. ADJUST must not be negative. */
 
-/*     CNFINE     is a SPICE window that confines the time period over */
-/*                which the specified search is conducted. CNFINE may */
-/*                consist of a single interval or a collection of */
-/*                intervals. */
+/*     CNFINE   is a SPICE window that confines the time period over */
+/*              which the specified search is conducted. CNFINE may */
+/*              consist of a single interval or a collection of */
+/*              intervals. */
 
-/*                In some cases the confinement window can be used to */
-/*                greatly reduce the time period that must be searched */
-/*                for the desired solution. See the Particulars section */
-/*                below for further discussion. */
+/*              In some cases the confinement window can be used to */
+/*              greatly reduce the time period that must be searched */
+/*              for the desired solution. See the $Particulars section */
+/*              below for further discussion. */
 
-/*                See the Examples section below for a code example */
-/*                that shows how to create a confinement window. */
+/*              See the $Examples section below for a code example */
+/*              that shows how to create a confinement window. */
 
-/*                CNFINE must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
+/*              CNFINE must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
 
-/*     RPT        is a logical variable which controls whether the */
-/*                progress reporter is enabled. When RPT is TRUE, */
-/*                progress reporting is enabled and the routines */
-/*                UDREPI, UDREPU, and UDREPF (see descriptions below) */
-/*                are used to report progress. */
+/*              In some cases the observer's state may be computed at */
+/*              times outside of CNFINE by as much as 2 seconds. See */
+/*              $Particulars for details. */
 
-/*     UDREPI     the name of the user specified routine that initializes */
-/*                a progress report.  When progress reporting is */
-/*                enabled, UDREPI is called at the start */
-/*                of a search.  The calling sequence of UDREPI is */
+/*     RPT      is a logical variable which controls whether the progress */
+/*              reporter is enabled. When RPT is .TRUE., progress */
+/*              reporting is enabled and the routines UDREPI, UDREPU, and */
+/*              UDREPF (see descriptions below) are used to report */
+/*              progress. */
 
-/*                   UDREPI ( CNFINE, SRCPRE, SRCSUF ) */
+/*     UDREPI   is the name of the user specified routine that */
+/*              initializes a progress report. When progress reporting is */
+/*              enabled, UDREPI is called at the start of a search. The */
+/*              calling sequence of UDREPI is */
 
-/*                   DOUBLE PRECISION    CNFINE ( LBCELL : * ) */
-/*                   CHARACTER*(*)       SRCPRE */
-/*                   CHARACTER*(*)       SRCSUF */
+/*                 UDREPI ( CNFINE, SRCPRE, SRCSUF ) */
 
-/*                where */
+/*                 DOUBLE PRECISION    CNFINE ( LBCELL : * ) */
+/*                 CHARACTER*(*)       SRCPRE */
+/*                 CHARACTER*(*)       SRCSUF */
 
-/*                   CNFINE */
+/*              where */
 
-/*                is a confinement window specifying the time period */
-/*                over which a search is conducted, and */
+/*                 CNFINE */
 
-/*                   SRCPRE */
-/*                   SRCSUF */
+/*              is a confinement window specifying the time period over */
+/*              which a search is conducted, and */
 
-/*                are prefix and suffix strings used in the progress */
-/*                report: these strings are intended to bracket a */
-/*                representation of the fraction of work done. For */
-/*                example, when the progress reporting functions */
-/*                are used, if SRCPRE and SRCSUF are, respectively, */
+/*                 SRCPRE */
+/*                 SRCSUF */
 
-/*                   'Occultation/transit search' */
-/*                   'done.' */
+/*              are prefix and suffix strings used in the progress */
+/*              report: these strings are intended to bracket a */
+/*              representation of the fraction of work done. For example, */
+/*              when the SPICELIB progress reporting functions are used, */
+/*              if SRCPRE and SRCSUF are, respectively, */
 
-/*                the progress report display at the end of */
-/*                the search will be: */
+/*                 'Occultation/transit search' */
+/*                 'done.' */
 
-/*                   Occultation/transit search 100.00% done. */
+/*              the progress report display at the end of the search will */
+/*              be: */
 
-/*                If the user doesn't wish to provide a custom set of */
-/*                progress reporting functions, the routine */
+/*                 Occultation/transit search 100.00% done. */
 
-/*                   GFREPI */
+/*              If the user doesn't wish to provide a custom set of */
+/*              progress reporting functions, the SPICELIB routine */
 
-/*                may be used. */
+/*                 GFREPI */
 
-/*     UDREPU     the name of the user specified routine that updates */
-/*                the progress report for a search. The calling sequence */
-/*                of UDREPU is */
+/*              may be used. */
 
-/*                   UDREPU (IVBEG, IVEND, ET ) */
+/*     UDREPU   is the name of the user specified routine that updates */
+/*              the progress report for a search. The calling sequence of */
+/*              UDREPU is */
 
-/*                   DOUBLE PRECISION      ET */
-/*                   DOUBLE PRECISION      IVBEG */
-/*                   DOUBLE PRECISION      IVEND */
+/*                 UDREPU (IVBEG, IVEND, ET ) */
 
-/*                where ET is an epoch belonging to the confinement */
-/*                window, IVBEG and IVEND are the start and stop times, */
-/*                respectively of the current confinement window */
-/*                interval.  The ratio of the measure of the portion */
-/*                of CNFINE that precedes ET to the measure of CNFINE */
-/*                would be a logical candidate for the searches */
-/*                completion percentage; however the method of */
-/*                measurement is up to the user. */
+/*                 DOUBLE PRECISION      ET */
+/*                 DOUBLE PRECISION      IVBEG */
+/*                 DOUBLE PRECISION      IVEND */
 
-/*                If the user doesn't wish to provide a custom set of */
-/*                progress reporting functions, the routine */
+/*              where ET is an epoch belonging to the confinement window, */
+/*              IVBEG and IVEND are the start and stop times, */
+/*              respectively of the current confinement window interval. */
+/*              The ratio of the measure of the portion of CNFINE that */
+/*              precedes ET to the measure of CNFINE would be a logical */
+/*              candidate for the searches completion percentage; however */
+/*              the method of measurement is up to the user. */
 
-/*                   GFREPU */
+/*              If the user doesn't wish to provide a custom set of */
+/*              progress reporting functions, the SPICELIB routine */
 
-/*                may be used. */
+/*                 GFREPU */
 
-/*     UDREPF     the name of the user specified routine that finalizes */
-/*                a progress report.  UDREPF has no arguments. */
+/*              may be used. */
 
-/*                If the user doesn't wish to provide a custom set of */
-/*                progress reporting functions, the routine */
+/*     UDREPF   is the name of the user specified routine that finalizes */
+/*              a progress report. UDREPF has no arguments. */
 
-/*                   GFREPF */
+/*              If the user doesn't wish to provide a custom set of */
+/*              progress reporting functions, the SPICELIB routine */
 
-/*                may be used. */
+/*                 GFREPF */
 
-/*     MW         is a parameter specifying the length of the SPICE */
-/*                windows in the workspace array WORK (see description */
-/*                below) used by this routine. */
+/*              may be used. */
 
-/*                MW should be set to a number at least twice as large */
-/*                as the maximum number of intervals required by any */
-/*                workspace window. In many cases, it's not necessary to */
-/*                compute an accurate estimate of how many intervals are */
-/*                needed; rather, the user can pick a size considerably */
-/*                larger than what's really required. */
+/*     MW       is a parameter specifying the length of the SPICE */
+/*              windows in the workspace array WORK (see description */
+/*              below) used by this routine. */
 
-/*                However, since excessively large arrays can prevent */
-/*                applications from compiling, linking, or running */
-/*                properly, sometimes MW must be set according to */
-/*                the actual workspace requirement. A rule of thumb */
-/*                for the number of intervals NINTVLS needed is */
+/*              MW should be set to a number at least twice as large */
+/*              as the maximum number of intervals required by any */
+/*              workspace window. In many cases, it's not necessary to */
+/*              compute an accurate estimate of how many intervals are */
+/*              needed; rather, the user can pick a size considerably */
+/*              larger than what's really required. */
 
-/*                  NINTVLS  =  2*N  +  ( M / STEP ) */
+/*              However, since excessively large arrays can prevent */
+/*              applications from compiling, linking, or running */
+/*              properly, sometimes MW must be set according to */
+/*              the actual workspace requirement. A rule of thumb */
+/*              for the number of intervals NINTVLS needed is */
 
-/*               where */
+/*                 NINTVLS  =  2*N  +  ( M / STEP ) */
 
-/*                   N     is the number of intervals in the confinement */
-/*                         window */
+/*              where */
 
-/*                   M     is the measure of the confinement window, in */
-/*                         units of seconds */
+/*                 N     is the number of intervals in the confinement */
+/*                       window */
 
-/*                   STEP  is the search step size in seconds */
+/*                 M     is the measure of the confinement window, in */
+/*                       units of seconds */
 
-/*               MW should then be set to */
+/*                 STEP  is the search step size in seconds */
 
-/*                  2 * NINTVLS */
+/*              MW should then be set to */
 
-/*     NW         is a parameter specifying the number of SPICE windows */
-/*                in the workspace array WORK (see description below) */
-/*                used by this routine.  (The reason this dimension is */
-/*                an input argument is that this allows run-time */
-/*                error checking to be performed.) */
+/*                 2 * NINTVLS */
 
-/*     WORK       is an array used to store workspace windows. This */
-/*                array should be declared by the caller as shown: */
+/*     NW       is a parameter specifying the number of SPICE windows */
+/*              in the workspace array WORK (see description below) */
+/*              used by this routine. (The reason this dimension is */
+/*              an input argument is that this allows run-time */
+/*              error checking to be performed.) */
 
-/*                    DOUBLE PRECISION     WORK ( LBCELL : MW,  NW ) */
+/*     BAIL     is a logical flag indicating whether or not interrupt */
+/*              signaling handling is enabled. When BAIL is set to */
+/*              .TRUE., the input function UDBAIL (see description below) */
+/*              is used to determine whether an interrupt has been */
+/*              issued. */
 
-/*                WORK need not be initialized by the caller. */
+/*     UDBAIL   is the name of the user specified routine that indicates */
+/*              whether an interrupt signal has been issued (for example, */
+/*              from the keyboard). UDBAIL has no arguments and returns */
+/*              a LOGICAL value. The return value is .TRUE. if an */
+/*              interrupt has been issued; otherwise the value is .FALSE. */
 
-/*     BAIL       is a logical indicating whether or not interrupt */
-/*                signaling is enabled. When `bail' is set to TRUE, */
-/*                the input function UDBAIL (see description below) */
-/*                is used to determine whether an interrupt has been */
-/*                issued. */
+/*              GFEVNT uses UDBAIL only when BAIL (see above) is set */
+/*              to .TRUE., indicating that interrupt handling is */
+/*              enabled. When interrupt handling is enabled, GFEVNT */
+/*              and routines in its call tree will call UDBAIL to */
+/*              determine whether to terminate processing and return */
+/*              immediately. */
 
-/*     UDBAIL     the name of the user specified routine that */
-/*                indicates whether an interrupt signal has been */
-/*                issued (for example, from the keyboard).  UDBAIL */
-/*                has no arguments and returns a LOGICAL value. */
-/*                The return value is .TRUE. if an interrupt has */
-/*                been issued; otherwise the value is .FALSE. */
+/*              If interrupt handing is not enabled, a logical */
+/*              function must still be passed as an input argument. */
+/*              The SPICELIB function */
 
-/*                GFEVNT uses UDBAIL only when BAIL (see above) is set */
-/*                to .TRUE., indicating that interrupt handling is */
-/*                enabled. When interrupt handling is enabled, GFEVNT */
-/*                and routines in its call tree will call UDBAIL to */
-/*                determine whether to terminate processing and return */
-/*                immediately. */
+/*                 GFBAIL */
 
-/*                If interrupt handing is not enabled, a logical */
-/*                function must still be passed as an input argument. */
-/*                The function */
+/*              may be used for this purpose. */
 
-/*                   GFBAIL */
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
 
-/*                may be used for this purpose. */
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFEVNT conducts its search. */
 
 /* $ Detailed_Output */
 
-/*     WORK       has undefined contents on output. */
+/*     WORK     is an array used to store workspace windows. */
 
-/*     RESULT     is a SPICE window representing the set of time */
-/*                intervals, within the confinement period, when the */
-/*                specified geometric event occurs. */
+/*              This array should be declared by the caller as shown: */
 
-/*                If RESULT is non-empty on input, its contents */
-/*                will be discarded before GFEVNT conducts its */
-/*                search. */
+/*                 DOUBLE PRECISION     WORK ( LBCELL : MW,  NW ) */
 
-/*                RESULT must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
+/*              WORK need not be initialized by the caller. */
+
+/*              WORK is modified by this routine. The caller should */
+/*              re-initialize this array before attempting to use it for */
+/*              any other purpose. */
+
+/*     RESULT   is a SPICE window representing the set of time intervals, */
+/*              within the confinement period, when the specified */
+/*              geometric event occurs. */
+
+/*              The endpoints of the time intervals comprising RESULT */
+/*              are interpreted as seconds past J2000 TDB. */
+
+/*              If the search is for local extrema, or for absolute */
+/*              extrema with ADJUST set to zero, then normally each */
+/*              interval of RESULT will be a singleton: the left and */
+/*              right endpoints of each interval will be identical. */
+
+/*              If no times within the confinement window satisfy the */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL     is the SPICELIB cell lower bound. */
+/*     LBCELL   is the SPICE cell lower bound. */
+
+/*     MAXPAR   is the maximum number of parameters required to define */
+/*              any quantity. MAXPAR may grow if new quantities require */
+/*              more parameters. MAXPAR is currently set to 10. */
+
+/*     CNVTOL   is the default convergence tolerance used by the */
+/*              high-level GF search API routines. This tolerance is */
+/*              used to terminate searches for binary state transitions: */
+/*              when the time at which a transition occurs is bracketed */
+/*              by two times that differ by no more than */
+/*              SPICE_GF_CNVTOL, the transition time is considered */
+/*              to have been found. */
 
 /* $ Exceptions */
 
 /*     1)  There are varying requirements on how distinct the three */
-/*         objects, QCPARS, must be. If the requirements are not met, */
-/*         the error, SPICE(BODIESNOTDISTINCT) is signaled. */
+/*         objects, QCPARS, must be. If the requirements are not met, an, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*         When GQUANT has value 'ANGULAR SEPARATION' then all three */
 /*         must be distinct. */
@@ -1499,49 +1529,56 @@ static integer c__7 = 7;
 
 /*         the QCPARS(1) and QCPARS(2) objects must be distinct. */
 
-/*     2)  If any of the bodies involved do not have NAIF ID codes, the */
-/*         error SPICE(IDCODENOTFOUND) will be signaled. */
+/*     2)  If any of the bodies involved do not have NAIF ID codes, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     3)  If the value of GQUANT is not recognized as a valid value, */
-/*         the error SPICE(NOTRECOGNIZED) will be signaled. */
+/*         the error SPICE(NOTRECOGNIZED) is signaled. */
 
 /*     4)  If the number of quantity definition parameters, QNPARS is */
 /*         greater than the maximum allowed value, MAXPAR, the error */
-/*         SPICE(INVALIDCOUNT) will be signaled. */
+/*         SPICE(INVALIDCOUNT) is signaled. */
 
-/*     5)  If the proper required parameters, QPARS, are not supplied, */
-/*         the error SPICE(MISSINGVALUE) will be signaled. */
+/*     5)  If the proper required parameters are not supplied in QNPARS, */
+/*         the error SPICE(MISSINGVALUE) is signaled. */
 
 /*     6)  If the comparison operator, OP, is not recognized, the error */
 /*         SPICE(NOTRECOGNIZED) is signaled. */
 
-/*     7)  If the sizes of the workspace windows are too small, */
-/*         the error SPICE(ARRAYTOOSMALL) is signaled by routines */
-/*         called by this routine. */
+/*     7)  If the window size MW is less than 2, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
-/*     8)  If TOL is not greater than zero, the error */
-/*         SPICE(INVALIDTOLERANCE) is signaled by routines called by */
-/*         this routine. */
+/*     8)  If the number of workspace windows NW is too small for the */
+/*         required search, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*     9)  If ADJUST is negative, the error SPICE(VALUEOUTOFRANGE) will */
-/*         signal from a routine in the call tree of this routine. */
+/*     9)  If TOL is not greater than zero, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*         A non-zero value for ADJUST when OP has any value other than */
-/*         "ABSMIN" or "ABSMAX" causes the error SPICE(INVALIDVALUE) to */
-/*         signal from a routine in the call tree of this routine. */
+/*     10) If ADJUST is negative, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*    10)  The user must take care when searching for an extremum */
-/*         (ABSMAX, ABSMIN, LOCMAX, LOCMIN) of an angular quantity. */
-/*         Problems are most common when using the COORDINATE value of */
-/*         GQUANT with LONGITUDE or RIGHT ASCENSION values for the */
-/*         coordinate name. Since these quantities are cyclical, rather */
-/*         than monotonically increasing or decreasing, an extremum may */
-/*         be hard to interpret. In particular, if an extremum is found */
-/*         near the cycle boundary (- PI for longitude, 2 PI for */
-/*         RIGHT ASCENSION) it may not be numerically reasonable. For */
-/*         example, the search for times when a longitude coordinate is */
-/*         at its absolute maximum may result in a time when the */
-/*         longitude value is - PI, due to roundoff error. */
+/*     11) If ADJUST has a non-zero value when OP has any value other */
+/*         than 'ABSMIN' or 'ABSMAX', an error is signaled by a routine */
+/*         in the call tree of this routine. */
+
+/*     12) The user must take care when searching for an extremum */
+/*         ('ABSMAX', 'ABSMIN', 'LOCMAX', 'LOCMIN') of an angular */
+/*         quantity. Problems are most common when using the 'COORDINATE' */
+/*         value of GQUANT with 'LONGITUDE' or 'RIGHT ASCENSION' values */
+/*         for the coordinate name. Since these quantities are cyclical, */
+/*         rather than monotonically increasing or decreasing, an */
+/*         extremum may be hard to interpret. In particular, if an */
+/*         extremum is found near the cycle boundary (-Pi for */
+/*         'LONGITUDE', 2*Pi for 'RIGHT ASCENSION') it may not be */
+/*         numerically reasonable. For example, the search for times when */
+/*         a longitude coordinate is at its absolute maximum may result */
+/*         in a time when the longitude value is -Pi, due to roundoff */
+/*         error. */
+
+/*     13) If operation of this routine is interrupted, the output result */
+/*         window will be invalid. */
 
 /* $ Files */
 
@@ -1550,20 +1587,25 @@ static integer c__7 = 7;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target, source and observer that */
-/*          describes the ephemeris of these objects for the period */
-/*          defined by the confinement window, CNFINE must be */
-/*          loaded. If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for target, source and observer that */
+/*        describes the ephemeris of these objects for the period */
+/*        defined by the confinement window, CNFINE must be */
+/*        loaded. If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - PCK data: bodies are assumed to be spherical and must have a */
-/*          radius loaded from the kernel pool. Typically this is done by */
-/*          loading a text PCK file via FURNSH. If the bodies are */
-/*          triaxial, the largest radius is chosen as that of the */
-/*          equivalent spherical body. */
+/*     -  PCK data: bodies are assumed to be spherical and must have a */
+/*        radius loaded from the kernel pool. Typically this is done by */
+/*        loading a text PCK file via FURNSH. If the bodies are */
+/*        triaxial, the largest radius is chosen as that of the */
+/*        equivalent spherical body. */
+
+/*     -  In some cases the observer's state may be computed at times */
+/*        outside of CNFINE by as much as 2 seconds; data required to */
+/*        compute this state must be provided by loaded kernels. See */
+/*        $Particulars for details. */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
@@ -1602,8 +1644,9 @@ static integer c__7 = 7;
 /*     of the solution set for any inequality constraint is contained in */
 /*     the union of */
 
-/*        - the set of points where an equality constraint is met */
-/*        - the boundary points of the confinement window */
+/*     -  the set of points where an equality constraint is met */
+
+/*     -  the boundary points of the confinement window */
 
 /*     the solutions of both equality and inequality constraints can be */
 /*     found easily once the monotone windows have been found. */
@@ -1684,29 +1727,61 @@ static integer c__7 = 7;
 /*     to reduce the size of the time period over which a relatively */
 /*     slow search of interest must be performed. */
 
+/*     Certain types of searches require the state of the observer, */
+/*     relative to the solar system barycenter, to be computed at times */
+/*     slightly outside the confinement window CNFINE. The time window */
+/*     that is actually used is the result of "expanding" CNFINE by a */
+/*     specified amount "T": each time interval of CNFINE is expanded by */
+/*     shifting the interval's left endpoint to the left and the right */
+/*     endpoint to the right by T seconds. Any overlapping intervals are */
+/*     merged. (The input argument CNFINE is not modified.) */
+
+/*     The window expansions listed below are additive: if both */
+/*     conditions apply, the window expansion amount is the sum of the */
+/*     individual amounts. */
+
+/*     -  If a search uses an equality constraint, the time window */
+/*        over which the state of the observer is computed is expanded */
+/*        by 1 second at both ends of all of the time intervals */
+/*        comprising the window over which the search is conducted. */
+
+/*     -  If a search uses stellar aberration corrections, the time */
+/*        window over which the state of the observer is computed is */
+/*        expanded as described above. */
+
+/*     When light time corrections are used, expansion of the search */
+/*     window also affects the set of times at which the light time- */
+/*     corrected state of the target is computed. */
+
+/*     In addition to the possible 2 second expansion of the search */
+/*     window that occurs when both an equality constraint and stellar */
+/*     aberration corrections are used, round-off error should be taken */
+/*     into account when the need for data availability is analyzed. */
+
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-/*     Conduct a DISTANCE search using the default GF progress reporting */
-/*     capability. */
+/*     1) Conduct a DISTANCE search using the default GF progress */
+/*        reporting capability. */
 
-/*     The program will use console I/O to display a simple */
-/*     ASCII-based progress report. */
+/*        The program will use console I/O to display a simple */
+/*        ASCII-based progress report. */
 
-/*     The program will find local maximums of the distance from earth to */
-/*     Moon with  light time and stellar aberration corrections to model */
-/*     the apparent positions of the Moon. */
+/*        The program will find local maximums of the distance from */
+/*        Earth to Moon with light time and stellar aberration */
+/*        corrections to model the apparent positions of the Moon. */
 
-/*     Use the meta-kernel shown below to load the required SPICE */
-/*     kernels. */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
 
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: gfevnt_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -1717,6 +1792,16 @@ static integer c__7 = 7;
 /*           kernels referenced here must be present in the user's */
 /*           current working directory. */
 
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de414.bsp                     Planetary ephemeris */
+/*              pck00008.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
 
 /*           \begindata */
 
@@ -1726,270 +1811,307 @@ static integer c__7 = 7;
 
 /*           \begintext */
 
-/*     Code: */
-
-/*           PROGRAM GFEVNT_EX */
-/*           IMPLICIT              NONE */
-
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      SPD */
-/*           INTEGER               WNCARD */
-
-/*           INCLUDE               'gf.inc' */
-
-/*     C */
-/*     C     Local variables and initial parameters. */
-/*     C */
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
-
-/*           INTEGER               LNSIZE */
-/*           PARAMETER           ( LNSIZE = 80 ) */
-
-/*           INTEGER               MAXPAR */
-/*           PARAMETER           ( MAXPAR = 8 ) */
-
-/*           INTEGER               MAXVAL */
-/*           PARAMETER           ( MAXVAL = 20000 ) */
+/*           End of meta-kernel */
 
 
-/*           INTEGER               STRSIZ */
-/*           PARAMETER           ( STRSIZ = 40 ) */
-
-/*           INTEGER               I */
-
-/*     C */
-/*     C     Confining window */
-/*     C */
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : MAXVAL ) */
-
-/*     C */
-/*     C     Confining window beginning and ending time strings. */
-/*     C */
-/*           CHARACTER*(STRSIZ)    BEGSTR */
-/*           CHARACTER*(STRSIZ)    ENDSTR */
-
-/*     C */
-/*     C     Confining window beginning and ending times */
-/*     C */
-/*           DOUBLE PRECISION      BEGTIM */
-/*           DOUBLE PRECISION      ENDTIM */
-
-/*     C */
-/*     C     Result window beginning and ending times for intervals. */
-/*     C */
-/*           DOUBLE PRECISION      BEG */
-/*           DOUBLE PRECISION      END */
-
-/*     C */
-/*     C     Geometric quantity results window, work window, */
-/*     C     bail switch and progress reporter switch. */
-/*     C */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXVAL ) */
-/*           DOUBLE PRECISION      WORK   ( LBCELL : MAXVAL, NWDIST ) */
-
-/*           LOGICAL               BAIL */
-/*           LOGICAL               GFBAIL */
-/*           EXTERNAL              GFBAIL */
-/*           LOGICAL               RPT */
-
-/*     C */
-/*     C     Step size. */
-/*     C */
-/*           DOUBLE PRECISION      STEP */
-
-/*     C */
-/*     C     Geometric quantity name. */
-/*     C */
-/*           CHARACTER*(LNSIZE)    EVENT */
-
-/*     C */
-/*     C     Relational string */
-/*     C */
-/*           CHARACTER*(STRSIZ)    RELATE */
-
-/*     C */
-/*     C     Quantity definition parameter arrays: */
-/*     C */
-/*           INTEGER               QNPARS */
-/*           CHARACTER*(LNSIZE)    QPNAMS ( MAXPAR ) */
-/*           CHARACTER*(LNSIZE)    QCPARS ( MAXPAR ) */
-/*           DOUBLE PRECISION      QDPARS ( MAXPAR ) */
-/*           INTEGER               QIPARS ( MAXPAR ) */
-/*           LOGICAL               QLPARS ( MAXPAR ) */
-
-/*     C */
-/*     C     Routines to set step size, refine transition times */
-/*     C     and report work. */
-/*     C */
-/*           EXTERNAL              GFREFN */
-/*           EXTERNAL              GFREPI */
-/*           EXTERNAL              GFREPU */
-/*           EXTERNAL              GFREPF */
-/*           EXTERNAL              GFSTEP */
+/*        Example code begins here. */
 
 
-/*     C */
-/*     C     Reference and adjustment values. */
-/*     C */
-/*           DOUBLE PRECISION      REFVAL */
-/*           DOUBLE PRECISION      ADJUST */
+/*              PROGRAM GFEVNT_EX1 */
+/*              IMPLICIT              NONE */
 
-/*           INTEGER               COUNT */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      SPD */
+/*              INTEGER               WNCARD */
 
+/*              INCLUDE               'gf.inc' */
 
-/*     C     Load leapsecond and spk kernels. The name of the */
-/*     C     meta kernel file shown here is fictitious; you */
-/*     C     must supply the name of a file available */
-/*     C     on your own computer system. */
+/*        C */
+/*        C     Local variables and initial parameters. */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*           CALL FURNSH ('standard.tm') */
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
 
+/*              INTEGER               MAXPAR */
+/*              PARAMETER           ( MAXPAR = 8 ) */
 
-/*     C */
-/*     C     Set a beginning and end time for confining window. */
-/*     C */
-/*           BEGSTR = '2001 jan 01 00:00:00.000' */
-/*           ENDSTR = '2001 dec 31 00:00:00.000' */
-
-/*           CALL STR2ET ( BEGSTR, BEGTIM ) */
-/*           CALL STR2ET ( ENDSTR, ENDTIM ) */
-
-/*     C */
-/*     C     Set condition for extremum. */
-/*     C */
-/*           RELATE  =   'LOCMAX' */
-
-/*     C */
-/*     C     Set reference value (if needed) and absolute extremum */
-/*     C     adjustment (if needed). */
-/*     C */
-/*           REFVAL   =    0.D0 */
-/*           ADJUST   =    0.D0 */
-
-/*     C */
-/*     C     Set quantity. */
-/*     C */
-/*           EVENT    =   'DISTANCE' */
-
-/*     C */
-/*     C     Turn on progress reporter and initialize the windows. */
-/*     C */
-/*           RPT    = .TRUE. */
-/*           BAIL   = .FALSE. */
-
-/*           CALL SSIZED ( MAXVAL, CNFINE ) */
-/*           CALL SSIZED ( MAXVAL, RESULT ) */
-
-/*     C */
-/*     C     Add 2 points to the confinement interval window. */
-/*     C */
-/*           CALL WNINSD ( BEGTIM, ENDTIM, CNFINE ) */
-
-/*     C */
-/*     C     Define input quantities. */
-/*     C */
-/*           QPNAMS(1) = 'TARGET' */
-/*           QCPARS(1) =  'MOON' */
-
-/*           QPNAMS(2) = 'OBSERVER' */
-/*           QCPARS(2) =  'EARTH' */
-
-/*           QPNAMS(3) = 'ABCORR' */
-/*           QCPARS(3) =  'LT+S' */
-
-/*           QNPARS    =3 */
-
-/*     C */
-/*     C     Set the step size to 1 day and convert to seconds. */
-/*     C */
-/*           STEP = 1.D-3*SPD() */
-
-/*           CALL GFSSTP ( STEP ) */
-
-/*     C */
-/*     C    Look for solutions. */
-/*     C */
-/*           CALL GFEVNT ( GFSTEP,     GFREFN,   EVENT, */
-/*          .              QNPARS,     QPNAMS,   QCPARS, */
-/*          .              QDPARS,     QIPARS,   QLPARS, */
-/*          .              RELATE,     REFVAL,   CNVTOL, */
-/*          .              ADJUST,     CNFINE,   RPT, */
-/*          .              GFREPI,     GFREPU,   GFREPF, */
-/*          .              MAXVAL,     NWDIST,   WORK, */
-/*          .              BAIL,       GFBAIL,   RESULT ) */
+/*              INTEGER               MAXVAL */
+/*              PARAMETER           ( MAXVAL = 20000 ) */
 
 
-/*     C */
-/*     C     Check the number of intervals in the result window. */
-/*     C */
-/*           COUNT = WNCARD(RESULT) */
+/*              INTEGER               STRSIZ */
+/*              PARAMETER           ( STRSIZ = 40 ) */
 
-/*           WRITE (*,*) 'Found ', COUNT, ' intervals in RESULT' */
-/*           WRITE (*,*) ' ' */
+/*              INTEGER               I */
 
-/*     C */
-/*     C     List the beginning and ending points in each interval. */
-/*     C */
-/*           DO I = 1, COUNT */
+/*        C */
+/*        C     Confining window */
+/*        C */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
 
-/*             CALL WNFETD ( RESULT, I, BEG, END  ) */
+/*        C */
+/*        C     Confining window beginning and ending time strings. */
+/*        C */
+/*              CHARACTER*(STRSIZ)    BEGSTR */
+/*              CHARACTER*(STRSIZ)    ENDSTR */
 
-/*             CALL TIMOUT ( BEG, */
-/*          .                'YYYY-MON-DD HR:MN:SC.###### ' */
-/*          .  //            '(TDB) ::TDB ::RND',  BEGSTR ) */
-/*             CALL TIMOUT ( END, */
-/*          .                'YYYY-MON-DD HR:MN:SC.###### ' */
-/*          . //             '(TDB) ::TDB ::RND',  ENDSTR ) */
+/*        C */
+/*        C     Confining window beginning and ending times */
+/*        C */
+/*              DOUBLE PRECISION      BEGTIM */
+/*              DOUBLE PRECISION      ENDTIM */
 
-/*             WRITE (*,*) 'Interval ',  I */
-/*             WRITE (*,*) 'Beginning TDB ', BEGSTR */
-/*             WRITE (*,*) 'Ending TDB    ', ENDSTR */
-/*             WRITE (*,*) ' ' */
+/*        C */
+/*        C     Result window beginning and ending times for intervals. */
+/*        C */
+/*              DOUBLE PRECISION      BEG */
+/*              DOUBLE PRECISION      END */
 
-/*           END DO */
+/*        C */
+/*        C     Geometric quantity results window, work window, */
+/*        C     bail switch and progress reporter switch. */
+/*        C */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXVAL ) */
+/*              DOUBLE PRECISION      WORK   ( LBCELL : MAXVAL, NWDIST ) */
 
-/*           END */
+/*              LOGICAL               BAIL */
+/*              LOGICAL               GFBAIL */
+/*              EXTERNAL              GFBAIL */
+/*              LOGICAL               RPT */
 
-/*   The program compiled on OS X with g77: */
+/*        C */
+/*        C     Step size. */
+/*        C */
+/*              DOUBLE PRECISION      STEP */
 
-/*      The run output; the progress report had the format shown below: */
+/*        C */
+/*        C     Geometric quantity name. */
+/*        C */
+/*              CHARACTER*(LNSIZE)    EVENT */
 
-/*         Distance pass 1 of 2  50.62% done. */
+/*        C */
+/*        C     Relational string */
+/*        C */
+/*              CHARACTER*(STRSIZ)    RELATE */
 
-/*         Found  13 intervals in RESULT */
+/*        C */
+/*        C     Quantity definition parameter arrays: */
+/*        C */
+/*              INTEGER               QNPARS */
+/*              CHARACTER*(LNSIZE)    QPNAMS ( MAXPAR ) */
+/*              CHARACTER*(LNSIZE)    QCPARS ( MAXPAR ) */
+/*              DOUBLE PRECISION      QDPARS ( MAXPAR ) */
+/*              INTEGER               QIPARS ( MAXPAR ) */
+/*              LOGICAL               QLPARS ( MAXPAR ) */
 
-/*         Interval  1 */
+/*        C */
+/*        C     Routines to set step size, refine transition times */
+/*        C     and report work. */
+/*        C */
+/*              EXTERNAL              GFREFN */
+/*              EXTERNAL              GFREPI */
+/*              EXTERNAL              GFREPU */
+/*              EXTERNAL              GFREPF */
+/*              EXTERNAL              GFSTEP */
+
+/*        C */
+/*        C     Reference and adjustment values. */
+/*        C */
+/*              DOUBLE PRECISION      REFVAL */
+/*              DOUBLE PRECISION      ADJUST */
+
+/*              INTEGER               COUNT */
+
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement, workspace and result windows CNFINE, */
+/*        C     WORK and RESULT are saved because this practice helps to */
+/*        C     prevent stack overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+/*              SAVE                  WORK */
+
+/*        C */
+/*        C     Load leapsecond and spk kernels. The name of the */
+/*        C     meta kernel file shown here is fictitious; you */
+/*        C     must supply the name of a file available */
+/*        C     on your own computer system. */
+
+/*              CALL FURNSH ('gfevnt_ex1.tm') */
+
+/*        C */
+/*        C     Set a beginning and end time for confining window. */
+/*        C */
+/*              BEGSTR = '2001 jan 01 00:00:00.000' */
+/*              ENDSTR = '2001 jun 30 00:00:00.000' */
+
+/*              CALL STR2ET ( BEGSTR, BEGTIM ) */
+/*              CALL STR2ET ( ENDSTR, ENDTIM ) */
+
+/*        C */
+/*        C     Set condition for extremum. */
+/*        C */
+/*              RELATE  =   'LOCMAX' */
+
+/*        C */
+/*        C     Set reference value (if needed) and absolute extremum */
+/*        C     adjustment (if needed). */
+/*        C */
+/*              REFVAL   =    0.D0 */
+/*              ADJUST   =    0.D0 */
+
+/*        C */
+/*        C     Set quantity. */
+/*        C */
+/*              EVENT    =   'DISTANCE' */
+
+/*        C */
+/*        C     Turn on progress reporter and initialize the windows. */
+/*        C */
+/*              RPT    = .TRUE. */
+/*              BAIL   = .FALSE. */
+
+/*              CALL SSIZED ( 2,      CNFINE ) */
+/*              CALL SSIZED ( MAXVAL, RESULT ) */
+
+/*        C */
+/*        C     Add 2 points to the confinement interval window. */
+/*        C */
+/*              CALL WNINSD ( BEGTIM, ENDTIM, CNFINE ) */
+
+/*        C */
+/*        C     Define input quantities. */
+/*        C */
+/*              QPNAMS(1) = 'TARGET' */
+/*              QCPARS(1) = 'MOON' */
+
+/*              QPNAMS(2) = 'OBSERVER' */
+/*              QCPARS(2) = 'EARTH' */
+
+/*              QPNAMS(3) = 'ABCORR' */
+/*              QCPARS(3) = 'LT+S' */
+
+/*              QNPARS    = 3 */
+
+/*        C */
+/*        C     Set the step size to 1 day and convert to seconds. */
+/*        C */
+/*              STEP = 1.D-3*SPD() */
+
+/*              CALL GFSSTP ( STEP ) */
+
+/*        C */
+/*        C    Look for solutions. */
+/*        C */
+/*              CALL GFEVNT ( GFSTEP,     GFREFN,   EVENT, */
+/*             .              QNPARS,     QPNAMS,   QCPARS, */
+/*             .              QDPARS,     QIPARS,   QLPARS, */
+/*             .              RELATE,     REFVAL,   CNVTOL, */
+/*             .              ADJUST,     CNFINE,   RPT, */
+/*             .              GFREPI,     GFREPU,   GFREPF, */
+/*             .              MAXVAL,     NWDIST,   WORK, */
+/*             .              BAIL,       GFBAIL,   RESULT ) */
+
+
+/*        C */
+/*        C     Check the number of intervals in the result window. */
+/*        C */
+/*              COUNT = WNCARD(RESULT) */
+
+/*              WRITE (*,*) 'Found ', COUNT, ' intervals in RESULT' */
+/*              WRITE (*,*) ' ' */
+
+/*        C */
+/*        C     List the beginning and ending points in each interval. */
+/*        C */
+/*              DO I = 1, COUNT */
+
+/*                CALL WNFETD ( RESULT, I, BEG, END  ) */
+
+/*                CALL TIMOUT ( BEG, */
+/*             .                'YYYY-MON-DD HR:MN:SC.###### ' */
+/*             .  //            '(TDB) ::TDB ::RND',  BEGSTR ) */
+/*                CALL TIMOUT ( END, */
+/*             .                'YYYY-MON-DD HR:MN:SC.###### ' */
+/*             . //             '(TDB) ::TDB ::RND',  ENDSTR ) */
+
+/*                WRITE (*,*) 'Interval ',  I */
+/*                WRITE (*,*) 'Beginning TDB ', BEGSTR */
+/*                WRITE (*,*) 'Ending TDB    ', ENDSTR */
+/*                WRITE (*,*) ' ' */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Distance pass 1 of 1 100.00% done. */
+
+/*         Found            6  intervals in RESULT */
+
+/*         Interval            1 */
 /*         Beginning TDB 2001-JAN-24 19:22:01.436672 (TDB) */
 /*         Ending TDB    2001-JAN-24 19:22:01.436672 (TDB) */
 
-/*         Interval  2 */
+/*         Interval            2 */
 /*         Beginning TDB 2001-FEB-20 21:52:07.914964 (TDB) */
 /*         Ending TDB    2001-FEB-20 21:52:07.914964 (TDB) */
-/*         Interval  3 */
 
-/*                        ... */
+/*         Interval            3 */
+/*         Beginning TDB 2001-MAR-20 11:32:03.182345 (TDB) */
+/*         Ending TDB    2001-MAR-20 11:32:03.182345 (TDB) */
 
-/*         Interval  12 */
-/*         Beginning TDB 2001-NOV-23 15:45:23.027511 (TDB) */
-/*         Ending TDB    2001-NOV-23 15:45:23.027511 (TDB) */
+/*         Interval            4 */
+/*         Beginning TDB 2001-APR-17 06:09:00.877038 (TDB) */
+/*         Ending TDB    2001-APR-17 06:09:00.877038 (TDB) */
 
-/*         Interval  13 */
-/*         Beginning TDB 2001-DEC-21 13:04:47.124241 (TDB) */
-/*         Ending TDB    2001-DEC-21 13:04:47.124241 (TDB) */
+/*         Interval            5 */
+/*         Beginning TDB 2001-MAY-15 01:29:28.532819 (TDB) */
+/*         Ending TDB    2001-MAY-15 01:29:28.532819 (TDB) */
+
+/*         Interval            6 */
+/*         Beginning TDB 2001-JUN-11 19:44:10.855458 (TDB) */
+/*         Ending TDB    2001-JUN-11 19:44:10.855458 (TDB) */
+
+
+/*        Note that the progress report has the format shown below: */
+
+/*           Distance pass 1 of 1   6.02% done. */
+
+/*        The completion percentage was updated approximately once per */
+/*        second. */
+
+/*        When the program was interrupted at an arbitrary time, */
+/*        the output was: */
+
+/*           Distance pass 1 of 1  13.63% done. */
+/*           Search was interrupted. */
+
+/*        This message was written after an interrupt signal */
+/*        was trapped. By default, the program would have terminated */
+/*        before this message could be written. */
 
 /* $ Restrictions */
 
-/*     1) The kernel files to be used by GFEVNT must be loaded (normally */
-/*        via the SPICELIB routine FURNSH) before GFEVNT is called. */
+/*     1)  The kernel files to be used by GFEVNT must be loaded (normally */
+/*         via the SPICELIB routine FURNSH) before GFEVNT is called. */
 
-/*     2) If using the default, constant step size routine, GFSTEP, the */
-/*        entry point GFSSTP must be called prior to calling this */
-/*        routine. The call syntax for GFSSTP: */
+/*     2)  If using the default, constant step size routine, GFSTEP, the */
+/*         entry point GFSSTP must be called prior to calling this */
+/*         routine. The call syntax for GFSSTP: */
 
-/*           CALL GFSSTP ( STEP ) */
+/*            CALL GFSSTP ( STEP ) */
 
 /* $ Literature_References */
 
@@ -1997,19 +2119,42 @@ static integer c__7 = 7;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     L.S. Elson     (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 27-OCT-2021 (JDR) (BVS) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated description of WORK and RESULT arguments in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. */
+
+/*        Added SAVE statements for CNFINE, WORK and RESULT variables in */
+/*        code example. */
+
+/*        Added SAVE statement for DREF. */
+
+/*        Fixed typo in $Exceptions entry #5, which referred to a non */
+/*        existing input argument, replaced entry #7 by new entries #7 */
+/*        and #8, replaced entry #10 by new entries #10 and #11, and */
+/*        added entry #13. */
+
+/*        Added descriptions of MAXPAR and CNVTOL to the $Brief_I/O and */
+/*        $Parameters sections. */
+
+/*        Moved declaration of MAXPAR into the $Declarations section. */
+
+/*        Updated header to describe use of expanded confinement window. */
 
 /* -    SPICELIB Version 2.0.0, 05-SEP-2012 (EDW) (NJB) */
 
 /*        Edit to comments to correct search description. */
 
-/*        Edit to Index_Entries. */
+/*        Edit to $Index_Entries. */
 
 /*        Added geometric quantities: */
 
@@ -2071,11 +2216,6 @@ static integer c__7 = 7;
 
 
 /*     Assorted string lengths: */
-
-
-/*     MAXPAR is the maximum number of parameters required to define */
-/*     any quantity.  MAXPAR may grow if new quantities require */
-/*     more parameters. */
 
 
 /*     MAXOP is the maximum string length for comparison operators. */
@@ -2202,18 +2342,18 @@ static integer c__7 = 7;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ljust_(qpnams + (i__ - 1) * qpnams_len, pnames + ((i__2 = i__ - 1) < 
 		10 && 0 <= i__2 ? i__2 : s_rnge("pnames", i__2, "gfevnt_", (
-		ftnlen)1829)) * 80, qpnams_len, (ftnlen)80);
+		ftnlen)1972)) * 80, qpnams_len, (ftnlen)80);
 	ucase_(pnames + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"pnames", i__2, "gfevnt_", (ftnlen)1830)) * 80, pnames + ((
+		"pnames", i__2, "gfevnt_", (ftnlen)1973)) * 80, pnames + ((
 		i__3 = i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("pnames", 
-		i__3, "gfevnt_", (ftnlen)1830)) * 80, (ftnlen)80, (ftnlen)80);
+		i__3, "gfevnt_", (ftnlen)1973)) * 80, (ftnlen)80, (ftnlen)80);
 	ljust_(qcpars + (i__ - 1) * qcpars_len, cpars + ((i__2 = i__ - 1) < 
 		10 && 0 <= i__2 ? i__2 : s_rnge("cpars", i__2, "gfevnt_", (
-		ftnlen)1832)) * 80, qcpars_len, (ftnlen)80);
+		ftnlen)1975)) * 80, qcpars_len, (ftnlen)80);
 	ucase_(cpars + ((i__2 = i__ - 1) < 10 && 0 <= i__2 ? i__2 : s_rnge(
-		"cpars", i__2, "gfevnt_", (ftnlen)1833)) * 80, cpars + ((i__3 
+		"cpars", i__2, "gfevnt_", (ftnlen)1976)) * 80, cpars + ((i__3 
 		= i__ - 1) < 10 && 0 <= i__3 ? i__3 : s_rnge("cpars", i__3, 
-		"gfevnt_", (ftnlen)1833)) * 80, (ftnlen)80, (ftnlen)80);
+		"gfevnt_", (ftnlen)1976)) * 80, (ftnlen)80, (ftnlen)80);
     }
 
 /*     Make sure all parameters have been supplied for the requested */
@@ -2221,23 +2361,23 @@ static integer c__7 = 7;
 
     for (i__ = 1; i__ <= 10; ++i__) {
 	if (s_cmp(qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 <= i__1 ? 
-		i__1 : s_rnge("qpars", i__1, "gfevnt_", (ftnlen)1843)) * 80, 
+		i__1 : s_rnge("qpars", i__1, "gfevnt_", (ftnlen)1986)) * 80, 
 		" ", (ftnlen)80, (ftnlen)1) != 0) {
 
 /*           The Ith parameter must be supplied by the caller. */
 
 	    loc = isrchc_(qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 <=
 		     i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", (ftnlen)
-		    1847)) * 80, qnpars, pnames, (ftnlen)80, (ftnlen)80);
+		    1990)) * 80, qnpars, pnames, (ftnlen)80, (ftnlen)80);
 	    if (loc == 0) {
 		setmsg_("The parameter # is required in order to compute eve"
 			"nts pertaining to the quantity #; this parameter was"
 			" not supplied.", (ftnlen)117);
 		errch_("#", qpars + ((i__1 = i__ + qtnum * 10 - 11) < 80 && 0 
 			<= i__1 ? i__1 : s_rnge("qpars", i__1, "gfevnt_", (
-			ftnlen)1856)) * 80, (ftnlen)1, (ftnlen)80);
+			ftnlen)1999)) * 80, (ftnlen)1, (ftnlen)80);
 		errch_("#", qnames + ((i__1 = qtnum - 1) < 8 && 0 <= i__1 ? 
-			i__1 : s_rnge("qnames", i__1, "gfevnt_", (ftnlen)1857)
+			i__1 : s_rnge("qnames", i__1, "gfevnt_", (ftnlen)2000)
 			) * 80, (ftnlen)1, (ftnlen)80);
 		sigerr_("SPICE(MISSINGVALUE)", (ftnlen)19);
 		chkout_("GFEVNT", (ftnlen)6);
@@ -2276,7 +2416,7 @@ static integer c__7 = 7;
     loc = isrchc_("TARGET", qnpars, pnames, (ftnlen)6, (ftnlen)80);
     if (loc > 0) {
 	s_copy(target, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1902)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2045)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2285,7 +2425,7 @@ static integer c__7 = 7;
     loc = isrchc_("OBSERVER", qnpars, pnames, (ftnlen)8, (ftnlen)80);
     if (loc > 0) {
 	s_copy(obsrvr, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1914)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2057)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2294,7 +2434,7 @@ static integer c__7 = 7;
     loc = isrchc_("ILLUM", qnpars, pnames, (ftnlen)5, (ftnlen)80);
     if (loc > 0) {
 	s_copy(illum, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1926)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2069)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2303,7 +2443,7 @@ static integer c__7 = 7;
     loc = isrchc_("TARGET1", qnpars, pnames, (ftnlen)7, (ftnlen)80);
     if (loc > 0) {
 	s_copy(of, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1938)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2081)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2312,7 +2452,7 @@ static integer c__7 = 7;
     loc = isrchc_("TARGET2", qnpars, pnames, (ftnlen)7, (ftnlen)80);
     if (loc > 0) {
 	s_copy(of + 80, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1950)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2093)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2321,7 +2461,7 @@ static integer c__7 = 7;
     loc = isrchc_("FRAME1", qnpars, pnames, (ftnlen)6, (ftnlen)80);
     if (loc > 0) {
 	s_copy(frame, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1962)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2105)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2330,7 +2470,7 @@ static integer c__7 = 7;
     loc = isrchc_("FRAME2", qnpars, pnames, (ftnlen)6, (ftnlen)80);
     if (loc > 0) {
 	s_copy(frame + 80, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 
-		: s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1973)) * 80, (
+		: s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2116)) * 80, (
 		ftnlen)80, (ftnlen)80);
     }
 
@@ -2339,7 +2479,7 @@ static integer c__7 = 7;
     loc = isrchc_("SHAPE1", qnpars, pnames, (ftnlen)6, (ftnlen)80);
     if (loc > 0) {
 	s_copy(shape, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1985)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2128)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2348,7 +2488,7 @@ static integer c__7 = 7;
     loc = isrchc_("SHAPE2", qnpars, pnames, (ftnlen)6, (ftnlen)80);
     if (loc > 0) {
 	s_copy(shape + 80, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 
-		: s_rnge("cpars", i__1, "gfevnt_", (ftnlen)1997)) * 80, (
+		: s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2140)) * 80, (
 		ftnlen)80, (ftnlen)80);
     }
 
@@ -2357,7 +2497,7 @@ static integer c__7 = 7;
     loc = isrchc_("ABCORR", qnpars, pnames, (ftnlen)6, (ftnlen)80);
     if (loc > 0) {
 	s_copy(abcorr, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2009)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2152)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2366,7 +2506,7 @@ static integer c__7 = 7;
     loc = isrchc_("REFERENCE FRAME", qnpars, pnames, (ftnlen)15, (ftnlen)80);
     if (loc > 0) {
 	s_copy(ref, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2021)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2164)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2416,7 +2556,7 @@ static integer c__7 = 7;
     loc = isrchc_("DREF", qnpars, pnames, (ftnlen)4, (ftnlen)80);
     if (loc > 0) {
 	s_copy(dref, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2092)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2235)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2425,7 +2565,7 @@ static integer c__7 = 7;
     loc = isrchc_("ANGTYP", qnpars, pnames, (ftnlen)6, (ftnlen)80);
     if (loc > 0) {
 	s_copy(angtyp, cpars + ((i__1 = loc - 1) < 10 && 0 <= i__1 ? i__1 : 
-		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2103)) * 80, (ftnlen)
+		s_rnge("cpars", i__1, "gfevnt_", (ftnlen)2246)) * 80, (ftnlen)
 		80, (ftnlen)80);
     }
 
@@ -2482,9 +2622,9 @@ static integer c__7 = 7;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    repmi_(srcpre + ((i__2 = i__ + (qtnum << 1) - 3) < 16 && 0 <= 
 		    i__2 ? i__2 : s_rnge("srcpre", i__2, "gfevnt_", (ftnlen)
-		    2182)) * 55, "#", &npass, rptpre + ((i__3 = i__ - 1) < 2 
+		    2325)) * 55, "#", &npass, rptpre + ((i__3 = i__ - 1) < 2 
 		    && 0 <= i__3 ? i__3 : s_rnge("rptpre", i__3, "gfevnt_", (
-		    ftnlen)2182)) * 55, (ftnlen)55, (ftnlen)1, (ftnlen)55);
+		    ftnlen)2325)) * 55, (ftnlen)55, (ftnlen)1, (ftnlen)55);
 	}
     }
 

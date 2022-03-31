@@ -5,8 +5,8 @@
 
 #include "f2c.h"
 
-/* $Procedure      CYLREC ( Cylindrical to rectangular ) */
-/* Subroutine */ int cylrec_(doublereal *r__, doublereal *long__, doublereal *
+/* $Procedure CYLREC ( Cylindrical to rectangular ) */
+/* Subroutine */ int cylrec_(doublereal *r__, doublereal *clon, doublereal *
 	z__, doublereal *rectan)
 {
     /* Builtin functions */
@@ -17,7 +17,7 @@
 
 /* $ Abstract */
 
-/*      Convert from cylindrical to rectangular coordinates. */
+/*     Convert from cylindrical to rectangular coordinates. */
 
 /* $ Disclaimer */
 
@@ -50,80 +50,36 @@
 
 /* $ Keywords */
 
-/*      CONVERSION,  COORDINATES */
+/*     CONVERSION */
+/*     COORDINATES */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  ------------------------------------------------- */
-/*      R          I   Distance of a point from Z axis. */
-/*      LONG       I   Angle (radians) of a point from XZ plane */
-/*      Z          I   Height of a point above XY plane. */
-/*      RECTAN     O   Rectangular coordinates of the point. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  ------------------------------------------------- */
+/*     R          I   Distance of a point from Z axis. */
+/*     CLON       I   Angle (radians) of a point from XZ plane */
+/*     Z          I   Height of a point above XY plane. */
+/*     RECTAN     O   Rectangular coordinates of the point. */
 
 /* $ Detailed_Input */
 
-/*      R          Distance of the point of interest from Z axis. */
+/*     R        is the distance of the point of interest from Z-axis. */
 
-/*      LONG       Cylindrical angle (in radians) of the point of */
-/*                 interest from XZ plane. */
+/*     CLON     is the cylindrical angle (in radians) of the point of */
+/*              interest from XZ plane. */
 
-/*      Z          Height of the point above XY plane. */
+/*     Z        is the height of the point above XY plane. */
 
 /* $ Detailed_Output */
 
-/*      RECTAN     Rectangular coordinates of the point of interest. */
+/*     RECTAN   are the rectangular coordinates of the point of */
+/*              interest. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      This routine transforms the coordinates of a point from */
-/*      cylindrical to rectangular coordinates. */
-
-/* $ Examples */
-
-/*     Below are two tables. */
-
-/*     Listed in the first table (under R, LONG and Z ) are */
-/*     cylindrical coordinate triples that approximately represent */
-/*     points whose rectangular coordinates are taken from the set */
-/*     {-1, 0, 1}.  (Angular quantities are given in degrees.) */
-
-/*     The result of the code fragment */
-
-/*          Use the SPICELIB routine CONVRT to convert the angular */
-/*          quantities to radians */
-
-/*          CALL CONVRT ( LONG, 'DEGREES', 'RADIANS', LONG ) */
-
-/*          CALL CYLREC ( R, LONG, Z, X ) */
-
-
-/*     are listed in the second parallel table under X(1), X(2) and X(3). */
-
-
-/*       R         LONG     Z            X(1)       X(2)     X(3) */
-/*       -------------------------       -------------------------- */
-/*       0.0000    0.0000   0.0000       0.0000     0.0000   0.0000 */
-/*       1.0000    0.0000   0.0000       1.0000     0.0000   0.0000 */
-/*       1.0000   90.0000   0.0000       0.0000     1.0000   0.0000 */
-/*       0.0000    0.0000   1.0000       0.0000     0.0000   1.0000 */
-/*       1.0000  180.0000   0.0000      -1.0000     0.0000   0.0000 */
-/*       1.0000  270.0000   0.0000       0.0000    -1.0000   0.0000 */
-/*       0.0000    0.0000  -1.0000       0.0000     0.0000  -1.0000 */
-/*       1.4142   45.0000   0.0000       1.0000     1.0000   0.0000 */
-/*       1.0000    0.0000   1.0000       1.0000     0.0000   1.0000 */
-/*       1.0000   90.0000   1.0000       0.0000     1.0000   1.0000 */
-/*       1.4142   45.0000   1.0000       1.0000     1.0000   1.0000 */
-
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
@@ -131,17 +87,283 @@
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
+/*     This routine transforms the coordinates of a point from */
+/*     cylindrical to rectangular coordinates. */
+
+/* $ Examples */
+
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Compute the cylindrical coordinates of the position of the Moon */
+/*        as seen from the Earth, and convert them to rectangular */
+/*        coordinates. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: cylrec_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              naif0012.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CYLREC_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,F20.8)' ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      CLON */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      RECTAN ( 3 ) */
+/*              DOUBLE PRECISION      R */
+/*              DOUBLE PRECISION      Z */
+
+/*        C */
+/*        C     Load SPK and LSK kernels, use a meta kernel for */
+/*        C     convenience. */
+/*        C */
+/*              CALL FURNSH ( 'cylrec_ex1.tm' ) */
+
+/*        C */
+/*        C     Look up the geometric state of the Moon as seen from */
+/*        C     the Earth at 2017 Mar 20, relative to the J2000 */
+/*        C     reference frame. */
+/*        C */
+/*              CALL STR2ET ( '2017 Mar 20', ET ) */
+
+/*              CALL SPKPOS ( 'Moon',  ET,  'J2000', 'NONE', */
+/*             .              'Earth', POS, LT               ) */
+
+/*        C */
+/*        C     Convert the position vector POS to cylindrical */
+/*        C     coordinates. */
+/*        C */
+/*              CALL RECCYL ( POS, R, CLON, Z ) */
+
+/*        C */
+/*        C     Convert the cylindrical to rectangular coordinates. */
+/*        C */
+
+/*              CALL CYLREC ( R, CLON, Z, RECTAN ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Original rectangular coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', POS(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', POS(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', POS(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Cylindrical coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Radius     (km): ', R */
+/*              WRITE(*,FMT1) '  Longitude (deg): ', CLON*DPR() */
+/*              WRITE(*,FMT1) '  Z          (km): ', Z */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates from CYLREC:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X          (km): ', RECTAN(1) */
+/*              WRITE(*,FMT1) '  Y          (km): ', RECTAN(2) */
+/*              WRITE(*,FMT1) '  Z          (km): ', RECTAN(3) */
+/*              WRITE(*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Original rectangular coordinates: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+/*         Cylindrical coordinates: */
+
+/*          Radius     (km):      383289.01777726 */
+/*          Longitude (deg):         261.65040211 */
+/*          Z          (km):     -126505.93063865 */
+
+/*         Rectangular coordinates from CYLREC: */
+
+/*          X          (km):      -55658.44323296 */
+/*          Y          (km):     -379226.32931475 */
+/*          Z          (km):     -126505.93063865 */
+
+
+/*     2) Create a table showing a variety of cylindrical coordinates */
+/*        and the corresponding rectangular coordinates. */
+
+/*        Corresponding rectangular and cylindrical coordinates are */
+/*        listed to three decimal places. Input angles are in degrees. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CYLREC_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      RPD */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NREC */
+/*              PARAMETER           ( NREC = 11 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      R      ( NREC ) */
+/*              DOUBLE PRECISION      CLON   ( NREC ) */
+/*              DOUBLE PRECISION      Z      ( NREC ) */
+/*              DOUBLE PRECISION      RCLON */
+/*              DOUBLE PRECISION      RECTAN ( 3    ) */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Define the input cylindrical coordinates. Angles */
+/*        C     in degrees. */
+/*        C */
+/*              DATA                 R    /  0.D0, 1.D0,     1.D0, */
+/*             .                             0.D0, 1.D0,     1.D0, */
+/*             .                             0.D0, 1.4142D0, 1.D0, */
+/*             .                             1.D0, 1.4142D0       / */
+
+/*              DATA                 CLON /  0.D0,   0.D0,  90.D0, */
+/*             .                             0.D0, 180.D0, 270.D0, */
+/*             .                             0.D0,  45.D0,   0.D0, */
+/*             .                            90.D0,  45.D0         / */
+
+/*              DATA                 Z    /  0.D0,   0.D0,   0.D0, */
+/*             .                             1.D0,   0.D0,   0.D0, */
+/*             .                            -1.D0,   0.D0,   1.D0, */
+/*             .                             1.D0,   1.D0         / */
+
+/*        C */
+/*        C     Print the banner. */
+/*        C */
+/*              WRITE(*,*) '    R       CLON      Z    ' */
+/*             . //        ' RECT(1)  RECT(2)  RECT(3) ' */
+/*              WRITE(*,*) ' -------  -------  ------- ' */
+/*             . //        ' -------  -------  ------- ' */
+
+/*        C */
+/*        C     Do the conversion. */
+/*        C */
+/*              DO I = 1, NREC */
+
+/*                 RCLON = CLON(I) * RPD() */
+
+/*                 CALL CYLREC( R(I), RCLON, Z(I), RECTAN ) */
+
+/*                 WRITE (*,'(6F9.3)') R(I), CLON(I), Z(I), */
+/*             .                       RECTAN */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*             R       CLON      Z     RECT(1)  RECT(2)  RECT(3) */
+/*          -------  -------  -------  -------  -------  ------- */
+/*            0.000    0.000    0.000    0.000    0.000    0.000 */
+/*            1.000    0.000    0.000    1.000    0.000    0.000 */
+/*            1.000   90.000    0.000    0.000    1.000    0.000 */
+/*            0.000    0.000    1.000    0.000    0.000    1.000 */
+/*            1.000  180.000    0.000   -1.000    0.000    0.000 */
+/*            1.000  270.000    0.000   -0.000   -1.000    0.000 */
+/*            0.000    0.000   -1.000    0.000    0.000   -1.000 */
+/*            1.414   45.000    0.000    1.000    1.000    0.000 */
+/*            1.000    0.000    1.000    1.000    0.000    1.000 */
+/*            1.000   90.000    1.000    0.000    1.000    1.000 */
+/*            1.414   45.000    1.000    1.000    1.000    1.000 */
+
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Changed the input argument name LONG to CLON for consistency */
+/*        with other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Added complete code examples. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -156,13 +378,6 @@
 /*     cylindrical to rectangular */
 
 /* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
-
-/*      Example section of header upgraded. */
-
-/* -& */
 
 /*     Local variables */
 
@@ -170,8 +385,8 @@
 /*     Convert to rectangular coordinates, storing the results in */
 /*     temporary variables. */
 
-    x = *r__ * cos(*long__);
-    y = *r__ * sin(*long__);
+    x = *r__ * cos(*clon);
+    y = *r__ * sin(*clon);
 
 /*     Move the results to the output variables. */
 

@@ -237,7 +237,7 @@
 
 /*                       - Is the correction relativistic? (This */
 /*                         value is always .FALSE. for aberration */
-/*                         corrrection specifications allowed by */
+/*                         correction specifications allowed by */
 /*                         this routine.) */
 
 /*                    The structure of ATTBLK is defined in the */
@@ -292,6 +292,10 @@
 /*     N.J. Bachman    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    SPICELIB Version 1.0.0, 11-APR-2008 (NJB) */
 

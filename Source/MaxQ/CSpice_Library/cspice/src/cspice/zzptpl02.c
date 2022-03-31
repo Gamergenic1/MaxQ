@@ -989,6 +989,10 @@ static integer c__19 = 19;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
+
 /* -    SPICELIB Version 1.0.0, 22-FEB-2017 (NJB) */
 
 /*        Added FAILED calls. */
@@ -1079,7 +1083,7 @@ static integer c__19 = 19;
 	    return 0;
 	}
 
-/*        We succesfully obtained the desired segment parameters, so we */
+/*        We successfully obtained the desired segment parameters, so we */
 /*        don't need to execute this code again until the segment */
 /*        changes. Save the current handle and DLA descriptor. */
 
@@ -1125,12 +1129,12 @@ static integer c__19 = 19;
     vsub_(point, voxori, offset);
     for (i__ = 1; i__ <= 3; ++i__) {
 	j = (integer) (offset[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("offset", i__1, "zzptpl02_", (ftnlen)467)] / voxsiz) + 
+		s_rnge("offset", i__1, "zzptpl02_", (ftnlen)471)] / voxsiz) + 
 		1;
 	vgrcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vgrcor", 
-		i__1, "zzptpl02_", (ftnlen)469)] = brckti_(&j, &c__1, &vgrext[
+		i__1, "zzptpl02_", (ftnlen)473)] = brckti_(&j, &c__1, &vgrext[
 		(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("vgrext", 
-		i__2, "zzptpl02_", (ftnlen)469)]);
+		i__2, "zzptpl02_", (ftnlen)473)]);
     }
 
 /*     Compute the coordinates of the coarse voxel containing the fine */
@@ -1153,9 +1157,9 @@ static integer c__19 = 19;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	cgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("cgrext", 
-		i__1, "zzptpl02_", (ftnlen)495)] = vgrext[(i__2 = i__ - 1) < 
+		i__1, "zzptpl02_", (ftnlen)499)] = vgrext[(i__2 = i__ - 1) < 
 		3 && 0 <= i__2 ? i__2 : s_rnge("vgrext", i__2, "zzptpl02_", (
-		ftnlen)495)] / cgrscl;
+		ftnlen)499)] / cgrscl;
     }
     cgrvid = zzvox2id_(cgrcor, cgrext);
     dski02_(handle, dladsc, &c__14, &cgrvid, &c__1, &n, &cgrptr);
@@ -1212,16 +1216,16 @@ static integer c__19 = 19;
 	i__1 = nread;
 	for (j = 1; j <= i__1; ++j) {
 	    pidtmp = pltbuf[(i__2 = j - 1) < 1000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("pltbuf", i__2, "zzptpl02_", (ftnlen)563)];
+		    s_rnge("pltbuf", i__2, "zzptpl02_", (ftnlen)567)];
 	    start = (pidtmp - 1) * 3 + 1;
 	    dski02_(handle, dladsc, &c__9, &start, &c__3, &n, plttmp);
 	    for (k = 1; k <= 3; ++k) {
 		vid = plttmp[(i__2 = k - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			"plttmp", i__2, "zzptpl02_", (ftnlen)570)];
+			"plttmp", i__2, "zzptpl02_", (ftnlen)574)];
 		start = (vid - 1) * 3 + 1;
 		dskd02_(handle, dladsc, &c__19, &start, &c__3, &n, &vrttmp[(
 			i__2 = k * 3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-			"vrttmp", i__2, "zzptpl02_", (ftnlen)573)]);
+			"vrttmp", i__2, "zzptpl02_", (ftnlen)577)]);
 	    }
 	    if (failed_()) {
 		chkout_("ZZPTPL02", (ftnlen)8);

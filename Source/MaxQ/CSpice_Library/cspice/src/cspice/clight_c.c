@@ -1,6 +1,6 @@
 /*
 
--Procedure  clight_c ( C, Speed of light in a vacuum )
+-Procedure clight_c ( C, Speed of light in a vacuum )
 
 -Abstract
 
@@ -50,7 +50,7 @@
 
 -Brief_I/O
 
-   The function returns the speed of light in vacuo (km/sec).
+   The function returns the speed of light in vacuum (km/sec).
 
 -Detailed_Input
 
@@ -59,12 +59,12 @@
 -Detailed_Output
 
    The function returns the IAU official value for the speed of light
-   in vacuo: 299792.458 km/sec.
- 
+   in vacuum: 299792.458 km/sec.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
 
    Error free.
@@ -79,22 +79,118 @@
 
 -Examples
 
-   The following example uses clight_c to determine the one-way
-   light-time (tau) to an object whose position relative to an
-   observer is contained in pos.
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      tau = vnorm_c ( pos ) / clight_c ();
+   1) Display the IAU official double precision value
+      for the constant speed of light in the vacuum, in km/sec.
 
-   Note that the SPK readers
+      Example code begins here.
 
-      spkezr_c 
-      spkez_c 
-      spkpos_c 
-      spkezp_c 
 
-   return the one-way light time as an output, for example
+      /.
+         Program clight_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
-      spkez_c  ( ..., &tau );
+      int main( )
+      {
+         /.
+         Display the value for the constant speed of light in the
+         vacuum.
+         ./
+         printf ( "Speed of light: %12.4f\n", clight_c( ) );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Speed of light:  299792.4580
+
+
+   2) The following example uses clight_c to determine the one-way
+      light-time (tau) to Mars whose geometric position relative to
+      the Earth is available.
+
+      Use the SPK kernel below to load the required ephemerides
+      for Mars and the Earth.
+
+         de405.bsp
+
+
+      Example code begins here.
+
+
+      /.
+         Program clight_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local constants
+         ./
+         #define  ET             0.0
+
+         /.
+         Local variables
+         ./
+         SpiceDouble             lt;
+         SpiceDouble             pos    [ 3 ];
+         SpiceDouble             tau;
+
+         /.
+         Load the SPK file.
+         ./
+         furnsh_c ( "de405.bsp" );
+
+         /.
+         Obtain the geometric position of Mars relative to the Earth at
+         the given ET, in J2000 frame.
+         ./
+         spkpos_c ( "MARS", ET, "J2000", "NONE", "EARTH", pos, &lt );
+
+         /.
+         Compute the one-way light time using clight_c
+         ./
+         tau = vnorm_c ( pos ) / clight_c ( );
+
+         /.
+         Display the one-way light time values obtained from spkpos_c
+         and using clight_c.
+         ./
+         printf ( "One-way light time (spkpos_c): %16.9f\n", lt );
+         printf ( "One-way light time (clight_c): %16.9f\n", tau  );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      One-way light time (spkpos_c):    922.961207764
+      One-way light time (clight_c):    922.961207764
+
+
+      Note that the following SPK readers
+
+         spkezr_c
+         spkez_c
+         spkpos_c
+         spkezp_c
+
+      return the one-way light time as an output.
 
 -Restrictions
 
@@ -106,28 +202,32 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
-   E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.0.3, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       complete code example.
+
    -CSPICE Version 1.0.2, 07-FEB-2008 (EDW) (NJB)
 
-      Corrected typos in header titles:
-      
-      Detailed Input to Detailed_Input
-      Detailed Output to Detailed_Output
+       Corrected typos in header titles:
 
-      Updated example to show pointer output argument
-      `tau' and list other high-level SPK routines that
-      return light time. Call to bodmat_c was removed
-      from example.
-      
+       Detailed Input to -Detailed_Input
+       Detailed Output to -Detailed_Output
+
+       Updated example to show pointer output argument
+       `tau' and list other high-level SPK routines that
+       return light time. Call to bodmat_c was removed
+       from example.
+
    -CSPICE Version 1.0.1, 11-NOV-2006 (EDW)
 
-      Added Parameters section header.
+       Added -Parameters section header.
 
    -CSPICE Version 1.0.0, 16-APR-1999 (EDW)
 
@@ -143,4 +243,3 @@
   return 299792.458;
 
 } /* End clight_c */
-

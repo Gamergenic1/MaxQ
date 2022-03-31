@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__12 = 12;
 
-/* $Procedure  SPKR05 ( Read SPK record from segment, type 5 ) */
+/* $Procedure SPKR05 ( Read SPK record from segment, type 5 ) */
 /* Subroutine */ int spkr05_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -81,7 +81,7 @@ static integer c__12 = 12;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -91,43 +91,43 @@ static integer c__12 = 12;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 the type 05 SPK segment to be read. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              the type 05 SPK segment to be read. */
 
-/*     ET          is a target epoch, specified as ephemeris seconds past */
-/*                 J2000, for which a data record from the segment is */
-/*                 required. */
+/*     ET       is a target epoch, specified as ephemeris seconds past */
+/*              J2000, for which a data record from the segment is */
+/*              required. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is a logical record from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of some body, relative */
-/*                 to some center, in some inertial reference frame. */
+/*     RECORD   is a logical record from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative */
+/*              to some center, in some inertial reference frame. */
 
-/*                 The structure of RECORD is: */
+/*              The structure of RECORD is: */
 
-/*                     RECORD(1) */
-/*                        .            state of the body at epoch 1. */
-/*                        . */
-/*                        . */
-/*                     RECORD(6) */
+/*                  RECORD(1) */
+/*                     .            state of the body at epoch 1. */
+/*                     . */
+/*                     . */
+/*                  RECORD(6) */
 
-/*                     RECORD(7) */
-/*                        . */
-/*                        .            state of the body at epoch 2. */
-/*                        . */
-/*                     RECORD(12) */
-/*                     RECORD(13)      epoch 1 in seconds past 2000. */
-/*                     RECORD(14)      epoch 2 in seconds past 2000. */
-/*                     RECORD(15)      GM for the center of motion. */
+/*                  RECORD(7) */
+/*                     . */
+/*                     .            state of the body at epoch 2. */
+/*                     . */
+/*                  RECORD(12) */
+/*                  RECORD(13)      epoch 1 in seconds past 2000. */
+/*                  RECORD(14)      epoch 2 in seconds past 2000. */
+/*                  RECORD(15)      GM for the center of motion. */
 
 
-/*                 Epoch 1 and epoch 2 are the times in the segment that */
-/*                 bracket ET.  If ET is less than the first time in the */
-/*                 segment then both epochs 1 and 2 are equal to the */
-/*                 first time.  And if ET is greater than the last time */
-/*                 then, epochs 1 and 2 are set equal to this last time. */
+/*              Epoch 1 and epoch 2 are the times in the segment that */
+/*              bracket ET. If ET is less than the first time in the */
+/*              segment then both epochs 1 and 2 are equal to the */
+/*              first time. And if ET is greater than the last time */
+/*              then, epochs 1 and 2 are set equal to this last time. */
 
 /* $ Parameters */
 
@@ -135,12 +135,12 @@ static integer c__12 = 12;
 
 /* $ Exceptions */
 
-/*     1) If the segment specified by DESCR is not of data type 05, */
-/*        the error 'SPICE(WRONGSPKTYPE)' is signalled. */
+/*     1)  If the segment specified by DESCR is not of data type 05, */
+/*         the error SPICE(WRONGSPKTYPE) is signaled. */
 
-/*     2) No error is signalled if ET is outside the time bounds of */
-/*        the segment. The output RECORD will contain epochs and the */
-/*        associated states which satisfy the rules stated above. */
+/*     2)  No error is signaled if ET is outside the time bounds of */
+/*         the segment. The output RECORD will contain epochs and the */
+/*         associated states which satisfy the rules stated above. */
 
 /* $ Files */
 
@@ -161,9 +161,9 @@ static integer c__12 = 12;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRnn */
+/*     completely. Given that understanding, however, the SPKRnn */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -203,11 +203,17 @@ static integer c__12 = 12;
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch      (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -219,7 +225,7 @@ static integer c__12 = 12;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_5 spk segment */
+/*     read record from type_5 SPK segment */
 
 /* -& */
 
@@ -428,9 +434,9 @@ static integer c__12 = 12;
 /*           the state for the last time twice. */
 
 	    record[12] = data[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("data", i__1, "spkr05_", (ftnlen)481)];
+		    s_rnge("data", i__1, "spkr05_", (ftnlen)488)];
 	    record[13] = data[(i__1 = n - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("data", i__1, "spkr05_", (ftnlen)482)];
+		    s_rnge("data", i__1, "spkr05_", (ftnlen)489)];
 	    addrss = begin + (nrec - 1) * 6;
 	    i__1 = addrss + 5;
 	    dafgda_(handle, &addrss, &i__1, data);
@@ -457,9 +463,9 @@ static integer c__12 = 12;
 /*        for this case will be read outside of the IF block. */
 
 	record[12] = data[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"data", i__1, "spkr05_", (ftnlen)513)];
+		"data", i__1, "spkr05_", (ftnlen)520)];
 	record[13] = data[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		"data", i__1, "spkr05_", (ftnlen)514)];
+		"data", i__1, "spkr05_", (ftnlen)521)];
     }
 
 /*     Read the consecutive states for the two epochs found above. */

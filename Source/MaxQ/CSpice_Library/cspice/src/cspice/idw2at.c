@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      IDW2AT ( Get file architecture and type from ID word ) */
+/* $Procedure IDW2AT ( Get file architecture and type from ID word ) */
 /* Subroutine */ int idw2at_(char *idword, char *arch, char *type__, ftnlen 
 	idword_len, ftnlen arch_len, ftnlen type_len)
 {
@@ -71,56 +71,57 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      IDWORD     I   The IDWORD to be examined. */
-/*      ARCH       O   The file architecture DAS or DAF. */
-/*      TYPE       O   The type of the file. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     IDWORD     I   The IDWORD to be examined. */
+/*     ARCH       O   The file architecture DAS or DAF. */
+/*     TYPE       O   The type of the file. */
 
 /* $ Detailed_Input */
 
-/*     IDWORD      is the ID word from a SPICE binary kernel file or a */
-/*                 text version of a binary kernel file whose */
-/*                 architecture and type are to be extracted. */
+/*     IDWORD   is the ID word from a SPICE binary kernel file or a */
+/*              text version of a binary kernel file whose */
+/*              architecture and type are to be extracted. */
 
 /* $ Detailed_Output */
 
-/*     ARCH        is the file architecture used to store the data in */
-/*                 a SPICE binary kernel file. If the architecture cannot */
-/*                 be extracted or is not recognized the value '?' is */
-/*                 returned. */
+/*     ARCH     is the file architecture used to store the data in */
+/*              a SPICE binary kernel file. If the architecture cannot */
+/*              be extracted or is not recognized the value '?' is */
+/*              returned. */
 
-/*                 The possible architectures are: */
+/*              The possible architectures are: */
 
-/*                    ASC -- An ASCII text file. */
-/*                    DAF -- A DAF based file. */
-/*                    DAS -- A DAS based file. */
-/*                    KPL -- Kernel Pool File (i.e., a text kernel) */
-/*                    TXT -- An ASCII text file. */
-/*                    TE1 -- Text E-Kernel type 1. */
+/*                 ASC -- An ASCII text file. */
+/*                 DAF -- A DAF based file. */
+/*                 DAS -- A DAS based file. */
+/*                 KPL -- Kernel Pool File (i.e., a text kernel) */
+/*                 TXT -- An ASCII text file. */
+/*                 TE1 -- Text E-Kernel type 1. */
 
-/*     TYPE        is the type of the SPICE file. If the type can not be */
-/*                 extracted or if it is blank, the value '?' is */
-/*                 returned. */
 
-/*                 The type can only be extracted by this routine if */
-/*                 the ID word follows the convention */
+/*     TYPE     is the type of the SPICE file. If the type can not be */
+/*              extracted or if it is blank, the value '?' is */
+/*              returned. */
 
-/*                    <architecture>/<type> */
+/*              The type can only be extracted by this routine if */
+/*              the ID word follows the convention */
 
-/*                 where <architecture> is one of the file architectures */
-/*                 specified above, and */
+/*                 <architecture>/<type> */
 
-/*                    <type> = 'xxxx' */
+/*              where <architecture> is one of the file architectures */
+/*              specified above, and */
 
-/*                 where 'xxxx' represents a four character mnemonic or */
-/*                 code for the file type. */
+/*                 <type> = 'xxxx' */
 
-/*                 This subroutine does not do any checking of the file */
-/*                 types. If a valid architecture is found and the type */
-/*                 is non-blank, that is what will be returned. It is up */
-/*                 to a higher level athority to determine whether a type */
-/*                 is valid. */
+/*              where 'xxxx' represents a four character mnemonic or */
+/*              code for the file type. */
+
+/*              This subroutine does not do any checking of the file */
+/*              types. If a valid architecture is found and the type */
+/*              is non-blank, that is what will be returned. It is up */
+/*              to a higher level authority to determine whether a type */
+/*              is valid. */
 
 /* $ Parameters */
 
@@ -128,7 +129,7 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*      1) If the variable ID word is blank, both the architecture and */
+/*     1)  If the variable ID word is blank, both the architecture and */
 /*         type will be unknown, specified by '?'. */
 
 /* $ Files */
@@ -189,31 +190,37 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 2.0.0, 26-OCT-1995 (KRG) */
+/* -    SPICELIB Version 2.1.0, 20-AUG-2021 (JDR) */
 
-/*         Changed the Version line from "Beta" to "SPICELIB" for the */
-/*         current revisions. The subroutine was already in SPICELIB, */
-/*         but the Version line said "Beta." */
+/*        Added IMPLICIT NONE statement. */
 
-/*         Added several new architectures: */
+/*        Edited the header to comply with NAIF standard. */
 
-/*            KPL -- Kernel Pool File (i.e., a text kernel) */
-/*            TXT -- An ASCII text file. */
-/*            ASC -- An ASCII text file. */
-/*            TE1 -- Text E-Kernel type 1. */
+/* -    SPICELIB Version 2.0.0, 26-OCT-1995 (KRG) */
 
-/*         Changed the response foe the ID word 'NAIF/DAS' to be */
-/*         consistent with GETFAT. It now sets the architecture to 'DAS' */
-/*         and the type to 'PRE', for pre-release version. */
+/*        Changed the Version line from "Beta" to "SPICELIB" for the */
+/*        current revisions. The subroutine was already in SPICELIB, */
+/*        but the Version line said "Beta." */
 
-/* -     Beta Version 1.0.0, 30-SEP-1993 (KRG) */
+/*        Added several new architectures: */
+
+/*           KPL -- Kernel Pool File (i.e., a text kernel) */
+/*           TXT -- An ASCII text file. */
+/*           ASC -- An ASCII text file. */
+/*           TE1 -- Text E-Kernel type 1. */
+
+/*        Changed the response foe the ID word 'NAIF/DAS' to be */
+/*        consistent with GETFAT. It now sets the architecture to 'DAS' */
+/*        and the type to 'PRE', for pre-release version. */
+
+/* -    SPICELIB Version 1.0.0, 30-SEP-1993 (KRG) */
 
 /* -& */
-
 /* $ Index_Entries */
 
 /*     extract architecture and type from an id word */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PUTSMS ( Store Short Error Message ) */
+/* $Procedure PUTSMS ( Store Short Error Message ) */
 /* Subroutine */ int putsms_0_(int n__, char *msg, ftnlen msg_len)
 {
     /* Initialized data */
@@ -17,9 +17,11 @@
 
 /* $ Abstract */
 
-/*     PUTSMS is a low-level data structure access routine which stores */
-/*     the short error message.  DO NOT CALL THIS ROUTINE.  USE SIGERR, */
-/*     NOT PUTSMS, TO SIGNAL ERRORS. */
+/*     Store a short error message. */
+
+/*     PUTSMS is a low-level data structure access routine. */
+/*     DO NOT CALL THIS ROUTINE. USE SIGERR, NOT PUTSMS, TO SIGNAL */
+/*     ERRORS. */
 
 /* $ Disclaimer */
 
@@ -111,7 +113,8 @@
 
 /* $ Detailed_Input */
 
-/*     MSG   The current short error message.  This value will be saved. */
+/*     MSG      is the current short error message. This value will be */
+/*              saved. */
 
 /* $ Detailed_Output */
 
@@ -119,8 +122,8 @@
 
 /* $ Parameters */
 
-/*     SMSGLN  is the maximum length of the short error message.  See */
-/*             the include file errhnd.inc for the value of SMSGLN. */
+/*     SMSGLN   is the maximum length of the short error message. See */
+/*              the include file errhnd.inc for the value of SMSGLN. */
 
 /* $ Exceptions */
 
@@ -133,9 +136,9 @@
 /* $ Particulars */
 
 /*     This is a data structure access routine for the */
-/*     toolkit short error message.  This routine should be */
+/*     toolkit short error message. This routine should be */
 /*     used for no other purpose; in particular, it should */
-/*     not be used to signal errors.  Use SIGERR for that. */
+/*     not be used to signal errors. Use SIGERR for that. */
 
 /* $ Examples */
 
@@ -143,9 +146,9 @@
 
 /* $ Restrictions */
 
-/*     Calls to this routine by routines other than the */
-/*     SPICELIB error handling routines may interfere */
-/*     with error processing. */
+/*     1)  Calls to this routine by routines other than the */
+/*         SPICELIB error handling routines may interfere */
+/*         with error processing. */
 
 /* $ Literature_References */
 
@@ -153,16 +156,25 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Index_Entries entry. */
 
 /* -    SPICELIB Version 1.1.0, 29-JUL-1997 (NJB) */
 
 /*        Maximum length of the short error message is now represented */
-/*        by the parameter SMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
+/*        by the parameter SMSGLN. Miscellaneous header fixes were */
+/*        made. Some indentation and vertical white space abnormalities */
+/*        in the code were fixed. Some dubious comments were deleted */
 /*        from the code. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -175,7 +187,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
+/*     store short error message */
 
 /* -& */
 /* $ Revisions */
@@ -183,9 +195,9 @@
 /* -    SPICELIB Version 1.1.0, 29-JUL-1997 (NJB) */
 
 /*        Maximum length of the short error message is now represented */
-/*        by the parameter SMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
+/*        by the parameter SMSGLN. Miscellaneous header fixes were */
+/*        made. Some indentation and vertical white space abnormalities */
+/*        in the code were fixed. Some dubious comments were deleted */
 /*        from the code. */
 
 /* -    Beta Version 1.0.1, 08-FEB-1989 (NJB) */
@@ -212,7 +224,7 @@
 
     s_copy(savmsg, msg, (ftnlen)25, msg_len);
     return 0;
-/* $Procedure      GETSMS ( Get Short Error Message ) */
+/* $Procedure GETSMS ( Get Short Error Message ) */
 
 L_getsms:
 /* $ Abstract */
@@ -254,13 +266,14 @@ L_getsms:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     CHARACTER*(*)          MSG */
 
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-
 /*     MSG        O   The current short error message. */
 
 /* $ Detailed_Input */
@@ -269,9 +282,9 @@ L_getsms:
 
 /* $ Detailed_Output */
 
-/*     MSG    is the current short error message.  See the */
-/*            "required reading" file for a detailed discussion */
-/*            of error messages. */
+/*     MSG      is the current short error message. See the */
+/*              "required reading" file for a detailed discussion */
+/*              of error messages. */
 
 /* $ Parameters */
 
@@ -279,10 +292,10 @@ L_getsms:
 
 /* $ Exceptions */
 
-/*     None. */
+/*     Error free. */
 
-/*     However, this routine is part of the SPICELIB error */
-/*     handling mechanism. */
+/*     1)  However, this routine is part of the SPICELIB error */
+/*         handling mechanism. */
 
 /* $ Files */
 
@@ -306,16 +319,25 @@ L_getsms:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Index_Entries entry. Removed unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.1.0, 29-JUL-1997 (NJB) */
 
 /*        Maximum length of the short error message is now represented */
-/*        by the parameter SMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
+/*        by the parameter SMSGLN. Miscellaneous header fixes were */
+/*        made. Some indentation and vertical white space abnormalities */
+/*        in the code were fixed. Some dubious comments were deleted */
 /*        from the code. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -328,18 +350,7 @@ L_getsms:
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 29-JUL-1997 (NJB) */
-
-/*        Maximum length of the short error message is now represented */
-/*        by the parameter SMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
-/*        from the code. */
+/*     get current short error message */
 
 /* -& */
 

@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKFROT ( C-kernel, find rotation ) */
+/* $Procedure CKFROT ( CK frame, find position rotation ) */
 /* Subroutine */ int ckfrot_(integer *inst, doublereal *et, doublereal *
 	rotate, integer *ref, logical *found)
 {
@@ -42,8 +42,10 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Find the rotation from a C-kernel Id to the native */
-/*     frame at the time requested. */
+/*     Find the position rotation matrix from a C-kernel (CK) frame with */
+/*     the specified frame class ID (CK ID) to the base frame of the */
+/*     highest priority CK segment containing orientation data for this */
+/*     CK frame at the time requested. */
 
 /* $ Disclaimer */
 
@@ -81,44 +83,46 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     INST       I   NAIF instrument ID. */
-/*     ET         I   Epoch measured in seconds past J2000. */
-/*     ROTATE     O   rotation from CK platform to frame REF. */
-/*     REF        O   Reference frame. */
-/*     FOUND      O   True when requested pointing is available. */
+/*     INST       I   Frame class ID (CK ID) of a CK frame. */
+/*     ET         I   Epoch measured in seconds past J2000 TDB. */
+/*     ROTATE     O   Rotation matrix from CK frame to frame REF. */
+/*     REF        O   Frame ID of the base reference. */
+/*     FOUND      O   .TRUE. when requested pointing is available. */
 
 /* $ Detailed_Input */
 
-/*     INST       is the unique NAIF integer ID for the spacecraft */
-/*                instrument for which data is being requested. */
+/*     INST     is the unique frame class ID (CK ID) of the CK frame for */
+/*              which data is being requested. */
 
-/*     ET         is the epoch for which the state rotation */
-/*                is desired. ET should be given in seconds past the */
-/*                epoch of J2000. */
-
+/*     ET       is the epoch for which the position rotation is desired. */
+/*              ET should be given in seconds past the epoch of J2000 */
+/*              TDB. */
 
 /* $ Detailed_Output */
 
-/*     ROTATE     is a rotation matrix that converts */
-/*                positions relative to the input frame (given by INST) */
-/*                to positions relative to the frame REF. */
+/*     ROTATE   is a position rotation matrix that converts positions */
+/*              relative to the CK frame given by its frame class ID, */
+/*              INST, to positions relative to the base frame given by */
+/*              its frame ID, REF. */
 
-/*                Thus, if a state S has components x,y,z,dx,dy,dz */
-/*                in the frame of INST, frame, then S has components */
-/*                x', y', z', dx', dy', dz' in frame REF. */
+/*              Thus, if a position S has components x,y,z in the CK */
+/*              frame, then S has components x', y', z' in the base */
+/*              frame. */
 
-/*                     [  x' ]     [           ] [  x ] */
-/*                     |  y' |  =  |   ROTATE  | |  y | */
-/*                     [  z' ]     [           ] [  z ] */
+/*                 .-  -.     .-        -. .- -. */
+/*                 | x' |     |          | | x | */
+/*                 | y' |  =  |  ROTATE  | | y | */
+/*                 | z' |     |          | | z | */
+/*                 `-  -'     `-        -' `- -' */
 
 
-/*     REF        is the id-code reference frame to which ROTATE will */
-/*                transform states. */
+/*     REF      is the ID code of the base reference frame to which */
+/*              ROTATE will transform positions. */
 
-/*     FOUND      is true if a record was found to satisfy the pointing */
-/*                request.  FOUND will be false otherwise. */
+/*     FOUND    is .TRUE. if a record was found to satisfy the pointing */
+/*              request. FOUND will be .FALSE. otherwise. */
 
 /* $ Parameters */
 
@@ -126,46 +130,228 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1)  If a C-kernel file is not loaded using CKLPF prior to calling */
-/*         this routine, an error is signalled by a routine that this */
-/*         routine calls. */
+/*     1)  If no CK files were loaded prior to calling this routine, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
+/*     2)  If no SCLK correlation data needed to read CK files were */
+/*         loaded prior to calling this routine, an error is signaled by */
+/*         a routine in the call tree of this routine. */
+
+/*     3)  If the input time ET cannot be converted to an encoded SCLK */
+/*         time, using SCLK data associated with INST, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*     CKFROT searches through files loaded by CKLPF to locate a segment */
-/*     that can satisfy the request for position rotation */
-/*     for instrument INST at time ET.  You must load a C-kernel */
-/*     file using CKLPF before calling this routine. */
+/*     CKFROT searches through loaded CK files to locate a segment that */
+/*     can satisfy the request for position rotation data for the CK */
+/*     frame with the specified frame class ID at time ET. You must load */
+/*     a CK file containing such data before calling this routine. You */
+/*     must also load SCLK and possibly LSK files needed to convert the */
+/*     input ET time to the encoded SCLK time with which the orientation */
+/*     data stored inside that CK is tagged. */
 
 /* $ Particulars */
 
-/*     CKFROT searches through files loaded by CKLPF to satisfy a */
-/*     pointing request. Last-loaded files are searched first, and */
-/*     individual files are searched in backwards order, giving */
-/*     priority to segments that were added to a file later than the */
-/*     others. CKFROT considers only those segments that contain */
-/*     angular velocity data. */
+/*     CKFROT searches through loaded CK files to satisfy a pointing */
+/*     request. Last-loaded files are searched first, and individual */
+/*     files are searched in backwards order, giving priority to */
+/*     segments that were added to a file later than the others. */
 
 /*     The search ends when a segment is found that can give pointing */
-/*     for the specified instrument at the request time. */
+/*     for the specified CK frame at the request time. */
+
+/*     Segments with and without angular velocities are considered by */
+/*     this routine. */
+
+/*     This routine uses the CKMETA routine to determine the SCLK ID */
+/*     used to convert the input ET time to the encoded SCLK time used */
+/*     to look up pointing data in loaded CK files. */
 
 /* $ Examples */
 
-/*     None. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Use CKFROT to compute the instantaneous angular velocity */
+/*        vector for the Mars Global Surveyor (MGS) spacecraft frame, */
+/*        'MGS_SPACECRAFT', relative to the inertial frame used as the */
+/*        base frame in CK files containing MGS spacecraft orientation */
+/*        at 2003-JUL-25 13:00:00. The frame class ID (CK ID) for the */
+/*        'MGS_SPACECRAFT' frame is -94000. */
+
+
+/*        Suppose that R(t) is the rotation matrix whose columns */
+/*        represent the inertial pointing vectors of the MGS spacecraft */
+/*        axes at time `t'. */
+
+/*        Then the angular velocity vector points along the vector given */
+/*        by: */
+
+/*                                T */
+/*            limit  AXIS( R(t+h)R ) */
+/*            h-->0 */
+
+
+/*        And the magnitude of the angular velocity at time `t' is given */
+/*        by: */
+
+/*                                T */
+/*            d ANGLE ( R(t+h)R(t) ) */
+/*           ------------------------   at   h = 0 */
+/*                      dh */
+
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: ckfrot_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              naif0012.tls                  Leapseconds */
+/*              mgs_sclkscet_00061.tsc        MGS SCLK coefficients */
+/*              mgs_sc_ext12.bc               MGS s/c bus attitude */
+
+/*           \begindata */
+
+/*           KERNELS_TO_LOAD = ( 'naif0012.tls', */
+/*                               'mgs_sclkscet_00061.tsc', */
+/*                               'mgs_sc_ext12.bc' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CKFROT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         EPOCH */
+/*              PARAMETER           ( EPOCH  = '2003-JUL-25 13:00:00' ) */
+
+/*              INTEGER               INST */
+/*              PARAMETER           ( INST   = -94000 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      ANGLE */
+/*              DOUBLE PRECISION      ANGVEL ( 3    ) */
+/*              DOUBLE PRECISION      AXIS   ( 3    ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      INFROT ( 3, 3 ) */
+/*              DOUBLE PRECISION      H */
+/*              DOUBLE PRECISION      RET    ( 3, 3 ) */
+/*              DOUBLE PRECISION      RETH   ( 3, 3 ) */
+
+/*              INTEGER               REF */
+/*              INTEGER               REFH */
+
+/*              LOGICAL               FOUND */
+/*              LOGICAL               FOUNDH */
+
+/*        C */
+/*        C     Load the required LSK, SCLK and CK. Use a */
+/*        C     meta-kernel for convenience. */
+/*        C */
+/*              CALL FURNSH ( 'ckfrot_ex1.tm' ) */
+
+/*        C */
+/*        C     First convert the time to seconds past J2000. Set the */
+/*        C     delta time (1 ms). */
+/*        C */
+/*              CALL STR2ET ( EPOCH, ET ) */
+/*              H = 1.D-3 */
+
+/*        C */
+/*        C     Now, look up the rotation from the MGS spacecraft */
+/*        C     frame specified by its frame class ID (CK ID) to a */
+/*        C     base reference frame (returned by CKFROT), at ET */
+/*        C     and ET+H. */
+/*        C */
+/*              CALL CKFROT ( INST, ET,   RET,  REF,  FOUND  ) */
+/*              CALL CKFROT ( INST, ET+H, RETH, REFH, FOUNDH ) */
+
+/*        C */
+/*        C     If both rotations were computed and if the base */
+/*        C     reference frames are the same, compute the */
+/*        C     instantaneous angular velocity vector. */
+/*        C */
+/*              IF ( FOUND .AND. FOUNDH .AND. REF .EQ. REFH ) THEN */
+
+/*        C */
+/*        C        Compute the infinitesimal rotation R(t+h)R(t)**T. */
+/*        C */
+/*                 CALL MXMT ( RETH, RET, INFROT ) */
+
+/*        C */
+/*        C        Compute the AXIS and ANGLE of the infinitesimal */
+/*        C        rotation. */
+/*        C */
+/*                 CALL RAXISA ( INFROT, AXIS, ANGLE ) */
+
+/*        C */
+/*        C        Scale AXIS to get the angular velocity vector. */
+/*        C */
+/*                 CALL VSCL ( ANGLE/H, AXIS, ANGVEL ) */
+
+/*        C */
+/*        C        Output the results. */
+/*        C */
+/*                 WRITE(*,'(A)') */
+/*             .           'Instantaneous angular velocity vector:' */
+/*                 WRITE(*,'(3F15.10)') ANGVEL */
+/*                 WRITE(*,'(A,I5)') 'Reference frame ID:', REF */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) 'ERROR: data not found or frame mismatch.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Instantaneous angular velocity vector: */
+/*           0.0001244121   0.0008314866   0.0003028634 */
+/*        Reference frame ID:    1 */
+
 
 /* $ Restrictions */
 
-/*     A C-kernel file should have been loaded by CKLPF. */
+/*     1)  A CK file must be loaded prior to calling this routine. */
 
-/*     In addition it is helpful to load a CK-info file into the */
-/*     Kernel pool.  This file should have the following variables */
-/*     defined. */
-
-/*       CK_<INST>_SCLK = SCLK idcode that yields SCLK mapping for INST. */
-/*       CK_<INST>_SPK  = SPK idcode  that yields ephemeris for INST. */
-
-/*     where <INST> is the integer string corresponding to INST. */
+/*     2)  LSK and SCLK files needed for time conversions must be loaded */
+/*         prior to calling this routine. */
 
 /* $ Literature_References */
 
@@ -173,15 +359,25 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 13-DEC-2021 (JDR) (BVS) (NJB) */
+
+/*        Edited the header to comply with NAIF standard and modern */
+/*        SPICE CK and frames terminology. Added initialization of local */
+/*        variable SFND. */
+
+/*        Added complete code example. */
 
 /* -    SPICELIB Version 1.2.0, 17-FEB-2000 (WLT) */
 
 /*        The routine now checks to make sure convert ET to TICKS */
 /*        and that at least one C-kernel is loaded before trying */
-/*        to look up the transformation.  Also the routine now calls */
+/*        to look up the transformation. Also the routine now calls */
 /*        SCE2C instead of SCE2T. */
 
 /* -    SPICELIB Version 1.0.0, 03-MAR-1999 (WLT) */
@@ -220,7 +416,7 @@ static integer c__6 = 6;
 /*     Local variables */
 
 
-/*     Set FOUND to FALSE right now in case we end up */
+/*     Set FOUND to .FALSE. right now in case we end up */
 /*     returning before doing any work. */
 
     *found = FALSE_;
@@ -230,9 +426,8 @@ static integer c__6 = 6;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("CKFROT", (ftnlen)6);
     }
+    chkin_("CKFROT", (ftnlen)6);
 
 /*     We don't need angular velocity data. */
 /*     Assume the segment won't be found until it really is. */
@@ -252,6 +447,11 @@ static integer c__6 = 6;
 	chkout_("CKFROT", (ftnlen)6);
 	return 0;
     }
+
+/*     Initialize SFND here in case an error occurs before CKSNS can */
+/*     set its value. */
+
+    sfnd = FALSE_;
     sce2c_(&sclkid, et, &time);
     ckbss_(inst, &time, &tol, &needav);
     cksns_(&handle, descr, segid, &sfnd, (ftnlen)40);

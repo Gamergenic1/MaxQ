@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CKE01 ( CK evaluate pointing record, data type 1 ) */
+/* $Procedure CKE01 ( CK evaluate pointing record, data type 1 ) */
 /* Subroutine */ int cke01_(logical *needav, doublereal *record, doublereal *
 	cmat, doublereal *av, doublereal *clkout)
 {
@@ -58,9 +58,9 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     NEEDAV     I   True if angular velocity vector is required. */
+/*     NEEDAV     I   .TRUE. if angular velocity vector is required. */
 /*     RECORD     I   Data type 1 pointing record. */
 /*     CMAT       O   C-matrix. */
 /*     AV         O   Angular velocity vector. */
@@ -68,85 +68,84 @@
 
 /* $ Detailed_Input */
 
-/*     NEEDAV     is true when angular velocity data is requested. */
+/*     NEEDAV   is .TRUE. when angular velocity data is requested. */
 
-/*     RECORD     is a set of double precision numbers returned by CKR01 */
-/*                that contain sufficient information from a data type */
-/*                1 pointing segment to evaluate the C-matrix and */
-/*                possibly the angular velocity vector (if NEEDAV is */
-/*                true) for a particular instance. */
+/*     RECORD   is a set of double precision numbers returned by CKR01 */
+/*              that contain sufficient information from a data type */
+/*              1 pointing segment to evaluate the C-matrix and */
+/*              possibly the angular velocity vector (if NEEDAV is */
+/*              .TRUE.) for a particular instance. */
 
-/*                The contents of RECORD are as follows: */
+/*              The contents of RECORD are as follows: */
 
-/*                   RECORD( 1 ) = CLKOUT */
+/*                 RECORD( 1 ) = CLKOUT */
 
-/*                   RECORD( 2 ) = q0 */
-/*                   RECORD( 3 ) = q1 */
-/*                   RECORD( 4 ) = q2 */
-/*                   RECORD( 5 ) = q3 */
+/*                 RECORD( 2 ) = q0 */
+/*                 RECORD( 3 ) = q1 */
+/*                 RECORD( 4 ) = q2 */
+/*                 RECORD( 5 ) = q3 */
 
-/*                   RECORD( 6 ) = Av1  ] */
-/*                   RECORD( 7 ) = Av2  |-- Optional */
-/*                   RECORD( 8 ) = Av3  ] */
+/*                 RECORD( 6 ) = Av1  ] */
+/*                 RECORD( 7 ) = Av2  |-- Optional */
+/*                 RECORD( 8 ) = Av3  ] */
 
 
-/*                The quantities q0 - q3 represent a quaternion. */
-/*                The quantities Av1, Av2, and Av3 represent the angular */
-/*                velocity vector. */
+/*              The quantities q0 - q3 represent a quaternion. */
+/*              The quantities Av1, Av2, and Av3 represent the angular */
+/*              velocity vector. */
 
-/*                CLKOUT is the encoded spacecraft clock time */
-/*                associated with the quaternion and, optionally, the */
-/*                angular velocity vector. */
+/*              CLKOUT is the encoded spacecraft clock time */
+/*              associated with the quaternion and, optionally, the */
+/*              angular velocity vector. */
 
 /* $ Detailed_Output */
 
-/*     CMAT       is a rotation matrix that transforms the components of */
-/*                of a vector expressed in the reference frame given in */
-/*                the segment to components expressed in the instrument */
-/*                fixed frame at time CLKOUT. */
+/*     CMAT     is a rotation matrix that transforms the components of */
+/*              of a vector expressed in the reference frame given in */
+/*              the segment to components expressed in the instrument */
+/*              fixed frame at time CLKOUT. */
 
-/*                Thus, if a vector v has components x, y, z in the */
-/*                reference frame, then v has components x', y', z' in */
-/*                the instrument fixed frame at time CLKOUT: */
+/*              Thus, if a vector v has components x, y, z in the */
+/*              reference frame, then v has components x', y', z' in */
+/*              the instrument fixed frame at time CLKOUT: */
 
-/*                     [ x' ]     [          ] [ x ] */
-/*                     | y' |  =  |   CMAT   | | y | */
-/*                     [ z' ]     [          ] [ z ] */
+/*                   [ x' ]     [          ] [ x ] */
+/*                   | y' |  =  |   CMAT   | | y | */
+/*                   [ z' ]     [          ] [ z ] */
 
-/*                If the x', y', z' components are known, use the */
-/*                transpose of the C-matrix to determine x, y, z as */
-/*                follows. */
+/*              If the x', y', z' components are known, use the */
+/*              transpose of the C-matrix to determine x, y, z as */
+/*              follows. */
 
-/*                     [ x ]      [          ]T    [ x' ] */
-/*                     | y |  =   |   CMAT   |     | y' | */
-/*                     [ z ]      [          ]     [ z' ] */
-/*                              (Transpose of CMAT) */
+/*                   [ x ]      [          ]T    [ x' ] */
+/*                   | y |  =   |   CMAT   |     | y' | */
+/*                   [ z ]      [          ]     [ z' ] */
+/*                            (Transpose of CMAT) */
 
-/*     AV         is the angular velocity vector. This is returned only */
-/*                if it has been requested, as indicated by NEEDAV. In */
-/*                other words, if NEEDAV is true, the angular velocity */
-/*                portion of RECORD must be present. */
+/*     AV       is the angular velocity vector. This is returned only */
+/*              if it has been requested, as indicated by NEEDAV. In */
+/*              other words, if NEEDAV is .TRUE., the angular velocity */
+/*              portion of RECORD must be present. */
 
-/*                The angular velocity vector is the vector whose */
-/*                direction gives the right-handed axis about which */
-/*                the reference frame tied to the instrument is */
-/*                instantaneously rotating at time CLKOUT. */
+/*              The angular velocity vector is the vector whose */
+/*              direction gives the right-handed axis about which */
+/*              the reference frame tied to the instrument is */
+/*              instantaneously rotating at time CLKOUT. */
 
-/*                The angular velocity vector is returned in component */
-/*                form */
+/*              The angular velocity vector is returned in component */
+/*              form */
 
-/*                         AV = [ AV1  , AV2  , AV3  ] */
+/*                       AV = [ AV1  , AV2  , AV3  ] */
 
-/*                which is in terms of the reference coordinate frame */
-/*                specified in the segment descriptor. */
+/*              which is in terms of the reference coordinate frame */
+/*              specified in the segment descriptor. */
 
-/*                The magnitude of AV is the magnitude of the instantane- */
-/*                ous velocity of the rotation, in radians per second. */
+/*              The magnitude of AV is the magnitude of the instantane- */
+/*              ous velocity of the rotation, in radians per second. */
 
-/*     CLKOUT     The encoded spacecraft clock time associated with the */
-/*                returned C-matrix and, optionally, the returned angular */
-/*                velocity vector. */
-
+/*     CLKOUT   is the encoded spacecraft clock time associated with the */
+/*              returned C-matrix and, optionally, the returned angular */
+/*              velocity vector. */
 
 /* $ Parameters */
 
@@ -154,12 +153,12 @@
 
 /* $ Exceptions */
 
-/*     1) No checking is done to determine whether RECORD is a valid */
-/*        record. */
+/*     1)  No checking is done to determine whether RECORD is a valid */
+/*         record. */
 
-/*     2) If NEEDAV is true, then RECORD is assumed to contain angular */
-/*        velocity data. No checking is performed to verify this */
-/*        assumption. */
+/*     2)  If NEEDAV is .TRUE., then RECORD is assumed to contain angular */
+/*         velocity data. No checking is performed to verify this */
+/*         assumption. */
 
 /* $ Files */
 
@@ -174,7 +173,7 @@
 /*     portion of the record from quaternion form to C-matrix form. */
 
 /*     The angular velocity vector will only be returned if it has been */
-/*     requested. In other words, if NEEDAV is true, the routine will */
+/*     requested. In other words, if NEEDAV is .TRUE., the routine will */
 /*     expect the angular velocity component of the record to be present. */
 
 /* $ Examples */
@@ -186,7 +185,7 @@
 /*     The following code fragment searches through a file represented */
 /*     by HANDLE for all segments applicable to the Voyager 2 wide angle */
 /*     camera, for a particular spacecraft clock time, which have data */
-/*     type 1.  It then evaluates the pointing for that epoch and prints */
+/*     type 1. It then evaluates the pointing for that epoch and prints */
 /*     the result. */
 
 /*     C */
@@ -261,16 +260,25 @@
 
 /* $ Literature_References */
 
-/*     1) None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.1, 22-AUG-2006 (EDW) */
 
@@ -311,7 +319,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate ck type_1 pointing data record */
+/*     evaluate CK type_1 pointing data record */
 
 /* -& */
 /* $ Revisions */

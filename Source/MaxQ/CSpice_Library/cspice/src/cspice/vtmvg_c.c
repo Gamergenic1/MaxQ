@@ -4,8 +4,8 @@
 
 -Abstract
 
-    Multiply the transpose of a n-dimensional column vector,
-    a nxm matrix, and a m-dimensional column vector.
+   Multiply the transpose of a n-dimensional column vector,
+   a nxm matrix, and a m-dimensional column vector.
 
 -Disclaimer
 
@@ -34,12 +34,12 @@
 
 -Required_Reading
 
-    None.
+   None.
 
 -Keywords
 
-    MATRIX
-    VECTOR
+   MATRIX
+   VECTOR
 
 */
 
@@ -56,83 +56,42 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-     v1        I   n-dimensional double precision column vector.
-     matrix    I   nxm double precision matrix.
-     v2        I   m-dimensional double porecision column vector.
-     nrow      I   Number of rows in matrix (number of rows in v1.)
-     ncol      I   Number of columns in matrix (number of rows in
-                   v2.)
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I   n-dimensional double precision column vector.
+   matrix     I   nxm double precision matrix.
+   v2         I   m-dimensional double precision column vector.
+   nrow       I   Number of rows in matrix (number of rows in `v1'.)
+   ncol       I   Number of columns in matrix (number of rows in `v2'.)
 
-     The function returns the result of (v1**t * matrix * v2 ).
+   The function returns the result of (v1**t * matrix * v2 ).
 
 -Detailed_Input
 
-    v1         is an n-dimensional double precision vector.
+   v1          is an n-dimensional double precision vector.
 
-    matrix     is an n x m double precision matrix.
+   matrix      is an n x m double precision matrix.
 
-    v2         is an m-dimensional double precision vector.
+   v2          is an m-dimensional double precision vector.
 
-    nrow       is the number of rows in matrix.  this is also
-               equivalent to the number of rows in the vector v1.
+   nrow        is the number of rows in matrix. this is also
+               equivalent to the number of rows in the vector `v1'.
 
-    ncol       is the number of columns in matrix. this is also
-               equivalent to the number of rows in the vector v2.
+   ncol        is the number of columns in matrix. this is also
+               equivalent to the number of rows in the vector `v2'.
 
 -Detailed_Output
 
-    The function returns the double precision value of the equation
-    (v1**t * matrix * v2 ).
+   The function returns the double precision value of the equation
+   (v1**t * matrix * v2 ).
 
-    Notice that vtmvg_c is actually the dot product of the vector
-    resulting from multiplying the transpose of V1 and MATRIX and the
-    vector V2.
+   Notice that vtmvg_c is actually the dot product of the vector
+   resulting from multiplying the transpose of `v1' and `matrix' and the
+   vector `v2'.
 
 -Parameters
 
-    None.
-
--Particulars
-
-    This routine implements the following vector/matrix/vector
-    multiplication:
-
-                           T
-       vtmvg_c = [   V1   ] |          |  |  |
-                            |  MATRIX  |  |V2|
-                            |          |  |  |
-
-    by calculating over all values of the indices k and l from 1 to
-    nrow and 1 to ncol, respectively, the expression
-
-       vtmvg_c = Summation of ( v1(k)*matrix(k,l)*v2(l) ) .
-
-    v1 is a column vector which becomes a row vector when transposed.
-    v2 is a column vector.
-
-    No check performed to determine whether floating point
-    overflow has occurred.
-
--Examples
-
-    If  v1 = | 1.0 |  matrix = | 2.0  0.0 |  v2 = | 1.0 |
-             |     |           |          |       |     |
-             | 2.0 |           | 1.0  2.0 |       | 2.0 |
-             |     |           |          |
-             | 3.0 |           | 1.0  1.0 |
-
-    nrow = 3
-    ncol = 2
-
-    Then the value of the function is  21.0.
-
--Restrictions
-
-    Since no error detection or recovery is implemented, the
-    programmer is required to insure that the inputs to this routine
-    are both valid and within the proper range.
+   None.
 
 -Exceptions
 
@@ -140,20 +99,64 @@
 
 -Files
 
-    None.
+   None.
 
--Author_and_Institution
+-Particulars
 
-    W.M. Owen       (JPL)
-    E.D. Wright     (JPL)
+   This routine implements the following vector/matrix/vector
+   multiplication:
+
+                          T |          |  |  |
+      vtmvg_c = [   v1   ]  |  matrix  |  |v2|
+                            |          |  |  |
+
+   by calculating over all values of the indices `k' and `l' from 0 to
+   nrow-1 and 0 to ncol-1, respectively, the expression
+
+      vtmvg_c = Summation of ( v1(k)*matrix(k,l)*v2(l) ) .
+
+   `v1' is a column vector which becomes a row vector when transposed.
+   `v2' is a column vector.
+
+   No check performed to determine whether floating point
+   overflow has occurred.
+
+-Examples
+
+   If  v1 = | 1.0 |  matrix = | 2.0  0.0 |  v2 = | 1.0 |
+            |     |           |          |       |     |
+            | 2.0 |           | 1.0  2.0 |       | 2.0 |
+            |     |           |          |
+            | 3.0 |           | 1.0  1.0 |
+
+   nrow = 3
+   ncol = 2
+
+   Then the value of the function is  21.0.
+
+-Restrictions
+
+   1)  Since no error detection or recovery is implemented, the
+       programmer is required to insure that the inputs to this routine
+       are both valid and within the proper range.
 
 -Literature_References
 
-    None.
+   None.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 1-JUL-1999
+   -CSPICE Version 1.0.1, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 01-JUL-1999 (EDW) (WMO)
 
 -Index_Entries
 
@@ -195,7 +198,7 @@
    ConstSpiceDouble      * loc_m1;
    ConstSpiceDouble      * loc_v2;
 
- 
+
    SpiceInt                k;
    SpiceInt                l;
    SpiceDouble             val = 0.;

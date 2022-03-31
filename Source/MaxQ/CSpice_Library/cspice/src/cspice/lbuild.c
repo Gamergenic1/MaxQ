@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      LBUILD ( Build a list in a character string ) */
+/* $Procedure LBUILD ( Build a list in a character string ) */
 /* Subroutine */ int lbuild_(char *items, integer *n, char *delim, char *list,
 	 ftnlen items_len, ftnlen delim_len, ftnlen list_len)
 {
@@ -28,7 +28,7 @@ static integer c__0 = 0;
 
 /* $ Abstract */
 
-/*      Build a list of items delimited by a character. */
+/*     Build a list of items delimited by a character. */
 
 /* $ Disclaimer */
 
@@ -61,118 +61,128 @@ static integer c__0 = 0;
 
 /* $ Keywords */
 
-/*      CHARACTER,  LIST,  STRING */
+/*     CHARACTER */
+/*     LIST */
+/*     STRING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ITEMS      I   Items in the list. */
-/*      N          I   Number of items in the list. */
-/*      DELIM      I   String used to delimit items. */
-/*      LIST       O   List of items delimited by DELIM. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ITEMS      I   Items in the list. */
+/*     N          I   Number of items in the list. */
+/*     DELIM      I   String used to delimit items. */
+/*     LIST       O   List of items delimited by DELIM. */
 
 /* $ Detailed_Input */
 
-/*      ITEMS       are the items to be combined to make the output */
-/*                  list. Leading and trailing blanks are ignored. */
-/*                  (Only the non-blank parts of the items are used.) */
+/*     ITEMS    are the items to be combined to make the output */
+/*              list. Leading and trailing blanks are ignored. */
+/*              (Only the non-blank parts of the items are used.) */
 
-/*      N           is the number of items. */
+/*     N        is the number of items. */
 
-/*      DELIM       is the string used to delimit the items in the */
-/*                  output list. DELIM may contain any number of */
-/*                  characters, including blanks. */
+/*     DELIM    is the string used to delimit the items in the */
+/*              output list. DELIM may contain any number of */
+/*              characters, including blanks. */
 
 /* $ Detailed_Output */
 
-/*      LIST        is the output list, containing the N elements of */
-/*                  ITEMS delimited by DELIM. If LIST is not long enough */
-/*                  to contain the output list, it is truncated on the */
-/*                  right. */
+/*     LIST     is the output list, containing the N elements of */
+/*              ITEMS delimited by DELIM. If LIST is not long enough */
+/*              to contain the output list, it is truncated on the */
+/*              right. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The non-blank parts of the elements of the ITEMS array are */
-/*      appended to the list, one at a time, separated by DELIM. */
-
-/* $ Examples */
-
-/*      The following examples illustrate the operation of LBUILD. */
-
-/*      1) Let */
-/*               DELIM    = ' ' */
-
-/*               ITEMS(1) = 'A' */
-/*               ITEMS(2) = '  number' */
-/*               ITEMS(3) = 'of' */
-/*               ITEMS(4) = ' words' */
-/*               ITEMS(5) = 'separated' */
-/*               ITEMS(6) = '  by' */
-/*               ITEMS(7) = 'spaces' */
-
-/*         Then */
-/*               LIST  = 'A number of words separated by spaces' */
-
-/*      2) Let */
-/*               DELIM    = '/' */
-
-/*               ITEMS(1) = ' ' */
-/*               ITEMS(2) = ' ' */
-/*               ITEMS(3) = 'option1' */
-/*               ITEMS(4) = ' ' */
-/*               ITEMS(5) = 'option2' */
-/*               ITEMS(6) = ' ' */
-/*               ITEMS(7) = ' ' */
-/*               ITEMS(8) = ' ' */
-
-/*         Then */
-/*               LIST  = '//option1//option2///' */
-
-/*      3) Let */
-/*               DELIM    = ' and ' */
-
-/*               ITEMS(1) = 'Bob' */
-/*               ITEMS(2) = 'Carol' */
-/*               ITEMS(3) = 'Ted' */
-/*               ITEMS(4) = 'Alice' */
-
-/*         Then */
-/*               LIST  = 'Bob and Carol and Ted and Alice' */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     The non-blank parts of the elements of the ITEMS array are */
+/*     appended to the list, one at a time, separated by DELIM. */
+
+/* $ Examples */
+
+/*     The following examples illustrate the operation of LBUILD. */
+
+/*     1) Let */
+/*              DELIM    = ' ' */
+
+/*              ITEMS(1) = 'A' */
+/*              ITEMS(2) = '  number' */
+/*              ITEMS(3) = 'of' */
+/*              ITEMS(4) = ' words' */
+/*              ITEMS(5) = 'separated' */
+/*              ITEMS(6) = '  by' */
+/*              ITEMS(7) = 'spaces' */
+
+/*        Then */
+/*              LIST  = 'A number of words separated by spaces' */
+
+/*     2) Let */
+/*              DELIM    = '/' */
+
+/*              ITEMS(1) = ' ' */
+/*              ITEMS(2) = ' ' */
+/*              ITEMS(3) = 'option1' */
+/*              ITEMS(4) = ' ' */
+/*              ITEMS(5) = 'option2' */
+/*              ITEMS(6) = ' ' */
+/*              ITEMS(7) = ' ' */
+/*              ITEMS(8) = ' ' */
+
+/*        Then */
+/*              LIST  = '//option1//option2///' */
+
+/*     3) Let */
+/*              DELIM    = ' and ' */
+
+/*              ITEMS(1) = 'Bob' */
+/*              ITEMS(2) = 'Carol' */
+/*              ITEMS(3) = 'Ted' */
+/*              ITEMS(4) = 'Alice' */
+
+/*        Then */
+/*              LIST  = 'Bob and Carol and Ted and Alice' */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

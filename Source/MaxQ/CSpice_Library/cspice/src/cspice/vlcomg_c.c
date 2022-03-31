@@ -56,56 +56,39 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-    n          I   Dimension of vector space
-    a          I   Coefficient of v1
-    v1         I   Vector in n-space
-    b          I   Coefficient of v2
-    v2         I   Vector in n-space
-    sum        O   Linear Vector Combination a*v1 + b*v2
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   n          I   Dimension of vector space.
+   a          I   Coefficient of `v1'.
+   v1         I   Vector in n-space.
+   b          I   Coefficient of `v2'.
+   v2         I   Vector in n-space.
+   sum        O   Linear vector combination a*v1 + b*v2.
 
 -Detailed_Input
 
-    n   This variable contains the dimension of the v1, v2 and sum.
-    a   This double precision variable multiplies v1.
-    v1  This is an arbitrary, double precision n-dimensional vector.
-    b   This double precision variable multiplies v2.
-    v2  This is an arbitrary, double precision n-dimensional vector.
+   n           is the dimension of `v1', `v2' and `sum'.
+
+   a           is the double precision scalar variable that multiplies
+               `v1'.
+
+   v1          is an arbitrary, double precision n-dimensional vector.
+
+   b           is the double precision scalar variable that multiplies
+               `v2'.
+
+   v2          is an arbitrary, double precision n-dimensional vector.
 
 -Detailed_Output
 
-    sum   is an arbitrary, double precision n-dimensional vector
-          which contains the linear combination a*v1 + b*v2.
+   sum         is the double precision n-dimensional vector which
+               contains the linear combination
+
+                  a * v1 + b * v2
 
 -Parameters
 
-    None.
-
--Particulars
-
-    For each index from 1 to n, this routine implements in C
-    code the expression:
-
-    sum[i] = a*v1[i] + b*v2[i]
-
-    No error checking is performed to guard against numeric overflow.
-
--Examples
-
-    We can easily use this routine to perform vector projections
-    to 2-planes in n-space.  Let x be an arbitray n-vector
-    and let u and v be orthonormal n-vectors spanning the plane
-    of interest.  The projection of x onto this 2-plane, projuv can
-    be obtained by the following code fragment.
-
-       vlcomg_c ( n, vdot_c(x,u,n), u, vdot_c(x,v,n), v, projuv );
-
--Restrictions
-
-    No error checking is performed to guard against numeric overflow
-    or underflow.  The user is responsible for insuring that the
-    input values are reasonable.
+   None.
 
 -Exceptions
 
@@ -113,19 +96,119 @@
 
 -Files
 
-    None
+   None.
 
--Author_and_Institution
+-Particulars
 
-    W.L. Taber      (JPL)
+   The code reflects precisely the following mathematical expression
+
+      For each value of the index `i', from 0 to n-1:
+
+         sum[i] = a * v1[i] + b * v2[i]
+
+   No error checking is performed to guard against numeric overflow.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Perform the projection of a 4-dimensional vector into a
+      2-dimensional plane in 4-space.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vlcomg_ex1
+      ./
+      #include <math.h>
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NDIM         4
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          puv    [NDIM];
+         SpiceDouble          v      [NDIM];
+
+         /.
+         Let `x' be an arbitrary NDIM-vector
+         ./
+         SpiceDouble          x      [NDIM] = { 4.0, 35.0, -5.0, 7.0 };
+
+         /.
+         Let `u' and `v' be orthonormal NDIM-vectors spanning the
+         plane of interest.
+         ./
+         SpiceDouble          u      [NDIM] = { 0.0,  0.0,  1.0, 0.0 };
+
+         v[0] =  sqrt(3.0)/3.0;
+         v[1] = -sqrt(3.0)/3.0;
+         v[2] =  0.0;
+         v[3] =  sqrt(3.0)/3.0;
+
+         /.
+         Compute the projection of `x' onto this 2-dimensional
+         plane in NDIM-space.
+         ./
+         vlcomg_c ( NDIM, vdotg_c ( x, u, NDIM ), u,
+                          vdotg_c ( x, v, NDIM ), v, puv );
+
+         /.
+         Display the results.
+         ./
+         printf( "Input vector             :  %5.1f %5.1f %5.1f %5.1f\n",
+                                                   x[0], x[1], x[2], x[3] );
+         printf( "Projection into 2-d plane:  %5.1f %5.1f %5.1f %5.1f\n",
+                                           puv[0], puv[1], puv[2], puv[3] );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector             :    4.0  35.0  -5.0   7.0
+      Projection into 2-d plane:   -8.0   8.0  -5.0  -8.0
+
+
+-Restrictions
+
+   1)  No error checking is performed to guard against numeric
+       overflow or underflow. The user is responsible for insuring
+       that the input values are reasonable.
 
 -Literature_References
 
-    None
+   None.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 30-JUN-1999
+   -CSPICE Version 1.0.1, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
+   -CSPICE Version 1.0.0, 30-JUN-1999 (WLT)
 
 -Index_Entries
 

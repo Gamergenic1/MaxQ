@@ -12,7 +12,7 @@ static doublereal c_b36 = 2.;
 static integer c__2048 = 2048;
 static doublereal c_b108 = 1e-16;
 
-/* $Procedure      NEARPT ( Nearest point on an ellipsoid ) */
+/* $Procedure NEARPT ( Nearest point on an ellipsoid ) */
 /* Subroutine */ int nearpt_(doublereal *positn, doublereal *a, doublereal *b,
 	 doublereal *c__, doublereal *npoint, doublereal *alt)
 {
@@ -57,6 +57,7 @@ static doublereal c_b108 = 1e-16;
     extern /* Subroutine */ int vperp_(doublereal *, doublereal *, doublereal 
 	    *);
     extern doublereal vnorm_(doublereal *);
+    extern logical vzero_(doublereal *);
     doublereal denom2, denom3, lambda, tlambd[3], height;
     extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     logical inside;
@@ -89,9 +90,9 @@ static doublereal c_b108 = 1e-16;
 
 /* $ Abstract */
 
-/*     This routine locates the point on the surface of an ellipsoid */
-/*     that is nearest to a specified position. It also returns the */
-/*     altitude of the position above the ellipsoid. */
+/*     Locate the point on the surface of an ellipsoid that is nearest */
+/*     to a specified position. Also return the altitude of the position */
+/*     above the ellipsoid. */
 
 /* $ Disclaimer */
 
@@ -142,34 +143,31 @@ static doublereal c_b108 = 1e-16;
 
 /* $ Detailed_Input */
 
-/*     POSITN     3-vector giving the position of a point with respect */
-/*                to the center of an ellipsoid. The vector is expressed */
-/*                in a body-fixed reference frame. The semi-axes of the */
-/*                ellipsoid are aligned with the x, y, and z-axes of the */
-/*                body-fixed frame. */
+/*     POSITN   is a 3-vector giving the position of a point with respect */
+/*              to the center of an ellipsoid. The vector is expressed */
+/*              in a body-fixed reference frame. The semi-axes of the */
+/*              ellipsoid are aligned with the x, y, and z-axes of the */
+/*              body-fixed frame. */
 
-/*     A          Length of the semi-axis of the ellipsoid that is */
-/*                parallel to the x-axis of the body-fixed reference */
-/*                frame. */
+/*     A        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the x-axis of the body-fixed reference frame. */
 
-/*     B          Length of the semi-axis of the ellipsoid that is */
-/*                parallel to the y-axis of the body-fixed reference */
-/*                frame. */
+/*     B        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the y-axis of the body-fixed reference frame. */
 
-/*     C          Length of the semi-axis of the ellipsoid that is */
-/*                parallel to the z-axis of the body-fixed reference */
-/*                frame. */
+/*     C        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the z-axis of the body-fixed reference frame. */
 
 /* $ Detailed_Output */
 
-/*     NPOINT     is the nearest point on the ellipsoid to POSITN. */
-/*                NPOINT is a 3-vector expressed in the body-fixed */
-/*                reference frame. */
+/*     NPOINT   is the nearest point on the ellipsoid to POSITN. */
+/*              NPOINT is a 3-vector expressed in the body-fixed */
+/*              reference frame. */
 
-/*     ALT        is the altitude of POSITN above the ellipsoid. If */
-/*                POSITN is inside the ellipsoid, ALT will be negative */
-/*                and have magnitude equal to the distance between */
-/*                NPOINT and POSITN. */
+/*     ALT      is the altitude of POSITN above the ellipsoid. If */
+/*              POSITN is inside the ellipsoid, ALT will be negative */
+/*              and have magnitude equal to the distance between */
+/*              NPOINT and POSITN. */
 
 /* $ Parameters */
 
@@ -177,34 +175,34 @@ static doublereal c_b108 = 1e-16;
 
 /* $ Exceptions */
 
-/*     1) If any of the axis lengths A, B or C are non-positive, the */
-/*        error SPICE(BADAXISLENGTH) will be signaled. */
+/*     1)  If any of the axis lengths A, B or C are non-positive, the */
+/*         error SPICE(BADAXISLENGTH) is signaled. */
 
-/*     2) If the ratio of the longest to the shortest ellipsoid axis */
-/*        is large enough so that arithmetic expressions involving its */
-/*        squared value may overflow, the error SPICE(BADAXISLENGTH) */
-/*        will be signaled. */
+/*     2)  If the ratio of the longest to the shortest ellipsoid axis */
+/*         is large enough so that arithmetic expressions involving its */
+/*         squared value may overflow, the error SPICE(BADAXISLENGTH) */
+/*         is signaled. */
 
-/*     3) If any of the expressions */
+/*     3)  If any of the expressions */
 
-/*           A * ABS( POSITN(1) ) / m**2 */
-/*           B * ABS( POSITN(2) ) / m**2 */
-/*           C * ABS( POSITN(3) ) / m**2 */
+/*            A * ABS( POSITN(1) ) / m**2 */
+/*            B * ABS( POSITN(2) ) / m**2 */
+/*            C * ABS( POSITN(3) ) / m**2 */
 
-/*        where m is the minimum of { A, B, C }, is large enough so */
-/*        that arithmetic expressions involving these sub-expressions */
-/*        may overflow, the error SPICE(INPUTSTOOLARGE) is signaled. */
+/*         where `m' is the minimum of { A, B, C }, is large enough so */
+/*         that arithmetic expressions involving these sub-expressions */
+/*         may overflow, the error SPICE(INPUTSTOOLARGE) is signaled. */
 
-/*     4) If the axes of the ellipsoid have radically different */
-/*        magnitudes, for example if the ratios of the axis lengths vary */
-/*        by 10 orders of magnitude, the results may have poor */
-/*        precision. No error checks are done to identify this problem. */
+/*     4)  If the axes of the ellipsoid have radically different */
+/*         magnitudes, for example if the ratios of the axis lengths vary */
+/*         by 10 orders of magnitude, the results may have poor */
+/*         precision. No error checks are done to identify this problem. */
 
-/*     5) If the axes of the ellipsoid and the input point POSITN have */
-/*        radically different magnitudes, for example if the ratio of */
-/*        the magnitude of POSITN to the length of the shortest axis is */
-/*        1.E25, the results may have poor precision. No error checks */
-/*        are done to identify this problem. */
+/*     5)  If the axes of the ellipsoid and the input point POSITN have */
+/*         radically different magnitudes, for example if the ratio of */
+/*         the magnitude of POSITN to the length of the shortest axis is */
+/*         1.E25, the results may have poor precision. No error checks */
+/*         are done to identify this problem. */
 
 /* $ Files */
 
@@ -216,6 +214,10 @@ static doublereal c_b108 = 1e-16;
 /*     using the higher-level SPICELIB routine SUBPNT. This routine */
 /*     is the mathematical workhorse on which SUBPNT relies. */
 
+/*     This routine solves for the location, N, on the surface of an */
+/*     ellipsoid nearest to an arbitrary location, P, relative to that */
+/*     ellipsoid. */
+
 /* $ Examples */
 
 /*     Example 1. */
@@ -225,7 +227,7 @@ static doublereal c_b108 = 1e-16;
 
 /*     C */
 /*     C     Load the ephemeris, leapseconds and physical constants */
-/*     C     files first.  We assume the names of these files are */
+/*     C     files first. We assume the names of these files are */
 /*     C     stored in the character variables SPK, LSK and */
 /*     C     PCK. */
 /*     C */
@@ -235,7 +237,7 @@ static doublereal c_b108 = 1e-16;
 
 /*     C */
 /*     C     Get the apparent position of the moon as seen from the */
-/*     C     earth.  Look up this position vector in the moon */
+/*     C     earth. Look up this position vector in the moon */
 /*     C     body-fixed frame IAU_MOON. The orientation of the */
 /*     C     IAU_MOON frame will be computed at epoch ET-LT. */
 /*     C */
@@ -267,20 +269,20 @@ static doublereal c_b108 = 1e-16;
 /*     Example 2. */
 
 /*     One can use this routine to define a generalization of GEODETIC */
-/*     coordinates called GAUSSIAN coordinates of a triaxial body.  (The */
+/*     coordinates called GAUSSIAN coordinates of a triaxial body. (The */
 /*     name is derived from the famous Gauss-map of classical */
 /*     differential geometry).  The coordinates are longitude, */
 /*     latitude, and altitude. */
 
 /*     We let the x-axis of the body fixed coordinate system point */
-/*     along the longest axis of the triaxial body.  The y-axis points */
+/*     along the longest axis of the triaxial body. The y-axis points */
 /*     along the middle axis and the z-axis points along the shortest */
 /*     axis. */
 
 /*     Given a point P, there is a point on the ellipsoid that is */
-/*     closest to P, call it Q.  The latitude and longitude of P */
+/*     closest to P, call it Q. The latitude and longitude of P */
 /*     are determined by constructing the outward pointing unit normal */
-/*     to the ellipsoid at Q.  Latitude of P is the latitude that the */
+/*     to the ellipsoid at Q. Latitude of P is the latitude that the */
 /*     normal points toward in the body-fixed frame. Longitude is */
 /*     the longitude the normal points to in the body-fixed frame. */
 /*     The altitude is the signed distance from P to Q, positive if P */
@@ -299,10 +301,9 @@ static doublereal c_b108 = 1e-16;
 
 /*     The Gaussian coordinates are LONG, LAT, and ALT. */
 
-
 /* $ Restrictions */
 
-/*     See the Exceptions header section above. */
+/*     See $Exceptions section. */
 
 /* $ Literature_References */
 
@@ -310,12 +311,24 @@ static doublereal c_b108 = 1e-16;
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 26-OCT-2021 (NJB) (JDR) (EDW) */
+
+/*        Edit to logic to reduce unneeded operations when */
+/*        error or projection vectors equal zero. Addition */
+/*        of details concerning the "ellipsoid near point" */
+/*        problem and solution. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.4.0, 27-JUN-2013 (NJB) */
 
@@ -334,7 +347,7 @@ static doublereal c_b108 = 1e-16;
 
 /* -    SPICELIB Version 1.3.0, 07-AUG-2006 (NJB) */
 
-/*        Bug fix:  added initialization of variable SNGLPT to support */
+/*        Bug fix: added initialization of variable SNGLPT to support */
 /*                  operation under the Macintosh Intel Fortran */
 /*                  compiler. Note that this bug did not affect */
 /*                  operation of this routine on other platforms. */
@@ -343,10 +356,10 @@ static doublereal c_b108 = 1e-16;
 
 /*        Various changes were made to ensure that all loops terminate. */
 
-/*        Bug fix:  scale of transverse component of error vector */
+/*        Bug fix: scale of transverse component of error vector */
 /*        was corrected for the exterior point case. */
 
-/*        Bug fix:  non-standard use of duplicate arguments in VSCL */
+/*        Bug fix: non-standard use of duplicate arguments in VSCL */
 /*        calls was corrected. */
 
 /*        Error checking was added to screen out inputs that might */
@@ -380,9 +393,9 @@ static doublereal c_b108 = 1e-16;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.1.0, 07-AUG-2006 (NJB) */
+/* -    SPICELIB Version 1.1.0, 27-NOV-1990 (NJB) */
 
-/*        Bug fix:  added initialization of variable SNGLPT to support */
+/*        Bug fix: added initialization of variable SNGLPT to support */
 /*                  operation under the Macintosh Intel Fortran */
 /*                  compiler. Note that this bug did not affect */
 /*                  operation of this routine on other platforms. The */
@@ -397,17 +410,17 @@ static doublereal c_b108 = 1e-16;
 /*        the uninitialized value of SNGLPT. */
 
 /*        However, the Intel Fortran compiler for the Mac flags a runtime */
-/*        error when the above code is exercised.  So SNGLPT is now */
+/*        error when the above code is exercised. So SNGLPT is now */
 /*        initialized prior to the above IF statement. */
 
 
 /* -    SPICELIB Version 1.2.0, 15-NOV-2005 (EDW) (NJB) */
 
-/*        Bug fix:  scale of transverse component of error vector */
+/*        Bug fix: scale of transverse component of error vector */
 /*        was corrected for the exterior point case. */
 /*        Replaced BODVAR call in examples to BODVRD. */
 
-/*        Bug fix:  non-standard use of duplicate arguments in VSCL */
+/*        Bug fix: non-standard use of duplicate arguments in VSCL */
 /*        calls was corrected. */
 
 /*        Various changes were made to ensure that all loops terminate. */
@@ -447,31 +460,32 @@ static doublereal c_b108 = 1e-16;
 /*        A few code changes were made to enhance clarity. */
 
 
-/* -    SPICELIB Version 1.1.0, 27-NOV-1990 */
+/* -    SPICELIB Version 1.1.0, 27-NOV-1990 (WLT) */
 
-/*      The routine was nearly rewritten so that points */
-/*      near the coordinate planes in the interior of the ellipsoid */
-/*      could be handled without fear of floating point overflow */
-/*      or divide by zero. */
+/*        The routine was nearly rewritten so that points */
+/*        near the coordinate planes in the interior of the ellipsoid */
+/*        could be handled without fear of floating point overflow */
+/*        or divide by zero. */
 
-/*      While the mathematical ideas involved in the original routine */
-/*      are retained, the code is for the most part new.  In addition, */
-/*      the new code has been documented far more extensively than was */
-/*      NEARPT 1.0.0. */
+/*        While the mathematical ideas involved in the original routine */
+/*        are retained, the code is for the most part new. In addition, */
+/*        the new code has been documented far more extensively than was */
+/*        NEARPT 1.0.0. */
 
 
-/* -     Beta Version 2.0.0, 9-JAN-1989 (WLT) */
+/* -    Beta Version 2.0.0, 9-JAN-1989 (WLT) */
 
-/*      Error handling added has been added for bad axes values. */
+/*        Error handling added has been added for bad axes values. */
 
-/*      The algorithm did not work correctly for some points inside */
-/*      the ellipsoid lying on the plane orthogonal to the shortest */
-/*      axis of the ellipsoid.  The problem was corrected. */
+/*        The algorithm did not work correctly for some points inside */
+/*        the ellipsoid lying on the plane orthogonal to the shortest */
+/*        axis of the ellipsoid. The problem was corrected. */
 
-/*      Finally the algorithm was made slightly more robust and clearer */
-/*      by use of SPICELIB routines and by normalizing the inputs. */
+/*        Finally the algorithm was made slightly more robust and clearer */
+/*        by use of SPICELIB routines and by normalizing the inputs. */
 
-/*      Add an example to the header section. */
+/*        Add an example to the header section. */
+
 /* -& */
 
 /*     SPICELIB functions */
@@ -544,6 +558,8 @@ static doublereal c_b108 = 1e-16;
 /*        Chapter 6.  Clean up. */
 
 
+/*     Chapter 1 */
+
 /*     Error and Exception Handling. */
 /*     ================================================================ */
 /*     ---------------------------------------------------------------- */
@@ -569,7 +585,7 @@ static doublereal c_b108 = 1e-16;
     }
     if (bad > 0) {
 	setmsg_(mssg + ((i__1 = bad - 1) < 7 && 0 <= i__1 ? i__1 : s_rnge(
-		"mssg", i__1, "nearpt_", (ftnlen)591)) * 80, (ftnlen)80);
+		"mssg", i__1, "nearpt_", (ftnlen)610)) * 80, (ftnlen)80);
 	errch_("?", "The A,B, and C axes were #, #, and # respectively.", (
 		ftnlen)1, (ftnlen)50);
 	errdp_("#", a, (ftnlen)1);
@@ -580,10 +596,17 @@ static doublereal c_b108 = 1e-16;
 	return 0;
     }
 
+/*     Chapter 2 */
+
 /*     Mathematical background for the solution---the lambda equation. */
 /*     ================================================================ */
 /*     ---------------------------------------------------------------- */
 
+/*     You can describe this problem in two ways, either using a */
+/*     geometric description of the required conditions for the */
+/*     solution, or a functional description based on minimization. */
+
+/*     Geometric description: */
 
 /*     Here is the background and general outline of how this problem is */
 /*     going to be solved. */
@@ -592,7 +615,7 @@ static doublereal c_b108 = 1e-16;
 
 
 /*           X**2       Y**2       Z**2 */
-/*          ------  +  ------  +  ------  =  1 */
+/*          ------  +  ------  +  ------  =  1                       [1] */
 /*           A**2       B**2       C**2 */
 
 /*     that is closest to the input point POSITN. */
@@ -618,25 +641,26 @@ static doublereal c_b108 = 1e-16;
 /*         More gory details: A normal to a point (X,Y,Z) */
 /*         on the ellipsoid is given by */
 
-/*           (X/A**2, Y/B**2, Z/C**2) */
+/*               X      Y      Z */
+/*           ( -----, -----, ----- )                                 [2] */
+/*              A**2   B**2   C**2 */
 
-/*         Given a fixed LAMBDA, and allowing (X,Y,Z) to */
+/*         Given a fixed lambda, and allowing (X,Y,Z) to */
 /*         range over all points on the ellipsoid, the set */
 /*         of points */
 
 
-/*                 LAMBDA*X      LAMBDA*Y      LAMBDA*Z */
-/*           ( X + --------, Y + --------, Z + -------- ) */
+/*                 lambda*X      lambda*Y      lambda*Z */
+/*           ( X + --------, Y + --------, Z + -------- )            [3] */
 /*                   A**2          B**2          C**2 */
 
 /*         describes another ellipsoid with axes having lengths */
 
-/*                  LAMBDA         LAMBDA        LAMBDA */
-/*              A + ------ ,   B + ------ ,  C + ------  . */
+/*                  lambda         lambda        lambda */
+/*              A + ------ ,   B + ------ ,  C + ------  .           [4] */
 /*                    A              B             C */
 
-
-/*         Moreover, as long as LAMBDA > - MIN( A**2, B**2, C**2 ) */
+/*         Moreover, as long as lambda > - MIN( A**2, B**2, C**2 ) */
 /*         none of these ellipsoids intersect.  Thus, as long as */
 /*         the normal lines are not allowed to cross the coordinate plane */
 /*         orthogonal to the smallest axis (called the central plane) */
@@ -657,40 +681,41 @@ static doublereal c_b108 = 1e-16;
 /*     on the ellipsoid given by the equation: */
 
 /*           X**2       Y**2       Z**2 */
-/*          ------  +  ------  +  ------  =  1 */
+/*          ------  +  ------  +  ------  =  1                       [5] */
 /*           A**2       B**2       C**2 */
 
 
-/*     such that for some value of LAMBDA */
+/*     such that for some value of lambda */
 
-/*          POSITN = NPOINT + LAMBDA*NORMAL(NPOINT). */
+/*          POSITN = NPOINT + LAMBDA * NORMAL(NPOINT). */
 
-/*     Moreover, if POSITN = (X_o,Y_o,Z_o) then LAMBDA must satisfy */
+/*     Moreover, if POSITN = (Px,Py,Pz) then lambda must satisfy */
 /*     the equation: */
 
-/*              2                   2                   2 */
-/*           X_o                 Y_o                 Z_o */
-/*     -----------------  + ------------------  + ------------------ = 1 */
-/*                     2                     2                     2 */
-/*     ( A + LAMBDA/A )      ( B + LAMBDA/B )      ( C + LAMBDA/C ) */
+/*              2                 2                2 */
+/*           Px                 Py               Pz */
+/*      -------------   +  -------------  +  ------------  = 1       [6] */
+/*                  2                2               2 */
+/*      (A + lambda)       (B + lambda)      (C + lambda) */
+/*           ------             ------            ------ */
+/*              A                 B                 C */
+
+/*     and lambda must be greater than -MIN(A**2,B**2,C**2) */
 
 
-/*     and LAMBDA must be greater than -MIN(A**2,B**2,C**2) */
-
-
-/*     Once LAMBDA is known, NPOINT can be computed from the equation: */
+/*     Once lambda is known, NPOINT can be computed from the equation: */
 
 /*          POSITN = NPOINT + LAMBDA*NORMAL(NPOINT). */
 
 
-/*     The process of solving for LAMBDA can be viewed as selecting */
+/*     The process of solving for lambda can be viewed as selecting */
 /*     that ellipsoid */
 
-/*                2                     2               2 */
-/*               x                     y               z */
-/*          --------------- + ---------------- + ---------------  = 1 */
-/*                        2                  2                 2 */
-/*          (a + lambda/a)    ( b + lambda/b)    (c + lambda/c) */
+/*                2                 2               2 */
+/*               x                 y               z */
+/*      --------------- + ---------------- + ---------------  = 1    [7] */
+/*                     2                  2                 2 */
+/*       (a + lambda/a)    ( b + lambda/b)    (c + lambda/c) */
 
 /*     that contains the input point POSITN.  For lambda = 0, this */
 /*     ellipsoid is just the input ellipsoid.  When we increase */
@@ -738,11 +763,86 @@ static doublereal c_b108 = 1e-16;
 /*     refinement we are working on by counting the number of */
 /*     lambda solutions that are computed. */
 
+/*     Functional description: */
+
+/*     The problem also defines a minimization condition solvable with */
+/*     the technique of Lagrange Multipliers. In this case, */
+/*     minimize the distance between the ellipsoid surface (set) and the */
+/*     location P subject to the ellipsoid constraint, the solution, */
+/*     NPOINT, an element of the ellipsoid set. */
+
+/*     Define the Lagrange expression, L, as */
+
+/*        L = f - lambda * g                                         [8] */
+
+/*     with f the function to minimize, and g the constraint on f. */
+
+/*     Solve */
+
+/*        D*L = 0                                                    [9] */
+
+/*     with */
+
+/*        g = 0                                                     [10] */
+
+/*     which gives us the expressions */
+
+/*        D*f = lambda * D*g                                        [11] */
+/*        g = 0 */
+
+/*     where D = (Dx, Dy, Dz). */
+/*                                     2 */
+/*      Choose f(x,y,z) as ||P-NPOINT|| rather than ||P-NPOINT|| */
+/*      to simplify the resulting derivatives. Both functions have the */
+/*      same minimum. */
+
+/*        f(x,y,z) = (Px - X)**2 + (Py-Y)**2 + (Pz-Z)**2            [12] */
+
+/*       The constrain equation */
+
+/*                    X**2       Y**2       Z**2 */
+/*        g(x,y,z) = ------  +  ------  +  ------  - 1              [13] */
+/*                    A**2       B**2       C**2 */
+
+/*      The resulting equations from [11] */
+
+/*         (Px-X) = lambda *   X                                    [14] */
+/*                            --- */
+/*                            A**2 */
+
+/*         (Py-Y) = lambda *   Y                                    [15] */
+/*                            --- */
+/*                            B**2 */
+
+/*         (Pz-Z) = lambda *   Z                                    [16] */
+/*                            --- */
+/*                            C**2 */
+
+/*          X**2       Y**2       Z**2 */
+/*          -----   +  -----  +   -----  - 1 = 0                    [17] */
+/*          A**2       B**2       C**2 */
+
+/*     Solve [14], [15], [16] for X, Y, Z, then substitute into [5] */
+
+/*              2                 2                2 */
+/*           Px                 Py               Pz */
+/*      -------------   +  -------------  +  ------------  - 1 = 0  [18] */
+/*                  2                  2                 2 */
+/*      (A + lambda)       (B + lambda)      (C + lambda) */
+/*           ------             ------            ------ */
+/*              A                 B                 C */
+
+/*     We see expression [18] identical to expression [6]. */
+
+
+/*     Chapter 3 */
 
 /*     Initializations for the main processing loop */
 /*     ================================================================ */
 /*     ---------------------------------------------------------------- */
 
+/*     The solution as implemented uses the geometric description */
+/*     of the problem. */
 
 /*     Let the game begin! */
 
@@ -782,15 +882,15 @@ static doublereal c_b108 = 1e-16;
 
     for (i__ = 2; i__ <= 3; ++i__) {
 	if (axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("axis", 
-		i__1, "nearpt_", (ftnlen)818)] > toobig) {
+		i__1, "nearpt_", (ftnlen)924)] > toobig) {
 	    setmsg_("Ratio of length of axis #* to length of axis #* is *; t"
 		    "his value may cause numeric overflow.", (ftnlen)92);
 	    errint_("*", &iorder[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("iorder", i__1, "nearpt_", (ftnlen)823)], (ftnlen)
+		    s_rnge("iorder", i__1, "nearpt_", (ftnlen)929)], (ftnlen)
 		    1);
 	    errint_("*", iorder, (ftnlen)1);
 	    errdp_("*", &axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("axis", i__1, "nearpt_", (ftnlen)825)], (ftnlen)1);
+		    s_rnge("axis", i__1, "nearpt_", (ftnlen)931)], (ftnlen)1);
 	    sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
 	    chkout_("NEARPT", (ftnlen)6);
 	    return 0;
@@ -806,15 +906,15 @@ static doublereal c_b108 = 1e-16;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	prodct = sqrt(axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"axis", i__1, "nearpt_", (ftnlen)844)]) * sqrt((d__1 = point[(
+		"axis", i__1, "nearpt_", (ftnlen)950)]) * sqrt((d__1 = point[(
 		i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("point", 
-		i__2, "nearpt_", (ftnlen)844)], abs(d__1)));
+		i__2, "nearpt_", (ftnlen)950)], abs(d__1)));
 	if (prodct > toobig) {
 	    setmsg_("Product of length of scaled axis #* and size of corresp"
 		    "onding scaled component of POSITN is > *; these values m"
 		    "ay cause numeric overflow.", (ftnlen)137);
 	    errint_("*", &iorder[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("iorder", i__1, "nearpt_", (ftnlen)852)], (ftnlen)
+		    s_rnge("iorder", i__1, "nearpt_", (ftnlen)958)], (ftnlen)
 		    1);
 	    d__1 = pow_dd(&toobig, &c_b36);
 	    errdp_("*", &d__1, (ftnlen)1);
@@ -833,12 +933,16 @@ static doublereal c_b108 = 1e-16;
 /*     We will need to "solve" for the NEARPT at least 3 times. */
 /*     SOLUTN is the counter that keeps track of how many times */
 /*     we have actually solved for a near point.  SOLVNG indicates */
-/*     whether we should continue solving for NEARPT. */
+/*     whether we should continue solving for NEARPT. The logic relies */
+/*     on the initial value of SOLVNG as TRUE, maintaining that */
+/*     value unless explicitly changed. */
 
     snglpt = 4;
     solutn = 1;
     solvng = TRUE_;
     while(solvng) {
+
+/*       Chapter 4 */
 
 /*       Mathematical solution of the lambda equation. */
 /*       ================================================================ */
@@ -861,18 +965,18 @@ static doublereal c_b108 = 1e-16;
 	vequ_(point, copy);
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-		    "nt", i__1, "nearpt_", (ftnlen)903)] * .5 + axis[(i__2 = 
+		    "nt", i__1, "nearpt_", (ftnlen)1015)] * .5 + axis[(i__2 = 
 		    i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("axis", i__2, 
-		    "nearpt_", (ftnlen)903)] == axis[(i__3 = i__ - 1) < 3 && 
+		    "nearpt_", (ftnlen)1015)] == axis[(i__3 = i__ - 1) < 3 && 
 		    0 <= i__3 ? i__3 : s_rnge("axis", i__3, "nearpt_", (
-		    ftnlen)903)] || point[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? 
-		    i__4 : s_rnge("point", i__4, "nearpt_", (ftnlen)903)] * 
+		    ftnlen)1015)] || point[(i__4 = i__ - 1) < 3 && 0 <= i__4 ?
+		     i__4 : s_rnge("point", i__4, "nearpt_", (ftnlen)1015)] * 
 		    .5 - axis[(i__5 = i__ - 1) < 3 && 0 <= i__5 ? i__5 : 
-		    s_rnge("axis", i__5, "nearpt_", (ftnlen)903)] == -axis[(
+		    s_rnge("axis", i__5, "nearpt_", (ftnlen)1015)] == -axis[(
 		    i__6 = i__ - 1) < 3 && 0 <= i__6 ? i__6 : s_rnge("axis", 
-		    i__6, "nearpt_", (ftnlen)903)]) {
+		    i__6, "nearpt_", (ftnlen)1015)]) {
 		point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-			"nt", i__1, "nearpt_", (ftnlen)906)] = 0.;
+			"nt", i__1, "nearpt_", (ftnlen)1018)] = 0.;
 	    }
 	}
 
@@ -971,20 +1075,20 @@ static doublereal c_b108 = 1e-16;
 
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"tlambd", i__1, "nearpt_", (ftnlen)1011)] = ((d__1 = 
+			"tlambd", i__1, "nearpt_", (ftnlen)1123)] = ((d__1 = 
 			point[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : 
-			s_rnge("point", i__2, "nearpt_", (ftnlen)1011)], abs(
+			s_rnge("point", i__2, "nearpt_", (ftnlen)1123)], abs(
 			d__1)) * .5 - axis[(i__3 = i__ - 1) < 3 && 0 <= i__3 ?
-			 i__3 : s_rnge("axis", i__3, "nearpt_", (ftnlen)1011)]
+			 i__3 : s_rnge("axis", i__3, "nearpt_", (ftnlen)1123)]
 			) * axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? i__4 : 
-			s_rnge("axis", i__4, "nearpt_", (ftnlen)1011)];
+			s_rnge("axis", i__4, "nearpt_", (ftnlen)1123)];
 	    }
 /* Computing MAX */
 	    d__1 = max(0.,tlambd[0]), d__1 = max(d__1,tlambd[1]);
 	    lower = max(d__1,tlambd[2]);
 
 /*           Choose the next value of lambda so that the largest term */
-/*           of Q will be no more than 1/4. */
+/*           of Q will be no more than 1/4. (?) */
 
 /* Computing MAX */
 	    d__4 = (d__1 = axis[0] * point[0], abs(d__1)), d__5 = (d__2 = 
@@ -1028,7 +1132,7 @@ static doublereal c_b108 = 1e-16;
 	    snglpt = 4;
 	    for (i__ = 3; i__ >= 1; --i__) {
 		if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"point", i__1, "nearpt_", (ftnlen)1065)] != 0.) {
+			"point", i__1, "nearpt_", (ftnlen)1177)] != 0.) {
 		    snglpt = i__;
 		}
 	    }
@@ -1039,22 +1143,22 @@ static doublereal c_b108 = 1e-16;
 	    if (snglpt <= 3) {
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("point", i__1, "nearpt_", (ftnlen)1079)] ==
+			    s_rnge("point", i__1, "nearpt_", (ftnlen)1191)] ==
 			     0.) {
 			tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
 				s_rnge("tlambd", i__1, "nearpt_", (ftnlen)
-				1080)] = -axisqr[2];
+				1192)] = -axisqr[2];
 		    } else {
 			tlambd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
 				s_rnge("tlambd", i__1, "nearpt_", (ftnlen)
-				1082)] = axis[(i__2 = i__ - 1) < 3 && 0 <= 
+				1194)] = axis[(i__2 = i__ - 1) < 3 && 0 <= 
 				i__2 ? i__2 : s_rnge("axis", i__2, "nearpt_", 
-				(ftnlen)1082)] * ((d__1 = point[(i__3 = i__ - 
+				(ftnlen)1194)] * ((d__1 = point[(i__3 = i__ - 
 				1) < 3 && 0 <= i__3 ? i__3 : s_rnge("point", 
-				i__3, "nearpt_", (ftnlen)1082)], abs(d__1)) * 
+				i__3, "nearpt_", (ftnlen)1194)], abs(d__1)) * 
 				.5 - axis[(i__4 = i__ - 1) < 3 && 0 <= i__4 ? 
 				i__4 : s_rnge("axis", i__4, "nearpt_", (
-				ftnlen)1082)]);
+				ftnlen)1194)]);
 		    }
 		}
 /* Computing MAX */
@@ -1101,9 +1205,9 @@ static doublereal c_b108 = 1e-16;
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-		    "nt", i__1, "nearpt_", (ftnlen)1139)] == 0.) {
+		    "nt", i__1, "nearpt_", (ftnlen)1251)] == 0.) {
 		term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("term",
-			 i__1, "nearpt_", (ftnlen)1141)] = 0.;
+			 i__1, "nearpt_", (ftnlen)1253)] = 0.;
 	    } else {
 
 /*              We have to be a bit careful for points inside the */
@@ -1116,11 +1220,11 @@ static doublereal c_b108 = 1e-16;
 /*              can simply truncate its individual terms when we are in */
 /*              danger of division overflows. */
 		denom = axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			s_rnge("axis", i__1, "nearpt_", (ftnlen)1155)] + 
+			s_rnge("axis", i__1, "nearpt_", (ftnlen)1267)] + 
 			lambda / axis[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-			i__2 : s_rnge("axis", i__2, "nearpt_", (ftnlen)1155)];
+			i__2 : s_rnge("axis", i__2, "nearpt_", (ftnlen)1267)];
 		trim = (d__1 = point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 
-			: s_rnge("point", i__1, "nearpt_", (ftnlen)1157)], 
+			: s_rnge("point", i__1, "nearpt_", (ftnlen)1269)], 
 			abs(d__1)) * .5 > denom;
 		if (inside && trim) {
 		    factor = 2.;
@@ -1139,11 +1243,11 @@ static doublereal c_b108 = 1e-16;
 			return 0;
 		    }
 		    factor = point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("point", i__1, "nearpt_", (ftnlen)1179)] / 
+			    s_rnge("point", i__1, "nearpt_", (ftnlen)1291)] / 
 			    denom;
 		}
 		term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("term",
-			 i__1, "nearpt_", (ftnlen)1183)] = factor * factor;
+			 i__1, "nearpt_", (ftnlen)1295)] = factor * factor;
 	    }
 	}
 	if (! inside) {
@@ -1277,20 +1381,20 @@ static doublereal c_b108 = 1e-16;
 	    if (touchd_(&d__1) > 0.) {
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-			    s_rnge("point", i__1, "nearpt_", (ftnlen)1337)] ==
+			    s_rnge("point", i__1, "nearpt_", (ftnlen)1449)] ==
 			     0.) {
 			term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-				s_rnge("term", i__1, "nearpt_", (ftnlen)1339)]
+				s_rnge("term", i__1, "nearpt_", (ftnlen)1451)]
 				 = 0.;
 		    } else {
 			denom = axis[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 
 				: s_rnge("axis", i__1, "nearpt_", (ftnlen)
-				1343)] + lambda / axis[(i__2 = i__ - 1) < 3 &&
+				1455)] + lambda / axis[(i__2 = i__ - 1) < 3 &&
 				 0 <= i__2 ? i__2 : s_rnge("axis", i__2, 
-				"nearpt_", (ftnlen)1343)];
+				"nearpt_", (ftnlen)1455)];
 			trim = (d__1 = point[(i__1 = i__ - 1) < 3 && 0 <= 
 				i__1 ? i__1 : s_rnge("point", i__1, "nearpt_",
-				 (ftnlen)1345)], abs(d__1)) * .5 > denom;
+				 (ftnlen)1457)], abs(d__1)) * .5 > denom;
 			if (inside && trim) {
 			    factor = 2.;
 			} else {
@@ -1309,10 +1413,10 @@ static doublereal c_b108 = 1e-16;
 			    }
 			    factor = point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ?
 				     i__1 : s_rnge("point", i__1, "nearpt_", (
-				    ftnlen)1368)] / denom;
+				    ftnlen)1480)] / denom;
 			}
 			term[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-				s_rnge("term", i__1, "nearpt_", (ftnlen)1372)]
+				s_rnge("term", i__1, "nearpt_", (ftnlen)1484)]
 				 = factor * factor;
 		    }
 		}
@@ -1333,12 +1437,12 @@ static doublereal c_b108 = 1e-16;
 	lambda = lower;
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    if (point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("poi"
-		    "nt", i__1, "nearpt_", (ftnlen)1398)] == 0.) {
+		    "nt", i__1, "nearpt_", (ftnlen)1510)] == 0.) {
 		spoint[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"spoint", i__1, "nearpt_", (ftnlen)1400)] = 0.;
+			"spoint", i__1, "nearpt_", (ftnlen)1512)] = 0.;
 	    } else {
 		denom = lambda / axisqr[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? 
-			i__1 : s_rnge("axisqr", i__1, "nearpt_", (ftnlen)1404)
+			i__1 : s_rnge("axisqr", i__1, "nearpt_", (ftnlen)1516)
 			] + 1.;
 
 /*             We don't expect that DENOM will be non-positive, but we */
@@ -1354,9 +1458,9 @@ static doublereal c_b108 = 1e-16;
 		    return 0;
 		}
 		spoint[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-			"spoint", i__1, "nearpt_", (ftnlen)1421)] = copy[(
+			"spoint", i__1, "nearpt_", (ftnlen)1533)] = copy[(
 			i__2 = i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge(
-			"copy", i__2, "nearpt_", (ftnlen)1421)] / denom;
+			"copy", i__2, "nearpt_", (ftnlen)1533)] / denom;
 	    }
 	}
 
@@ -1505,7 +1609,7 @@ static doublereal c_b108 = 1e-16;
 /*               | POINT(3) | <= c - a*(a/c) */
 
 	    if (axis[0] != axis[(i__1 = snglpt - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("axis", i__1, "nearpt_", (ftnlen)1575)] && abs(
+		    s_rnge("axis", i__1, "nearpt_", (ftnlen)1687)] && abs(
 		    point[1]) <= axis[1] - axisqr[0] / axis[1] && abs(point[2]
 		    ) <= axis[2] - axisqr[0] / axis[2]) {
 
@@ -1616,6 +1720,8 @@ static doublereal c_b108 = 1e-16;
 	    }
 	}
 
+/*       Chapter 5 */
+
 /*       Decisions and initializations for sharpening the solution. */
 /*       ================================================================ */
 /*       ---------------------------------------------------------------- */
@@ -1678,13 +1784,13 @@ static doublereal c_b108 = 1e-16;
 	    surfnm_(axis, &axis[1], &axis[2], spoint, normal);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		err[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("err", 
-			i__1, "nearpt_", (ftnlen)1774)] = orignl[(i__2 = i__ 
+			i__1, "nearpt_", (ftnlen)1889)] = orignl[(i__2 = i__ 
 			- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("orignl", i__2, 
-			"nearpt_", (ftnlen)1774)] - spoint[(i__3 = i__ - 1) < 
-			3 && 0 <= i__3 ? i__3 : s_rnge("spoint", i__3, "near"
-			"pt_", (ftnlen)1774)] - height * normal[(i__4 = i__ - 
+			"nearpt_", (ftnlen)1889)] - (spoint[(i__3 = i__ - 1) <
+			 3 && 0 <= i__3 ? i__3 : s_rnge("spoint", i__3, "nea"
+			"rpt_", (ftnlen)1889)] + height * normal[(i__4 = i__ - 
 			1) < 3 && 0 <= i__4 ? i__4 : s_rnge("normal", i__4, 
-			"nearpt_", (ftnlen)1774)];
+			"nearpt_", (ftnlen)1889)]);
 	    }
 
 /*           Find the component of the error vector that is */
@@ -1692,6 +1798,13 @@ static doublereal c_b108 = 1e-16;
 /*           point by this component. */
 
 	    vperp_(err, normal, errp);
+
+/*           Check for a zero projection. If so, set iteration flag to */
+/*           prevent an iteration pass after the current finishes. */
+
+	    if (vzero_(errp)) {
+		solvng = FALSE_;
+	    }
 
 /*           The sign of the original point's altitude tells */
 /*           us whether the point is outside the ellipsoid. */
@@ -1716,10 +1829,16 @@ static doublereal c_b108 = 1e-16;
 		    chkout_("NEARPT", (ftnlen)6);
 		    return 0;
 		}
-		d__1 = vnorm_(spoint) / pnorm;
-		vsclip_(&d__1, errp);
+		if (solvng) {
+		    d__1 = vnorm_(spoint) / pnorm;
+		    vsclip_(&d__1, errp);
+		}
 	    }
 	    vadd_(spoint, errp, point);
+	    if (spoint[0] == point[0] && spoint[1] == point[1] && spoint[2] ==
+		     point[2]) {
+		solvng = FALSE_;
+	    }
 	    olderr = vnorm_(err);
 	    bestht = height;
 
@@ -1764,19 +1883,27 @@ static doublereal c_b108 = 1e-16;
 	    surfnm_(axis, &axis[1], &axis[2], spoint, normal);
 	    for (i__ = 1; i__ <= 3; ++i__) {
 		err[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("err", 
-			i__1, "nearpt_", (ftnlen)1867)] = orignl[(i__2 = i__ 
+			i__1, "nearpt_", (ftnlen)2002)] = orignl[(i__2 = i__ 
 			- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("orignl", i__2, 
-			"nearpt_", (ftnlen)1867)] - spoint[(i__3 = i__ - 1) < 
-			3 && 0 <= i__3 ? i__3 : s_rnge("spoint", i__3, "near"
-			"pt_", (ftnlen)1867)] - height * normal[(i__4 = i__ - 
+			"nearpt_", (ftnlen)2002)] - (spoint[(i__3 = i__ - 1) <
+			 3 && 0 <= i__3 ? i__3 : s_rnge("spoint", i__3, "nea"
+			"rpt_", (ftnlen)2002)] + height * normal[(i__4 = i__ - 
 			1) < 3 && 0 <= i__4 ? i__4 : s_rnge("normal", i__4, 
-			"nearpt_", (ftnlen)1867)];
+			"nearpt_", (ftnlen)2002)]);
 	    }
 
-/*           ...and determine the magnitude of the error due to our */
-/*           sharpened estimate. */
+/*           Check for a zero difference. If so, set iteration flag to */
+/*           prevent an iteration pass after the current finishes. */
 
-	    newerr = vnorm_(err);
+	    if (vzero_(err)) {
+		solvng = FALSE_;
+		newerr = 0.;
+	    } else {
+/*              Determine the magnitude of the error due to our */
+/*              sharpened estimate, if error non zero. */
+
+		newerr = vnorm_(err);
+	    }
 
 /*           If the sharpened estimate yields a smaller error ... */
 
@@ -1795,7 +1922,18 @@ static doublereal c_b108 = 1e-16;
 /*              "sharpening" estimate. */
 
 		if (solutn <= 6) {
+/*                 Find the component of the error vector that is */
+/*                 perpendicular to the normal, and shift our solution */
+/*                 point by this component. */
 		    vperp_(err, normal, errp);
+
+/*                 Check for a zero projection. If so, set iteration */
+/*                 flag to prevent an iteration pass after the current */
+/*                 finishes. */
+
+		    if (vzero_(errp)) {
+			solvng = FALSE_;
+		    }
 
 /*                 The sign of the original point's altitude tells */
 /*                 us whether the point is outside the ellipsoid. */
@@ -1820,10 +1958,16 @@ static doublereal c_b108 = 1e-16;
 			    chkout_("NEARPT", (ftnlen)6);
 			    return 0;
 			}
-			d__1 = vnorm_(spoint) / pnorm;
-			vsclip_(&d__1, errp);
+			if (solvng) {
+			    d__1 = vnorm_(spoint) / pnorm;
+			    vsclip_(&d__1, errp);
+			}
 		    }
 		    vadd_(spoint, errp, point);
+		    if (spoint[0] == point[0] && spoint[1] == point[1] && 
+			    spoint[2] == point[2]) {
+			solvng = FALSE_;
+		    }
 		}
 	    } else {
 
@@ -1842,6 +1986,8 @@ static doublereal c_b108 = 1e-16;
 	solvng = solvng && solutn <= 6;
     }
 
+/*     Chapter 6 */
+
 /*     Clean up. */
 /*     ================================================================== */
 /*     ------------------------------------------------------------------ */
@@ -1853,10 +1999,10 @@ static doublereal c_b108 = 1e-16;
     vsclip_(&d__1, bestpt);
     for (i__ = 1; i__ <= 3; ++i__) {
 	npoint[(i__2 = iorder[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("iorder", i__1, "nearpt_", (ftnlen)1966)] - 1) < 3 && 
+		s_rnge("iorder", i__1, "nearpt_", (ftnlen)2135)] - 1) < 3 && 
 		0 <= i__2 ? i__2 : s_rnge("npoint", i__2, "nearpt_", (ftnlen)
-		1966)] = bestpt[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("bestpt", i__3, "nearpt_", (ftnlen)1966)];
+		2135)] = bestpt[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+		s_rnge("bestpt", i__3, "nearpt_", (ftnlen)2135)];
     }
     *alt = bestht / scale;
     chkout_("NEARPT", (ftnlen)6);

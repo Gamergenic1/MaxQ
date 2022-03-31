@@ -107,6 +107,12 @@
                                 on parameters supplied via a frame
                                 kernel.
 
+         SPICE_FRMTYP_SWTCH     is a "switch" frame. These frames have
+                                orientation defined by their alignment with
+                                base frames selected from a prioritized list.
+                                The base frames optionally have associated
+                                time intervals of applicability.
+
          SPICE_FRMTYP_ALL       indicates any of the above classes.
                                 This parameter is used in APIs that
                                 fetch information about frames of a
@@ -118,7 +124,10 @@
 
 -Author_and_Institution
 
-   N.J. Bachman       (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+   E.D. Wright         (JPL)
 
 -Restrictions
 
@@ -126,10 +135,38 @@
 
 -Version
 
+   -CSPICE Version 1.2.0, 26-AUG-2021 (JDR) (NJB) (BVS)
+
+       Added parameter SWTCH to support the switch frame class.
+
+       Increased the number of non-inertial frames from 106 to 124
+       in order to accommodate the following PCK based frames:
+
+          IAU_52_EUROPA
+          IAU_NIX
+          IAU_HYDRA
+          IAU_RYUGU
+          IAU_ARROKOTH
+          IAU_DIDYMOS_BARYCENTER
+          IAU_DIDYMOS
+          IAU_DIMORPHOS
+          IAU_DONALDJOHANSON
+          IAU_EURYBATES
+          IAU_EURYBATES_BARYCENTER
+          IAU_QUETA
+          IAU_POLYMELE
+          IAU_LEUCUS
+          IAU_ORUS
+          IAU_PATROCLUS_BARYCENTER
+          IAU_PATROCLUS
+          IAU_MENOETIUS
+
+       This value matches that listed in nninrt.inc.
+
    -CSPICE Version 1.1.0, 25-JAN-2016 (EDW)
 
        Increased the number of non-inertial frames from 105 to 106
-       in order to accomodate the following PCK based frame:
+       in order to accommodate the following PCK based frame:
 
           IAU_BENNU
 
@@ -158,7 +195,7 @@
    Number of built-in non-inertial frames. This number must be kept in
    sync with that defined in the SPICELIB include file nninrt.inc.
    */
-   #define SPICE_NFRAME_NNINRT             106
+   #define SPICE_NFRAME_NNINRT             124
 
 
 
@@ -193,10 +230,14 @@
    #define SPICE_FRMTYP_DYN                 5
 
    /*
+   Switch frames:
+   */
+   #define SPICE_FRMTYP_SWTCH               6
+
+   /*
    All frame classes:
    */
    #define SPICE_FRMTYP_ALL              ( -1 )
 
 
 #endif
-

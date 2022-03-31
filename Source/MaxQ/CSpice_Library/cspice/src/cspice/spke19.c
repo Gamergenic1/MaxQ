@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SPKE19 ( SPK, evaluate record, type 19 ) */
+/* $Procedure SPKE19 ( SPK, evaluate record, type 19 ) */
 /* Subroutine */ int spke19_(doublereal *et, doublereal *record, doublereal *
 	state)
 {
@@ -256,50 +256,49 @@
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     MAXREC     P   Maximum size of SPK record.  See SPKPVN. */
+/*     MAXREC     P   Maximum size of SPK record. */
 /*     ET         I   Epoch for which a state is desired. */
 /*     RECORD     I   Record from a type 19 SPK segment valid for ET. */
 /*     STATE      O   State (position and velocity) at epoch ET. */
 
 /* $ Detailed_Input */
 
-/*     ET             is the epoch for which a state vector is desired, */
-/*                    expressed as seconds past J2000 TDB. */
+/*     ET       is the epoch for which a state vector is desired, */
+/*              expressed as seconds past J2000 TDB. */
 
+/*     RECORD   is a record from a type 19 SPK segment which, when */
+/*              evaluated at epoch ET, will give the state */
+/*              (position and velocity) of some body, relative to */
+/*              some center, in the reference frame associated */
+/*              with the data packets. Usually the body, center */
+/*              and frame are those of the SPK segment from which */
+/*              the packets were read. */
 
-/*     RECORD         is a record from a type 19 SPK segment which, when */
-/*                    evaluated at epoch ET, will give the state */
-/*                    (position and velocity) of some body, relative to */
-/*                    some center, in the reference frame associated */
-/*                    with the data packets. Usually the body, center */
-/*                    and frame are those of the SPK segment from which */
-/*                    the packets were read. */
+/*              The structure of the record is as follows: */
 
-/*                    The structure of the record is as follows: */
-
-/*                       +----------------------+ */
-/*                       | subtype code         | */
-/*                       +----------------------+ */
-/*                       | number of packets (n)| */
-/*                       +----------------------+ */
-/*                       | packet 1             | */
-/*                       +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                       +----------------------+ */
-/*                       | packet n             | */
-/*                       +----------------------+ */
-/*                       | epoch 1              | */
-/*                       +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                       +----------------------+ */
-/*                       | epoch n              | */
-/*                       +----------------------+ */
+/*                 +----------------------+ */
+/*                 | subtype code         | */
+/*                 +----------------------+ */
+/*                 | number of packets (n)| */
+/*                 +----------------------+ */
+/*                 | packet 1             | */
+/*                 +----------------------+ */
+/*                          . */
+/*                          . */
+/*                          . */
+/*                 +----------------------+ */
+/*                 | packet n             | */
+/*                 +----------------------+ */
+/*                 | epoch 1              | */
+/*                 +----------------------+ */
+/*                          . */
+/*                          . */
+/*                          . */
+/*                 +----------------------+ */
+/*                 | epoch n              | */
+/*                 +----------------------+ */
 
 /* $ Detailed_Output */
 
@@ -317,8 +316,8 @@
 /*         by this routine. This routine assumes that the input record */
 /*         is valid. */
 
-/*     2)  If the subtype code in the input record is invalid, the error */
-/*         will be diagnosed by a routine in the call tree of this */
+/*     2)  If the subtype code in the input record is invalid, an error */
+/*         is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /* $ Files */
@@ -340,7 +339,7 @@
 /*     The data returned by the SPKRnn routine is in a raw form, taken */
 /*     directly from the segment. As such, it will be not be directly */
 /*     useful to a user unless they have a complete understanding of the */
-/*     structure of the data type.  Given that understanding, however, */
+/*     structure of the data type. Given that understanding, however, */
 /*     the SPKRnn routines could be used to "dump" and check segment data */
 /*     for a particular epoch before evaluating the record to obtain a */
 /*     state vector, as in the example that follows. */
@@ -374,7 +373,7 @@
 
 /* $ Restrictions */
 
-/*     1)  This routine assumes that the input record is valid.  Any */
+/*     1)  This routine assumes that the input record is valid. Any */
 /*         checking of the input data is assumed to have been performed */
 /*         when the source SPK file was created. */
 
@@ -384,10 +383,15 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
 
@@ -401,11 +405,6 @@
 /* $ Index_Entries */
 
 /*     evaluate type_19 spk_segment */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 
@@ -472,10 +471,10 @@
 		from = packsz * (j - 1) + 2 + i__;
 		to = (j << 1) - 1;
 		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "spke19_", (ftnlen)320)] = record[
+			"locrec", i__2, "spke19_", (ftnlen)318)] = record[
 			from - 1];
 		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "spke19_", (ftnlen)321)] = record[from + 2];
+			, i__2, "spke19_", (ftnlen)319)] = record[from + 2];
 	    }
 
 /*           Interpolate the Ith position and velocity components of the */
@@ -483,9 +482,9 @@
 
 	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &state[(i__1 = 
 		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
-		    "spke19_", (ftnlen)329)], &state[(i__2 = i__ + 2) < 6 && 
+		    "spke19_", (ftnlen)327)], &state[(i__2 = i__ + 2) < 6 && 
 		    0 <= i__2 ? i__2 : s_rnge("state", i__2, "spke19_", (
-		    ftnlen)329)]);
+		    ftnlen)327)]);
 	}
 
 /*        Now interpolate velocity, using separate velocity data and */
@@ -501,10 +500,10 @@
 		from = packsz * (j - 1) + 2 + packsz / 2 + i__;
 		to = (j << 1) - 1;
 		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "spke19_", (ftnlen)353)] = record[
+			"locrec", i__2, "spke19_", (ftnlen)351)] = record[
 			from - 1];
 		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "spke19_", (ftnlen)354)] = record[from + 2];
+			, i__2, "spke19_", (ftnlen)352)] = record[from + 2];
 	    }
 
 /*           Interpolate the Ith velocity and acceleration components of */
@@ -513,9 +512,9 @@
 
 	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &vbuff[(i__1 = 
 		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("vbuff", i__1, 
-		    "spke19_", (ftnlen)363)], &vbuff[(i__2 = i__ + 2) < 6 && 
+		    "spke19_", (ftnlen)361)], &vbuff[(i__2 = i__ + 2) < 6 && 
 		    0 <= i__2 ? i__2 : s_rnge("vbuff", i__2, "spke19_", (
-		    ftnlen)363)]);
+		    ftnlen)361)]);
 	}
 
 /*        Fill in the velocity in the output state using the results of */
@@ -539,7 +538,7 @@
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ystart = n * (i__ - 1) + 3;
 	    state[(i__2 = i__ - 1) < 6 && 0 <= i__2 ? i__2 : s_rnge("state", 
-		    i__2, "spke19_", (ftnlen)398)] = lgrint_(&n, &record[
+		    i__2, "spke19_", (ftnlen)396)] = lgrint_(&n, &record[
 		    xstart - 1], &record[ystart - 1], locrec, et);
 	}
     } else if (subtyp == 2) {
@@ -558,10 +557,10 @@
 		from = packsz * (j - 1) + 2 + i__;
 		to = (j << 1) - 1;
 		locrec[(i__2 = to - 1) < 198 && 0 <= i__2 ? i__2 : s_rnge(
-			"locrec", i__2, "spke19_", (ftnlen)423)] = record[
+			"locrec", i__2, "spke19_", (ftnlen)421)] = record[
 			from - 1];
 		locrec[(i__2 = to) < 198 && 0 <= i__2 ? i__2 : s_rnge("locrec"
-			, i__2, "spke19_", (ftnlen)424)] = record[from + 2];
+			, i__2, "spke19_", (ftnlen)422)] = record[from + 2];
 	    }
 
 /*           Interpolate the Ith position and velocity components of the */
@@ -569,9 +568,9 @@
 
 	    hrmint_(&n, &record[xstart - 1], locrec, et, work, &state[(i__1 = 
 		    i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
-		    "spke19_", (ftnlen)432)], &state[(i__2 = i__ + 2) < 6 && 
+		    "spke19_", (ftnlen)430)], &state[(i__2 = i__ + 2) < 6 && 
 		    0 <= i__2 ? i__2 : s_rnge("state", i__2, "spke19_", (
-		    ftnlen)432)]);
+		    ftnlen)430)]);
 	}
     } else {
 

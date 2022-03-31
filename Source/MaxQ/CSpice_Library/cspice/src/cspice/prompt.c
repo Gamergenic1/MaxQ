@@ -9,9 +9,9 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      PROMPT ( Prompt a user for a string ) */
-/* Subroutine */ int prompt_(char *prmpt, char *string, ftnlen prmpt_len, 
-	ftnlen string_len)
+/* $Procedure PROMPT ( Prompt a user for a string ) */
+/* Subroutine */ int prompt_(char *dspmsg, char *buffer, ftnlen dspmsg_len, 
+	ftnlen buffer_len)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -30,7 +30,7 @@ static integer c__1 = 1;
 
 /* $ Abstract */
 
-/*     This routine prompts a user for keyboard input. */
+/*     Prompt a user for keyboard input. */
 
 /* $ Disclaimer */
 
@@ -68,27 +68,27 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     PRMPT      I   The prompt to use when asking for input. */
-/*     STRING     O   The response typed by a user. */
+/*     DSPMSG     I   The prompt to use when asking for input. */
+/*     BUFFER     O   The response typed by a user. */
 
 /* $ Detailed_Input */
 
-/*     PRMPT      is a character string that will be displayed from the */
-/*                current cursor position and describes the input that */
-/*                the user is expected to enter.  The string PRMPT should */
-/*                be relatively short, i.e., 50 or fewer characters, so */
-/*                that a response may be typed on the line where the */
-/*                prompt appears. */
+/*     DSPMSG   is a character string that will be displayed from the */
+/*              current cursor position and describes the input that */
+/*              the user is expected to enter. The string DSPMSG should */
+/*              be relatively short, i.e., 50 or fewer characters, so */
+/*              that a response may be typed on the line where the */
+/*              prompt appears. */
 
-/*                All characters (including trailing blanks) in PRMPT */
-/*                are considered significant and will be displayed. */
+/*              All characters (including trailing blanks) in DSPMSG */
+/*              are considered significant and will be displayed. */
 
 /* $ Detailed_Output */
 
-/*     STRING     is a character string that contains the string */
-/*                entered by the user. */
+/*     BUFFER   is a character string that contains the string */
+/*              entered by the user. */
 
 /* $ Parameters */
 
@@ -99,13 +99,13 @@ static integer c__1 = 1;
 /*     This subroutine uses discovery check-in so that it may be called */
 /*     after an error has occurred. */
 
-/*     1) If the attempt to write the prompt to the standard output */
-/*        device fails, returning an IOSTAT value not equal to zero, the */
-/*        error SPICE(WRITEFAILED) will be signalled. */
+/*     1)  If the attempt to write the prompt to the standard output */
+/*         device fails, returning an IOSTAT value not equal to zero, the */
+/*         error SPICE(WRITEFAILED) is signaled. */
 
-/*     2) If the attempt to read the response from the standard input */
-/*        device fails, returning an IOSTAT value not equal to zero, the */
-/*        error SPICE(READFAILED) will be signalled. */
+/*     2)  If the attempt to read the response from the standard input */
+/*         device fails, returning an IOSTAT value not equal to zero, the */
+/*         error SPICE(READFAILED) is signaled. */
 
 /* $ Files */
 
@@ -114,29 +114,152 @@ static integer c__1 = 1;
 /* $ Particulars */
 
 /*     This is a utility that allows you to "easily" request information */
-/*     from a program user.  At a high level, it frees you from the */
+/*     from a program user. At a high level, it frees you from the */
 /*     peculiarities of a particular implementation of FORTRAN cursor */
 /*     control. */
 
 /* $ Examples */
 
-/*     Suppose you wanted to ask a user to input an answer to */
-/*     a question such as "Do you want to try again? (Y/N) " */
-/*     and leave the cursor at the end of the question as shown here: */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        Do you want to try again? (Y/N) _ */
+/*     1) Suppose you have an interactive program that computes state */
+/*        vectors by calling SPKEZR. The program prompts the user for */
+/*        the inputs to SPKEZR. After each prompt is written, the program */
+/*        leaves the cursor at the end of the string as shown here: */
 
-/*     (The underscore indicates the cursor position). */
+/*           Enter UTC epoch  > _ */
 
-/*     The following line of code will do what you want. */
+/*        (The underscore indicates the cursor position). */
 
-/*        CALL PROMPT ( 'Do you want to try again? (Y/N) ', ANSWER ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File: prompt_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                        Contents */
+/*              ---------                        -------- */
+/*              de430.bsp                        Planetary ephemeris */
+/*              mar097.bsp                       Mars satellite ephemeris */
+/*              naif0011.tls                     Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de430.bsp', */
+/*                                  'mar097.bsp', */
+/*                                  'naif0011.tls' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM PROMPT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         FMT */
+/*              PARAMETER           ( FMT    = '(A,F22.10)' ) */
+/*              INTEGER               STRLEN */
+/*              PARAMETER           ( STRLEN = 36 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(STRLEN)    OBS */
+/*              CHARACTER*(STRLEN)    TARGET */
+/*              CHARACTER*(STRLEN)    EPOCH */
+
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      STATE ( 6 ) */
+
+/*              INTEGER               I */
+
+/*        C */
+/*        C     Load kernel. */
+/*        C */
+/*              CALL FURNSH( 'prompt_ex1.tm' ) */
+
+/*        C */
+/*        C     Prompt for the required inputs. */
+/*        C */
+/*              CALL PROMPT ( 'Enter UTC epoch             > ', EPOCH  ) */
+/*              CALL PROMPT ( 'Enter observer name         > ', OBS    ) */
+/*              CALL PROMPT ( 'Enter target name           > ', TARGET ) */
+
+/*        C */
+/*        C     Convert the UTC request time to ET (seconds past */
+/*        C     J2000, TDB). */
+/*        C */
+/*              CALL STR2ET( EPOCH, ET ) */
+
+/*        C */
+/*        C     Look up the state vector at the requested ET */
+/*        C */
+/*              CALL SPKEZR( TARGET, ET, 'J2000', 'NONE', OBS, STATE, LT) */
+
+/*        C */
+/*        C     Output... */
+/*        C */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT) 'Epoch               : ', ET */
+/*              WRITE(*,FMT) '   x-position   (km): ', STATE(1) */
+/*              WRITE(*,FMT) '   y-position   (km): ', STATE(2) */
+/*              WRITE(*,FMT) '   z-position   (km): ', STATE(3) */
+/*              WRITE(*,FMT) '   x-velocity (km/s): ', STATE(4) */
+/*              WRITE(*,FMT) '   y-velocity (km/s): ', STATE(5) */
+/*              WRITE(*,FMT) '   z-velocity (km/s): ', STATE(6) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the time string '2017-07-14T19:46:00' as epoch, */
+/*        'MARS' as target and 'EARTH' as observer, the output was: */
+
+
+/*        Enter UTC epoch             > 2017-07-14T19:46:00 */
+/*        Enter observer name         > MARS */
+/*        Enter target name           > EARTH */
+
+/*        Epoch               :   553333628.1837273836 */
+/*           x-position   (km):   173881563.8231496215 */
+/*           y-position   (km):  -322898311.5398598909 */
+/*           z-position   (km):  -147992421.0068917871 */
+/*           x-velocity (km/s):          47.4619819770 */
+/*           y-velocity (km/s):          19.0770886182 */
+/*           z-velocity (km/s):           7.9424268278 */
+
 
 /* $ Restrictions */
 
-/*     This routine is environment specific.  Standard FORTRAN does not */
-/*     provide for user control of cursor position after write */
-/*     statements. */
+/*     1)  This routine is environment specific. Standard FORTRAN does */
+/*         not provide for user control of cursor position after write */
+/*         statements. */
 
 /* $ Literature_References */
 
@@ -144,10 +267,27 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 3.26.0, 13-AUG-2021 (JDR) */
+
+/*        Changed argument names PRMPT and STRING to DSPMSG and BUFFER */
+/*        for consistency with other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
 
 /* -    SPICELIB Version 3.25.0, 10-MAR-2014 (BVS) */
 
@@ -256,23 +396,23 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 3.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 3.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -282,7 +422,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 2.0.0, 20-JUL-1995 (WLT) (KRG) */
 
-/*        This routine now participates in error handling.  It */
+/*        This routine now participates in error handling. It */
 /*        checks to make sure no I/O errors have occurred while */
 /*        attempting to write to standard output or read from standard */
 /*        input. It uses discovery checkin if an error is detected. */
@@ -309,7 +449,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 2.0.0, 20-JUL-1995 (WLT) (KRG) */
 
-/*        This routine now participates in error handling.  It */
+/*        This routine now participates in error handling. It */
 /*        checks to make sure no I/O errors have occurred while */
 /*        attempting to write to standard output or read from standard */
 /*        input. It uses discovery checkin if an error is detected. */
@@ -336,7 +476,7 @@ static integer c__1 = 1;
     if (iostat != 0) {
 	goto L100001;
     }
-    iostat = do_fio(&c__1, prmpt, prmpt_len);
+    iostat = do_fio(&c__1, dspmsg, dspmsg_len);
     if (iostat != 0) {
 	goto L100001;
     }
@@ -354,7 +494,7 @@ L100001:
 /*     environment while you figure out how to control cursor */
 /*     positioning. */
 
-/*      WRITE (*,*, IOSTAT=IOSTAT ) PRMPT */
+/*      WRITE (*,*, IOSTAT=IOSTAT ) DSPMSG */
 
 /*     Check for a write error. It's not likely, but the standard output */
 /*     can be redirected. Better safe than confused later. */
@@ -384,7 +524,7 @@ L100001:
     if (iostat != 0) {
 	goto L100002;
     }
-    iostat = do_fio(&c__1, string, string_len);
+    iostat = do_fio(&c__1, buffer, buffer_len);
     if (iostat != 0) {
 	goto L100002;
     }
@@ -397,9 +537,9 @@ L100002:
 		"d the input buffer while attempting to type your response.  "
 		"It may help if you limit your response to # or fewer charact"
 		"ers. ", (ftnlen)242);
-	errch_("#", prmpt, (ftnlen)1, prmpt_len);
+	errch_("#", dspmsg, (ftnlen)1, dspmsg_len);
 /* Computing MIN */
-	i__2 = i_len(string, string_len);
+	i__2 = i_len(buffer, buffer_len);
 	i__1 = min(i__2,131);
 	errint_("#", &i__1, (ftnlen)1);
 	sigerr_("SPICE(READFAILED)", (ftnlen)17);

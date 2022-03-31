@@ -487,6 +487,114 @@ void USpice::axisar(
 }
 
 
+void USpice::azlcpo(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSDimensionlessStateVector& azlsta,
+    FSEphemerisPeriod& lt,
+    const FSEphemerisTime& et,
+    const FSDistanceVector& obspos,
+    const FString& obsctr,
+    const FString& obsref,
+    const FString& target,
+    bool        azccw,
+    bool        elplsz,
+    ES_AberrationCorrectionWithTransmissions abcorr,
+    ES_LocalZenithMethod method
+)
+{
+    // Unpack inputs, default outputs
+    ConstSpiceChar* _method         = nullptr;
+    ConstSpiceChar* _target         = TCHAR_TO_ANSI(*target);
+    SpiceDouble         _et         = et.AsSpiceDouble();
+    ConstSpiceChar* _abcorr         = USpiceTypes::toString(abcorr);
+    SpiceBoolean        _azccw      = azccw ? SPICETRUE : SPICEFALSE;
+    SpiceBoolean        _elplsz     = elplsz ? SPICETRUE : SPICEFALSE;
+    SpiceDouble    _obspos[3];      obspos.CopyTo(_obspos);
+    ConstSpiceChar* _obsctr         = TCHAR_TO_ANSI(*obsctr);
+    ConstSpiceChar* _obsref         = TCHAR_TO_ANSI(*obsref);
+    SpiceDouble         _azlsta[6]; azlsta.CopyTo(_azlsta);
+    SpiceDouble _lt                 = lt.AsSpiceDouble();
+
+    if (method == ES_LocalZenithMethod::ELLIPSOID)
+    {
+        _method = "ELLIPSOID";
+    }
+
+    // Invoke
+    azlcpo_c(
+        _method,
+        _target,
+        _et,
+        _abcorr,
+        _azccw,
+        _elplsz,
+        _obspos,
+        _obsctr,
+        _obsref,
+        _azlsta,
+        &_lt
+    );
+
+    // Pack outputs
+    azlsta = FSDimensionlessStateVector(_azlsta);
+    lt = FSEphemerisPeriod(_lt);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+/*
+Exceptions
+   Error free.
+
+   1)  If the value of the input argument `range' is negative
+       the output rectangular coordinates will be negated, i.e.
+       the resulting array will be of the same length
+       but opposite direction to the one that would be obtained
+       with a positive input argument `range' of value ||RANGE||.
+
+   2)  If the value of the input argument `el' is outside the
+       range [-pi/2, pi/2], the results may not be as
+       expected.
+
+   3)  If the value of the input argument `az' is outside the
+       range [0, 2*pi], the value will be mapped to a value
+       inside the range that differs from the input value by an
+       integer multiple of 2*pi.
+*/
+void USpice::azlrec(
+    FSDistanceVector& rectan,
+    const FSDistance& range,
+    const FSAngle& az,
+    const FSAngle& el,
+    bool azccw,
+    bool elplsz
+)
+{
+    // Unpack inputs, set default outputs
+    SpiceDouble  _range = range.AsSpiceDouble();
+    SpiceDouble  _az = az.AsSpiceDouble();
+    SpiceDouble  _el = el.AsSpiceDouble();
+    SpiceBoolean _azccw = azccw ? SPICETRUE : SPICEFALSE;
+    SpiceBoolean _elplsz = elplsz ? SPICETRUE : SPICEFALSE;;
+    SpiceDouble  _rectan[3];  rectan.CopyTo(_rectan);
+
+    // Invoke
+    azlrec_c(
+        _range,
+        _az,
+        _el,
+        _azccw,
+        _elplsz,
+        _rectan
+    );
+
+    // Pack output
+    rectan = FSDistanceVector(_rectan);
+}
+
+
 /*
 Exceptions
    Error free.
@@ -1123,6 +1231,78 @@ void USpice::ckcov(
             coverage.Add(FSWindowSegment(_start, _stop));
         }
     }
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::ckfrot(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    ES_FoundCode& found,
+    FSRotationMatrix& rotationMatrix,
+    int& ref,
+    int inst,
+    const FSEphemerisTime& et
+)
+{
+    // Unpack inputs, set default outputs
+    SpiceInt        _inst = inst;
+    SpiceDouble     _et = et.AsSpiceDouble();
+    SpiceDouble     _m[3][3];  rotationMatrix.CopyTo(_m);
+    SpiceInt        _ref = ref;
+    SpiceBoolean    _found = (found == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
+
+    // Invoke
+    ckfrot_c(
+        _inst,
+        _et,
+        _m,
+        &_ref,
+        &_found
+    );
+
+    // Pack up outputs
+    rotationMatrix = FSRotationMatrix(_m);
+    found = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    ref = _ref;
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+void USpice::ckfxfm(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    ES_FoundCode& found,
+    FSStateTransform& xform,
+    int& ref,
+    int inst,
+    const FSEphemerisTime& et
+)
+{
+    // Unpack inputs, set default outputs
+    SpiceInt        _inst = inst;
+    SpiceDouble     _et = et.AsSpiceDouble();
+    SpiceDouble     _xform[6][6];  xform.CopyTo(_xform);
+    SpiceInt        _ref = ref;
+    SpiceBoolean    _found = (found == ES_FoundCode::Found) ? SPICETRUE : SPICEFALSE;
+
+    // Invoke
+    ckfxfm_c(
+        _inst,
+        _et,
+        _xform,
+        &_ref,
+        &_found
+    );
+
+    // Pack up outputs
+    xform = FSStateTransform(_xform);
+    found = (_found == SPICETRUE) ? ES_FoundCode::Found : ES_FoundCode::NotFound;
+    ref = _ref;
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
@@ -3014,6 +3194,39 @@ void USpice::getelm(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
+
+/*
+Exceptions
+   1)  No checks are made on the reasonableness of the inputs.
+
+   2)  If a problem occurs when evaluating the elements, an
+       error is signaled by a routine in the call tree of this
+       routine.
+*/
+void USpice::evsgp4(
+    ES_ResultCode& ResultCode,
+    FString& ErrorMessage,
+    FSStateVector& state,
+    const FSEphemerisTime& et,
+    const FSTLEGeophysicalConstants& geophs,
+    const FSTwoLineElements& elems
+)
+{
+    // Copy inputs & default outputs...
+    SpiceDouble _et = et.AsSpiceDouble();
+    SpiceDouble _geophs[8]; geophs.CopyTo(_geophs);
+    SpiceDouble _elems[10]; elems.CopyTo(_elems);
+    SpiceDouble _state[6]; state.CopyTo(_state);
+
+    // Invocation
+    evsgp4_c(_et, _geophs, _elems, _state);
+
+    // Bundle up the output
+    state = FSStateVector(_state);
+
+    // Error Handling
+    ErrorCheck(ResultCode, ErrorMessage);
+}
 
 int USpice::ev2lin(
     ES_ResultCode& ResultCode,
@@ -6005,29 +6218,27 @@ void USpice::invort(
     ErrorCheck(ResultCode, ErrorMessage);
 }
 
-// invstm_c doesn't exist!
-#if 0
 /*
 Exceptions
    Error free
 */
 void USpice::invstm(
-    FSStateTransform& invmat,
-    const FSStateTransform& mat
+    const FSStateTransform& xform,
+    FSStateTransform& inverseXform
 )
 {
     // Input
-    SpiceDouble _mat[6][6];     mat.CopyTo(_mat);
+    SpiceDouble _xform[6][6];     xform.CopyTo(_xform);
     // Output
-    SpiceDouble _invmat[6][6];  ZeroOut(_invmat);
+    SpiceDouble _inverseXform[6][6];  inverseXform.CopyTo(_inverseXform);
 
     // Invocation
-    invstm_c(_mat, _invmat);
+    invstm_c(_xform, _inverseXform);
 
     // Return Value
-    invmat = FSStateTransform(_invmat);
+    inverseXform = FSStateTransform(_inverseXform);
 }
-#endif
+
 
 
 /*
@@ -7674,6 +7885,46 @@ void USpice::raxisa(
 
     // Error Handling
     ErrorCheck(ResultCode, ErrorMessage);
+}
+
+
+/*
+Exceptions
+   Error free.
+
+   1)  If the X and Y components of `rectan' are both zero, the
+       azimuth is set to zero.
+
+   2)  If `rectan' is the zero vector, azimuth and elevation
+       are both set to zero.*/
+void USpice::recazl(
+    FSDistance& range,
+    FSAngle& az,
+    FSAngle& el,
+    const FSDistanceVector& rectan,
+    bool azccw,
+    bool elplsz
+)
+{
+    SpiceDouble  _rectan[3];  rectan.CopyTo(_rectan);
+    SpiceBoolean _azccw = azccw ? SPICETRUE : SPICEFALSE;
+    SpiceBoolean _elplsz = elplsz ? SPICETRUE : SPICEFALSE;
+    SpiceDouble _range = range.AsSpiceDouble();
+    SpiceDouble _az = az.AsSpiceDouble();
+    SpiceDouble _el = el.AsSpiceDouble();
+
+    recazl_c(
+        _rectan,
+        _azccw,
+        _elplsz,
+        &_range,
+        &_az,
+        &_el
+    );
+
+    range = FSDistance(_range);
+    az = FSAngle(_az);
+    el = FSAngle(_el);
 }
 
 

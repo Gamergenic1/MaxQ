@@ -75,22 +75,22 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BINARY     I   Name of an existing binary SPK or CK file. */
 /*     UNIT       I   Logical unit connected to a text file. */
 
 /* $ Detailed_Input */
 
-/*     BINARY      is the name of an existing binary SPK or CK file */
-/*                 that may contain comments in its comment area. */
+/*     BINARY   is the name of an existing binary SPK or CK file */
+/*              that may contain comments in its comment area. */
 
-/*     UNIT        is the logical unit connected to a text file that */
-/*                 has been opened for write access.  Use the routine */
-/*                 TXTOPN to open this file.  Upon exit, this file will */
-/*                 contain the same data and comments as the binary */
-/*                 file, but in text format which is more suitable for */
-/*                 transfer between heterogeneous computing environments. */
+/*     UNIT     is the logical unit connected to a text file that */
+/*              has been opened for write access. Use the routine */
+/*              TXTOPN to open this file. Upon exit, this file will */
+/*              contain the same data and comments as the binary */
+/*              file, but in text format which is more suitable for */
+/*              transfer between heterogeneous computing environments. */
 
 /* $ Detailed_Output */
 
@@ -100,17 +100,18 @@ static integer c__1 = 1;
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If there is a problem opening or reading from the binary file, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
+
+/*     2)  If there is a problem writing to the text file, */
+/*         the error SPICE(FILEWRITEFAILED) is signaled. */
+
 /* $ Files */
 
 /*     See arguments BINARY and UNIT above. */
-
-/* $ Exceptions */
-
-/*     1) If there is a problem opening or reading from the binary file, */
-/*        a routine that SPCB2T calls diagnoses and signals an error. */
-
-/*     2) If there is a problem writing to the text file, */
-/*        the error SPICE(FILEWRITEFAILED) is signalled. */
 
 /* $ Particulars */
 
@@ -119,24 +120,24 @@ static integer c__1 = 1;
 /*     binary representations of numbers, you must convert SPK and CK */
 /*     files to text format when porting from one system to another. */
 /*     After converting the file to text, you can transfer it using */
-/*     a transfer protocol program like Kermit or FTP.  Then, convert */
+/*     a transfer protocol program like Kermit or FTP. Then, convert */
 /*     the text file back to binary format. */
 
 /*     The following is a list of the SPICELIB routines that convert */
 /*     SPK and CK files between binary and text format: */
 
-/*        SPCA2B    converts text to binary.  It opens the text file, */
+/*        SPCA2B    converts text to binary. It opens the text file, */
 /*                  creates a new binary file, and closes both files. */
 
-/*        SPCB2A    converts binary to text.  It opens the binary file, */
+/*        SPCB2A    converts binary to text. It opens the binary file, */
 /*                  creates a new text file, and closes both files. */
 
-/*        SPCT2B    converts text to binary.  It creates a new binary */
-/*                  file and closes it.  The text file is open on */
+/*        SPCT2B    converts text to binary. It creates a new binary */
+/*                  file and closes it. The text file is open on */
 /*                  entrance and exit. */
 
-/*        SPCB2T    converts binary to text.  It opens the binary */
-/*                  file and closes it.  The text file is open on */
+/*        SPCB2T    converts binary to text. It opens the binary */
+/*                  file and closes it. The text file is open on */
 /*                  entrance and exit */
 
 /*     See the SPC required reading for more information */
@@ -149,7 +150,7 @@ static integer c__1 = 1;
 /*     by a standard label. */
 
 /*     The SPICELIB routine TXTOPN opens a new text file and TXTOPR */
-/*     opens an existing text file for read access.  TEXT and */
+/*     opens an existing text file for read access. TEXT and */
 /*     BINARY are character strings that contain the names of the */
 /*     text and binary files. */
 
@@ -180,10 +181,10 @@ static integer c__1 = 1;
 /* $ Restrictions */
 
 /*     1)  This routine assumes that the comment area of the binary SPK */
-/*         or CK file contains only text stored by SPCAC.  Comments */
+/*         or CK file contains only text stored by SPCAC. Comments */
 /*         written any other way may not be handled properly. */
 
-/*     2)  UNIT must be obtained via TXTOPN.  Use TXTOPN to open new */
+/*     2)  UNIT must be obtained via TXTOPN. Use TXTOPN to open new */
 /*         text files for write access and get the logical unit. */
 /*         System dependencies regarding opening text files have */
 /*         been isolated in the routines TXTOPN and TXTOPR. */
@@ -194,9 +195,17 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -208,7 +217,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     binary spk or ck to text */
+/*     binary SPK or CK to text */
 
 /* -& */
 

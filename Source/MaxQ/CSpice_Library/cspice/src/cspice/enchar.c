@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ENCHAR ( Encode a character string ) */
+/* $Procedure ENCHAR ( Encode a character string ) */
 /* Subroutine */ int enchar_0_(int n__, integer *number, char *string, ftnlen 
 	string_len)
 {
@@ -59,7 +59,8 @@
 
 /* $ Keywords */
 
-/*     CELLS, CHARACTER */
+/*     CELLS */
+/*     CHARACTER */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -72,58 +73,58 @@
 
 /* $ Detailed_Input */
 
-/*     NUMBER      is an arbitrary nonnegative integer. */
+/*     NUMBER   is an arbitrary nonnegative integer. */
 
 /* $ Detailed_Output */
 
-/*     STRING      is the character string implied by the ASCII */
-/*                 interpretation of NUMBER when converted to its */
-/*                 base CHBASE representation. */
+/*     STRING   is the character string implied by the ASCII */
+/*              interpretation of NUMBER when converted to its */
+/*              base CHBASE representation. */
 
-/*                 Let L be the declared length of STRING, and let */
-/*                 NUMBER be given by */
+/*              Let L be the declared length of STRING, and let */
+/*              NUMBER be given by */
 
-/*                                     0           1                 L-1 */
-/*                    NUMBER = a CHBASE  + a CHBASE  + ... + a CHBASE */
-/*                              1           2                 L */
+/*                                  0           1                 L-1 */
+/*                 NUMBER = a CHBASE  + a CHBASE  + ... + a CHBASE */
+/*                           1           2                 L */
 
-/*                 Then */
+/*              Then */
 
-/*                    STRING(i:i) = CHAR(a )   for i = 1, L */
-/*                                        i */
+/*                 STRING(i:i) = CHAR(a )   for i = 1, L */
+/*                                     i */
 
-/*                 Note that, just as for any other "numbers", */
-/*                 the "digits" in STRING are arranged from right */
-/*                 to left in order of increasing significance. */
-/*                 The string is, in effect, "padded with nulls" */
-/*                 on the left. */
+/*              Note that, just as for any other "numbers", */
+/*              the "digits" in STRING are arranged from right */
+/*              to left in order of increasing significance. */
+/*              The string is, in effect, "padded with nulls" */
+/*              on the left. */
 
 /* $ Parameters */
 
-/*     MINLEN      is the minimum length of a string into which a */
-/*                 number may be encoded. In order to avoid padding */
-/*                 long strings with hundreds, possibly thousands */
-/*                 of null characters, only the first MINLEN characters */
-/*                 of the string are actually used. Note that this */
-/*                 also allows the encoded number to be preserved */
-/*                 during assignments, */
+/*     MINLEN   is the minimum length of a string into which a */
+/*              number may be encoded. In order to avoid padding */
+/*              long strings with hundreds, possibly thousands */
+/*              of null characters, only the first MINLEN characters */
+/*              of the string are actually used. Note that this */
+/*              also allows the encoded number to be preserved */
+/*              during assignments, */
 
-/*                    STR1 = STR2 */
+/*                 STR1 = STR2 */
 
-/*                 so long as both strings are of length MINLEN or */
-/*                 greater. */
+/*              so long as both strings are of length MINLEN or */
+/*              greater. */
 
 /* $ Exceptions */
 
-/*     1) If the length of the output string is less than MINLEN, */
-/*        the error 'SPICE(INSUFFLEN)' is signalled. */
+/*     1)  If the length of the output string is less than MINLEN, */
+/*         the error SPICE(INSUFFLEN) is signaled. */
 
-/*     2) If the number to be encoded is negative, the error */
-/*        'SPICE(OUTOFRANGE)' is signalled. */
+/*     2)  If the number to be encoded is negative, the error */
+/*         SPICE(OUTOFRANGE) is signaled. */
 
-/*                                                         MINLEN */
-/*     3) If the number to be encoded is larger than CHBASE       - 1, */
-/*        the error 'SPICE(OUTOFRANGE)' is signalled. */
+/*                                                          MINLEN */
+/*     3)  If the number to be encoded is larger than CHBASE       - 1, */
+/*         the error SPICE(OUTOFRANGE) is signaled. */
 
 /* $ Files */
 
@@ -148,11 +149,18 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 31-JAN-2008 (BVS) */
 
@@ -225,7 +233,7 @@
 	chkout_("ENCHAR", (ftnlen)6);
     }
     return 0;
-/* $Procedure      DECHAR ( Decode a character string ) */
+/* $Procedure DECHAR ( Decode a character string ) */
 
 L_dechar:
 /* $ Abstract */
@@ -267,6 +275,8 @@ L_dechar:
 
 /* $ Declarations */
 
+/*     IMPLICIT NONE */
+
 /*     CHARACTER*(*)      STRING */
 /*     INTEGER            NUMBER */
 
@@ -279,15 +289,15 @@ L_dechar:
 
 /* $ Detailed_Input */
 
-/*     STRING      is a character string previously encoded by ENCHAR. */
-/*                 This contains an integer in base CHBASE notation, */
-/*                 where CHBASE is a function of the size of the */
-/*                 available character set. See ENCHAR for details */
-/*                 about the format of STRING. */
+/*     STRING   is a character string previously encoded by ENCHAR. */
+/*              This contains an integer in base CHBASE notation, */
+/*              where CHBASE is a function of the size of the */
+/*              available character set. See ENCHAR for details */
+/*              about the format of STRING. */
 
 /* $ Detailed_Output */
 
-/*     NUMBER      is the integer encoded in the input string. */
+/*     NUMBER   is the integer encoded in the input string. */
 
 /* $ Parameters */
 
@@ -295,8 +305,8 @@ L_dechar:
 
 /* $ Exceptions */
 
-/*     1) If the length of the input string is less than MINLEN, */
-/*        the error 'SPICE(INSUFFLEN)' is signalled. */
+/*     1)  If the length of the input string is less than MINLEN, */
+/*         the error SPICE(INSUFFLEN) is signaled. */
 
 /* $ Files */
 
@@ -330,11 +340,18 @@ L_dechar:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 31-JAN-2008 (BVS) */
 

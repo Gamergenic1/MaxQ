@@ -26,7 +26,7 @@
     extern /* Subroutine */ int zzspklt1_(integer *, doublereal *, char *, 
 	    char *, doublereal *, doublereal *, doublereal *, doublereal *, 
 	    ftnlen, ftnlen), zzstelab_(logical *, doublereal *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *), zzprscor_(char *, 
+	    doublereal *, doublereal *, doublereal *), zzvalcor_(char *, 
 	    logical *, ftnlen);
     integer refid;
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
@@ -571,8 +571,8 @@
 /*     C           Observer:               Earth (NAIF ID code 399) */
 /*     C */
 /*     C        Before we can execute this computation, we'll need the */
-/*     C        geometric state and accleration of the observer relative */
-/*     C        to the solar system barycenter at ET, expressed */
+/*     C        geometric state and acceleration of the observer */
+/*     C        relative to the solar system barycenter at ET, expressed */
 /*     C        relative to the J2000 reference frame. First find */
 /*     C        the state: */
 /*     C */
@@ -692,6 +692,12 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 12-SEP-2021 (NJB) */
+
+/*        Bug fix: aberration correction strings are now parsed using */
+/*        ZZVALCOR. This improves error checking. Corrected header */
+/*        comment typo. */
+
 /* -    SPICELIB Version 1.1.0, 04-JUL-2014 (NJB) */
 
 /*        Discussion of light time corrections was updated. Assertions */
@@ -744,7 +750,7 @@
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any.  Analyze the new flag. */
 
-	zzprscor_(abcorr, attblk, abcorr_len);
+	zzvalcor_(abcorr, attblk, abcorr_len);
 	if (failed_()) {
 	    chkout_("ZZSPKAS1", (ftnlen)8);
 	    return 0;
@@ -766,7 +772,7 @@
 /*           USECN indicates converged Newtonian light time correction. */
 
 /*        The above definitions are consistent with those used by */
-/*        ZZPRSCOR. */
+/*        ZZVALCOR. */
 
 	xmit = attblk[4];
 	uselt = attblk[1];

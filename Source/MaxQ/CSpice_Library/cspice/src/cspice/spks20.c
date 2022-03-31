@@ -9,7 +9,7 @@
 
 static integer c__7 = 7;
 
-/* $Procedure      SPKS20 ( S/P Kernel, subset, type 20 ) */
+/* $Procedure SPKS20 ( S/P Kernel, subset, type 20 ) */
 /* Subroutine */ int spks20_(integer *handle, integer *baddr, integer *eaddr, 
 	doublereal *begin, doublereal *end)
 {
@@ -77,7 +77,7 @@ static integer c__7 = 7;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of source segment. */
 /*     BADDR      I   Beginning address of source segment. */
@@ -89,15 +89,15 @@ static integer c__7 = 7;
 
 /*     HANDLE, */
 /*     BADDR, */
-/*     EADDR       are the file handle assigned to a SPK file, and the */
-/*                 beginning and ending addresses of a segment within */
-/*                 the file.  Together they determine a complete set of */
-/*                 ephemeris data, from which a subset is to be */
-/*                 extracted. */
+/*     EADDR    are the file handle assigned to a SPK file, and the */
+/*              beginning and ending addresses of a segment within */
+/*              the file. Together they determine a complete set of */
+/*              ephemeris data, from which a subset is to be */
+/*              extracted. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset to be extracted. */
+/*     END      are the initial and final epochs (ephemeris time) */
+/*              of the subset to be extracted. */
 
 /* $ Detailed_Output */
 
@@ -110,12 +110,12 @@ static integer c__7 = 7;
 
 /* $ Exceptions */
 
-/*     1)  Any errors that occur while reading data from the source SPK */
-/*         file will be diagnosed by routines in the call tree of this */
-/*         routine. */
+/*     1)  If an error occurs while reading data from the source SPK */
+/*         file, the error is signaled by a routine in the call tree of */
+/*         this routine. */
 
-/*     2)  Any errors that occur while writing data to the output SPK */
-/*         file will be diagnosed by routines in the call tree of this */
+/*     2)  If an error occurs while writing data to the output SPK file, */
+/*         the error is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /* $ Files */
@@ -137,22 +137,28 @@ static integer c__7 = 7;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     R.E. Thurman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     R.E. Thurman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 23-DEC-2013 (NJB) (RET) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_20 spk segment */
+/*     subset type_20 SPK segment */
 
 /* -& */
 

@@ -192,7 +192,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*   Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of PCK file open for writing. */
 /*     CLSSID     I   NAIF PCK frame class ID. */
@@ -215,190 +215,189 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the DAF handle of a PCK file to which a type 20 */
-/*                    segment is to be added. The PCK file must be open */
-/*                    for writing. */
+/*     HANDLE   is the DAF handle of a PCK file to which a type 20 */
+/*              segment is to be added. The PCK file must be open */
+/*              for writing. */
 
-/*     CLSSID         is the integer NAIF PCK frame class ID code of the */
-/*                    reference frame whose orientation relative to its */
-/*                    base frame is described by the segment to be */
-/*                    created. See the Frames Required Reading for */
-/*                    details. */
+/*     CLSSID   is the integer NAIF PCK frame class ID code of the */
+/*              reference frame whose orientation relative to its */
+/*              base frame is described by the segment to be */
+/*              created. See the Frames Required Reading for */
+/*              details. */
 
-/*     FRAME          is the NAIF name for a reference frame relative to */
-/*                    which the orientation information for CLSSID is */
-/*                    specified. This frame is called the "base frame." */
+/*     FRAME    is the NAIF name for a reference frame relative to */
+/*              which the orientation information for CLSSID is */
+/*              specified. This frame is called the "base frame." */
 
 /*     FIRST, */
-/*     LAST           are the start and stop times of the time interval */
-/*                    over which the segment defines the orientation of */
-/*                    the reference frame identified by CLSSID. */
+/*     LAST     are the start and stop times of the time interval */
+/*              over which the segment defines the orientation of */
+/*              the reference frame identified by CLSSID. */
 
-/*     SEGID          is a segment identifier. A PCK segment identifier */
-/*                    may contain up to 40 characters. */
+/*     SEGID    is a segment identifier. A PCK segment identifier */
+/*              may contain up to 40 characters. */
 
-/*     INTLEN         is the length of time, in TDB Julian days, covered */
-/*                    by each set of Chebyshev polynomial coefficients */
-/*                    (each logical record). */
+/*     INTLEN   is the length of time, in TDB Julian days, covered */
+/*              by each set of Chebyshev polynomial coefficients */
+/*              (each logical record). */
 
-/*     N              is the number of logical records to be stored in */
-/*                    the segment. There is one logical record for each */
-/*                    time period. Each logical record contains three */
-/*                    sets of Chebyshev coefficients---one for each */
-/*                    coordinate---and three position vector components. */
+/*     N        is the number of logical records to be stored in */
+/*              the segment. There is one logical record for each */
+/*              time period. Each logical record contains three */
+/*              sets of Chebyshev coefficients---one for each */
+/*              coordinate---and three position vector components. */
 
-/*     POLYDG         is the degree of each set of Chebyshev */
-/*                    polynomials, i.e. the number of Chebyshev */
-/*                    coefficients per angle minus one. POLYDG must be */
-/*                    less than or equal to the parameter MAXDEG. */
+/*     POLYDG   is the degree of each set of Chebyshev */
+/*              polynomials, i.e. the number of Chebyshev */
+/*              coefficients per angle minus one. POLYDG must be */
+/*              less than or equal to the parameter MAXDEG. */
 
-/*     CDATA          is an array containing sets of Chebyshev */
-/*                    polynomial coefficients and angles to be placed in */
-/*                    the new segment of the PCK file. The Chebyshev */
-/*                    coefficients represent Euler angle rates; the */
-/*                    angles are values of the Euler angles at each */
-/*                    interval midpoint. The angular and time units of */
-/*                    the data are defined by the inputs ASCALE and */
-/*                    TSCALE, which are described below. */
+/*     CDATA    is an array containing sets of Chebyshev */
+/*              polynomial coefficients and angles to be placed in */
+/*              the new segment of the PCK file. The Chebyshev */
+/*              coefficients represent Euler angle rates; the */
+/*              angles are values of the Euler angles at each */
+/*              interval midpoint. The angular and time units of */
+/*              the data are defined by the inputs ASCALE and */
+/*              TSCALE, which are described below. */
 
-/*                    The Euler angles represent the orientation of the */
-/*                    reference frame designated by CLSSID relative to */
-/*                    its base frame. The angles, which are numbered */
-/*                    according to their ordinal position in the logical */
-/*                    records, define a transformation matrix R as */
-/*                    follows: */
+/*              The Euler angles represent the orientation of the */
+/*              reference frame designated by CLSSID relative to */
+/*              its base frame. The angles, which are numbered */
+/*              according to their ordinal position in the logical */
+/*              records, define a transformation matrix R as */
+/*              follows: */
 
-/*                       R = [ A*ANGLE_3 ]  [ A*ANGLE_2 ]  [ A*ANGLE_1 ] */
-/*                                        3              1              3 */
+/*                 R = [ A*ANGLE_3 ]  [ A*ANGLE_2 ]  [ A*ANGLE_1 ] */
+/*                                  3              1              3 */
 
-/*                    where A is the angular scale ASCALE. Here the */
-/*                    notation */
+/*              where A is the angular scale ASCALE. Here the */
+/*              notation */
 
-/*                       [ THETA ] */
-/*                                i */
+/*                 [ THETA ] */
+/*                          i */
 
-/*                    denotes a reference frame rotation of THETA */
-/*                    radians in the right-hand sense about the ith */
-/*                    coordinate axis. See the Rotation Required Reading */
-/*                    for further discussion of this notation. */
+/*              denotes a reference frame rotation of THETA */
+/*              radians in the right-hand sense about the ith */
+/*              coordinate axis. See the Rotation Required Reading */
+/*              for further discussion of this notation. */
 
-/*                    The matrix R transforms vectors expressed in the */
-/*                    base frame to vectors expressed in the frame */
-/*                    associated with CLSSID by left multiplication: */
+/*              The matrix R transforms vectors expressed in the */
+/*              base frame to vectors expressed in the frame */
+/*              associated with CLSSID by left multiplication: */
 
-/*                       V       = R * V */
-/*                        CLSSID        FRAME */
+/*                 V       = R * V */
+/*                  CLSSID        FRAME */
 
-/*                    In cases where the frame designated by CLSSID */
-/*                    (which we'll abbreviate as "the CLSSID frame") is */
-/*                    a body-fixed, right-handed frame with its +Z axis */
-/*                    aligned with a body's north pole, the orientation */
-/*                    angles are related to right ascension (RA) and */
-/*                    declination (DEC) of the CLSSID frame's north */
-/*                    pole, and prime meridian orientation (W), by the */
-/*                    equations */
+/*              In cases where the frame designated by CLSSID */
+/*              (which we'll abbreviate as "the CLSSID frame") is */
+/*              a body-fixed, right-handed frame with its +Z axis */
+/*              aligned with a body's north pole, the orientation */
+/*              angles are related to right ascension (RA) and */
+/*              declination (DEC) of the CLSSID frame's north */
+/*              pole, and prime meridian orientation (W), by the */
+/*              equations */
 
-/*                       ANGLE_1 * ASCALE = RA   + pi/2 radians */
-/*                       ANGLE_2 * ASCALE = pi/2 - DEC  radians */
-/*                       ANGLE_3 * ASCALE = W           radians */
+/*                 ANGLE_1 * ASCALE = RA   + pi/2 radians */
+/*                 ANGLE_2 * ASCALE = pi/2 - DEC  radians */
+/*                 ANGLE_3 * ASCALE = W           radians */
 
-/*                    The coefficients and angles are stored in CDATA in */
-/*                    order as follows: */
+/*              The coefficients and angles are stored in CDATA in */
+/*              order as follows: */
 
-/*                       the (POLYDG + 1) coefficients for the rate of */
-/*                       the first angle of the first logical record, */
-/*                       followed by the value of the first angle at the */
-/*                       first interval midpoint. */
+/*                 the (POLYDG + 1) coefficients for the rate of */
+/*                 the first angle of the first logical record, */
+/*                 followed by the value of the first angle at the */
+/*                 first interval midpoint. */
 
-/*                       the coefficients for the rate of the second */
-/*                       angle of the first logical record, followed by */
-/*                       the value of the second angle at the first */
-/*                       interval midpoint. */
+/*                 the coefficients for the rate of the second */
+/*                 angle of the first logical record, followed by */
+/*                 the value of the second angle at the first */
+/*                 interval midpoint. */
 
-/*                       the coefficients for the rate of the third */
-/*                       angle of the first logical record, followed by */
-/*                       the value of the third angle at the first */
-/*                       interval midpoint. */
+/*                 the coefficients for the rate of the third */
+/*                 angle of the first logical record, followed by */
+/*                 the value of the third angle at the first */
+/*                 interval midpoint. */
 
-/*                       the (degree + 1) coefficients for the rate of */
-/*                       the first angle of the second logical record, */
-/*                       followed by the value of the first angle at the */
-/*                       second interval midpoint. */
+/*                 the (degree + 1) coefficients for the rate of */
+/*                 the first angle of the second logical record, */
+/*                 followed by the value of the first angle at the */
+/*                 second interval midpoint. */
 
-/*                       and so on. */
+/*                 and so on. */
 
-/*                    The logical data records are stored contiguously: */
+/*              The logical data records are stored contiguously: */
 
-/*                       +----------+ */
-/*                       | Record 1 | */
-/*                       +----------+ */
-/*                       | Record 2 | */
-/*                       +----------+ */
-/*                           ... */
-/*                       +----------+ */
-/*                       | Record N | */
-/*                       +----------+ */
+/*                 +----------+ */
+/*                 | Record 1 | */
+/*                 +----------+ */
+/*                 | Record 2 | */
+/*                 +----------+ */
+/*                     ... */
+/*                 +----------+ */
+/*                 | Record N | */
+/*                 +----------+ */
 
-/*                    The contents of an individual record are: */
+/*              The contents of an individual record are: */
 
-/*                       +--------------------------------------+ */
-/*                       | Coeff set for ANGLE_1 rate           | */
-/*                       +--------------------------------------+ */
-/*                       | ANGLE_1                              | */
-/*                       +--------------------------------------+ */
-/*                       | Coeff set for ANGLE_2 rate           | */
-/*                       +--------------------------------------+ */
-/*                       | ANGLE_2                              | */
-/*                       +--------------------------------------+ */
-/*                       | Coeff set for ANGLE_3 rate           | */
-/*                       +--------------------------------------+ */
-/*                       | ANGLE_3                              | */
-/*                       +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | Coeff set for ANGLE_1 rate           | */
+/*                 +--------------------------------------+ */
+/*                 | ANGLE_1                              | */
+/*                 +--------------------------------------+ */
+/*                 | Coeff set for ANGLE_2 rate           | */
+/*                 +--------------------------------------+ */
+/*                 | ANGLE_2                              | */
+/*                 +--------------------------------------+ */
+/*                 | Coeff set for ANGLE_3 rate           | */
+/*                 +--------------------------------------+ */
+/*                 | ANGLE_3                              | */
+/*                 +--------------------------------------+ */
 
 /*                   Each coefficient set has the structure: */
 
-/*                       +--------------------------------------+ */
-/*                       | Coefficient of T_0                   | */
-/*                       +--------------------------------------+ */
-/*                       | Coefficient of T_1                   | */
-/*                       +--------------------------------------+ */
-/*                                         ... */
-/*                       +--------------------------------------+ */
-/*                       | Coefficient of T_POLYDG              | */
-/*                       +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | Coefficient of T_0                   | */
+/*                 +--------------------------------------+ */
+/*                 | Coefficient of T_1                   | */
+/*                 +--------------------------------------+ */
+/*                                   ... */
+/*                 +--------------------------------------+ */
+/*                 | Coefficient of T_POLYDG              | */
+/*                 +--------------------------------------+ */
 
-/*                    Where T_n represents the Chebyshev polynomial */
-/*                    of the first kind of degree n. */
+/*              Where T_n represents the Chebyshev polynomial */
+/*              of the first kind of degree n. */
 
 /*     ASCALE, */
-/*     TSCALE         are, respectively, the angular scale of the input */
-/*                    angle and angular rate data in radians, and the */
-/*                    time scale of the input rate data in TDB */
-/*                    seconds. */
+/*     TSCALE   are, respectively, the angular scale of the input */
+/*              angle and angular rate data in radians, and the */
+/*              time scale of the input rate data in TDB */
+/*              seconds. */
 
-/*                    For example, if the input angular data have units */
-/*                    of degrees, ASCALE should be set to the number of */
-/*                    radians in one degree. If the input rate data have */
-/*                    time units of Julian days, then TSCALE should be */
-/*                    set to the number of seconds per Julian day */
-/*                    (86400). */
+/*              For example, if the input angular data have units */
+/*              of degrees, ASCALE should be set to the number of */
+/*              radians in one degree. If the input rate data have */
+/*              time units of Julian days, then TSCALE should be */
+/*              set to the number of seconds per Julian day */
+/*              (86400). */
 
 
-/*     INITJD         is the integer part of the Julian ephemeris date */
-/*                    of initial epoch of the first record. INITJD may */
-/*                    be less than, equal to, or greater than the */
-/*                    initial epoch. */
+/*     INITJD   is the integer part of the Julian ephemeris date */
+/*              of initial epoch of the first record. INITJD may */
+/*              be less than, equal to, or greater than the */
+/*              initial epoch. */
 
-/*     INITFR         is the fractional part of the Julian ephemeris */
-/*                    date of initial epoch of the first record. INITFR */
-/*                    has units of Julian days. INITFR has magnitude */
-/*                    strictly less than 1 day. The sum */
+/*     INITFR   is the fractional part of the Julian ephemeris */
+/*              date of initial epoch of the first record. INITFR */
+/*              has units of Julian days. INITFR has magnitude */
+/*              strictly less than 1 day. The sum */
 
-/*                       INITJD + INITFR */
+/*                 INITJD + INITFR */
 
-/*                    equals the Julian ephemeris date of the initial */
-/*                    epoch of the first record. */
-
+/*              equals the Julian ephemeris date of the initial */
+/*              epoch of the first record. */
 
 /* $ Detailed_Output */
 
@@ -406,69 +405,68 @@ static integer c__1 = 1;
 
 /* $ Parameters */
 
-/*     MAXDEG         is the maximum allowed degree of the input */
-/*                    Chebyshev expansions. MAXDEG is declared in the */
-/*                    Fortran INCLUDE file pck20.inc. */
+/*     MAXDEG   is the maximum allowed degree of the input */
+/*              Chebyshev expansions. MAXDEG is declared in the */
+/*              Fortran INCLUDE file pck20.inc. */
 
-/*     TOLSCL         is a tolerance scale factor (also called a */
-/*                    "relative tolerance") used for time coverage */
-/*                    bound checking. TOLSCL is unitless. TOLSCL */
-/*                    produces a tolerance value via the formula */
+/*     TOLSCL   is a tolerance scale factor (also called a */
+/*              "relative tolerance") used for time coverage */
+/*              bound checking. TOLSCL is unitless. TOLSCL */
+/*              produces a tolerance value via the formula */
 
-/*                       TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) ) */
+/*                 TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) ) */
 
-/*                    where FIRST and LAST are the coverage time bounds */
-/*                    of a type 20 segment, expressed as seconds past */
-/*                    J2000 TDB. */
+/*              where FIRST and LAST are the coverage time bounds */
+/*              of a type 20 segment, expressed as seconds past */
+/*              J2000 TDB. */
 
-/*                    The resulting parameter TOL is used as a tolerance */
-/*                    for comparing the input segment descriptor time */
-/*                    bounds to the first and last epoch covered by the */
-/*                    sequence of time intervals defined by the inputs */
-/*                    to PCKW20: */
+/*              The resulting parameter TOL is used as a tolerance */
+/*              for comparing the input segment descriptor time */
+/*              bounds to the first and last epoch covered by the */
+/*              sequence of time intervals defined by the inputs */
+/*              to PCKW20: */
 
-/*                       INITJD */
-/*                       INITFR */
-/*                       INTLEN */
-/*                       N */
+/*                 INITJD */
+/*                 INITFR */
+/*                 INTLEN */
+/*                 N */
 
-/*                    TOLSCL is declared in the Fortran INCLUDE file */
-/*                    pck20.inc. */
+/*              TOLSCL is declared in the Fortran INCLUDE file */
+/*              pck20.inc. */
 
-/*                    See the Exceptions section below for a description */
-/*                    of the error check using this tolerance. */
+/*              See the $Exceptions section below for a description */
+/*              of the error check using this tolerance. */
 
 /* $ Exceptions */
 
-/*     1)  If the number of sets of coefficients is not positive */
-/*         SPICE(INVALIDCOUNT) is signaled. */
+/*     1)  If the number of sets of coefficients is not positive, */
+/*         the error SPICE(INVALIDCOUNT) is signaled. */
 
-/*     2)  If the interval length is not positive, SPICE(INTLENNOTPOS) */
-/*         is signaled. */
+/*     2)  If the interval length is not positive, the error */
+/*         SPICE(INTLENNOTPOS) is signaled. */
 
 /*     3)  If the name of the reference frame is not recognized, */
-/*         SPICE(INVALIDREFFRAME) is signaled. */
+/*         the error SPICE(INVALIDREFFRAME) is signaled. */
 
 /*     4)  If segment stop time is not greater then the begin time, */
-/*         SPICE(BADDESCRTIMES) is signaled. */
+/*         the error SPICE(BADDESCRTIMES) is signaled. */
 
 /*     5)  If the start time of the first record exceeds the descriptor */
 /*         begin time by more than a computed tolerance, or if the end */
 /*         time of the last record precedes the descriptor end time by */
 /*         more than a computed tolerance, the error SPICE(COVERAGEGAP) */
-/*         is signaled. See the Parameters section above for a */
+/*         is signaled. See the $Parameters section above for a */
 /*         description of the tolerance. */
 
 /*     6)  If the input degree POLYDG is less than 0 or greater than */
 /*         MAXDEG, the error SPICE(INVALIDDEGREE) is signaled. */
 
-/*     7)  If the last non-blank character of SEGID occurs past index */
-/*         40, or if SEGID contains any nonprintable characters, the */
-/*         error will be diagnosed by a routine in the call tree of this */
-/*         routine. */
+/*     7)  If the last non-blank character of SEGID occurs past index 40, */
+/*         or if SEGID contains any nonprintable characters, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /*     8)  If either the angle or time scale is non-positive, the */
-/*         error SPICE(NONPOSITIVESCALE) will be signaled. */
+/*         error SPICE(NONPOSITIVESCALE) is signaled. */
 
 /* $ Files */
 
@@ -485,7 +483,7 @@ static integer c__1 = 1;
 /*     and base frame. The Chebyshev polynomial degree and length */
 /*     of time covered by each logical record are also fixed. However, */
 /*     an arbitrary number of logical records of Chebyshev polynomial */
-/*     coefficients can be written in each segment.  Minimizing the */
+/*     coefficients can be written in each segment. Minimizing the */
 /*     number of segments in a PCK file will help optimize how the */
 /*     SPICE system accesses the file. */
 
@@ -542,17 +540,22 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman (JPL) */
-/*     K.S. Zukor   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 17-JAN-2014 (NJB) (KSZ) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     write pck type_20 data segment */
+/*     write PCK type_20 data segment */
 
 /* -& */
 

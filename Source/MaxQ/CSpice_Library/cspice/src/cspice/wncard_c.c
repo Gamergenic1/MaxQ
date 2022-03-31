@@ -3,10 +3,10 @@
 -Procedure wncard_c ( Cardinality of a double precision window )
 
 -Abstract
- 
+
    Return the cardinality (number of intervals) of a double
    precision window.
- 
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,135 +33,197 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
+
    WINDOWS
- 
+
 -Keywords
- 
+
    WINDOWS
- 
+
 */
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #include "SpiceZmc.h"
-   
-   SpiceInt wncard_c ( SpiceCell  * window ) 
+
+   SpiceInt wncard_c ( SpiceCell  * window )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   window     I   Input window 
- 
-   The function returns the window cardinality of the window. 
- 
--Detailed_Input
-  
-   window      a window containing zero or more intervals
 
-               'window' must be declared as a double precision SpiceCell.
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   window     I   Input window
+
+   The function returns the window cardinality of the window.
+
+-Detailed_Input
+
+   window      is a window containing zero or more intervals.
+
+               `window' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( window, WINDOWSZ );
+
+               where WINDOWSZ is the maximum capacity of `window'.
+
 -Detailed_Output
- 
+
    The function returns the cardinality of (number of intervals in)
    the input window.
- 
+
 -Parameters
- 
-   None. 
- 
--Exceptions
- 
+
    None.
 
+-Exceptions
+
+   1)  If the number of elements in `window' is not even, the error
+       SPICE(INVALIDSIZE) is signaled by a routine in the call tree
+       of this routine.
+
+   2)  If the `window' cell argument has a type other than
+       SpiceDouble, the error SPICE(TYPEMISMATCH) is signaled. The
+       function returns the value 0.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
+
    This function returns the value of card_c(window)/2.
- 
+
 -Examples
 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as input,
+   the compiler and supporting libraries, and the machine specific
+   arithmetic implementation.
 
-      /. Include needed headers. ./
+   1) The following code example demonstrates how to insert an
+      interval into an existing double precision SPICE window, and
+      how to loop over all its intervals to extract their left and
+      right points.
 
+
+      Example code begins here.
+
+
+      /.
+         Program wncard_ex1
+      ./
       #include <stdio.h>
       #include "SpiceUsr.h"
 
-      #define WNSIZE          10
-   
-   int main()
+      int main()
       {
 
+         /.
+         Local parameters.
+         ./
+         #define WNSIZE          10
 
-      SpiceInt                 i;
-      SpiceDouble              left;
-      SpiceDouble              right;
-   
-      SPICEDOUBLE_CELL ( window,  WNSIZE );
+         /.
+         Local variables.
+         ./
+         SpiceDouble              left;
+         SpiceDouble              right;
 
-      wnvald_c ( WNSIZE, 0, &window );
+         SPICEDOUBLE_CELL ( window,  WNSIZE );
 
-      wninsd_c (  1.0,   3.0, &window );
-      wninsd_c (  7.0,  11.0, &window );
-      wninsd_c ( 23.0,  27.0, &window );
-   
-      for ( i=0; i<wncard_c(&window); i++)
+         SpiceInt                 i;
+
+         /.
+         Validate the window with size WNSIZE and zero elements.
+         ./
+         wnvald_c ( WNSIZE, 0, &window );
+
+         /.
+         Insert the intervals
+
+            [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ]
+
+         into `window'.
+         ./
+         wninsd_c (  1.0,   3.0, &window );
+         wninsd_c (  7.0,  11.0, &window );
+         wninsd_c ( 23.0,  27.0, &window );
+
+         /.
+         Loop over the number of intervals in `window', output
+         the `left' and `right' endpoints for each interval.
+         ./
+         for ( i=0; i<wncard_c(&window); i++)
          {
-         wnfetd_c( &window, i, &left, &right );
-         printf("Interval %d [%f, %f]\n", i, left, right );
+            wnfetd_c( &window, i, &left, &right );
+            printf("Interval %d [%8.3f, %8.3f]\n", i, left, right );
          }
-   
-      return ( 0 );
+
+         return ( 0 );
+
       }
-      
-   The code outputs:
-   
-      Interval 0 [1.000000 ,  3.000000]
-      Interval 1 [7.000000 , 11.000000]
-      Interval 2 [23.000000, 27.000000]
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Interval 0 [   1.000,    3.000]
+      Interval 1 [   7.000,   11.000]
+      Interval 2 [  23.000,   27.000]
+
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   E.D. Wright    (JPL) 
- 
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 05-AUG-2021 (JDR)
+
+       Edited the header to comply to NAIF standard. Created complete code
+       example from code fragment and added example's problem statement.
+
+       Extended description of argument "window" in -Detailed_Input to include
+       type and preferred declaration method.
+
+       Completed -Exceptions section.
+
    -CSPICE Version 1.0.0, 21-AUG-2007 (EDW)
 
 -Index_Entries
- 
+
    cardinality of a d.p. window
- 
+
 -&
 */
 
 { /* Begin wncard_c */
 
    SpiceInt      retval;
-   
+
    /*
    Use discovery check-in.
 
-   Make sure cell data type is d.p. 
+   Make sure cell data type is d.p.
    */
-   CELLTYPECHK_VAL( CHK_DISCOVER, 
-                    "wncard_c", SPICE_DP, window, 0 );
+   CELLTYPECHK_VAL( CHK_DISCOVER, "wncard_c", SPICE_DP, window, 0 );
    /*
-   Initialize the cell if necessary. 
+   Initialize the cell if necessary.
    */
    CELLINIT( window );
 
@@ -170,4 +232,3 @@
    return( retval );
 
 } /* End wncard_c */
-

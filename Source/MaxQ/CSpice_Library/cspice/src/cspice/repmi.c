@@ -77,43 +77,45 @@
 
 /* $ Detailed_Input */
 
-/*     IN             is an arbitrary character string. */
+/*     IN       is an arbitrary character string. */
 
-/*     MARKER         is an arbitrary character string. The first */
-/*                    occurrence of MARKER in the input string is */
-/*                    to be replaced by VALUE. */
+/*     MARKER   is an arbitrary character string. The first occurrence of */
+/*              MARKER in the input string is to be replaced by VALUE. */
 
-/*                    Leading and trailing blanks in MARKER are NOT */
-/*                    significant. In particular, no substitution is */
-/*                    performed if MARKER is blank. */
+/*              Leading and trailing blanks in MARKER are NOT */
+/*              significant. In particular, no substitution is performed */
+/*              if MARKER is blank. */
 
-/*     VALUE          is an arbitrary integer. */
+/*     VALUE    is an arbitrary integer. */
 
 /* $ Detailed_Output */
 
-/*     OUT            is the string obtained by substituting the text */
-/*                    representation of VALUE for the first occurrence */
-/*                    of MARKER in the input string. */
+/*     OUT      is the string obtained by substituting the text */
+/*              representation of VALUE for the first occurrence of */
+/*              MARKER in the input string. */
 
-/*                    OUT and IN must be identical or disjoint. */
+/*              OUT and IN must be identical or disjoint. */
 
 /* $ Parameters */
 
-/*     MAXLI          is the maximum expected length of the text */
-/*                    representation of an integer. 11 characters are */
-/*                    sufficient to hold any integer whose absolute */
-/*                    value is less than 10 billion. */
+/*     MAXLI    is the maximum expected length of the text representation */
+/*              of an integer. 11 characters are sufficient to hold any */
+/*              integer whose absolute value is less than 10 billion. */
+
+/*              This routine assumes that the input integer is such that */
+/*              its string representation contains no more than MAXLI */
+/*              characters. */
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) If OUT does not have sufficient length to accommodate the */
-/*        result of the substitution, the result will be truncated on */
-/*        the right. */
+/*     1)  If OUT does not have sufficient length to accommodate the */
+/*         result of the substitution, the result will be truncated on */
+/*         the right. */
 
-/*     2) If MARKER is blank, or if MARKER is not a substring of IN, */
-/*        no substitution is performed. (OUT and IN are identical.) */
+/*     2)  If MARKER is blank, or if MARKER is not a substring of IN, */
+/*         no substitution is performed. (OUT and IN are identical.) */
 
 /* $ Files */
 
@@ -134,8 +136,8 @@
 
 /*     by the calls */
 
-/*        CALL REPMCT ( STRING, '#1', N_PICS,  'C', STRING ) */
-/*        CALL REPMC  ( STRING, '#2', DIR_NAME,     STRING ) */
+/*        CALL REPMCT ( STRING, '#1',  51,           'C', STRING ) */
+/*        CALL REPMC  ( STRING, '#2', '[USER.DATA]',      STRING ) */
 
 /*     which substitute the cardinal text 'Fifty-one' and the character */
 /*     string '[USER.DATA]' for the markers '#1' and '#2' respectively. */
@@ -144,65 +146,84 @@
 
 /*        REPMC    ( Replace marker with character string value ) */
 /*        REPMD    ( Replace marker with double precision value ) */
-/*        REPMF    ( Replace marker with formatted d.p. value ) */
-/*        REPMI    ( Replace marker with integer value ) */
-/*        REPMCT   ( Replace marker with cardinal text) */
-/*        REPMOT   ( Replace marker with ordinal text ) */
+/*        REPMF    ( Replace marker with formatted d.p. value   ) */
+/*        REPMI    ( Replace marker with integer value          ) */
+/*        REPML    ( Replace marker with logical value          ) */
+/*        REPMCT   ( Replace marker with cardinal text          ) */
+/*        REPMOT   ( Replace marker with ordinal text           ) */
 
 /* $ Examples */
 
-/*     1. Let */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*           IN = 'Invalid operation value.  The value was #.' */
-
-/*        Then following the call, */
-
-/*           CALL REPMI ( IN, '#', 5, IN  ) */
-
-/*        IN is */
-
-/*           'Invalid operation value.  The value was 5.' */
+/*     1) The following example illustrate the use of REPMI to */
+/*        replace a marker within a string with the text representation */
+/*        of an integer value. */
 
 
-/*     2. Let */
-
-/*           IN = 'Left endpoint exceeded right endpoint. */
-/*                 The left endpoint was:  XX.  The right */
-/*                 endpoint was:  XX.' */
-
-/*        Then following the call, */
-
-/*           CALL REPMI ( IN, '  XX  ', 5, OUT ) */
-
-/*        OUT is */
-
-/*           'Left endpoint exceeded right endpoint.  The left */
-/*            endpoint was:  5.  The right endpoint was:  XX. */
+/*        Example code begins here. */
 
 
-/*     3. Let */
+/*              PROGRAM REPMI_EX1 */
+/*              IMPLICIT NONE */
 
-/*           NUM    = 23 */
-/*           CHANCE = 'fair' */
-/*           SCORE  = 4.665D0 */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER                 STRLEN */
+/*              PARAMETER             ( STRLEN = 80 ) */
 
-/*        Then following the sequence of calls, */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(STRLEN)      INSTR */
+/*              CHARACTER*(STRLEN)      MARKER */
+/*              CHARACTER*(STRLEN)      OUTSTR */
 
-/*           CALL REPMI ( 'There are & routines that have a '  // */
-/*          .             '& chance of meeting your needs.'    // */
-/*          .             'The maximum score was &.', */
-/*          .             '&', */
-/*          .             NUM, */
-/*          .             MSG  ) */
+/*        C */
+/*        C     1. Single marker */
+/*        C */
+/*              MARKER = '#' */
+/*              INSTR  = 'Invalid value. The value was:  #' */
 
-/*           CALL REPMC ( MSG, '&', CHANCE, MSG ) */
+/*              CALL REPMI ( INSTR, MARKER, 75, OUTSTR ) */
 
-/*           CALL REPMF ( MSG, '&', SCORE, 4, 'F', MSG ) */
+/*              WRITE(*,*) 'Case 1: Single marker.' */
+/*              WRITE(*,*) '   Input : ', INSTR */
+/*              WRITE(*,*) '   Output: ', OUTSTR */
+/*              WRITE(*,*) */
 
-/*        MSG is */
+/*        C */
+/*        C     2. Multiple markers */
+/*        C */
+/*              MARKER = ' XX ' */
+/*              INSTR  = 'Left > Right endpoint. Left: XX; Right: XX' */
 
-/*           'There are 23 routines that have a fair chance of */
-/*            meeting your needs.  The maximum score was 4.665.' */
+/*              CALL REPMI ( INSTR, MARKER, 2035, OUTSTR ) */
+
+/*              WRITE(*,*) 'Case 2: Multiple markers.' */
+/*              WRITE(*,*) '   Input : ', INSTR */
+/*              WRITE(*,*) '   Output: ', OUTSTR */
+/*              WRITE(*,*) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Case 1: Single marker. */
+/*            Input : Invalid value. The value was:  # */
+/*            Output: Invalid value. The value was:  75 */
+
+/*         Case 2: Multiple markers. */
+/*            Input : Left > Right endpoint. Left: XX; Right: XX */
+/*            Output: Left > Right endpoint. Left: 2035; Right: XX */
+
 
 /* $ Restrictions */
 
@@ -214,12 +235,24 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 21-AUG-2020 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing fragments. */
+
+/*        Added REPML to the list of available replace marker routines in */
+/*        $Particulars and extended MAXLI parameter description in */
+/*        $Parameters. */
 
 /* -    SPICELIB Version 1.2.0, 21-SEP-2013 (BVS) */
 

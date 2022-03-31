@@ -4,9 +4,9 @@
 
 -Abstract
 
-   Given the coefficients for the Chebyshev expansion of a
-   polynomial, this returns the value of the polynomial and its
-   first nderiv derivatives evaluated at the input X.
+   Return the value of a polynomial and its first `nderiv'
+   derivatives, evaluated at the input `x', using the coefficients of
+   the Chebyshev expansion of the polynomial.
 
 -Disclaimer
 
@@ -17,7 +17,7 @@
    PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
    TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
    WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
-   PARTICULAR USE OR PURPOSE (AS set_c FORTH IN UNITED STATES UCC
+   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
    SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
    SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
 
@@ -39,9 +39,9 @@
 
 -Keywords
 
-    INTERPOLATION
-    MATH
-    POLYNOMIAL
+   INTERPOLATION
+   MATH
+   POLYNOMIAL
 
 */
 
@@ -61,48 +61,48 @@
 
 -Brief_I/O
 
-    VARIABLE  I/O  DESCRIPTION
-    --------  ---  --------------------------------------------------
-    cp         I   degp+1 Chebyshev polynomial coefficients.
-    degp       I   Degree of polynomial.
-    x2s        I   Transformation parameters of polynomial.
-    x          I   Value for which the polynomial is to be evaluated
-    nderiv     I   The number of derivatives to compute
-    partdp    I-O  Workspace provided for computing derivatives
-    dpdxs      O   Array of the derivatives of the polynomial
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   cp         I   degp+1 Chebyshev polynomial coefficients.
+   degp       I   Degree of polynomial.
+   x2s        I   Transformation parameters of polynomial.
+   x          I   Value for which the polynomial is to be evaluated.
+   nderiv     I   The number of derivatives to compute.
+   partdp    I-O  Workspace provided for computing derivatives.
+   dpdxs      O   Array of the derivatives of the polynomial.
 
 -Detailed_Input
 
-    cp         is an array of coefficients a polynomial with respect
+   cp          is an array of coefficients a polynomial with respect
                to the Chebyshev basis. The polynomial to be
                evaluated is assumed to be of the form:
 
-                 cp(degp+1)*T(degp,S) + cp(degp)*T(degp-1,S) + ...
+                 cp[degp]*T(degp,s) + cp[degp-1]*T(degp-1,s) + ...
 
-                                  ... + cp(2)*T(1,S) + cp(1)*T(0,S)
+                                    + cp[1]*T(1,s) + cp[0]*T(0,s)
 
-               where T(I,S) is the I'th Chebyshev polynomial
-               evaluated  at a number S whose double precision
-               value lies between -1 and 1. The value of S is
-               computed from the input variables x2s[0],
-               x2s[1] and X.
+               where T(i,s) is the I'th Chebyshev polynomial
+               evaluated at a number `s' whose double precision
+               value lies between -1 and 1. The value of `s' is
+               computed from the input variables x2s[0], x2s[1]
+               and `x'.
 
-    degp       is the degree of the Chebyshev polynomial to be
+   degp        is the degree of the Chebyshev polynomial to be
                evaluated.
 
-    x2s        is an array of two parameters. These parameters are
-               used to transform the domain of the input variable X
+   x2s         is an array of two parameters. These parameters are
+               used to transform the domain of the input variable `x'
                into the standard domain of the Chebyshev polynomial.
                x2s[0] should be a reference point in the domain of
-               x; x2s[1] should be the radius by which points are
+               `x'; x2s[1] should be the radius by which points are
                allowed to deviate from the reference point and while
-               remaining within the domain of x. The value of
-               x is transformed into the value S given by
+               remaining within the domain of `x'. The value of
+               `x' is transformed into the value `s' given by
 
-                         S = ( x - x2s[0] ) / x2s[1]
+                  s = ( x - x2s[0] ) / x2s[1]
 
                Typically x2s[0] is the midpoint of the interval over
-               which x is allowed to vary and x2s[1] is the radius
+               which `x' is allowed to vary and x2s[1] is the radius
                of the interval.
 
                The main reason for doing this is that a Chebyshev
@@ -111,7 +111,7 @@
                respectively. Thus to get the "best fit" the
                data was transformed to the interval [-1,1] and
                coefficients generated. These coefficients are
-               not re-scaled to the interval of the data so that
+               not rescaled to the interval of the data so that
                the numerical "robustness" of the Chebyshev fit will
                not be lost. Consequently, when the "best fitting"
                polynomial needs to be evaluated at an intermediate
@@ -119,191 +119,237 @@
                in the same way that the generating points were
                transformed.
 
-    x          Value for which the polynomial is to be evaluated.
+   x           is the value for which the polynomial is to be
+               evaluated.
 
-    nderiv     is the number of derivatives to be computed by the
-               routine. nderiv should be non-negative.
+   nderiv      is the number of derivatives to be computed by the
+               routine. `nderiv' should be non-negative.
 
-    partdp     Is a work space used by the program to compute
+   partdp      is a work space used by the program to compute
                all of the desired derivatives. It should be declared
                in the calling program as
 
-                      SpiceDouble partdp[3 * (nderiv+1)]
+                  SpiceDouble       partdp[3 * (nderiv+1)]
 
 -Detailed_Output
 
-    dpdxs(0)   The value of the polynomial to be evaluated. It
-               is given by
+   dpdxs       is an array containing the value of the polynomial and
+               its derivatives evaluated at `x'.
 
-                 cp(degp+1)*T(degp,S) + cp(degp)*T(degp-1,S) + ...
+               dpdxs[0] is the value of the polynomial to be evaluated.
+               It is given by
 
-                                  ... + cp(2)*T(1,S) + cp(1)*T(0,S)
+                  cp[degp]*T(degp,s) + cp[degp-1]*T(degp-1,s) + ...
 
-               where T(I,S) is the I'th Chebyshev polynomial
-               evaluated  at a number S = ( x -  x2s[0] )/ x2s[1].
+                                     + cp[1]*T(1,s) + cp[0]*T(0,s)
 
-    dpdxs(i)   The value of the i'th derivative of the polynomial at
-               x. (I ranges from 1 to nderiv) It is given by
+               where T(i,s) is the i'th Chebyshev polynomial
+               evaluated  at a number s = ( x -  x2s[0] )/ x2s[1].
+
+               dpdxs(i) is the value of the i'th derivative of the
+               polynomial at `x' (`i' ranges from 1 to `nderiv'). It is
+               given by
 
                                            [i]
-                 (1/x2s[1]**i) ( cp(degp+1)*T   (degp,S)
+                  (1/x2s[1]^i) ( cp[degp]*T   (degp,s)
 
-                                         [i]
-                             + cp(degp)*T   (degp-1,S) + ...
+                                             [i]
+                               + cp[degp-1]*T   (degp-1,s)
 
-                             .
-                             .
-                             .
-                                      [i]
-                         ... + cp(2)*T   (1,S)
+                              + ...
 
-                                      [i]
-                             + cp(1)*T   (0,S) )
+                                       [i]
+                              + cp[1]*T   (1,s)
 
-                                 [i]
-               where T(k,S) and T   (i,S)  are the k'th Chebyshev
-               polynomial and its i'th derivative respectively,
-               evaluated at the number S = ( x - x2s[0] )/x2s[1].
+                                       [i]
+                              + cp[0]*T   (0,s) )
+
+               where T(k,s) is the k'th Chebyshev polynomial and the
+               superscript [i] indicates its i'th derivative,
+               evaluated at the number s = ( x - x2s[0] )/x2s[1].
 
 -Parameters
 
-    None.
+   None.
 
 -Exceptions
 
-   Error free
+   Error free.
 
-   No tests are performed for exceptional values ( nderiv negative,
-   degp negative, etc.) This routine is expected to be used at a low
-   level in ephemeris evaluations. For that reason it has been
-   elected as a routine that will not participate in error handling.
+   1)  No tests are performed for exceptional values (`nderiv'
+       negative, `degp' negative, etc.). This routine is expected to
+       be used at a low level in ephemeris evaluations. For that
+       reason it has been elected as a routine that will not
+       participate in error handling.
 
 -Files
 
-    None.
+   None.
 
 -Particulars
 
-    This routine computes the value of a Chebyshev polynomial
-    expansion and the derivatives of the expansion with respect to X.
-    The polynomial is given by
+   This routine computes the value of a Chebyshev polynomial
+   expansion and the derivatives of the expansion with respect to `x'.
+   The polynomial is given by
 
-         cp(degp+1)*T(degp,S) + cp(degp)*T(degp-1,S) + ...
+      cp[degp]*T(degp,s) + cp[degp-1]*T(degp-1,s) + ...
 
-                          ... + cp(2)*T(1,S) + cp(1)*T(0,S)
+                         + cp[1]*T(1,s) + cp[0]*T(0,s)
 
-    where
+   where
 
-         S  =  ( x - x2s[0] ) / x2s[1]
+      s  =  ( x - x2s[0] ) / x2s[1]
 
-    and
+   and
 
-         T(i,S) is the i'th Chebyshev polynomial of the first kind
-         evaluated at S.
+      T(i,s) is the i'th Chebyshev polynomial of the first kind
+      evaluated at `s'.
 
 -Examples
 
-   Depending upon the user's needs, there are 3 routines available
-   for evaluating Chebyshev polynomials.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      chbval_c for evaluating a Chebyshev polynomial when no
-             derivatives are desired.
+   1) Depending upon the user's needs, there are 3 routines
+      available for evaluating Chebyshev polynomials.
 
-      chbint_c for evaluating a Chebyshev polynomial and its
-             first derivative.
+         chbval_c   for evaluating a Chebyshev polynomial when no
+                    derivatives are desired.
 
-      chbder_c for evaluating a Chebyshev polynomial and a user
-             or application dependent number of derivatives.
+         chbint_c   for evaluating a Chebyshev polynomial and its
+                    first derivative.
 
-   Of these 3 the one most commonly employed by NAIF software
-   is chbint_c as it is used to interpolate ephemeris state
-   vectors which requires the evaluation of a polynomial
-   and its derivative. When no derivatives are desired one
-   should use chbval_c, or when more than one or an unknown
-   number of derivatives are desired one should use chbder_c.
+         chbder_c   for evaluating a Chebyshev polynomial and a user
+                    or application dependent number of derivatives.
 
-   Example:
+      Of these 3 the one most commonly employed by SPICE software
+      is chbint_c as it is used to interpolate ephemeris state
+      vectors; this requires the evaluation of a polynomial
+      and its derivative. When no derivatives are desired one
+      should use chbval_c, or when more than one or an unknown
+      number of derivatives are desired one should use chbder_c.
 
+      The code example below illustrates how this routine might
+      be used to obtain points for plotting a polynomial
+      and its derivatives.
+
+
+      Example code begins here.
+
+
+      /.
+         Program chbder_ex1
+      ./
       #include <stdio.h>
       #include "SpiceUsr.h"
-   
-      int main()
-         {
-   
+
+      int main( )
+      {
+
          /.
          Local variables.
          ./
-         SpiceDouble      cp [] = {  1., 3., 0.5, 1., 0.5, -1., 1. };
-         SpiceInt         degp    = 6;
+         SpiceDouble      cp []  = {  1., 3., 0.5, 1., 0.5, -1., 1. };
+         SpiceInt         degp   = 6;
          SpiceInt         nderiv = 3;
          SpiceDouble      x2s[]  = { .5, 3.};
          SpiceDouble      x      = 1.;
-   
-         /. Dimension partdp as 3 * (nderiv + 1) ./
+
+         /.
+         Dimension partdp as 3 * (nderiv + 1)
+         ./
          SpiceDouble      partdp[3 * 4];
-   
-        /. Dimension dpdxs as nderiv + 1. ./
-        SpiceDouble       dpdxs [3+1];
-   
-         int              i;
-   
+
+         /.
+         Dimension dpdxs as nderiv + 1.
+         ./
+         SpiceDouble      dpdxs [3+1];
+
+         SpiceInt         i;
+
          chbder_c ( cp, degp, x2s, x, nderiv, partdp, dpdxs );
-   
-         for ( i=0; i<=nderiv; i++ )
-            {
-            printf( "dpdxs = %lf\n", dpdxs[i] );
-            }
-   
-         return(0);
+
+         printf( "Value of the polynomial at X=1: %10.6f\n",
+                  dpdxs[0] );
+
+         for ( i=1; i<=nderiv; i++ )
+         {
+            printf( "   Derivative %i at X=1        : %10.6f\n",
+                                                (int)i, dpdxs[i] );
          }
 
-   The program outputs:
+         return ( 0 );
+      }
 
-      dpdxs = -0.340878
-      dpdxs = 0.382716
-      dpdxs = 4.288066
-      dpdxs = -1.514403
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Value of the polynomial at X=1:  -0.340878
+         Derivative 1 at X=1        :   0.382716
+         Derivative 2 at X=1        :   4.288066
+         Derivative 3 at X=1        :  -1.514403
+
 
 -Restrictions
 
-    The user must be sure that the provided workspace is declared
-    properly in the calling routine. The proper declaration is:
+   1)  The user must be sure that the provided workspace is declared
+       properly in the calling routine. The proper declaration is:
 
-    SpiceInt         nderiv = the desired number of derivatives;
-    SpiceDouble      partdp[3 * (nderiv + 1)];
+          SpiceInt         nderiv = the desired number of derivatives;
+          SpiceDouble      partdp[3 * (nderiv + 1)];
 
-    If for some reason a parameter is not passed to this routine in
-    nderiv, the user should make sure that the value of nderiv is not
-    so large that the work space provided is inadequate.
+       If for some reason a parameter is not passed to this routine
+       in `nderiv', the user should make sure that the value of `nderiv'
+       is not so large that the work space provided is inadequate.
 
-    One needs to be careful that the value (X-x2s[0]) / x2s[1] lies
-    between -1 and 1. Otherwise, the routine may fail spectacularly
-    (for example with a floating point overflow).
+   2)  One needs to be careful that the value
 
-    While this routine will compute derivatives of the input
-    polynomial, the user should consider how accurately the
-    derivatives of the Chebyshev fit, match the derivatives of the
-    function it approximates.
+          (x-x2s[0]) / x2s[1]
+
+       lies between -1 and 1. Otherwise, the routine may fail
+       spectacularly (for example with a floating point overflow).
+
+   3)  While this routine will compute derivatives of the input
+       polynomial, the user should consider how accurately the
+       derivatives of the Chebyshev fit, match the derivatives of the
+       function it approximates.
 
 -Literature_References
 
-    "Numerical Recipes -- The Art of Scientific Computing" by
-     William H. Press, Brian P. Flannery, Saul A. Teukolsky,
-     Willam T. Vetterling. (See Clenshaw's Recurrence Formula)
+   [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling,
+        "Numerical Recipes -- The Art of Scientific Computing,"
+        chapter 5.4, "Recurrence Relations and Clenshaw's Recurrence
+        Formula," p 161, Cambridge University Press, 1986.
 
-    "The Chebyshev Polynomials" by Theodore J. Rivlin.
+   [2]  T. Rivlin, "The Chebyshev Polynomials," Wiley, 1974.
 
-    "CRC Handbook of Tables for Mathematics"
+   [3]  R. Weast and S. Selby, "CRC Handbook of Tables for
+        Mathematics," 4th Edition, CRC Press, 1976.
 
 -Author_and_Institution
 
-    N.J. Bachman    (JPL)
-    W.L. Taber      (JPL)
-    E.D. Wright     (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 24-AUG-2015 (EDW)
+   -CSPICE Version 1.1.0, 01-NOV-2021 (JDR)
+
+       Removed error tracing calls. The function is declared
+       as error free, therefore these calls are not required.
+
+       Updated the header to comply with NAIF standard and correct several
+       typos. Reformatted example's output.
+
+       Removed unnecessary comments from the function's body.
+
+   -CSPICE Version 1.0.0, 24-AUG-2015 (EDW) (NJB) (WLT)
 
 -Index_Entries
 
@@ -315,39 +361,18 @@
 { /* Begin chbder_c */
 
    /*
-   Local constants
+   Error free: no error tracing required.
    */
-
 
    /*
-   Local macros
+   Call the f2c'd Fortran routine.
    */
-
-
-   /*
-   Local variables
-   */
-
-
-   /*
-   Static variables
-   */
-
-
-   /*
-   Participate in error tracing.
-   */
-
-   chkin_c ( "chbder_c" );
-
-   chbder_( (doublereal *) cp,
-            (integer    *) &degp,
-            (doublereal *) x2s,
-            (doublereal *) &x,
-            (integer    *) &nderiv,
-            (doublereal *) partdp,
-            (doublereal *) dpdxs);
-
-   chkout_c ( "chbder_c" );
+   chbder_ (  ( doublereal * )  cp,
+              ( integer    * ) &degp,
+              ( doublereal * )  x2s,
+              ( doublereal * ) &x,
+              ( integer    * ) &nderiv,
+              ( doublereal * )  partdp,
+              ( doublereal * )  dpdxs  );
 
 } /* End chbder_c */

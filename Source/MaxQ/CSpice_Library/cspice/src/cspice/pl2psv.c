@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PL2PSV ( Plane to point and spanning vectors ) */
+/* $Procedure PL2PSV ( Plane to point and spanning vectors ) */
 /* Subroutine */ int pl2psv_(doublereal *plane, doublereal *point, doublereal 
 	*span1, doublereal *span2)
 {
@@ -56,9 +56,9 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     PLANE      I   A SPICELIB plane. */
+/*     PLANE      I   A SPICE plane. */
 /*     POINT, */
 /*     SPAN1, */
 /*     SPAN2      O   A point in the input plane and two vectors */
@@ -66,26 +66,23 @@
 
 /* $ Detailed_Input */
 
-/*     PLANE          is a SPICELIB plane that represents the geometric */
-/*                    plane defined by POINT, SPAN1, and SPAN2. */
+/*     PLANE    is a SPICE plane. */
 
 /* $ Detailed_Output */
 
 /*     POINT, */
 /*     SPAN1, */
-/*     SPAN2          are, respectively, a point and two orthogonal */
-/*                    spanning vectors that generate the geometric plane */
-/*                    represented by PLANE.  The geometric plane is the */
-/*                    set of vectors */
+/*     SPAN2    are, respectively, a point and two orthogonal spanning */
+/*              vectors that generate the geometric plane represented by */
+/*              PLANE. The geometric plane is the set of vectors */
 
-/*                       POINT   +   s * SPAN1   +   t * SPAN2 */
+/*                 POINT   +   s * SPAN1   +   t * SPAN2 */
 
-/*                    where s and t are real numbers.  POINT is the */
-/*                    closest point in the plane to the origin; this */
-/*                    point is always a multiple of the plane's normal */
-/*                    vector.  SPAN1 and SPAN2 are an orthonormal pair */
-/*                    of vectors.  POINT, SPAN1, and SPAN2 are mutually */
-/*                    orthogonal. */
+/*              where `s' and `t' are real numbers. POINT is the closest */
+/*              point in the plane to the origin; this point is always a */
+/*              multiple of the plane's normal vector. SPAN1 and SPAN2 */
+/*              are an orthonormal pair of vectors. POINT, SPAN1, and */
+/*              SPAN2 are mutually orthogonal. */
 
 /* $ Parameters */
 
@@ -111,17 +108,17 @@
 /* $ Particulars */
 
 /*     SPICELIB geometry routines that deal with planes use the `plane' */
-/*     data type to represent input and output planes.  This data type */
+/*     data type to represent input and output planes. This data type */
 /*     makes the subroutine interfaces simpler and more uniform. */
 
-/*     The SPICELIB routines that produce SPICELIB planes from data that */
+/*     The SPICELIB routines that produce SPICE planes from data that */
 /*     define a plane are: */
 
 /*        NVC2PL ( Normal vector and constant to plane ) */
 /*        NVP2PL ( Normal vector and point to plane    ) */
 /*        PSV2PL ( Point and spanning vectors to plane ) */
 
-/*     The SPICELIB routines that convert SPICELIB planes to data that */
+/*     The SPICELIB routines that convert SPICE planes to data that */
 /*     define a plane are: */
 
 /*        PL2NVC ( Plane to normal vector and constant ) */
@@ -131,23 +128,23 @@
 /* $ Examples */
 
 /*     1)  Project a vector V orthogonally onto a plane defined by */
-/*         POINT, SPAN1, and SPAN2.  PROJ is the projection we want; it */
+/*         POINT, SPAN1, and SPAN2. PROJ is the projection we want; it */
 /*         is the closest vector in the plane to V. */
 
 /*            CALL PSV2PL ( POINT,   SPAN1,    SPAN2,   PLANE ) */
 /*            CALL VPRJP  ( V,       PLANE,    PROJ           ) */
 
 
-/*     2)  Find the intersection of a plane and the unit sphere.  This */
+/*     2)  Find the intersection of a plane and the unit sphere. This */
 /*         is a geometry problem that arises in computing the */
-/*         intersection of a plane and a triaxial ellipsoid.  The */
+/*         intersection of a plane and a triaxial ellipsoid. The */
 /*         SPICELIB routine INEDPL computes this intersection, but this */
 /*         example does illustrate how to use this routine. */
 
 
 /*            C */
 /*            C     The geometric plane of interest will be represented */
-/*            C     by the SPICELIB plane PLANE in this example. */
+/*            C     by the SPICE plane PLANE in this example. */
 /*            C */
 /*            C     The intersection circle will be represented by the */
 /*            C     vectors CENTER, V1, and V2; the circle is the set */
@@ -163,8 +160,8 @@
 
 /*            C */
 /*            C     The center of the intersection circle will be the */
-/*            C     closest point in the plane to the origin.  This */
-/*            C     point is returned by PL2PSV.  The distance of the */
+/*            C     closest point in the plane to the origin. This */
+/*            C     point is returned by PL2PSV. The distance of the */
 /*            C     center from the origin is the norm of CENTER. */
 /*            C */
 /*                  CALL PL2PSV  ( PLANE, CENTER, SPAN1, SPAN2 ) */
@@ -195,16 +192,16 @@
 /*         Find a normal vector and constant for the transformed plane. */
 
 /*            C */
-/*            C     Make a SPICELIB plane from N and C, and then find a */
+/*            C     Make a SPICE plane from N and C, and then find a */
 /*            C     point in the plane and spanning vectors for the */
-/*            C     plane.  N need not be a unit vector. */
+/*            C     plane. N need not be a unit vector. */
 /*            C */
 /*                  CALL NVC2PL ( N,      C,      PLANE         ) */
 /*                  CALL PL2PSV ( PLANE,  POINT,  SPAN1,  SPAN2 ) */
 
 /*            C */
 /*            C     Apply the linear transformation to the point and */
-/*            C     spanning vectors.  All we need to do is multiply */
+/*            C     spanning vectors. All we need to do is multiply */
 /*            C     these vectors by M, since for any linear */
 /*            C     transformation T, */
 /*            C */
@@ -221,7 +218,7 @@
 /*                  CALL MXV ( M, SPAN2, TSPAN2 ) */
 
 /*            C */
-/*            C     Make a new SPICELIB plane TPLANE from the */
+/*            C     Make a new SPICE plane TPLANE from the */
 /*            C     transformed point and spanning vectors, and find a */
 /*            C     unit normal and constant for this new plane. */
 /*            C */
@@ -234,13 +231,22 @@
 
 /* $ Literature_References */
 
-/*     [1] `Calculus and Analytic Geometry', Thomas and Finney. */
+/*     [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry," */
+/*          7th Edition, Addison Wesley, 1988. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-AUG-2021 (NJB) (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -256,27 +262,13 @@
 
 /* -& */
 
-/*     Local parameters */
-
-
-/*     The contents of SPICELIB planes are as follows: */
-
-/*        Elements NMLPOS through NMLPOS + 2 contain a unit normal */
-/*        vector for the plane. */
-
-/*        Element CONPOS contains a constant for the plane;  every point */
-/*        X in the plane satisifies */
-
-/*           < X, PLANE(NMLPOS) >  =  PLANE(CONPOS). */
-
-/*        The plane constant is the distance of the plane from the */
-/*        origin; the normal vector, scaled by the constant, is the */
-/*        closest point in the plane to the origin. */
-
-
-
 /*     Local variables */
 
+
+/*     Note for programmers: validity of the input plane is not */
+/*     checked in the interest of efficiency. The input plane will be */
+/*     valid if it was created by one of the SPICE plane construction */
+/*     routines. */
 
 /*     Find a unit normal vector for the plane, and find the closest */
 /*     point in the plane to the origin. */

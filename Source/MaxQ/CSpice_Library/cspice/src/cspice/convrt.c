@@ -12,7 +12,7 @@ static integer c__5 = 5;
 static integer c__3 = 3;
 static integer c__9 = 9;
 
-/* $Procedure      CONVRT ( Convert Units ) */
+/* $Procedure CONVRT ( Convert Units ) */
 /* Subroutine */ int convrt_(doublereal *x, char *in, char *out, doublereal *
 	y, ftnlen in_len, ftnlen out_len)
 {
@@ -66,9 +66,9 @@ static integer c__9 = 9;
 
 /* $ Abstract */
 
-/*      Take a measurement X, the units associated with */
-/*      X, and units to which X should be converted; return Y --- */
-/*      the value of the measurement in the output units. */
+/*     Take a measurement X, the units associated with */
+/*     X, and units to which X should be converted; return Y --- */
+/*     the value of the measurement in the output units. */
 
 /* $ Disclaimer */
 
@@ -101,7 +101,8 @@ static integer c__9 = 9;
 
 /* $ Keywords */
 
-/*     CONVERSION, UNITS */
+/*     CONVERSION */
+/*     UNITS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -115,56 +116,55 @@ static integer c__9 = 9;
 
 /* $ Detailed_Input */
 
-/*     X          is a number representing a measurement in the units */
-/*                specified by IN. */
+/*     X        is a number representing a measurement in the units */
+/*              specified by IN. */
 
-/*     IN         represents the units associated with a measurement X. */
-/*                Acceptable units are: */
+/*     IN       is the identifier of the units associated with the */
+/*              measurement X. Acceptable units are: */
 
-/*                Angles:                 'RADIANS' */
-/*                                        'DEGREES' */
-/*                                        'ARCMINUTES' */
-/*                                        'ARCSECONDS' */
-/*                                        'HOURANGLE' */
-/*                                        'MINUTEANGLE' */
-/*                                        'SECONDANGLE' */
+/*                 Angles:                 'RADIANS' */
+/*                                         'DEGREES' */
+/*                                         'ARCMINUTES' */
+/*                                         'ARCSECONDS' */
+/*                                         'HOURANGLE' */
+/*                                         'MINUTEANGLE' */
+/*                                         'SECONDANGLE' */
 
-/*                Metric Distances:       'M' */
-/*                                        'METERS' */
-/*                                        'KM' */
-/*                                        'KILOMETERS' */
-/*                                        'CM' */
-/*                                        'CENTIMETERS' */
-/*                                        'MM' */
-/*                                        'MILLIMETERS' */
+/*                 Metric Distances:       'M' */
+/*                                         'METERS' */
+/*                                         'KM' */
+/*                                         'KILOMETERS' */
+/*                                         'CM' */
+/*                                         'CENTIMETERS' */
+/*                                         'MM' */
+/*                                         'MILLIMETERS' */
 
-/*                English Distances:      'FEET' */
-/*                                        'INCHES' */
-/*                                        'YARDS' */
-/*                                        'STATUTE_MILES' */
-/*                                        'NAUTICAL_MILES' */
+/*                 English Distances:      'FEET' */
+/*                                         'INCHES' */
+/*                                         'YARDS' */
+/*                                         'STATUTE_MILES' */
+/*                                         'NAUTICAL_MILES' */
 
-/*                Astrometric Distances:  'AU' */
-/*                                        'PARSECS' */
-/*                                        'LIGHTSECS' */
-/*                                        'LIGHTYEARS' julian lightyears */
+/*                 Astrometric Distances:  'AU' */
+/*                                         'PARSECS' */
+/*                                         'LIGHTSECS' */
+/*                                         'LIGHTYEARS' julian lightyears */
 
-/*                Time:                   'SECONDS' */
-/*                                        'MINUTES' */
-/*                                        'HOURS' */
-/*                                        'DAYS' */
-/*                                        'JULIAN_YEARS' */
-/*                                        'TROPICAL_YEARS' */
-/*                                        'YEARS' (same as julian years) */
+/*                 Time:                   'SECONDS' */
+/*                                         'MINUTES' */
+/*                                         'HOURS' */
+/*                                         'DAYS' */
+/*                                         'JULIAN_YEARS' */
+/*                                         'TROPICAL_YEARS' */
+/*                                         'YEARS' (same as julian years) */
 
-/*     OUT        represents the units desired for the measurement X. */
-/*                See the description of IN. */
+/*     OUT      is the identifier of the units desired for the */
+/*              measurement X. See the description of IN. */
 
 /* $ Detailed_Output */
 
-/*     Y          is the input measurement converted to the desired */
-/*                units. */
-
+/*     Y        is the input measurement converted to the desired */
+/*              units. */
 
 /* $ Parameters */
 
@@ -172,12 +172,12 @@ static integer c__9 = 9;
 
 /* $ Exceptions */
 
-/*     1) If the input units, output units, or both input and */
-/*        output units are not recognized, the error */
-/*        SPICE(UNITSNOTREC) is signaled. */
+/*     1)  If the input units, output units, or both input and */
+/*         output units are not recognized, the error */
+/*         SPICE(UNITSNOTREC) is signaled. */
 
-/*     2) If the units being converted between are incompatible, the */
-/*        error SPICE(INCOMPATIBLEUNITS) is signaled. */
+/*     2)  If the units being converted between are incompatible, the */
+/*         error SPICE(INCOMPATIBLEUNITS) is signaled. */
 
 /* $ Files */
 
@@ -207,33 +207,33 @@ static integer c__9 = 9;
 /*        CALL CONVRT ( 1.0D0, 'METERS', 'STATUTE_MILES', MILES ) */
 /*        CALL CONVRT ( 1.0D0, 'METERS', 'FEET',          FEET  ) */
 
-
 /* $ Restrictions */
 
-/*     You should make sure that your units are appropriate for the */
-/*     measurement. This routine does not do any checking for over- */
-/*     flow. Something like */
+/*     1)  This routine does not do any checking for overflow. The caller */
+/*         is required to make sure that the units used for the */
+/*         measurement are such that no floating point overflow will */
+/*         occur when the conversion is performed. */
 
-/*        CALL ( 10.0D22, 'LIGHTYEARS', 'MM', Y ) */
+/*     2)  Some of the units are not "defined" quantities. In such a case */
+/*         a best estimate is provided as of the date of the current */
+/*         version of this routine. Those estimated quantities are: */
 
-/*     will cause a floating point overflow. */
+/*            AU               The astronomical unit. The value was taken */
+/*                             from the JPL ephemeris DE125. This value */
+/*                             is an approximation and should not be used */
+/*                             for high-accuracy work. It agrees with the */
+/*                             value used in the JPL planetary ephemeris */
+/*                             DE430 (149597870.700 km) at the 100m */
+/*                             level. */
 
-/*     Some of the units are not "defined" quantities.  In such a case */
-/*     a best estimate is provided as of the date of the current version */
-/*     of this routine. Those estimated quantities are: */
+/*            TROPICAL_YEARS   The tropical year is the time from equinox */
+/*                             to equinox. This varies slightly with */
+/*                             time. */
 
-/*         1 AU    --- the astronomical unit. The value was taken from */
-/*                     the JPL ephemeris DE125. This value is an */
-/*                     approximation and should not be used for */
-/*                     high-accuracy work. It agrees with the value used */
-/*                     in the JPL planetary ephemeris DE430 */
-/*                     (149597870.700 km) at the 100m level. */
-
-/*         The tropical year is the time from equinox to equinox.  This */
-/*         varies slightly with time. */
-
-/*         1 PARSEC --- is dependent upon the value of the astronomical */
-/*                      unit. */
+/*            PARSECS          The parsec is the distance to an object */
+/*                             whose parallax angle is one arcsecond. Its */
+/*                             value is dependent upon the value of the */
+/*                             astronomical unit. */
 
 /* $ Literature_References */
 
@@ -241,14 +241,23 @@ static integer c__9 = 9;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.M. Owen       (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Corrected a typo in $Restrictions section. */
 
 /* -    SPICELIB Version 2.0.0, 12-MAY-2015 (NJB) */
 
@@ -257,7 +266,7 @@ static integer c__9 = 9;
 
 /* -    SPICELIB Version 1.0.2, 01-JUL-2014 (NJB) */
 
-/*        Updated the description of the AU in the Restrictions */
+/*        Updated the description of the AU in the $Restrictions */
 /*        section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -271,21 +280,6 @@ static integer c__9 = 9;
 /* $ Index_Entries */
 
 /*     convert units */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.2.0, 05-JAN-1990 (WLT) */
-
-/*        Data statements for double precision values were changed */
-/*        to include a 'D' so that this routine would function properly */
-/*        on the Univac. */
-
-/* -   Beta Version 1.1.0, 02-MAR-1989 (HAN) */
-
-/*        The variable LIGHTYEAR was changed to LTYEAR in order to */
-/*        comply with the ANSI Fortran Standard six character */
-/*        variable name length restriction. */
 
 /* -& */
 
@@ -406,21 +400,21 @@ static integer c__9 = 9;
 	}
     }
     if (s_cmp(type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge(
-	    "type", i__3, "convrt_", (ftnlen)547)) << 3), type__ + (((i__4 = 
+	    "type", i__3, "convrt_", (ftnlen)539)) << 3), type__ + (((i__4 = 
 	    j - 1) < 31 && 0 <= i__4 ? i__4 : s_rnge("type", i__4, "convrt_", 
-	    (ftnlen)547)) << 3), (ftnlen)8, (ftnlen)8) != 0) {
+	    (ftnlen)539)) << 3), (ftnlen)8, (ftnlen)8) != 0) {
 /* Writing concatenation */
 	i__5[0] = 58, a__3[0] = "CONVRT: Incompatible units. You are attempt"
 		"ing to convert ";
 	i__5[1] = 16, a__3[1] = inu;
 	i__5[2] = 6, a__3[2] = "type: ";
 	i__5[3] = 8, a__3[3] = type__ + (((i__3 = i__ - 1) < 31 && 0 <= i__3 ?
-		 i__3 : s_rnge("type", i__3, "convrt_", (ftnlen)549)) << 3);
+		 i__3 : s_rnge("type", i__3, "convrt_", (ftnlen)541)) << 3);
 	i__5[4] = 4, a__3[4] = " to ";
 	i__5[5] = 16, a__3[5] = outu;
 	i__5[6] = 6, a__3[6] = "type: ";
 	i__5[7] = 8, a__3[7] = type__ + (((i__4 = j - 1) < 31 && 0 <= i__4 ? 
-		i__4 : s_rnge("type", i__4, "convrt_", (ftnlen)549)) << 3);
+		i__4 : s_rnge("type", i__4, "convrt_", (ftnlen)541)) << 3);
 	i__5[8] = 1, a__3[8] = ".";
 	s_cat(ch__4, a__3, i__5, &c__9, (ftnlen)123);
 	setmsg_(ch__4, (ftnlen)123);
@@ -429,9 +423,9 @@ static integer c__9 = 9;
 	return 0;
     }
     temp = *x * cnvrtn[(i__3 = i__ - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge(
-	    "cnvrtn", i__3, "convrt_", (ftnlen)565)];
+	    "cnvrtn", i__3, "convrt_", (ftnlen)557)];
     *y = temp / cnvrtn[(i__3 = j - 1) < 31 && 0 <= i__3 ? i__3 : s_rnge("cnv"
-	    "rtn", i__3, "convrt_", (ftnlen)566)];
+	    "rtn", i__3, "convrt_", (ftnlen)558)];
     chkout_("CONVRT", (ftnlen)6);
     return 0;
 } /* convrt_ */

@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKW04E ( CK type 04: End a segment ) */
+/* $Procedure CKW04E ( CK type 04: End a segment ) */
 /* Subroutine */ int ckw04e_(integer *handle, doublereal *endtim)
 {
     extern /* Subroutine */ int dafgs_(doublereal *), chkin_(char *, ftnlen), 
@@ -78,18 +78,19 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the file handle of an CK file that has been */
-/*                opened for writing, and to which a type 4 CK segment */
-/*                is being written. */
+/*     HANDLE   is the file handle of an CK file that has been */
+/*              opened for writing, and to which a type 4 CK segment */
+/*              is being written. */
 
-/*     ENDTIM     is the encoded SCLK time for the end of the segment */
-/*                coverage. */
+/*     ENDTIM   is the encoded SCLK time for the end of the segment */
+/*              coverage. */
 
 /* $ Detailed_Output */
 
-/*     None.       The type 4 segment in the DAF file associated with */
-/*                 HANDLE will be ended, making the addition of the */
-/*                 data to the file permanent. */
+/*     None. */
+
+/*     The type 04 segment in the DAF file associated with HANDLE will be */
+/*     ended, making the addition of the data to the file permanent. */
 
 /* $ Parameters */
 
@@ -97,8 +98,9 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1)  Errors reading or writing the file indicated by HANDLE will */
-/*         be diagnosed by routine in the call tree of this routine. */
+/*     1)  If an error occurs while reading or writing the file */
+/*         indicated by HANDLE, the error is signaled by a routine in */
+/*         the call tree of this routine. */
 
 /* $ Files */
 
@@ -240,9 +242,9 @@ static integer c__6 = 6;
 
 /* $ Restrictions */
 
-/*     1) The type 4 CK segment being closed must have been started by */
-/*        the routine CKW04B, the routine which begins a type 4 CK */
-/*        segment. */
+/*     1)  The type 4 CK segment being closed must have been started by */
+/*         the routine CKW04B, the routine which begins a type 4 CK */
+/*         segment. */
 
 /* $ Literature_References */
 
@@ -250,10 +252,15 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     Y.K. Zaiko     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     Y.K. Zaiko         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 02-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 18-APR-2014 (BVS) */
 
@@ -264,7 +271,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     end a type_4 ck segment */
+/*     end a type_4 CK segment */
 
 /* -& */
 

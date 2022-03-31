@@ -5,9 +5,8 @@
 
 #include "f2c.h"
 
-/* $Procedure      MTXV  ( Matrix transpose times vector, 3x3 ) */
-/* Subroutine */ int mtxv_(doublereal *matrix, doublereal *vin, doublereal *
-	vout)
+/* $Procedure MTXV ( Matrix transpose times vector, 3x3 ) */
+/* Subroutine */ int mtxv_(doublereal *m, doublereal *vin, doublereal *vout)
 {
     /* System generated locals */
     integer i__1, i__2, i__3, i__4;
@@ -21,8 +20,8 @@
 
 /* $ Abstract */
 
-/*     MTXV multiplies the transpose of a 3x3 matrix on the left with */
-/*     a vector on the right. */
+/*     Multiply the transpose of a 3x3 matrix on the left with a vector */
+/*     on the right. */
 
 /* $ Disclaimer */
 
@@ -61,27 +60,28 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O              DESCRIPTION */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     MATRIX     I   3X3 double precision matrix. */
+/*     M          I   3X3 double precision matrix. */
 /*     VIN        I   3-dimensional double precision vector. */
 /*     VOUT       O   3-dimensional double precision vector. VOUT is */
-/*                    the product MATRIX**T * VIN. */
+/*                    the product M**T * VIN. */
 
 /* $ Detailed_Input */
 
-/*     MATRIX     is an arbitrary 3x3 double precision matrix. */
-/*                Typically, MATRIX will be a rotation matrix since */
-/*                then its transpose is its inverse (but this is NOT */
-/*                a requirement). */
+/*     M        is an arbitrary 3x3 double precision matrix. */
+/*              Typically, M will be a rotation matrix since */
+/*              then its transpose is its inverse (but this is NOT */
+/*              a requirement). */
 
-/*     VIN        is an arbitrary 3-dimensional double precision */
-/*                vector. */
+/*     VIN      is an arbitrary 3-dimensional double precision */
+/*              vector. */
 
 /* $ Detailed_Output */
 
-/*     VOUT       is a 3-dimensional double precision vector. VOUT is */
-/*                the product VOUT = (MATRIX**T)  x (VIN). */
+/*     VOUT     is a 3-dimensional double precision vector. VOUT is */
+/*              the product VOUT = (M**T)  x (VIN). */
+
 /* $ Parameters */
 
 /*     None. */
@@ -100,50 +100,91 @@
 
 /*        For each value of the subscript I from 1 to 3: */
 
-/*        VOUT(I) = Summation from K=1 to 3 of  ( MATRIX(K,I) * VIN(K) ) */
+/*                        3 */
+/*                     .----- */
+/*                      \ */
+/*           VOUT(I) =   )  M(K,I) * VIN(K) */
+/*                      / */
+/*                     '----- */
+/*                       K=1 */
 
 /*     Note that the reversal of the K and I subscripts in the left-hand */
-/*     matrix MATRIX is what makes VOUT the product of the TRANSPOSE of */
-/*     and not simply of MATRIX itself. */
+/*     matrix M is what makes VOUT the product of the TRANSPOSE of */
+/*     and not simply of M itself. */
 
 /* $ Examples */
 
-/*     Typically the matrix MATRIX will be a rotation matrix. Because */
-/*     the transpose of an orthogonal matrix is equivalent to its */
-/*     inverse, applying the rotation to the vector is accomplished by */
-/*     multiplying the vector by the transpose of the matrix. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*                -1 */
-/*     Let  MATRIX   * VIN = VOUT. If MATRIX is an orthogonal matrix, */
-/*     then  (MATRIX**T) * VIN = VOUT. */
-
-
-/*     If MATRIX  = |  1.0D0  1.0D0  0.0D0 |   and  VIN = |  5.0D0 | */
-/*                  |                      |              |        | */
-/*                  | -1.0D0  1.0D0  0.0D0 |              | 10.0D0 | */
-/*                  |                      |              |        | */
-/*                  |  0.0D0  0.0D0  1.0D0 |              | 15.0D0 | */
+/*     1) Given a 3x3 matrix and a 3-vector, multiply the transpose of */
+/*        the matrix by the vector. */
 
 
-/*     then the call */
-
-/*        CALL MTXV ( MATRIX, VIN, VOUT ) */
-
-/*     produces the vector */
+/*        Example code begins here. */
 
 
-/*        VOUT = | -5.0D0 | */
-/*               |        | */
-/*               | 15.0D0 | */
-/*               |        | */
-/*               | 15.0D0 | */
+/*              PROGRAM MTXV_EX1 */
+/*              IMPLICIT NONE */
 
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      M    ( 3, 3 ) */
+/*              DOUBLE PRECISION      VIN  ( 3    ) */
+/*              DOUBLE PRECISION      VOUT ( 3    ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define M and VIN. */
+/*        C */
+/*              DATA                  M    /  1.0D0, -1.0D0,  0.0D0, */
+/*             .                              1.0D0,  1.0D0,  0.0D0, */
+/*             .                              0.0D0,  0.0D0,  1.0D0  / */
+
+/*              DATA                  VIN  /  5.0D0, 10.0D0, 15.0D0  / */
+
+/*        C */
+/*        C     Multiply the transpose of M by VIN. */
+/*        C */
+/*              CALL MTXV ( M, VIN, VOUT ) */
+
+/*              WRITE(*,'(A)') 'Transpose of M times VIN:' */
+/*              WRITE(*,'(3F10.3)') VOUT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Transpose of M times VIN: */
+/*            -5.000    15.000    15.000 */
+
+
+/*        Note that typically the matrix M will be a rotation matrix. */
+/*        Because the transpose of an orthogonal matrix is equivalent to */
+/*        its inverse, applying the rotation to the vector is */
+/*        accomplished by multiplying the vector by the transpose of the */
+/*        matrix. */
+
+/*        Let */
+
+/*               -1 */
+/*              M   * VIN = VOUT */
+
+/*        If M is an orthogonal matrix, then (M**T) * VIN = VOUT. */
 
 /* $ Restrictions */
 
-/*     The user is responsible for checking the magnitudes of the */
-/*     elements of MATRIX and VIN so that a floating point overflow does */
-/*     not occur. */
+/*     1)  The user is responsible for checking the magnitudes of the */
+/*         elements of M and VIN so that a floating point overflow does */
+/*         not occur. */
 
 /* $ Literature_References */
 
@@ -151,9 +192,22 @@
 
 /* $ Author_and_Institution */
 
-/*     W.M. Owen       (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 25-AUG-2021 (JDR) */
+
+/*        Changed input argument name MATRIX to M for consistency with */
+/*        other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example based on the existing example. */
 
 /* -    SPICELIB Version 1.0.2, 23-APR-2010 (NJB) */
 
@@ -181,12 +235,12 @@
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	prodv[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("prodv", i__1,
-		 "mtxv_", (ftnlen)179)] = matrix[(i__2 = i__ * 3 - 3) < 9 && 
-		0 <= i__2 ? i__2 : s_rnge("matrix", i__2, "mtxv_", (ftnlen)
-		179)] * vin[0] + matrix[(i__3 = i__ * 3 - 2) < 9 && 0 <= i__3 
-		? i__3 : s_rnge("matrix", i__3, "mtxv_", (ftnlen)179)] * vin[
-		1] + matrix[(i__4 = i__ * 3 - 1) < 9 && 0 <= i__4 ? i__4 : 
-		s_rnge("matrix", i__4, "mtxv_", (ftnlen)179)] * vin[2];
+		 "mtxv_", (ftnlen)236)] = m[(i__2 = i__ * 3 - 3) < 9 && 0 <= 
+		i__2 ? i__2 : s_rnge("m", i__2, "mtxv_", (ftnlen)236)] * vin[
+		0] + m[(i__3 = i__ * 3 - 2) < 9 && 0 <= i__3 ? i__3 : s_rnge(
+		"m", i__3, "mtxv_", (ftnlen)236)] * vin[1] + m[(i__4 = i__ * 
+		3 - 1) < 9 && 0 <= i__4 ? i__4 : s_rnge("m", i__4, "mtxv_", (
+		ftnlen)236)] * vin[2];
     }
 
 /*  Move the result into VOUT */

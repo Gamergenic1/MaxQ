@@ -319,7 +319,7 @@
 
 /*     3)  If the input key is less than 1 or greater than the number */
 /*         of keys in the specified tree, the error SPICE(INVALIDINDEX) */
-/*         is signalled. */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -352,6 +352,10 @@
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 23-OCT-1995 (NJB) */
 

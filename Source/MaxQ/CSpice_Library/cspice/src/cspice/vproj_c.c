@@ -4,8 +4,8 @@
 
 -Abstract
 
-   vproj_c finds the projection of one vector onto another vector.
-   All vectors are 3-dimensional.
+   Compute the projection of one 3-dimensional vector onto another
+   3-dimensional vector.
 
 -Disclaimer
 
@@ -56,57 +56,28 @@
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-    a         I    The vector to be projected.
-    b         I    The vector onto which a is to be projected.
-    p         O    The projection of a onto b.
+   a          I   The vector to be projected.
+   b          I   The vector onto which `a' is to be projected.
+   p          O   The projection of `a' onto `b'.
 
 -Detailed_Input
 
-   a     is a double precision, 3-dimensional vector.  This
-          vector is to be projected onto the vector b.
+   a           is a double precision, 3-dimensional vector. This
+               vector is to be projected onto the vector `b'.
 
-   b     is a double precision, 3-dimensional vector.  This
-          vector is the vector which receives the projection.
+   b           is a double precision, 3-dimensional vector. This
+               vector is the vector which receives the projection.
 
 -Detailed_Output
 
-   p     is a double precision, 3-dimensional vector containing
-          the projection of a onto b.  p may overwrite either
-          a or b.  (p is necessarily parallel to b.)  If b is
-          the zero vector then p will be returned as the zero vector.
+   p           is a double precision, 3-dimensional vector containing
+               the projection of `a' onto `b'. (`p' is necessarily parallel
+               to `b'.) If `b' is the zero vector then `p' will be returned
+               as the zero vector.
+
+               `p' may overwrite either `a' or `b'.
 
 -Parameters
-
-   None.
-
--Particulars
-
-   The given any vectors a and b there is a unique decomposition
-   of a as a sum v + p such that v  the dot product of v and b
-   is zero, and the dot product of p with b is equal the product
-   of the lengths of p and b.  p is called the projection of
-   a onto b.  It can be expressed mathematically as
-
-          dot(a,b)
-          -------- * b
-          dot(b,b)
-
-   (This is not necessarily the prescription used to compute
-   the projection. It is intended only for descriptive purposes.)
-
--Examples
-
-   The following table gives sample inputs and results from calling
-   vproj_c.
-
-    a                   b                        p
-    --------------------------------------------------
-    (6, 6, 6)      ( 2, 0, 0)                (6, 0, 0)
-    (6, 6, 6)      (-3, 0, 0)                (6, 0, 0)
-    (6, 6, 0)      ( 0, 7, 0)                (0, 6, 0)
-    (6, 0, 0)      ( 0, 0, 9)                (0, 0, 0)
-
--Restrictions
 
    None.
 
@@ -118,17 +89,142 @@
 
    None.
 
--Author_and_Institution
+-Particulars
 
-   W.L. Taber      (JPL)
+   Given any vectors `a' and `b', there is a unique decomposition of
+   `a' as a sum v + p such that `v', the dot product of `v' and `b', is zero,
+   and the dot product of `p' with `b' is equal the product of the
+   lengths of `p' and `b'. `p' is called the projection of `a' onto `b'. It
+   can be expressed mathematically as
+
+      dot(a,b)
+      -------- * b
+      dot(b,b)
+
+   (This is not necessarily the prescription used to compute the
+   projection. It is intended only for descriptive purposes.)
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Define two sets of vectors and compute the projection of
+      each vector of the first set on the corresponding vector of
+      the second set.
+
+      Example code begins here.
+
+
+      /.
+         Program vproj_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NDIM         3
+         #define SETSIZ       4
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          pvec   [NDIM];
+
+         SpiceInt             i;
+
+         /.
+         Define the two vector sets.
+         ./
+         SpiceDouble          seta   [SETSIZ][NDIM] =
+
+                                     { {6.0,  6.0,  6.0},
+                                       {6.0,  6.0,  6.0},
+                                       {6.0,  6.0,  0.0},
+                                       {6.0,  0.0,  0.0} };
+
+         SpiceDouble          setb   [SETSIZ][NDIM] =
+
+                                     { { 2.0,  0.0,  0.0},
+                                       {-3.0,  0.0,  0.0},
+                                       { 0.0,  7.0,  0.0},
+                                       { 0.0,  0.0,  9.0} };
+
+         /.
+         Calculate the projection
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            vproj_c ( seta[i], setb[i], pvec );
+
+            printf( "Vector A  :  %4.1f %4.1f %4.1f\n",
+                    seta[i][0], seta[i][1], seta[i][2] );
+            printf( "Vector B  :  %4.1f %4.1f %4.1f\n",
+                    setb[i][0], setb[i][1], setb[i][2] );
+            printf( "Projection:  %4.1f %4.1f %4.1f\n",
+                    pvec[0], pvec[1], pvec[2]          );
+            printf( " \n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Vector A  :   6.0  6.0  6.0
+      Vector B  :   2.0  0.0  0.0
+      Projection:   6.0  0.0  0.0
+
+      Vector A  :   6.0  6.0  6.0
+      Vector B  :  -3.0  0.0  0.0
+      Projection:   6.0 -0.0 -0.0
+
+      Vector A  :   6.0  6.0  0.0
+      Vector B  :   0.0  7.0  0.0
+      Projection:   0.0  6.0  0.0
+
+      Vector A  :   6.0  0.0  0.0
+      Vector B  :   0.0  0.0  9.0
+      Projection:   0.0  0.0  0.0
+
+
+-Restrictions
+
+   1)  An implicit assumption exists that `a' and `b' are specified in
+       the same reference frame. If this is not the case, the
+       numerical result has no meaning.
 
 -Literature_References
 
-   REFERENCE: Any reasonable calculus text (for example Thomas)
+   [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry,"
+        7th Edition, Addison Wesley, 1988.
+
+-Author_and_Institution
+
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
+   -CSPICE Version 1.0.1, 01-NOV-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete example
+       to the -Examples section. Added entry to -Restrictions section.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT)
 
 -Index_Entries
 

@@ -9,7 +9,7 @@
 
 static integer c__128 = 128;
 
-/* $Procedure      DASIOD ( DAS, Fortran I/O, double precision ) */
+/* $Procedure DASIOD ( DAS, Fortran I/O, double precision ) */
 /* Subroutine */ int dasiod_(char *action, integer *unit, integer *recno, 
 	doublereal *record, ftnlen action_len)
 {
@@ -75,7 +75,7 @@ static integer c__128 = 128;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ACTION     I   Action to take (read or write). */
 /*     UNIT       I   Fortran unit connected to DAS file. */
@@ -84,38 +84,38 @@ static integer c__128 = 128;
 
 /* $ Detailed_Input */
 
-/*     ACTION         is a character string specifying whether to read */
-/*                    from or write to the specified DAS file.  Possible */
-/*                    values are: */
+/*     ACTION   is a character string specifying whether to read */
+/*              from or write to the specified DAS file. Possible */
+/*              values are: */
 
-/*                       'READ' */
-/*                       'WRITE' */
+/*                 'READ' */
+/*                 'WRITE' */
 
-/*                    Case and leading or trailing blanks are not */
-/*                    significant. */
+/*              Case and leading or trailing blanks are not */
+/*              significant. */
 
 
-/*     UNIT           is the Fortran unit number connected to the DAS */
-/*                    file that is to be read or written.  Given the */
-/*                    handle of the DAS file, the unit number can be */
-/*                    obtained using ZZDDHHLU. */
+/*     UNIT     is the Fortran unit number connected to the DAS */
+/*              file that is to be read or written. Given the */
+/*              handle of the DAS file, the unit number can be */
+/*              obtained using ZZDDHHLU. */
 
-/*     RECNO          is the Fortran record number of the record to be */
-/*                    read or written. */
+/*     RECNO    is the Fortran record number of the record to be */
+/*              read or written. */
 
-/*     RECORD         is a double precision array whose contents are to */
-/*                    be written to record RECNO, if ACTION is WRITE. */
+/*     RECORD   is a double precision array whose contents are to */
+/*              be written to record RECNO, if ACTION is WRITE. */
 
 /* $ Detailed_Output */
 
-/*     RECORD         is a double precision array whose contents are to */
-/*                    be set equal to those of record RECNO, if ACTION */
-/*                    is READ. */
+/*     RECORD   is a double precision array whose contents are to */
+/*              be set equal to those of record RECNO, if ACTION */
+/*              is READ. */
 
 /* $ Parameters */
 
-/*     NWD            is the number of elements in a DAS double precision */
-/*                    record. */
+/*     NWD      is the number of elements in a DAS double precision */
+/*              record. */
 
 /* $ Exceptions */
 
@@ -196,11 +196,10 @@ static integer c__128 = 128;
 /*            CALL ZZDDHHLU ( HANDLE,  'DAS', .FALSE., UNIT   ) */
 /*            CALL DASIOD   ( 'WRITE', UNIT,  10,      RECORD ) */
 
-
 /* $ Restrictions */
 
-/*     1) This routine may be used only on DAS files having */
-/*        the native binary file format of the host system. */
+/*     1)  This routine may be used only on DAS files having */
+/*         the native binary file format of the host system. */
 
 /* $ Literature_References */
 
@@ -208,14 +207,21 @@ static integer c__128 = 128;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.1, 05-FEB-2015 (NJB) */
 
-/*        Header was updated to refer to ZZDDHHLU. Restrictions section */
+/*        Header was updated to refer to ZZDDHHLU. $Restrictions section */
 /*        was updated. */
 
 /* -    SPICELIB Version 1.0.0, 30-JUN-1992 (NJB) (WLT) */
@@ -226,6 +232,7 @@ static integer c__128 = 128;
 /*     perform Fortran reads of double precision records */
 /*     perform Fortran writes of double precision records */
 /*     perform low-level I/O for DAS routines */
+
 /* -& */
 
 /*     SPICELIB functions */

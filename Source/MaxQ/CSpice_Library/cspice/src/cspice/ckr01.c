@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKR01 ( C-kernel, read pointing record, data type 1 ) */
+/* $Procedure CKR01 ( C-kernel, read pointing record, data type 1 ) */
 /* Subroutine */ int ckr01_(integer *handle, doublereal *descr, doublereal *
 	sclkdp, doublereal *tol, logical *needav, doublereal *record, logical 
 	*found)
@@ -84,72 +84,71 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
 /*     SCLKDP     I   Spacecraft clock time. */
 /*     TOL        I   Time tolerance. */
-/*     NEEDAV     I   True when angular velocity data is requested. */
+/*     NEEDAV     I   .TRUE. when angular velocity data is requested. */
 /*     RECORD     O   Pointing data record. */
-/*     FOUND      O   True when data is found. */
+/*     FOUND      O   .TRUE. when data is found. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the integer handle of the CK file containing the */
-/*                segment. */
+/*     HANDLE   is the integer handle of the CK file containing the */
+/*              segment. */
 
-/*     DESCR      is the descriptor of the segment. */
+/*     DESCR    is the descriptor of the segment. */
 
-/*     SCLKDP     is an encoded spacecraft clock time for which */
-/*                pointing is being requested.  The SPICELIB routines */
-/*                SCENCD and SCDECD are used to encode and decode SCLK */
-/*                times. */
+/*     SCLKDP   is an encoded spacecraft clock time for which */
+/*              pointing is being requested. The SPICELIB routines */
+/*              SCENCD and SCDECD are used to encode and decode SCLK */
+/*              times. */
 
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*                The record returned by CKR01 is the one whose time is */
-/*                closest to SCLKDP and within TOL units of SCLKDP. */
+/*              The record returned by CKR01 is the one whose time is */
+/*              closest to SCLKDP and within TOL units of SCLKDP. */
 
-/*     NEEDAV     is true when angular velocity data is requested. */
-
+/*     NEEDAV   is .TRUE. when angular velocity data is requested. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the pointing record.  Contents are as follows: */
+/*     RECORD   is the pointing record. Contents are as follows: */
 
-/*                   RECORD( 1 ) = CLKOUT */
+/*                 RECORD( 1 ) = CLKOUT */
 
-/*                   RECORD( 2 ) = q0 */
-/*                   RECORD( 3 ) = q1 */
-/*                   RECORD( 4 ) = q2 */
-/*                   RECORD( 5 ) = q3 */
+/*                 RECORD( 2 ) = q0 */
+/*                 RECORD( 3 ) = q1 */
+/*                 RECORD( 4 ) = q2 */
+/*                 RECORD( 5 ) = q3 */
 
-/*                   RECORD( 6 ) = Av1  ] */
-/*                   RECORD( 7 ) = Av2  |-- Returned optionally */
-/*                   RECORD( 8 ) = Av3  ] */
+/*                 RECORD( 6 ) = Av1  ] */
+/*                 RECORD( 7 ) = Av2  |-- Returned optionally */
+/*                 RECORD( 8 ) = Av3  ] */
 
-/*                CLKOUT is the encoded spacecraft clock time for the */
-/*                returned pointing values. CLKOUT will be the closest */
-/*                time in the segment to the input time as long as it is */
-/*                within the input tolerance (see FOUND below). If SCLKDP */
-/*                falls at the exact midpoint of two times, the record */
-/*                for the greater of the two will be returned. */
+/*              CLKOUT is the encoded spacecraft clock time for the */
+/*              returned pointing values. CLKOUT will be the closest */
+/*              time in the segment to the input time as long as it is */
+/*              within the input tolerance (see FOUND below). If SCLKDP */
+/*              falls at the exact midpoint of two times, the record */
+/*              for the greater of the two will be returned. */
 
-/*                The quantities q0 - q3 represent a quaternion. */
-/*                The quantities Av1, Av2, and Av3 represent the angular */
-/*                velocity vector, and are returned if the segment */
-/*                contains angular velocity data and NEEDAV is true. */
-/*                The components of the angular velocity vector are */
-/*                specified relative to the inertial reference frame */
-/*                for the segment. */
+/*              The quantities q0 - q3 represent a quaternion. */
+/*              The quantities Av1, Av2, and Av3 represent the angular */
+/*              velocity vector, and are returned if the segment */
+/*              contains angular velocity data and NEEDAV is .TRUE. */
+/*              The components of the angular velocity vector are */
+/*              specified relative to the inertial reference frame */
+/*              for the segment. */
 
-/*     FOUND      is true if a record was found to satisfy the pointing */
-/*                request. FOUND will be false when there is no pointing */
-/*                instance within the segment whose time falls within */
-/*                the requested time tolerance on either side of the */
-/*                input time. */
+/*     FOUND    is .TRUE. if a record was found to satisfy the pointing */
+/*              request. FOUND will be .FALSE. when there is no pointing */
+/*              instance within the segment whose time falls within */
+/*              the requested time tolerance on either side of the */
+/*              input time. */
 
 /* $ Parameters */
 
@@ -158,19 +157,19 @@ static integer c__6 = 6;
 /* $ Exceptions */
 
 /*     1)  If the specified handle does not belong to any file that is */
-/*         currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         currently known to be open, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /*     2)  If DESCR is not a valid, packed descriptor of a segment in */
 /*         the CK file specified by HANDLE, the results of this routine */
 /*         are unpredictable. */
 
 /*     3)  If the segment is not of data type 1, as specified in the */
-/*         third integer component of the segment descriptor, then */
-/*         the error SPICE(WRONGDATATYPE) is signalled. */
+/*         third integer component of the segment descriptor, */
+/*         the error SPICE(WRONGDATATYPE) is signaled. */
 
 /*     4)  If there is a need for angular velocity data and the segment */
-/*         contains no such data, the error SPICE(NOAVDATA) is signalled. */
+/*         contains no such data, the error SPICE(NOAVDATA) is signaled. */
 
 /* $ Files */
 
@@ -195,11 +194,15 @@ static integer c__6 = 6;
 /*     routines, which evaluate the record returned by CKRnn to give */
 /*     the pointing information and output time. */
 
-/*     The following code fragment searches through a file (represented */
-/*     by HANDLE) for all segments applicable to the Voyager 2 wide angle */
-/*     camera, for a particular spacecraft clock time, which have data */
-/*     type 1.  It then evaluates the pointing for that epoch and prints */
-/*     the result. */
+/*     The following code fragment searches backwards through a file */
+/*     (represented by HANDLE) for all segments applicable to the */
+/*     Voyager 2 wide angle camera, for a particular spacecraft clock */
+/*     time, which have data type 1. It then evaluates the pointing for */
+/*     that epoch and prints the result. */
+
+/*     The search performed here does not mimic the behavior of the CK */
+/*     reader APIs CKGP and CKGPAV, which consider data from multiple CK */
+/*     files, when available. See the CK Required reading for details. */
 
 /*     C */
 /*     C     - Get the spacecraft clock time. Must encode it for use */
@@ -228,10 +231,11 @@ static integer c__6 = 6;
 /*           CALL SCENCD ( SC, SCLKCH, SCLKDP ) */
 
 /*     C */
-/*     C     Search from the beginning through all segments. */
+/*     C     Search backwards from the end of the CK file through all */
+/*     C     of the segments. */
 /*     C */
-/*           CALL DAFBFS ( HANDLE ) */
-/*           CALL DAFFNA ( SFND   ) */
+/*           CALL DAFBBS ( HANDLE ) */
+/*           CALL DAFFPA ( SFND   ) */
 
 /*           DO WHILE ( SFND ) */
 
@@ -262,14 +266,14 @@ static integer c__6 = 6;
 
 /*              END IF */
 
-/*              CALL DAFFNA ( SFND ) */
+/*              CALL DAFFPA ( SFND ) */
 
 /*           END DO */
 
 /* $ Restrictions */
 
-/*     1) The file containing the segment should be opened for read, */
-/*        either by CKLPF or DAFOPR. */
+/*     1)  The file containing the segment should be opened for read, */
+/*         either by CKLPF or DAFOPR. */
 
 /* $ Literature_References */
 
@@ -277,13 +281,23 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
-/*     J.E. McLean    (JPL) */
-/*     M.J. Spencer   (JPL) */
-/*     R.E. Thurman   (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.2, 12-AUG-2021 (NJB) (JDR) */
+
+/*        Updated code example to use backwards search. Added */
+/*        note regarding difference between this search and those */
+/*        performed by the CK reader APIs CKGP and CKGPAV. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.1, 22-AUG-2006 (EDW) */
 
@@ -305,12 +319,12 @@ static integer c__6 = 6;
 /*        This routine now checks the segment descriptor to */
 /*        determine if it has been given a type 1 segment. */
 
-/*        The FOUND flag is set to FALSE at the beginning of */
+/*        The FOUND flag is set to .FALSE. at the beginning of */
 /*        the routine. */
 
-/*        The particulars section was changed to provide a more */
+/*        The $Particulars section was changed to provide a more */
 /*        general description of the function of this routine. The */
-/*        information that was originally in Particulars was moved */
+/*        information that was originally in $Particulars was moved */
 /*        to the body of the code. */
 
 /*        The example program was changed so that the tolerance */
@@ -327,7 +341,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     read ck type_1 pointing data record */
+/*     read CK type_1 pointing data record */
 
 /* -& */
 /* $ Revisions */
@@ -337,13 +351,13 @@ static integer c__6 = 6;
 /*        1) This routine now checks the segment descriptor, ICD(3), */
 /*           to determine if it has been given a type 1 segment. */
 
-/*        2) The FOUND flag is set to FALSE at the beginning of */
-/*           the routine.  This is done so that if a SPICE error */
-/*           is signalled, the FOUND flag will definitely be false. */
+/*        2) The FOUND flag is set to .FALSE. at the beginning of */
+/*           the routine. This is done so that if a SPICE error */
+/*           is signaled, the FOUND flag will definitely be false. */
 
-/*        3) The particulars section was changed to provide a more */
+/*        3) The $Particulars section was changed to provide a more */
 /*           general description of the function of this routine. The */
-/*           information that was originally in Particulars was moved */
+/*           information that was originally in $Particulars was moved */
 /*           to the body of the code. */
 
 /*        4) The example program was changed so that the tolerance */
@@ -572,7 +586,7 @@ static integer c__6 = 6;
 
     i__ = lstcld_(sclkdp, &n, buffer);
     if ((d__1 = *sclkdp - buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-	    s_rnge("buffer", i__1, "ckr01_", (ftnlen)625)], abs(d__1)) > *tol)
+	    s_rnge("buffer", i__1, "ckr01_", (ftnlen)638)], abs(d__1)) > *tol)
 	     {
 	chkout_("CKR01", (ftnlen)5);
 	return 0;
@@ -584,7 +598,7 @@ static integer c__6 = 6;
 
     *found = TRUE_;
     record[0] = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-	    "buffer", i__1, "ckr01_", (ftnlen)638)];
+	    "buffer", i__1, "ckr01_", (ftnlen)651)];
 
 /*     We need the Ith pointing record out of this group of DIRSIZ. */
 /*     This group of DIRSIZ is SKIP records into the beginning */

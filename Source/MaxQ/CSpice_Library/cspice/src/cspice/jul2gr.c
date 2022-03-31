@@ -18,7 +18,7 @@ static integer c__12 = 12;
 static integer c_b27 = 146097;
 static integer c__1461 = 1461;
 
-/* $Procedure      JUL2GR (Julian to Gregorian Calendar) */
+/* $Procedure JUL2GR (Julian to Gregorian Calendar) */
 /* Subroutine */ int jul2gr_0_(int n__, integer *year, integer *month, 
 	integer *day, integer *doy)
 {
@@ -78,71 +78,71 @@ static integer c__1461 = 1461;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      TIME */
+/*     TIME */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     YEAR      I/O  Year  of Julian Calendar/Gregorian Calendar */
-/*     MONTH     I/O  Month of Julian Calendar/Gregorian Calendar */
-/*     DAY       I/O  Day of Month in Julian Calendar/Gregorian Calendar */
+/*     YEAR      I-O  Year  of Julian Calendar/Gregorian Calendar */
+/*     MONTH     I-O  Month of Julian Calendar/Gregorian Calendar */
+/*     DAY       I-O  Day of Month in Julian Calendar/Gregorian Calendar */
 /*     DOY        O   Day of Year in Gregorian Calendar */
 
 /* $ Detailed_Input */
 
-/*     YEAR      is an integer representing the year of an epoch, E, in */
-/*               the Julian proleptic calendar. Note that the year 0 */
-/*               and negative values are required to represent */
-/*               years in the pre-Christian era (B.C.)  A year, Y B.C., */
-/*               should be represented as -(Y-1).  For example the year */
-/*               435 B.C. should be input as -434. */
+/*     YEAR     is an integer representing the year of an epoch, E, in */
+/*              the Julian proleptic calendar. Note that the year 0 */
+/*              and negative values are required to represent */
+/*              years in the pre-Christian era (B.C.) A year, Y B.C., */
+/*              should be represented as -(Y-1).  For example the year */
+/*              435 B.C. should be input as -434. */
 
-/*     MONTH     is an integer representing the month of some epoch, E, */
-/*               in the Julian proleptic calendar. Months */
-/*               outside the usual range from 1 to 12 are converted */
-/*               to the standard range using modular arithmetic and */
-/*               the input year is adjusted appropriately. */
+/*     MONTH    is an integer representing the month of some epoch, E, */
+/*              in the Julian proleptic calendar. Months */
+/*              outside the usual range from 1 to 12 are converted */
+/*              to the standard range using modular arithmetic and */
+/*              the input year is adjusted appropriately. */
 
 
-/*     DAY       is the day of the month of some epoch, E, in the Julian */
-/*               proleptic calendar. */
+/*     DAY      is the day of the month of some epoch, E, in the Julian */
+/*              proleptic calendar. */
 
-/*               Note to input an epoch as the day of a year, set MONTH */
-/*               to 1 and DAY to the day of the year. */
+/*              Note to input an epoch as the day of a year, set MONTH */
+/*              to 1 and DAY to the day of the year. */
 
 /* $ Detailed_Output */
 
-/*     YEAR      is an integer representing the year of the epoch, E, */
-/*               above in the Gregorian calendar. Note that the year */
-/*               0 (zero) and negative values are used to represent */
-/*               years in the pre-Christian era (B.C.)  A year, Y B.C., */
-/*               is be reprented as -(Y-1).  For example the year */
-/*               435 B.C. will be returned as -434. */
+/*     YEAR     is an integer representing the year of the epoch, E, */
+/*              above in the Gregorian calendar. Note that the year */
+/*              0 (zero) and negative values are used to represent */
+/*              years in the pre-Christian era (B.C.) A year, Y B.C., */
+/*              is be represented as -(Y-1).  For example the year */
+/*              435 B.C. will be returned as -434. */
 
-/*     MONTH     is an integer representing the month of the epoch, E, */
-/*               above in the Gregorian Calendar calendar. */
+/*     MONTH    is an integer representing the month of the epoch, E, */
+/*              above in the Gregorian Calendar calendar. */
 
-/*     DAY       is the day of the month of the epoch, E, above in the */
-/*               Gregorian Calendar */
+/*     DAY      is the day of the month of the epoch, E, above in the */
+/*              Gregorian Calendar */
 
-/*     DOY       is the day of the year of the epoch, E, above in the */
-/*               Gregorian Calendar. */
+/*     DOY      is the day of the year of the epoch, E, above in the */
+/*              Gregorian Calendar. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
+/* $ Exceptions */
 
 /*     None. */
 
-/* $ Exceptions */
+/* $ Files */
 
 /*     None. */
 
@@ -152,8 +152,8 @@ static integer c__1461 = 1461;
 /*     and presentation of ancient epochs. */
 
 /*     The SPICE software deals primarily with epochs represented on */
-/*     in the Gregororian Calendar.  However, the Gregorian calendar */
-/*     was not adopted until October 15, 1582.  As a result, epochs */
+/*     in the Gregorian Calendar. However, the Gregorian calendar */
+/*     was not adopted until October 15, 1582. As a result, epochs */
 /*     prior to that time are usually represented in the Julian */
 /*     proleptic calendar. */
 
@@ -177,8 +177,8 @@ static integer c__1461 = 1461;
 
 /*     Suppose you need to find the epoch (in seconds past the */
 /*     J2000) of some ancient epoch that occurred at */
-/*     3:00 on March 4 of the year 121 B.C.  And that this epoch */
-/*     is based on the Julian proleptic calendar.  We first need */
+/*     3:00 on March 4 of the year 121 B.C. And that this epoch */
+/*     is based on the Julian proleptic calendar. We first need */
 /*     to convert the Julian Calendar date to the Gregorian Calendar. */
 
 /*     Here's the declarations we'll need */
@@ -224,15 +224,21 @@ static integer c__1461 = 1461;
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 02-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 26-AUG-2005 (NJB) */
 
@@ -250,7 +256,6 @@ static integer c__1461 = 1461;
 
 /* -    SPICELIB Version 1.0.0, 13-MAR-1996 (WLT) */
 
-
 /* -& */
 /* $ Index_Entries */
 
@@ -259,7 +264,7 @@ static integer c__1461 = 1461;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.1.0, 26-AUG-2005 (NJB) */
+/* -    SPICELIB Version 1.1.0, 23-FEB-1998 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in RMAINI calls. */
@@ -312,13 +317,13 @@ static integer c__1461 = 1461;
 	}
 
 
-/*     Definitions of statment functions. */
+/*     Definitions of statement functions. */
 
-/*     The number of days ellapsed since Gregorian Jan 1, of year 1 A.D. */
+/*     The number of days elapsed since Gregorian Jan 1, of year 1 A.D. */
 /*     to Jan 1 of YR is given by: */
 
 
-/*     The number of days ellapsed since Julian Jan 1, of year 1 A.D. */
+/*     The number of days elapsed since Julian Jan 1, of year 1 A.D. */
 /*     to Jan 1 of YR is given by: */
 
 
@@ -370,15 +375,15 @@ static integer c__1461 = 1461;
 	rdayg = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 - (c__1582 - 1) / 100 
 		+ (c__1582 - 1) / 400 + (dpjan0[(i__1 = c__10 - 1) < 12 && 0 
 		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
-		535)] + extra[(i__2 = c__10 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "jul2gr_", (ftnlen)535)] * (max(i__3,
+		544)] + extra[(i__2 = c__10 - 1) < 12 && 0 <= i__2 ? i__2 : 
+		s_rnge("extra", i__2, "jul2gr_", (ftnlen)544)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__15) - 1;
 /* Computing MAX */
 	i__3 = 0, i__4 = abs(c__1582) / c__4 * c__4 + 1 - abs(c__1582);
 	rdayj = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 + (dpjan0[(i__1 = 
 		c__10 - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, 
-		"jul2gr_", (ftnlen)536)] + extra[(i__2 = c__10 - 1) < 12 && 0 
-		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)536)
+		"jul2gr_", (ftnlen)545)] + extra[(i__2 = c__10 - 1) < 12 && 0 
+		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)545)
 		] * max(i__3,i__4) + c__5) - 1;
 	offstj = rdayj - rdayg;
 	offstg = rdayg - rdayj;
@@ -410,9 +415,9 @@ static integer c__1461 = 1461;
 /* Computing MAX */
     i__3 = 0, i__4 = abs(yr) / c__4 * c__4 + 1 - abs(yr);
     dayj = (yr - 1) * 365 + (yr - 1) / 4 + (dpjan0[(i__1 = mon - 1) < 12 && 0 
-	    <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)574)] 
+	    <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)583)] 
 	    + extra[(i__2 = mon - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge("extra"
-	    , i__2, "jul2gr_", (ftnlen)574)] * max(i__3,i__4) + dy) - 1 + 
+	    , i__2, "jul2gr_", (ftnlen)583)] * max(i__3,i__4) + dy) - 1 + 
 	    offset;
 
 /*     This day is DAYJ - RDAYJ days after 1582 Oct 5 on the */
@@ -456,18 +461,18 @@ static integer c__1461 = 1461;
     if (max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6) == 0) {
 	mon = lstlti_(&dofyr, &c__12, dpjan0);
 	dy = dofyr - dpjan0[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)616)];
+		s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)625)];
     } else {
 	mon = lstlti_(&dofyr, &c__12, dpbegl);
 	dy = dofyr - dpbegl[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpbegl", i__1, "jul2gr_", (ftnlen)619)];
+		s_rnge("dpbegl", i__1, "jul2gr_", (ftnlen)628)];
     }
     *year = yr;
     *month = mon;
     *day = dy;
     *doy = dofyr;
     return 0;
-/* $Procedure      GR2JUL (Gregorian to Julian Calendar) */
+/* $Procedure GR2JUL (Gregorian to Julian Calendar) */
 
 L_gr2jul:
 /* $ Abstract */
@@ -502,11 +507,11 @@ L_gr2jul:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      TIME */
+/*     TIME */
 
 /* $ Declarations */
 
@@ -519,59 +524,59 @@ L_gr2jul:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     YEAR      I/O  Year  of Gregorian Calendar/Julian Calendar */
-/*     MONTH     I/O  Month of Gregorian Calendar/Julian Calendar */
-/*     DAY       I/O  Day of Month in Gregorian Calendar/Julian Calendar */
+/*     YEAR      I-O  Year  of Gregorian Calendar/Julian Calendar */
+/*     MONTH     I-O  Month of Gregorian Calendar/Julian Calendar */
+/*     DAY       I-O  Day of Month in Gregorian Calendar/Julian Calendar */
 /*     DOY        O   Day of Year in Julian Calendar */
 
 /* $ Detailed_Input */
 
-/*     YEAR      is an integer representing the year of an epoch, E, in */
-/*               the Gregorian calendar. Note that the year 0 (zero) */
-/*               and negative values are required to represent */
-/*               years in the pre-Christian era (B.C.)  A year, Y B.C. */
-/*               should be reprented as -(Y-1).  For example the year */
-/*               435 B.C. should be input as -434. */
+/*     YEAR     is an integer representing the year of an epoch, E, in */
+/*              the Gregorian calendar. Note that the year 0 (zero) */
+/*              and negative values are required to represent */
+/*              years in the pre-Christian era (B.C.) A year, Y B.C. */
+/*              should be represented as -(Y-1).  For example the year */
+/*              435 B.C. should be input as -434. */
 
-/*     MONTH     is an integer representing the month of some epoch, E, */
-/*               in the Gregorian calendar. Months */
-/*               outside the usual range from 1 to 12 are converted */
-/*               to the standard range using modular arithmetic and */
-/*               the input year is adjusted appropriately. */
+/*     MONTH    is an integer representing the month of some epoch, E, */
+/*              in the Gregorian calendar. Months */
+/*              outside the usual range from 1 to 12 are converted */
+/*              to the standard range using modular arithmetic and */
+/*              the input year is adjusted appropriately. */
 
-/*     DAY       is the day of the month of some epoch, E, in the */
-/*               Gregorian calendar. */
+/*     DAY      is the day of the month of some epoch, E, in the */
+/*              Gregorian calendar. */
 
-/*               Note to input an epoch as the day of a year, set MONTH */
-/*               to 1 and DAY to the day of the year. */
+/*              Note to input an epoch as the day of a year, set MONTH */
+/*              to 1 and DAY to the day of the year. */
 
 /* $ Detailed_Output */
 
-/*     YEAR      is an integer representing the year of the epoch, E, */
-/*               above in the Julian calendar. Note that the year 0 */
-/*               (zero) and negative values are used to represent */
-/*               years in the pre-Christian era (B.C.)  A year, Y B.C., */
-/*               is be reprented as -(Y-1).  For example the year */
-/*               435 B.C. will be returned as -434. */
+/*     YEAR     is an integer representing the year of the epoch, E, */
+/*              above in the Julian calendar. Note that the year 0 */
+/*              (zero) and negative values are used to represent */
+/*              years in the pre-Christian era (B.C.) A year, Y B.C., */
+/*              is be represented as -(Y-1).  For example the year */
+/*              435 B.C. will be returned as -434. */
 
-/*     MONTH     is an integer representing the month of the epoch, E, */
-/*               above in the Julian Calendar calendar. */
+/*     MONTH    is an integer representing the month of the epoch, E, */
+/*              above in the Julian Calendar calendar. */
 
-/*     DAY       is the day of the month of the epoch, E, above in the */
-/*               Julian Calendar */
+/*     DAY      is the day of the month of the epoch, E, above in the */
+/*              Julian Calendar */
 
-/*     DOY       is the day of the year of the epoch, E, above in the */
-/*               Julian Calendar. */
+/*     DOY      is the day of the year of the epoch, E, above in the */
+/*              Julian Calendar. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
+/* $ Exceptions */
 
 /*     None. */
 
-/* $ Exceptions */
+/* $ Files */
 
 /*     None. */
 
@@ -581,8 +586,8 @@ L_gr2jul:
 /*     and presentation of Ancient epochs. */
 
 /*     The SPICE software deals primarily with epochs represented on */
-/*     in the Gregororian Calendar.  However, the Gregorian calendar */
-/*     was not adopted until October 15, 1582.  As a result, epochs */
+/*     in the Gregorian Calendar. However, the Gregorian calendar */
+/*     was not adopted until October 15, 1582. As a result, epochs */
 /*     prior to that time are usually represented in the Julian */
 /*     proleptic calendar. */
 
@@ -600,7 +605,7 @@ L_gr2jul:
 /* $ Examples */
 
 /*     Suppose you need to print an epoch (given in seconds past the */
-/*     J2000 epoch) of some ancient epoch that occured during */
+/*     J2000 epoch) of some ancient epoch that occurred during */
 /*     pre-Christian era, and that you want to represent this epoch */
 /*     using the Julian proleptic calendar. */
 
@@ -622,15 +627,15 @@ L_gr2jul:
 /*        CALL TTRANS ( 'TDB', 'YMD', TVEC ) */
 
 /*     The output time vector will be relative to the Gregorian */
-/*     Calendar.  Collect the year, month and day from the time */
-/*     vectory. */
+/*     Calendar. Collect the year, month and day from the time */
+/*     vector. */
 
 /*        YEAR    = INT ( TVEC(1) ) */
 /*        MONTH   = INT ( TVEC(2) ) */
 /*        DAY     = INT ( TVEC(3) ) */
 
 /*     The hours, minutes and seconds appear in components 4 through 6 */
-/*     of the time vector.  We can ignore them in the conversion */
+/*     of the time vector. We can ignore them in the conversion */
 /*     of the calendar from Gregorian to Julian. */
 
 /*        CALL GR2JUL ( YEAR, MONTH, DAY, DOY ) */
@@ -642,15 +647,21 @@ L_gr2jul:
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 02-OCT-2021 (JDR) */
+
+/*        Reordered header sections. Edited the header to comply with */
+/*        NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 23-FEB-1998 (WLT) */
 
@@ -658,7 +669,6 @@ L_gr2jul:
 /*        error months that are outside the range from 1 to 12. */
 
 /* -    SPICELIB Version 1.0.0, 13-MAR-1996 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -690,15 +700,15 @@ L_gr2jul:
 	rdayg = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 - (c__1582 - 1) / 100 
 		+ (c__1582 - 1) / 400 + (dpjan0[(i__1 = c__10 - 1) < 12 && 0 
 		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)
-		850)] + extra[(i__2 = c__10 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "jul2gr_", (ftnlen)850)] * (max(i__3,
+		865)] + extra[(i__2 = c__10 - 1) < 12 && 0 <= i__2 ? i__2 : 
+		s_rnge("extra", i__2, "jul2gr_", (ftnlen)865)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__15) - 1;
 /* Computing MAX */
 	i__3 = 0, i__4 = abs(c__1582) / c__4 * c__4 + 1 - abs(c__1582);
 	rdayj = (c__1582 - 1) * 365 + (c__1582 - 1) / 4 + (dpjan0[(i__1 = 
 		c__10 - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, 
-		"jul2gr_", (ftnlen)851)] + extra[(i__2 = c__10 - 1) < 12 && 0 
-		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)851)
+		"jul2gr_", (ftnlen)866)] + extra[(i__2 = c__10 - 1) < 12 && 0 
+		<= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)866)
 		] * max(i__3,i__4) + c__5) - 1;
 	offstj = rdayj - rdayg;
 	offstg = rdayg - rdayj;
@@ -735,8 +745,8 @@ L_gr2jul:
     i__7 = 0, i__8 = abs(yr) / c__400 * c__400 + 1 - abs(yr);
     dayg = (yr - 1) * 365 + (yr - 1) / 4 - (yr - 1) / 100 + (yr - 1) / 400 + (
 	    dpjan0[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("dpjan0"
-	    , i__1, "jul2gr_", (ftnlen)888)] + extra[(i__2 = mon - 1) < 12 && 
-	    0 <= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)888)] 
+	    , i__1, "jul2gr_", (ftnlen)903)] + extra[(i__2 = mon - 1) < 12 && 
+	    0 <= i__2 ? i__2 : s_rnge("extra", i__2, "jul2gr_", (ftnlen)903)] 
 	    * (max(i__3,i__4) - max(i__5,i__6) + max(i__7,i__8)) + dy) - 1 + 
 	    offset;
 
@@ -769,11 +779,11 @@ L_gr2jul:
     if (max(i__1,i__2) == 0) {
 	mon = lstlti_(&dofyr, &c__12, dpjan0);
 	dy = dofyr - dpjan0[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)922)];
+		s_rnge("dpjan0", i__1, "jul2gr_", (ftnlen)937)];
     } else {
 	mon = lstlti_(&dofyr, &c__12, dpbegl);
 	dy = dofyr - dpbegl[(i__1 = mon - 1) < 12 && 0 <= i__1 ? i__1 : 
-		s_rnge("dpbegl", i__1, "jul2gr_", (ftnlen)925)];
+		s_rnge("dpbegl", i__1, "jul2gr_", (ftnlen)940)];
     }
     *year = yr;
     *month = mon;

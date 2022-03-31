@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure   LSTLTD ( Last double precision element less than ) */
+/* $Procedure LSTLTD ( Last double precision element less than ) */
 integer lstltd_(doublereal *x, integer *n, doublereal *array)
 {
     /* System generated locals */
@@ -16,8 +16,8 @@ integer lstltd_(doublereal *x, integer *n, doublereal *array)
 
 /* $ Abstract */
 
-/*      Given a number X and an array of non-decreasing numbers, */
-/*      find the index of the largest array element less than X. */
+/*     Find the index of the largest array element less than */
+/*     a given number X in an array of non-decreasing numbers. */
 
 /* $ Disclaimer */
 
@@ -50,134 +50,152 @@ integer lstltd_(doublereal *x, integer *n, doublereal *array)
 
 /* $ Keywords */
 
-/*      SEARCH,  ARRAY */
+/*     ARRAY */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      X          I   Value to search against. */
-/*      ARRAY      I   Array of possible lower bounds. */
-/*      N          I   Number elements in ARRAY. */
-/*      LSTLTD     O   the index of the last element of ARRAY < X. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     X          I   Upper bound value to search against. */
+/*     N          I   Number of elements in ARRAY. */
+/*     ARRAY      I   Array of possible lower bounds. */
+
+/*     The function returns the index of the last element of ARRAY that */
+/*     is less than X. */
 
 /* $ Detailed_Input */
 
-/*      X       Double precision number for which one desires to find */
-/*              the last ARRAY element less than X. */
+/*     X        is a double precision value acting as an upper bound: the */
+/*              element of ARRAY that is the greatest element less than X */
+/*              is to be found. */
 
-/*      N       Total number of elements in ARRAY. */
+/*     N        is the total number of elements in ARRAY. */
 
-/*      ARRAY   Array of double precision numbers that forms a */
-/*              non-decreasing sequence.  We will find the last element */
-/*              of the sequence that is less than X. */
+/*     ARRAY    is an array of double precision numbers that forms a */
+/*              non-decreasing sequence. The elements of array need not */
+/*              be distinct. */
 
 /* $ Detailed_Output */
 
-/*      LSTLTD  Index of the last element of the non-decreasing sequence: */
-/*              {ARRAY(I) : 0 < I < N + 1} that is less than X. */
-/*              (Note that LSTLTD = I for some I in the range 1 to */
-/*              N  unless X is less than or equal to all of these */
-/*              elements, in which case LSTLTD = 0.) */
+/*     The function returns the index of the highest-indexed element in */
+/*     the input array that is less than X. The routine assumes the array */
+/*     elements are sorted in non-decreasing order. */
 
-/*              In the case that N is input with value less than or equal */
-/*              to zero, LSTLTD is returned as zero. */
+/*     Indices range from 1 to N. */
+
+/*     If all elements of ARRAY are greater than or equal to X, the */
+/*     routine returns the value 0. If N is less than or equal to zero, */
+/*     the routine returns the value 0. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-
-/*      An array of double precision numbers is given.  The array */
-/*      ARRAY(I) (0 < I < N+1 ) forms a non-decreasing sequence of */
-/*      numbers.  Given a real number X, there will be a last one of */
-/*      these numbers that is less than X.  This routine */
-/*      finds the index LSTLTD such that ARRAY(LSTLTD) is that number. */
-
-/*      If X is not greater than ARRAY(1), INDEX will be set to zero. */
-
-/*      Note:  If you need to find the first element of the array that */
-/*             is greater than or equal to X, simply add 1 to the */
-/*             result returned by this function and check to see if the */
-/*             result is within the array bounds given by N. */
-
-/* $ Examples */
-
-/*      If ARRAY(I) = -1 + 4*I/3 (real arithmetic implied here) */
-
-/*      N        = 10 */
-/*      X        = 7.12 */
-
-/*      then */
-
-/*      LSTLTD will be I where */
-/*              (4*I/3) - 1       <      7.12 */
-/*      but */
-/*              (4*(I+1)/3) - 1   > or = 7.12 . */
-
-/*      In this case our subsequence is: */
-/*             1/3, 5/3, 9/3, 13/3, 17/3, 21/3, 25/3, .... 37/3 */
-
-/*      index:  1    2    3    4     5     6     7    ....  10 */
-
-/*      Thus LSTLTD will be returned as 6 */
-
-/*      The following table shows the values of LSTLTD that would be */
-/*      returned for various values of X */
-
-/*             X       LSTLTD */
-/*           -----     ------- */
-/*            0.12        0 */
-/*            1.34        1 */
-/*            5.13        4 */
-/*            8.00        6 */
-/*           15.10       10 */
-
-/* $ Restrictions */
-
-/*      If the sequence is not non-decreasing, the program will run */
-/*      to completion but the index found will not mean anything. */
-
 /* $ Exceptions */
 
-/*     None. */
+/*     Error free. */
+
+/*     1)  If N is less than or equal to zero, the function returns 0. */
+/*         This case is not treated as an error. */
+
+/*     2)  If the input array is not sorted in non-decreasing order, the */
+/*         output of this routine is undefined. No error is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      N.J. Bachman    (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     This routine uses a binary search algorithm and so requires */
+/*     at most on the order of */
+
+/*        log (N) */
+/*           2 */
+
+/*     steps to compute the value of LSTLTD. */
+
+/*     Note: If you need to find the first element of the array that is */
+/*     greater than or equal to X, simply add 1 to the result returned by */
+/*     this function and check to see if the result is within the array */
+/*     bounds given by N. */
+
+/* $ Examples */
+
+/*     If ARRAY(I) = -1 + 4*I/3 (real arithmetic implied here) */
+
+/*        N        = 10 */
+/*        X        = 7.12 */
+
+/*     then */
+
+/*        LSTLTD will be I where */
+
+/*             (4*I/3) - 1       <      7.12 */
+
+/*     but */
+
+/*             (4*(I+1)/3) - 1   > or = 7.12 . */
+
+/*     In this case our subsequence is: */
+
+/*            1/3, 5/3, 9/3, 13/3, 17/3, 21/3, 25/3, .... 37/3 */
+
+/*     index:  1    2    3    4     5     6     7    ....  10 */
+
+/*     Thus LSTLTD will be returned as 6 */
+
+/*     The following table shows the values of LSTLTD that would be */
+/*     returned for various values of X */
+
+/*            X       LSTLTD */
+/*          -----     ------- */
+/*           0.12        0 */
+/*           1.34        1 */
+/*           5.13        4 */
+/*           8.00        6 */
+/*          15.10       10 */
+
+/* $ Restrictions */
+
+/*     1)  If the sequence of double precision numbers in the input array */
+/*         ARRAY is not non-decreasing, the program will run to */
+/*         completion but the index found will not mean anything. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Improved $Detailed_Input, */
+/*        $Detailed_Output, $Particulars, $Exceptions and $Restrictions */
+/*        sections. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     last d.p. element less_than */
-
-/* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.1.0, 16-FEB-1989 (NJB) */
-
-/*        Declaration of unused variable I removed. */
 
 /* -& */
 

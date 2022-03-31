@@ -555,13 +555,13 @@ static integer c__5 = 5;
 /*         called by this routine. */
 
 /*     2)  If the data type of the input column is not double precision, */
-/*         the error SPICE(INVALIDTYPE) is signalled. */
+/*         the error SPICE(INVALIDTYPE) is signaled. */
 
 /*     3)  If the input column is not indexed, the error */
-/*         SPICE(NOTINDEXED) is signalled. */
+/*         SPICE(NOTINDEXED) is signaled. */
 
 /*     4)  If the index type of the input column is not recognized, */
-/*         the error SPICE(INVALIDTYPE) is signalled. */
+/*         the error SPICE(INVALIDTYPE) is signaled. */
 
 /*     5)  If an I/O error occurs while reading or writing the indicated */
 /*         file, the error will be diagnosed by routines called by this */
@@ -601,6 +601,10 @@ static integer c__5 = 5;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 09-NOV-1995 (NJB) */
 

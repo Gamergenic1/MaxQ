@@ -246,7 +246,7 @@ static integer c__0 = 0;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TARG       I   Target body. */
 /*     ET         I   Target epoch. */
@@ -257,28 +257,28 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     TARG        is the standard NAIF ID code for a target body. */
+/*     TARG     is the standard NAIF ID code for a target body. */
 
-/*     ET          is the epoch (ephemeris time) at which the position */
-/*                 of the target body is to be computed. */
+/*     ET       is the epoch (ephemeris time) at which the position */
+/*              of the target body is to be computed. */
 
-/*     REF         is the name of the reference frame to */
-/*                 which the vectors returned by the routine should */
-/*                 be rotated. This may be any frame supported by */
-/*                 the SPICELIB subroutine REFCHG. */
+/*     REF      is the name of the reference frame to */
+/*              which the vectors returned by the routine should */
+/*              be rotated. This may be any frame supported by */
+/*              the SPICELIB subroutine REFCHG. */
 
-/*     OBS         is the standard NAIF ID code for an observing body. */
+/*     OBS      is the standard NAIF ID code for an observing body. */
 
 /* $ Detailed_Output */
 
-/*     POS         contains the position of the target */
-/*                 body, relative to the observing body. This vector is */
-/*                 rotated into the specified reference frame. Units */
-/*                 are always km. */
+/*     POS      is a 3-dimensional vector that contains the position of */
+/*              the target body, relative to the observing body. This */
+/*              vector is rotated into the specified reference frame. */
+/*              Units are always km. */
 
-/*     LT          is the one-way light time from the observing body */
-/*                 to the geometric position of the target body at the */
-/*                 specified epoch. */
+/*     LT       is the one-way light time from the observing body */
+/*              to the geometric position of the target body at the */
+/*              specified epoch. */
 
 /* $ Parameters */
 
@@ -286,19 +286,19 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1) If insufficient ephemeris data has been loaded to compute */
-/*        the necessary positions, the error SPICE(SPKINSUFFDATA) is */
-/*        signalled. */
+/*     1)  If insufficient ephemeris data has been loaded to compute */
+/*         the necessary positions, the error SPICE(SPKINSUFFDATA) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*     See: $Restrictions. */
+/*     See $Restrictions. */
 
 /* $ Particulars */
 
 /*     SPKGPS computes the geometric position, T(t), of the target */
 /*     body and the geometric position, O(t), of the observing body */
-/*     relative to the first common center of motion.  Subtracting */
+/*     relative to the first common center of motion. Subtracting */
 /*     O(t) from T(t) gives the geometric position of the target */
 /*     body relative to the observer. */
 
@@ -333,7 +333,7 @@ static integer c__0 = 0;
 
 /*     Ephemeris data from more than one segment may be required */
 /*     to determine the positions of the target body and observer */
-/*     relative to a common center.  SPKGPS reads as many segments */
+/*     relative to a common center. SPKGPS reads as many segments */
 /*     as necessary, from as many files as necessary, using files */
 /*     that have been loaded by previous calls to SPKLEF (load */
 /*     ephemeris file). */
@@ -383,7 +383,7 @@ static integer c__0 = 0;
 
 /*     C */
 /*     C      Divide the interval of coverage [BEGIN,END] into */
-/*     C      N steps.  At each step, compute the position, and */
+/*     C      N steps. At each step, compute the position, and */
 /*     C      print out the epoch in UTC time and position norm. */
 /*     C */
 /*            DELTA = ( END - BEGIN ) / N */
@@ -402,8 +402,8 @@ static integer c__0 = 0;
 
 /* $ Restrictions */
 
-/*     1) The ephemeris files to be used by SPKGPS must be loaded */
-/*        by SPKLEF before SPKGPS is called. */
+/*     1)  The ephemeris files to be used by SPKGPS must be loaded */
+/*         by SPKLEF before SPKGPS is called. */
 
 /* $ Literature_References */
 
@@ -411,11 +411,22 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman  (JPL) */
-/*     B.V. Semenov  (JPL) */
-/*     W.L. Taber    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 09-OCT-2021 (JDR) (NJB) */
+
+/*        Bug fix: added calls to FAILED after calls to SPKPVN. */
+/*        Previously only one call to SPKPVN was followed by a FAILED */
+/*        call. Moved some FAILED checks so they will be hit whether */
+/*        or not SPKSFS finds a segment. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 2.0.0, 08-JAN-2014 (BVS) */
 
@@ -427,11 +438,11 @@ static integer c__0 = 0;
 /*        ZZNAMFRM, and then calling IRFNUM. The side effect of this */
 /*        change is that now the frame with the fixed name 'DEFAULT' */
 /*        that can be associated with any code via CHGIRF's entry point */
-/*        IRFDEF will be fully masked by a frame with indentical name */
+/*        IRFDEF will be fully masked by a frame with identical name */
 /*        defined via a text kernel. Previously the CHGIRF's 'DEFAULT' */
 /*        frame masked the text kernel frame with the same name. */
 
-/*        Replaced SPKLEF with FURNSH and fixed errors in Examples. */
+/*        Replaced SPKLEF with FURNSH and fixed errors in $Examples. */
 
 /* -    SPICELIB Version 1.2.0, 05-NOV-2005 (NJB) */
 
@@ -442,20 +453,12 @@ static integer c__0 = 0;
 
 /*        Tests of routine FAILED() were added. */
 
-/* -    SPICELIB Version 1.0.0, 9-JUL-1998 (WLT) */
+/* -    SPICELIB Version 1.0.0, 09-JUL-1998 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     geometric position of one body relative to another */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.2.0, 05-NOV-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VADD calls. */
 
 /* -& */
 
@@ -683,20 +686,20 @@ static integer c__0 = 0;
 
     i__ = 1;
     ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", i__1, 
-	    "spkgps_", (ftnlen)603)] = *targ;
+	    "spkgps_", (ftnlen)607)] = *targ;
     found = TRUE_;
     cleard_(&c__6, &starg[(i__1 = i__ * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-	    s_rnge("starg", i__1, "spkgps_", (ftnlen)606)]);
+	    s_rnge("starg", i__1, "spkgps_", (ftnlen)610)]);
     while(found && i__ < 20 && ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ctarg", i__1, "spkgps_", (ftnlen)608)] != *obs && 
+	    i__1 : s_rnge("ctarg", i__1, "spkgps_", (ftnlen)612)] != *obs && 
 	    ctarg[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ctarg", 
-	    i__2, "spkgps_", (ftnlen)608)] != 0) {
+	    i__2, "spkgps_", (ftnlen)612)] != 0) {
 
 /*        Find a file and segment that has position */
 /*        data for CTARG(I). */
 
 	spksfs_(&ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ctarg", i__1, "spkgps_", (ftnlen)617)], et, &handle, descr, 
+		"ctarg", i__1, "spkgps_", (ftnlen)621)], et, &handle, descr, 
 		ident, &found, (ftnlen)40);
 	if (found) {
 
@@ -707,21 +710,22 @@ static integer c__0 = 0;
 	    ++i__;
 	    spkpvn_(&handle, descr, et, &tframe[(i__1 = i__ - 1) < 20 && 0 <= 
 		    i__1 ? i__1 : s_rnge("tframe", i__1, "spkgps_", (ftnlen)
-		    627)], &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
-		    i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)627)], &
+		    631)], &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
+		    i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)631)], &
 		    ctarg[(i__3 = i__ - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		    "ctarg", i__3, "spkgps_", (ftnlen)627)]);
+		    "ctarg", i__3, "spkgps_", (ftnlen)631)]);
 
 /*           Here's what we have.  STARG is the position of CTARG(I-1) */
 /*           relative to CTARG(I) in reference frame TFRAME(I) */
 
-/*           If one of the routines above failed during */
-/*           execution, we just give up and check out. */
+	}
 
-	    if (failed_()) {
-		chkout_("SPKGPS", (ftnlen)6);
-		return 0;
-	    }
+/*        If one of the routines above failed during */
+/*        execution, we just give up and check out. */
+
+	if (failed_()) {
+	    chkout_("SPKGPS", (ftnlen)6);
+	    return 0;
 	}
     }
     tframe[0] = tframe[1];
@@ -753,6 +757,10 @@ static integer c__0 = 0;
 /*              STEMP. */
 
 		spkpvn_(&handle, descr, et, &tmpfrm, stemp, &ctarg[19]);
+		if (failed_()) {
+		    chkout_("SPKGPS", (ftnlen)6);
+		    return 0;
+		}
 
 /*              Add STEMP to the position of TARG relative to */
 /*              the old center to get the position of TARG */
@@ -775,14 +783,14 @@ static integer c__0 = 0;
 		}
 		vadd_(vtemp, stemp, &starg[114]);
 		tframe[19] = tmpfrm;
+	    }
 
-/*              If one of the routines above failed during */
-/*              execution, we just give up and check out. */
+/*           If one of the routines above failed during */
+/*           execution, we just give up and check out. */
 
-		if (failed_()) {
-		    chkout_("SPKGPS", (ftnlen)6);
-		    return 0;
-		}
+	    if (failed_()) {
+		chkout_("SPKGPS", (ftnlen)6);
+		return 0;
 	    }
 	}
     }
@@ -818,10 +826,10 @@ static integer c__0 = 0;
 /*     be zero if COBS is not found in CTARG. */
 
     if (ctarg[(i__1 = nct - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", 
-	    i__1, "spkgps_", (ftnlen)762)] == cobs) {
+	    i__1, "spkgps_", (ftnlen)771)] == cobs) {
 	ctpos = nct;
 	cframe = tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "spkgps_", (ftnlen)764)];
+		"tframe", i__1, "spkgps_", (ftnlen)773)];
     } else {
 	ctpos = 0;
     }
@@ -857,6 +865,10 @@ static integer c__0 = 0;
 		spkpvn_(&handle, descr, et, &tmpfrm, sobs, &cobs);
 	    } else {
 		spkpvn_(&handle, descr, et, &tmpfrm, stemp, &cobs);
+	    }
+	    if (failed_()) {
+		chkout_("SPKGPS", (ftnlen)6);
+		return 0;
 	    }
 	    if (nofrm) {
 		nofrm = FALSE_;
@@ -896,20 +908,19 @@ static integer c__0 = 0;
 		cframe = tmpfrm;
 	    }
 
-/*           Check failed.  We don't want to loop */
-/*           indefinitely. */
-
-	    if (failed_()) {
-		chkout_("SPKGPS", (ftnlen)6);
-		return 0;
-	    }
-
 /*           We now have one more leg of the path for OBS.  Set */
 /*           LEGS to reflect this.  Then see if the new center */
 /*           is a common node. If not, repeat the loop. */
 
 	    ++legs;
 	    ctpos = isrchi_(&cobs, &nct, ctarg);
+	}
+
+/*        Check failed.  We don't want to loop indefinitely. */
+
+	if (failed_()) {
+	    chkout_("SPKGPS", (ftnlen)6);
+	    return 0;
 	}
     }
 
@@ -989,53 +1000,53 @@ static integer c__0 = 0;
     i__1 = ctpos - 1;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tframe"
-		, i__2, "spkgps_", (ftnlen)960)] == tframe[(i__3 = i__) < 20 
+		, i__2, "spkgps_", (ftnlen)973)] == tframe[(i__3 = i__) < 20 
 		&& 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, "spkgps_", (
-		ftnlen)960)]) {
+		ftnlen)973)]) {
 	    vadd_(&starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : 
-		    s_rnge("starg", i__2, "spkgps_", (ftnlen)962)], &starg[(
+		    s_rnge("starg", i__2, "spkgps_", (ftnlen)975)], &starg[(
 		    i__3 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__3 ? i__3 : 
-		    s_rnge("starg", i__3, "spkgps_", (ftnlen)962)], stemp);
+		    s_rnge("starg", i__3, "spkgps_", (ftnlen)975)], stemp);
 	    moved_(stemp, &c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
 		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)
-		    963)]);
+		    976)]);
 	} else if (tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		"tframe", i__3, "spkgps_", (ftnlen)965)] > 0 && tframe[(i__3 =
+		"tframe", i__3, "spkgps_", (ftnlen)978)] > 0 && tframe[(i__3 =
 		 i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, "spk"
-		"gps_", (ftnlen)965)] <= 21 && tframe[(i__2 = i__ - 1) < 20 && 
+		"gps_", (ftnlen)978)] <= 21 && tframe[(i__2 = i__ - 1) < 20 && 
 		0 <= i__2 ? i__2 : s_rnge("tframe", i__2, "spkgps_", (ftnlen)
-		965)] > 0 && tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 
-		: s_rnge("tframe", i__2, "spkgps_", (ftnlen)965)] <= 21) {
+		978)] > 0 && tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 
+		: s_rnge("tframe", i__2, "spkgps_", (ftnlen)978)] <= 21) {
 	    irfrot_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tframe", i__2, "spkgps_", (ftnlen)967)], &tframe[(
+		    s_rnge("tframe", i__2, "spkgps_", (ftnlen)980)], &tframe[(
 		    i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", 
-		    i__3, "spkgps_", (ftnlen)967)], rot);
+		    i__3, "spkgps_", (ftnlen)980)], rot);
 	    mxv_(rot, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : 
-		    s_rnge("starg", i__2, "spkgps_", (ftnlen)968)], stemp);
-	    vadd_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__2 
-		    ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)969)], 
-		    vtemp);
-	    moved_(vtemp, &c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
-		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)
-		    970)]);
-	} else {
-	    refchg_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tframe", i__2, "spkgps_", (ftnlen)974)], &tframe[(
-		    i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", 
-		    i__3, "spkgps_", (ftnlen)974)], et, psxfrm);
-	    if (failed_()) {
-		chkout_("SPKGPS", (ftnlen)6);
-		return 0;
-	    }
-	    mxv_(psxfrm, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
-		    i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)981)], 
-		    stemp);
+		    s_rnge("starg", i__2, "spkgps_", (ftnlen)981)], stemp);
 	    vadd_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__2 
 		    ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)982)], 
 		    vtemp);
 	    moved_(vtemp, &c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
 		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)
 		    983)]);
+	} else {
+	    refchg_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
+		    s_rnge("tframe", i__2, "spkgps_", (ftnlen)987)], &tframe[(
+		    i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", 
+		    i__3, "spkgps_", (ftnlen)987)], et, psxfrm);
+	    if (failed_()) {
+		chkout_("SPKGPS", (ftnlen)6);
+		return 0;
+	    }
+	    mxv_(psxfrm, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
+		    i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)994)], 
+		    stemp);
+	    vadd_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__2 
+		    ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)995)], 
+		    vtemp);
+	    moved_(vtemp, &c__3, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
+		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgps_", (ftnlen)
+		    996)]);
 	}
     }
 
@@ -1045,11 +1056,11 @@ static integer c__0 = 0;
 /*     frame transformations. */
 
     if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tframe", 
-	    i__1, "spkgps_", (ftnlen)996)] == cframe) {
+	    i__1, "spkgps_", (ftnlen)1009)] == cframe) {
 	vsub_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "spkgps_", (ftnlen)998)], sobs, pos);
+		s_rnge("starg", i__1, "spkgps_", (ftnlen)1011)], sobs, pos);
     } else if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "tframe", i__1, "spkgps_", (ftnlen)1000)] == refid) {
+	    "tframe", i__1, "spkgps_", (ftnlen)1013)] == refid) {
 
 /*        If the last frame associated with the target is already */
 /*        in the requested output frame, we convert the position of */
@@ -1073,33 +1084,33 @@ static integer c__0 = 0;
 
 	cframe = refid;
 	vsub_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "spkgps_", (ftnlen)1031)], stemp, pos);
+		s_rnge("starg", i__1, "spkgps_", (ftnlen)1044)], stemp, pos);
     } else if (cframe > 0 && cframe <= 21 && tframe[(i__1 = ctpos - 1) < 20 &&
 	     0 <= i__1 ? i__1 : s_rnge("tframe", i__1, "spkgps_", (ftnlen)
-	    1034)] > 0 && tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 :
-	     s_rnge("tframe", i__1, "spkgps_", (ftnlen)1034)] <= 21) {
+	    1047)] > 0 && tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 :
+	     s_rnge("tframe", i__1, "spkgps_", (ftnlen)1047)] <= 21) {
 
 /*        If both frames are inertial we use IRFROT instead of */
 /*        REFCHG to get things into a common frame. */
 
 	irfrot_(&tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "spkgps_", (ftnlen)1040)], &cframe, rot);
+		"tframe", i__1, "spkgps_", (ftnlen)1053)], &cframe, rot);
 	mxv_(rot, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "spkgps_", (ftnlen)1041)], stemp);
+		s_rnge("starg", i__1, "spkgps_", (ftnlen)1054)], stemp);
 	vsub_(stemp, sobs, pos);
     } else {
 
 /*        Use the more general routine REFCHG to make the transformation. */
 
 	refchg_(&tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "spkgps_", (ftnlen)1048)], &cframe, et, 
+		"tframe", i__1, "spkgps_", (ftnlen)1061)], &cframe, et, 
 		psxfrm);
 	if (failed_()) {
 	    chkout_("SPKGPS", (ftnlen)6);
 	    return 0;
 	}
 	mxv_(psxfrm, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 :
-		 s_rnge("starg", i__1, "spkgps_", (ftnlen)1055)], stemp);
+		 s_rnge("starg", i__1, "spkgps_", (ftnlen)1068)], stemp);
 	vsub_(stemp, sobs, pos);
     }
 

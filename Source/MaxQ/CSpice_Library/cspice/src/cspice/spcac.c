@@ -111,7 +111,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle assigned to binary SPK or CK file. */
 /*     UNIT       I   Logical unit connected to comment file. */
@@ -120,35 +120,43 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file */
-/*                 which has been opened for write access. */
+/*     HANDLE   is the handle assigned to the binary SPK or CK file */
+/*              which has been opened for write access. */
 
-/*     UNIT        is the logical unit connected to the text file */
-/*                 which contains the text to be stored in the */
-/*                 comment area of the binary file. */
+/*              Use the SPICELIB routine DAFOPW to open the file for */
+/*              write access and get HANDLE. Upon exit, this binary file */
+/*              will contain the specified text from the comment file in */
+/*              its comment area, appended to whatever text may already */
+/*              have been stored there. SPCAC will include an extra blank */
+/*              line between the original text and the appended text. */
+
+/*     UNIT     is the logical unit connected to the comment file. */
+/*              This file must contain only text (printable */
+/*              ASCII characters, namely ASCII 32-126).  Open this */
+/*              file with read access and get its UNIT using TXTOPR. */
 
 /*     BMARK, */
-/*     EMARK       are markers that delimit a group of consecutive */
-/*                 lines in the text file (UNIT), that get stored in the */
-/*                 comment area of the binary file (HANDLE). */
+/*     EMARK    are markers that delimit a group of consecutive */
+/*              lines in the text file (UNIT), that get stored in the */
+/*              comment area of the binary file (HANDLE). */
 
-/*                 The group of lines begins with the line that */
-/*                 immediately follows the first line of the file */
-/*                 equivalent to BMARK.  It ends with line that */
-/*                 precedes the next line of the file equivalent to */
-/*                 EMARK, including blank lines.  Leading and */
-/*                 trailing blanks are ignored when testing for */
-/*                 equivalence. */
+/*              The group of lines begins with the line that */
+/*              immediately follows the first line of the file */
+/*              equivalent to BMARK. It ends with line that */
+/*              precedes the next line of the file equivalent to */
+/*              EMARK, including blank lines. Leading and */
+/*              trailing blanks are ignored when testing for */
+/*              equivalence. */
 
-/*                 By convention, if BMARK is blank, the first line of */
-/*                 the group is the first line of the file; if EMARK is */
-/*                 blank, the last line of the group is the last line */
-/*                 of the file. */
+/*              By convention, if BMARK is blank, the first line of */
+/*              the group is the first line of the file; if EMARK is */
+/*              blank, the last line of the group is the last line */
+/*              of the file. */
 
-/*                 If a marker is non-blank and is not found, or if */
-/*                 non-blank markers are on successive lines in the text */
-/*                 file, nothing gets stored in the comment area of */
-/*                 the binary file. */
+/*              If a marker is non-blank and is not found, or if */
+/*              non-blank markers are on successive lines in the text */
+/*              file, nothing gets stored in the comment area of */
+/*              the binary file. */
 
 /* $ Detailed_Output */
 
@@ -160,42 +168,32 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If the specified DAF file is not open for write access, the */
-/*        error will be diagnosed by a routine called by this routine. */
+/*     1)  If the specified DAF file is not open for write access, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If there is a problem reading from the comment area of the */
-/*        binary file, the error SPICE(FILEREADFAILED) is signalled. */
+/*     2)  If there is a problem reading from the comment area of the */
+/*         binary file, the error SPICE(FILEREADFAILED) is signaled. */
 
-/*     3) If there is a problem writing to the comment area of the */
-/*        binary file, the error SPICE(FILEWRITEFAILED) is signalled. */
+/*     3)  If there is a problem writing to the comment area of the */
+/*         binary file, the error SPICE(FILEWRITEFAILED) is signaled. */
 
-/*     4) If there is a problem reading from the text file, */
-/*        a routine that SPCAC calls signals an error. */
+/*     4)  If there is a problem reading from the text file, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     5) If a non-printing ASCII character is encountered in the */
-/*        comments, a routine that SPCAC calls diagnoses and signals */
-/*        an error. */
+/*     5)  If a non-printing ASCII character is encountered in the */
+/*         comments, an error is signaled by a routine in the call tree */
+/*         of this routine. */
 
 /* $ Files */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file. */
-/*                 Use DAFOPW to open it for write access and get the */
-/*                 handle.  Upon exit, this binary file will contain */
-/*                 the specified text from the comment file in its */
-/*                 comment area, appended to whatever text may already */
-/*                 have been stored there.  SPCAC will include an extra */
-/*                 blank line between the original text and the */
-/*                 appended text. */
-
-/*     UNIT        is the logical unit connected to the comment file. */
-/*                 This file must contain only text (printable */
-/*                 ASCII characters, namely ASCII 32-126).  Open this */
-/*                 file with read access and get its UNIT using TXTOPR. */
+/*     See arguments HANDLE and UNIT. */
 
 /* $ Particulars */
 
 /*     The structure of SPK and CK files accommodates comments in */
-/*     addition to data.  The following three routines are available */
+/*     addition to data. The following three routines are available */
 /*     for accessing the comment area of a binary SPK or CK file: */
 
 /*           SPCAC           add comments */
@@ -205,7 +203,7 @@ static integer c__1 = 1;
 /*           SPCDC           delete comments */
 
 /*     Note that comments must consist of only text, that is, printable */
-/*     ASCII characters, specifically ASCII 32-126.  This excludes */
+/*     ASCII characters, specifically ASCII 32-126. This excludes */
 /*     tabs (ASCII 9) and control characters. */
 
 /*     The SPC conversion routines---SPCB2A, SPCA2B, SPCB2T, and */
@@ -285,22 +283,22 @@ static integer c__1 = 1;
 /* $ Restrictions */
 
 /*     1)  The lines in the comment file should not exceed 1000 */
-/*         characters in length.  SPCAC truncates lines longer than */
+/*         characters in length. SPCAC truncates lines longer than */
 /*         this on the right. */
 
 /*     2)  Use TXTOPR to open text files for read access and get */
-/*         the logical unit.  System dependencies regarding */
+/*         the logical unit. System dependencies regarding */
 /*         opening text files have been isolated in the routines */
 /*         TXTOPN and TXTOPR. */
 
 /*     3)  This routine assumes that the comment area of the binary SPK */
-/*         or CK file contains only text stored by SPCAC.  Comments */
+/*         or CK file contains only text stored by SPCAC. Comments */
 /*         written any other way may not be handled properly. */
 
 /*     4)  The comment area of the binary SPK or CK file must contain */
-/*         only one EOT character.  This routine seeks back from the */
+/*         only one EOT character. This routine seeks back from the */
 /*         last reserved record searching for the first EOT it */
-/*         encounters.  Thus the multiple EOT's will cause the appended */
+/*         encounters. Thus the multiple EOT's will cause the appended */
 /*         comments to be invisible to any reader that starts at the */
 /*         first reserved record and reads until the first EOT present. */
 
@@ -310,10 +308,24 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Moved the contents of the $Files section to the description of */
+/*        HANDLE and UNIT in $Detailed_Input section, and referred to */
+/*        them from $Files. Removed unnecessary entries from $Revisions */
+/*        section. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
@@ -323,11 +335,11 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 1.3.0, 12-FEB-1999 (FST) */
 
 /*        Modified the EOT search code to seek back through any */
-/*        reserved records, as opposed to just the last one.  This */
+/*        reserved records, as opposed to just the last one. This */
 /*        provides the flexibility to use DAFOPN to reserve records */
 /*        that may ultimately be used for storing comments. As a direct */
 /*        result of these changes the SPICE(MISSINGEOT) error is no */
-/*        longer signalled, since if no EOT is found in the reserved */
+/*        longer signaled, since if no EOT is found in the reserved */
 /*        records, they are considered available for writes. */
 
 /* -    SPICELIB Version 1.2.0, 12-MAY-1994 (KRG) */
@@ -352,7 +364,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     add comments to spk or ck file */
+/*     add comments to SPK or CK file */
 
 /* -& */
 /* $ Revisions */
@@ -360,31 +372,12 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
 /*        This routine now utilizes DAFSIH to determine if */
-/*        HANDLE is open for WRITE access.  The call to DAFHLU */
+/*        HANDLE is open for WRITE access. The call to DAFHLU */
 /*        has been replaced with a call to ZZDDHHLU, the handle */
 /*        manager interface for retrieving a logical unit. */
 /*        DAFHLU is no longer used, since it locks the unit */
 /*        returned to its HANDLE, tying up resources in the */
 /*        handle manager. */
-
-/* -    SPICELIB Version 1.2.0, 12-MAY-1994 (KRG) */
-
-/*        Added an IF statement so that DAFARR is called only if new */
-/*        reserved records need to be added to the comment area. */
-
-/* -    SPICELIB Version 1.1.0, 09-APR-1993 (KRG) */
-
-/*        Added code to initialize the variable LASTRR to zero. This */
-/*        variable is used in a function call, MAX ( LASTRR-1, 1 ), */
-/*        regardless of whether or not any reserved records are in */
-/*        the file. Thus the need to initialize it. */
-
-/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
-
-/*        Comment section for permuted index source lines was added */
-/*        following the header. */
-
-/* -    SPICELIB Version 1.0.0, 05-APR-1991 (JEM) */
 
 /* -& */
 
@@ -420,7 +413,7 @@ static integer c__1 = 1;
     }
 
 /*     Rewind the comment file - we'll start the search for BMARK */
-/*     and EMARK at the beginnning.  Once we have located the markers, */
+/*     and EMARK at the beginning.  Once we have located the markers, */
 /*     count the number of lines between them and the number of */
 /*     characters in those lines, ignoring trailing blanks. */
 

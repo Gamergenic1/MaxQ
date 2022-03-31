@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      NEXTWD ( Next word in a character string ) */
+/* $Procedure NEXTWD ( Next word in a character string ) */
 /* Subroutine */ int nextwd_(char *string, char *next, char *rest, ftnlen 
 	string_len, ftnlen next_len, ftnlen rest_len)
 {
@@ -25,8 +25,8 @@
 
 /* $ Abstract */
 
-/*      Return the next word in a given character string, and */
-/*      left justify the rest of the string. */
+/*     Return the next word in a given character string, and */
+/*     left justify the rest of the string. */
 
 /* $ Disclaimer */
 
@@ -59,36 +59,41 @@
 
 /* $ Keywords */
 
-/*      CHARACTER,  PARSING,  WORD */
+/*     CHARACTER */
+/*     PARSING */
+/*     WORD */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STRING     I   Input character string. */
-/*      NEXT       O   The next word in the string. */
-/*      REST       O   The remaining part of STRING, left-justified. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STRING     I   Input character string. */
+/*     NEXT       O   The next word in the string. */
+/*     REST       O   The remaining part of STRING, left-justified. */
 
 /* $ Detailed_Input */
 
-/*      STRING      is the input character string. This may be a list */
-/*                  of items, a sentence, or anything else. */
+/*     STRING   is the input string to be parsed. Each word of this */
+/*              string is a maximal sequence of consecutive non-blank */
+/*              characters. */
 
 /* $ Detailed_Output */
 
-/*      NEXT        is the next word in STRING. A word is any sequence */
-/*                  of consecutive non-blank characters. NEXT is always */
-/*                  returned left-justified. */
+/*     NEXT     is the first word in STRING. It is called the "next" word */
+/*              because NEXTWD is typically called repeatedly to find the */
+/*              words of the input string in left-to-right order. A word */
+/*              is a maximal sequence of consecutive non-blank */
+/*              characters. NEXT is always returned left-justified. */
 
-/*                  If STRING is blank, NEXT is blank. */
+/*              If STRING is blank, NEXT is blank. */
 
-/*                  NEXT may NOT overwrite STRING. */
+/*              NEXT may NOT overwrite STRING. */
 
-/*     REST         is the remaining part of STRING, left-justified */
-/*                  after the removal of NEXT. */
+/*     REST     is the remaining part of STRING, left-justified after the */
+/*              removal of NEXT. */
 
-/*                  REST may overwrite STRING. */
+/*              REST may overwrite STRING. */
 
 /* $ Parameters */
 
@@ -96,84 +101,148 @@
 
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
+
+/*     1)  If the declared lengths of NEXT and REST are not large enough */
+/*         to hold the output strings, they are truncated on the right. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      NEXTWD is used primarily for parsing input commands consisting */
-/*      of one or more words, where a word is defined to be any sequence */
-/*      of consecutive non-blank characters. Successive calls to NEXTWD, */
-/*      each using the previous value of REST as the input string, allow */
-/*      the calling routine to neatly parse and process one word at a */
-/*      time. */
+/*     NEXTWD is used primarily for parsing input commands consisting */
+/*     of one or more words, where a word is defined to be any sequence */
+/*     of consecutive non-blank characters. Successive calls to NEXTWD, */
+/*     each using the previous value of REST as the input string, allow */
+/*     the calling routine to neatly parse and process one word at a */
+/*     time. */
 
-/*      NEXTWD cuts the input string into two pieces, and returns them */
-/*      separately. The first piece is the first word in the string. */
-/*      (Leading blanks are ignored. The next word runs from the first */
-/*      non-blank character in the string up to the first blank that */
-/*      follows it.) The second piece is whatever is left after the */
-/*      first word is removed. The second piece is left justified, */
-/*      to simplify later calls to NEXTWD. */
-
-/*      If NEXT and REST are not large enough to hold the output */
-/*      strings, they are truncated on the right. */
+/*     NEXTWD cuts the input string into two pieces, and returns them */
+/*     separately. The first piece is the first word in the string. */
+/*     (Leading blanks are ignored. The first word, which is returned in */
+/*     the output argument NEXT, runs from the first non-blank character */
+/*     in the string up to the first blank that follows it.) The second */
+/*     piece is whatever is left after the first word is removed. The */
+/*     second piece is left justified, to simplify later calls to NEXTWD. */
 
 /* $ Examples */
 
-/*      Let STRING be the following string: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            '  Now is the time,  for all good men    to come.' */
+/*     1) Given a character string, get the sequence of words within. */
 
-/*      Then successive aplications of NEXTWD yield the following: */
 
-/*            NEXT         REST */
-/*            -----------  ---------------------------- */
-/*            'Now'        'is the time,  for all good men    to come.' */
-/*            'is'         'the time,  for all good men    to come.' */
-/*            'the'        'time,  for all good men    to come.' */
-/*            'time,'      'for all good men    to come.' */
-/*            'for'        'all good men    to come.' */
-/*            'all'        'good men    to come.' */
-/*            'good'       'men    to come.' */
-/*            'men'        'to come.' */
-/*            'to          'come.' */
-/*            'come.'      ' ' */
-/*            ' '          ' ' */
+/*        Example code begins here. */
+
+
+/*              PROGRAM NEXTWD_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              LOGICAL               EQSTR */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               LINZS */
+/*              PARAMETER           ( LINZS = 47 ) */
+
+/*              INTEGER               WRDSZ */
+/*              PARAMETER           ( WRDSZ = 5  ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(WRDSZ)     NEXT */
+/*              CHARACTER*(LINZS)     REST */
+/*              CHARACTER*(LINZS)     STRING */
+
+/*              REST = '  Now is the time,  for all good men to come.' */
+
+/*              WRITE(*,'(A)') 'Next   Rest of the string' */
+/*              WRITE(*,'(A)') '-----  ---' */
+/*             .            // '---------------------------------------' */
+
+/*              DO WHILE ( .NOT. EQSTR ( REST, ' ' ) ) */
+
+/*                 STRING = REST */
+/*                 CALL NEXTWD ( STRING, NEXT, REST ) */
+
+/*                 WRITE(*,'(A5,2X,A)') NEXT, REST */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Next   Rest of the string */
+/*        -----  ------------------------------------------ */
+/*        Now    is the time,  for all good men   to come. */
+/*        is     the time,  for all good men   to come. */
+/*        the    time,  for all good men   to come. */
+/*        time,  for all good men   to come. */
+/*        for    all good men   to come. */
+/*        all    good men   to come. */
+/*        good   men   to come. */
+/*        men    to come. */
+/*        to     come. */
+/*        come. */
+
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      K.R. Gehringer  (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.2.0, 04-APR-1996 (KRG) */
+/* -    SPICELIB Version 1.3.0, 19-MAY-2021 (JDR) (NJB) */
 
-/*         Fixed a problem that could occur when STRING and REST are */
-/*         the same character string. Simplified the algorithm a bit */
-/*         while I was at it. */
+/*        Added IMPLICIT NONE statement. */
 
-/*         Single character comparisons now make use of ICHAR to */
-/*         perform the comparisons as integers for speed. */
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on the existing fragment. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Updated header documentation. Added entry #1 in $Exceptions */
+/*        section. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 1.2.0, 04-APR-1996 (KRG) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Fixed a problem that could occur when STRING and REST are */
+/*        the same character string. Simplified the algorithm a bit */
+/*        while I was at it. */
+
+/*        Single character comparisons now make use of ICHAR to */
+/*        perform the comparisons as integers for speed. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

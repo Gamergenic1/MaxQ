@@ -10,7 +10,7 @@
 static logical c_false = FALSE_;
 static logical c_true = TRUE_;
 
-/* $Procedure      RESET ( Reset Error Status ) */
+/* $Procedure RESET ( Reset Error Status ) */
 /* Subroutine */ int reset_(void)
 {
     logical stat;
@@ -58,13 +58,8 @@ static logical c_true = TRUE_;
 /*     ERROR */
 
 /* $ Declarations */
-
-/*     None. */
-
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  DESCRIPTION */
-/*     --------  ---  -------------------------------------------------- */
 /*     None. */
 
 /* $ Detailed_Input */
@@ -81,10 +76,12 @@ static logical c_true = TRUE_;
 
 /* $ Exceptions */
 
-/*     This routine does not detect any errors. */
+/*     Error free. */
 
-/*     However, this routine is part of the SPICELIB error */
-/*     handling mechanism. */
+/*     1)  This routine does not detect any errors. */
+
+/*         However, this routine is part of the SPICELIB error */
+/*         handling mechanism. */
 
 /* $ Files */
 
@@ -109,18 +106,18 @@ static logical c_true = TRUE_;
 
 /*     This routine should be called in cases where one wishes */
 /*     to attempt to continue processing after detection of an */
-/*     error, and the 'RETURN' error action is being used.  When */
+/*     error, and the 'RETURN' error action is being used. When */
 /*     the error response action is set to 'RETURN', routines */
 /*     that have external references, or that can */
 /*     detect errors, return immediately upon entry when an */
-/*     error condition exists.  This prevents a program from */
+/*     error condition exists. This prevents a program from */
 /*     crashing, but does not allow for a recovery attempt. */
 
 /*     If one does wish to attempt to recover, */
 /*     in general the procedure is to test for an error */
 /*     condition, and if one exists, respond to the error */
 /*     (by outputting diagnostic messages, for example).  Next, */
-/*     a call to RESET can be made.  After resetting the */
+/*     a call to RESET can be made. After resetting the */
 /*     error status, the normal execution thread can be resumed. */
 
 /*     It is also appropriate to call this routine when the error */
@@ -129,7 +126,7 @@ static logical c_true = TRUE_;
 
 /* $ Examples */
 
-/*     1.  In this example, we try to read a line from the file, */
+/*     1. In this example, we try to read a line from the file, */
 /*         SPUD.DAT, using the toolkit routine, RDTEXT. */
 /*         When FAILED indicates an error, we grab the short */
 /*         error message and its explanation, using GETMSG (see), */
@@ -163,10 +160,10 @@ static logical c_true = TRUE_;
 
 /* $ Restrictions */
 
-/*     It can be dangerous to call this routine without */
-/*     RESPONDING to the error condition first; by calling */
-/*     RESET, you are wiping out the SPICELIB's knowledge of */
-/*     the error. */
+/*     1)  It can be dangerous to call this routine without */
+/*         RESPONDING to the error condition first; by calling */
+/*         RESET, you are wiping out the SPICELIB's knowledge of */
+/*         the error. */
 
 /* $ Literature_References */
 
@@ -174,10 +171,18 @@ static logical c_true = TRUE_;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 26-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 14-MAR-1996 (KRG) */
 
@@ -188,7 +193,7 @@ static logical c_true = TRUE_;
 /*        after this copying action; the only time the frozen stack */
 /*        could be accessed is when a program is executing in 'RETURN' */
 /*        mode and FAILED is .TRUE., i.e. after an error has been */
-/*        signalled, causing the active stack at the time of the */
+/*        signaled, causing the active stack at the time of the */
 /*        error to be copied to the frozen stack. So this copying */
 /*        of the active stack on a RESET of the error handling */
 /*        accomplishes nothing. */

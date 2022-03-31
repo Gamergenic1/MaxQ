@@ -1196,6 +1196,10 @@ static integer c__4 = 4;
 
 /* $ Version */
 
+/* -    SPICELIB Version 2.2.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
+
 /* -    SPICELIB Version 2.2.0, 07-FEB-2015 (NJB) */
 
 /*        Now uses ERRHAN to insert DAS file name into */
@@ -1361,7 +1365,7 @@ static integer c__4 = 4;
     tprime = otabs[0];
     cprime = ocols[0];
     seg = segvec[(i__1 = tprime - 1) < 10 && 0 <= i__1 ? i__1 : s_rnge("segv"
-	    "ec", i__1, "zzekjsrt_", (ftnlen)534)];
+	    "ec", i__1, "zzekjsrt_", (ftnlen)538)];
     colptr = stdtpt[seg - 1];
     i__1 = cprime;
     for (i__ = 2; i__ <= i__1; ++i__) {
@@ -1389,7 +1393,7 @@ static integer c__4 = 4;
 /*        Character columns present a special case:  their string length */
 /*        can get pretty big, and it could take a lot of memory to store */
 /*        their column entries.  We compromise here:  we store only the */
-/*        first INISUB chararacters of each character column entry.  If */
+/*        first INISUB characters of each character column entry.  If */
 /*        we can't decide the order of two strings based on these initial */
 /*        substrings, we let ZZEKVCMP handle the matter. */
 
@@ -1406,7 +1410,7 @@ static integer c__4 = 4;
 		i__3 = sgvbas + svsize;
 		zzeksrd_(&i__2, &i__3, segvec);
 		seg = segvec[(i__2 = tprime - 1) < 10 && 0 <= i__2 ? i__2 : 
-			s_rnge("segvec", i__2, "zzekjsrt_", (ftnlen)585)];
+			s_rnge("segvec", i__2, "zzekjsrt_", (ftnlen)589)];
 		handle = sthan[seg - 1];
 		colptr = stdtpt[seg - 1];
 		i__2 = cprime;
@@ -1418,13 +1422,13 @@ static integer c__4 = 4;
 	    i__3 = rwvbas + rvsize;
 	    zzeksrd_(&i__2, &i__3, rowvec);
 	    row = rowvec[(i__2 = tprime - 1) < 11 && 0 <= i__2 ? i__2 : 
-		    s_rnge("rowvec", i__2, "zzekjsrt_", (ftnlen)598)];
+		    s_rnge("rowvec", i__2, "zzekjsrt_", (ftnlen)602)];
 	    eltidx = oelts[cprime - 1];
 	    if (dtype == 1) {
 		zzekrsc_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
 			- 11], &row, &eltidx, &cvlen, cdat + (((i__2 = i__ - 
 			1) < 250000 && 0 <= i__2 ? i__2 : s_rnge("cdat", i__2,
-			 "zzekjsrt_", (ftnlen)604)) << 5), &null, &found, (
+			 "zzekjsrt_", (ftnlen)608)) << 5), &null, &found, (
 			ftnlen)32);
 		if (! found) {
 		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
@@ -1443,7 +1447,7 @@ static integer c__4 = 4;
 		zzekrsd_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
 			- 11], &row, &eltidx, &ddat[(i__2 = i__ - 1) < 250000 
 			&& 0 <= i__2 ? i__2 : s_rnge("ddat", i__2, "zzekjsrt_"
-			, (ftnlen)636)], &null, &found);
+			, (ftnlen)640)], &null, &found);
 		if (! found) {
 		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
 			    "column entry elt was not found.", (ftnlen)78);
@@ -1460,7 +1464,7 @@ static integer c__4 = 4;
 		zzekrsi_(&handle, &stsdsc[seg * 24 - 24], &dtdscs[colptr * 11 
 			- 11], &row, &eltidx, &idat[(i__2 = i__ - 1) < 250000 
 			&& 0 <= i__2 ? i__2 : s_rnge("idat", i__2, "zzekjsrt_"
-			, (ftnlen)666)], &null, &found);
+			, (ftnlen)670)], &null, &found);
 		if (! found) {
 		    setmsg_("EK = #; SEG = #; ROW = #; COLIDX = #; ELT = #; "
 			    "column entry elt was not found.", (ftnlen)78);
@@ -1489,11 +1493,11 @@ static integer c__4 = 4;
 
 	    if (null) {
 		*(unsigned char *)&nf[(i__2 = i__ - 1) < 250000 && 0 <= i__2 ?
-			 i__2 : s_rnge("nf", i__2, "zzekjsrt_", (ftnlen)710)] 
+			 i__2 : s_rnge("nf", i__2, "zzekjsrt_", (ftnlen)714)] 
 			= 'T';
 	    } else {
 		*(unsigned char *)&nf[(i__2 = i__ - 1) < 250000 && 0 <= i__2 ?
-			 i__2 : s_rnge("nf", i__2, "zzekjsrt_", (ftnlen)712)] 
+			 i__2 : s_rnge("nf", i__2, "zzekjsrt_", (ftnlen)716)] 
 			= 'F';
 	    }
 	    prvbas = sgvbas;
@@ -1504,7 +1508,7 @@ static integer c__4 = 4;
 	i__1 = nrows;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ordvec[(i__2 = i__ - 1) < 250000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ordvec", i__2, "zzekjsrt_", (ftnlen)724)] = i__;
+		    "ordvec", i__2, "zzekjsrt_", (ftnlen)728)] = i__;
 	}
 
 /*        At this point, we've read in the data for the primary order-by */
@@ -1531,16 +1535,16 @@ static integer c__4 = 4;
 /*                 elements, as indicated by the order vector. */
 
 		    rj = ordvec[(i__2 = j - 1) < 250000 && 0 <= i__2 ? i__2 : 
-			    s_rnge("ordvec", i__2, "zzekjsrt_", (ftnlen)755)];
+			    s_rnge("ordvec", i__2, "zzekjsrt_", (ftnlen)759)];
 		    rjg = ordvec[(i__2 = jg - 1) < 250000 && 0 <= i__2 ? i__2 
-			    : s_rnge("ordvec", i__2, "zzekjsrt_", (ftnlen)756)
+			    : s_rnge("ordvec", i__2, "zzekjsrt_", (ftnlen)760)
 			    ];
 		    nfj = *(unsigned char *)&nf[(i__2 = rj - 1) < 250000 && 0 
 			    <= i__2 ? i__2 : s_rnge("nf", i__2, "zzekjsrt_", (
-			    ftnlen)758)] == 'T';
+			    ftnlen)762)] == 'T';
 		    nfjg = *(unsigned char *)&nf[(i__2 = rjg - 1) < 250000 && 
 			    0 <= i__2 ? i__2 : s_rnge("nf", i__2, "zzekjsrt_",
-			     (ftnlen)759)] == 'T';
+			     (ftnlen)763)] == 'T';
 
 /*                 Start out hoping for the best:  that we won't have */
 /*                 to do a brute-force comparison. */
@@ -1556,25 +1560,25 @@ static integer c__4 = 4;
 				jle = nfj || ! (nfj || nfjg) && idat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("idat", i__2, "zzekjsrt_", (
-					ftnlen)777)] <= idat[(i__3 = rjg - 1) 
+					ftnlen)781)] <= idat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"idat", i__3, "zzekjsrt_", (ftnlen)
-					777)];
+					781)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && idat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("idat", i__2, "zzekjsrt_", (
-					ftnlen)779)] >= idat[(i__3 = rjg - 1) 
+					ftnlen)783)] >= idat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"idat", i__3, "zzekjsrt_", (ftnlen)
-					779)];
+					783)];
 			    }
 			} else if (! (nfj && nfjg || ! (nfj || nfjg) && idat[(
 				i__2 = rj - 1) < 250000 && 0 <= i__2 ? i__2 : 
-				s_rnge("idat", i__2, "zzekjsrt_", (ftnlen)783)
+				s_rnge("idat", i__2, "zzekjsrt_", (ftnlen)787)
 				] == idat[(i__3 = rjg - 1) < 250000 && 0 <= 
 				i__3 ? i__3 : s_rnge("idat", i__3, "zzekjsrt_"
-				, (ftnlen)783)])) {
+				, (ftnlen)787)])) {
 
 /*                       If the items we're comparing are unequal, we can */
 /*                       still make a decision. */
@@ -1583,18 +1587,18 @@ static integer c__4 = 4;
 				jle = nfj || ! (nfj || nfjg) && idat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("idat", i__2, "zzekjsrt_", (
-					ftnlen)791)] <= idat[(i__3 = rjg - 1) 
+					ftnlen)795)] <= idat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"idat", i__3, "zzekjsrt_", (ftnlen)
-					791)];
+					795)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && idat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("idat", i__2, "zzekjsrt_", (
-					ftnlen)793)] >= idat[(i__3 = rjg - 1) 
+					ftnlen)797)] >= idat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"idat", i__3, "zzekjsrt_", (ftnlen)
-					793)];
+					797)];
 			    }
 			} else {
 
@@ -1613,41 +1617,41 @@ static integer c__4 = 4;
 				jle = nfj || ! (nfj || nfjg) && ddat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("ddat", i__2, "zzekjsrt_", (
-					ftnlen)819)] <= ddat[(i__3 = rjg - 1) 
+					ftnlen)823)] <= ddat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"ddat", i__3, "zzekjsrt_", (ftnlen)
-					819)];
+					823)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && ddat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("ddat", i__2, "zzekjsrt_", (
-					ftnlen)821)] >= ddat[(i__3 = rjg - 1) 
+					ftnlen)825)] >= ddat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"ddat", i__3, "zzekjsrt_", (ftnlen)
-					821)];
+					825)];
 			    }
 			} else if (! (nfj && nfjg || ! (nfj || nfjg) && ddat[(
 				i__2 = rj - 1) < 250000 && 0 <= i__2 ? i__2 : 
-				s_rnge("ddat", i__2, "zzekjsrt_", (ftnlen)825)
+				s_rnge("ddat", i__2, "zzekjsrt_", (ftnlen)829)
 				] == ddat[(i__3 = rjg - 1) < 250000 && 0 <= 
 				i__3 ? i__3 : s_rnge("ddat", i__3, "zzekjsrt_"
-				, (ftnlen)825)])) {
+				, (ftnlen)829)])) {
 			    if (senses[0] == 0) {
 				jle = nfj || ! (nfj || nfjg) && ddat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("ddat", i__2, "zzekjsrt_", (
-					ftnlen)830)] <= ddat[(i__3 = rjg - 1) 
+					ftnlen)834)] <= ddat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"ddat", i__3, "zzekjsrt_", (ftnlen)
-					830)];
+					834)];
 			    } else {
 				jle = nfjg || ! (nfj || nfjg) && ddat[(i__2 = 
 					rj - 1) < 250000 && 0 <= i__2 ? i__2 :
 					 s_rnge("ddat", i__2, "zzekjsrt_", (
-					ftnlen)832)] >= ddat[(i__3 = rjg - 1) 
+					ftnlen)836)] >= ddat[(i__3 = rjg - 1) 
 					< 250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"ddat", i__3, "zzekjsrt_", (ftnlen)
-					832)];
+					836)];
 			    }
 			} else {
 
@@ -1668,33 +1672,33 @@ static integer c__4 = 4;
 				s_copy(ch__1, cdat + (((i__2 = rj - 1) < 
 					250000 && 0 <= i__2 ? i__2 : s_rnge(
 					"cdat", i__2, "zzekjsrt_", (ftnlen)
-					858)) << 5), (ftnlen)32, (ftnlen)32);
+					862)) << 5), (ftnlen)32, (ftnlen)32);
 				s_copy(ch__2, cdat + (((i__3 = rjg - 1) < 
 					250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"cdat", i__3, "zzekjsrt_", (ftnlen)
-					858)) << 5), (ftnlen)32, (ftnlen)32);
+					862)) << 5), (ftnlen)32, (ftnlen)32);
 				jle = nfj || ! (nfj || nfjg) && s_cmp(ch__1, 
 					ch__2, (ftnlen)32, (ftnlen)32) <= 0;
 			    } else {
 				s_copy(ch__1, cdat + (((i__2 = rj - 1) < 
 					250000 && 0 <= i__2 ? i__2 : s_rnge(
 					"cdat", i__2, "zzekjsrt_", (ftnlen)
-					860)) << 5), (ftnlen)32, (ftnlen)32);
+					864)) << 5), (ftnlen)32, (ftnlen)32);
 				s_copy(ch__2, cdat + (((i__3 = rjg - 1) < 
 					250000 && 0 <= i__3 ? i__3 : s_rnge(
 					"cdat", i__3, "zzekjsrt_", (ftnlen)
-					860)) << 5), (ftnlen)32, (ftnlen)32);
+					864)) << 5), (ftnlen)32, (ftnlen)32);
 				jle = nfjg || ! (nfj || nfjg) && s_cmp(ch__1, 
 					ch__2, (ftnlen)32, (ftnlen)32) >= 0;
 			    }
 			} else /* if(complicated condition) */ {
 			    s_copy(ch__1, cdat + (((i__2 = rj - 1) < 250000 &&
 				     0 <= i__2 ? i__2 : s_rnge("cdat", i__2, 
-				    "zzekjsrt_", (ftnlen)864)) << 5), (ftnlen)
+				    "zzekjsrt_", (ftnlen)868)) << 5), (ftnlen)
 				    32, (ftnlen)32);
 			    s_copy(ch__2, cdat + (((i__3 = rjg - 1) < 250000 
 				    && 0 <= i__3 ? i__3 : s_rnge("cdat", i__3,
-				     "zzekjsrt_", (ftnlen)864)) << 5), (
+				     "zzekjsrt_", (ftnlen)868)) << 5), (
 				    ftnlen)32, (ftnlen)32);
 			    if (! (nfj && nfjg || ! (nfj || nfjg) && s_cmp(
 				    ch__1, ch__2, (ftnlen)32, (ftnlen)32) == 
@@ -1707,12 +1711,12 @@ static integer c__4 = 4;
 				    s_copy(ch__1, cdat + (((i__2 = rj - 1) < 
 					    250000 && 0 <= i__2 ? i__2 : 
 					    s_rnge("cdat", i__2, "zzekjsrt_", 
-					    (ftnlen)872)) << 5), (ftnlen)32, (
+					    (ftnlen)876)) << 5), (ftnlen)32, (
 					    ftnlen)32);
 				    s_copy(ch__2, cdat + (((i__3 = rjg - 1) < 
 					    250000 && 0 <= i__3 ? i__3 : 
 					    s_rnge("cdat", i__3, "zzekjsrt_", 
-					    (ftnlen)872)) << 5), (ftnlen)32, (
+					    (ftnlen)876)) << 5), (ftnlen)32, (
 					    ftnlen)32);
 				    jle = nfj || ! (nfj || nfjg) && s_cmp(
 					    ch__1, ch__2, (ftnlen)32, (ftnlen)
@@ -1721,12 +1725,12 @@ static integer c__4 = 4;
 				    s_copy(ch__1, cdat + (((i__2 = rj - 1) < 
 					    250000 && 0 <= i__2 ? i__2 : 
 					    s_rnge("cdat", i__2, "zzekjsrt_", 
-					    (ftnlen)874)) << 5), (ftnlen)32, (
+					    (ftnlen)878)) << 5), (ftnlen)32, (
 					    ftnlen)32);
 				    s_copy(ch__2, cdat + (((i__3 = rjg - 1) < 
 					    250000 && 0 <= i__3 ? i__3 : 
 					    s_rnge("cdat", i__3, "zzekjsrt_", 
-					    (ftnlen)874)) << 5), (ftnlen)32, (
+					    (ftnlen)878)) << 5), (ftnlen)32, (
 					    ftnlen)32);
 				    jle = nfjg || ! (nfj || nfjg) && s_cmp(
 					    ch__1, ch__2, (ftnlen)32, (ftnlen)
@@ -1772,9 +1776,9 @@ static integer c__4 = 4;
 
 			swapi_(&ordvec[(i__2 = j - 1) < 250000 && 0 <= i__2 ? 
 				i__2 : s_rnge("ordvec", i__2, "zzekjsrt_", (
-				ftnlen)920)], &ordvec[(i__3 = jg - 1) < 
+				ftnlen)924)], &ordvec[(i__3 = jg - 1) < 
 				250000 && 0 <= i__3 ? i__3 : s_rnge("ordvec", 
-				i__3, "zzekjsrt_", (ftnlen)920)]);
+				i__3, "zzekjsrt_", (ftnlen)924)]);
 		    }
 		    j -= gap;
 		}

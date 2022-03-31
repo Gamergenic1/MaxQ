@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      RQUAD ( Roots of a quadratic equation ) */
+/* $Procedure RQUAD ( Roots of a quadratic equation ) */
 /* Subroutine */ int rquad_(doublereal *a, doublereal *b, doublereal *c__, 
 	doublereal *root1, doublereal *root2)
 {
@@ -72,9 +72,8 @@ static integer c__2 = 2;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-
 /*     A          I   Coefficient of quadratic term. */
 /*     B          I   Coefficient of linear term. */
 /*     C          I   Constant. */
@@ -85,47 +84,47 @@ static integer c__2 = 2;
 
 /*     A, */
 /*     B, */
-/*     C              are the coefficients of a quadratic polynomial */
+/*     C        are the coefficients of a quadratic polynomial */
 
-/*                         2 */
-/*                       Ax   +   Bx   +   C. */
+/*                      2 */
+/*                 A * x   +  B * x  +  C. */
 
 /* $ Detailed_Output */
 
 /*     ROOT1, */
-/*     ROOT2         are the roots of the equation, */
+/*     ROOT2    are the roots of the equation */
 
-/*                         2 */
-/*                       Ax   +   Bx   +   C   =  0. */
-
-
-/*                   ROOT1 and ROOT2 are both arrays of length 2.  The */
-/*                   first element of each array is the real part of a */
-/*                   root; the second element contains the complex part */
-/*                   of the same root. */
-
-/*                   When A is non-zero, ROOT1 represents the root */
-
-/*                                    _____________ */
-/*                                   /  2 */
-/*                      - B   +    \/  B    -   4AC */
-/*                      --------------------------- */
-/*                                    2A */
+/*                      2 */
+/*                 A * x   +  B * x  +  C = 0. */
 
 
-/*                   and ROOT2 represents the root */
+/*              ROOT1 and ROOT2 are both arrays of length 2. The first */
+/*              element of each array is the real part of a root; the */
+/*              second element contains the complex part of the same */
+/*              root. */
 
-/*                                    _____________ */
-/*                                   /  2 */
-/*                      - B   -    \/  B    -   4AC */
-/*                      --------------------------- . */
-/*                                    2A */
+/*              When A is non-zero, ROOT1 represents the root */
+
+/*                               _____________ */
+/*                              /  2 */
+/*                 - B   +    \/  B    -   4AC */
+/*                 --------------------------- */
+/*                               2A */
 
 
-/*                   When A is zero and B is non-zero, ROOT1 and ROOT2 */
-/*                   both represent the root */
+/*              and ROOT2 represents the root */
 
-/*                      - C / B. */
+/*                               _____________ */
+/*                              /  2 */
+/*                 - B   -    \/  B    -   4AC */
+/*                 --------------------------- . */
+/*                               2A */
+
+
+/*              When A is zero and B is non-zero, ROOT1 and ROOT2 both */
+/*              represent the root */
+
+/*                 - C / B. */
 
 /* $ Parameters */
 
@@ -133,9 +132,9 @@ static integer c__2 = 2;
 
 /* $ Exceptions */
 
-/*     1)   If the input coefficients A and B are both zero, the error */
-/*          SPICE(DEGENERATECASE) is signalled.  The output arguments */
-/*          are not modified. */
+/*     1)  If the input coefficients A and B are both zero, the error */
+/*         SPICE(DEGENERATECASE) is signaled. The output arguments */
+/*         are not modified. */
 
 /* $ Files */
 
@@ -158,11 +157,11 @@ static integer c__2 = 2;
 /*              2 */
 /*             r   +  r  -  1  =  0. */
 
-/*          The following code frament does the job. */
+/*          The following code fragment does the job. */
 
 
 /*             C */
-/*             C     Compute "golden ratio."  The root we want, */
+/*             C     Compute "golden ratio." The root we want, */
 /*             C */
 /*             C                ___ */
 /*             C               / */
@@ -204,7 +203,7 @@ static integer c__2 = 2;
 
 /* $ Restrictions */
 
-/*     No checks for overflow of the roots are performed. */
+/*     1)  No checks for overflow of the roots are performed. */
 
 /* $ Literature_References */
 
@@ -212,9 +211,17 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

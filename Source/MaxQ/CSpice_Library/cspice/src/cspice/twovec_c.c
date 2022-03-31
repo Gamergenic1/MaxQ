@@ -3,11 +3,11 @@
 -Procedure twovec_c ( Two vectors defining an orthonormal frame )
 
 -Abstract
- 
-    Find the transformation to the right-handed frame having a 
-    given vector as a specified axis and having a second given 
-    vector lying in a specified coordinate plane. 
- 
+
+   Find the transformation to the right-handed frame having a
+   given vector as a specified axis and having a second given
+   vector lying in a specified coordinate plane.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,149 +34,161 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-    AXES,  FRAME,  ROTATION,  TRANSFORMATION 
- 
+
+   AXES
+   FRAME
+   ROTATION
+   TRANSFORMATION
+
 */
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
    #undef    twovec_c
-   
+
 
    void twovec_c ( ConstSpiceDouble    axdef  [3],
                    SpiceInt            indexa,
                    ConstSpiceDouble    plndef [3],
                    SpiceInt            indexp,
-                   SpiceDouble         mout   [3][3] ) 
+                   SpiceDouble         mout   [3][3] )
+
 /*
 
 -Brief_I/O
- 
-    VARIABLE  I/O  DESCRIPTION 
-    --------  ---  ------------------------------------------------- 
-    axdef      I   Vector defining a principal axis. 
-    indexa     I   Principal axis number of axdef (X=1, Y=2, Z=3). 
-    plndef     I   Vector defining (with axdef) a principal plane. 
-    indexp     I   Second axis number (with indexa) of principal 
-                   plane. 
-    mout       O   Output rotation matrix. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   axdef      I   Vector defining a principal axis.
+   indexa     I   Principal axis number of `axdef' (x=1, y=2, z=3).
+   plndef     I   Vector defining (with `axdef') a principal plane.
+   indexp     I   Second axis number (with `indexa') of principal
+                  plane.
+   mout       O   Output rotation matrix.
+
 -Detailed_Input
- 
-    axdef      is a vector defining one of the principal axes of a 
-               coordinate frame. 
- 
-    indexa     is a number that determines which of the three 
-               coordinate axes contains axdef. 
- 
-               If indexa is 1 then axdef defines the X axis of the 
-               coordinate frame. 
- 
-               If indexa is 2 then axdef defines the Y axis of the 
-               coordinate frame. 
- 
-               If indexa is 3 then axdef defines the Z axis of the 
-               coordinate frame 
- 
-    plndef     is a vector defining (with axdef) a principal plane of 
-               the coordinate frame. 
- 
-    indexp     is the second axis of the principal frame determined 
-               by axdef and plndef. 
- 
-               If indexp is 1, the second axis of the principal 
-               plane is the X-axis. 
- 
-               If indexp is 2, the second axis of the principal
-               plane is the Y-axis. 
- 
-               If indexp is 3, the second axis of the principal plane 
-               is the Z-axis. 
- 
+
+   axdef       is a vector defining one of the principal axes of a
+               coordinate frame.
+
+   indexa      is a number that determines which of the three
+               coordinate axes contains `axdef'.
+
+               If `indexa' is 1 then `axdef' defines the X axis of the
+               coordinate frame.
+
+               If `indexa' is 2 then `axdef' defines the Y axis of the
+               coordinate frame.
+
+               If `indexa' is 3 then `axdef' defines the Z axis of the
+               coordinate frame.
+
+   plndef      is a vector defining (with `axdef') a principal plane of
+               the coordinate frame. `axdef' and `plndef' must be
+               linearly independent.
+
+   indexp      is the second axis of the principal frame determined by
+               `axdef' and `plndef'.  `indexa', `indexp' must be different
+               and be integers from 1 to 3.
+
+               If `indexp' is 1, the second axis of the principal
+               plane is the X-axis.
+
+               If `indexp' is 2, the second axis of the principal
+               plane is the Y-axis.
+
+               If `indexp' is 3, the second axis of the principal plane
+               is the Z-axis.
+
 -Detailed_Output
- 
-    mout       is a rotation matrix that transforms coordinates given 
-               in the input frame to the frame determined by axdef, 
-               plndef, indexa and indexp. 
- 
+
+   mout        is a rotation matrix that transforms coordinates given
+               in the input frame to the frame determined by `axdef',
+               `plndef', `indexa' and `indexp'.
+
 -Parameters
- 
-    None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If indexa or indexp is not in the set {1,2,3} the error 
-      SPICE(BADINDEX) will be signalled. 
- 
-   2) If indexa and indexp are the same the error 
-      SPICE(UNDEFINEDFRAME) will be signalled. 
- 
-   3) If the cross product of the vectors axdef and plndef is zero, 
-      the error SPICE(DEPENDENTVECTORS) will be signalled. 
- 
+
+   1)  If `indexa' or `indexp' is not in the set {1,2,3}, the error
+       SPICE(BADINDEX) is signaled by a routine in the call tree of
+       this routine.
+
+   2)  If `indexa' and `indexp' are the same, the error
+       SPICE(UNDEFINEDFRAME) is signaled by a routine in the call
+       tree of this routine.
+
+   3)  If the cross product of the vectors `axdef' and `plndef' is zero,
+       the error SPICE(DEPENDENTVECTORS) is signaled by a routine in
+       the call tree of this routine.
+
 -Files
- 
-    None. 
- 
+
+   None.
+
 -Particulars
- 
-    Given two linearly independent vectors there is a unique 
-    right-handed coordinate frame having: 
- 
-       1) axdef lying along the indexa axis. 
- 
-       2) plndef lying in the indexa-indexp coordinate plane. 
- 
-    This routine determines the transformation matrix that transforms 
-    from coordinates used to represent the input vectors to the 
-    the system determined by axdef and plndef.  Thus a vector 
-    (x,y,z) in the input coordinate system will have coordinates 
- 
-                             t 
-               mout * (x,y,z) 
- 
-    in the frame determined by axdef and plndef. 
- 
+
+   Given two linearly independent vectors there is a unique
+   right-handed coordinate frame having:
+
+      `axdef' lying along the `indexa' axis.
+
+      `plndef' lying in the indexa-indexp coordinate plane.
+
+   This routine determines the transformation matrix that transforms
+   from coordinates used to represent the input vectors to the
+   the system determined by `axdef' and `plndef'. Thus a vector
+   (x,y,z) in the input coordinate system will have coordinates
+
+                   t
+      mout* (x,y,z)
+
+   in the frame determined by `axdef' and `plndef'.
+
 -Examples
- 
-    The rotation matrix ticc from inertial to Sun-Canopus 
-    (celestial) coordinates is found by the call 
- 
-       twovec_c ( Sun_vector, 3, Canopus_vector, 1, ticc ); 
- 
- 
+
+   The rotation matrix ticc from inertial to Sun-Canopus
+   (celestial) coordinates is found by the call
+
+      twovec_c ( Sun_vector, 3, Canopus_vector, 1, ticc );
+
 -Restrictions
- 
-    indexa, indexp must be different and be integers from 1 to 3. 
- 
-    axdef and plndef must be linearly independent. 
- 
--Author_and_Institution
- 
-    W.M. Owen       (JPL) 
-    W.L. Taber      (JPL) 
- 
+
+   None.
+
 -Literature_References
- 
-    None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   W.L. Taber          (JPL)
+
 -Version
- 
-   -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input matrices const.
+   -CSPICE Version 1.0.1, 13-AUG-2021 (JDR)
 
-   -CSPICE Version 1.0.0, 2-MAR-1998
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 22-OCT-1998 (NJB)
+
+       Made input matrices const.
+
+   -CSPICE Version 1.0.0, 02-MAR-1998 (WLT) (WMO)
 
 -Index_Entries
- 
-   define an orthonormal frame from two vectors 
- 
+
+   define an orthonormal frame from two vectors
+
 -&
 */
 
@@ -201,7 +213,7 @@
    order.
    */
    xpose_c ( mout, mout );
-   
+
 
    chkout_c ( "twovec_c" );
 

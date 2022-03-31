@@ -95,18 +95,18 @@ static integer c__128 = 128;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAF file opened for writing. */
 /*     RESV       I   Number of records to reserve. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle associated with a DAF file that has */
-/*                 been opened with write access. */
+/*     HANDLE   is the handle associated with a DAF file that has */
+/*              been opened with write access. */
 
-/*     RESV        is the number of reserved records to be added */
-/*                 to the specified file. */
+/*     RESV     is the number of reserved records to be added */
+/*              to the specified file. */
 
 /* $ Detailed_Output */
 
@@ -118,7 +118,7 @@ static integer c__128 = 128;
 
 /* $ Exceptions */
 
-/*     1) If RESV is less than one, the file is not changed. */
+/*     1)  If RESV is less than one, the file is not changed. */
 
 /* $ Files */
 
@@ -127,7 +127,7 @@ static integer c__128 = 128;
 /* $ Particulars */
 
 /*     Normally, the reserved records in an array file are reserved */
-/*     when the file is created.  However, it may occasionally become */
+/*     when the file is created. However, it may occasionally become */
 /*     necessary to add reserved records---when the contents of one */
 /*     file are appended to another, for example. (In this case, any */
 /*     information in the reserved records of either file should */
@@ -151,9 +151,9 @@ static integer c__128 = 128;
 
 /* $ Restrictions */
 
-/*     1) This routine will only add reserved records to DAFs open for */
-/*        write.  These files are implicitly of the native binary file */
-/*        format. */
+/*     1)  This routine will only add reserved records to DAFs open for */
+/*         write. These files are implicitly of the native binary file */
+/*         format. */
 
 /* $ Literature_References */
 
@@ -161,10 +161,19 @@ static integer c__128 = 128;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.6.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.5.0, 16-NOV-2001 (FST) */
 
@@ -189,7 +198,7 @@ static integer c__128 = 128;
 
 /* -    SPICELIB Version 1.2.0, 30-SEP-1993 (KRG) */
 
-/*        Detailed_Input and Examples section of the header were */
+/*        $Detailed_Input and $Examples section of the header were */
 /*        modified. */
 
 /*        Added calls to the FORTRAN intrinsic functions INT and */
@@ -207,7 +216,7 @@ static integer c__128 = 128;
 /* -& */
 /* $ Index_Entries */
 
-/*     add daf reserved records */
+/*     add DAF reserved records */
 
 /* -& */
 /* $ Revisions */
@@ -228,13 +237,13 @@ static integer c__128 = 128;
 
 /* -    SPICELIB Version 1.2.0, 30-SEP-1993 (KRG) */
 
-/*        $ Detailed_Input section was modified. References to any */
+/*        $Detailed_Input section was modified. References to any */
 /*        specific routines by name as a method for opening a DAF file */
 /*        for write access were removed. The assumption is that a person */
 /*        using DAF files would already know something about opening and */
 /*        closing the files. */
 
-/*        $ Examples section was modified. References to any specific */
+/*        $Examples section was modified. References to any specific */
 /*        routines by name as a method for opening a DAF file for writing */
 /*        were removed, and the example was reworded in such a way that */
 /*        the use of the subroutine remained clear. */
@@ -262,7 +271,7 @@ static integer c__128 = 128;
 /*                 CALL CHKIN ( 'DAFARR' ) */
 /*              END IF */
 
-/*        with the eqivalent code: */
+/*        with the equivalent code: */
 
 /*              IF ( RETURN () ) THEN */
 /*                 RETURN */
@@ -449,12 +458,12 @@ static integer c__128 = 128;
 	dafgs_(sum);
 	dafus_(sum, &nd, &ni, dc, ic);
 	ic[(i__1 = ni - 2) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
-		"dafarr_", (ftnlen)474)] = ic[(i__2 = ni - 2) < 250 && 0 <= 
-		i__2 ? i__2 : s_rnge("ic", i__2, "dafarr_", (ftnlen)474)] + 
+		"dafarr_", (ftnlen)488)] = ic[(i__2 = ni - 2) < 250 && 0 <= 
+		i__2 ? i__2 : s_rnge("ic", i__2, "dafarr_", (ftnlen)488)] + 
 		incr;
 	ic[(i__1 = ni - 1) < 250 && 0 <= i__1 ? i__1 : s_rnge("ic", i__1, 
-		"dafarr_", (ftnlen)475)] = ic[(i__2 = ni - 1) < 250 && 0 <= 
-		i__2 ? i__2 : s_rnge("ic", i__2, "dafarr_", (ftnlen)475)] + 
+		"dafarr_", (ftnlen)489)] = ic[(i__2 = ni - 1) < 250 && 0 <= 
+		i__2 ? i__2 : s_rnge("ic", i__2, "dafarr_", (ftnlen)489)] + 
 		incr;
 	dafps_(&nd, &ni, dc, ic, sum);
 	dafws_(sum);

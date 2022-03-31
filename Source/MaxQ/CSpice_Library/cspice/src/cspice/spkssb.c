@@ -58,7 +58,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TARG       I   Target body. */
 /*     ET         I   Target epoch. */
@@ -67,24 +67,23 @@
 
 /* $ Detailed_Input */
 
-/*     TARG        is the standard NAIF ID code for a target body. */
+/*     TARG     is the standard NAIF ID code for a target body. */
 
-/*     ET          is the epoch (ephemeris time) at which the state */
-/*                 of the target body is to be computed. */
+/*     ET       is the epoch (ephemeris time) at which the state of the */
+/*              target body is to be computed. */
 
-/*     REF         is the name of the  reference frame to which the */
-/*                 vectors returned by the routine should be rotated. */
-/*                 This may be any frame supported by the SPICELIB frame */
-/*                 system, including dynamic and other non-inertial */
-/*                 frames. */
+/*     REF      is the name of the reference frame relative to which the */
+/*              output state vector should be expressed. This may be any */
+/*              frame supported by the SPICELIB frame system, including */
+/*              dynamic and other non-inertial frames. */
 
 /* $ Detailed_Output */
 
-/*     STARG       contains the position and velocity of the target */
-/*                 body, relative to the solar system barycenter, */
-/*                 at epoch ET. These vectors are rotated into the */
-/*                 specified  reference frame. Units are always */
-/*                 km and km/sec. */
+/*     STARG    is a Cartesian state vector representing the position and */
+/*              velocity of the target body, relative to the solar system */
+/*              barycenter, at epoch ET. This vector is rotated into the */
+/*              specified reference frame. Units are always km and */
+/*              km/sec. */
 
 /* $ Parameters */
 
@@ -92,13 +91,13 @@
 
 /* $ Exceptions */
 
-/*     1) If insufficient information has not bee "loaded" via the */
-/*        routine SPKLEF or the PCK kernel loaders, the problem will */
-/*        be diagnosed by a routine in the call tree of this routine. */
+/*     1)  If sufficient information has not been "loaded" via the */
+/*         routine FURNSH, SPKLEF or the PCK kernel loaders, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*     See: $Restrictions. */
+/*     See $Restrictions. */
 
 /* $ Particulars */
 
@@ -111,7 +110,7 @@
 /*     to determine the state of a body relative to the barycenter. */
 /*     SPKSSB reads as many segments as necessary, from as many */
 /*     files as necessary, using files that have been loaded by */
-/*     previous calls to SPKLEF (load ephemeris file). */
+/*     previous calls to FURNSH or SPKLEF (load ephemeris file). */
 
 /* $ Examples */
 
@@ -138,38 +137,46 @@
 
 /* $ Restrictions */
 
-/*     1) The ephemeris files to be used by SPKSSB must be loaded */
-/*        by SPKLEF before SPKSSB is called. */
+/*     1)  The ephemeris files to be used by SPKSSB must be loaded */
+/*         by FURNSH or SPKLEF before SPKSSB is called. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.4, 13-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        detailed description of arguments REF and STARG. */
 
 /* -    SPICELIB Version 2.0.3, 18-MAY-2010 (BVS) */
 
 /*        Removed "C$" marker from text in the header. */
 
-/* -    SPICELIB Version 2.0.2, 20-NOV-2004  (NJB) */
+/* -    SPICELIB Version 2.0.2, 20-NOV-2004 (NJB) */
 
 /*        Updated description of input argument REF to indicate all */
 /*        frames supported by SPICELIB are allowed. */
 
-/* -    SPICELIB Version 2.0.1, 24-JUN-1999  (WLT) */
+/* -    SPICELIB Version 2.0.1, 24-JUN-1999 (WLT) */
 
-/*        Corrected code in Examples section of the headers */
+/*        Corrected code in $Examples section of the headers */
 
-/* -    SPICELIB Version 2.0.0, 19-SEP-1995  (WLT) */
+/* -    SPICELIB Version 2.0.0, 19-SEP-1995 (WLT) */
 
 /*        The routine was simplified by replacing all of the */
-/*        main body of code with a call to SPKGEO.  By making */
+/*        main body of code with a call to SPKGEO. By making */
 /*        this change the routine now supports non-inertial frames. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
@@ -191,10 +198,10 @@
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 2.0.0, 19-SEP-1995  (WLT) */
+/* -    SPICELIB Version 2.0.0, 19-SEP-1995 (WLT) */
 
 /*        The routine was simplified by replacing all of the */
-/*        main body of code with a call to SPKGEO.  By making */
+/*        main body of code with a call to SPKGEO. By making */
 /*        this change the routine now supports non-inertial frames. */
 
 /* -& */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SHIFTC ( Shift a character string ) */
+/* $Procedure SHIFTC ( Shift a character string ) */
 /* Subroutine */ int shiftc_(char *in, char *dir, integer *nshift, char *
 	fillc, char *out, ftnlen in_len, ftnlen dir_len, ftnlen fillc_len, 
 	ftnlen out_len)
@@ -23,9 +23,9 @@
 
 /* $ Abstract */
 
-/*      Shift the contents of a character string to the left or right. */
-/*      Characters moved past the beginning or end of the string are */
-/*      lost. Vacant spaces are filled with a specified character. */
+/*     Shift the contents of a character string to the left or right. */
+/*     Characters moved past the beginning or end of the string are */
+/*     lost. Vacant spaces are filled with a specified character. */
 
 /* $ Disclaimer */
 
@@ -58,90 +58,99 @@
 
 /* $ Keywords */
 
-/*      CHARACTER,  UTILITY */
+/*     CHARACTER */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      IN         I   Input string. */
-/*      DIR        I   Direction to shift. */
-/*      NSHIFT     I   Number of times to shift. */
-/*      FILLC      I   Character to fill spaces left vacant. */
-/*      OUT        O   Shifted string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     IN         I   Input string. */
+/*     DIR        I   Direction to shift. */
+/*     NSHIFT     I   Number of times to shift. */
+/*     FILLC      I   Character to fill spaces left vacant. */
+/*     OUT        O   Shifted string. */
 
 /* $ Detailed_Input */
 
-/*      IN          is the input character string. */
+/*     IN       is the input character string. */
 
-/*      DIR         is the direction in which the characters in the */
-/*                  string are to be shifted. */
+/*     DIR      is the direction in which the characters in the */
+/*              string are to be shifted. */
 
-/*                        'L' or 'l'  to shift left. */
-/*                        'R' or 'r'  to shift right. */
+/*                    'L' or 'l'  to shift left. */
+/*                    'R' or 'r'  to shift right. */
 
-/*      NSHIFT      is the number of times the string is to be */
-/*                  shifted. */
+/*     NSHIFT   is the number of times the string is to be */
+/*              shifted. */
 
-/*      FILLC       is the character with which spaces left vacant by */
-/*                  the shift are to be filled. */
+/*     FILLC    is the character with which spaces left vacant by */
+/*              the shift are to be filled. */
 
 /* $ Detailed_Output */
 
-/*      OUT         is the output string. This is the input string, */
-/*                  shifted N times, filled with FILLC. */
+/*     OUT      is the output string. This is the input string, */
+/*              shifted N times, filled with FILLC. */
 
-/*                  OUT may overwrite IN. */
+/*              OUT may overwrite IN. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The first NSHIFT characters of the output string are filled */
-/*      with the fill character, and the input string is appended. */
-
-/* $ Examples */
-
-/*    If FILLC = ' ' */
-
-/*           'abcde'   shifted left twice becomes     'cde  ' */
-/*           'abcde'   shifted right once becomes     ' abcd' */
-
-/*    If FILLC = '.' */
-
-/*           '12345 '  shifted right once becomes     '.12345' */
-/*           'Apple '  shifted left ten times becomes '......' */
-
-/* $ Restrictions */
-
-/*     SHIFTC is being maintained for historical reasons only. */
-/*     To avoid the overhead imposed by the error handling in this */
-/*     routine, use the equivalent routines SHIFTL and SHIFTR. */
-
 /* $ Exceptions */
 
-/*     1) A negative shift in one direction is equal to a positive */
-/*        shift in the other. */
+/*     1)  A negative shift in one direction is equal to a positive */
+/*         shift in the other. */
 
-/*     2) If a legal direction ('L', 'l', 'R', 'r') is not supplied, */
-/*        the error 'SPICE(ILLEGSHIFTDIR)' is signalled. */
+/*     2)  If a legal direction ('L', 'l', 'R', 'r') is not supplied, */
+/*         the error SPICE(ILLEGSHIFTDIR) is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     The first NSHIFT characters of the output string are filled */
+/*     with the fill character, and the input string is appended. */
+
+/* $ Examples */
+
+/*     If FILLC = ' ' */
+
+/*            'abcde'   shifted left twice becomes     'cde  ' */
+/*            'abcde'   shifted right once becomes     ' abcd' */
+
+/*     If FILLC = '.' */
+
+/*            '12345 '  shifted right once becomes     '.12345' */
+/*            'Apple '  shifted left ten times becomes '......' */
+
+/* $ Restrictions */
+
+/*     1)  SHIFTC is being maintained for historical reasons only. */
+/*         To avoid the overhead imposed by the error handling in this */
+/*         routine, use the equivalent routines SHIFTL and SHIFTR. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      XPOSBL ( Transpose a matrix by blocks    ) */
+/* $Procedure XPOSBL ( Transpose a matrix by blocks    ) */
 /* Subroutine */ int xposbl_(doublereal *bmat, integer *nrow, integer *ncol, 
 	integer *bsize, doublereal *btmat)
 {
@@ -67,7 +67,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BMAT       I   a matrix composed of square block submatrices */
 /*     NROW       I   the number of rows in the matrix BMAT */
@@ -77,67 +77,67 @@
 
 /* $ Detailed_Input */
 
-/*     BMAT       is a block structured matrix.  In other words */
-/*                it looks like: */
+/*     NROW     is the number of rows in the input matrix. */
+
+/*     NCOL     is the number of columns in the input matrix. */
+
+/*     BSIZE    is the number of rows and columns in each block */
+/*              of the input matrix. */
+
+/*     BMAT     is a block structured matrix. In other words */
+/*              it looks like: */
 
 
-/*                   -                                - */
-/*                  |      :      :       :     :      | */
-/*                  |  B   :  B   :   B   :     :  B   | */
-/*                  |   11 :   12 :    13 : ... :   1C | */
-/*                  |......:......:.......:     :......| */
-/*                  |      :      :       :     :      | */
-/*                  |  B   :  B   :   B   :     :  B   | */
-/*                  |   21 :   22 :    23 : ... :   2C | */
-/*                  |......:......:.......:     :......| */
-/*                  |      .                           | */
-/*                  |      .                           | */
-/*                  |      .                           | */
-/*                  |......................     .......| */
-/*                  |      :      :       :     :      | */
-/*                  |  B   :  B   :   B   :     :  B   | */
-/*                  |   R1 :   R2 :    R3 : ... :   RC | */
-/*                  |......:......:.......:     :......| */
-/*                   -                                - */
+/*                 -                                - */
+/*                |      :      :       :     :      | */
+/*                |  B   :  B   :   B   :     :  B   | */
+/*                |   11 :   12 :    13 : ... :   1C | */
+/*                |......:......:.......:     :......| */
+/*                |      :      :       :     :      | */
+/*                |  B   :  B   :   B   :     :  B   | */
+/*                |   21 :   22 :    23 : ... :   2C | */
+/*                |......:......:.......:     :......| */
+/*                |      .                           | */
+/*                |      .                           | */
+/*                |      .                           | */
+/*                |......................     .......| */
+/*                |      :      :       :     :      | */
+/*                |  B   :  B   :   B   :     :  B   | */
+/*                |   R1 :   R2 :    R3 : ... :   RC | */
+/*                |......:......:.......:     :......| */
+/*                 -                                - */
 
-/*                where each B   is a square matrix of BSIZE rows and */
-/*                            ij */
-/*                and columns. */
-
-/*     NROW       is the number of rows in the input matrix. */
-
-/*     NCOL       is the number of columns in the input matrix. */
-
-/*     BSIZE      is the number of rows and columns in each block */
-/*                of the input matrix. */
+/*              where each B   is a square matrix of BSIZE rows and */
+/*                          ij */
+/*              and columns. */
 
 /* $ Detailed_Output */
 
-/*     BTMAT     is the matrix obtained from BMAT when each of its */
-/*               blocks is transposed.  Given the description of */
-/*               BMAT above, BTMAT looks like: */
+/*     BTMAT    is the matrix obtained from BMAT when each of its */
+/*              blocks is transposed. Given the description of */
+/*              BMAT above, BTMAT looks like: */
 
 
-/*                   -                                - */
-/*                  |   t  :   t  :    t  :     :   t  | */
-/*                  |  B   :  B   :   B   :     :  B   | */
-/*                  |   11 :   12 :    13 : ... :   1C | */
-/*                  |......:......:.......:     :......| */
-/*                  |      :      :       :     :      | */
-/*                  |   t  :   t  :    t  :     :   t  | */
-/*                  |  B   :  B   :   B   :     :  B   | */
-/*                  |   21 :   22 :    23 : ... :   2C | */
-/*                  |......:......:.......:     :......| */
-/*                  |      .                           | */
-/*                  |      .                           | */
-/*                  |      .                           | */
-/*                  |......................     .......| */
-/*                  |      :      :       :     :      | */
-/*                  |   t  :   t  :    t  :     :   t  | */
-/*                  |  B   :  B   :   B   :     :  B   | */
-/*                  |   R1 :   R2 :    R3 : ... :   RC | */
-/*                  |......:......:.......:     :......| */
-/*                   -                                - */
+/*                  -                                - */
+/*                 |   t  :   t  :    t  :     :   t  | */
+/*                 |  B   :  B   :   B   :     :  B   | */
+/*                 |   11 :   12 :    13 : ... :   1C | */
+/*                 |......:......:.......:     :......| */
+/*                 |      :      :       :     :      | */
+/*                 |   t  :   t  :    t  :     :   t  | */
+/*                 |  B   :  B   :   B   :     :  B   | */
+/*                 |   21 :   22 :    23 : ... :   2C | */
+/*                 |......:......:.......:     :......| */
+/*                 |      .                           | */
+/*                 |      .                           | */
+/*                 |      .                           | */
+/*                 |......................     .......| */
+/*                 |      :      :       :     :      | */
+/*                 |   t  :   t  :    t  :     :   t  | */
+/*                 |  B   :  B   :   B   :     :  B   | */
+/*                 |   R1 :   R2 :    R3 : ... :   RC | */
+/*                 |......:......:.......:     :......| */
+/*                  -                                - */
 
 /* $ Parameters */
 
@@ -145,21 +145,17 @@
 
 /* $ Exceptions */
 
-/*     1) If the number of rows input is not positive, your program */
-/*        will probably experience a run-time error.  However, in the */
-/*        event that your system does not catch this error, this routine */
-/*        will diagnose it and signal the error 'SPICE(BADROWCOUNT)'. */
+/*     1)  If the number of rows input is not positive, the error */
+/*         SPICE(BADROWCOUNT) is signaled. */
 
-/*     1) If the number of columns input is not positive, your program */
-/*        will probably experience a run-time error.  However, in the */
-/*        event that your system does not catch this error, this routine */
-/*        will diagnose it and signal the error 'SPICE(BADCOLUMNCOUNT)'. */
+/*     2)  If the number of columns input is not positive, the error */
+/*         SPICE(BADCOLUMNCOUNT) is signaled. */
 
-/*     3) If the block size input is not positive, the error */
-/*        'SPICE(BADBLOCKSIZE)' is signalled. */
+/*     3)  If the block size input is not positive, the error */
+/*         SPICE(BADBLOCKSIZE) is signaled. */
 
-/*     4) If BMAT cannot be partitioned into an integer number of */
-/*        blocks, the error 'SPICE(BLOCKSNOTEVEN)' is signalled. */
+/*     4)  If BMAT cannot be partitioned into an integer number of */
+/*         blocks, the error SPICE(BLOCKSNOTEVEN) is signaled. */
 
 /* $ Files */
 
@@ -168,7 +164,7 @@
 /* $ Particulars */
 
 /*     This routine transposes the blocks of a block structured */
-/*     matrix.  This operation is valuable, as it is a means */
+/*     matrix. This operation is valuable, as it is a means */
 /*     for computing the inverse of a state transformation matrix */
 /*     (see the example below). */
 
@@ -203,7 +199,6 @@
 /*     C */
 /*           CALL MXVG   ( TSPMI, ESTATE, 6, 6, ISTATE ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -214,9 +209,18 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 16-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        $Exceptions section. */
 
 /* -    SPICELIB Version 1.0.2, 22-APR-2010 (NJB) */
 
@@ -228,7 +232,7 @@
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 5-NOV-1990 (WLT) */
+/* -    SPICELIB Version 1.0.0, 05-NOV-1990 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -374,26 +378,26 @@
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
 				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
 				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)370)] = bmat[(i__8 = rb + i__ + 
+				"bl_", (ftnlen)375)] = bmat[(i__8 = rb + i__ + 
 				(cb + j) * bmat_dim1 - bmat_offset) < 
 				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
-				s_rnge("bmat", i__8, "xposbl_", (ftnlen)370)];
+				s_rnge("bmat", i__8, "xposbl_", (ftnlen)375)];
 		    } else {
 			temp = bmat[(i__7 = rb + i__ + (cb + j) * bmat_dim1 - 
 				bmat_offset) < bmat_dim1 * bmat_dim2 && 0 <= 
 				i__7 ? i__7 : s_rnge("bmat", i__7, "xposbl_", 
-				(ftnlen)372)];
+				(ftnlen)377)];
 			btmat[(i__7 = rb + i__ + (cb + j) * btmat_dim1 - 
 				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
 				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)373)] = bmat[(i__8 = rb + j + (
+				"bl_", (ftnlen)378)] = bmat[(i__8 = rb + j + (
 				cb + i__) * bmat_dim1 - bmat_offset) < 
 				bmat_dim1 * bmat_dim2 && 0 <= i__8 ? i__8 : 
-				s_rnge("bmat", i__8, "xposbl_", (ftnlen)373)];
+				s_rnge("bmat", i__8, "xposbl_", (ftnlen)378)];
 			btmat[(i__7 = rb + j + (cb + i__) * btmat_dim1 - 
 				btmat_offset) < btmat_dim1 * btmat_dim2 && 0 
 				<= i__7 ? i__7 : s_rnge("btmat", i__7, "xpos"
-				"bl_", (ftnlen)374)] = temp;
+				"bl_", (ftnlen)379)] = temp;
 		    }
 		}
 	    }

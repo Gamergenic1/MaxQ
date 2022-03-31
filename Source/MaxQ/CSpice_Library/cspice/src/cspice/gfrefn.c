@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure GFREFN ( GF, default refinement estimator) */
+/* $Procedure GFREFN ( GF, default refinement estimator ) */
 /* Subroutine */ int gfrefn_(doublereal *t1, doublereal *t2, logical *s1, 
 	logical *s2, doublereal *t)
 {
@@ -14,8 +14,9 @@
 
 /* $ Abstract */
 
-/*     For those times when we can't do better, we use a bisection */
-/*     method to find the next estimate of state change. */
+/*     Estimate, using a bisection method, the next abscissa value at */
+/*     which a state change occurs. This is the default GF refinement */
+/*     method. */
 
 /* $ Disclaimer */
 
@@ -64,20 +65,20 @@
 
 /* $ Detailed_Input */
 
-/*     T1         One of two abscissa values (usually times) */
-/*                bracketing a state change. */
+/*     T1       is one of two abscissa values (usually times) */
+/*              bracketing a state change. */
 
-/*     T2         The other abscissa value that brackets a state change. */
+/*     T2       is the other abscissa value that brackets a state change. */
 
-/*     S1         System state at T1. This argument is provided */
-/*                for forward compatibility; it's not currently used. */
+/*     S1       is the system state at T1. This argument is provided */
+/*              for forward compatibility; it's not currently used. */
 
-/*     S2         System state at T2. This argument is provided */
-/*                for forward compatibility; it's not currently used. */
+/*     S2       is the system state at T2. This argument is provided */
+/*              for forward compatibility; it's not currently used. */
 
 /* $ Detailed_Output */
 
-/*     T          the midpoint of T1 and T2. */
+/*     T        is the midpoint of T1 and T2. */
 
 /* $ Parameters */
 
@@ -85,7 +86,7 @@
 
 /* $ Exceptions */
 
-/*     Error free */
+/*     Error free. */
 
 /* $ Files */
 
@@ -93,47 +94,48 @@
 
 /* $ Particulars */
 
-/*   "Refinement" means reducing the size of a bracketing interval on the */
-/*   real line in which a solution is known to lie. In the GF setting, */
-/*   the solution is the time of a state transition of a binary function. */
+/*     "Refinement" means reducing the size of a bracketing interval on */
+/*     the real line in which a solution is known to lie. In the GF */
+/*     setting, the solution is the time of a state transition of a */
+/*     binary function. */
 
-/*   This routine supports solving for locations of bracketed state */
-/*   transitions by the bisection method. This is the default refinement */
-/*   method used by the GF system. */
+/*     This routine supports solving for locations of bracketed state */
+/*     transitions by the bisection method. This is the default */
+/*     refinement method used by the GF system. */
 
-/*   The argument list of this routine is compatible with the GF system's */
-/*   general root finding routine. Refinement routines created by users */
-/*   must have the same argument list in order to be used by the GF */
-/*   mid-level APIs such as GFOCCE and GFFOVE. */
+/*     The argument list of this routine is compatible with the GF */
+/*     system's general root finding routine. Refinement routines created */
+/*     by users must have the same argument list in order to be used by */
+/*     the GF mid-level APIs such as GFOCCE and GFFOVE. */
 
 /* $ Examples */
 
-/*   The following code fragment from an example program in the header of */
-/*   GFOCCE shows the routine passed as the 12th argument. */
+/*     The following code fragment from an example program in the header */
+/*     of GFOCCE shows the routine passed as the 12th argument. */
 
-/*      C */
-/*      C     Define as EXTERNAL the routines to pass to GFOCCE. */
-/*      C */
-/*            EXTERNAL              GFSTEP */
-/*            EXTERNAL              GFREFN */
-/*            EXTERNAL              GFREPI */
-/*            EXTERNAL              GFREPU */
-/*            EXTERNAL              GFREPF */
-/*            EXTERNAL              GFBAIL */
+/*        C */
+/*        C     Define as EXTERNAL the routines to pass to GFOCCE. */
+/*        C */
+/*              EXTERNAL              GFSTEP */
+/*              EXTERNAL              GFREFN */
+/*              EXTERNAL              GFREPI */
+/*              EXTERNAL              GFREPU */
+/*              EXTERNAL              GFREPF */
+/*              EXTERNAL              GFBAIL */
 
-/*               ... initialize for the search ... */
+/*                 ... initialize for the search ... */
 
-/*            CALL GFOCCE ( 'ANY', */
-/*           .              'MOON',   'ellipsoid',  'IAU_MOON', */
-/*           .              'SUN',    'ellipsoid',  'IAU_SUN', */
-/*           .              'LT',     'EARTH',       CNVTOL, */
-/*           .               GFSTEP,   GFREFN,       RPT, */
-/*           .               GFREPI,   GFREPU,       GFREPF, */
-/*           .               BAIL,     GFBAIL,       CNFINE,  RESULT ) */
+/*              CALL GFOCCE ( 'ANY', */
+/*             .              'MOON',   'ellipsoid',  'IAU_MOON', */
+/*             .              'SUN',    'ellipsoid',  'IAU_SUN', */
+/*             .              'LT',     'EARTH',       CNVTOL, */
+/*             .               GFSTEP,   GFREFN,       RPT, */
+/*             .               GFREPI,   GFREPU,       GFREPF, */
+/*             .               BAIL,     GFBAIL,       CNFINE,  RESULT ) */
 
 /* $ Restrictions */
 
-/*      No errors are returned by this routine. */
+/*     None. */
 
 /* $ Literature_References */
 
@@ -141,13 +143,17 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
-/*     L.S. Elson     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/*   SPICELIB Version 1.0.0, 03-MAR-2009 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 03-MAR-2009 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */

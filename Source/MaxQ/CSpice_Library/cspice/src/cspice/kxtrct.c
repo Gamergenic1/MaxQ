@@ -5,10 +5,10 @@
 
 #include "f2c.h"
 
-/* $Procedure      KXTRCT ( Extract a substring starting with a keyword ) */
+/* $Procedure KXTRCT ( Extract a substring starting with a keyword ) */
 /* Subroutine */ int kxtrct_(char *keywd, char *terms, integer *nterms, char *
-	string, logical *found, char *substr, ftnlen keywd_len, ftnlen 
-	terms_len, ftnlen string_len, ftnlen substr_len)
+	wordsq, logical *found, char *substr, ftnlen keywd_len, ftnlen 
+	terms_len, ftnlen wordsq_len, ftnlen substr_len)
 {
     /* System generated locals */
     integer i__1;
@@ -67,168 +67,176 @@
 
 /* $ Keywords */
 
-/*      SEARCH, PARSING, PARSING */
+/*     PARSING */
+/*     PARSING */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      KEYWD      I   Word that marks the beginning of text of interest. */
-/*      TERMS      I   Set of words, any of which marks the end of text. */
-/*      NTERMS     I   Number of TERMS. */
-/*      STRING    I/O  String containing a sequence of words. */
-/*      FOUND      O   TRUE if the keyword is found in the string. */
-/*      SUBSTR     O   String from end of KEYWD to beginning of first */
-/*                     TERMS item found. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     KEYWD      I   Word that marks the beginning of text of interest. */
+/*     TERMS      I   Set of words, any of which marks the end of text. */
+/*     NTERMS     I   Number of TERMS. */
+/*     WORDSQ    I-O  String containing a sequence of words. */
+/*     FOUND      O   .TRUE. if the keyword is found in the string. */
+/*     SUBSTR     O   String from end of KEYWD to beginning of first */
+/*                    TERMS item found. */
 
 /* $ Detailed_Input */
 
-/*      KEYWD      is a word used to mark the start of text of interest. */
+/*     KEYWD    is a word used to mark the start of text of interest. */
 
-/*      TERMS      is a set of words, any one of which may signal the */
-/*                 end of text of interest. */
+/*     TERMS    is a set of words, any one of which may signal the end of */
+/*              text of interest. */
 
-/*      NTERMS     is the number of TERMS. */
+/*     NTERMS   is the number of TERMS. */
 
-/*      STRING     is a character string made up of words, that may */
-/*                 contain the keyword in KEYWD. */
+/*     WORDSQ   is a character string made up of words, that may contain */
+/*              the keyword in KEYWD. */
 
 /* $ Detailed_Output */
 
-/*      STRING     is the input string stripped of all words from */
-/*                 the beginning of the keyword KEYWD to the end of */
-/*                 the last word preceding one of the words in TERMS */
-/*                 (or the end of the string if none of the TERMS follows */
-/*                 KEYWD in the string). */
+/*     WORDSQ   is the input string stripped of all words from the */
+/*              beginning of the keyword KEYWD to the end of the last */
+/*              word preceding one of the words in TERMS (or the end of */
+/*              the string if none of the TERMS follows KEYWD in the */
+/*              string). */
 
-/*      FOUND      is .TRUE. if KEYWD is present in the input STRING. */
+/*     FOUND    is .TRUE. if KEYWD is present in the input WORDSQ. */
 
-/*      SUBSTR     is the substring that begins with the first word */
-/*                 following KEYWD up to the beginning of any of the */
-/*                 words in TERM or the end of the string. */
+/*     SUBSTR   is the substring that begins with the first word */
+/*              following KEYWD up to the beginning of any of the words */
+/*              in TERM or the end of the string. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
+
+/*     None. */
+
 /* $ Particulars */
 
-/*      Definitions: */
+/*     Definitions: */
 
-/*      A WORD        is a set of consecutive non-blank characters */
-/*                    delimited by blanks or either end of the string */
-/*                    that contains them. */
+/*     A WORD        is a set of consecutive non-blank characters */
+/*                   delimited by blanks or either end of the string */
+/*                   that contains them. */
 
-/*      Given a string and a keyword this routine locates the first */
-/*      occurrence of the keyword in the string and returns the */
-/*      substring between the end of the keyword and the first occurrence */
-/*      of any of the words in a list of terminating words.  If none */
-/*      of the terminating words follows the keyword in the string, */
-/*      the routine returns all of the string following the keyword. */
+/*     Given a string and a keyword this routine locates the first */
+/*     occurrence of the keyword in the string and returns the */
+/*     substring between the end of the keyword and the first occurrence */
+/*     of any of the words in a list of terminating words. If none */
+/*     of the terminating words follows the keyword in the string, */
+/*     the routine returns all of the string following the keyword. */
 
-/*      If the next word following the keyword is a terminating word, */
-/*      the substring returned will be a blank. */
+/*     If the next word following the keyword is a terminating word, */
+/*     the substring returned will be a blank. */
 
-/*      If the keyword can not be located in the string, the variable */
-/*      FOUND will be returned as .FALSE. and the input string will be */
-/*      unchanged.  The substring will be returned as a blank. */
+/*     If the keyword can not be located in the string, the variable */
+/*     FOUND will be returned as .FALSE. and the input string will be */
+/*     unchanged. The substring will be returned as a blank. */
 
-/*      In all other cases, the part of the input string from the */
-/*      beginning of the keyword to the start of the first terminating */
-/*      word will be removed.  If no terminating word follows the keyword */
-/*      the portion of the string from the keyword to the last non-blank */
-/*      character of the string will be removed. */
+/*     In all other cases, the part of the input string from the */
+/*     beginning of the keyword to the start of the first terminating */
+/*     word will be removed. If no terminating word follows the keyword */
+/*     the portion of the string from the keyword to the last non-blank */
+/*     character of the string will be removed. */
 
 /* $ Examples */
 
-/*  Example 1. */
-/*  ---------- */
-/*       Input:  STRING  'FROM 1 October 1984 12:00:00 TO 1 January 1987' */
+/*     Example 1. */
+/*     ---------- */
+/*       Input:  WORDSQ  'FROM 1 October 1984 12:00:00 TO 1 January 1987' */
 /*               KEYWD   'TO' */
 /*               TERMS   'FROM' */
 /*                       'TO' */
 /*                       'BEGINNING' */
 /*                       'ENDING' */
 
-/*       Output: STRING  'FROM 1 October 1984 12:00:00 ' */
+/*       Output: WORDSQ  'FROM 1 October 1984 12:00:00 ' */
 /*               FOUND   .TRUE. */
 /*               SUBSTR  '1 January 1987' */
 
 
-
-/*  Example 2. */
-/*  ---------- */
-/*       Input:  STRING  'FROM 1 October 1984 12:00:00 TO 1 January 1987' */
+/*     Example 2. */
+/*     ---------- */
+/*       Input:  WORDSQ  'FROM 1 October 1984 12:00:00 TO 1 January 1987' */
 /*               KEYWD   'FROM' */
 /*               TERMS   'FROM' */
 /*                       'TO' */
 /*                       'BEGINNING' */
 /*                       'ENDING' */
 
-/*       Output: STRING  ' TO 1 January 1987' */
+/*       Output: WORDSQ  ' TO 1 January 1987' */
 /*               FOUND   .TRUE. */
 /*               SUBSTR  '1 October 1984 12:00:00' */
 
 
-
-/*  Example 3. */
-/*  ---------- */
-/*       Input:  STRING  'ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 ' */
+/*     Example 3. */
+/*     ---------- */
+/*       Input:  WORDSQ  'ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 ' */
 /*               KEYWD   'ADDRESS:' */
 /*               TERMS   'ADDRESS:' */
 /*                       'PHONE:' */
 /*                       'NAME:' */
 
-/*       Output: STRING  ' PHONE: 354-4321 ' */
+/*       Output: WORDSQ  ' PHONE: 354-4321 ' */
 /*               FOUND   .TRUE. */
 /*               SUBSTR  '4800 OAK GROVE DRIVE' */
 
 
-/*  Example 4. */
-/*  ---------- */
-/*       Input:  STRING  'ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 ' */
+/*     Example 4. */
+/*     ---------- */
+/*       Input:  WORDSQ  'ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 ' */
 /*               KEYWD   'NAME:' */
 /*               TERMS   'ADDRESS:' */
 /*                       'PHONE:' */
 /*                       'NAME:' */
 
-/*       Output: STRING  'ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 ' */
+/*       Output: WORDSQ  'ADDRESS: 4800 OAK GROVE DRIVE PHONE: 354-4321 ' */
 /*               FOUND   .FALSE. */
 /*               SUBSTR  ' ' */
 
 /* $ Restrictions */
 
-/*      It is the user's responsibility to make sure there is adequate */
-/*      room in SUBSTR to contain the substring. */
+/*     1)  It is the user's responsibility to make sure there is adequate */
+/*         room in SUBSTR to contain the substring. */
 
-/*      SUBSTR cannot overwrite STRING. */
-
-/* $ Exceptions */
-
-/*      Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     2)  SUBSTR cannot overwrite WORDSQ. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 17-JUN-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. Changed the input argument */
+/*        STRING to WORDSQ for consistency with other routines. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -244,7 +252,7 @@
 
 /* -     Beta Version 1.0.1, 10-FEB-1989 (HAN) */
 
-/*         Contents of the Exceptions section was changed */
+/*         Contents of the $Exceptions section was changed */
 /*         to "error free" to reflect the decision that the */
 /*         module will never participate in error handling. */
 
@@ -258,7 +266,7 @@
 
 /*     Locate the keyword within the string. */
 
-    positn = wdindx_(string, keywd, string_len, keywd_len);
+    positn = wdindx_(wordsq, keywd, wordsq_len, keywd_len);
 
 /*     If the keyword wasn't found, set the outputs and head for home. */
 
@@ -279,13 +287,13 @@
 
 /*     Find the begin and end of the next word. */
 
-    fndnwd_(string, &start, &b, &e, string_len);
+    fndnwd_(wordsq, &start, &b, &e, wordsq_len);
 
 /*     If there is a next word ( E came back non-zero ) see if its a */
 /*     terminator. */
 
     if (e != 0) {
-	delims = isrchc_(string + (b - 1), nterms, terms, e - (b - 1), 
+	delims = isrchc_(wordsq + (b - 1), nterms, terms, e - (b - 1), 
 		terms_len);
     }
 
@@ -295,8 +303,8 @@
 
     if (e == 0 || delims != 0) {
 	i__1 = eerase - berase + 1;
-	shiftl_(string + (berase - 1), &i__1, " ", string + (berase - 1), 
-		string_len - (berase - 1), (ftnlen)1, string_len - (berase - 
+	shiftl_(wordsq + (berase - 1), &i__1, " ", wordsq + (berase - 1), 
+		wordsq_len - (berase - 1), (ftnlen)1, wordsq_len - (berase - 
 		1));
 	s_copy(substr, " ", substr_len, (ftnlen)1);
 	return 0;
@@ -315,9 +323,9 @@
 	endstr = e;
 	eerase = e;
 	start = e + 1;
-	fndnwd_(string, &start, &b, &e, string_len);
+	fndnwd_(wordsq, &start, &b, &e, wordsq_len);
 	if (e != 0) {
-	    delims = isrchc_(string + (b - 1), nterms, terms, e - (b - 1), 
+	    delims = isrchc_(wordsq + (b - 1), nterms, terms, e - (b - 1), 
 		    terms_len);
 	}
     }
@@ -326,10 +334,10 @@
 /*     and words up to the terminator or end of the string --- whichever */
 /*     came first. */
 
-    s_copy(substr, string + (begstr - 1), substr_len, endstr - (begstr - 1));
+    s_copy(substr, wordsq + (begstr - 1), substr_len, endstr - (begstr - 1));
     i__1 = eerase - berase + 1;
-    shiftl_(string + (berase - 1), &i__1, " ", string + (berase - 1), 
-	    string_len - (berase - 1), (ftnlen)1, string_len - (berase - 1));
+    shiftl_(wordsq + (berase - 1), &i__1, " ", wordsq + (berase - 1), 
+	    wordsq_len - (berase - 1), (ftnlen)1, wordsq_len - (berase - 1));
     return 0;
 } /* kxtrct_ */
 

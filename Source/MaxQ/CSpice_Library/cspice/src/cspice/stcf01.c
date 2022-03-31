@@ -9,7 +9,7 @@
 
 static integer c__15 = 15;
 
-/* $Procedure   STCF01 (STAR catalog type 1, find stars in RA-DEC box) */
+/* $Procedure STCF01 (STAR catalog type 1, find stars in RA-DEC box) */
 /* Subroutine */ int stcf01_(char *catnam, doublereal *westra, doublereal *
 	eastra, doublereal *sthdec, doublereal *nthdec, integer *nstars, 
 	ftnlen catnam_len)
@@ -80,82 +80,82 @@ static integer c__15 = 15;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     CATNAM      I   Catalog table name. */
-/*     WESTRA      I   Western most right ascension in radians. */
-/*     EASTRA      I   Eastern most right ascension in radians. */
-/*     STHDEC      I   Southern most declination in radians. */
-/*     NTHDEC      I   Northern most declination in radians. */
-/*     NSTARS      O   Number of stars found. */
+/*     CATNAM     I   Catalog table name. */
+/*     WESTRA     I   Western most right ascension in radians. */
+/*     EASTRA     I   Eastern most right ascension in radians. */
+/*     STHDEC     I   Southern most declination in radians. */
+/*     NTHDEC     I   Northern most declination in radians. */
+/*     NSTARS     O   Number of stars found. */
 
 /* $ Detailed_Input */
 
-/*     CATNAM      is name of the catalog data table. This name is */
-/*                 returned by the catalog loader routine STCL01. */
+/*     CATNAM   is name of the catalog data table. This name is */
+/*              returned by the catalog loader routine STCL01. */
 
-/*     WESTRA      are right ascension and declination constraints */
-/*     EASTRA      giving the western, eastern, southern and northern */
-/*     STHDEC      boundaries of a search rectangle as follows: */
+/*     WESTRA   are right ascension and declination constraints */
+/*     EASTRA   giving the western, eastern, southern and northern */
+/*     STHDEC   boundaries of a search rectangle as follows: */
 /*     NTHDEC */
-/*                       RA  BETWEEN WESTRA  AND EASTRA  and */
-/*                       DEC BETWEEN STHDEC AND NTHDEC */
+/*                    RA  BETWEEN WESTRA  AND EASTRA  and */
+/*                    DEC BETWEEN STHDEC AND NTHDEC */
 
-/*                 where RA and DEC are the right ascension and */
-/*                 declination of a star. WESTRA always represents */
-/*                 "west" side of this rectangle and EASTRA -- the */
-/*                 "east" side.  STHDEC represents the "south" side */
-/*                 of the rectangle, NTHDEC represents the "north" */
-/*                 side of the rectangle. */
+/*              where RA and DEC are the right ascension and */
+/*              declination of a star. WESTRA always represents */
+/*              "west" side of this rectangle and EASTRA -- the */
+/*              "east" side. STHDEC represents the "south" side */
+/*              of the rectangle, NTHDEC represents the "north" */
+/*              side of the rectangle. */
 
-/*                 For an observer standing on the surface */
-/*                 of the earth at the equator, the west side of the */
-/*                 rectangle ( the side associated with WESTRA) rises */
-/*                 first. The east side (the side associated with */
-/*                 EASTRA) rises last.  All meridians that rise between */
-/*                 the rising of the west and east edges of the */
-/*                 rectangle  cross through the RA-DEC rectangle. */
+/*              For an observer standing on the surface */
+/*              of the earth at the equator, the west side of the */
+/*              rectangle ( the side associated with WESTRA) rises */
+/*              first. The east side (the side associated with */
+/*              EASTRA) rises last. All meridians that rise between */
+/*              the rising of the west and east edges of the */
+/*              rectangle  cross through the RA-DEC rectangle. */
 
-/*                 To specify the 6 degrees wide RA-DEC */
-/*                 square centered on the celestical equator that */
-/*                 has western most right ascension of 357 degrees, */
-/*                 use the following values for WESTRA, EASTRA, STHDEC, */
-/*                 and NTHDEC (we multiply the angles by the SPICELIB */
-/*                 function RPD to convert degrees to radians). */
+/*              To specify the 6 degrees wide RA-DEC */
+/*              square centered on the celestial equator that */
+/*              has western most right ascension of 357 degrees, */
+/*              use the following values for WESTRA, EASTRA, STHDEC, */
+/*              and NTHDEC (we multiply the angles by the SPICELIB */
+/*              function RPD to convert degrees to radians). */
 
-/*                      WESTRA  = 357.0D0 * RPD() */
-/*                      EASTRA  =   3.0D0 * RPD() */
-/*                      STHDEC  =  -3.0D0 * RPD() */
-/*                      DEXMAX  =   3.0D0 * RPD() */
+/*                   WESTRA  = 357.0D0 * RPD() */
+/*                   EASTRA  =   3.0D0 * RPD() */
+/*                   STHDEC  =  -3.0D0 * RPD() */
+/*                   DEXMAX  =   3.0D0 * RPD() */
 
-/*                 To specify a 5 degree wide RA-DEC square that has */
-/*                 western most right ascension 10 degrees and */
-/*                 eastern most right ascension 15 degrees and southern */
-/*                 most declination of 45 degrees, assign the following */
-/*                 values to WESTRA, EASTRA, STHDEC and NTHDEC. */
+/*              To specify a 5 degree wide RA-DEC square that has */
+/*              western most right ascension 10 degrees and */
+/*              eastern most right ascension 15 degrees and southern */
+/*              most declination of 45 degrees, assign the following */
+/*              values to WESTRA, EASTRA, STHDEC and NTHDEC. */
 
-/*                      WESTRA  =  10.0D0 * RPD() */
-/*                      EASTRA  =  15.0D0 * RPD() */
-/*                      STHDEC  =  45.0D0 * RPD() */
-/*                      DEXMAX  =  50.0D0 * RPD() */
+/*                   WESTRA  =  10.0D0 * RPD() */
+/*                   EASTRA  =  15.0D0 * RPD() */
+/*                   STHDEC  =  45.0D0 * RPD() */
+/*                   DEXMAX  =  50.0D0 * RPD() */
 
-/*                 All RA and DECS should be in radians and relative */
-/*                 to the J2000 inertial frame. */
+/*              All RA and DECS should be in radians and relative */
+/*              to the J2000 inertial frame. */
 
-/*                 All Right Ascension values should be in the */
-/*                 interval [0, 2*pi ).  This routine does */
-/*                 not "fold" Right Ascension values into the this */
-/*                 interval.  For example if you request stars in */
-/*                 whose right ascensions lie between 3*pi and 4*pi */
-/*                 no stars will be found. */
+/*              All Right Ascension values should be in the */
+/*              interval [0, 2*pi ).  This routine does */
+/*              not "fold" Right Ascension values into the this */
+/*              interval. For example if you request stars in */
+/*              whose right ascensions lie between 3*pi and 4*pi */
+/*              no stars will be found. */
 
-/*                 All Declination values should be in the interval */
-/*                 [-pi,pi]. */
+/*              All Declination values should be in the interval */
+/*              [-pi,pi]. */
 
 /* $ Detailed_Output */
 
-/*     NSTARS      is number of catalog stars found within the */
-/*                 specified RA - DEC rectangle. */
+/*     NSTARS   is number of catalog stars found within the */
+/*              specified RA - DEC rectangle. */
 
 /* $ Parameters */
 
@@ -163,11 +163,11 @@ static integer c__15 = 15;
 
 /* $ Exceptions */
 
-/*     1) If no star catalog has been loaded, an error will be */
-/*        signalled by a routine in the call tree of this routine. */
+/*     1)  If no star catalog has been loaded, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2) If the catalog query fails for any reason then */
-/*        the error 'SPICE(QUERYFAILURE)'is signalled. */
+/*     2)  If the catalog query fails for any reason, the error */
+/*         SPICE(QUERYFAILURE) is signaled. */
 
 /* $ Files */
 
@@ -242,8 +242,8 @@ static integer c__15 = 15;
 
 /* $ Restrictions */
 
-/*     1) The catalog file STCF01 searches through MUST be loaded */
-/*        by STCL01 before STCF01 is called. */
+/*     1)  The catalog file STCF01 searches through MUST be loaded */
+/*         by STCL01 before STCF01 is called. */
 
 /* $ Literature_References */
 
@@ -251,16 +251,23 @@ static integer c__15 = 15;
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 15-MAY-1996 (BVS) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      find stars in RA-DEC rectangle in type 1 star catalog */
+/*     find stars in RA-DEC rectangle in type 1 star catalog */
 
 /* -& */
 

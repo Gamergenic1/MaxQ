@@ -3,9 +3,9 @@
 -Procedure maxd_c ( Maximum of a set of double precision values )
 
 -Abstract
- 
-   Find the maximum of a set of double precision values. 
- 
+
+   Find the maximum of a set of double precision values.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,85 +32,84 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   PLANES 
- 
+
+   PLANES
+
 -Keywords
- 
-   GEOMETRY 
-   MATH 
-   PLANE 
- 
+
+   GEOMETRY
+   MATH
+   PLANE
+
 */
    #include <stdarg.h>
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
-   
 
-   SpiceDouble maxd_c ( SpiceInt  n,  ... ) 
+
+   SpiceDouble maxd_c ( SpiceInt  n,  ... )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
    n          I   The number of double precision values to compare.
    ...        I   The numbers to be compared, separated by commas.
-    
+
 -Detailed_Input
- 
-   n              is the number of double precision values in the set 
-                  whose maximum is to be determined.  
-   
-   ...            represents a variable argument list.  The number of 
-                  double precision values supplied must be that 
-                  indicated by n.  The values are separated by commas.
-                  
-                  Section 5.2.4.1 of the ANSI C Standard, titled
-                  "Translation Limits," specifies that argument lists
-                  containing at least 31 items must be supported.  In
-                  the interest of portability, no more than 30 
-                  double precision values should be supplied.
-   
+
+   n           is the number of double precision values in the set whose
+               maximum is to be determined.
+
+   ...         represents a variable argument list. The number of double
+               precision values supplied must be that indicated by `n'. The
+               values are separated by commas.
+
+               Section 5.2.4.1 of the ANSI C Standard, titled "Translation
+               Limits," specifies that argument lists containing at least 31
+               items must be supported. In the interest of portability, no
+               more than 30 double precision values should be supplied.
+
 -Detailed_Output
- 
+
    The function returns the maximum of the set of input double precision
    values.
- 
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
+
    Error free.
-   
-   1) If n is less than 1, the value 0.0 is returned.
-   
-   2) If the number of double precision values supplied does not match
-      the argument n, the action of this routine is not defined.
-      
-   3) If the number of double precision values supplied exceeds 30,
-      the action of this routine is not defined.
-    
+
+   1)  If `n' is less than 1, the value 0.0 is returned.
+
+   2)  If the number of double precision values supplied does not match
+       the argument `n', the action of this routine is not defined.
+
+   3)  If the number of double precision values supplied exceeds 30,
+       the action of this routine is not defined.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
 
-   None. 
- 
+   None.
+
 -Examples
- 
+
    1) Find the maximum of four double precision values.
-   
+
       #include "SpiceUsr.h"
            .
            .
            .
-           
+
       SpiceDouble             max;
       SpiceDouble             a;
       SpiceDouble             b;
@@ -119,40 +118,44 @@
            .
            .
            .
-           
+
       max = maxd_c ( 4, a, b, c, d );
-      
-   
+
 -Restrictions
- 
-   1) The ANSI C Standard specifies that argument lists containing 31
-      actual arguments must be supported.  Larger sets of values may
-      not be handled properly by this routine. 
- 
+
+   1)  The ANSI C Standard specifies that argument lists containing 31
+       actual arguments must be supported. Larger sets of values may
+       not be handled properly by this routine.
+
 -Literature_References
- 
-   1) "American National Standard for Programming Languages---C."
-      Section 5.4.2.1, "Translation Limits," p. 13.
-      Published by American National Standards Institute,
-      11 West 42nd St., New York, NY 10035. Copyright 1990.
-      
+
+   [1]  "American National Standard for Programming Languages -- C,"
+        Section 5.4.2.1, "Translation Limits," p.13, American National
+        Standards Institute, 1990.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.2, 10-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.1, 11-NOV-2006 (EDW)
 
-      Added "None." text to Particulars section, required for
-      API doc script (cspicehtml.pl) integrity checks.
+       Added "None." text to -Particulars section, required for
+       API doc script (cspicehtml.pl) integrity checks.
 
    -CSPICE Version 1.0.0, 16-SEP-1999 (NJB)
 
 -Index_Entries
- 
-   maximum of double precision values 
- 
+
+   maximum of double precision values
+
 -&
 */
 
@@ -161,10 +164,10 @@
    /*
    Local variables
    */
-   
+
    SpiceDouble             next;
    SpiceDouble             retval;
-   
+
    SpiceInt                i;
 
 
@@ -174,61 +177,60 @@
    */
 
    va_list                 ap;
-   
-   
-   
+
+
+
    /*
-   If there are no values to compare, return zero.  
+   If there are no values to compare, return zero.
    */
- 
+
    if ( n < 1 )
    {
       return ( 0.0 );
    }
-   
+
    /*
    Initialize the argument pointer with the last named argument, namely
    n.
    */
-   
+
    va_start ( ap, n );
-   
-   
+
+
    /*
    Initialize the maximum with the first value.
    */
-   
+
    retval = va_arg ( ap, double );
-   
-   
+
+
    /*
    Now compute a running maximum of the values, if there are more.
-   
+
    By the way, we capture the argument in the variable next rather than
    make the va_arg call as a MaxVal argument, because the MaxVal macro
    would make the va_arg call twice.
-   */ 
-   
+   */
+
    for ( i = 1;  i < n;  i++ )
    {
       next   =  va_arg ( ap,     double );
       retval =  MaxVal ( retval, next   );
    }
-   
-   
+
+
    /*
    Terminate the argument fetching process.
    */
-   
+
    va_end ( ap );
-   
-   
+
+
    /*
    Return the value we've found.
    */
-   
-   return ( retval );
-   
-   
-} /* End maxd_c */
 
+   return ( retval );
+
+
+} /* End maxd_c */

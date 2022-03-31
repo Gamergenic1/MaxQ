@@ -931,7 +931,7 @@ static integer c__1 = 1;
 /*         will not be modified. */
 
 /*     2)  If names have not been resolved in the input query, the error */
-/*         SPICE(NAMESNOTRESOLVED) will be signalled.  The outputs */
+/*         SPICE(NAMESNOTRESOLVED) will be signaled.  The outputs */
 /*         will not be modified. */
 
 /*     3)  If any sort of time conversion error occurs, the output flag */
@@ -985,6 +985,10 @@ static integer c__1 = 1;
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 11-OCT-1995 (NJB) */
 

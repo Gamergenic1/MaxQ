@@ -113,11 +113,11 @@
 
 /*     None. */
 
-/* $ Files */
+/* $ Exceptions */
 
 /*     None. */
 
-/* $ Exceptions */
+/* $ Files */
 
 /*     None. */
 
@@ -138,21 +138,25 @@
 /*     1)  This routine should be called only by ZZDPSEC as part of the */
 /*     DPSPCE subroutine package.  It has no other use. */
 
-/* $ Author_and_Institution */
-
-/*     E.D. Wright      (JPL) */
-
 /* $ Literature_References */
 
 /*     Spacetrack 3 report. */
 
+/* $ Author_and_Institution */
+
+/*     E.D. Wright      (JPL) */
+
 /* $ Version */
+
+/* -   SPICELIB Version 1.1.1, 03-OCT-2021 (NJB) */
+
+/*       Reordered header sections. Corrected typo in comments. */
 
 /* -   SPICELIB Version 1.1.0, 24-MAR-1999 (EDW) */
 
 /*       Correction made to format of Version descriptions. */
 /*       Name of variable OMGDT changed to OMGDOT to be consistent */
-/*       with name useage in other deep space two line elements */
+/*       with name usage in other deep space two line elements */
 /*       routines. */
 
 /* -   SPICELIB Version 1.0.0, MAY-19-1997 (EDW) */

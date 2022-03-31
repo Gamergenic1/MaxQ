@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PXFORM ( Position Transformation Matrix ) */
+/* $Procedure PXFORM ( Position Transformation Matrix ) */
 /* Subroutine */ int pxform_(char *from, char *to, doublereal *et, doublereal 
 	*rotate, ftnlen from_len, ftnlen to_len)
 {
@@ -61,11 +61,11 @@
 
 /* $ Required_Reading */
 
-/*      FRAMES */
+/*     FRAMES */
 
 /* $ Keywords */
 
-/*      FRAMES */
+/*     FRAMES */
 
 /* $ Declarations */
 /* $ Abstract */
@@ -128,34 +128,34 @@
 /*     FROM       I   Name of the frame to transform from. */
 /*     TO         I   Name of the frame to transform to. */
 /*     ET         I   Epoch of the rotation matrix. */
-/*     ROTATE     O   A rotation matrix */
+/*     ROTATE     O   A rotation matrix. */
 
 /* $ Detailed_Input */
 
-/*     FROM        is the name of some reference frame in which */
-/*                 a position vector is known. */
+/*     FROM     is the name of a reference frame in which a position */
+/*              vector is known. */
 
-/*     TO          is the name of a reference frame in which it */
-/*                 is desired to represent a position vector. */
+/*     TO       is the name of a reference frame in which it is desired */
+/*              to represent a position vector. */
 
-/*     ET          is the epoch in ephemeris seconds past the epoch */
-/*                 of J2000 (TDB) at which the position transformation */
-/*                 matrix ROTATE should be evaluated. */
+/*     ET       is the epoch in ephemeris seconds past the epoch of J2000 */
+/*              (TDB) at which the position transformation matrix ROTATE */
+/*              should be evaluated. */
 
 /* $ Detailed_Output */
 
-/*     ROTATE      is the matrix that transforms position vectors from */
-/*                 the reference frame FROM to the frame TO at epoch ET. */
-/*                 If (x, y, z) is a position relative to the frame FROM */
-/*                 then the vector ( x', y', z') is the same position */
-/*                 relative to the frame TO at epoch ET.  Here the */
-/*                 vector ( x', y', z' ) is defined by the equation: */
+/*     ROTATE   is the matrix that transforms position vectors from */
+/*              the reference frame FROM to the frame TO at epoch ET. */
+/*              If (x, y, z) is a position relative to the frame FROM */
+/*              then the vector ( x', y', z') is the same position */
+/*              relative to the frame TO at epoch ET. Here the */
+/*              vector ( x', y', z' ) is defined by the equation: */
 
-/*                   -   -       -        -     -  - */
-/*                  | x'  |     |          |   | x  | */
-/*                  | y'  |     |  ROTATE  |   | y  | */
-/*                  | z'  |  =  |          |   | z  | */
-/*                   -   -       -        -     -  - */
+/*                 .-   -.     .-        -.   .-  -. */
+/*                 | x'  |     |          |   | x  | */
+/*                 | y'  |  =  |  ROTATE  |   | y  | */
+/*                 | z'  |     |          |   | z  | */
+/*                 `-   -'     `-        -'   `-  -' */
 
 /* $ Parameters */
 
@@ -163,13 +163,13 @@
 
 /* $ Exceptions */
 
-/*     1) If sufficient information has not been supplied via loaded */
-/*        SPICE kernels to compute the transformation between the */
-/*        two frames, the error will be diagnosed by a routine */
-/*        in the call tree to this routine. */
+/*     1)  If sufficient information has not been supplied via loaded */
+/*         SPICE kernels to compute the transformation between the */
+/*         two frames, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     2) If either frame FROM or TO is not recognized the error */
-/*        'SPICE(UNKNOWNFRAME)' will be signaled. */
+/*     2)  If either frame FROM or TO is not recognized, the error */
+/*         SPICE(UNKNOWNFRAME) is signaled. */
 
 /* $ Files */
 
@@ -185,11 +185,21 @@
 /*     information is loaded to provide a complete position */
 /*     transformation path from the FROM frame to the TO frame. */
 
+/*     A common type of reference frame transformation is one from one */
+/*     time-dependent frame to another, where the orientations of the */
+/*     frames are computed at different epochs. For example, a remote */
+/*     sensing application may compute the transformation from a target */
+/*     body-fixed frame, with its orientation evaluated at the epoch of */
+/*     photon emission, to a spacecraft instrument frame, with its */
+/*     orientation evaluated at the epoch of photon reception. The */
+/*     SPICELIB routine PXFRM2 computes this type of frame */
+/*     transformation. */
+
 /* $ Examples */
 
 /*     Suppose that you have geodetic coordinates of a station on the */
 /*     surface of the earth and that you need the inertial (J2000) */
-/*     position of this station.  The following code fragment */
+/*     position of this station. The following code fragment */
 /*     illustrates how to transform the position of the station to a */
 /*     J2000 position. */
 
@@ -204,7 +214,7 @@
 /*        CALL PXFORM ( 'IAU_EARTH', 'J2000', ET,  ROTATE  ) */
 /*        CALL MXV    (  ROTATE,      EPOS,   JPOS         ) */
 
-/*     The state JPOS is the desired J2000 position of the station. */
+/*     The position JPOS is the desired J2000 position of the station. */
 
 /* $ Restrictions */
 
@@ -212,16 +222,22 @@
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 09-AUG-2021 (NJB) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Updated the */
+/*        $Particulars header section to mention PXFRM2. */
 
 /* -    SPICELIB Version 1.1.0, 23-SEP-2013 (BVS) */
 
@@ -231,12 +247,12 @@
 
 /* -    SPICELIB Version 1.0.3, 27-FEB-2008 (BVS) */
 
-/*        Added FRAMES to the Required_Reading section. */
+/*        Added FRAMES to the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.2, 23-OCT-2005 (NJB) */
 
 /*        Header example had invalid flattening factor computation; */
-/*        this was corrected.  Reference to BODVAR in header was */
+/*        this was corrected. Reference to BODVAR in header was */
 /*        replaced with reference to BODVRD. */
 
 /* -    SPICELIB Version 1.0.1, 29-JUL-2003 (NJB) (CHA) */
@@ -244,7 +260,6 @@
 /*        Various header corrections were made. */
 
 /* -    SPICELIB Version 1.0.0, 05-APR-1999 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */

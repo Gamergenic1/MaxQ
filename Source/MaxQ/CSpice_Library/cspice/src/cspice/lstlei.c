@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure   LSTLEI ( Last integer element less than or equal to ) */
+/* $Procedure LSTLEI ( Last integer element less than or equal to ) */
 integer lstlei_(integer *x, integer *n, integer *array)
 {
     /* System generated locals */
@@ -16,9 +16,8 @@ integer lstlei_(integer *x, integer *n, integer *array)
 
 /* $ Abstract */
 
-/*      Given a number X and an array of non-decreasing numbers, */
-/*      find the index of the largest array element less than or equal */
-/*      to X. */
+/*     Find the index of the largest array element less than or equal */
+/*     to a given integer X in an array of non-decreasing integers. */
 
 /* $ Disclaimer */
 
@@ -51,62 +50,76 @@ integer lstlei_(integer *x, integer *n, integer *array)
 
 /* $ Keywords */
 
-/*      SEARCH,  ARRAY */
+/*     ARRAY */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      X          I   Value to search against. */
-/*      ARRAY      I   Array of possible lower bounds. */
-/*      N          I   Number elements in ARRAY. */
-/*      LSTLEI     O   the index of the last element of ARRAY <= X. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     X          I   Upper bound value to search against. */
+/*     N          I   Number of elements in ARRAY. */
+/*     ARRAY      I   Array of possible lower bounds. */
+
+/*     The function returns the index of the last element of ARRAY that */
+/*     is less than or equal to X. */
 
 /* $ Detailed_Input */
 
-/*      X       Integer for which one desires to find */
-/*              the last ARRAY element less than or equal to X. */
+/*     X        is an integer value acting as an upper bound: the element */
+/*              of ARRAY that is the greatest element less than or equal */
+/*              to X is to be found. */
 
-/*      ARRAY   Array of integers that forms a */
-/*              non-decreasing sequence.  We will find the last element */
-/*              of the sequence that is less than or equal to X. */
+/*     N        is the total number of elements in ARRAY. */
 
-/*      N       Total number of elements in ARRAY */
+/*     ARRAY    is an array of integers that forms a non-decreasing */
+/*              sequence. The elements of array need not be distinct. */
 
 /* $ Detailed_Output */
 
-/*      LSTLEI  Index of the last element of the non-decreasing sequence: */
-/*              {ARRAY(I) : 0 < I < N + 1} that is less than or equal */
-/*              to X. (Note that LSTLEI = I for some I in the range 1 to */
-/*              N  unless X is less than all of these elements in which */
-/*              case LSTLEI = 0.) */
+/*     The function returns the index of the highest-indexed element in */
+/*     the input array that is less than or equal to X. The routine */
+/*     assumes the array elements are sorted in non-decreasing order. */
 
-/*              In the case that N is input with value less than or equal */
-/*              to zero, LSTLEI is returned as zero. */
+/*     Indices range from 1 to N. */
+
+/*     If all elements of ARRAY are greater than X, the routine returns */
+/*     the value 0. If N is less than or equal to zero, the routine */
+/*     returns the value 0. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/*     1)  If N is less than or equal to zero, the function returns 0. */
+/*         This case is not treated as an error. */
+
+/*     2)  If the input array is not sorted in non-decreasing order, the */
+/*         output of this routine is undefined. No error is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
+/*     This routine uses a binary search algorithm and so requires */
+/*     at most on the order of */
 
-/*      An array of integers is given.  The array */
-/*      ARRAY(I) (0 < I < N ) forms a non-decreasing sequence of */
-/*      numbers.  Given a real number X, there will be a last one of */
-/*      these numbers that is less than or equal to X.  This routine */
-/*      finds the index LSTLEI such that ARRAY(LSTLEI) is that number. */
+/*        log (N) */
+/*           2 */
 
-/*      If X is not greater than ARRAY(1), INDEX will be set to zero. */
+/*     steps to compute the value of LSTLEI. */
 
-/*      This routine uses a binary search algorithm and so requires */
-/*      at most LOG_2(N) steps to find the value of LSTLEI. */
-
-/*      Note:  If you need to find the first element of the array that */
-/*             is greater than X, simply add 1 to the result returned */
-/*             by this function and check to see if the result is */
-/*             within the array bounds given by N. */
+/*     Note: If you need to find the first element of the array that is */
+/*     greater than X, simply add 1 to the result returned by this */
+/*     function and check to see if the result is within the array bounds */
+/*     given by N. */
 
 /* $ Examples */
 
@@ -187,7 +200,7 @@ integer lstlei_(integer *x, integer *n, integer *array)
 
 /*     we would obtain a routine that inserted duplicates before */
 /*     existing entries. (LSTLTI is similar to LSTLEI except it finds */
-/*     the last occurrance of an integer strictly less than a value.) */
+/*     the last occurrence of an integer strictly less than a value.) */
 /*     Using 7 and 33.33D3 for KEY and VALUE again, the modified code */
 /*     fragment would yield the results shown below. */
 
@@ -215,51 +228,42 @@ integer lstlei_(integer *x, integer *n, integer *array)
 
 /* $ Restrictions */
 
-/*      If the sequence does not non-decreasing, the program will run */
-/*      to completion but the index found will not mean anything. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     1)  If the sequence of integer numbers in the input array ARRAY is */
+/*         not non-decreasing, the program will run to completion but the */
+/*         index found will not mean anything. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Improved $Detailed_Input, */
+/*        $Detailed_Output, $Particulars, $Exceptions and $Restrictions */
+/*        sections. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     last integer element less_than_or_equal_to */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.1.0, 9-MAR-1989 (HAN) */
-
-/*        Declaration of the variable I was removed from the code. The */
-/*        variable was declared but not used. */
-
-/* -     Beta Version 1.0.1, 1-Feb-1989 (WLT) */
-
-/*      Example section of header upgraded. */
 
 /* -& */
 

@@ -346,9 +346,13 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
+
 /* -    SPICELIB Version 1.1.0, 07-AUG-2006 (NJB) */
 
-/*        Bug fix:  added intialization of variable NRVDEL to support */
+/*        Bug fix:  added initialization of variable NRVDEL to support */
 /*                  operation under the Macintosh Intel Fortran */
 /*                  compiler. Note that this bug did not affect */
 /*                  operation of this routine on other platforms. */
@@ -360,7 +364,7 @@
 
 /* -    SPICELIB Version 1.1.0, 07-AUG-2006 (NJB) */
 
-/*        Bug fix:  added intialization of variable NRVDEL to support */
+/*        Bug fix:  added initialization of variable NRVDEL to support */
 /*                  operation under the Macintosh Intel Fortran */
 /*                  compiler. Note that this bug did not affect */
 /*                  operation of this routine on other platforms. The */
@@ -372,7 +376,7 @@
 /*        In the previous version of the code, NRVDEL is uninitialized */
 /*        when NRVDEL is 0.  NRVDEL *is* initialized when RC is */
 /*        non-zero, so the logical value of the IF expression is not */
-/*        affected by the lack of proper intialization. */
+/*        affected by the lack of proper initialization. */
 
 /*        However, the Intel Fortran compiler for the Mac flags a runtime */
 /*        error when the above code is exercised.  So NRVDEL is now */
@@ -576,7 +580,7 @@
 /*              The segment vector pointer is base-relative. */
 
 		rowvec[(i__3 = rvsize - 1) < 11 && 0 <= i__3 ? i__3 : s_rnge(
-			"rowvec", i__3, "zzekjsqz_", (ftnlen)415)] = (i__ - 1)
+			"rowvec", i__3, "zzekjsqz_", (ftnlen)419)] = (i__ - 1)
 			 * svsize + 4;
 		i__3 = rtarg + 1;
 		i__4 = rtarg + rvsize;

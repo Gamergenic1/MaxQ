@@ -14,6 +14,16 @@ static integer c__128 = 128;
 /* Subroutine */ int dafwda_(integer *handle, integer *begin, integer *end, 
 	doublereal *data)
 {
+    /* Initialized data */
+
+    static doublereal buffer[128] = { 0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+	    0.,0.,0.,0.,0. };
+
     /* System generated locals */
     integer i__1, i__2;
 
@@ -30,10 +40,8 @@ static integer c__128 = 128;
     extern /* Subroutine */ int cleard_(integer *, doublereal *), dafrdr_(
 	    integer *, integer *, integer *, integer *, doublereal *, logical 
 	    *), dafarw_(integer *, integer *, integer *), dafwdr_(integer *, 
-	    integer *, doublereal *);
-    doublereal buffer[128];
-    extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
-	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
+	    integer *, doublereal *), sigerr_(char *, ftnlen), chkout_(char *,
+	     ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
 	    ftnlen);
     extern logical return_(void);
 
@@ -78,7 +86,7 @@ static integer c__128 = 128;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a DAF. */
 /*     BEGIN, */
@@ -87,16 +95,16 @@ static integer c__128 = 128;
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a DAF. */
+/*     HANDLE   is the handle of a DAF. */
 
 /*     BEGIN, */
-/*     END         are the initial and final addresses of a contiguous */
-/*                 set of double precision numbers within a DAF. */
-/*                 Presumably, these make up all or part of a */
-/*                 particular array. */
+/*     END      are the initial and final addresses of a contiguous */
+/*              set of double precision numbers within a DAF. */
+/*              Presumably, these make up all or part of a */
+/*              particular array. */
 
-/*     DATA        are the double precision data to be stored between */
-/*                 the specified addresses within the specified file. */
+/*     DATA     are the double precision data to be stored between */
+/*              the specified addresses within the specified file. */
 
 /* $ Detailed_Output */
 
@@ -104,19 +112,19 @@ static integer c__128 = 128;
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If BEGIN is zero or negative, the error SPICE(DAFNEGADDR) */
-/*        is signalled. */
+/*     1)  If BEGIN is zero or negative, the error SPICE(DAFNEGADDR) */
+/*         is signaled. */
 
-/*     1) If the BEGIN > END, the error SPICE(DAFBEGGTEND) */
-/*        is signalled. */
+/*     2)  If the BEGIN > END, the error SPICE(DAFBEGGTEND) */
+/*         is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -161,14 +169,27 @@ static integer c__128 = 128;
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Local variable BUFFER is now initialized and saved. */
+
+/*        Edited the header to comply with NAIF standard. Moved DAF */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
 
@@ -184,7 +205,7 @@ static integer c__128 = 128;
 /* -& */
 /* $ Index_Entries */
 
-/*     write data to daf address */
+/*     write data to DAF address */
 
 /* -& */
 
@@ -194,13 +215,18 @@ static integer c__128 = 128;
 /*     Local variables */
 
 
+/*     Saved variables */
+
+
+/*     Initial values */
+
+
 /*     Standard SPICE error handling. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("DAFWDA", (ftnlen)6);
     }
+    chkin_("DAFWDA", (ftnlen)6);
 
 /*     Bad addresses? */
 
@@ -251,7 +277,7 @@ static integer c__128 = 128;
 	    n = 128;
 	}
 	moved_(&data[next - 1], &n, &buffer[(i__2 = first - 1) < 128 && 0 <= 
-		i__2 ? i__2 : s_rnge("buffer", i__2, "dafwda_", (ftnlen)258)])
+		i__2 ? i__2 : s_rnge("buffer", i__2, "dafwda_", (ftnlen)281)])
 		;
 	next += n;
 	dafwdr_(handle, &recno, buffer);

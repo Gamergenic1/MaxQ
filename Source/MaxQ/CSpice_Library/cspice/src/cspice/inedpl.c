@@ -10,7 +10,7 @@
 static doublereal c_b32 = 0.;
 static doublereal c_b33 = 1.;
 
-/* $Procedure      INEDPL ( Intersection of ellipsoid and plane ) */
+/* $Procedure INEDPL ( Intersection of ellipsoid and plane ) */
 /* Subroutine */ int inedpl_(doublereal *a, doublereal *b, doublereal *c__, 
 	doublereal *plane, doublereal *ellips, logical *found)
 {
@@ -89,7 +89,7 @@ static doublereal c_b33 = 1.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     A          I   Length of ellipsoid semi-axis lying on the x-axis. */
 /*     B          I   Length of ellipsoid semi-axis lying on the y-axis. */
@@ -102,28 +102,28 @@ static doublereal c_b33 = 1.;
 
 /*     A, */
 /*     B, */
-/*     C              are the lengths of the semi-axes of a triaxial */
-/*                    ellipsoid.  The ellipsoid is centered at the */
-/*                    origin and oriented so that its axes lie on the */
-/*                    x, y and z axes.  A, B, and C are the lengths of */
-/*                    the semi-axes that point in the x, y, and z */
-/*                    directions respectively. */
+/*     C        are the lengths of the semi-axes of a triaxial */
+/*              ellipsoid. The ellipsoid is centered at the */
+/*              origin and oriented so that its axes lie on the */
+/*              x, y and z axes.  A, B, and C are the lengths of */
+/*              the semi-axes that point in the x, y, and z */
+/*              directions respectively. */
 
-/*     PLANE          is a SPICELIB plane. */
+/*     PLANE    is a SPICE plane. */
 
 /* $ Detailed_Output */
 
-/*     ELLIPS         is the SPICELIB ellipse formed by the intersection */
-/*                    of the input plane and ellipsoid.  ELLIPS will */
-/*                    represent a single point if the ellipsoid and */
-/*                    plane are tangent. */
+/*     ELLIPS   is the SPICE ellipse formed by the intersection */
+/*              of the input plane and ellipsoid. ELLIPS will */
+/*              represent a single point if the ellipsoid and */
+/*              plane are tangent. */
 
-/*                    If the intersection of the ellipsoid and plane is */
-/*                    empty, ELLIPS is not modified. */
+/*              If the intersection of the ellipsoid and plane is */
+/*              empty, ELLIPS is not modified. */
 
 
-/*     FOUND          is .TRUE. if and only if the intersection of the */
-/*                    ellipsoid and plane is non-empty. */
+/*     FOUND    is .TRUE. if and only if the intersection of the */
+/*              ellipsoid and plane is non-empty. */
 
 /* $ Parameters */
 
@@ -133,7 +133,7 @@ static doublereal c_b33 = 1.;
 
 /*     1)  If any of the lengths of the semi-axes of the input ellipsoid */
 /*         are non-positive, the error SPICE(DEGENERATECASE) is */
-/*         signaled.  ELLIPS is not modified.  FOUND is set to .FALSE. */
+/*         signaled. ELLIPS is not modified. FOUND is set to .FALSE. */
 
 /*     2)  If the input plane in invalid, in other words, if the input */
 /*         plane as the zero vector as its normal vector, the error */
@@ -145,9 +145,9 @@ static doublereal c_b33 = 1.;
 /*         results. */
 
 /*     4)  If the input plane and ellipsoid are precisely tangent, the */
-/*         intersection is a single point.  In this case, the output */
+/*         intersection is a single point. In this case, the output */
 /*         ellipse is degenerate, but FOUND will still have the value */
-/*         .TRUE.  You must decide whether this output makes sense for */
+/*         .TRUE. You must decide whether this output makes sense for */
 /*         your application. */
 
 /* $ Files */
@@ -161,89 +161,246 @@ static doublereal c_b33 = 1.;
 
 /* $ Examples */
 
-/*     1)  Suppose we wish to find the limb of a body, as observed from */
-/*         location LOC in body-fixed coordinates.  The SPICELIB routine */
-/*         EDLIMB solves this problem.  Here's how INEDPL is used in */
-/*         that solution. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         We assume LOC is outside of the body. The body is modelled as */
-/*         a triaxial ellipsoid with semi-axes of length A, B, and C. */
-/*         The notation */
+/*     1) Suppose we wish to find the limb of a body, as observed from */
+/*        location LOC in body-fixed coordinates. The SPICELIB routine */
+/*        EDLIMB solves this problem. Here's how INEDPL is used in */
+/*        that solution. */
 
-/*            < X, Y > */
+/*        We assume LOC is outside of the body. The body is modeled as */
+/*        a triaxial ellipsoid with semi-axes of length A, B, and C. */
 
-/*         indicates the inner product of the vectors X and Y. */
+/*        The notation */
 
-/*         The limb lies on the plane defined by */
+/*           < X, Y > */
 
-/*            < X,  N >  =  1, */
+/*        indicates the inner product of the vectors X and Y. */
 
-/*         where the vector N is defined as */
+/*        The limb lies on the plane defined by */
 
-/*            ( LOC(1) / A**2,   LOC(2) / B**2,   LOC(3) / C**2 ). */
+/*           < X,  N >  =  1, */
 
-/*         The assignments */
+/*        where the vector N is defined as */
 
-/*            N(1) = LOC(1) / A**2 */
-/*            N(2) = LOC(2) / B**2 */
-/*            N(3) = LOC(3) / C**2 */
+/*                       2              2              2 */
+/*           ( LOC(1) / A ,   LOC(2) / B ,   LOC(3) / C  ). */
 
-/*         and the calls */
+/*        The assignments */
 
-/*            CALL NVC2PL ( N,  1.0D0,  PLANE ) */
+/*           N(1) = LOC(1) / ( A*A ) */
+/*           N(2) = LOC(2) / ( B*B ) */
+/*           N(3) = LOC(3) / ( C*C ) */
 
-/*            CALL INEDPL ( A,  B,  C,  PLANE,  LIMB,  FOUND ) */
+/*        and the calls */
 
-/*            CALL EL2CGV ( LIMB, CENTER, SMAJOR, SMINOR ) */
+/*           CALL NVC2PL ( N,  1.0D0,  PLANE ) */
 
-/*         will return the center and semi-axes of the limb. */
+/*           CALL INEDPL ( A,  B,  C,  PLANE,  LIMB,  FOUND ) */
 
+/*           CALL EL2CGV ( LIMB, CENTER, SMAJOR, SMINOR ) */
 
-/*         How do we know that  < X, N > = 1  for all X on the limb? */
-/*         This is because all limb points X satisfy */
-
-/*            < LOC - X, SURFNM(X) >  =  0, */
-
-/*         where SURFNM(X) is a surface normal at X.  SURFNM(X) is */
-/*         parallel to the vector */
-
-/*            V = (  X(1) / A**2,   X(2) / B**2,   X(3) / C**2  ) */
-
-/*         so we have */
-
-/*            < LOC - X, V >  =  0, */
-
-/*            < LOC, V >      =  < X, V >  =  1  (from the original */
-/*                                                ellipsoid */
-/*                                                equation); */
-/*         and finally */
-
-/*            < X,   N >      =  1, */
-
-/*         where the vector N is defined as */
-
-/*            (  LOC(1) / A**2,    LOC(2) / B**2,   LOC(3) / C**2  ). */
+/*        will return the center and semi-axes of the limb. */
 
 
-/*     2)  Suppose we wish to find the terminator of a body.  We can */
-/*         make a fair approximation to the location of the terminator */
-/*         by finding the limb of the body as seen from the vertex of */
-/*         the umbra; then the problem is essentially the same as in */
-/*         example 1.  Let VERTEX be this location.  We make the */
-/*         assignments */
+/*        How do we know that  < X, N > = 1  for all X on the limb? */
+/*        This is because all limb points X satisfy */
 
-/*            P(1) =   VERTEX(1) / A**2 */
-/*            P(2) =   VERTEX(2) / B**2 */
-/*            P(3) =   VERTEX(3) / C**2 */
+/*           < LOC - X, SURFNM(X) >  =  0, */
 
-/*         and then make the calls */
+/*        where SURFNM(X) is a surface normal at X.  SURFNM(X) is */
+/*        parallel to the vector */
 
-/*            CALL NVC2PL ( P,  1.0D0,  PLANE ) */
+/*                          2            2            2 */
+/*           V = (  X(1) / A ,   X(2) / B ,   X(3) / C   ) */
 
-/*            CALL INEDPL ( A,  B,  C,  PLANE,  TERM,  FOUND ) */
+/*        so we have */
 
-/*         The SPICELIB ellipse TERM represents the terminator of the */
-/*         body. */
+/*           < LOC - X, V >  =  0, */
+
+/*           < LOC, V >      =  < X, V >  =  1  (from the original */
+/*                                               ellipsoid */
+/*                                               equation); */
+/*        and finally */
+
+/*           < X,   N >      =  1, */
+
+/*        where N is as defined above. */
+
+
+/*     2) We'd like to find the apparent limb of Jupiter, corrected for */
+/*        light time and stellar aberration, as seen from JUNO */
+/*        spacecraft's position at a given UTC time. */
+
+/*        This example is equivalent to the one in EDLIMB, but it uses */
+/*        INEDPL to compute the limb. */
+
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: inedpl_ex2.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                           Contents */
+/*              ---------                           -------- */
+/*              juno_rec_160522_160729_160909.bsp   JUNO s/c ephemeris */
+/*              pck00010.tpc                        Planet orientation */
+/*                                                  and radii */
+/*              naif0012.tls                        Leapseconds */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'juno_rec_160522_160729_160909.bsp', */
+/*                                  'pck00010.tpc', */
+/*                                  'naif0012.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM INEDPL_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)           UTCSTR */
+/*              PARAMETER             ( UTCSTR = '2016 Jul 14 19:45:00' ) */
+
+/*              INTEGER                 UBEL */
+/*              PARAMETER             ( UBEL =   9 ) */
+
+/*              INTEGER                 UBPL */
+/*              PARAMETER             ( UBPL =   4 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION        CENTER ( 3    ) */
+/*              DOUBLE PRECISION        ET */
+/*              DOUBLE PRECISION        JPOS   ( 3    ) */
+/*              DOUBLE PRECISION        LIMB   ( UBEL ) */
+/*              DOUBLE PRECISION        LT */
+/*              DOUBLE PRECISION        PLANE  ( UBPL ) */
+/*              DOUBLE PRECISION        RAD    ( 3    ) */
+/*              DOUBLE PRECISION        SMAJOR ( 3    ) */
+/*              DOUBLE PRECISION        SMINOR ( 3    ) */
+/*              DOUBLE PRECISION        SCPOS  ( 3    ) */
+/*              DOUBLE PRECISION        TIPM   ( 3, 3 ) */
+
+/*              INTEGER                 N */
+
+/*              LOGICAL                 FOUND */
+
+/*        C */
+/*        C     Load the required kernels. */
+/*        C */
+/*              CALL FURNSH ( 'inedpl_ex2.tm' ) */
+
+/*        C */
+/*        C     Find the viewing point in Jupiter-fixed coordinates. To */
+/*        C     do this, find the apparent position of Jupiter as seen */
+/*        C     from the spacecraft in Jupiter-fixed coordinates and */
+/*        C     negate this vector. In this case we'll use light time */
+/*        C     and stellar aberration corrections to arrive at the */
+/*        C     apparent limb. JPOS is the Jupiter's position as seen */
+/*        C     from the spacecraft.  SCPOS is the spacecraft's position */
+/*        C     relative to Jupiter. */
+/*        C */
+/*              CALL STR2ET ( UTCSTR,    ET ) */
+/*              CALL SPKPOS ( 'JUPITER', ET, 'J2000', 'LT+S', 'JUNO', */
+/*             .               JPOS,     LT                         ) */
+
+/*              CALL VMINUS ( JPOS, SCPOS ) */
+
+/*        C */
+/*        C     Get Jupiter's semi-axis lengths... */
+/*        C */
+/*              CALL BODVRD ( 'JUPITER', 'RADII', 3, N, RAD ) */
+
+/*        C */
+/*        C     ...and the transformation from J2000 to Jupiter */
+/*        C     equator and prime meridian coordinates. Note that we */
+/*        C     use the orientation of Jupiter at the time of */
+/*        C     emission of the light that arrived at the */
+/*        C     spacecraft at time ET. */
+/*        C */
+/*              CALL PXFORM ( 'J2000', 'IAU_JUPITER', ET-LT, TIPM ) */
+
+/*        C */
+/*        C     Transform the spacecraft's position into Jupiter- */
+/*        C     fixed coordinates. */
+/*        C */
+/*              CALL MXV ( TIPM, SCPOS, SCPOS ) */
+
+/*        C */
+/*        C     Normalize the position to factors of the radii. */
+/*        C */
+/*              SCPOS(1) = SCPOS(1) / RAD(1)**2 */
+/*              SCPOS(2) = SCPOS(2) / RAD(2)**2 */
+/*              SCPOS(3) = SCPOS(3) / RAD(3)**2 */
+
+/*        C */
+/*        C     Find the apparent limb.  LIMB is a SPICE ellipse */
+/*        C     representing the limb. */
+/*        C */
+/*              CALL NVC2PL ( SCPOS,  1.0D0,  PLANE  ) */
+/*              CALL INEDPL ( RAD(1), RAD(2), RAD(3), */
+/*             .              PLANE,  LIMB,   FOUND  ) */
+
+/*        C */
+/*        C     CENTER, SMAJOR, and SMINOR are the limb's center, */
+/*        C     semi-major axis of the limb, and a semi-minor axis */
+/*        C     of the limb.  We obtain these from LIMB using the */
+/*        C     SPICELIB routine EL2CGV ( Ellipse to center and */
+/*        C     generating vectors ). */
+/*        C */
+/*              CALL EL2CGV ( LIMB, CENTER, SMAJOR, SMINOR ) */
+
+/*        C */
+/*        C     Output the structure components. */
+/*        C */
+/*              WRITE(*,'(A)') 'Apparent limb of Jupiter as seen ' */
+/*             .            // 'from JUNO:' */
+/*              WRITE(*,'(2A)')       '   UTC time       : ', UTCSTR */
+/*              WRITE(*,'(A,3F14.6)') '   Semi-minor axis:', SMINOR */
+/*              WRITE(*,'(A,3F14.6)') '   Semi-major axis:', SMAJOR */
+/*              WRITE(*,'(A,3F14.6)') '   Center         :', CENTER */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Apparent limb of Jupiter as seen from JUNO: */
+/*           UTC time       : 2016 Jul 14 19:45:00 */
+/*           Semi-minor axis:  12425.547643  -5135.572410  65656.053303 */
+/*           Semi-major axis:  27305.667297  66066.222576      0.000000 */
+/*           Center         :    791.732472   -327.228993   -153.408849 */
 
 
 /* $ Restrictions */
@@ -256,13 +413,23 @@ static doublereal c_b33 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.3.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
+
 /* -    SPICELIB Version 1.2.0, 16-NOV-2005 (NJB) */
 
-/*        Bug fix:  error detection for case of invalid input plane was */
+/*        Bug fix: error detection for case of invalid input plane was */
 /*        added. */
 
 /*        Updated to remove non-standard use of duplicate arguments */
@@ -272,8 +439,8 @@ static doublereal c_b33 = 1.;
 
 /*        Removed potential numerical precision problems that could be */
 /*        caused by using a REAL constant in a double precision */
-/*        computation. The value 1.0 was repaced with the value 1.0D0 in */
-/*        the following three lines: */
+/*        computation. The value 1.0 was replaced with the value 1.0D0 */
+/*        in the following three lines: */
 
 /*           DSTORT(1) = 1.0 / A */
 /*           DSTORT(2) = 1.0 / B */
@@ -293,36 +460,6 @@ static doublereal c_b33 = 1.;
 /* $ Index_Entries */
 
 /*     intersection of ellipsoid and plane */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.2.0, 16-NOV-2005 (NJB) */
-
-/*        Bug fix:  error detection for case of invalid input plane was */
-/*        added. */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSCL calls. */
-
-/* -    SPICELIB Version 1.1.0, 11-JUL-1995 (KRG) */
-
-/*        Removed potential numerical precision problems that could be */
-/*        caused by using a REAL constant in a double precision */
-/*        computation. The value 1.0 was repaced with the value 1.0D0 in */
-/*        the following three lines: */
-
-/*           DSTORT(1) = 1.0 / A */
-/*           DSTORT(2) = 1.0 / B */
-/*           DSTORT(3) = 1.0 / C */
-
-/*        Also changed was a numeric constant from 1.D0 to the */
-/*        equivalent, but more aesthetically pleasing 1.0D0. */
-
-/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
-
-/*        Comment section for permuted index source lines was added */
-/*        following the header. */
 
 /* -& */
 
@@ -430,20 +567,20 @@ static doublereal c_b33 = 1.;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	point[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("point", i__1,
-		 "inedpl_", (ftnlen)449)] = dstort[(i__2 = i__ - 1) < 3 && 0 
+		 "inedpl_", (ftnlen)589)] = dstort[(i__2 = i__ - 1) < 3 && 0 
 		<= i__2 ? i__2 : s_rnge("dstort", i__2, "inedpl_", (ftnlen)
-		449)] * point[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("point", i__3, "inedpl_", (ftnlen)449)];
+		589)] * point[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+		s_rnge("point", i__3, "inedpl_", (ftnlen)589)];
 	span1[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("span1", i__1,
-		 "inedpl_", (ftnlen)450)] = dstort[(i__2 = i__ - 1) < 3 && 0 
+		 "inedpl_", (ftnlen)590)] = dstort[(i__2 = i__ - 1) < 3 && 0 
 		<= i__2 ? i__2 : s_rnge("dstort", i__2, "inedpl_", (ftnlen)
-		450)] * span1[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("span1", i__3, "inedpl_", (ftnlen)450)];
+		590)] * span1[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+		s_rnge("span1", i__3, "inedpl_", (ftnlen)590)];
 	span2[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("span2", i__1,
-		 "inedpl_", (ftnlen)451)] = dstort[(i__2 = i__ - 1) < 3 && 0 
+		 "inedpl_", (ftnlen)591)] = dstort[(i__2 = i__ - 1) < 3 && 0 
 		<= i__2 ? i__2 : s_rnge("dstort", i__2, "inedpl_", (ftnlen)
-		451)] * span2[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
-		s_rnge("span2", i__3, "inedpl_", (ftnlen)451)];
+		591)] * span2[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : 
+		s_rnge("span2", i__3, "inedpl_", (ftnlen)591)];
     }
     psv2pl_(point, span1, span2, dplane);
 
@@ -495,20 +632,20 @@ static doublereal c_b33 = 1.;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	center[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("center", 
-		i__1, "inedpl_", (ftnlen)511)] = invdst[(i__2 = i__ - 1) < 3 
+		i__1, "inedpl_", (ftnlen)651)] = invdst[(i__2 = i__ - 1) < 3 
 		&& 0 <= i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (
-		ftnlen)511)] * center[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("center", i__3, "inedpl_", (ftnlen)511)];
+		ftnlen)651)] * center[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+		i__3 : s_rnge("center", i__3, "inedpl_", (ftnlen)651)];
 	vec1[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vec1", i__1, 
-		"inedpl_", (ftnlen)512)] = invdst[(i__2 = i__ - 1) < 3 && 0 <=
-		 i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (ftnlen)512)]
+		"inedpl_", (ftnlen)652)] = invdst[(i__2 = i__ - 1) < 3 && 0 <=
+		 i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (ftnlen)652)]
 		 * vec1[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-		"vec1", i__3, "inedpl_", (ftnlen)512)];
+		"vec1", i__3, "inedpl_", (ftnlen)652)];
 	vec2[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("vec2", i__1, 
-		"inedpl_", (ftnlen)513)] = invdst[(i__2 = i__ - 1) < 3 && 0 <=
-		 i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (ftnlen)513)]
+		"inedpl_", (ftnlen)653)] = invdst[(i__2 = i__ - 1) < 3 && 0 <=
+		 i__2 ? i__2 : s_rnge("invdst", i__2, "inedpl_", (ftnlen)653)]
 		 * vec2[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-		"vec2", i__3, "inedpl_", (ftnlen)513)];
+		"vec2", i__3, "inedpl_", (ftnlen)653)];
     }
 
 /*     Make an ellipse from the center and generating vectors. */

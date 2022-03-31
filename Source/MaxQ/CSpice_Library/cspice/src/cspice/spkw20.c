@@ -191,7 +191,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*   Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of SPK file open for writing. */
 /*     BODY       I   NAIF code for ephemeris object. */
@@ -208,153 +208,147 @@ static integer c__1 = 1;
 /*     TSCALE     I   Time scale of data. */
 /*     INITJD     I   Integer part of begin time (TDB Julian date) of */
 /*                    first record. */
-/*     INITFR     I   Fractional part of begin time (TDB Julian date) of */
-/*                    first record. */
-/*     MAXDEG     P   Maximum allowed degree of Chebyshev expansions. */
-/*     TOLSCL     P   Tolerance scale for coverage bound checking. */
+/*     INITFR     I   Fractional part of begin time of first record. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the DAF handle of an SPK file to which a type 20 */
-/*                    segment is to be added.  The SPK file must be open */
-/*                    for writing. */
+/*     HANDLE   is the DAF handle of an SPK file to which a type 20 */
+/*              segment is to be added. The SPK file must be open */
+/*              for writing. */
 
-/*     BODY           is the NAIF integer code for an ephemeris object */
-/*                    whose state relative to another body is described */
-/*                    by the segment to be created. */
+/*     BODY     is the NAIF integer code for an ephemeris object */
+/*              whose state relative to another body is described */
+/*              by the segment to be created. */
 
-/*     CENTER         is the NAIF integer code for the center of motion */
-/*                    of the object identified by BODY. */
+/*     CENTER   is the NAIF integer code for the center of motion */
+/*              of the object identified by BODY. */
 
-/*     FRAME          is the NAIF name for a reference frame relative to */
-/*                    which the state information for BODY is specified. */
+/*     FRAME    is the NAIF name for a reference frame relative to */
+/*              which the state information for BODY is specified. */
 
 /*     FIRST, */
-/*     LAST           are the start and stop times of the time interval */
-/*                    over which the segment defines the state of the */
-/*                    object identified by BODY. */
+/*     LAST     are the start and stop times of the time interval */
+/*              over which the segment defines the state of the */
+/*              object identified by BODY. */
 
-/*     SEGID          is a segment identifier. An SPK segment identifier */
-/*                    may contain up to 40 characters. */
+/*     SEGID    is a segment identifier. An SPK segment identifier */
+/*              may contain up to 40 characters. */
 
-/*     INTLEN         is the length of time, in TDB Julian days, covered */
-/*                    by each set of Chebyshev polynomial coefficients */
-/*                    (each logical record). */
+/*     INTLEN   is the length of time, in TDB Julian days, covered */
+/*              by each set of Chebyshev polynomial coefficients */
+/*              (each logical record). */
 
-/*     N              is the number of logical records to be stored in */
-/*                    the segment. There is one logical record for each */
-/*                    time period. Each logical record contains three */
-/*                    sets of Chebyshev coefficients---one for each */
-/*                    coordinate---and three position vector components. */
+/*     N        is the number of logical records to be stored in */
+/*              the segment. There is one logical record for each */
+/*              time period. Each logical record contains three */
+/*              sets of Chebyshev coefficients---one for each */
+/*              coordinate---and three position vector components. */
 
-/*     POLYDG         is the degree of each set of Chebyshev */
-/*                    polynomials, i.e. the number of Chebyshev */
-/*                    coefficients per coordinate minus one. POLYDG must */
-/*                    be less than or equal to the parameter MAXDEG. */
+/*     POLYDG   is the degree of each set of Chebyshev */
+/*              polynomials, i.e. the number of Chebyshev */
+/*              coefficients per coordinate minus one. POLYDG must */
+/*              be less than or equal to the parameter MAXDEG. */
 
-/*     CDATA          is an array containing all the sets of Chebyshev */
-/*                    polynomial coefficients and position components to */
-/*                    be placed in the new segment of the SPK file. */
-/*                    There are three sets of coefficients and position */
-/*                    components for each time interval covered by the */
-/*                    segment. */
+/*     CDATA    is an array containing all the sets of Chebyshev */
+/*              polynomial coefficients and position components to */
+/*              be placed in the new segment of the SPK file. */
+/*              There are three sets of coefficients and position */
+/*              components for each time interval covered by the */
+/*              segment. */
 
-/*                    The coefficients and position components are */
-/*                    stored in CDATA in order as follows: */
+/*              The coefficients and position components are */
+/*              stored in CDATA in order as follows: */
 
-/*                       the (POLYDG + 1) coefficients for the first */
-/*                       coordinate of the first logical record, */
-/*                       followed by the X component of position at the */
-/*                       first interval midpoint. The first coefficient */
-/*                       is that of the constant term of the expansion. */
+/*                 the (POLYDG + 1) coefficients for the first */
+/*                 coordinate of the first logical record, */
+/*                 followed by the X component of position at the */
+/*                 first interval midpoint. The first coefficient */
+/*                 is that of the constant term of the expansion. */
 
-/*                       the coefficients for the second coordinate, */
-/*                       followed by the Y component of position at the */
-/*                       first interval midpoint. */
+/*                 the coefficients for the second coordinate, */
+/*                 followed by the Y component of position at the */
+/*                 first interval midpoint. */
 
-/*                       the coefficients for the third coordinate, */
-/*                       followed by the Z component of position at the */
-/*                       first interval midpoint. */
+/*                 the coefficients for the third coordinate, */
+/*                 followed by the Z component of position at the */
+/*                 first interval midpoint. */
 
-/*                       the coefficients for the first coordinate for */
-/*                       the second logical record, followed by the X */
-/*                       component of position at the second interval */
-/*                       midpoint. */
+/*                 the coefficients for the first coordinate for */
+/*                 the second logical record, followed by the X */
+/*                 component of position at the second interval */
+/*                 midpoint. */
 
-/*                       and so on. */
+/*                 and so on. */
 
-/*                    The logical data records are stored contiguously: */
+/*              The logical data records are stored contiguously: */
 
-/*                       +----------+ */
-/*                       | Record 1 | */
-/*                       +----------+ */
-/*                       | Record 2 | */
-/*                       +----------+ */
-/*                           ... */
-/*                       +----------+ */
-/*                       | Record N | */
-/*                       +----------+ */
+/*                 +----------+ */
+/*                 | Record 1 | */
+/*                 +----------+ */
+/*                 | Record 2 | */
+/*                 +----------+ */
+/*                     ... */
+/*                 +----------+ */
+/*                 | Record N | */
+/*                 +----------+ */
 
-/*                    The contents of an individual record are: */
+/*              The contents of an individual record are: */
 
-/*                       +--------------------------------------+ */
-/*                       | Coeff set for X velocity component   | */
-/*                       +--------------------------------------+ */
-/*                       | X position component                 | */
-/*                       +--------------------------------------+ */
-/*                       | Coeff set for Y velocity component   | */
-/*                       +--------------------------------------+ */
-/*                       | Y position component                 | */
-/*                       +--------------------------------------+ */
-/*                       | Coeff set for Z velocity component   | */
-/*                       +--------------------------------------+ */
-/*                       | Z position component                 | */
-/*                       +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | Coeff set for X velocity component   | */
+/*                 +--------------------------------------+ */
+/*                 | X position component                 | */
+/*                 +--------------------------------------+ */
+/*                 | Coeff set for Y velocity component   | */
+/*                 +--------------------------------------+ */
+/*                 | Y position component                 | */
+/*                 +--------------------------------------+ */
+/*                 | Coeff set for Z velocity component   | */
+/*                 +--------------------------------------+ */
+/*                 | Z position component                 | */
+/*                 +--------------------------------------+ */
 
 /*                   Each coefficient set has the structure: */
 
-/*                       +--------------------------------------+ */
-/*                       | Coefficient of T_0                   | */
-/*                       +--------------------------------------+ */
-/*                       | Coefficient of T_1                   | */
-/*                       +--------------------------------------+ */
-/*                                         ... */
-/*                       +--------------------------------------+ */
-/*                       | Coefficient of T_POLYDG              | */
-/*                       +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | Coefficient of T_0                   | */
+/*                 +--------------------------------------+ */
+/*                 | Coefficient of T_1                   | */
+/*                 +--------------------------------------+ */
+/*                                   ... */
+/*                 +--------------------------------------+ */
+/*                 | Coefficient of T_POLYDG              | */
+/*                 +--------------------------------------+ */
 
-/*                    Where T_n represents the Chebyshev polynomial */
-/*                    of the first kind of degree n. */
-
+/*              Where T_n represents the Chebyshev polynomial */
+/*              of the first kind of degree n. */
 
 /*     DSCALE, */
-/*     TSCALE         are, respectively, the distance scale of the input */
-/*                    position and velocity data in km, and the time */
-/*                    scale of the input velocity data in TDB seconds. */
+/*     TSCALE   are, respectively, the distance scale of the input */
+/*              position and velocity data in km, and the time */
+/*              scale of the input velocity data in TDB seconds. */
 
-/*                    For example, if the input distance data have units */
-/*                    of astronomical units (AU), DSCALE should be set */
-/*                    to the number of km in one AU. If the input */
-/*                    velocity data have time units of Julian days, then */
-/*                    TSCALE should be set to the number of seconds per */
-/*                    Julian day (86400). */
+/*              For example, if the input distance data have units */
+/*              of astronomical units (AU), DSCALE should be set */
+/*              to the number of km in one AU. If the input */
+/*              velocity data have time units of Julian days, then */
+/*              TSCALE should be set to the number of seconds per */
+/*              Julian day (86400). */
 
+/*     INITJD   is the integer part of the Julian ephemeris date */
+/*              of initial epoch of the first record. INITJD may */
+/*              be less than, equal to, or greater than the */
+/*              initial epoch. */
 
-/*     INITJD         is the integer part of the Julian ephemeris date */
-/*                    of initial epoch of the first record. INITJD may */
-/*                    be less than, equal to, or greater than the */
-/*                    initial epoch. */
+/*     INITFR   is the fractional part of the Julian ephemeris date */
+/*              of initial epoch of the first record. INITFR has */
+/*              units of Julian days. INITFR has magnitude */
+/*              strictly less than 1 day. The sum */
 
-/*     INITFR         is the fractional part of the Julian ephemeris date */
-/*                    of initial epoch of the first record. INITFR has */
-/*                    units of Julian days. INITFR has magnitude */
-/*                    strictly less than 1 day. The sum */
+/*                 INITJD + INITFR */
 
-/*                       INITJD + INITFR */
-
-/*                    equals the Julian ephemeris date of the initial */
-/*                    epoch of the first record. */
-
+/*              equals the Julian ephemeris date of the initial */
+/*              epoch of the first record. */
 
 /* $ Detailed_Output */
 
@@ -365,66 +359,63 @@ static integer c__1 = 1;
 /*     The parameters described in this section are declared in the */
 /*     Fortran INCLUDE file spk20.inc */
 
+/*     MAXDEG   is the maximum allowed degree of the input */
+/*              Chebyshev expansions. */
 
-/*     MAXDEG         is the maximum allowed degree of the input */
-/*                    Chebyshev expansions. */
+/*     TOLSCL   is a tolerance scale factor (also called a */
+/*              "relative tolerance") used for time coverage */
+/*              bound checking. TOLSCL is unitless. TOLSCL */
+/*              produces a tolerance value via the formula */
 
+/*                 TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) ) */
 
-/*     TOLSCL         is a tolerance scale factor (also called a */
-/*                    "relative tolerance") used for time coverage */
-/*                    bound checking. TOLSCL is unitless. TOLSCL */
-/*                    produces a tolerance value via the formula */
+/*              where FIRST and LAST are the coverage time bounds */
+/*              of a type 20 segment, expressed as seconds past */
+/*              J2000 TDB. */
 
-/*                       TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) ) */
+/*              The resulting parameter TOL is used as a tolerance */
+/*              for comparing the input segment descriptor time */
+/*              bounds to the first and last epoch covered by the */
+/*              sequence of time intervals defined by the inputs */
 
-/*                    where FIRST and LAST are the coverage time bounds */
-/*                    of a type 20 segment, expressed as seconds past */
-/*                    J2000 TDB. */
+/*                 INITJD */
+/*                 INITFR */
+/*                 INTLEN */
+/*                 N */
 
-/*                    The resulting parameter TOL is used as a tolerance */
-/*                    for comparing the input segment descriptor time */
-/*                    bounds to the first and last epoch covered by the */
-/*                    sequence of time intervals defined by the inputs */
-
-/*                       INITJD */
-/*                       INITFR */
-/*                       INTLEN */
-/*                       N */
-
-/*                    See the Exceptions section below for a description */
-/*                    of the error check using this tolerance. */
+/*              See the $Exceptions section below for a description */
+/*              of the error check using this tolerance. */
 
 /* $ Exceptions */
 
-/*     1)  If the number of sets of coefficients is not positive */
-/*         SPICE(INVALIDCOUNT) is signaled. */
+/*     1)  If the number of sets of coefficients is not positive, */
+/*         the error SPICE(INVALIDCOUNT) is signaled. */
 
-/*     2)  If the interval length is not positive, SPICE(INTLENNOTPOS) */
-/*         is signaled. */
+/*     2)  If the interval length is not positive, the error */
+/*         SPICE(INTLENNOTPOS) is signaled. */
 
 /*     3)  If the name of the reference frame is not recognized, */
-/*         SPICE(INVALIDREFFRAME) is signaled. */
+/*         the error SPICE(INVALIDREFFRAME) is signaled. */
 
 /*     4)  If segment stop time is not greater than or equal to */
-/*         the begin time, SPICE(BADDESCRTIMES) is signaled. */
+/*         the begin time, the error SPICE(BADDESCRTIMES) is signaled. */
 
 /*     5)  If the start time of the first record exceeds the descriptor */
 /*         begin time by more than a computed tolerance, or if the end */
 /*         time of the last record precedes the descriptor end time by */
 /*         more than a computed tolerance, the error SPICE(COVERAGEGAP) */
-/*         is signaled. See the Parameters section above for a */
+/*         is signaled. See the $Parameters section above for a */
 /*         description of the tolerance. */
 
 /*     6)  If the input degree POLYDG is less than 0 or greater than */
 /*         MAXDEG, the error SPICE(INVALIDDEGREE) is signaled. */
 
-/*     7)  If the last non-blank character of SEGID occurs past index */
-/*         40, or if SEGID contains any nonprintable characters, the */
-/*         error will be diagnosed by a routine in the call tree of this */
-/*         routine. */
+/*     7)  If the last non-blank character of SEGID occurs past index 40, */
+/*         or if SEGID contains any nonprintable characters, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /*     8)  If either the distance or time scale is non-positive, the */
-/*         error SPICE(NONPOSITIVESCALE) will be signaled. */
+/*         error SPICE(NONPOSITIVESCALE) is signaled. */
 
 /* $ Files */
 
@@ -441,7 +432,7 @@ static integer c__1 = 1;
 /*     and reference frame. The Chebyshev polynomial degree and length */
 /*     of time covered by each logical record are also fixed. However, */
 /*     an arbitrary number of logical records of Chebyshev polynomial */
-/*     coefficients can be written in each segment.  Minimizing the */
+/*     coefficients can be written in each segment. Minimizing the */
 /*     number of segments in an SPK file will help optimize how the */
 /*     SPICE system accesses the file. */
 
@@ -494,17 +485,24 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman (JPL) */
-/*     K.S. Zukor   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 05-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added missing description of INITFR to $Brief_I/O section. */
 
 /* -    SPICELIB Version 1.0.0, 17-JAN-2017 (NJB) (KSZ) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     write spk type_20 data segment */
+/*     write SPK type_20 data segment */
 
 /* -& */
 

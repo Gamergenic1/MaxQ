@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SCE2T ( ET to discrete SCLK ticks ) */
+/* $Procedure SCE2T ( ET to discrete SCLK ticks ) */
 /* Subroutine */ int sce2t_(integer *sc, doublereal *et, doublereal *sclkdp)
 {
     /* System generated locals */
@@ -53,7 +53,9 @@
 
 /* $ Required_Reading */
 
+/*     CK */
 /*     SCLK */
+/*     SPK */
 /*     TIME */
 
 /* $ Keywords */
@@ -64,7 +66,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SC         I   NAIF spacecraft ID code. */
 /*     ET         I   Ephemeris time, seconds past J2000. */
@@ -73,22 +75,22 @@
 
 /* $ Detailed_Input */
 
-/*     SC             is a NAIF integer code for a spacecraft whose */
-/*                    encoded SCLK value at the epoch specified by ET is */
-/*                    desired. */
+/*     SC       is a NAIF integer code for a spacecraft whose */
+/*              encoded SCLK value at the epoch specified by ET is */
+/*              desired. */
 
-/*     ET             is an epoch, specified as ephemeris seconds past */
-/*                    J2000. */
+/*     ET       is an epoch, specified as ephemeris seconds past */
+/*              J2000. */
 
 /* $ Detailed_Output */
 
-/*     SCLKDP         is an encoded integral spacecraft clock value. */
-/*                    SCLKDP is an encoded representation of the total */
-/*                    count of spacecraft clock ticks measured from the */
-/*                    time the spacecraft clock started to the epoch ET: */
-/*                    partition information IS reflected in the encoded */
-/*                    value.  SCLKDP is rounded to the nearest integral */
-/*                    double precision number. */
+/*     SCLKDP   is an encoded integral spacecraft clock value. */
+/*              SCLKDP is an encoded representation of the total */
+/*              count of spacecraft clock ticks measured from the */
+/*              time the spacecraft clock started to the epoch ET: */
+/*              partition information IS reflected in the encoded */
+/*              value. SCLKDP is rounded to the nearest integral */
+/*              double precision number. */
 
 /* $ Parameters */
 
@@ -96,21 +98,20 @@
 
 /* $ Exceptions */
 
-/*     1)  This routine assumes that that an SCLK kernel appropriate */
-/*         to the spacecraft clock identified by the input argument SC */
-/*         has been loaded.  If an SCLK kernel has not been loaded, */
-/*         does not contain all of the required data, or contains */
-/*         invalid data, error diagnoses will be performed by routines */
-/*         called by this routine.  The output argument SCLKDP will not */
-/*         be modified. */
+/*     1)  If an SCLK kernel has not been loaded, does not contain all of */
+/*         the required data, or contains invalid data, an error is */
+/*         signaled by a routine in the call tree of this routine. The */
+/*         output argument SCLKDP will not be modified. This routine */
+/*         assumes that that an SCLK kernel appropriate to the spacecraft */
+/*         clock identified by the input argument SC has been loaded. */
 
-/*     2)  When using SCLK kernels that map SCLK to a time system other */
-/*         than ET (also called barycentric dynamical time---`TDB'), it */
-/*         is necessary to have a leapseconds kernel loaded at the time */
-/*         this routine is called.  If a leapseconds kernel is required */
-/*         for conversion between SCLK and ET but is not loaded, the */
-/*         error will be diagnosed by routines called by this routine. */
-/*         The output argument SCLKDP will not be modified. */
+/*     2)  If a leapseconds kernel is required for conversion between */
+/*         SCLK and ET but is not loaded, an error is signaled by a */
+/*         routine in the call tree of this routine. The output argument */
+/*         SCLKDP will not be modified. When using SCLK kernels that map */
+/*         SCLK to a time system other than ET (also called barycentric */
+/*         dynamical time---`TDB'), it is necessary to have a leapseconds */
+/*         kernel loaded at the time this routine is called. */
 
 /*         The time system that an SCLK kernel maps SCLK to is indicated */
 /*         by the variable SCLK_TIME_SYSTEM_nn in the kernel, where nn */
@@ -121,13 +122,13 @@
 
 /*     3)  If the clock type for the spacecraft clock identified by */
 /*         SC is not supported by this routine, the error */
-/*         SPICE(NOTSUPPORTED) is signaled.  The output argument SCLKDP */
+/*         SPICE(NOTSUPPORTED) is signaled. The output argument SCLKDP */
 /*         will not be modified. */
 
 /*     4)  If the input ET value is not representable as an encoded */
 /*         spacecraft clock value for the spacecraft clock identified by */
-/*         SC, the error will be diagnosed by routines called by this */
-/*         routine.  The output argument SCLKDP will not be modified. */
+/*         SC, an error is signaled by a routine in the call tree of this */
+/*         routine. The output argument SCLKDP will not be modified. */
 
 /* $ Files */
 
@@ -135,16 +136,16 @@
 
 /* $ Particulars */
 
-/*     This routine outputs discrete, encoded SCLK values.  Since */
+/*     This routine outputs discrete, encoded SCLK values. Since */
 /*     continuous SCLK values are generally more useful, the newer */
 /*     routine SCE2C (ET to continuous ticks) should normally be used */
-/*     in place of this one.  However, the functionality of this */
+/*     in place of this one. However, the functionality of this */
 /*     routine is needed for converting ET to SCLK strings, and the */
 /*     routine SCE2S calls this routine for that purpose. */
 
 /*     The advantage of encoded SCLK, as opposed to character string */
 /*     representations of SCLK, is that encoded SCLK values are easy to */
-/*     perform arithmetic operations on.  Also, working with encoded SCLK */
+/*     perform arithmetic operations on. Also, working with encoded SCLK */
 /*     reduces the overhead of repeated conversion of  character strings */
 /*     to integers or double precision numbers. */
 
@@ -162,7 +163,7 @@
 /*         ephemeris time. */
 
 /*            During program initialization, load the leapseconds and */
-/*            SCLK kernels.  We will pretend that these files are named */
+/*            SCLK kernels. We will pretend that these files are named */
 /*            "LEAPSECONDS.KER" and "GLLSCLK.KER".  To use this code */
 /*            fragment, you must substitute the actual names of these */
 /*            kernel files for the names used here. */
@@ -239,22 +240,32 @@
 
 /* $ Literature_References */
 
-/*     [1]  CK Required Reading */
-
-/*     [2]  SPK Required Reading */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Moved the required readings present in $Literature_References */
+/*        section to $Required_Reading. */
 
 /* -    SPICELIB Version 1.0.4, 27-JAN-2004 (NJB) */
 
 /*        Header was updated to remove comments indicating this routine */
-/*        was deprecated.  Minor changes were made to clarify both the */
+/*        was deprecated. Minor changes were made to clarify both the */
 /*        functionality of this routine and the difference between */
-/*        this routine and SCE2C.  Examples were updated to use FURNSH. */
+/*        this routine and SCE2C.  $Examples were updated to use FURNSH. */
 
 /* -    SPICELIB Version 1.0.3, 09-MAR-1999 (NJB) */
 
@@ -264,16 +275,17 @@
 /* -    SPICELIB Version 1.0.2, 10-APR-1992 (NJB) (WLT) */
 
 /*        Header was updated to reflect possibility of needing to load */
-/*        a leapseconds kernel before calling this routine.  Comment */
+/*        a leapseconds kernel before calling this routine. Comment */
 /*        section for permuted index source lines was added following the */
 /*        header. */
 
 /* -    SPICELIB Version 1.0.1, 12-OCT-1990 (NJB) */
 
-/*        Restrictions section no longer states that you must load the */
+/*        $Restrictions section no longer states that you must load the */
 /*        leapseconds kernel prior to calling this routine. */
 
-/*        The examples have been slightly re-written. */
+/*        The examples have been slightly re-written. In particular, */
+/*        they no longer use calls to CLPOOL. */
 
 /* -    SPICELIB Version 1.0.0, 03-SEP-1990 (NJB) */
 
@@ -281,17 +293,6 @@
 /* $ Index_Entries */
 
 /*     ephemeris time to spacecraft_clock ticks */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.0.1, 12-OCT-1990 (NJB) */
-
-/*        Restrictions section no longer states that you must load the */
-/*        leapseconds kernel prior to calling this routine. */
-
-/*        The examples have been slightly re-written.  In particular, */
-/*        they no longer use calls to CLPOOL. */
 
 /* -& */
 

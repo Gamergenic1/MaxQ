@@ -11,7 +11,7 @@ static integer c__6 = 6;
 static integer c__5 = 5;
 static integer c__7 = 7;
 
-/* $Procedure      SGFREF ( Generic Segments: Fetch references ) */
+/* $Procedure SGFREF ( Generic Segments: Fetch references ) */
 /* Subroutine */ int sgfref_(integer *handle, doublereal *descr, integer *
 	first, integer *last, doublereal *values)
 {
@@ -38,10 +38,10 @@ static integer c__7 = 7;
 
 /* $ Abstract */
 
-/*     Given the descriptor for a generic segment in a DAF file */
-/*     associated with HANDLE, fetch from the references partition */
-/*     of the segment the double precision numbers from FIRST to */
-/*     LAST. */
+/*     Fetch from the references partition of a generic segment */
+/*     the double precision numbers from FIRST to LAST. The */
+/*     segment is identified by a DAF file handle and segment */
+/*     descriptor. */
 
 /* $ Disclaimer */
 
@@ -70,7 +70,7 @@ static integer c__7 = 7;
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
@@ -89,49 +89,49 @@ static integer c__7 = 7;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of a DAF file opened for reading */
-/*                that contains the segment described by DESCR. */
+/*     HANDLE   is the handle of a DAF file opened for reading */
+/*              that contains the segment described by DESCR. */
 
-/*     DESCR      is the descriptor of the segment with the desired */
-/*                constant values. This must be the descriptor for a */
-/*                segment in the DAF associated with HANDLE. */
+/*     DESCR    is the descriptor of the segment with the desired */
+/*              constant values. This must be the descriptor for a */
+/*              segment in the DAF associated with HANDLE. */
 
-/*     FIRST      is the index of the first value to fetch from the */
-/*                reference section of the DAF generic segment associated */
-/*                with HANDLE and DESCR. */
+/*     FIRST    is the index of the first value to fetch from the */
+/*              reference section of the DAF generic segment associated */
+/*              with HANDLE and DESCR. */
 
-/*     LAST       is the index of the last value to fetch from the */
-/*                constants section of the DAF generic segment associated */
-/*                with HANDLE and DESCR. */
+/*     LAST     is the index of the last value to fetch from the */
+/*              constants section of the DAF generic segment associated */
+/*              with HANDLE and DESCR. */
 
 /* $ Detailed_Output */
 
-/*     VALUES      is the array of reference values obtained from the */
-/*                 reference section of the DAF generic segment */
-/*                 associated with HANDLE and DESCR. */
+/*     VALUES   is the array of reference values obtained from the */
+/*              reference section of the DAF generic segment */
+/*              associated with HANDLE and DESCR. */
 
 /* $ Parameters */
 
 /*     This subroutine makes use of parameters defined in the file */
 /*     'sgparam.inc'. */
 
+/* $ Exceptions */
+
+/*     1)  If FIRST is less than 1 or LAST is greater than the number of */
+/*         reference values, the error SPICE(REQUESTOUTOFBOUNDS) is */
+/*         signaled. */
+
+/*     2)  If LAST is less than FIRST, the error SPICE(REQUESTOUTOFORDER) */
+/*         is signaled. */
+
+/*     3)  If the reference directory structure is unrecognized, the */
+/*         error SPICE(UNKNOWNREFDIR) is signaled. The most likely cause */
+/*         of this error is that an upgrade to your version of the SPICE */
+/*         toolkit is needed. */
+
 /* $ Files */
 
 /*     See the description of HANDLE above. */
-
-/* $ Exceptions */
-
-/*     1) The error SPICE(REQUESTOUTOFBOUNDS) will be signalled */
-/*        if FIRST is less than 1 or LAST is greater than the */
-/*        number of reference values. */
-
-/*     2) The error SPICE(REQUESTOUTOFORDER) will be signalled */
-/*        if LAST is less than FIRST. */
-
-/*     3) The error SPICE(UNKNOWNREFDIR) will be signalled if the */
-/*        reference directory structure is unrecognized.  The most */
-/*        likely cause of this error is that an upgrade to your */
-/*        version of the SPICE toolkit is needed. */
 
 /* $ Particulars */
 
@@ -152,22 +152,27 @@ static integer c__7 = 7;
 
 /*        CALL SGFREF ( HANDLE, DESCR, I, I, REFVAL ) */
 
-
 /* $ Restrictions */
 
-/*     The segment described by DESCR MUST be a generic segment, */
-/*     otherwise the results of this routine are not predictable. */
-
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     1)  The segment described by DESCR MUST be a generic segment, */
+/*         otherwise the results of this routine are not predictable. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 07-SEP-2001 (EDW) */
 
@@ -182,7 +187,7 @@ static integer c__7 = 7;
 
 /* -& */
 
-/*     Spicelib Functions */
+/*     SPICELIB Functions */
 
 
 /*     Local Parameters */
@@ -683,7 +688,7 @@ static integer c__7 = 7;
     } else {
 	setmsg_("The generic DAF segment you attempted to read has an unsupp"
 		"orted reference directory structure. The integer code given "
-		"for this structure is #. The likely cause of this anomoly is"
+		"for this structure is #. The likely cause of this anomaly is"
 		" that your version of SPICELIB needs to be updated. Contact "
 		"your system administrator or NAIF for a toolkit update. ", (
 		ftnlen)295);

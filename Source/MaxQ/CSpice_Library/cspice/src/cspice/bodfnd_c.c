@@ -65,15 +65,15 @@
 
 -Detailed_Input
 
-   body       is the ID code of the body for which the item is
-              requested. Bodies are numbered according to the
-              standard NAIF numbering scheme.
+   body        is the ID code of the body for which the item is
+               requested. Bodies are numbered according to the
+               standard NAIF numbering scheme.
 
-   item       is the item to be returned. Together, the body and
-              item name combine to form a variable name, e.g.,
+   item        is the item to be returned. Together, the body and
+               item name combine to form a variable name, e.g.,
 
-                    "BODY599_RADII"
-                    "BODY4_POLE_RA"
+                     "BODY599_RADII"
+                     "BODY4_POLE_RA"
 
 -Detailed_Output
 
@@ -81,6 +81,20 @@
    kernel pool, and is SPICEFALSE if it is not.
 
 -Parameters
+
+   None.
+
+-Exceptions
+
+   1)  If the `item' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       SPICEFALSE.
+
+   2)  If the `item' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled. The function returns the value
+       SPICEFALSE.
+
+-Files
 
    None.
 
@@ -94,57 +108,111 @@
 
 -Examples
 
-   In the following example, default values are substituted for
-   bodies for which radii are not found.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
+   1) Test if the Earth's radii values exist in the kernel pool.
+
+      Use the PCK kernel below to load the required triaxial
+      ellipsoidal shape model for the Earth.
+
+         pck00008.tpc
+
+
+      Example code begins here.
+
+
+      /.
+         Program bodfnd_ex1
+      ./
+      #include <stdio.h>
       #include "SpiceUsr.h"
-          ...
-      SpiceDouble          radii[3];
-      SpiceInt             n;
-      SpiceInt             target;
-          ...
 
-      if ( bodfnd_c ( target, "RADII" ) )
+      int main( )
       {
-         bodvcd_c ( target, "AXES", 3, &n, radii );
+         /.
+         Local constants.
+         ./
+         #define  bodyid         399
+
+         /.
+         Local variables.
+         ./
+         SpiceBoolean            found;
+         SpiceDouble             radii [ 3 ];
+         SpiceInt                dim;
+
+         /.
+         Load a PCK file.
+         ./
+         furnsh_c( "pck00008.tpc" );
+
+         /.
+         Test if Earth's radii values exist in the
+         kernel pool.
+
+         The procedure searches for the kernel variable
+         BODY399_RADII.
+         ./
+         found = bodfnd_c( bodyid, "RADII" );
+
+         /.
+         If found, retrieve the values.
+         ./
+         if ( found )
+         {
+            bodvcd_c( bodyid, "RADII", 3, &dim, radii );
+
+            printf ( "%d RADII: %10.3f %10.3f %10.3f\n",
+                     (int)bodyid, radii[0], radii[1], radii[2] );
+         }
+         else
+         {
+            printf ( "No RADII data found for object %d\n",
+                     (int)bodyid                          );
+         }
       }
-      else
-      {
-         vpack_c ( 100.0, 100.0, 100.0, radii );
-      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      399 RADII:   6378.140   6378.140   6356.750
+
 
 -Restrictions
 
    None.
 
--Exceptions
-
-   Error free.
-
--Files
+-Literature_References
 
    None.
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
-   H.A. Neilan     (JPL)
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
-   E.D. Wright     (JPL)
-
--Literature_References
-
-   None.
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
+
+   -CSPICE Version 2.0.3, 08-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       complete code examples.
 
    -CSPICE Version 2.0.2, 24-OCT-2005 (NJB)
 
        Header updates: reference to bodvar_c was replaced with
-       reference to bodvcd_c.  The string "AXES" and variable `axes'
+       reference to bodvcd_c. The string "AXES" and variable `axes'
        were replaced with the string "RADII" and variable `radii'
-       throughout the header.  A few other minor header edits were
+       throughout the header. A few other minor header edits were
        made.
 
    -CSPICE Version 2.0.1, 08-FEB-1998 (EDW)
@@ -156,10 +224,10 @@
        Input argument item was changed to type ConstSpiceChar *.
 
        References to C2F_CreateStr_Sig were removed; code was
-       cleaned up accordingly.  String checks are now done using
+       cleaned up accordingly. String checks are now done using
        the macro CHKFSTR_VAL.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW) (WLT) (IMU) (HAN)
 
 -Index_Entries
 
@@ -167,7 +235,6 @@
 
 -&
 */
-
 
 { /* Begin bodfnd_c */
 
@@ -207,4 +274,3 @@
    return ( result );
 
 } /* End bodfnd_c */
-

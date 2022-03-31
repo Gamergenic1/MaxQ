@@ -5,12 +5,12 @@
 
 #include "f2c.h"
 
-/* $Procedure      IDENT (Return the 3x3 identity matrix) */
+/* $Procedure IDENT ( Return the 3x3 identity matrix ) */
 /* Subroutine */ int ident_(doublereal *matrix)
 {
 /* $ Abstract */
 
-/*    This routine returns the 3x3 identity matrix. */
+/*     Return the 3x3 identity matrix. */
 
 /* $ Disclaimer */
 
@@ -50,7 +50,7 @@
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     MATRIX     O   is the 3x3 identity matrix */
+/*     MATRIX     O   The 3x3 identity matrix. */
 
 /* $ Detailed_Input */
 
@@ -58,24 +58,26 @@
 
 /* $ Detailed_Output */
 
-/*     MATRIX     is the 3x3 Identity matrix.  That is MATRIX is */
-/*                the following */
-/*                  _                       _ */
+/*     MATRIX   is the 3x3 Identity matrix. That MATRIX is */
+/*              the following */
+
+/*                 .-                       -. */
 /*                 |  1.0D0   0.0D0   0.0D0  | */
 /*                 |  0.0D0   1.0D0   0.0D0  | */
 /*                 |  0.0D0   0.0D0   1.0D0  | */
-/*                  -                       - */
+/*                 `-                       -' */
+
 /* $ Parameters */
-
-/*     None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -85,39 +87,125 @@
 
 /* $ Examples */
 
-/*     Suppose that you need to construct the matrix sum */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        I + OMEGA */
+/*     1) Define a 3x3 matrix and compute its inverse using the SPICELIB */
+/*        routine INVERT. Verify the accuracy of the computed inverse */
+/*        using the mathematical identity */
 
-/*     where OMEGA is some matrix you have already computed. */
+/*                -1 */
+/*           M x M   - I = 0 */
 
-/*     The code fragment below shows how you could accomplish this */
-/*     with this routine. */
+/*        where I is the 3x3 identity matrix. */
 
-/*        First get the Identity matrix */
 
-/*        DOUBLE PRECISION      I ( 3, 3 ) */
+/*        Example code begins here. */
 
-/*        CALL IDENT( I  ) */
-/*        CALL VSUMG( I, OMEGA, 9, SUM ) */
+
+/*              PROGRAM IDENT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      IDMAT  ( 3, 3 ) */
+/*              DOUBLE PRECISION      IMAT   ( 3, 3 ) */
+/*              DOUBLE PRECISION      M      ( 3, 3 ) */
+/*              DOUBLE PRECISION      MOUT   ( 3, 3 ) */
+/*              DOUBLE PRECISION      MZERO  ( 3, 3 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define a matrix to invert. */
+/*        C */
+/*              DATA                  M  /  0.D0,  0.5D0, 0.D0, */
+/*             .                           -1.D0,  0.D0,  0.D0, */
+/*             .                            0.D0,  0.D0,  1.D0 / */
+
+/*              WRITE(*,*) 'Original Matrix:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( M(I,J), J=1,3 ) */
+
+/*              END DO */
+/*        C */
+/*        C     Invert the matrix, then output. */
+/*        C */
+/*              CALL INVERT ( M, MOUT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Inverse Matrix:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( MOUT(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Check the M times MOUT produces the identity matrix. */
+/*        C */
+/*              CALL IDENT ( IDMAT ) */
+/*              CALL MXM   ( M, MOUT, IMAT ) */
+
+/*              CALL VSUBG ( IMAT, IDMAT, 9, MZERO ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Original times inverse minus identity:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( MZERO(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Original Matrix: */
+/*               0.0000000      -1.0000000       0.0000000 */
+/*               0.5000000       0.0000000       0.0000000 */
+/*               0.0000000       0.0000000       1.0000000 */
+
+/*         Inverse Matrix: */
+/*               0.0000000       2.0000000      -0.0000000 */
+/*              -1.0000000       0.0000000      -0.0000000 */
+/*               0.0000000      -0.0000000       1.0000000 */
+
+/*         Original times inverse minus identity: */
+/*               0.0000000       0.0000000       0.0000000 */
+/*               0.0000000       0.0000000       0.0000000 */
+/*               0.0000000       0.0000000       0.0000000 */
 
 
 /* $ Restrictions */
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 5-FEB-1996 (WLT) */
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
+
+/* -    SPICELIB Version 1.0.0, 05-FEB-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

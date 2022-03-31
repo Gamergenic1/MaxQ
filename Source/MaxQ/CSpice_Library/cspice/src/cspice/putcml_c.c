@@ -50,19 +50,18 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    argc       I   The number of command line arguments.
    argv       I   The vector of command line arguments.
 
 -Detailed_Input
 
-   argc      is the number of command line arguments.
+   argc        is the number of command line arguments.
 
-   argv      is the vector of space delimited command line arguments.
-             Each entry entry contains one argument.  argv[0] is the
-             command name.
-
+   argv        is the vector of space delimited command line arguments.
+               Each entry entry contains one argument. argv[0] is the
+               command name.
 
 -Detailed_Output
 
@@ -74,8 +73,11 @@
 
 -Exceptions
 
-   This routines participates in error tracing but detects no errors.
-   Error detection is done in zzgetcml_c.c
+   1)  If getcml_c is called before putcml_c in any given program, an
+       error is signaled by a routine in the call tree of this routine.
+
+   2)  If putclm_c is called more than once in any given program, an error is
+       signaled by a routine in the call tree of this routine.
 
 -Files
 
@@ -84,48 +86,150 @@
 -Particulars
 
    This routine is a wrapper routine for the initialization call to
-   zzgetcml_c.  The first call to zzgetcml_c stores the values of argv
+   zzgetcml_c. The first call to zzgetcml_c stores the values of argv
    and argc where subsequent calls, via getcml_c, retrieve the values.
 
 -Examples
 
-   #include <stdio.h>
-   #include <stdlib.h>
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   #include "SpiceUsr.h"
-
-   void main( int argc, char *argv[] )
-   {
-
-
-      /. Store argv and argc for latter access. ./
-
-      putcml_c ( argc, argv );
+   1) The following code fragment demonstrates how getcml_c and
+      putcml_c are used for allowing any program module to access
+      the argv and argc values provided through the command line.
 
 
-      ..... other stuff .....
-      .....             .....
+      #include <stdio.h>
+      #include <stdlib.h>
 
-   }
+      #include "SpiceUsr.h"
 
-
-   void goop ()
-   {
-      ..... new module .....
-
-      SpiceInt      argc;
-      SpiceChar  ** argv;
+      void main( int argc, char *argv[] )
+      {
 
 
-      .....
-      .....
+         /.
+         Store argv and argc for latter access.
+         ./
+         putcml_c (argc, argv );
 
-      /. Now get the stored information. ./
 
-      getcml_c ( &argc, &argv );
+         ..... other stuff .....
+         .....             .....
 
-   }
+      }
 
+
+      void goop ()
+      {
+         ..... new module .....
+
+         SpiceInt      argc;
+         SpiceChar  ** argv;
+
+
+         .....
+         .....
+
+         /.
+         Now get the stored information.
+         ./
+
+         getcml_c ( &argc, &argv );
+
+      }
+
+
+   2) getcml_c and putcml_c could also be used to test the interaction
+      of program modules with command line arguments, from a testing
+      framework, i.e. without interacting with the program through
+      command line. The following example demonstrates how.
+
+
+      Example code begins here.
+
+
+      /.
+         Program putcml_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      /.
+      Declaration of the printme module.
+      ./
+      void printme( );
+
+      int main( )
+      {
+         /.
+         Local parameters.
+         ./
+         #define NVALS       4
+
+         /.
+         Local variables
+         ./
+         SpiceChar   * values[NVALS] = { "program", "argv1",
+                                         "argv2",   "argv3" };
+
+         /.
+         Store nvals and values for latter access by another module.
+         ./
+         putcml_c ( NVALS, values );
+
+         /.
+         Run the module.
+         ./
+         printme( );
+
+         return ( 0 );
+      }
+
+
+      /.
+      printme module, which takes the nvals and values provided in
+      the main block of the program, and prints them to the screen.
+      ./
+      void printme( )
+      {
+         /.
+         Local variables.
+         ./
+         SpiceInt      argc;
+         SpiceChar  ** argv;
+
+         SpiceInt      i;
+
+         /.
+         Get the stored "command line" information.
+         ./
+         getcml_c ( &argc, &argv );
+
+         /.
+         Output the data.
+         ./
+         printf( "Number of command line arguments: %d\n\n", (int)argc );
+         for ( i = 0; i < argc; i++ )
+         {
+            printf( "   Argument %d: %s\n", (int)i, argv[i] );
+         }
+
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Number of command line arguments: 4
+
+         Argument 0: program
+         Argument 1: argv1
+         Argument 2: argv2
+         Argument 3: argv3
 
 
 -Restrictions
@@ -138,20 +242,30 @@
 
 -Author_and_Institution
 
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.2.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example.
+
+       Improved -Exceptions section, adding the actual description of
+       all possible issues detected by this routine.
+
    -CSPICE Version 1.2.0, 23-JUL-2001 (NJB)
-     
+
        Removed tab characters from source file.
        Corrected previous version line.
 
-   -CSPICE Version 1.1.0, 08-FEB-1998   (EDW)
+   -CSPICE Version 1.1.0, 08-FEB-1998 (EDW)
 
-      Routine rewritten to use private routine zzgetcml_c.c.
+       Routine rewritten to use private routine zzgetcml_c.c.
 
-   -CSPICE Version 1.0.0, 14-JAN-1997   (EDW)
+   -CSPICE Version 1.0.0, 14-JAN-1997 (EDW)
 
 -Index_Entries
 
@@ -171,7 +285,6 @@
 
    zzgetcml_c ( &argc, &argv, SPICETRUE );
 
-   chkout_c( "putcml_c" );   
-   
-}
+   chkout_c( "putcml_c" );
 
+}

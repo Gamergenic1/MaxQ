@@ -11,7 +11,7 @@ static integer c__1 = 1;
 static integer c__3 = 3;
 static integer c__6 = 6;
 
-/* $Procedure      PROP2B ( Propagate a two-body solution ) */
+/* $Procedure PROP2B ( Propagate a two-body solution ) */
 /* Subroutine */ int prop2b_(doublereal *gm, doublereal *pvinit, doublereal *
 	dt, doublereal *pvprop)
 {
@@ -70,9 +70,9 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Given a central mass and the state of massless body at time t_0, */
-/*     this routine determines the state as predicted by a two-body */
-/*     force model at time t_0 + DT. */
+/*     Compute the state of a massless body at time t_0 + DT by applying */
+/*     the two-body force model to a given central mass and a given body */
+/*     state at time t_0. */
 
 /* $ Disclaimer */
 
@@ -112,7 +112,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     GM         I   Gravity of the central mass. */
 /*     PVINIT     I   Initial state from which to propagate a state. */
@@ -121,22 +121,22 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     GM         is the gravitational constant G times the mass M of the */
-/*                central body. */
+/*     GM       is the gravitational constant G times the mass M of the */
+/*              central body. */
 
-/*     PVINIT     is the state at some specified time relative to the */
-/*                central mass.  The mass of the object is assumed to */
-/*                be negligible when compared to the central mass. */
+/*     PVINIT   is the state at some specified time relative to the */
+/*              central mass. The mass of the object is assumed to */
+/*              be negligible when compared to the central mass. */
 
-/*     DT         is a offset in time from the time of the initial */
-/*                state to which the two-body state should be */
-/*                propagated. (The units of time and distance must be */
-/*                the same in GM, PVINIT, and DT). */
+/*     DT       is a offset in time from the time of the initial */
+/*              state to which the two-body state should be */
+/*              propagated. (The units of time and distance must be */
+/*              the same in GM, PVINIT, and DT). */
 
 /* $ Detailed_Output */
 
-/*     PVPROP     is the two-body propagation of the initial state */
-/*                DT units of time past the epoch of the initial state. */
+/*     PVPROP   is the two-body propagation of the initial state */
+/*              DT units of time past the epoch of the initial state. */
 
 /* $ Parameters */
 
@@ -144,27 +144,27 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1) If GM is not positive, the error SPICE(NONPOSITIVEMASS) will */
-/*        be signalled. */
+/*     1)  If GM is not positive, the error SPICE(NONPOSITIVEMASS) is */
+/*         signaled. */
 
-/*     2) If the position of the initial state is the zero vector, the */
-/*        error SPICE(ZEROPOSITION) will be signalled. */
+/*     2)  If the position of the initial state is the zero vector, the */
+/*         error SPICE(ZEROPOSITION) is signaled. */
 
-/*     3) If the velocity of the initial state is the zero vector, the */
-/*        error SPICE(ZEROVELOCITY) will be signalled. */
+/*     3)  If the velocity of the initial state is the zero vector, the */
+/*         error SPICE(ZEROVELOCITY) is signaled. */
 
-/*     4) If the cross product of the position and velocity of PVINIT */
-/*        has squared length of zero, the error SPICE(NONCONICMOTION) */
-/*        will be signalled. */
+/*     4)  If the cross product of the position and velocity of PVINIT */
+/*         has squared length of zero, the error SPICE(NONCONICMOTION) */
+/*         is signaled. */
 
-/*     5) The value of DT must be "reasonable".  In other words, DT */
-/*        should be less than 10**20 seconds for realistic solar system */
-/*        orbits specified in the MKS system.  (The actual bounds */
-/*        on DT are much greater but require substantial computation.) */
-/*        The "reasonableness" of DT is checked at run-time.  If DT is */
-/*        so large that there is a danger of floating point overflow */
-/*        during computation, the error SPICE(DTOUTOFRANGE) is */
-/*        signalled and a message is generated describing the problem. */
+/*     5)  If DT is so large that there is a danger of floating point */
+/*         overflow during computation, the error SPICE(DTOUTOFRANGE) is */
+/*         signaled and a message is generated describing the problem. */
+/*         The value of DT must be "reasonable". In other words, DT */
+/*         should be less than 10**20 seconds for realistic solar system */
+/*         orbits specified in the MKS system. (The actual bounds on DT */
+/*         are much greater but require substantial computation.) The */
+/*         "reasonableness" of DT is checked at run-time. */
 
 /* $ Files */
 
@@ -186,50 +186,151 @@ static integer c__6 = 6;
 
 /*     The derivation used to determine the propagated state is a */
 /*     slight variation of the derivation in Danby's book */
-/*     `Fundamentals of Celestial Mechanics' [1] . */
+/*     "Fundamentals of Celestial Mechanics" [1]. */
 
 /* $ Examples */
 
-/*     When the eccentricity of an orbit is near 1, and the epoch */
-/*     of classical elements is near the epoch of periapse, classical */
-/*     formulations that propagate a state from elements tend to */
-/*     lack robustness due to the finite precision of floating point */
-/*     machines. In those situations it is better to use a universal */
-/*     variables formulation to propagate the state. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     By using this routine, you need not go from a state to elements */
-/*     and back to a state. Instead, you can get the state from an */
-/*     initial state. */
+/*     1) When the eccentricity of an orbit is near 1, and the epoch */
+/*        of classical elements is near the epoch of periapse, classical */
+/*        formulations that propagate a state from elements tend to */
+/*        lack robustness due to the finite precision of floating point */
+/*        machines. In those situations it is better to use a universal */
+/*        variables formulation to propagate the state. */
 
-/*     If PV is your initial state and you want the state 3600 */
-/*     seconds later, the following call will suffice. */
+/*        By using this routine, you need not go from a state to */
+/*        elements and back to a state. Instead, you can get the state */
+/*        from an initial state. */
 
-/*          Look up GM somewhere */
+/*        If PVINIT is your initial state and you want the state 3600 */
+/*        seconds later, the following call will suffice. */
 
-/*          DT = 3600.0D0 */
+/*           Look up GM somewhere */
 
-/*          CALL PROP2B ( GM, PV, DT, PVDT ) */
+/*           DT = 3600.0D0 */
 
-/*     After the call, PVDT will contain the state of the */
-/*     object 3600 seconds after the time it had state PV. */
+/*           CALL PROP2B ( GM, PVINIT, DT, PVPROP ) */
+
+/*        After the call, PVPROP will contain the state of the */
+/*        object 3600 seconds after the time it had state PVINIT. */
+
+/*     2) Use the two-body force model to propagate the state of a */
+/*        massless body orbiting the Earth at 100,000,000 km after half */
+/*        a period. */
+
+/*        In circular two-body motion, the orbital speed is */
+
+/*           s     = sqrt(mu/r) */
+
+/*        where mu is the central mass. After tau/2 = pi*r/s seconds */
+/*        (half period), the state should equal the negative of the */
+/*        original state. */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM PROP2B_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      PI */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      MU */
+/*              DOUBLE PRECISION      PVINIT ( 6 ) */
+/*              DOUBLE PRECISION      R */
+/*              DOUBLE PRECISION      SPEED */
+/*              DOUBLE PRECISION      STATE  ( 6 ) */
+/*              DOUBLE PRECISION      T */
+
+/*        C */
+/*        C     Initial values. */
+/*        C */
+/*              MU    =  3.9860043543609598D+05 */
+/*              R     =  1.0D+08 */
+/*              SPEED =  SQRT( MU / R ) */
+/*              T     =  PI( )*R/SPEED */
+
+/*              PVINIT(1) =  0.0D0 */
+/*              PVINIT(2) =  R/SQRT(2.0D0) */
+/*              PVINIT(3) =  R/SQRT(2.0D0) */
+/*              PVINIT(4) =  0.0D0 */
+/*              PVINIT(5) = -SPEED/SQRT(2.0D0) */
+/*              PVINIT(6) =  SPEED/SQRT(2.0D0) */
+
+/*        C */
+/*        C     Calculate the state of the body at 0.5 period */
+/*        C     after the epoch. */
+/*        C */
+/*              CALL PROP2B ( MU, PVINIT, T, STATE ) */
+
+/*        C */
+/*        C     The `state' vector should equal -pvinit */
+/*        C */
+/*              WRITE(*,*) 'State at t0:' */
+/*              WRITE(*,'(A,3F17.5)') '   R   (km):', */
+/*             .                 PVINIT(1), PVINIT(2), PVINIT(3) */
+/*              WRITE(*,'(A,3F17.5)') '   V (km/s):', */
+/*             .                 PVINIT(4), PVINIT(5), PVINIT(6) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'State at tau/2:' */
+/*              WRITE(*,'(A,3F17.5)') '   R   (km):', */
+/*             .                    STATE(1), STATE(2), STATE(3) */
+/*              WRITE(*,'(A,3F17.5)') '   V (km/s):', */
+/*             .                    STATE(4), STATE(5), STATE(6) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         State at t0: */
+/*           R   (km):          0.00000   70710678.11865   70710678.11865 */
+/*           V (km/s):          0.00000         -0.04464          0.04464 */
+
+/*         State at tau/2: */
+/*           R   (km):         -0.00000  -70710678.11865  -70710678.11865 */
+/*           V (km/s):          0.00000          0.04464         -0.04464 */
+
 
 /* $ Restrictions */
 
-/*     Users should be sure that GM, PVINIT and DT are all in the */
-/*     same system of units ( for example MKS ). */
+/*     1)  Users should be sure that GM, PVINIT and DT are all in the */
+/*         same system of units ( for example MKS ). */
 
 /* $ Literature_References */
 
-/*     [1] `Fundamentals of Celestial Mechanics', Second Edition */
-/*         by J.M.A. Danby;  Willman-Bell, Inc., P.O. Box 35025 */
-/*         Richmond Virginia;  pp 168-180 */
+/*     [1]  J. Danby, "Fundamentals of Celestial Mechanics," 2nd Edition, */
+/*          pp 168-180, Willman-Bell, 1988. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.2.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Removed unnecessary $Revisions section. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
 
 /* -    SPICELIB Version 2.1.0, 31-AUG-2005 (NJB) */
 
@@ -240,28 +341,19 @@ static integer c__6 = 6;
 
 /*        Corrected ENDIF to END IF. */
 
-/* -    Spicelib Version 2.0.0 16-May-1995  (WLT) */
+/* -    SPICELIB Version 2.0.0, 16-MAY-1995 (WLT) */
 
 /*        The initial guess at a solution to Kepler's equation was */
 /*        modified slightly and a loop counter was added to the */
 /*        bisection loop together with logic that will force termination */
 /*        of the bisection loop. */
 
-/* -    Spicelib Version 1.0.0, 10-Mar-1992 (WLT) */
-
+/* -    SPICELIB Version 1.0.0, 10-MAR-1992 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      Propagate state vector using two-body force model */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 2.1.0, 31-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSCL call. */
+/*     Propagate state vector using two-body force model */
 
 /* -& */
 
@@ -325,8 +417,8 @@ static integer c__6 = 6;
 /*     and GM to the oldest saved state and GM. */
 
 /*     NEWEST(1)  contains the most recently input initial conditions */
-/*     NEWEST(2)  contains the next most recently input intial conditions */
-/*                etc. */
+/*     NEWEST(2)  contains the next most recently input initial */
+/*                conditions etc. */
 
 /*     Also note that when this routine starts up there will be no */
 /*     buffered states or GMs.  Every time we encounter a new state, we */
@@ -339,21 +431,21 @@ static integer c__6 = 6;
     while(i__ < nsaved && new__) {
 	++i__;
 	k = newest[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("newest",
-		 i__1, "prop2b_", (ftnlen)375)];
+		 i__1, "prop2b_", (ftnlen)470)];
 	new__ = pvinit[0] != savepv[(i__1 = k * 6 - 6) < 18 && 0 <= i__1 ? 
-		i__1 : s_rnge("savepv", i__1, "prop2b_", (ftnlen)377)] || 
+		i__1 : s_rnge("savepv", i__1, "prop2b_", (ftnlen)472)] || 
 		pvinit[1] != savepv[(i__2 = k * 6 - 5) < 18 && 0 <= i__2 ? 
-		i__2 : s_rnge("savepv", i__2, "prop2b_", (ftnlen)377)] || 
+		i__2 : s_rnge("savepv", i__2, "prop2b_", (ftnlen)472)] || 
 		pvinit[2] != savepv[(i__3 = k * 6 - 4) < 18 && 0 <= i__3 ? 
-		i__3 : s_rnge("savepv", i__3, "prop2b_", (ftnlen)377)] || 
+		i__3 : s_rnge("savepv", i__3, "prop2b_", (ftnlen)472)] || 
 		pvinit[3] != savepv[(i__4 = k * 6 - 3) < 18 && 0 <= i__4 ? 
-		i__4 : s_rnge("savepv", i__4, "prop2b_", (ftnlen)377)] || 
+		i__4 : s_rnge("savepv", i__4, "prop2b_", (ftnlen)472)] || 
 		pvinit[4] != savepv[(i__5 = k * 6 - 2) < 18 && 0 <= i__5 ? 
-		i__5 : s_rnge("savepv", i__5, "prop2b_", (ftnlen)377)] || 
+		i__5 : s_rnge("savepv", i__5, "prop2b_", (ftnlen)472)] || 
 		pvinit[5] != savepv[(i__6 = k * 6 - 1) < 18 && 0 <= i__6 ? 
-		i__6 : s_rnge("savepv", i__6, "prop2b_", (ftnlen)377)] || *gm 
+		i__6 : s_rnge("savepv", i__6, "prop2b_", (ftnlen)472)] || *gm 
 		!= savegm[(i__7 = k - 1) < 3 && 0 <= i__7 ? i__7 : s_rnge(
-		"savegm", i__7, "prop2b_", (ftnlen)377)];
+		"savegm", i__7, "prop2b_", (ftnlen)472)];
     }
     if (! new__) {
 
@@ -362,12 +454,12 @@ static integer c__6 = 6;
 
 	k = i__;
 	bumped = newest[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("new"
-		"est", i__1, "prop2b_", (ftnlen)394)];
+		"est", i__1, "prop2b_", (ftnlen)489)];
 	for (i__ = k; i__ >= 2; --i__) {
 	    newest[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("newest",
-		     i__1, "prop2b_", (ftnlen)397)] = newest[(i__2 = i__ - 2) 
+		     i__1, "prop2b_", (ftnlen)492)] = newest[(i__2 = i__ - 2) 
 		    < 3 && 0 <= i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_"
-		    , (ftnlen)397)];
+		    , (ftnlen)492)];
 	}
 	newest[0] = bumped;
 	k = bumped;
@@ -375,17 +467,17 @@ static integer c__6 = 6;
 /*        Now look up all of the other saved quantities. */
 
 	b2rv = sb2rv[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sb2rv", 
-		i__1, "prop2b_", (ftnlen)406)];
+		i__1, "prop2b_", (ftnlen)501)];
 	bound = sbound[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbou"
-		"nd", i__1, "prop2b_", (ftnlen)407)];
+		"nd", i__1, "prop2b_", (ftnlen)502)];
 	bq = sbq[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbq", i__1, 
-		"prop2b_", (ftnlen)408)];
+		"prop2b_", (ftnlen)503)];
 	br0 = sbr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbr0", 
-		i__1, "prop2b_", (ftnlen)409)];
+		i__1, "prop2b_", (ftnlen)504)];
 	f = sf[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sf", i__1, 
-		"prop2b_", (ftnlen)410)];
+		"prop2b_", (ftnlen)505)];
 	qovr0 = sqovr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sqov"
-		"r0", i__1, "prop2b_", (ftnlen)411)];
+		"r0", i__1, "prop2b_", (ftnlen)506)];
     } else {
 
 /*        We have a new state, new GM or both.  First let's make sure */
@@ -810,46 +902,46 @@ static integer c__6 = 6;
 	i__1 = nsaved + 1;
 	nsaved = brckti_(&i__1, &c__1, &c__3);
 	bumped = newest[(i__1 = nsaved - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"newest", i__1, "prop2b_", (ftnlen)855)];
+		"newest", i__1, "prop2b_", (ftnlen)950)];
 	for (i__ = nsaved; i__ >= 2; --i__) {
 	    newest[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("newest",
-		     i__1, "prop2b_", (ftnlen)858)] = newest[(i__2 = i__ - 2) 
+		     i__1, "prop2b_", (ftnlen)953)] = newest[(i__2 = i__ - 2) 
 		    < 3 && 0 <= i__2 ? i__2 : s_rnge("newest", i__2, "prop2b_"
-		    , (ftnlen)858)];
+		    , (ftnlen)953)];
 	}
 	newest[0] = bumped;
 	k = bumped;
 	savepv[(i__1 = k * 6 - 6) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)864)] = pvinit[0];
+		i__1, "prop2b_", (ftnlen)959)] = pvinit[0];
 	savepv[(i__1 = k * 6 - 5) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)865)] = pvinit[1];
+		i__1, "prop2b_", (ftnlen)960)] = pvinit[1];
 	savepv[(i__1 = k * 6 - 4) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)866)] = pvinit[2];
+		i__1, "prop2b_", (ftnlen)961)] = pvinit[2];
 	savepv[(i__1 = k * 6 - 3) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)867)] = pvinit[3];
+		i__1, "prop2b_", (ftnlen)962)] = pvinit[3];
 	savepv[(i__1 = k * 6 - 2) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)868)] = pvinit[4];
+		i__1, "prop2b_", (ftnlen)963)] = pvinit[4];
 	savepv[(i__1 = k * 6 - 1) < 18 && 0 <= i__1 ? i__1 : s_rnge("savepv", 
-		i__1, "prop2b_", (ftnlen)869)] = pvinit[5];
+		i__1, "prop2b_", (ftnlen)964)] = pvinit[5];
 	savegm[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("savegm", i__1,
-		 "prop2b_", (ftnlen)870)] = *gm;
+		 "prop2b_", (ftnlen)965)] = *gm;
 
 /*        Finally we save the results of all of the above */
 /*        computations so that we won't have to do them again, */
 /*        if this initial state and GM are entered again. */
 
 	sb2rv[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sb2rv", i__1, 
-		"prop2b_", (ftnlen)877)] = b2rv;
+		"prop2b_", (ftnlen)972)] = b2rv;
 	sbound[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbound", i__1,
-		 "prop2b_", (ftnlen)878)] = bound;
+		 "prop2b_", (ftnlen)973)] = bound;
 	sbq[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbq", i__1, 
-		"prop2b_", (ftnlen)879)] = bq;
+		"prop2b_", (ftnlen)974)] = bq;
 	sbr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sbr0", i__1, 
-		"prop2b_", (ftnlen)880)] = br0;
+		"prop2b_", (ftnlen)975)] = br0;
 	sf[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sf", i__1, "prop"
-		"2b_", (ftnlen)881)] = f;
+		"2b_", (ftnlen)976)] = f;
 	sqovr0[(i__1 = k - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("sqovr0", i__1,
-		 "prop2b_", (ftnlen)882)] = qovr0;
+		 "prop2b_", (ftnlen)977)] = qovr0;
     }
 
 
@@ -879,7 +971,7 @@ static integer c__6 = 6;
 
 /*             DT = KFUN ( X ) */
 
-/*        Satisifies */
+/*        Satisfies */
 
 /*                     DT */
 /*         0 < X  <  ------- */
@@ -1034,7 +1126,7 @@ static integer c__6 = 6;
 	    lower = x;
 	}
 
-/*        As soon as the bracketting values move away from */
+/*        As soon as the bracketing values move away from */
 /*        zero we can modify the count limit. */
 
 	if (mostc > 64) {

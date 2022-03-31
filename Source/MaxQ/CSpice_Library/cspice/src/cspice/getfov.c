@@ -60,8 +60,11 @@ static integer c__0 = 0;
 	    *);
     extern doublereal vnorm_(doublereal *);
     extern /* Subroutine */ int ljust_(char *, char *, ftnlen, ftnlen), 
-	    unorm_(doublereal *, doublereal *, doublereal *), vrotv_(
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+	    unorm_(doublereal *, doublereal *, doublereal *);
+    extern logical vzero_(doublereal *);
+    extern /* Subroutine */ int vrotv_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *);
+    extern logical failed_(void);
     doublereal refang;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     doublereal coscan;
@@ -117,19 +120,19 @@ static integer c__0 = 0;
 
 /* $ Required_Reading */
 
-/*     IK */
+/*     NAIF_IDS */
 
 /* $ Keywords */
 
-/*     INSTRUMENT */
 /*     FOV */
+/*     INSTRUMENT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     INSTID     I   NAIF ID of an instrument */
+/*     INSTID     I   NAIF ID of an instrument. */
 /*     ROOM       I   Maximum number of vectors that can be returned. */
 /*     SHAPE      O   Instrument FOV shape. */
 /*     FRAME      O   Name of the frame in which FOV vectors are defined. */
@@ -139,160 +142,171 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     INSTID     is the NAIF ID of an instrument. */
+/*     INSTID   is the NAIF ID of an instrument. */
 
-/*     ROOM       is the maximum number of 3D vectors that can be */
-/*                returned in BOUNDS. */
+/*     ROOM     is the maximum number of 3-dimensional vectors that can */
+/*              be returned in BOUNDS. */
 
 /* $ Detailed_Output */
 
-/*     SHAPE      is a character string that describes the "shape" of */
-/*                the field of view.  Possible values returned are: */
+/*     SHAPE    is a character string that describes the "shape" of */
+/*              the field of view. Possible values returned are: */
 
-/*                   'POLYGON' */
-/*                   'RECTANGLE' */
-/*                   'CIRCLE' */
-/*                   'ELLIPSE' */
+/*                 'POLYGON' */
+/*                 'RECTANGLE' */
+/*                 'CIRCLE' */
+/*                 'ELLIPSE' */
 
-/*                If the value of SHAPE is 'POLYGON' the field of view */
-/*                of the instrument is a pyramidal polyhedron. The */
-/*                vertex of the pyramid is at the instrument focal */
-/*                point. The rays along the edges of the pyramid are */
-/*                parallel to the vectors returned in BOUNDS. */
+/*              If the value of SHAPE is 'POLYGON' the field of view */
+/*              of the instrument is a pyramidal polyhedron. The */
+/*              vertex of the pyramid is at the instrument focal */
+/*              point. The rays along the edges of the pyramid are */
+/*              parallel to the vectors returned in BOUNDS. */
 
-/*                If the value of SHAPE is 'RECTANGLE' the field of view */
-/*                of the instrument is a rectangular pyramid. The vertex */
-/*                of the pyramid is at the instrument focal point. The */
-/*                rays along the edges of the pyramid are parallel to */
-/*                the vectors returned in BOUNDS.  Moreover, in this */
-/*                case, the boresight points along the axis of symmetry */
-/*                of the rectangular pyramid. */
+/*              If the value of SHAPE is 'RECTANGLE' the field of view */
+/*              of the instrument is a rectangular pyramid. The vertex */
+/*              of the pyramid is at the instrument focal point. The */
+/*              rays along the edges of the pyramid are parallel to */
+/*              the vectors returned in BOUNDS. Moreover, in this */
+/*              case, the boresight points along the axis of symmetry */
+/*              of the rectangular pyramid. */
 
-/*                If the value of SHAPE is 'CIRCLE' the field of view of */
-/*                the instrument is a circular cone centered on the */
-/*                boresight vector. The vertex of the cone is at the */
-/*                instrument focal point. A single vector will be */
-/*                returned in BOUNDS. This vector will be parallel to a */
-/*                ray that lies in the cone that makes up the boundary */
-/*                of the field of view. */
+/*              If the value of SHAPE is 'CIRCLE' the field of view of */
+/*              the instrument is a circular cone centered on the */
+/*              boresight vector. The vertex of the cone is at the */
+/*              instrument focal point. A single vector will be */
+/*              returned in BOUNDS. This vector will be parallel to a */
+/*              ray that lies in the cone that makes up the boundary */
+/*              of the field of view. */
 
-/*                If the value of SHAPE is 'ELLIPSE' the field of view */
-/*                of the instrument is an elliptical cone with the */
-/*                boresight vector as the axis of the cone.  In this */
-/*                case two vectors are returned in BOUNDS. One of the */
-/*                vectors returned in BOUNDS points to the end of the */
-/*                semi-major axis of a perpendicular cross section of */
-/*                the elliptic cone.  The other vector points to the end */
-/*                of the semi-minor axis of a perpendicular cross */
-/*                section of the cone. */
+/*              If the value of SHAPE is 'ELLIPSE' the field of view */
+/*              of the instrument is an elliptical cone with the */
+/*              boresight vector as the axis of the cone. In this */
+/*              case two vectors are returned in BOUNDS. One of the */
+/*              vectors returned in BOUNDS points to the end of the */
+/*              semi-major axis of a perpendicular cross section of */
+/*              the elliptic cone. The other vector points to the end */
+/*              of the semi-minor axis of a perpendicular cross */
+/*              section of the cone. */
 
-/*     FRAME      is the name of the reference frame in which the field */
-/*                of view boundary vectors are defined. */
+/*     FRAME    is the name of the reference frame in which the field */
+/*              of view boundary vectors are defined. */
 
-/*     BSIGHT     is a vector representing the principal instrument view */
-/*                direction that can be */
+/*     BSIGHT   is a vector representing the principal instrument view */
+/*              direction that can be */
 
-/*                   -  the central pixel view direction, */
-/*                   -  the optical axis direction, */
-/*                   -  the FOV geometric center view direction, */
-/*                   -  an axis of the FOV frame, */
+/*                 -  the central pixel view direction, */
+/*                 -  the optical axis direction, */
+/*                 -  the FOV geometric center view direction, */
+/*                 -  an axis of the FOV frame, */
 
-/*                or any other vector specified for this purpose */
-/*                in the IK FOV definition. The length of BSIGHT */
-/*                is not specified other than being non-zero. */
+/*              or any other vector specified for this purpose */
+/*              in the IK FOV definition. The length of BSIGHT */
+/*              is not specified other than being non-zero. */
 
-/*     N          is the number of boundary vectors returned. */
+/*     N        is the number of boundary vectors returned. */
 
-/*     BOUNDS     is an array of vectors that point to the "corners" of */
-/*                the instrument field of view.  (See the discussion */
-/*                accompanying shape for an expansion of the term */
-/*                "corner of the field of view.")  Note that the vectors */
-/*                returned in BOUNDS are not necessarily unit vectors. */
-/*                Their magnitudes will be as set in the IK (for */
-/*                'CORNER'-style FOV specifications) or the same as the */
-/*                magnitude of the boresight (for 'ANGLES'-style FOV */
-/*                specifications.) */
+/*     BOUNDS   is an array of vectors that point to the "corners" of */
+/*              the instrument field of view. (See the discussion */
+/*              accompanying SHAPE for an expansion of the term */
+/*              "corner of the field of view.") Note that the vectors */
+/*              returned in BOUNDS are not necessarily unit vectors. */
+/*              Their magnitudes will be as set in the IK (for */
+/*              'CORNERS'-style FOV specifications) or the same as the */
+/*              magnitude of the boresight (for 'ANGLES'-style FOV */
+/*              specifications.) */
 
 /* $ Parameters */
 
-/*     MINCOS     This parameter is the lower limit on the value of the */
-/*                cosine of the cross or reference angles in the ANGLES */
-/*                specification cases. (see Particulars for further */
-/*                discussion). */
+/*     MINCOS   is the lower limit on the value of the cosine of the */
+/*              cross or reference angles in the 'ANGLES' specification */
+/*              cases. The current value for MINCOS is 1.0D-15. */
+
 /* $ Exceptions */
 
-/*     1) If the frame associated with the instrument can not be found, */
-/*        the error SPICE(FRAMEMISSING) is signaled. */
+/*     1)  If the frame associated with the instrument can not be found, */
+/*         the error SPICE(FRAMEMISSING) is signaled. */
 
-/*     2) If the SHAPE of the instrument field of view can not be found */
-/*        in the kernel pool, the error SPICE(SHAPEMISSING) is signaled */
-/*        signaled. */
+/*     2)  If the shape of the instrument field of view can not be found */
+/*         in the kernel pool, the error SPICE(SHAPEMISSING) is signaled */
+/*         signaled. */
 
-/*     3) If the SHAPE specified by the instrument kernel is not one of */
-/*        the four values: 'CIRCLE', 'POLYGON', 'ELLIPSE', or */
-/*        'RECTANGLE', the error 'SPICE(SHAPENOTSUPPORTED)' is */
-/*        signaled. If the ANGLES specification is used, SHAPE must be */
-/*        one of the three values: 'CIRCLE', 'ELLIPSE', or 'RECTANGLE'. */
+/*     3)  If the FOV_SHAPE specified by the instrument kernel is not */
+/*         one of the four values: 'CIRCLE', 'POLYGON', 'ELLIPSE', or */
+/*         'RECTANGLE', the error SPICE(SHAPENOTSUPPORTED) is signaled. */
+/*         If the 'ANGLES' specification is used, FOV_SHAPE must be */
+/*         one of the three values: 'CIRCLE', 'ELLIPSE', or 'RECTANGLE'. */
 
-/*     4) If the direction of the boresight cannot be located in the */
-/*        kernel pool, the error 'SPICE(BORESIGHTMISSING)' is signaled. */
+/*     4)  If the direction of the boresight cannot be located in the */
+/*         kernel pool, the error SPICE(BORESIGHTMISSING) is signaled. */
 
-/*     5) If the number of components for the boresight vector in the */
-/*        kernel pool is not 3, the error 'SPICE(BADBORESIGHTSPEC)' is */
-/*        signaled. */
+/*     5)  If the number of components for the boresight vector in the */
+/*         kernel pool is not 3, or they are not numeric, the error */
+/*         SPICE(BADBORESIGHTSPEC) is signaled. */
 
-/*     6) If the ANGLES specification is not present in the kernel pool */
-/*        and the boundary vectors for the edge of the field of view */
-/*        cannot be found in the kernel pool, the error */
-/*        'SPICE(BOUNDARYMISSING)' is signaled. */
+/*     6)  If the boresight vector is the zero vector, the error */
+/*         SPICE(ZEROBORESIGHT) is signaled. */
 
-/*     7) If there is insufficient room (as specified by the variable */
-/*        ROOM) to return all of the vectors associated with the */
-/*        boundary of the field of view, the error */
-/*        'SPICE(BOUNDARYTOOBIG)' is signaled. */
+/*     7)  If the 'ANGLES' specification is not present in the kernel */
+/*         pool and the boundary vectors for the edge of the field of */
+/*         view cannot be found in the kernel pool, the error */
+/*         SPICE(BOUNDARYMISSING) is signaled. */
 
-/*     8) If the number of components of vectors making up the field of */
-/*        view is not a multiple of 3, the error 'SPICE(BADBOUNDARY)' is */
-/*        signaled. */
+/*     8)  If there is insufficient room (as specified by the argument */
+/*         ROOM) to return all of the vectors associated with the */
+/*         boundary of the field of view, the error */
+/*         SPICE(BOUNDARYTOOBIG) is signaled. */
 
-/*     9) If the number of components of vectors making up the field of */
-/*        view is not compatible with the shape specified for the field */
-/*        of view, the error 'SPICE(BADBOUNDARY)' is signaled. */
+/*     9)  If the number of components of vectors making up the field of */
+/*         view is not a multiple of 3, the error SPICE(BADBOUNDARY) is */
+/*         signaled. */
 
-/*    10) If the reference vector for the ANGLES specification can not be */
-/*        found in the kernel pool, the error 'SPICE(REFVECTORMISSING)' */
-/*        is signaled. */
+/*     10) If the number of components of vectors making up the field of */
+/*         view is not compatible with the shape specified for the field */
+/*         of view, the error SPICE(BADBOUNDARY) is signaled. */
 
-/*    11) If the reference vector stored in the kernel pool to support */
-/*        the ANGLES specification contains an incorrect number of */
-/*        components, contains 3 character components, or is parallel to */
-/*        the boresight, the error 'SPICE(BADREFVECTORSPEC)' is signaled. */
+/*     11) If the reference vector for the 'ANGLES' specification can not */
+/*         be found in the kernel pool, the error SPICE(REFVECTORMISSING) */
+/*         is signaled. */
 
-/*    12) If the ANGLES specification is present in the kernel pool and */
-/*        the reference angle stored in the kernel pool to support the */
-/*        ANGLES specification is absent from the kernel pool, the error */
-/*        'SPICE(REFANGLEMISSING)' is signaled. */
+/*     12) If the reference vector stored in the kernel pool to support */
+/*         the 'ANGLES' specification contains an incorrect number of */
+/*         components, contains 3 character components, or is parallel to */
+/*         the boresight, the error SPICE(BADREFVECTORSPEC) is signaled. */
 
-/*    13) If the keyword that stores the angular units for the angles */
-/*        used in the ANGLES specification is absent from the kernel */
-/*        pool, the error 'SPICE(UNITSMISSING)' is signaled. */
+/*     13) If the 'ANGLES' specification is present in the kernel pool */
+/*         and the reference angle stored in the kernel pool to support */
+/*         the 'ANGLES' specification is absent from the kernel pool, the */
+/*         error SPICE(REFANGLEMISSING) is signaled. */
 
-/*    14) If the keyword that stores the cross angle for the ANGLES */
-/*        specification is needed and is absent from the kernel pool, the */
-/*        error 'SPICE(CROSSANGLEMISSING)' is signaled. */
+/*     14) If the keyword that stores the angular units for the angles */
+/*         used in the 'ANGLES' specification is absent from the kernel */
+/*         pool, the error SPICE(UNITSMISSING) is signaled. */
 
-/*    15) If the angles for the RECTANGLE/ANGLES specification case have */
-/*        cosines that are less than those stored in the parameter */
-/*        MICOS, the error 'SPICE(BADBOUNDARY)' is signaled. */
+/*     15) If the value used for the units in the 'ANGLES' specification */
+/*         is not one of the supported angular units of CONVRT, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*    16) If the class specification contains something other than */
-/*        'ANGLES' or 'CORNERS', the error 'SPICE(UNSUPPORTEDSPEC)' is */
-/*        signaled. */
+/*     16) If the keyword that stores the cross angle for the 'ANGLES' */
+/*         specification is needed and is absent from the kernel pool, */
+/*         the error SPICE(CROSSANGLEMISSING) is signaled. */
+
+/*     17) If the angles for the 'RECTANGLE'/'ANGLES' specification case */
+/*         have cosines that are less than those stored in the parameter */
+/*         MINCOS, the error SPICE(BADBOUNDARY) is signaled. */
+
+/*     18) If the class specification contains something other than */
+/*         'ANGLES' or 'CORNERS', the error SPICE(UNSUPPORTEDSPEC) is */
+/*         signaled. */
+
+/*     19) In the event that the CLASS_SPEC keyword is absent from the */
+/*         kernel pool for the instrument whose FOV is sought, this */
+/*         module assumes the 'CORNERS' specification is to be utilized. */
 
 /* $ Files */
 
 /*     This routine relies upon having successfully loaded an instrument */
-/*     kernel (IK-file) via the routine FURNSH prior to calling this */
+/*     kernel (IK file) via the routine FURNSH prior to calling this */
 /*     routine. */
 
 /* $ Particulars */
@@ -323,7 +337,6 @@ static integer c__0 = 0;
 /*                                           omitted to indicate the */
 /*                                           "corners"-class */
 /*                                           specification. */
-
 
 /*        INS<INSTID>_FOV_SHAPE              must be set to one of these */
 /*                                           values: */
@@ -422,10 +435,9 @@ static integer c__0 = 0;
 /*                                           FOV_REF_VECTOR keyword. The */
 /*                                           the FOV angular half-extents */
 /*                                           are measured from the */
-/*                                           boresight vector. */
-/*                                           This keyword is not */
-/*                                           required for FOV_SHAPE = */
-/*                                           'CIRCLE'. */
+/*                                           boresight vector. This */
+/*                                           keyword is not required for */
+/*                                           FOV_SHAPE = 'CIRCLE'. */
 
 /*        INS<INSTID>_FOV_ANGLE_UNITS        must specify units for the */
 /*                                           angles given in the */
@@ -434,6 +446,11 @@ static integer c__0 = 0;
 /*                                           Any angular units */
 /*                                           recognized by CONVRT are */
 /*                                           acceptable. */
+
+/*     The INS<INSTID>_FOV_REF_ANGLE and INS<INSTID>_FOV_CROSS_ANGLE */
+/*     keywords can have any values for the 'CIRCLE' and 'ELLIPSE' */
+/*     FOV shapes but must satisfy the condition COS( ANGLE ) > 0 for */
+/*     the 'RECTANGLE' shape. */
 
 /*     This routine is intended to be an intermediate level routine. */
 /*     It is expected that users of this routine will be familiar */
@@ -446,171 +463,207 @@ static integer c__0 = 0;
 /*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as input, */
 /*     the compiler and supporting libraries, and the machine specific */
-/*     arithmetic implementation. Note that output generated by FORTRAN */
-/*     list-directed format statements (* format) is platform-dependent. */
+/*     arithmetic implementation. */
 
-/*     The example program in this section loads the IK file */
-/*     'example.ti' with the following contents defining four FOVs of */
-/*     various shapes and sizes: */
+/*     1) Load an IK, fetch the parameters for each of the FOVs defined */
+/*        within and print these parameters to the screen. */
 
-/*        KPL/IK */
+/*        Use the kernel shown below, an IK defining four FOVs of */
+/*        various shapes and sizes, to load the FOV definitions. */
 
-/*        The keywords below define a circular, 10-degree wide FOV with */
-/*        the boresight along the +Z axis of the 'SC999_INST001' frame */
-/*        for an instrument with ID -999001 using the "angles"-class */
-/*        specification. */
 
-/*        \begindata */
-/*           INS-999001_FOV_CLASS_SPEC       = 'ANGLES' */
-/*           INS-999001_FOV_SHAPE            = 'CIRCLE' */
-/*           INS-999001_FOV_FRAME            = 'SC999_INST001' */
-/*           INS-999001_BORESIGHT            = ( 0.0, 0.0, 1.0 ) */
-/*           INS-999001_FOV_REF_VECTOR       = ( 1.0, 0.0, 0.0 ) */
-/*           INS-999001_FOV_REF_ANGLE        = ( 5.0 ) */
-/*           INS-999001_FOV_ANGLE_UNITS      = ( 'DEGREES' ) */
-/*        \begintext */
+/*           KPL/IK */
 
-/*        The keywords below define an elliptical FOV with 2- and */
-/*        4-degree angular extents in the XZ and XY planes and the */
-/*        boresight along the +X axis of the 'SC999_INST002' frame for */
-/*        an instrument with ID -999002 using the "corners"-class */
-/*        specification. */
+/*           File name: getfov_ex1.ti */
 
-/*        \begindata */
-/*           INS-999002_FOV_SHAPE            = 'ELLIPSE' */
-/*           INS-999002_FOV_FRAME            = 'SC999_INST002' */
-/*           INS-999002_BORESIGHT            = ( 1.0, 0.0, 0.0 ) */
-/*           INS-999002_FOV_BOUNDARY_CORNERS = ( 1.0, 0.0, 0.01745506, */
-/*                                               1.0, 0.03492077, 0.0 ) */
-/*        \begintext */
+/*           The keywords below define a circular, 10-degree wide FOV */
+/*           with the boresight along the +Z axis of the 'SC999_INST001' */
+/*           frame for an instrument with ID -999001 using the */
+/*           "angles"-class specification. */
 
-/*        The keywords below define a rectangular FOV with 1.2- and */
-/*        0.2-degree angular extents in the ZX and ZY planes and the */
-/*        boresight along the +Z axis of the 'SC999_INST003' frame for */
-/*        an instrument with ID -999003 using the "angles"-class */
-/*        specification. */
+/*           \begindata */
+/*              INS-999001_FOV_CLASS_SPEC       = 'ANGLES' */
+/*              INS-999001_FOV_SHAPE            = 'CIRCLE' */
+/*              INS-999001_FOV_FRAME            = 'SC999_INST001' */
+/*              INS-999001_BORESIGHT            = ( 0.0, 0.0, 1.0 ) */
+/*              INS-999001_FOV_REF_VECTOR       = ( 1.0, 0.0, 0.0 ) */
+/*              INS-999001_FOV_REF_ANGLE        = ( 5.0 ) */
+/*              INS-999001_FOV_ANGLE_UNITS      = ( 'DEGREES' ) */
+/*           \begintext */
 
-/*        \begindata */
-/*           INS-999003_FOV_CLASS_SPEC       = 'ANGLES' */
-/*           INS-999003_FOV_SHAPE            = 'RECTANGLE' */
-/*           INS-999003_FOV_FRAME            = 'SC999_INST003' */
-/*           INS-999003_BORESIGHT            = ( 0.0, 0.0, 1.0 ) */
-/*           INS-999003_FOV_REF_VECTOR       = ( 1.0, 0.0, 0.0 ) */
-/*           INS-999003_FOV_REF_ANGLE        = ( 0.6 ) */
-/*           INS-999003_FOV_CROSS_ANGLE      = ( 0.1 ) */
-/*           INS-999003_FOV_ANGLE_UNITS      = ( 'DEGREES' ) */
-/*        \begintext */
+/*           The keywords below define an elliptical FOV with 2- and */
+/*           4-degree angular extents in the XZ and XY planes and the */
+/*           boresight along the +X axis of the 'SC999_INST002' frame for */
+/*           an instrument with ID -999002 using the "corners"-class */
+/*           specification. */
 
-/*        The keywords below define a triangular FOV with the boresight */
-/*        along the +Y axis of the 'SC999_INST004' frame for an */
-/*        instrument with ID -999004 using the "corners"-class */
-/*        specification. */
+/*           \begindata */
+/*              INS-999002_FOV_SHAPE            = 'ELLIPSE' */
+/*              INS-999002_FOV_FRAME            = 'SC999_INST002' */
+/*              INS-999002_BORESIGHT            = ( 1.0, 0.0, 0.0 ) */
+/*              INS-999002_FOV_BOUNDARY_CORNERS = ( */
+/*                                      1.0,  0.0,        0.01745506, */
+/*                                      1.0,  0.03492077, 0.0        ) */
+/*           \begintext */
 
-/*        \begindata */
-/*           INS-999004_FOV_SHAPE            = 'POLYGON' */
-/*           INS-999004_FOV_FRAME            = 'SC999_INST004' */
-/*           INS-999004_BORESIGHT            = (  0.0,  1.0,  0.0 ) */
-/*           INS-999004_FOV_BOUNDARY_CORNERS = (  0.0,  0.8,  0.5, */
-/*                                                0.4,  0.8, -0.2, */
-/*                                               -0.4,  0.8, -0.2 ) */
-/*        \begintext */
+/*           The keywords below define a rectangular FOV with 1.2- and */
+/*           0.2-degree angular extents in the ZX and ZY planes and the */
+/*           boresight along the +Z axis of the 'SC999_INST003' frame for */
+/*           an instrument with ID -999003 using the "angles"-class */
+/*           specification. */
 
-/*     The program shown below loads the IK, fetches parameters for each */
-/*     of the four FOVs and prints these parameters to the screen. */
+/*           \begindata */
+/*              INS-999003_FOV_CLASS_SPEC       = 'ANGLES' */
+/*              INS-999003_FOV_SHAPE            = 'RECTANGLE' */
+/*              INS-999003_FOV_FRAME            = 'SC999_INST003' */
+/*              INS-999003_BORESIGHT            = ( 0.0, 0.0, 1.0 ) */
+/*              INS-999003_FOV_REF_VECTOR       = ( 1.0, 0.0, 0.0 ) */
+/*              INS-999003_FOV_REF_ANGLE        = ( 0.6 ) */
+/*              INS-999003_FOV_CROSS_ANGLE      = ( 0.1 ) */
+/*              INS-999003_FOV_ANGLE_UNITS      = ( 'DEGREES' ) */
+/*           \begintext */
 
-/*        IMPLICIT              NONE */
+/*           The keywords below define a triangular FOV with the */
+/*           boresight along the +Y axis of the 'SC999_INST004' frame */
+/*           for an instrument with ID -999004 using the "corners"-class */
+/*           specification. */
 
-/*        INTEGER               MAXBND */
-/*        PARAMETER           ( MAXBND = 4 ) */
+/*           \begindata */
+/*              INS-999004_FOV_SHAPE            = 'POLYGON' */
+/*              INS-999004_FOV_FRAME            = 'SC999_INST004' */
+/*              INS-999004_BORESIGHT            = (  0.0,  1.0,  0.0 ) */
+/*              INS-999004_FOV_BOUNDARY_CORNERS = (  0.0,  0.8,  0.5, */
+/*                                                   0.4,  0.8, -0.2, */
+/*                                                  -0.4,  0.8, -0.2 ) */
+/*           \begintext */
 
-/*        INTEGER               NUMINS */
-/*        PARAMETER           ( NUMINS = 4 ) */
+/*           End of IK */
 
-/*        INTEGER               WDSIZE */
-/*        PARAMETER           ( WDSIZE = 32 ) */
 
-/*        CHARACTER*(WDSIZE)    FRAME */
-/*        CHARACTER*(WDSIZE)    SHAPE */
+/*        Example code begins here. */
 
-/*        DOUBLE PRECISION      BOUNDS ( 3, MAXBND ) */
-/*        DOUBLE PRECISION      BSIGHT ( 3 ) */
 
-/*        INTEGER               I */
-/*        INTEGER               INSIDS ( NUMINS ) */
-/*        INTEGER               J */
-/*        INTEGER               N */
+/*              PROGRAM GETFOV_EX1 */
+/*              IMPLICIT NONE */
 
-/*        DATA INSIDS / -999001, -999002, -999003, -999004 / */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               MAXBND */
+/*              PARAMETER           ( MAXBND = 4 ) */
 
-/*        CALL FURNSH( 'example.ti' ) */
+/*              INTEGER               NUMINS */
+/*              PARAMETER           ( NUMINS = 4 ) */
 
-/*        WRITE (*,*) '--------------------------------------' */
-/*        DO I = 1, NUMINS */
+/*              INTEGER               WDSIZE */
+/*              PARAMETER           ( WDSIZE = 32 ) */
 
-/*           CALL GETFOV ( INSIDS(I), MAXBND, */
-/*       .                 SHAPE, FRAME, BSIGHT, N, BOUNDS ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(WDSIZE)    FRAME */
+/*              CHARACTER*(WDSIZE)    SHAPE */
 
-/*           WRITE (*,*) 'Instrument ID: ', INSIDS(I) */
-/*           WRITE (*,*) '    FOV shape: ', SHAPE */
-/*           WRITE (*,*) '    FOV frame: ', frame */
-/*           WRITE (*,*) 'FOV boresight: ', BSIGHT */
-/*           WRITE (*,*) '  FOV corners: ' */
-/*           DO J = 1, N */
-/*              WRITE (*,*) '               ', */
-/*       .                  BOUNDS(1,J), BOUNDS(2,J), BOUNDS(3,J) */
-/*           END DO */
-/*           WRITE (*,*) '--------------------------------------' */
+/*              DOUBLE PRECISION      BOUNDS ( 3, MAXBND ) */
+/*              DOUBLE PRECISION      BSIGHT ( 3 ) */
 
-/*        END DO */
+/*              INTEGER               I */
+/*              INTEGER               INSIDS ( NUMINS ) */
+/*              INTEGER               J */
+/*              INTEGER               N */
 
-/*        END */
+/*        C */
+/*        C     Define the instrument IDs. */
+/*        C */
+/*              DATA                  INSIDS  /  -999001, -999002, */
+/*             .                                 -999003, -999004  / */
 
-/*     When this program was executed on a PC/Linux/g77 platform, the */
-/*     output was: */
+/*        C */
+/*        C     Load the IK file. */
+/*        C */
+/*              CALL FURNSH( 'getfov_ex1.ti' ) */
+
+/*        C */
+/*        C     For each instrument ... */
+/*        C */
+/*              WRITE (*,'(A)') '--------------------------------------' */
+/*              DO I = 1, NUMINS */
+
+/*        C */
+/*        C        ... fetch FOV parameters and ... */
+/*        C */
+/*                 CALL GETFOV ( INSIDS(I), MAXBND, */
+/*             .                 SHAPE, FRAME, BSIGHT, N, BOUNDS ) */
+
+/*        C */
+/*        C        ... print them to the screen. */
+/*        C */
+/*                 WRITE (*,'(A,I7)')     'Instrument ID: ', INSIDS(I) */
+/*                 WRITE (*,'(2A)')       '    FOV shape: ', SHAPE */
+/*                 WRITE (*,'(2A)')       '    FOV frame: ', frame */
+/*                 WRITE (*,'(A,3F12.8)') 'FOV boresight: ', BSIGHT */
+
+/*                 WRITE (*,'(A)') '  FOV corners: ' */
+/*                 DO J = 1, N */
+/*                    WRITE (*,'(A,3F12.8)') '               ', */
+/*             .                  BOUNDS(1,J), BOUNDS(2,J), BOUNDS(3,J) */
+/*                 END DO */
+/*                 WRITE (*,'(A)') */
+/*             .            '--------------------------------------' */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
 
 /*        -------------------------------------- */
-/*        Instrument ID:  -999001 */
+/*        Instrument ID: -999001 */
 /*            FOV shape: CIRCLE */
 /*            FOV frame: SC999_INST001 */
-/*        FOV boresight:   0.  0.  1. */
+/*        FOV boresight:   0.00000000  0.00000000  1.00000000 */
 /*          FOV corners: */
-/*                         0.0871557427  0.  0.996194698 */
+/*                         0.08715574  0.00000000  0.99619470 */
 /*        -------------------------------------- */
-/*        Instrument ID:  -999002 */
+/*        Instrument ID: -999002 */
 /*            FOV shape: ELLIPSE */
 /*            FOV frame: SC999_INST002 */
-/*        FOV boresight:   1.  0.  0. */
+/*        FOV boresight:   1.00000000  0.00000000  0.00000000 */
 /*          FOV corners: */
-/*                         1.  0.          0.01745506 */
-/*                         1.  0.03492077  0. */
+/*                         1.00000000  0.00000000  0.01745506 */
+/*                         1.00000000  0.03492077  0.00000000 */
 /*        -------------------------------------- */
-/*        Instrument ID:  -999003 */
+/*        Instrument ID: -999003 */
 /*            FOV shape: RECTANGLE */
 /*            FOV frame: SC999_INST003 */
-/*        FOV boresight:   0.  0.  1. */
+/*        FOV boresight:   0.00000000  0.00000000  1.00000000 */
 /*          FOV corners: */
-/*                         0.0104717682  0.00174523267  0.999943647 */
-/*                        -0.0104717682  0.00174523267  0.999943647 */
-/*                        -0.0104717682 -0.00174523267  0.999943647 */
-/*                         0.0104717682 -0.00174523267  0.999943647 */
+/*                         0.01047177  0.00174523  0.99994365 */
+/*                        -0.01047177  0.00174523  0.99994365 */
+/*                        -0.01047177 -0.00174523  0.99994365 */
+/*                         0.01047177 -0.00174523  0.99994365 */
 /*        -------------------------------------- */
-/*        Instrument ID:  -999004 */
+/*        Instrument ID: -999004 */
 /*            FOV shape: POLYGON */
 /*            FOV frame: SC999_INST004 */
-/*        FOV boresight:   0.   1.  0. */
+/*        FOV boresight:   0.00000000  1.00000000  0.00000000 */
 /*          FOV corners: */
-/*                         0.   0.8  0.5 */
-/*                         0.4  0.8 -0.2 */
-/*                        -0.4  0.8 -0.2 */
+/*                         0.00000000  0.80000000  0.50000000 */
+/*                         0.40000000  0.80000000 -0.20000000 */
+/*                        -0.40000000  0.80000000 -0.20000000 */
 /*        -------------------------------------- */
+
 
 /* $ Restrictions */
 
-/*     This routine will not operate unless an I-kernel for the */
-/*     instrument with the NAIF ID specified in INSTID have been */
-/*     loaded via a call to FURNSH prior to calling this routine and */
-/*     this IK contains the specification for the instrument field of */
-/*     view consistent with the expectations of this routine. */
+/*     1)  This routine will not operate unless an I-kernel for the */
+/*         instrument with the NAIF ID specified in INSTID have been */
+/*         loaded via a call to FURNSH prior to calling this routine and */
+/*         this IK contains the specification for the instrument field of */
+/*         view consistent with the expectations of this routine. */
 
 /* $ Literature_References */
 
@@ -618,31 +671,53 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     J. Diaz del Rio (ODC Space) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     M. Liukis          (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.1.2  22-MAR-2017 (JDR) (BVS) */
+/* -    SPICELIB Version 2.3.0, 17-DEC-2021 (JDR) (ML) (BVS) */
+
+/*        Bug fix: added missing exception for the boresight vector */
+/*        being the zero vector. */
+
+/*        Updated long error message for 'BADBOUNDARY' exception to */
+/*        correctly describe the check that's actually done. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Updated entry #5 and added entries #14 and #18 to $Exceptions */
+/*        section. Updated $Restrictions section. */
+
+/*        Updated $Particulars to describe the actual condition that */
+/*        reference and cross angles values must satisfy. */
+
+/*        Updated to check FAILED() after calls to CONVRT to prevent */
+/*        use of uninitialized values in subsequent calls. */
+
+/* -    SPICELIB Version 2.2.0, 22-MAR-2017 (JDR) (BVS) */
 
 /*        Header updates: made various header changes to make it */
 /*        compliant with the SPICE standard header format; updated */
 /*        BSIGHT description; added explanation of output boundary */
 /*        vector magnitudes; made other minor header corrections. */
 
-/*        Updated code to remove unnecessary lines. */
+/*        Updated code to remove unnecessary lines in the SPICE */
+/*        error handling IF-THEN-ELSE statements. */
 
-/* -    SPICELIB Version 2.1.1  05-FEB-2009 (BVS) */
+/* -    SPICELIB Version 2.1.1, 05-FEB-2009 (BVS) */
 
 /*        Header updates: added information about required IK keywords; */
 /*        replaced old example with a new one more focused on GETFOV and */
 /*        IK keywords. */
 
-/* -    SPICELIB Version 2.1.0  23-OCT-2005 (NJB) (BVS) */
+/* -    SPICELIB Version 2.1.0, 23-OCT-2005 (NJB) (BVS) */
 
 /*        Fixed bug causing incorrect computation of the boundary */
 /*        vectors for a rectangular FOV specified using the angular */
@@ -655,24 +730,24 @@ static integer c__0 = 0;
 
 /*        Replaced header reference to LDPOOL with reference to FURNSH. */
 
-/* -    SPICELIB Version 2.0.1  29-JUL-2003 (NJB) (CHA) */
+/* -    SPICELIB Version 2.0.1, 29-JUL-2003 (NJB) (CHA) */
 
-/*        Various header changes were made to improve clarity.  Some */
+/*        Various header changes were made to improve clarity. Some */
 /*        minor header corrections were made. */
 
-/* -    SPICELIB Version 2.0.0  15-MAY-2001 (FST) */
+/* -    SPICELIB Version 2.0.0, 15-MAY-2001 (FST) */
 
 /*        Updated the routine to support the new ANGLES specification */
 /*        for RECTANGLE, ELLIPSE, and CIRCLE. */
 
-/* -    SPICELIB Version 1.1.2  10-MAY-2000 (WLT) */
+/* -    SPICELIB Version 1.1.2, 10-MAY-2000 (WLT) */
 
 /*        Removed the unused variable INDEX. */
 
-/* -    SPICELIB Version 1.1.1  13-APR-2000 (WLT) */
+/* -    SPICELIB Version 1.1.1, 13-APR-2000 (WLT) */
 
 /*        This routine was harvested from the NEAR specific routine */
-/*        of the same name.  It was enhanced to support the 'RECTANGLE' */
+/*        of the same name. It was enhanced to support the 'RECTANGLE' */
 /*        shape for a field of view (a special case of 'POLYGON' */
 /*        added for the sake of Cassini users). */
 
@@ -680,27 +755,6 @@ static integer c__0 = 0;
 /* $ Index_Entries */
 
 /*     return instrument's FOV parameters */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 2.2.0  09-SEP-2015 (JDR) */
-
-/*        Updated to remove unnecessary lines of code in the SPICE */
-/*        error handling IF-THEN-ELSE statements */
-
-/* -    SPICELIB Version 2.1.0  23-OCT-2005 (NJB) (BVS) */
-
-/*        Fixed bug causing incorrect computation of the boundary */
-/*        vectors for a rectangular FOV specified using the angular */
-/*        extents method if the reference vector was provided as a */
-/*        non-unit vector and/or was non-perpendicular to the */
-/*        specified boresight. */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in CONVRT, UNORM, VHAT, VSCL and VCROSS calls. */
-
-/*        Replaced header reference to LDPOOL with reference to FURNSH. */
 
 /* -& */
 
@@ -851,6 +905,17 @@ static integer c__0 = 0;
 	return 0;
     }
     gdpool_(kword, &c__1, &c__3, &i__, bsight, &found, (ftnlen)32);
+
+/*     Check whether boresight is a zero vector; complain if it is. */
+
+    if (vzero_(bsight)) {
+	setmsg_("The boresight vector, stored in the '#' variable, is the ze"
+		"ro vector.", (ftnlen)69);
+	errch_("#", kword, (ftnlen)1, rtrim_(kword, (ftnlen)32));
+	sigerr_("SPICE(ZEROBORESIGHT)", (ftnlen)20);
+	chkout_("GETFOV", (ftnlen)6);
+	return 0;
+    }
 
 /*     At this point we have gotten all the specification independent */
 /*     information.  Now check for the presence of the FOV class */
@@ -1075,6 +1140,10 @@ static integer c__0 = 0;
 /*        Convert the reference angle to radians. */
 
 	convrt_(&refang, angunt, "RADIANS", &tmpang, (ftnlen)80, (ftnlen)7);
+	if (failed_()) {
+	    chkout_("GETFOV", (ftnlen)6);
+	    return 0;
+	}
 	refang = tmpang;
 
 /*        Branch to shape specific code. */
@@ -1138,6 +1207,10 @@ static integer c__0 = 0;
 
 	    convrt_(&crsang, angunt, "RADIANS", &tmpang, (ftnlen)80, (ftnlen)
 		    7);
+	    if (failed_()) {
+		chkout_("GETFOV", (ftnlen)6);
+		return 0;
+	    }
 	    crsang = tmpang;
 
 /*           Now check to see that the caller left enough room */
@@ -1211,6 +1284,10 @@ static integer c__0 = 0;
 
 	    convrt_(&crsang, angunt, "RADIANS", &tmpang, (ftnlen)80, (ftnlen)
 		    7);
+	    if (failed_()) {
+		chkout_("GETFOV", (ftnlen)6);
+		return 0;
+	    }
 	    crsang = tmpang;
 
 /*           Now check to see that the caller left enough room */
@@ -1290,9 +1367,11 @@ static integer c__0 = 0;
 	    if (cosran < 1e-15 || coscan < 1e-15) {
 		setmsg_("The angular extents specified in the FOV definition"
 			" for instrument # result in degenerate or improper b"
-			"oundary corner vectors.  This usually is the case wh"
-			"en one or both of the angles specified is 90 degrees."
-			, (ftnlen)208);
+			"oundary corner vectors. This usually happens when on"
+			"e (or both) of the angles results in the angular sep"
+			"aration between the boresight and the FOV side plane"
+			" that it defines being equal to or greater than 90 d"
+			"egrees.", (ftnlen)318);
 		errint_("#", instid, (ftnlen)1);
 		sigerr_("SPICE(BADBOUNDARY)", (ftnlen)18);
 		chkout_("GETFOV", (ftnlen)6);

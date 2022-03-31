@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LUN2FN ( Map logical unit of open file to its name. ) */
+/* $Procedure LUN2FN ( Map logical unit of open file to its name. ) */
 /* Subroutine */ int lun2fn_(integer *lunit, char *filnam, ftnlen filnam_len)
 {
     /* System generated locals */
@@ -85,17 +85,17 @@
 
 /* $ Exceptions */
 
-/*     1) If the logical unit is not positive, the error */
-/*        SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If the logical unit is not positive, the error */
+/*         SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2) If an error occurs during the execution of the Fortran INQUIRE */
-/*        statement, the error SPICE(INQUIREFAILED) is signalled. */
+/*     2)  If an error occurs during the execution of the Fortran INQUIRE */
+/*         statement, the error SPICE(INQUIREFAILED) is signaled. */
 
-/*     3) If the logical unit is not attached to an open file, the */
-/*        error SPICE(FILENOTOPEN) will be signalled. */
+/*     3)  If the logical unit is not attached to an open file, the */
+/*         error SPICE(FILENOTOPEN) is signaled. */
 
-/*     4) In the event of an error the contents of the variable FILNAM */
-/*        are not defined and should not be used. */
+/*     4)  In the event of an error the contents of the variable FILNAM */
+/*         are not defined and should not be used. */
 
 /* $ Files */
 
@@ -120,15 +120,22 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer  (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 16-AUG-1994 (KRG) */
 

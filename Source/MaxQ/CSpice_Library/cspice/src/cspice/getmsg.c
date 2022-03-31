@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      GETMSG ( Get Error Message ) */
+/* $Procedure GETMSG ( Get Error Message ) */
 /* Subroutine */ int getmsg_(char *option, char *msg, ftnlen option_len, 
 	ftnlen msg_len)
 {
@@ -37,9 +37,8 @@ static integer c__2 = 2;
 
 /* $ Abstract */
 
-/*     Retrieve the current short error message, */
-/*     the explanation of the short error message, or the */
-/*     long error message. */
+/*     Retrieve the current short error message, the explanation of the */
+/*     short error message, or the long error message. */
 
 /* $ Disclaimer */
 
@@ -77,55 +76,46 @@ static integer c__2 = 2;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      OPTION     I   Indicates type of error message. */
-/*      MSG        O   The error message to be retrieved. */
-
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     OPTION     I   Indicates type of error message. */
+/*     MSG        O   The error message to be retrieved. */
 
 /* $ Detailed_Input */
 
-/*      OPTION  Indicates the type of error message to be retrieved. */
-/*              The choices are:  The current short error message, */
-/*              the explanation of the short error message, */
-/*              or the current long error message. */
+/*     OPTION   is a string that indicates the type of error message to */
+/*              be retrieved. */
 
 /*              Possible values of OPTION are: */
 
-/*              'SHORT'   -- indicates that the short message is to */
-/*                           be retrieved */
+/*                 'SHORT'     indicates that the short message is to be */
+/*                             retrieved. */
 
-/*              'EXPLAIN' -- indicates that the explanation of the */
-/*                           short message is to be retrieved */
+/*                 'EXPLAIN'   indicates that the explanation of the */
+/*                             short message is to be retrieved. */
 
-/*              'LONG'    -- indicates that the long message is to */
-/*                           be retrieved */
+/*                 'LONG'      indicates that the long message is to be */
+/*                             retrieved. */
 
-/*              The input strings indicating the choice of option */
-/*              may be in mixed case.  For example, there is no */
-/*              problem with the call, */
-
-/*                    CALL GETMSG ( 'loNg' , MSG ) */
+/*              The input strings indicating the choice of option may be */
+/*              in mixed case. Leading and trailing blanks in OPTION are */
+/*              not significant. */
 
 /* $ Detailed_Output */
 
-/*      MSG     Is the error message to be retrieved. */
-/*              Its value depends on OPTION, and on whether */
-/*              an error condition exists. */
+/*     MSG      is the error message to be retrieved. Its value depends */
+/*              on OPTION, and on whether an error condition exists. */
 
 /*              When there is no error condition, MSG is blank. */
 
+/*              If an error condition does exist, and OPTION is */
 
-/*              If an error condition does exist, */
-
-/*                When OPTION is */
-
-/*                'SHORT'    --  MSG is the current short error message. */
+/*                'SHORT'        MSG is the current short error message. */
 /*                               This is a very condensed, 25-character */
 /*                               description of the error. */
 
-/*                'EXPLAIN'  --  MSG is the explanation of the current */
-/*                               short error message.  This is a one-line */
+/*                'EXPLAIN'      MSG is the explanation of the current */
+/*                               short error message. This is a one-line */
 /*                               expansion of the text of the short */
 /*                               message. */
 
@@ -135,7 +125,7 @@ static integer c__2 = 2;
 /*                               there is no explanation text, MSG */
 /*                               will be blank. */
 
-/*                'LONG'     --  MSG is the current long error message. */
+/*                'LONG'         MSG is the current long error message. */
 /*                               The long error message is a detailed */
 /*                               explanation of the error, possibly */
 /*                               containing data specific to the */
@@ -145,9 +135,8 @@ static integer c__2 = 2;
 /*                               Long error messages are no longer than */
 /*                               320 characters. */
 
-/*                invalid    --  MSG will remain unchanged from */
-/*                               its value on input. */
-
+/*              If OPTION is invalid, MSG will remain unchanged from its */
+/*              value on input. */
 
 /* $ Parameters */
 
@@ -155,95 +144,94 @@ static integer c__2 = 2;
 
 /* $ Exceptions */
 
-/*      Errors detected: */
-
-/*      1.  SPICE(INVALIDMSGTYPE) */
-
-/*          This routine signals an error condition if the input, */
-/*          OPTION, is invalid.  In that case no messages are */
-/*          returned; MSG retains the value it had on input. */
-
-
-/*      This routine is part of the interface to the */
-/*      SPICELIB error handling mechanism.  For this reason, */
-/*      this routine does not participate in the trace scheme, */
-/*      even though it has external references. */
+/*     1)  If the input OPTION is invalid, the error */
+/*         SPICE(INVALIDMSGTYPE) is signaled. In that case no messages */
+/*         are returned; MSG retains the value it had on input. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      Please read the "required reading" first! */
+/*     Please read the "required reading" first! */
 
-/*      A good time to call this routine would be when an error */
-/*      condition exists, as indicated by the SPICELIB function, */
-/*      FAILED. */
+/*     A good time to call this routine would be when an error */
+/*     condition exists, as indicated by the SPICELIB function, */
+/*     FAILED. */
 
-/*      See the example below for a serving suggestion. */
+/*     See the example below for a serving suggestion. */
 
-/*      GETMSG isn't too useful if an error condition doesn't */
-/*      exist, since it will return a blank string in that case. */
-
+/*     GETMSG isn't too useful if an error condition doesn't */
+/*     exist, since it will return a blank string in that case. */
 
 /* $ Examples */
 
+/*     Here's an example of a real-life call to GETMSG to get the */
+/*     explanation of the current short error message. */
 
-/*      Here's an example of a real-life call to GETMSG to get the */
-/*      explanation of the current short error message. */
-
-/*      In this example, a SPICELIB routine, RDTEXT, is called. */
-/*      Following the return from RDTEXT, the logical function, */
-/*      FAILED, is tested to see whether an error occurred. */
-/*      If it did, the message is retrieved and output via */
-/*      a user-defined output routine: */
-
-
-/*      C */
-/*      C     We call RDTEXT; then test for errors... */
-/*      C */
-/*            CALL RDTEXT ( FILE, LINE, EOF ) */
-
-/*            IF ( FAILED ) THEN */
-
-/*      C */
-/*      C        Get explanation text for the current short message */
-/*      C        and print it: */
-/*      C */
-
-/*               CALL GETMSG ( 'EXPLAIN', TEXT ) */
-
-/*               CALL USER_DEFINED_OUTPUT ( TEXT ) */
-
-/*                     . */
-/*                     .   [Do more stuff here] */
-/*                     . */
-
-/*            END IF */
+/*     In this example, a SPICELIB routine, RDTEXT, is called. */
+/*     Following the return from RDTEXT, the logical function, */
+/*     FAILED, is tested to see whether an error occurred. */
+/*     If it did, the message is retrieved and output via */
+/*     a user-defined output routine: */
 
 
+/*     C */
+/*     C     We call RDTEXT; then test for errors... */
+/*     C */
+/*           CALL RDTEXT ( FILE, LINE, EOF ) */
+
+/*           IF ( FAILED ) THEN */
+
+/*     C */
+/*     C        Get explanation text for the current short message */
+/*     C        and print it: */
+/*     C */
+
+/*              CALL GETMSG ( 'EXPLAIN', TEXT ) */
+
+/*              CALL USER_DEFINED_OUTPUT ( TEXT ) */
+
+/*                    . */
+/*                    .   [Do more stuff here] */
+/*                    . */
+
+/*           END IF */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     1)  This routine is part of the interface to the SPICELIB error */
+/*         handling mechanism. For this reason, this routine does not */
+/*         participate in the trace scheme, even though it has external */
+/*         references. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 20-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/*        Edited the header to comply with NAIF standard. Moved */
+/*        disclaimer on participation of this routine in the SPICELIB */
+/*        trace scheme from $Exceptions to $Restrictions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

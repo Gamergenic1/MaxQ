@@ -336,89 +336,81 @@
 
 /* $ Detailed_Input */
 
-/*     PRI        is a logical flag indicating whether to perform */
-/*                a prioritized or unprioritized DSK segment search. */
-/*                In an unprioritized search, no segment masks another: */
-/*                data from all specified segments are used to */
-/*                define the surface of interest. */
+/*     PRI      is a logical flag indicating whether to perform */
+/*              a prioritized or unprioritized DSK segment search. */
+/*              In an unprioritized search, no segment masks another: */
+/*              data from all specified segments are used to */
+/*              define the surface of interest. */
 
-/*                The search is unprioritized if and only if PRI */
-/*                is set to .FALSE. In the N0066 SPICE Toolkit, this */
-/*                is the only allowed value. */
+/*              The search is unprioritized if and only if PRI */
+/*              is set to .FALSE. In the N0066 SPICE Toolkit, this */
+/*              is the only allowed value. */
 
-
-/*     TARGET     is the name of the target body on which a surface */
-/*                intercept is sought. */
-
+/*     TARGET   is the name of the target body on which a surface */
+/*              intercept is sought. */
 
 /*     NSURF, */
-/*     SRFLST     are, respectively, a count of surface ID codes in a */
-/*                list and an containing the list. Only DSK segments for */
-/*                for the body designated by TARGET and having surface */
-/*                IDs in this list will considered in the intercept */
-/*                computation. If the list is empty, all DSK segments */
-/*                for TARGET will be considered. */
+/*     SRFLST   are, respectively, a count of surface ID codes in a */
+/*              list and the containing list. Only DSK segments for */
+/*              the body designated by TARGET and having surface */
+/*              IDs in this list will considered in the intercept */
+/*              computation. If the list is empty, all DSK segments */
+/*              for TARGET will be considered. */
 
+/*     ET       is the epoch of the intersection computation, */
+/*              expressed as seconds past J2000 TDB. This epoch is */
+/*              used only for DSK segment selection. Segments used */
+/*              the intercept computation must include ET in their */
+/*              time coverage intervals. */
 
-/*     ET         is the epoch of the intersection computation, */
-/*                expressed as seconds past J2000 TDB. This epoch is */
-/*                used only for DSK segment selection. Segments used */
-/*                the intercept computation must include ET in their */
-/*                time coverage intervals. */
+/*     FIXREF   is the name of a body-fixed, body-centered reference */
+/*              frame associated with the target. The input ray vectors */
+/*              are specified in this frame, as is the output intercept */
+/*              point. */
 
-
-/*     FIXREF     is the name of a body-fixed, body-centered reference */
-/*                frame associated with the target. The input ray vectors */
-/*                are specified in this frame, as is the output intercept */
-/*                point. */
-
-/*                The frame designated by FIXREF must have a fixed */
-/*                orientation relative to the frame of any DSK segment */
-/*                used in the computation. */
-
+/*              The frame designated by FIXREF must have a fixed */
+/*              orientation relative to the frame of any DSK segment */
+/*              used in the computation. */
 
 /*     NRAYS, */
 /*     VTXARR, */
-/*     DIRARR     are, respectively, a count of rays, an array containing */
-/*                the vertices of rays, and an array containing the */
-/*                direction vectors of the rays. */
+/*     DIRARR   are, respectively, a count of rays, an array containing */
+/*              the vertices of rays, and an array containing the */
+/*              direction vectors of the rays. */
 
-/*                The ray's vertices are considered to represent offsets */
-/*                from the center of the target body. */
+/*              The ray's vertices are considered to represent offsets */
+/*              from the center of the target body. */
 
-/*                The rays' vertices and direction vectors are */
-/*                represented in the reference frame designated by */
-/*                FIXREF. */
+/*              The rays' vertices and direction vectors are */
+/*              represented in the reference frame designated by */
+/*              FIXREF. */
 
 /* $ Detailed_Output */
 
+/*     XPTARR   is an array containing the intercepts of the input */
+/*              rays on the surface specified by the inputs */
 
-/*     XPTARR     is an array containing the intercepts of the input */
-/*                rays on the surface specified by the inputs */
+/*                 PRI */
+/*                 TARGET */
+/*                 NSURF */
+/*                 SRFLST */
+/*                 ET */
 
-/*                   PRI */
-/*                   TARGET */
-/*                   NSURF */
-/*                   SRFLST */
-/*                   ET */
+/*              The Ith element of XPTARR is the intercept */
+/*              corresponding to the Ith ray, if such an intercept */
+/*              exists. If a ray intersects the surface at multiple */
+/*              points, the intercept closest to the ray's vertex is */
+/*              selected. */
 
-/*                The Ith element of XPTARR is the intercept */
-/*                corresponding to the Ith ray, if such an intercept */
-/*                exists. If a ray intersects the surface at multiple */
-/*                points, the intercept closest to the ray's vertex is */
-/*                selected. */
+/*              The Ith element of XPTARR is defined if and only if the */
+/*              Ith element of FNDARR is .TRUE. */
 
-/*                The Ith element of XPTARR is defined if and only if the */
-/*                Ith element of FNDARR is .TRUE. */
+/*              Units are km. */
 
-/*                Units are km. */
-
-
-/*     FNDARR     is an array of logical flags indicating whether the */
-/*                input rays intersect the surface. The Ith element of */
-/*                FNDARR is set to .TRUE. if and only if an intercept */
-/*                was found for the Ith ray. */
-
+/*     FNDARR   is an array of logical flags indicating whether the */
+/*              input rays intersect the surface. The Ith element of */
+/*              FNDARR is set to .TRUE. if and only if an intercept */
+/*              was found for the Ith ray. */
 
 /* $ Parameters */
 
@@ -427,35 +419,50 @@
 /*        dsktol.inc */
 
 /*     for the values of tolerance parameters used by default by the */
-/*     ray-surface intercept algorithm. These are discussed in in the */
-/*     Particulars section below. */
+/*     ray-surface intercept algorithm. */
+
+/*     These parameters are discussed in the $Particulars section */
+/*     below. */
+
+/*     See the include file */
+
+/*        dla.inc */
+
+/*     for declarations of DLA descriptor sizes and documentation of the */
+/*     contents of DLA descriptors. */
+
+/*     See the include file */
+
+/*        dskdsc.inc */
+
+/*     for declarations of DSK descriptor sizes and documentation of the */
+/*     contents of DSK descriptors. */
 
 /* $ Exceptions */
 
 /*     1)  If the input prioritization flag PRI is set to .TRUE., */
 /*         the error SPICE(BADPRIORITYSPEC) is signaled. */
 
-/*     2)  If the input body name TARGET cannot be mapped to an */
+/*     2)  If NRAYS is less than 1, the error SPICE(INVALIDCOUNT) */
+/*         is signaled. */
+
+/*     3)  If NSURF is less than 0, the error SPICE(INVALIDCOUNT) */
+/*         is signaled. */
+
+/*     4)  If the input body name TARGET cannot be mapped to an */
 /*         ID code, the error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     3)  If the input frame name FIXREF cannot be mapped to an */
+/*     5)  If the input frame name FIXREF cannot be mapped to an */
 /*         ID code, the error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     4)  If the frame center associated with FIXREF cannot be */
+/*     6)  If the frame center associated with FIXREF cannot be */
 /*         retrieved, the error SPICE(NOFRAMEINFO) is signaled. */
 
-/*     5)  If the frame center associated with FIXREF is not */
+/*     7)  If the frame center associated with FIXREF is not */
 /*         the target body, the error SPICE(INVALIDFRAME) is signaled. */
 
-/*     6)  If NRAYS is less than 1, the error SPICE(INVALIDCOUNT) */
-/*         is signaled. */
-
-/*     7)  If NSURF is less than 0, the error SPICE(INVALIDCOUNT) */
-/*         is signaled. */
-
-/*     8)  Any errors that occur during the intercept computation */
-/*         will be signaled by routines in the call tree of this */
-/*         routine. */
+/*     8)  If an error occurs during the intercept computation, the error */
+/*         is signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -464,38 +471,37 @@
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for the positions of the centers */
-/*          of DSK reference frames relative to the target body are */
-/*          required if those frames are not centered at the target */
-/*          body center. */
+/*     -  SPK data: ephemeris data for the positions of the centers */
+/*        of DSK reference frames relative to the target body are */
+/*        required if those frames are not centered at the target */
+/*        body center. */
 
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - DSK data: DSK files containing topographic data for the */
-/*          target body must be loaded. If a surface list is specified, */
-/*          data for at least one of the listed surfaces must be loaded. */
+/*     -  DSK data: DSK files containing topographic data for the */
+/*        target body must be loaded. If a surface list is specified, */
+/*        data for at least one of the listed surfaces must be loaded. */
 
-/*        - Frame data: if a frame definition is required to convert */
-/*          DSK segment data to the body-fixed frame designated by */
-/*          FIXREF, the target, that definition must be available in the */
-/*          kernel pool. Typically the definitions of frames not already */
-/*          built-in to SPICE are supplied by loading a frame kernel. */
+/*     -  Frame data: if a frame definition is required to convert */
+/*        DSK segment data to the body-fixed frame designated by */
+/*        FIXREF, the target, that definition must be available in the */
+/*        kernel pool. Typically the definitions of frames not already */
+/*        built-in to SPICE are supplied by loading a frame kernel. */
 
-/*        - CK data: if the frame to which FIXREF refers is a CK frame, */
-/*          and if any DSK segments used in the computation have a */
-/*          different frame, at least one CK file will be needed to */
-/*          permit transformation of vectors between that frame and both */
-/*          the J2000 and the target body-fixed frames. */
+/*     -  CK data: if the frame to which FIXREF refers is a CK frame, */
+/*        and if any DSK segments used in the computation have a */
+/*        different frame, at least one CK file will be needed to */
+/*        permit transformation of vectors between that frame and both */
+/*        the J2000 and the target body-fixed frames. */
 
-/*        - SCLK data: if a CK file is needed, an associated SCLK */
-/*          kernel is required to enable conversion between encoded SCLK */
-/*          (used to time-tag CK data) and barycentric dynamical time */
-/*          (TDB). */
+/*     -  SCLK data: if a CK file is needed, an associated SCLK */
+/*        kernel is required to enable conversion between encoded SCLK */
+/*        (used to time-tag CK data) and barycentric dynamical time */
+/*        (TDB). */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
-
 
 /* $ Particulars */
 
@@ -637,7 +643,7 @@
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
@@ -651,7 +657,9 @@
 /*        number of errors, the number of computations, and the */
 /*        number of intercepts found. */
 
-/*        Use the meta-kernel below to load example SPICE kernels. */
+
+/*        Use the meta-kernel shown below to load example SPICE */
+/*        kernels. */
 
 
 /*           KPL/MK */
@@ -677,35 +685,35 @@
 /*                                               plate model */
 /*           \begindata */
 
-/*              PATH_SYMBOLS    = 'GEN' */
-/*              PATH_VALUES     = '/ftp/pub/naif/generic_kernels' */
-
-/*              KERNELS_TO_LOAD = ( '$GEN/dsk/phobos/phobos512.bds' ) */
+/*              KERNELS_TO_LOAD = ( 'phobos512.bds' ) */
 
 /*           \begintext */
 
+/*           End of meta-kernel */
 
-/*     Example code begins here. */
+
+/*        Example code begins here. */
 
 
-/*              PROGRAM VSPEAR */
+/*              PROGRAM DSKXV_EX1 */
 /*              IMPLICIT NONE */
+
 /*        C */
 /*        C     Multi-segment, vectorized spear program. */
 /*        C */
 /*        C     This program expects all loaded DSKs */
 /*        C     to represent the same body and surface. */
 /*        C */
-/*        C        Syntax: vspear <meta-kernel> */
-/*        C */
 /*              INCLUDE 'dla.inc' */
 /*              INCLUDE 'dsk.inc' */
 /*              INCLUDE 'dskdsc.inc' */
+
 /*        C */
 /*        C     SPICELIB functions */
 /*        C */
 /*              DOUBLE PRECISION      RPD */
 /*              DOUBLE PRECISION      VDIST */
+
 /*        C */
 /*        C     Local parameters */
 /*        C */
@@ -792,24 +800,17 @@
 
 
 /*              CALL CHKIN ( 'SPEAR' ) */
-/*        C */
-/*        C     Load kernel. */
-/*        C */
-/*              CALL GETCML ( CMD ) */
-
-/*              IF ( CMD .EQ. ' ' ) THEN */
-/*                 CALL TOSTDO( 'Syntax: spear <meta-kernel>' ) */
-/*                 CALL BYEBYE( 'SUCCESS' ) */
-/*              END IF */
 
 /*        C */
-/*        C     Pick the meta-kernel name from the command. */
+/*        C     Prompt for the name of the meta-kernel. */
 /*        C */
-/*              CALL NEXTWD ( CMD, FNAME, IDCH ) */
+/*              CALL PROMPT ( 'Enter meta-kernel name >  ', FNAME ) */
+
 /*        C */
-/*        C     Load DSKs. */
+/*        C     Load the meta-kernel. */
 /*        C */
 /*              CALL FURNSH ( FNAME ) */
+
 /*        C */
 /*        C     Get a handle for one of the loaded DSKs, */
 /*        C     then find the first segment and extract */
@@ -852,6 +853,7 @@
 /*        C     any realistic target. */
 /*        C */
 /*              R = 1.D10 */
+
 /*        C */
 /*        C     Spear the target with rays pointing toward */
 /*        C     the origin.  Use a grid of ray vertices */
@@ -877,6 +879,11 @@
 /*              LAT    = 90.D0 */
 /*              NLSTEP = 0 */
 /*              NRAYS  = 0 */
+
+/*        C */
+/*        C     Set the epoch for interval selection. */
+/*        C */
+/*              ET     = 0.D0 */
 
 /*        C */
 /*        C     Generate rays. */
@@ -922,6 +929,7 @@
 /*                 NLSTEP = 0 */
 
 /*              END DO */
+
 /*        C */
 /*        C     Assign surface ID list. */
 /*        C */
@@ -932,7 +940,7 @@
 /*              NSURF     = 1 */
 /*              SRFLST(1) = SURFID */
 
-
+/*              WRITE (*,*) ' ' */
 /*              WRITE (*,*) 'Computing intercepts...' */
 
 /*              CALL DSKXV ( .FALSE., TARGET, NSURF, SRFLST, */
@@ -940,6 +948,8 @@
 /*             .             DIRARR,  XPTARR, FNDARR        ) */
 
 /*              WRITE (*,*) 'Done.' */
+/*              WRITE (*,*) ' ' */
+
 /*        C */
 /*        C     Check results. */
 /*        C */
@@ -1009,18 +1019,23 @@
 /*              WRITE (*,*) 'NHITS  = ', NHITS */
 /*              WRITE (*,*) 'NDERR  = ', NDERR */
 /*              WRITE (*,*) ' ' */
+
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using as input the meta-kernel dskxv_ex1.tm, the */
+/*        output was: */
 
 
-/*        Computing intercepts... */
-/*        Done. */
-/*        NRAYS  =        32580 */
-/*        NHITS  =        32580 */
-/*        NDERR  =            0 */
+/*        Enter meta-kernel name >  dskxv_ex1.tm */
+
+/*         Computing intercepts... */
+/*         Done. */
+
+/*         NRAYS  =        32580 */
+/*         NHITS  =        32580 */
+/*         NDERR  =            0 */
 
 
 /* $ Restrictions */
@@ -1038,20 +1053,28 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 06-AUG-2021 (JDR) (BVS) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated code example to prompt for input meta-kernel name and */
+/*        set input time to zero. */
 
 /* -    SPICELIB Version 1.0.0, 21-FEB-2017 (NJB) */
 
 /*        Original 25-FEB-2016 (NJB) */
 
-
 /* -& */
 /* $ Index_Entries */
 
 /*     vectorized ray-surface intercept */
-/*     vectorized ray-dsk intercept */
+/*     vectorized ray-DSK intercept */
 
 /* -& */
 

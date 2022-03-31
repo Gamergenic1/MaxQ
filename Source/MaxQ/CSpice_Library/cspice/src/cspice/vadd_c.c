@@ -3,9 +3,9 @@
 -Procedure vadd_c ( Vector addition, 3 dimensional )
 
 -Abstract
- 
-   Add two 3 dimensional vectors. 
- 
+
+   Add two double precision 3-dimensional vectors.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,99 +32,177 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   VECTOR 
- 
+
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
    #undef    vadd_c
-   
+
 
    void vadd_c ( ConstSpiceDouble   v1[3],
                  ConstSpiceDouble   v2[3],
-                 SpiceDouble        vout[3] ) 
+                 SpiceDouble        vout[3] )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   v1         I     First vector to be added. 
-   v2         I     Second vector to be added. 
-   vout       O     Sum vector, v1 + v2. 
-                     vout can overwrite either v1 or v2. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   v1         I   First vector to be added.
+   v2         I   Second vector to be added.
+   vout       O   Sum vector, v1 + v2.
+
 -Detailed_Input
- 
-   v1      This may be any 3-element vector. 
- 
-   v2      Likewise. 
- 
+
+   v1,
+   v2          are two arbitrary double precision 3-dimensional
+               vectors.
+
 -Detailed_Output
- 
-   vout   This is vector sum of v1 and v2. vout may overwrite either 
-           v1 or v2. 
- 
+
+   vout        is the double precision 3-dimensional vector sum of `v1'
+               and `v2'. `vout' may overwrite either `v1' or `v2'.
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   This routine simply performs addition between components of v1 
-   and v2.  No checking is performed to determine whether floating 
-   point overflow has occurred. 
- 
--Examples
- 
-   The following table shows the output vout as a function of the 
-   the input v1 and v2 from the subroutine vadd_c. 
- 
-   v1                  v2              ---> vout 
-   --------------      --------------       -------------- 
-   (1.0, 2.0, 3.0)     (4.0, 5.0, 6.0)      (5.0, 7.0, 9.0) 
-   (1D-7,1D23,0)       (1D24, 1D23, 0.0)    (1D24,2D23,0.0) 
- 
--Restrictions
- 
-   The user is required to determine that the magnitude each 
-   component of the vectors is within the appropriate range so as 
-   not to cause floating point overflow. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
--Author_and_Institution
- 
-   W.M. Owen       (JPL) 
-   E.D. Wright     (JPL)
- 
+
+   None.
+
+-Particulars
+
+   This routine simply performs addition between components of `v1'
+   and `v2'. No checking is performed to determine whether floating
+   point overflow has occurred.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+
+   1) Define two sets of 3-dimensional vectors and compute the sum
+      of each vector in first set with the corresponding vector in
+      the second set.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vadd_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define SETSIZ       2
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          vout   [3];
+
+         SpiceInt             i;
+
+         /.
+         Define the two vector sets.
+         ./
+         SpiceDouble          seta   [SETSIZ][3] = { {1.0,   2.0,   3.0  },
+                                                     {1.e-7, 1.e23, 1.e-9} };
+
+         SpiceDouble          setb   [SETSIZ][3] = { {4.0,   5.0,   6.0},
+                                                     {1.e24, 1.e23, 0.0} };
+
+         /.
+         Calculate the sum of each pair of vectors
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            vadd_c ( seta[i], setb[i], vout );
+
+            printf( "Vector A  :  %10.2e %10.2e %10.2e\n",
+                    seta[i][0], seta[i][1], seta[i][2] );
+            printf( "Vector B  :  %10.2e %10.2e %10.2e\n",
+                    setb[i][0], setb[i][1], setb[i][2] );
+            printf( "Sum vector:  %10.2e %10.2e %10.2e\n",
+                               vout[0], vout[1], vout[2] );
+            printf( "\n" );
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Vector A  :    1.00e+00   2.00e+00   3.00e+00
+      Vector B  :    4.00e+00   5.00e+00   6.00e+00
+      Sum vector:    5.00e+00   7.00e+00   9.00e+00
+
+      Vector A  :    1.00e-07   1.00e+23   1.00e-09
+      Vector B  :    1.00e+24   1.00e+23   0.00e+00
+      Sum vector:    1.00e+24   2.00e+23   1.00e-09
+
+
+-Restrictions
+
+   1)  The user is required to determine that the magnitude each
+       component of the vectors is within the appropriate range so as
+       not to cause floating point overflow.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 05-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vectors const.
+       Made input vectors const.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WMO)
 
 -Index_Entries
- 
-   3-dimensional vector addition 
- 
+
+   3-dimensional vector addition
+
 -&
 */
 

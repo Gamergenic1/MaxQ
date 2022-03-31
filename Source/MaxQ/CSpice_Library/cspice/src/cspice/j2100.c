@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure                     J2100 ( Julian Date of 2100 JAN 1.5 ) */
+/* $Procedure J2100 ( Julian Date of 2100 JAN 1.5 ) */
 doublereal j2100_(void)
 {
     /* System generated locals */
@@ -72,7 +72,7 @@ doublereal j2100_(void)
 
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -102,17 +102,22 @@ doublereal j2100_(void)
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.2, 08-JUL-2020 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Edited the header to comply with NAIF standard. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

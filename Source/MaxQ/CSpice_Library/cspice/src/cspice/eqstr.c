@@ -71,29 +71,29 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*     A, */
 /*     B          I   Arbitrary character strings. */
 
-/*     The function returns TRUE if A and B are equivalent. */
+/*     The function returns .TRUE. if A and B are equivalent. */
 
 /* $ Detailed_Input */
 
 /*     A, */
-/*     B           are arbitrary character strings. */
+/*     B        are arbitrary character strings. */
 
 /* $ Detailed_Output */
 
-/*     The function returns TRUE if A and B are equivalent: that is, */
+/*     The function returns .TRUE. if A and B are equivalent: that is, */
 /*     if A and B contain  the same characters in the same order, */
 /*     when blanks are ignored and uppercase and lowercase characters */
 /*     are considered equal. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
 /*     None. */
 
 /* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -104,11 +104,9 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*     extra (leading, trailing, and embedded) blanks and differences */
 /*     in case. For the most part, */
 
-/*        IF ( EQSTR ( A, B ) ) THEN */
-/*           . */
-/*           . */
+/*        EQSTR ( A, B ) */
 
-/*     is true whenever */
+/*     is .TRUE. whenever */
 
 /*        CALL CMPRSS ( ' ', 0, A, TEMPA ) */
 /*        CALL UCASE  (            TEMPA, TEMPA ) */
@@ -116,11 +114,9 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*        CALL CMPRSS ( ' ', 0, B, TEMPB ) */
 /*        CALL UCASE  (            TEMPB, TEMPB ) */
 
-/*        IF ( TEMPA .EQ. TEMPB ) THEN */
-/*           . */
-/*           . */
+/*        EQVLNT = TEMPA .EQ. TEMPB */
 
-/*     is true. There are two important differences, however. */
+/*     is .TRUE. There are two important differences, however. */
 
 /*        1) The single reference to EQSTR is much simpler to */
 /*           write, and simpler to understand. */
@@ -128,71 +124,135 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*        2) The reference to EQSTR does not require any temporary */
 /*           storage, nor does it require that the strings A and B */
 /*           be changed. This feature is especially useful when */
-/*           comparing strings recieved as subprogram arguments */
+/*           comparing strings received as subprogram arguments */
 /*           against strings stored internally within the subprogram. */
 
 /* $ Examples */
 
-/*      Usage */
-/*      -------------------------------------------- */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         All of the following are TRUE. */
+/*     1) This code provides examples of equivalent and non-equivalent */
+/*        strings according to the algorithm implemented in EQSTR. */
 
-/*            EQSTR ( 'A short string   ', */
-/*           .        'ashortstring'        ) */
-
-/*            EQSTR ( 'Embedded        blanks', */
-/*           .        'Em be dd ed bl an ks'    ) */
-
-/*            EQSTR ( 'Embedded        blanks', */
-/*           .        '   Embeddedblanks'    ) */
-
-/*            EQSTR ( ' ', */
-/*           .        '          ' ) */
-
-/*         All of the following are FALSE. */
-
-/*            EQSTR ( 'One word left out', */
-/*           .        'WORD LEFT OUT'      ) */
-
-/*            EQSTR ( 'Extra [] delimiters', */
-/*           .        'extradelimiters'      ) */
-
-/*            EQSTR ( 'Testing 1, 2, 3', */
-/*           .        'TESTING123'       ) */
+/*        Example code begins here. */
 
 
-/*      Use */
-/*      -------------------------------------------- */
+/*              PROGRAM EQSTR_EX1 */
+/*              IMPLICIT NONE */
 
-/*         The following illustrates a typical use for EQSTR. */
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              LOGICAL               EQSTR */
 
-/*            SUBROUTINE GREETING ( WHO, WHAT ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               SETSIZ */
+/*              PARAMETER           ( SETSIZ = 9  ) */
 
-/*            CHARACTER*(*)         WHO */
-/*            CHARACTER*(*)         WHAT */
+/*              INTEGER               STRLEN */
+/*              PARAMETER           ( STRLEN = 22 ) */
 
-/*            IF ( EQSTR ( WHO, 'Steve' ) ) THEN */
-/*               WHAT = 'Yes, sir?' */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(STRLEN)    STR1   ( SETSIZ ) */
+/*              CHARACTER*(STRLEN)    STR2   ( SETSIZ ) */
 
-/*            ELSE IF ( EQSTR ( WHO, 'Chuck' ) ) THEN */
-/*               WHAT = 'What can I do for you?' */
+/*              INTEGER               I */
 
-/*            ELSE */
-/*               WHAT = 'Whaddya want?' */
-/*            END IF */
+/*        C */
+/*        C     Initialize the two arrays of strings. */
+/*        C */
+/*              DATA                  STR1   / 'A short string   ', */
+/*             .                               'Embedded        blanks', */
+/*             .                               'Embedded        blanks', */
+/*             .                               ' ', */
+/*             .                               'One word left out', */
+/*             .                               'Extra [] delimiters', */
+/*             .                               'Testing 1, 2, 3', */
+/*             .                               'Case insensitive', */
+/*             .                               'Steve'  / */
 
-/*            RETURN */
-/*            END */
+/*              DATA                  STR2   / 'ashortstring', */
+/*             .                               'Em be dd ed bl an ks', */
+/*             .                               '   Embeddedblanks', */
+/*             .                               '          ', */
+/*             .                               'WORD LEFT OUT', */
+/*             .                               'extradelimiters', */
+/*             .                               'TESTING123', */
+/*             .                               'Case Insensitive', */
+/*             .                               '  S t E v E  '  / */
 
-/*         Note that all of the following calls will elicit the */
-/*         greeting 'Yes, sir?': */
 
-/*            CALL GREETING ( 'STEVE',       WHAT ) */
-/*            CALL GREETING ( 'steve',       WHAT ) */
-/*            CALL GREETING ( 'Steve',       WHAT ) */
-/*            CALL GREETING ( 'sTEVE',       WHAT ) */
-/*            CALL GREETING ( ' S T E V E ', WHAT ) */
+/*        C */
+/*        C     Compare the two arrays. */
+/*        C */
+/*              DO I = 1, SETSIZ */
+
+/*                 WRITE(*,*) */
+/*                 WRITE(*,*) 'STR1 : ', STR1(I) */
+/*                 WRITE(*,*) 'STR2 : ', STR2(I) */
+
+/*                 IF ( EQSTR( STR1(I), STR2(I) ) ) THEN */
+
+/*                    WRITE(*,*) 'EQSTR: equivalent.' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) 'EQSTR: NOT equivalent.' */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         STR1 : A short string */
+/*         STR2 : ashortstring */
+/*         EQSTR: equivalent. */
+
+/*         STR1 : Embedded        blanks */
+/*         STR2 : Em be dd ed bl an ks */
+/*         EQSTR: equivalent. */
+
+/*         STR1 : Embedded        blanks */
+/*         STR2 :    Embeddedblanks */
+/*         EQSTR: equivalent. */
+
+/*         STR1 : */
+/*         STR2 : */
+/*         EQSTR: equivalent. */
+
+/*         STR1 : One word left out */
+/*         STR2 : WORD LEFT OUT */
+/*         EQSTR: NOT equivalent. */
+
+/*         STR1 : Extra [] delimiters */
+/*         STR2 : extradelimiters */
+/*         EQSTR: NOT equivalent. */
+
+/*         STR1 : Testing 1, 2, 3 */
+/*         STR2 : TESTING123 */
+/*         EQSTR: NOT equivalent. */
+
+/*         STR1 : Case insensitive */
+/*         STR2 : Case Insensitive */
+/*         EQSTR: equivalent. */
+
+/*         STR1 : Steve */
+/*         STR2 :   S t E v E */
+/*         EQSTR: equivalent. */
+
 
 /* $ Restrictions */
 
@@ -204,16 +264,25 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing example fragments. */
 
 /* -    SPICELIB Version 1.2.0, 03-AUG-1994 (NJB) */
 
 /*        Code changed to eliminate DO WHILE ( .TRUE. ) construct. */
 /*        The purpose of the change was to eliminate compilation */
-/*        diagnostics relating to unreachable statements.  The code */
+/*        diagnostics relating to unreachable statements. The code */
 /*        ran just fine before this change. */
 
 /* -    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
@@ -235,7 +304,7 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.2.0, 07-JUL-1994 (NJB) */
+/* -    SPICELIB Version 1.2.0, 03-AUG-1994 (NJB) */
 
 /*        Code changed to eliminate DO WHILE ( .TRUE. ) construct. */
 /*        The purpose of the change was to eliminate compilation */
@@ -253,13 +322,12 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 /*           END IF */
 
-
 /* -    SPICELIB Version 1.1.0, 10-MAY-1990 (NJB) */
 
-/*        Loop termination condition fixed.  The routine now checks */
+/*        Loop termination condition fixed. The routine now checks */
 /*        the termination case where both string pointers are pointing */
 /*        to blanks, and at least one pointer has a value greater than */
-/*        the length of the string it corresponds to.  Internal comments */
+/*        the length of the string it corresponds to. Internal comments */
 /*        were updated accordingly. */
 
 /* -& */
@@ -283,16 +351,16 @@ logical eqstr_(char *a, char *b, ftnlen a_len, ftnlen b_len)
 /*              If (A and B are equivalent) then */
 /*                 Increment A and B */
 /*              Else */
-/*                 Return FALSE */
+/*                 Return .FALSE. */
 
 /*           If (A and B are past end) then */
-/*              Return TRUE */
+/*              Return .TRUE. */
 
 /*           Else if (A or B is past end and other is non-blank) then */
-/*              Return FALSE */
+/*              Return .FALSE. */
 
 /*           Else if (A or B is past end and other is blank) then */
-/*              Return TRUE */
+/*              Return .TRUE. */
 
 /*     Note that no pointer gets incremented more than once on each */
 /*     pass through the loop. */

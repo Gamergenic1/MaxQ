@@ -62,7 +62,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ND         I   Number of double precision components. */
 /*     NI         I   Number of integer components. */
@@ -72,35 +72,36 @@
 
 /* $ Detailed_Input */
 
-/*     ND          is the number of double precision components in */
-/*                 the summary to be packed. */
+/*     ND       is the number of double precision components in */
+/*              the summary to be packed. */
 
-/*     NI          is the number of integer components in the summary. */
+/*     NI       is the number of integer components in the summary. */
 
-/*     DC          are the double precision components of the summary. */
+/*     DC       are the double precision components of the summary. */
 
-/*     IC          are the integer components of the summary. */
+/*     IC       are the integer components of the summary. */
 
 /* $ Detailed_Output */
 
-/*     SUM         is an array summary containing the components in DC */
-/*                 and IC. This identifies the contents and location of */
-/*                 a single array within a DAF. */
+/*     SUM      is an array summary containing the components in DC */
+/*              and IC. This identifies the contents and location of */
+/*              a single array within a DAF. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If ND is zero or negative, no DP components are stored. */
+/*     1)  If ND is zero or negative, no DP components are stored. */
 
-/*     2) If NI is zero or negative, no integer components are stored. */
+/*     2)  If NI is zero or negative, no integer components are stored. */
 
-/*     3) If the total size of the summary is greater than 125 double */
-/*        precision words, some components may not be stored. */
+/*     3)  If the total size of the summary is greater than 125 double */
+/*         precision words, some components may not be stored. See */
+/*         $Particulars for details. */
 
 /* $ Files */
 
@@ -123,7 +124,153 @@
 
 /* $ Examples */
 
-/*     Maybe later. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Replace the body ID code 301 (Moon) with a test body ID, */
+/*        e.g. -999, in every descriptor of an SPK file. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DAFPS_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER               CARDI */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5   ) */
+
+/*              INTEGER               DSCSIZ */
+/*              PARAMETER           ( DSCSIZ = 5    ) */
+
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 256  ) */
+
+/*              INTEGER               MAXOBJ */
+/*              PARAMETER           ( MAXOBJ = 1000 ) */
+
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND     = 2    ) */
+
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI     = 6    ) */
+
+/*              INTEGER               NEWCOD */
+/*              PARAMETER           ( NEWCOD = -999 ) */
+
+/*              INTEGER               OLDCOD */
+/*              PARAMETER           ( OLDCOD =  301 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FILSIZ)    FNAME */
+
+/*              DOUBLE PRECISION      DC     ( ND ) */
+/*              DOUBLE PRECISION      SUM    ( DSCSIZ ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               IC     ( NI ) */
+/*              INTEGER               IDS    ( LBCELL : MAXOBJ ) */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Get the SPK file name. */
+/*        C */
+/*              CALL PROMPT ( 'Enter name of the SPK file > ', FNAME ) */
+
+/*        C */
+/*        C     Initialize the set IDS. */
+/*        C */
+/*              CALL SSIZEI ( MAXOBJ, IDS ) */
+
+/*        C */
+/*        C     Open for writing the SPK file. */
+/*        C */
+/*              CALL DAFOPW ( FNAME, HANDLE ) */
+
+/*        C */
+/*        C     Search the file in forward order. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+/*              CALL DAFFNA ( FOUND ) */
+
+/*              DO WHILE ( FOUND ) */
+
+/*        C */
+/*        C        Fetch and unpack the descriptor (aka summary) */
+/*        C        of the current segment. */
+/*        C */
+/*                 CALL DAFGS ( SUM ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+
+/*        C */
+/*        C        Replace ID codes if necessary. */
+/*        C */
+/*                 IF ( IC(1) .EQ. OLDCOD ) THEN */
+
+/*                    IC(1) = NEWCOD */
+
+/*                 END IF */
+
+/*                 IF ( IC(2) .EQ. OLDCOD ) THEN */
+
+/*                    IC(2) = NEWCOD */
+
+/*                 END IF */
+
+/*        C */
+/*        C        Re-pack the descriptor; replace the descriptor */
+/*        C        in the file. */
+/*        C */
+/*                 CALL DAFPS ( ND, NI, DC, IC, SUM ) */
+/*                 CALL DAFRS ( SUM ) */
+
+/*        C */
+/*        C        Find the next segment. */
+/*        C */
+/*                 CALL DAFFNA ( FOUND ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Close the file. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*        C */
+/*        C     Find the set of objects in the SPK file. */
+/*        C */
+/*              CALL SPKOBJ ( FNAME, IDS ) */
+
+/*              WRITE(*,'(A)') 'Objects in the DAF file:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(20I4)') ( IDS(I), I= 1, CARDI ( IDS ) ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the SPK file named de430.bsp, the output was: */
+
+
+/*        Enter name of the SPK file > de430.bsp */
+/*        Objects in the DAF file: */
+
+/*        -999   1   2   3   4   5   6   7   8   9  10 199 299 399 */
+
 
 /* $ Restrictions */
 
@@ -135,9 +282,20 @@
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
 
 /* -    SPICELIB Version 1.0.3, 10-OCT-2012 (EDW) */
 
@@ -160,7 +318,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     pack daf summary */
+/*     pack DAF summary */
 
 /* -& */
 
@@ -244,7 +402,7 @@ L_dafus:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SUM        I   Array summary. */
 /*     ND         I   Number of double precision components. */
@@ -254,35 +412,35 @@ L_dafus:
 
 /* $ Detailed_Input */
 
-/*     SUM         is an array summary. This identifies the contents and */
-/*                 location of a single array within a DAF. */
+/*     SUM      is an array summary. This identifies the contents and */
+/*              location of a single array within a DAF. */
 
-/*     ND          is the number of double precision components in */
-/*                 the summary. */
+/*     ND       is the number of double precision components in */
+/*              the summary. */
 
-/*     NI          is the number of integer components in the summary. */
+/*     NI       is the number of integer components in the summary. */
 
 /* $ Detailed_Output */
 
-/*     DC          are the double precision components of the summary. */
+/*     DC       are the double precision components of the summary. */
 
-/*     IC          are the integer components of the summary. */
+/*     IC       are the integer components of the summary. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If ND is zero or negative, no double precision components */
-/*        are returned. */
+/*     1)  If ND is zero or negative, no double precision components */
+/*         are returned. */
 
-/*     2) If NI is zero or negative, no integer components are returned. */
+/*     2)  If NI is zero or negative, no integer components are returned. */
 
-/*     3) If the total size of the summary is greater than 125 double */
-/*        precision words, some components may not be returned. */
+/*     3)  If the total size of the summary is greater than 125 double */
+/*         precision words, some components may not be returned. */
 
 /* $ Files */
 
@@ -305,113 +463,138 @@ L_dafus:
 
 /* $ Examples */
 
-/*     Use a simple routine to output the double precision and integer */
-/*     values stored in an SPK's segments descriptors. This function */
-/*     opens a DAF for read, performs a forwards search for the DAF */
-/*     arrays, prints segments description for each array found, then */
-/*     closes the DAF. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*           PROGRAM DAF_T */
+/*     1) Use a simple routine to output the double precision and */
+/*        integer values stored in an SPK's segments descriptors. This */
+/*        function opens a DAF for read, performs a forwards search for */
+/*        the DAF arrays, prints segments description for each array */
+/*        found, then closes the DAF. */
 
-/*           INTEGER             HANDLE */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*     C */
-/*     C     Define the summary parameters appropriate */
-/*     C     for an SPK file. */
-/*     C */
-/*           INTEGER             ND */
-/*           PARAMETER         ( ND = 2 ) */
-
-/*           INTEGER             NI */
-/*           PARAMETER         ( NI = 6 ) */
-
-/*           INTEGER             IC( NI ) */
-
-/*           DOUBLE PRECISION    DC( ND ) */
-
-/*           CHARACTER*(32)      KERNEL */
-
-/*           LOGICAL             FOUND */
+/*           de421.bsp */
 
 
-/*     C */
-/*     C     Open a DAF for read. Return a HANDLE referring to the file. */
-/*     C */
-/*           KERNEL = 'de421.bsp' */
-/*           CALL DAFOPR ( KERNEL, HANDLE ) */
+/*        Example code begins here. */
 
-/*     C */
-/*     C     Begin a forward search on the file. */
-/*     C */
-/*           CALL DAFBFS ( HANDLE ) */
 
-/*     C */
-/*     C     Search until a DAF array is found. */
-/*     C */
-/*           CALL DAFFNA ( FOUND ) */
+/*              PROGRAM DAFUS_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Loop while the search finds subsequent DAF arrays. */
-/*     C */
-/*           DO WHILE ( FOUND ) */
+/*        C */
+/*        C     Define the summary parameters appropriate */
+/*        C     for an SPK file. */
+/*        C */
+/*              INTEGER               MAXSUM */
+/*              PARAMETER           ( MAXSUM = 125 ) */
 
-/*              CALL DAFGS ( SUM ) */
-/*              CALL DAFUS ( SUM, ND, NI, DC, IC ) */
+/*              INTEGER               ND */
+/*              PARAMETER           ( ND = 2       ) */
 
-/*              WRITE(*,*)                'Doubles: ', DC(1:ND) */
-/*              WRITE(*, FMT='(A,6I9)' ) 'Integers: ', IC(1:NI) */
+/*              INTEGER               NI */
+/*              PARAMETER           ( NI = 6       ) */
 
-/*     C */
-/*     C        Check for another segment. */
-/*     C */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(32)        KERNEL */
+
+/*              DOUBLE PRECISION      DC     ( ND     ) */
+/*              DOUBLE PRECISION      SUM    ( MAXSUM ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               IC     ( NI ) */
+
+/*              LOGICAL               FOUND */
+
+
+/*        C */
+/*        C     Open a DAF for read. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              KERNEL = 'de421.bsp' */
+/*              CALL DAFOPR ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Begin a forward search on the file. */
+/*        C */
+/*              CALL DAFBFS ( HANDLE ) */
+
+/*        C */
+/*        C     Search until a DAF array is found. */
+/*        C */
 /*              CALL DAFFNA ( FOUND ) */
 
-/*           END DO */
+/*        C */
+/*        C     Loop while the search finds subsequent DAF arrays. */
+/*        C */
+/*              DO WHILE ( FOUND ) */
 
-/*     C */
-/*     C     Safely close the DAF. */
-/*     C */
-/*           CALL DAFCLS ( HANDLE ) */
+/*                 CALL DAFGS ( SUM ) */
+/*                 CALL DAFUS ( SUM, ND, NI, DC, IC ) */
 
-/*           END */
+/*                 WRITE(*,*)                'Doubles:', DC(1:ND) */
+/*                 WRITE(*, FMT='(A,6I9)' ) 'Integers:', IC(1:NI) */
 
-/*     The program outputs: */
+/*        C */
+/*        C        Check for another segment. */
+/*        C */
+/*                 CALL DAFFNA ( FOUND ) */
 
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         1        0        1        2      641   310404 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         2        0        1        2   310405   423048 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         3        0        1        2   423049   567372 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         4        0        1        2   567373   628976 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         5        0        1        2   628977   674740 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         6        0        1        2   674741   715224 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         7        0        1        2   715225   750428 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         8        0        1        2   750429   785632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:         9        0        1        2   785633   820836 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:        10        0        1        2   820837   944040 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       301        3        1        2   944041  1521324 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       399        3        1        2  1521325  2098608 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       199        1        1        2  2098609  2098620 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       299        2        1        2  2098621  2098632 */
-/*      Doubles:   -3169195200.0000000        1696852800.0000000 */
-/*     Integers:       499        4        1        2  2098633  2098644 */
+/*              END DO */
 
-/*      Note, the final entries in the integer array contains the segment */
-/*      start/end indexes. The output indicates the search proceeded */
-/*      from the start of the file (low value index) towards the end */
-/*      (high value index). */
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        1        0        1        2      641   310404 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        2        0        1        2   310405   423048 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        3        0        1        2   423049   567372 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        4        0        1        2   567373   628976 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        5        0        1        2   628977   674740 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        6        0        1        2   674741   715224 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        7        0        1        2   715225   750428 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        8        0        1        2   750429   785632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:        9        0        1        2   785633   820836 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:       10        0        1        2   820837   944040 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      301        3        1        2   944041  1521324 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      399        3        1        2  1521325  2098608 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      199        1        1        2  2098609  2098620 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      299        2        1        2  2098621  2098632 */
+/*         Doubles:  -3169195200.0000000        1696852800.0000000 */
+/*        Integers:      499        4        1        2  2098633  2098644 */
+
+
+/*        Note, the final entries in the integer array contains the */
+/*        segment start/end indexes. The output indicates the search */
+/*        proceeded from the start of the file (low value index) towards */
+/*        the end (high value index). */
 
 /* $ Restrictions */
 
@@ -423,13 +606,24 @@ L_dafus:
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 04-AUG-2020 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard.. */
+/*        Added undeclared variables to code example. */
+
 /* -    SPICELIB Version 1.0.3, 10-OCT-2012 (EDW) */
 
-/*        Added a functional code example to the Examples section. */
+/*        Added a functional code example to the $Examples section. */
 
 /*        Removed the obsolete Reference citation to "NAIF */
 /*        Document 167.0." */
@@ -450,7 +644,14 @@ L_dafus:
 /* -& */
 /* $ Index_Entries */
 
-/*     unpack daf summary */
+/*     unpack DAF summary */
+
+/* -& */
+/* $ Revisions */
+
+/* -    SPICELIB Version 1.1.0, 04-AUG-2020 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
 
 /* -& */
 

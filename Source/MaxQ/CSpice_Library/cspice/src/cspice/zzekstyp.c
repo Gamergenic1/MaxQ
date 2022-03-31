@@ -234,10 +234,10 @@ integer zzekstyp_(integer *ncols, integer *cdscrs)
 /* $ Exceptions */
 
 /*     1)  If NCOLS is non-positive or greater than the maximum allowed */
-/*         number MXCLSG, the error SPICE(INVALIDCOUNT) is signalled. */
+/*         number MXCLSG, the error SPICE(INVALIDCOUNT) is signaled. */
 
 /*     2)  If the input column descriptors do not contain compatible */
-/*         attributes, the error SPICE(BADATTRIBUTES) will be signalled. */
+/*         attributes, the error SPICE(BADATTRIBUTES) will be signaled. */
 
 /* $ Files */
 
@@ -272,6 +272,10 @@ integer zzekstyp_(integer *ncols, integer *cdscrs)
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 06-NOV-1995 (NJB) */
 

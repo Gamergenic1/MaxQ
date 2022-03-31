@@ -10,7 +10,7 @@
 static integer c__0 = 0;
 static integer c__1 = 1;
 
-/* $Procedure      SYRENI ( Rename an existing symbol ) */
+/* $Procedure SYRENI ( Rename an existing symbol ) */
 /* Subroutine */ int syreni_(char *old, char *new__, char *tabsym, integer *
 	tabptr, integer *tabval, ftnlen old_len, ftnlen new_len, ftnlen 
 	tabsym_len)
@@ -88,45 +88,44 @@ static integer c__1 = 1;
 /*     --------  ---  -------------------------------------------------- */
 /*     OLD        I   Name of the symbol to be renamed. */
 /*     NEW        I   New name of the symbol. */
-
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     I   Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     OLD        is the name of the symbol to be renamed. If OLD is */
-/*                not in the symbol table, the tables are not modified. */
+/*     OLD      is the name of the symbol to be renamed. If OLD is */
+/*              not in the symbol table, the tables are not modified. */
 
-/*     NEW        is the new name of the symbol. If the symbol NEW */
-/*                already exists in the symbol table, it is deleted. */
-/*                OLD is then renamed to NEW. */
+/*     NEW      is the new name of the symbol. If the symbol NEW */
+/*              already exists in the symbol table, it is deleted. */
+/*              OLD is then renamed to NEW. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are components of the integer symbol table. */
+/*     TABVAL   are components of the integer symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are components of the integer symbol table. */
-/*                The values previously associated with OLD are now */
-/*                associated with NEW. If OLD is not in the symbol */
-/*                table, the symbol tables are not modified. */
+/*     TABVAL   are components of the integer symbol table. */
+/*              The values previously associated with OLD are now */
+/*              associated with NEW. If OLD is not in the symbol */
+/*              table, the symbol tables are not modified. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the symbol OLD is not in the symbol table, the error */
+/*         SPICE(NOSUCHSYMBOL) is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     If the symbol OLD is not in the symbol table, the error */
-/*     SPICE(NOSUCHSYMBOL) is signalled. */
 
 /* $ Particulars */
 
@@ -197,18 +196,26 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 03-JUN-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. Fixed I/O type */
+/*        of arguments TABSYM, TABPTR and TABVAL in $Brief_I/O table. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

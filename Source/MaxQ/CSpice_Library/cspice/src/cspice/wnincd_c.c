@@ -3,10 +3,10 @@
 -Procedure wnincd_c ( Included in a double precision window )
 
 -Abstract
- 
-   Determine whether an interval is included in a double precision 
-   window. 
- 
+
+   Determine whether an interval is included in a double precision
+   window.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 -Keywords
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 */
 
    #include "SpiceUsr.h"
@@ -48,100 +48,127 @@
 
    SpiceBoolean wnincd_c ( SpiceDouble     left,
                            SpiceDouble     right,
-                           SpiceCell     * window ) 
+                           SpiceCell     * window )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   left, 
-   right      I   Input interval. 
-   window     I   Input window. 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   left,
+   right      I   Input interval.
+   window     I   Input window.
 
    The function returns SPICETRUE if the input interval is included in
-   ---is a subset of some interval in---window.  
- 
+   ---is a subset of some interval in---window.
+
 -Detailed_Input
- 
-   left, 
-   right       are the endpoints of an interval, which may or 
-               may not be contained in one of the intervals in 
-               window. 
 
-   window      is a CSPICE window containing zero or more intervals. 
+   left,
+   right       are the endpoints of an interval, which may or may not be
+               contained in one of the intervals in `window'.
 
-               window must be declared as a double precision SPICECELL.
- 
+   window      is a window containing zero or more intervals.
+
+               `window' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( window, WINDOWSZ );
+
+               where WINDOWSZ is the maximum capacity of `window'.
+
 -Detailed_Output
- 
-   The function returns SPICETRUE if the input interval is included 
-   in the input window---that is, if 
 
-      a(i)  <  left  <  right  <  b(i) 
-            -        -         - 
+   The function returns SPICETRUE if the input interval is included in
+   the input window --- that is, if
 
-   for some interval [ a(i), b(i) ] in window---and is SPICEFALSE
+      a(i)  <  left  <  right  <  b(i)
+            -        -         -
+
+   for some interval [ a(i), b(i) ] in `window' --- and is SPICEFALSE
    otherwise.
- 
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If the input window is a SpiceCell of type other than double 
-      precision, the error SPICE(TYPEMISMATCH) is signaled.
- 
+
+   1)  The cardinality of the input `window' must be even. Left
+       endpoints of stored intervals must be strictly greater than
+       preceding right endpoints. Right endpoints must be greater
+       than or equal to corresponding left endpoints. Invalid window
+       data are not diagnosed by this routine and may lead to
+       unpredictable results.
+
+   2)  The order of the input interval's endpoints, `left' and `right',
+       is not checked, and that this does not affect the result.
+
+   3)  If the `window' cell argument has a type other than
+       SpiceDouble, the error SPICE(TYPEMISMATCH) is signaled. The
+       function returns the value SPICEFALSE.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   None. 
- 
+
+   None.
+
 -Examples
- 
-   Let window contain the intervals 
 
-      [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] 
+   Let window contain the intervals
 
-   Then the following expressions are SPICETRUE 
+      [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ]
+
+   Then the following expressions are SPICETRUE
 
       wnincd_c ( 1.0,  3.0, &window );
       wnincd_c ( 9.0, 10.0, &window );
 
-   and the following expressions are SPICEFALSE. 
+   and the following expressions are SPICEFALSE.
 
-      wnincd_c (  0.0,  2.0, &window ); 
-      wnincd_c ( 13.0, 15.0, &window ); 
+      wnincd_c (  0.0,  2.0, &window );
+      wnincd_c ( 13.0, 15.0, &window );
       wnincd_c ( 29.0, 30.0, &window );
- 
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   H.A. Neilan     (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 05-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Extended description of argument "window" in -Detailed_Input to include
+       type and preferred declaration method.
+
+       Added entries #1 and #2 in -Exceptions section.
+
    -CSPICE Version 1.0.0, 29-JUL-2002 (NJB) (HAN) (WLT) (IMU)
 
 -Index_Entries
- 
-   included in a d.p. window 
- 
+
+   included in a d.p. window
+
 -&
 */
 
@@ -151,23 +178,22 @@
    /*
    Use discovery check-in.
 
-   Make sure cell data type is d.p. 
+   Make sure cell data type is d.p.
    */
-   CELLTYPECHK_VAL ( CHK_DISCOVER, 
-                     "wnincd_c",  SPICE_DP,  window,  SPICEFALSE );
+   CELLTYPECHK_VAL ( CHK_DISCOVER, "wnincd_c", SPICE_DP, window, SPICEFALSE );
 
 
    /*
-   Initialize the cell if necessary. 
+   Initialize the cell if necessary.
    */
    CELLINIT ( window );
-   
+
 
    /*
-   Let the f2c'd routine do the work. 
+   Let the f2c'd routine do the work.
    */
    return ( (SpiceBoolean) wnincd_ ( (doublereal *) &left,
-                                     (doublereal *) &right, 
+                                     (doublereal *) &right,
                                      (doublereal *) (window->base) )  );
 
 } /* End wnincd_c */

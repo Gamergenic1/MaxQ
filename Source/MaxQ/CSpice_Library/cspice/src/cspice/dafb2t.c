@@ -91,8 +91,8 @@ static integer c__5 = 5;
 
 /* $ Abstract */
 
-/*     Deprecated. The routine DAFBT supersedes this routine. */
-/*     NAIF supports this routine only to provide backward */
+/*     Deprecated: This routine has been superseded by the SPICELIB */
+/*     routine DAFBT. NAIF supports this routine only to provide backward */
 /*     compatibility. */
 
 /*     Write the contents of a binary DAF to a text file opened by */
@@ -134,20 +134,20 @@ static integer c__5 = 5;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BINARY     I   Name of an existing binary DAF. */
 /*     TEXT       I   Logical unit connected to text file. */
 
 /* $ Detailed_Input */
 
-/*     BINARY      is the name of an existing binary DAF. */
+/*     BINARY   is the name of an existing binary DAF. */
 
-/*     TEXT        is a logical unit number, to which a text file has */
-/*                 been connected by the calling program, and into */
-/*                 which the contents of BINARY are to be written */
-/*                 (in a form more suitable for transfer between */
-/*                 heterogeneous computing environments). */
+/*     TEXT     is a logical unit number, to which a text file has */
+/*              been connected by the calling program, and into */
+/*              which the contents of BINARY are to be written */
+/*              (in a form more suitable for transfer between */
+/*              heterogeneous computing environments). */
 
 /* $ Detailed_Output */
 
@@ -155,15 +155,15 @@ static integer c__5 = 5;
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If for some reason the text file cannot be written, */
-/*        the error SPICE(DAFWRITEFAIL) is signalled. */
+/*     1)  If for some reason the text file cannot be written, */
+/*         the error SPICE(DAFWRITEFAIL) is signaled. */
 
-/*     2) If for some reason the ID word cannot be read from the DAF */
-/*        file, the error SPICE(DAFREADFAIL) will be signalled. */
+/*     2)  If for some reason the ID word cannot be read from the DAF */
+/*         file, the error SPICE(DAFREADFAIL) is signaled. */
 
 /* $ Files */
 
@@ -247,28 +247,40 @@ static integer c__5 = 5;
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 3.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved DAF */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
+
 /* -    SPICELIB Version 3.0.1, 26-JUL-2012 (EDW) */
 
-/*        Edited Abstract section to use "Deprecated" keyword */
+/*        Edited $Abstract section to use "Deprecated" keyword */
 /*        and state replacement routine. */
 
-/*        Eliminated unneeded Revisions section. */
+/*        Eliminated unneeded $Revisions section. */
 
 /* -    SPICELIB Version 3.0.0, 16-NOV-2001 (FST) */
 
 /*        This routine still uses a naked READ to retrieve the */
 /*        file IDWORD from the first 8 characters stored in the */
-/*        file record.  It may be that future environments */
+/*        file record. It may be that future environments */
 /*        will have characters whose storage exceeds 1 byte, */
 /*        in which case this routine will require modification. */
 /*        One possibility is to call the private file record */
@@ -303,7 +315,7 @@ static integer c__5 = 5;
 /*              CALL SETMSG ( 'The attempt to write to file ''#''' // */
 /*        .                   ' failed. IOSTAT = #.'                ) */
 /*              CALL ERRFNM ( '#', TEXT                             ) */
-/*              CALL SIGERR ( 'SPICE(DAFWRITEFAIL)'                 ) */
+/*              CALL SIGERR ( SPICE(DAFWRITEFAIL)                 ) */
 /*              CALL CHKOUT ( 'DAFB2T'                              ) */
 /*              RETURN */
 
@@ -319,7 +331,7 @@ static integer c__5 = 5;
 /*                 IF ( IOSTAT .NE. 0 ) THEN */
 /*                    CALL SETMSG ( 'Value of IOSTAT was: #. ' ) */
 /*                    CALL ERRINT ( '#', IOSTAT                ) */
-/*                    CALL SIGERR ( 'SPICE(DAFWRITEFAIL)'      ) */
+/*                    CALL SIGERR ( SPICE(DAFWRITEFAIL)      ) */
 /*                  END IF */
 
 /*        The answer to the question is: */
@@ -331,17 +343,17 @@ static integer c__5 = 5;
 
 /*           C     2) If for some reason the ID word cannot be read from */
 /*           C        the DAF file, the error SPICE(DAFREADFAIL) will be */
-/*           C        signalled. */
+/*           C        signaled. */
 
 /*        because the file ID word is now read from the binary DAF file */
 /*        rather than being hard coded as 'NAIF/DAF' in this routine. */
 
-/*        Added a statement to the $ Particulars section to the effect */
+/*        Added a statement to the $Particulars section to the effect */
 /*        that this routine has been made obsolete by the introduction of */
 /*        the routine DAFBT, and that we strongly recommend the use of */
 /*        the new routine. */
 
-/*        Modified the $ Abstract section to reflect the fact that this */
+/*        Modified the $Abstract section to reflect the fact that this */
 /*        routine is obsolete. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
@@ -358,7 +370,7 @@ static integer c__5 = 5;
 /* -& */
 /* $ Index_Entries */
 
-/*     binary daf to text */
+/*     DEPRECATED binary DAF to text */
 
 /* -& */
 
@@ -611,7 +623,7 @@ L100007:
 	for (i__ = 1; i__ <= i__2; ++i__) {
 	    iostat = do_lio(&c__5, &c__1, (char *)&dc[(i__3 = i__ - 1) < 125 
 		    && 0 <= i__3 ? i__3 : s_rnge("dc", i__3, "dafb2t_", (
-		    ftnlen)524)], (ftnlen)sizeof(doublereal));
+		    ftnlen)540)], (ftnlen)sizeof(doublereal));
 	    if (iostat != 0) {
 		goto L100008;
 	    }
@@ -637,7 +649,7 @@ L100008:
 	for (i__ = 1; i__ <= i__3; ++i__) {
 	    iostat = do_lio(&c__3, &c__1, (char *)&ic[(i__2 = i__ - 1) < 250 
 		    && 0 <= i__2 ? i__2 : s_rnge("ic", i__2, "dafb2t_", (
-		    ftnlen)539)], (ftnlen)sizeof(integer));
+		    ftnlen)555)], (ftnlen)sizeof(integer));
 	    if (iostat != 0) {
 		goto L100009;
 	    }
@@ -655,9 +667,9 @@ L100009:
 	    return 0;
 	}
 	begin = ic[(i__2 = ni - 2) < 250 && 0 <= i__2 ? i__2 : s_rnge("ic", 
-		i__2, "dafb2t_", (ftnlen)554)];
+		i__2, "dafb2t_", (ftnlen)570)];
 	end = ic[(i__2 = ni - 1) < 250 && 0 <= i__2 ? i__2 : s_rnge("ic", 
-		i__2, "dafb2t_", (ftnlen)555)];
+		i__2, "dafb2t_", (ftnlen)571)];
 	while(begin <= end) {
 /* Computing MIN */
 	    i__2 = begin + 99;
@@ -699,7 +711,7 @@ L100010:
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 		iostat = do_lio(&c__5, &c__1, (char *)&buffer[(i__3 = i__ - 1)
 			 < 100 && 0 <= i__3 ? i__3 : s_rnge("buffer", i__3, 
-			"dafb2t_", (ftnlen)586)], (ftnlen)sizeof(doublereal));
+			"dafb2t_", (ftnlen)602)], (ftnlen)sizeof(doublereal));
 		if (iostat != 0) {
 		    goto L100011;
 		}

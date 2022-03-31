@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      INSSUB ( Insert a substring ) */
+/* $Procedure INSSUB ( Insert a substring ) */
 /* Subroutine */ int inssub_(char *in, char *sub, integer *loc, char *out, 
 	ftnlen in_len, ftnlen sub_len, ftnlen out_len)
 {
@@ -79,27 +79,27 @@
 
 /* $ Detailed_Input */
 
-/*     IN          is an input character string, into which a substring */
-/*                 is to be inserted. */
+/*     IN       is an input character string, into which a substring */
+/*              is to be inserted. */
 
-/*     SUB         is the substring to be inserted. Leading and trailing */
-/*                 blanks are significant. */
+/*     SUB      is the substring to be inserted. Leading and trailing */
+/*              blanks are significant. */
 
-/*     LOC         is the position in the input string at which the */
-/*                 substring is to be inserted. To append to the */
-/*                 string, set LOC equal to LEN(IN) + 1. */
+/*     LOC      is the index in the input string at which the substring */
+/*              is to be inserted. The range of LOC is 1:LEN(IN). To */
+/*              append to the string, set LOC equal to LEN(IN)+1. */
 
 /* $ Detailed_Output */
 
-/*     OUT         is the output string. This is equivalent to the */
-/*                 string that would be created by the concatenation */
+/*     OUT      is the output string. This is equivalent to the */
+/*              string that would be created by the concatenation */
 
-/*                    OUT = IN(1:LOC-1) // SUB // IN(LOC: ) */
+/*                 OUT = IN(1:LOC-1) // SUB // IN(LOC: ) */
 
-/*                 If the output string is too long, it is truncated */
-/*                 on the right. */
+/*              If the output string is too long, it is truncated */
+/*              on the right. */
 
-/*                 OUT may overwrite IN.  OUT may NOT overwrite SUB. */
+/*              OUT may overwrite IN. OUT may NOT overwrite SUB. */
 
 /* $ Parameters */
 
@@ -108,7 +108,7 @@
 /* $ Exceptions */
 
 /*     1)  If LOC is not in the interval [1, LEN(IN)+1], the error */
-/*         SPICE(INVALIDINDEX) is signalled. */
+/*         SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
 
@@ -128,45 +128,113 @@
 
 /* $ Examples */
 
-/*     The following examples illustrate the use of INSSUB. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        IN                SUB      LOC    OUT */
-/*        ----------------- -------  ---    ------------------------ */
-/*        'ABCDEFGHIJ'      ' YXZ '    3    'AB XYZ CDEFGHIJ' */
-/*        'The rabbit'      'best '    5    'The best rabbit' */
-/*        ' other woman'    'The'      1    'The other woman' */
-/*        'An Apple a day'  ' keeps'  15    'An Apple a day keeps' */
-/*        'Apple a day'     'An '      0     An error is signalled. */
-/*        'Apple a day'     'An '     -3     An error is signalled. */
-/*        'An Apple a day'  ' keeps'  16     An error is signalled. */
+/*     1) The following table illustrates the use of INSSUB. */
+
+/*           IN                SUB      LOC    OUT */
+/*           ----------------- -------  ---    ------------------------ */
+/*           'ABCDEFGHIJ'      ' YXZ '    3    'AB XYZ CDEFGHIJ' */
+/*           'The rabbit'      'best '    5    'The best rabbit' */
+/*           ' other woman'    'The'      1    'The other woman' */
+/*           'An Apple a day'  ' keeps'  15    'An Apple a day keeps' */
+/*           'Apple a day'     'An '      0     An error is signaled. */
+/*           'Apple a day'     'An '     -3     An error is signaled. */
+/*           'An Apple a day'  ' keeps'  16     An error is signaled. */
+
+
+/*     2) INSSUB could be used to insert substrings at any position */
+/*        within the declared length of the input string. Use it to */
+/*        add an ascii arrow (--->) at the end of the string. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM INSSUB_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               STRSZ */
+/*              PARAMETER           ( STRSZ = 20 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(STRSZ)     STRIN */
+/*              CHARACTER*(STRSZ)     STROUT */
+
+/*        C */
+/*        C     Assign the input string. */
+/*        C */
+/*              DATA                  STRIN / '0123456789         .' / */
+
+
+/*        C */
+/*        C     Insert a substring at index 17. This should leave 5 */
+/*        C     blanks after the sequence of numbers. Note that the */
+/*        C     resulting string is truncated. */
+/*        C */
+/*              CALL INSSUB ( STRIN, '--->', 17, STROUT ) */
+
+/*              WRITE(*,*) 'Input string:  ', STRIN */
+/*              WRITE(*,*) 'Output string: ', STROUT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Input string:  0123456789         . */
+/*         Output string: 0123456789      ---> */
+
 
 /* $ Restrictions */
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 01-OCT-2021 (JDR) (NJB) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated long error message for LOC out of range check, */
+/*        providing valid range of values. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
 
 /* -    SPICELIB Version 1.1.0, 24-OCT-1994 (NJB) */
 
-/*        Bug fixes made. Now does discovery check-in.  Header sections */
-/*        re-arranged.  Some clean-up of header format done. */
+/*        Bug fixes made. Now does discovery check-in. Header sections */
+/*        re-arranged. Some clean-up of header format done. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -178,23 +246,23 @@
 
 /* -    SPICELIB Version 1.1.0, 24-OCT-1994 (NJB) */
 
-/*        Bug fix:  case where insertion location follows end of */
-/*        input string is now handled correctly.  Formerly, an */
+/*        Bug fix: case where insertion location follows end of */
+/*        input string is now handled correctly. Formerly, an */
 /*        out-of-range substring bound violation was incurred in this */
 /*        case. */
 
-/*        Bug fix:  use of SHIFTC routine in old implementation */
+/*        Bug fix: use of SHIFTC routine in old implementation */
 /*        resulted in output string being truncated at length */
 /*        LEN(IN), which is not consistent with the routine's */
 /*        specification. */
 
-/*        Now does discovery check-in.  Header sections re-arranged. */
+/*        Now does discovery check-in. Header sections re-arranged. */
 /*        Some clean-up of header format done. */
 
-/* -    Beta Version 2.0.0, 4-JAN-1989 (HAN) */
+/* -    Beta Version 2.0.0, 04-JAN-1989 (HAN) */
 
 /*        If the location at which the substring is to be inserted is */
-/*        not in the interval [1, LEN(IN)+1], an error is signalled. */
+/*        not in the interval [1, LEN(IN)+1], an error is signaled. */
 /*        Locations not within that interval refer to non-existent */
 /*        characters positions. (To append to the string, set the */
 /*        location equal to LEN(IN)+1.) */
@@ -227,7 +295,10 @@
 
     if (*loc < 1 || *loc > inlen + 1) {
 	chkin_("INSSUB", (ftnlen)6);
-	setmsg_("Location was *.", (ftnlen)15);
+	setmsg_("Index at which the substring is to be inserted is out of th"
+		"e valid range [1,#]. Requested index was *.", (ftnlen)102);
+	i__1 = inlen + 1;
+	errint_("#", &i__1, (ftnlen)1);
 	errint_("*", loc, (ftnlen)1);
 	sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	chkout_("INSSUB", (ftnlen)6);

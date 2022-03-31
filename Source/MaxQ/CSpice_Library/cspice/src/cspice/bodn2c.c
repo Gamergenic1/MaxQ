@@ -15,8 +15,8 @@
 
 /* $ Abstract */
 
-/*    Translate the name of a body or object to the corresponding SPICE */
-/*    integer ID code. */
+/*     Translate the name of a body or object to the corresponding SPICE */
+/*     integer ID code. */
 
 /* $ Disclaimer */
 
@@ -57,54 +57,62 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   Body name to be translated into a SPICE ID code. */
 /*     CODE       O   SPICE integer ID code for the named body. */
-/*     FOUND      O   True if translated, otherwise false. */
+/*     FOUND      O   .TRUE. if translated, otherwise false. */
 /*     MAXL       P   Maximum length of NAME string. */
 
 /* $ Detailed_Input */
 
-/*     NAME         is the name of a body or object, such as a planet, */
-/*                  satellite, comet, asteroid, barycenter, DSN station, */
-/*                  spacecraft, or instrument, that is "known" to the */
-/*                  SPICE system, whether through hard-coded */
-/*                  registration or run-time registration in the SPICE */
-/*                  kernel pool. */
+/*     NAME     is the name of a body or object, such as a planet, */
+/*              satellite, comet, asteroid, barycenter, DSN station, */
+/*              spacecraft, or instrument, that is "known" to the */
+/*              SPICE system, whether through hard-coded */
+/*              registration or run-time registration in the SPICE */
+/*              kernel pool. */
 
-/*                 Case and leading and trailing blanks in a name */
-/*                 are not significant.  However when a name is made */
-/*                 up of more than one word, they must be separated by */
-/*                 at least one blank.  That is, all of the following */
-/*                 strings are equivalent names: */
+/*              Case and leading and trailing blanks in a name */
+/*              are not significant. However when a name is made */
+/*              up of more than one word, they must be separated by */
+/*              at least one blank. That is, all of the following */
+/*              strings are equivalent names: */
 
-/*                         'JUPITER BARYCENTER' */
-/*                         'Jupiter Barycenter' */
-/*                         'JUPITER BARYCENTER   ' */
-/*                         'JUPITER    BARYCENTER' */
-/*                         '   JUPITER BARYCENTER' */
+/*                  'JUPITER BARYCENTER' */
+/*                  'Jupiter Barycenter' */
+/*                  'JUPITER BARYCENTER   ' */
+/*                  'JUPITER    BARYCENTER' */
+/*                  '   JUPITER BARYCENTER' */
 
-/*                 However, 'JUPITERBARYCENTER' is not equivalent to */
-/*                 the names above. */
+/*              However, 'JUPITERBARYCENTER' is not equivalent to */
+/*              the names above. */
 
 /* $ Detailed_Output */
 
-/*     CODE        is the SPICE or user-defined integer ID code for the */
-/*                 named body. */
+/*     CODE     is the SPICE or user-defined integer ID code for the */
+/*              named body. */
 
-/*     FOUND       is true if NAME has a translation.  Otherwise, FOUND */
-/*                 is false. */
+/*     FOUND    is .TRUE. if NAME has a translation. Otherwise, FOUND */
+/*              is .FALSE. */
 
 /* $ Parameters */
 
-/*     MAXL        is the maximum allowable length of a body name. */
-/*                 The value of this parameter may be found in the */
-/*                 include file 'zzbodtrn.inc'. */
+/*     MAXL     is the maximum allowable length of a body name. The */
+/*              current value of this parameter is 36. See the SPICELIB */
+/*              include file zzbodtrn.inc for details. */
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If there is any problem with the body name-ID mapping kernel */
+/*         variables present in the kernel pool, an error is signaled by */
+/*         a routine in the call tree of this routine. */
+
+/*     2)  Body name strings are upper-cased, their leading and trailing */
+/*         blanks removed, and embedded blanks are compressed out, after */
+/*         which they get truncated to the maximum body name length MAXL. */
+/*         Therefore, two body names that differ only after that maximum */
+/*         length are considered equal. */
 
 /* $ Files */
 
@@ -114,7 +122,7 @@
 /*        NAIF_BODY_NAME += ( <name 1>, ... ) */
 /*        NAIF_BODY_CODE += ( <code 1>, ... ) */
 
-/*     See NAIF_IDs for details. */
+/*     See naif_ids.req for details. */
 
 /* $ Particulars */
 
@@ -147,14 +155,14 @@
 /*     handling input strings, since it accepts both body names and */
 /*     strings representing integer ID codes, for example '399'. */
 
-/*     Refer to NAIF_IDs for the list of name/code associations built */
+/*     Refer to naif_ids.req for the list of name/code associations built */
 /*     into SPICE, and for details concerning adding new name/code */
 /*     associations at run time by loading text kernels. */
 
 /* $ Examples */
 
-/*     1.  In the following code fragment, BODVCD returns the radii */
-/*         of Jupiter.  BODVCD requires the SPICE integer ID code for */
+/*     1)  In the following code fragment, BODVCD returns the radii */
+/*         of Jupiter. BODVCD requires the SPICE integer ID code for */
 /*         Jupiter, so we use BODN2C to convert the name to */
 /*         its corresponding integer ID code. */
 
@@ -163,7 +171,7 @@
 /*            CALL BODVCD ( JUPID, 'RADII', 3, N, RADII ) */
 
 
-/*     2.  In this example, we assume that only the set of default */
+/*     2)  In this example, we assume that only the set of default */
 /*         name/code pairs has been defined. */
 
 /*         Given these names, BODN2C will return the following codes: */
@@ -194,7 +202,7 @@
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  See exception <2>. */
 
 /* $ Literature_References */
 
@@ -202,22 +210,31 @@
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        description of MAXL parameter and added $Exceptions and */
+/*        $Restrictions. */
+
 /* -    SPICELIB Version 1.0.8, 16-MAY-2009 (EDW) */
 
-/*        Edit to Particulars section to document the BODC2S routine. */
+/*        Edit to $Particulars section to document the BODC2S routine. */
 
 /* -    SPICELIB Version 1.0.7, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section. */
+/*        Corrected the contents of the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.6, 31-JAN-2008 (NJB) */
 
@@ -225,7 +242,7 @@
 
 /* -    SPICELIB Version 1.0.5, 24-OCT-2005 (NJB) */
 
-/*        Header update:  changed references to BODVAR to references */
+/*        Header update: changed references to BODVAR to references */
 /*        to BODVCD. */
 
 /* -    SPICELIB Version 1.0.4, 20-JUL-2004 (EDW) */
@@ -239,7 +256,7 @@
 
 /* -    SPICELIB Version 1.0.2, 26-AUG-2002 (FST) */
 
-/*        Added discussion of MAXL to the parameters section. */
+/*        Added discussion of MAXL to the $Parameters section. */
 
 /* -    SPICELIB Version 1.0.1, 22-AUG-2001 (EDW) */
 
@@ -250,7 +267,7 @@
 /*        This was the BODN2C entry point from the original BODTRN */
 /*        subroutine that was in the NAIF toolkit SUPPORT library. */
 /*        When the private subroutine ZZBODTRN was added to SPICELIB, */
-/*        superceding the BODTRN from SUPPORT, the body ID code/name */
+/*        superseding the BODTRN from SUPPORT, the body ID code/name */
 /*        translation interface from the original BODTRN was moved to */
 /*        SPICELIB so that ID codes did not have to be hard coded by */
 /*        users of the Toolkit. */

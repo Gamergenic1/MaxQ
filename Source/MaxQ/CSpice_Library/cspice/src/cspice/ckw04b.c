@@ -12,7 +12,7 @@ static integer c__6 = 6;
 static integer c__0 = 0;
 static integer c__3 = 3;
 
-/* $Procedure      CKW04B ( CK type 04: Begin a segment ) */
+/* $Procedure CKW04B ( CK type 04: Begin a segment ) */
 /* Subroutine */ int ckw04b_(integer *handle, doublereal *begtim, integer *
 	inst, char *ref, logical *avflag, char *segid, ftnlen ref_len, ftnlen 
 	segid_len)
@@ -670,32 +670,33 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the file handle of a CK file that has been */
-/*                opened for writing. */
+/*     HANDLE   is the file handle of a CK file that has been */
+/*              opened for writing. */
 
-/*     SEGID      is the segment identifier. CK segment identifier */
-/*                may contain up to 40 printing ASCII characters. */
+/*     SEGID    is the segment identifier. CK segment identifier */
+/*              may contain up to 40 printing ASCII characters. */
 
-/*     INST       is the SPICE ID for the SC structure or instrument */
-/*                whose orientation are to be recorded in a CK file. */
+/*     INST     is the SPICE ID for the SC structure or instrument */
+/*              whose orientation are to be recorded in a CK file. */
 
-/*     AVFLAG     angular rates flag indicates whether segment will */
-/*                contain angular rate information. */
+/*     AVFLAG   is a logical flag that indicates whether segment will */
+/*              contain angular rate information. */
 
-/*     REF        is the name of a reference frame that pointing is */
-/*                given with respect to, for example 'J2000'. */
+/*     REF      is the name of a reference frame that pointing is */
+/*              given with respect to, for example 'J2000'. */
 
-/*     BEGTIM     is the encoded SCLK time for the start of the segment */
-/*                coverage. */
+/*     BEGTIM   is the encoded SCLK time for the start of the segment */
+/*              coverage. */
 
 /* $ Detailed_Output */
 
-/*     None.      The input data is used to create the segment summary */
-/*                for the segment being started in the DAF file */
-/*                associated with HANDLE. */
+/*     None. */
 
-/*                See the $ Particulars section for details about the */
-/*                structure of a type 4 CK segment. */
+/*     The input data is used to create the segment summary for the */
+/*     segment being started in the DAF file associated with HANDLE. */
+
+/*     See the $Particulars section for details about the structure of a */
+/*     type 4 CK segment. */
 
 /* $ Parameters */
 
@@ -704,21 +705,22 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1) File access errors are diagnosed by routines in the call tree */
-/*        of this routine. */
+/*     1)  If a file access error occurs while this routine begins a new */
+/*         type 04 segment, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
-/*     2) If numeric ID for given reference frame cannot be resolved */
-/*        from it's name SPICE(INVALIDREFFRAME) is signalled. */
+/*     2)  If numeric ID for given reference frame cannot be resolved */
+/*         from it's name, the error SPICE(INVALIDREFFRAME) is signaled. */
 
-/*     2) If SEGID is more than 40 characters long, the error */
-/*        SPICE(SEGIDTOOLONG) is signalled. */
+/*     3)  If SEGID is more than 40 characters long, the error */
+/*         SPICE(SEGIDTOOLONG) is signaled. */
 
-/*     3) If SEGID contains any nonprintable characters, the error */
-/*        SPICE(NONPRINTABLECHARS) is signalled. */
+/*     4)  If SEGID contains any nonprintable characters, the error */
+/*         SPICE(NONPRINTABLECHARS) is signaled. */
 
 /* $ Files */
 
-/*     See HANDLE in the $ Detailed_Input section. */
+/*     See HANDLE in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -855,8 +857,8 @@ static integer c__3 = 3;
 
 /* $ Restrictions */
 
-/*     1) The file containing the segment should be opened for read */
-/*        or write access either by CKOPN or DAFOPW. */
+/*     1)  The file containing the segment should be opened for read */
+/*         or write access either by CKOPN or DAFOPW. */
 
 /* $ Literature_References */
 
@@ -864,10 +866,15 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     Y.K. Zaiko     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     Y.K. Zaiko         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 17-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 18-APR-2014 (BVS) */
 

@@ -5,57 +5,24 @@
 
 #include "f2c.h"
 
-/* Table of constant values */
-
-static doublereal c_b16 = 1.;
-
-/* $Procedure      DNEARP ( Derivative of near point ) */
+/* $Procedure DNEARP ( Derivative of near point ) */
 /* Subroutine */ int dnearp_(doublereal *state, doublereal *a, doublereal *b, 
 	doublereal *c__, doublereal *dnear, doublereal *dalt, logical *found)
 {
-    /* Initialized data */
-
-    static doublereal gradm[9]	/* was [3][3] */ = { 1.,0.,0.,0.,1.,0.,0.,0.,
-	    1. };
-    static doublereal m[9]	/* was [3][3] */ = { 1.,0.,0.,0.,1.,0.,0.,0.,
-	    1. };
-
-    /* System generated locals */
-    integer i__1, i__2;
-    doublereal d__1;
-
-    /* Builtin functions */
-    integer s_rnge(char *, integer, char *, integer);
-
-    /* Local variables */
-    doublereal grad[3], temp[3];
-    extern doublereal vdot_(doublereal *, doublereal *);
-    extern /* Subroutine */ int vsub_(doublereal *, doublereal *, doublereal *
-	    );
-    extern doublereal vtmv_(doublereal *, doublereal *, doublereal *);
-    integer i__;
-    doublereal l;
     extern /* Subroutine */ int chkin_(char *, ftnlen);
-    doublereal denom, dterm[3];
-    extern /* Subroutine */ int vlcom_(doublereal *, doublereal *, doublereal 
-	    *, doublereal *, doublereal *);
-    doublereal norml[3];
-    extern /* Subroutine */ int unorm_(doublereal *, doublereal *, doublereal 
-	    *);
     extern logical failed_(void);
-    doublereal length, lprime;
     extern /* Subroutine */ int nearpt_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *), chkout_(
 	    char *, ftnlen);
-    doublereal zenith[3];
     extern logical return_(void);
-    extern /* Subroutine */ int mxv_(doublereal *, doublereal *, doublereal *)
-	    ;
+    extern /* Subroutine */ int zzdnpt_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, logical *);
 
 /* $ Abstract */
 
-/*     Compute the ellipsoid surface point nearest to a specified */
-/*     position; also compute the velocity of this point. */
+/*     Compute the state (position and velocity) of an ellipsoid surface */
+/*     point nearest to the position component of a specified state. */
 
 /* $ Disclaimer */
 
@@ -88,7 +55,9 @@ static doublereal c_b16 = 1.;
 
 /* $ Keywords */
 
-/*     ELLIPSOID, GEOMETRY, DERIVATIVE */
+/*     DERIVATIVE */
+/*     ELLIPSOID */
+/*     GEOMETRY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -96,78 +65,73 @@ static doublereal c_b16 = 1.;
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STATE      I   State of an object in body-fixed coordinates. */
-/*     A          I   Length of semi-axis parallel to x-axis. */
-/*     B          I   Length of semi-axis parallel to y-axis. */
-/*     C          I   Length on semi-axis parallel to z-axis. */
+/*     A          I   Length of semi-axis parallel to X-axis. */
+/*     B          I   Length of semi-axis parallel to Y-axis. */
+/*     C          I   Length on semi-axis parallel to Z-axis. */
 /*     DNEAR      O   State of the nearest point on the ellipsoid. */
 /*     DALT       O   Altitude and derivative of altitude. */
-/*     FOUND      O   Tells whether DNEAR is degenerate. */
+/*     FOUND      O   Flag that indicates whether DNEAR is degenerate. */
 
 /* $ Detailed_Input */
 
-/*     STATE      is a 6-vector giving the position and velocity of */
-/*                some object in the body-fixed coordinates of the */
-/*                ellipsoid. */
+/*     STATE    is a 6-vector giving the position and velocity of some */
+/*              object in the body-fixed coordinates of the ellipsoid. */
 
-/*                In body-fixed coordinates, the semi-axes of the */
-/*                ellipsoid are aligned with the x, y, and z-axes of the */
-/*                coordinate system. */
+/*              In body-fixed coordinates, the semi-axes of the ellipsoid */
+/*              are aligned with the X, Y, and Z-axes of the coordinate */
+/*              system. */
 
-/*     A          is the length of the semi-axis of the ellipsoid */
-/*                that is parallel to the x-axis of the body-fixed */
-/*                coordinate system. */
+/*     A        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the X-axis of the body-fixed coordinate */
+/*              system. */
 
-/*     B          is the length of the semi-axis of the ellipsoid */
-/*                that is parallel to the y-axis of the body-fixed */
-/*                coordinate system. */
+/*     B        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the Y-axis of the body-fixed coordinate */
+/*              system. */
 
-/*     C          is the length of the semi-axis of the ellipsoid */
-/*                that is parallel to the z-axis of the body-fixed */
-/*                coordinate system. */
+/*     C        is the length of the semi-axis of the ellipsoid that is */
+/*              parallel to the Z-axis of the body-fixed coordinate */
+/*              system. */
 
 /* $ Detailed_Output */
 
+/*     DNEAR    is the 6-vector giving the position and velocity in */
+/*              body-fixed coordinates of the point on the ellipsoid, */
+/*              closest to the object whose position and velocity are */
+/*              represented by STATE. */
 
-/*     DNEAR      is the 6-vector giving the position and velocity */
-/*                in body-fixed coordinates of the point on the */
-/*                ellipsoid, closest to the object whose position */
-/*                and velocity are represented by STATE. */
+/*              While the position component of DNEAR is always */
+/*              meaningful, the velocity component of DNEAR will be */
+/*              meaningless if FOUND if .FALSE. (See the discussion of */
+/*              the meaning of FOUND below.) */
 
-/*                While the position component of DNEAR is always */
-/*                meaningful, the velocity component of DNEAR will be */
-/*                meaningless if FOUND if .FALSE.  (See the discussion */
-/*                of the meaning of FOUND below.) */
+/*     DALT     is an array of two double precision numbers. The first */
+/*              gives the altitude of STATE with respect to the */
+/*              ellipsoid. The second gives the rate of change of the */
+/*              altitude. */
 
+/*              Note that the rate of change of altitude is meaningful if */
+/*              and only if FOUND is .TRUE. (See the discussion of the */
+/*              meaning of FOUND below.) */
 
-/*     DALT       is an array of two double precision numbers.  The */
-/*                first gives the altitude of STATE with respect to */
-/*                the ellipsoid.  The second gives the rate of */
-/*                change of the altitude. */
+/*     FOUND    is a logical flag indicating whether or not the velocity */
+/*              portion of DNEAR is meaningful. If the velocity portion */
+/*              of DNEAR is meaningful FOUND will be returned with a */
+/*              value of .TRUE. Under very rare circumstance the velocity */
+/*              of the near point is undefined. Under these circumstances */
+/*              FOUND will be returned with the value .FALSE. */
 
-/*                Note that the rate of change of altitude is meaningful */
-/*                if and only if FOUND is .TRUE.  (See the discussion of */
-/*                the meaning of FOUND below.) */
+/*              FOUND can be .FALSE. only for states whose position */
+/*              components are inside the ellipsoid and then only at */
+/*              points on a special surface contained inside the */
+/*              ellipsoid called the focal set of the ellipsoid. */
 
-/*     FOUND      is a logical flag indicating whether or not the */
-/*                velocity portion of DNEAR is meaningful. */
-/*                If the velocity portion of DNEAR is meaningful */
-/*                FOUND will be returned with a value of .TRUE. */
-/*                Under very rare circumstance the velocity of the */
-/*                near point is undefined.  Under these circumstances */
-/*                FOUND will be returned with the value .FALSE. */
-
-/*                FOUND can be .FALSE. only for states whose position */
-/*                components are inside the ellipsoid and then only at */
-/*                points on a special surface contained inside the */
-/*                ellipsoid called the focal set of the ellipsoid. */
-
-/*                A point in the interior is on this special surface */
-/*                only if there are two or more points on the ellipsoid */
-/*                that are closest to it.  The origin is such a point */
-/*                and the only such point if the ellipsoid is a */
-/*                sphere.  For non-spheroidal ellipsoids the focal */
-/*                set contains small portions of the planes of */
-/*                symmetry of the ellipsoid. */
+/*              A point in the interior is on this special surface only */
+/*              if there are two or more points on the ellipsoid that are */
+/*              closest to it. The origin is such a point and the only */
+/*              such point if the ellipsoid is a sphere. For */
+/*              non-spheroidal ellipsoids the focal set contains small */
+/*              portions of the planes of symmetry of the ellipsoid. */
 
 /* $ Parameters */
 
@@ -175,15 +139,14 @@ static doublereal c_b16 = 1.;
 
 /* $ Exceptions */
 
+/*     1)  If the axes are non-positive, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     1) If the axes are non-positive, a routine in the call tree */
-/*        of this routine will diagnose the error. */
-
-/*     2) If an object is passing through the interior of an ellipsoid */
-/*        there are points at which there is more than 1 point on */
-/*        the ellipsoid that is closest to the object.  At these */
-/*        points the velocity of the near point is undefined. (See */
-/*        the description of the output variable FOUND). */
+/*     2)  If an object is passing through the interior of an ellipsoid */
+/*         there are points at which there is more than 1 point on the */
+/*         ellipsoid that is closest to the object. At these points the */
+/*         velocity of the near point is undefined. (See the description */
+/*         of the output variable FOUND). */
 
 /* $ Files */
 
@@ -191,80 +154,278 @@ static doublereal c_b16 = 1.;
 
 /* $ Particulars */
 
-/*     If an object is moving relative to some triaxial body along */
-/*     a trajectory C(t) then there is a companion trajectory N(t) */
-/*     that gives the point on the ellipsoid that is closest to */
-/*     C(t) as a function of t.  The instantaneous position and */
-/*     velocity of C(t) (STATE) are sufficient to compute the */
-/*     instantaneous position and velocity of N(t) (DNEAR). */
+/*     If an object is moving relative to some triaxial body along a */
+/*     trajectory C(t) then there is a companion trajectory N(t) that */
+/*     gives the point on the ellipsoid that is closest to C(t) as a */
+/*     function of `t'. The instantaneous position and velocity of C(t), */
+/*     STATE, are sufficient to compute the instantaneous position and */
+/*     velocity of N(t), DNEAR. */
 
-/*     This routine computes DNEAR from STATE.  In addition it returns */
-/*     the altitude and rate of change of altitude. */
+/*     This routine computes DNEAR from STATE. In addition it returns the */
+/*     altitude and rate of change of altitude. */
 
-/*     Note that this routine can compute DNEAR for STATES outside, */
-/*     on, or inside the ellipsoid.  However, the velocity of DNEAR */
-/*     and derivative of altitude do not exist for a "small" set */
-/*     of STATES  in the interior of the ellipsoid. See the */
-/*     discussion of FOUND above for a description of this set of */
-/*     points. */
+/*     Note that this routine can compute DNEAR for STATE outside, on, */
+/*     or inside the ellipsoid. However, the velocity of DNEAR and */
+/*     derivative of altitude do not exist for a "small" set of STATE */
+/*     in the interior of the ellipsoid. See the discussion of FOUND */
+/*     above for a description of this set of points. */
 
 /* $ Examples */
 
-/*     Example 1.  Speed of a ground track. */
-/*     ======================================= */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
 
-/*     Suppose you wish to compute the velocity of the ground track */
-/*     of a satellite as it passes over a location on the earth */
-/*     and that the moment of passage (ET) has been previously */
-/*     determined.  (We assume that the spacecraft is close enough */
-/*     to the surface that light time corrections do not matter.) */
+/*     1) Suppose you wish to compute the velocity of the ground track */
+/*        of a satellite as it passes over a location on Mars and that */
+/*        the moment of passage has been previously determined. (We */
+/*        assume that the spacecraft is close enough to the surface that */
+/*        light time corrections do not matter.) */
 
-/*     We let */
-
-/*        BODY    be the idcode for the body */
-/*        FRAME   be the string representing the body's body-fixed frame */
-/*        SCID    be the idcode of the spacecraft */
-
-/*     First get the axes of the body. */
-
-/*        CALL BODVCD ( BODY, 'RADII', 3, DIM, ABC  ) */
-
-/*        A = ABC(1) */
-/*        B = ABC(2) */
-/*        C = ABC(3) */
-
-/*        CALL SPKEZ  ( SCID,  ET,   FRAME,   'NONE', BODY, STATE, LT ) */
-/*        CALL DNEARP ( STATE, A, B, C, DNEAR, DALT ) */
-
-/*     DNEAR contains the state of the subspacecraft point. */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*     Example 2. Doppler shift of an altimeter. */
-/*     ========================================= */
+/*           KPL/MK */
 
-/*     Suppose you wish to compute the one-way doppler shift of a radar */
-/*     altimeter mounted on board a spacecraft as it passes */
-/*     over some region.  Moreover, assume that for your */
-/*     purposes it is sufficient to neglect effects of atmosphere, */
-/*     topography and antenna pattern for the sake of this */
-/*     computation.  We use the same notation as in the previous example. */
+/*           File: dnearp_ex1.tm */
 
-/*     First get the axes of the body. */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*        CALL BODVCD ( BODY, 'RADII', 3, DIM, ABC  ) */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*        A = ABC(1) */
-/*        B = ABC(2) */
-/*        C = ABC(3) */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*        CALL SPKEZ  ( SCID,  ET,   FRAME,   'NONE', BODY, STATE, LT ) */
-/*        CALL DNEARP ( STATE, A, B, C, DNEAR, DALT ) */
+/*              File name                        Contents */
+/*              ---------                        -------- */
+/*              pck00010.tpc                     Planet orientation and */
+/*                                               radii */
+/*              naif0012.tls                     Leapseconds */
+/*              de430.bsp                        Planetary ephemeris */
+/*              mar097.bsp                       Mars satellite ephemeris */
+/*              mro_psp4_ssd_mro95a.bsp          MRO ephemeris */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'pck00010.tpc', */
+/*                                  'naif0012.tls', */
+/*                                  'de430.bsp', */
+/*                                  'mar097.bsp', */
+/*                                  'mro_psp4_ssd_mro95a.bsp' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
 
 
-/*     The change in frequency is given by multiplying SHIFT times the */
-/*     carrier frequency */
+/*        Example code begins here. */
 
-/*        SHIFT = ( DALT(2) / CLIGHT() ) */
+
+/*              PROGRAM DNEARP_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      VNORM */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         BODYNM */
+/*              PARAMETER           ( BODYNM = 'MARS' ) */
+
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'dnearp_ex1.tm' ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      A */
+/*              DOUBLE PRECISION      B */
+/*              DOUBLE PRECISION      C */
+/*              DOUBLE PRECISION      DALT   ( 2 ) */
+/*              DOUBLE PRECISION      DNEAR  ( 6 ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      RADII  ( 3 ) */
+/*              DOUBLE PRECISION      STATE  ( 6 ) */
+/*              DOUBLE PRECISION      GTVEL  ( 3 ) */
+
+/*              INTEGER               DIM */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load kernel files via the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+
+/*        C */
+/*        C     Convert the TDB input time string to seconds past */
+/*        C     J2000, TDB. */
+/*        C */
+/*              CALL STR2ET ( '2007 SEP 30 00:00:00 TDB', ET ) */
+
+/*        C */
+/*        C     First get the axes of the body. */
+/*        C */
+/*              CALL BODVRD ( BODYNM, 'RADII', 3, DIM, RADII ) */
+/*              CALL VUPACK ( RADII, A, B, C ) */
+
+/*        C */
+/*        C     Get the geometric state of the spacecraft with */
+/*        C     respect to BODYNM in the body-fixed reference frame */
+/*        C     at ET and compute the state of the sub-spacecraft point. */
+/*        C */
+/*              CALL SPKEZR ( 'MRO',  ET,    'IAU_MARS', 'NONE', */
+/*             .              BODYNM, STATE, LT                  ) */
+/*              CALL DNEARP ( STATE, A, B, C, DNEAR, DALT, FOUND ) */
+
+/*              IF ( FOUND ) THEN */
+
+/*        C */
+/*        C        DNEAR contains the state of the subspacecraft point. */
+/*        C */
+/*                 CALL VEQU ( DNEAR(4), GTVEL ) */
+
+/*                 WRITE(*,'(A,3F10.6)') */
+/*             .        'Ground-track velocity (km/s):', GTVEL */
+/*                 WRITE(*,'(A,F10.6)') */
+/*             .        'Ground-track speed    (km/s):', VNORM( GTVEL ) */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) 'DNEAR is degenerate.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Ground-track velocity (km/s):  0.505252  1.986553 -2.475506 */
+/*        Ground-track speed    (km/s):  3.214001 */
+
+
+/*     2) Suppose you wish to compute the one-way doppler shift of a */
+/*        radar mounted on board a spacecraft as it passes over some */
+/*        region. Moreover, assume that for your purposes it is */
+/*        sufficient to neglect effects of atmosphere, topography and */
+/*        antenna pattern for the sake of this computation. */
+
+/*        Use the meta-kernel from Example 1 above. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DNEARP_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      CLIGHT */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         BODYNM */
+/*              PARAMETER           ( BODYNM = 'MARS' ) */
+
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'dnearp_ex1.tm' ) */
+
+/*        C */
+/*        C     Define the central frequency of the radar, */
+/*        C     in megahertz. */
+/*        C */
+/*              DOUBLE PRECISION      RCFRQ */
+/*              PARAMETER           ( RCFRQ  = 20.D0 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      A */
+/*              DOUBLE PRECISION      B */
+/*              DOUBLE PRECISION      C */
+/*              DOUBLE PRECISION      DALT   ( 2 ) */
+/*              DOUBLE PRECISION      DNEAR  ( 6 ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      RADII  ( 3 ) */
+/*              DOUBLE PRECISION      SHIFT */
+/*              DOUBLE PRECISION      STATE  ( 6 ) */
+
+/*              INTEGER               DIM */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load kernel files via the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+
+/*        C */
+/*        C     Convert the TDB input time string to seconds past */
+/*        C     J2000, TDB. */
+/*        C */
+/*              CALL STR2ET ( '2007 SEP 30 00:00:00 TDB', ET ) */
+
+/*        C */
+/*        C     First get the axes of the body. */
+/*        C */
+/*              CALL BODVRD ( BODYNM, 'RADII', 3, DIM, RADII ) */
+/*              CALL VUPACK ( RADII, A, B, C ) */
+
+/*        C */
+/*        C     Get the geometric state of the spacecraft with */
+/*        C     respect to BODYNM in the body-fixed reference frame */
+/*        C     at ET and compute the state of the sub-spacecraft point. */
+/*        C */
+/*              CALL SPKEZR ( 'MRO',  ET,    'IAU_MARS', 'NONE', */
+/*             .              BODYNM, STATE, LT                  ) */
+/*              CALL DNEARP ( STATE, A, B, C, DNEAR, DALT, FOUND ) */
+
+/*              IF ( FOUND ) THEN */
+
+/*        C */
+/*        C        The change in frequency is given by multiplying SHIFT */
+/*        C        times the carrier frequency */
+/*        C */
+/*                 SHIFT = ( DALT(2) / CLIGHT() ) */
+/*                 WRITE(*,'(A,F20.16)') 'Central frequency (MHz):', */
+/*             .                          RCFRQ */
+/*                 WRITE(*,'(A,F20.16)') 'Doppler shift     (MHz):', */
+/*             .                          RCFRQ * SHIFT */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) 'DNEAR is degenerate.' */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Central frequency (MHz): 20.0000000000000000 */
+/*        Doppler shift     (MHz): -0.0000005500991159 */
+
 
 /* $ Restrictions */
 
@@ -276,10 +437,19 @@ static doublereal c_b16 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.0, 26-OCT-2021 (JDR) (EDW) */
+
+/*        Reimplemented routine using ZZDNPT. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code examples, based on the existing code fragments. */
 
 /* -    SPICELIB Version 1.1.2, 26-JUN-2008 (NJB) */
 
@@ -288,25 +458,24 @@ static doublereal c_b16 = 1.;
 
 /* -    SPICELIB Version 1.1.1, 24-OCT-2005 (NJB) */
 
-/*        Header update:  changed references to BODVAR to references */
+/*        Header update: changed references to BODVAR to references */
 /*        to BODVCD. */
 
 /* -    SPICELIB Version 1.1.0, 05-MAR-1998 (WLT) */
 
 /*        In the previous version of the routine FOUND could be */
-/*        returned without being set to TRUE when the velocity */
+/*        returned without being set to .TRUE. when the velocity */
 /*        of the near point and rate of change of altitude */
-/*        could be determined.  This error has been corrected. */
+/*        could be determined. This error has been corrected. */
 
 /* -    SPICELIB Version 1.0.0, 15-JUN-1995 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
 
 /*     Velocity of the nearest point on an ellipsoid */
 /*     Rate of change of the altitude over an ellipsoid */
-/*     Derivative of altitude over an ellipoid */
+/*     Derivative of altitude over an ellipsoid */
 /*     Velocity of a ground track */
 
 /* -& */
@@ -315,12 +484,6 @@ static doublereal c_b16 = 1.;
 
 
 /*     Local Variables */
-
-
-/*     Saved Variables */
-
-
-/*     Initial Values */
 
 
 /*     Standard SPICE error handling. */
@@ -346,182 +509,17 @@ static doublereal c_b16 = 1.;
 	return 0;
     }
 
-/*     Now for the work of this routine.  We need to compute the */
-/*     velocity component of DNEAR. */
+/*     Calculate the derivative of the near point and altitude. */
 
-/*     In all of the discussions below we let <,> stand for the */
-/*     dot product. */
+    zzdnpt_(state, dnear, a, b, c__, &dnear[3], &dalt[1], found);
 
-/*     Let P be the position (first three components) of STATE */
-/*     and let N be the position (first three components) of DNEAR. */
+/*     Check error status. Bail out if failure in call. */
 
-/*     The surface of the ellipsoid is described as the level set */
-/*     f(x,y,z) = 1 for the function f defined by */
-
-/*         f(x,y,z) = x**2/a**2 + y**2/b**2 + z**2/c**2 */
-
-/*     Let GRAD be the "half" gradiant of f. Then for some L */
-
-
-/*           N + L * GRAD = P                         ( 1 ) */
-
-
-/*     So that */
-/*                < P - N, GRAD > */
-/*           L =  -------------- */
-/*                < GRAD , GRAD > */
-
-/*                          GRAD */
-/*             =  < P - N, ------ >  /  | GRAD | */
-/*                         |GRAD| */
-
-/*     Since GRAD is computed at a point on the level set f(x,y,z) = 1 */
-/*     we don't have to worry about the magnitude of |GRAD| being */
-/*     so small that underflow can occur. */
-
-/*     Note that the half gradiant of f  can be computed by simple */
-/*     vector multiplication */
-
-/*                       [ 1/A**2    0       0    ] [ x ] */
-/*        GRAD(x,y,z)  = |   0     1/B**2    0    | | y | */
-/*                       [   0       0     1/C**2 ] [ z ] */
-
-/*     We call the matrix above GRADM.  The correct off */
-/*     diagonal values have been established in the data statement */
-/*     following the declaration section of this routine. */
-
-    gradm[0] = 1. / (*a * *a);
-    gradm[4] = 1. / (*b * *b);
-    gradm[8] = 1. / (*c__ * *c__);
-    vsub_(state, dnear, zenith);
-    mxv_(gradm, dnear, grad);
-    unorm_(grad, norml, &length);
-    l = vdot_(zenith, norml) / length;
-
-/*     We can rewrite equation (1) as */
-
-/*        P = N + L * GRADM * N */
-
-/*     from this it follows that */
-
-/*        P' =  N' + L' * GRADM * N */
-/*                 + L  * GRADM * N' */
-
-/*           = ( IDENT + L*GRADM ) * N'   + L' * GRADM * N */
-
-/*           = ( IDENT + L*GRADM ) * N'   + L' * GRAD */
-
-/*     where IDENT is the 3x3 identity matrix. */
-
-/*     Let M be the inverse of the matrix IDENT + L*GRADM. (Provided */
-/*     of course that all of the diagonal entries are non-zero). */
-
-/*     If we multiply both sides of the equation above by M */
-/*     we have */
-
-
-/*        M*P'  = N'  + L'* M * GRAD                      ( 2 ) */
-
-
-/*     Recall now that N' is orthogonal to GRAD (N' lies in the */
-/*     tangent plane to the ellipsoid at N and GRAD is normal */
-/*     to this tangent plane).  Thus */
-
-/*        < GRAD, M*P' > = L' < GRAD, M * GRAD > */
-
-/*     and */
-
-/*                 < GRAD, M*P'   > */
-/*        L'   =   ----------------- */
-/*                 < GRAD, M*GRAD > */
-
-
-/*             =   VTMV ( GRAD, M, P' ) / VTMV ( GRAD, M, GRAD ) */
-
-/*     Let's pause now to compute M and L'. */
-
-/*        This is where things could go bad.  M might not exist (which */
-/*        indicates STATE is on the focal set of the ellipsoid).  In */
-/*        addition it is conceivable that VTMV ( GRAD, M, GRAD ) is */
-/*        zero.  This turns out not to be possible.  However, the */
-/*        demonstration of this fact requires delving into the details */
-/*        of how N was computed by NEARPT.  Rather than spending a */
-/*        lot of time explaining the details we will make an */
-/*        unnecessary but inexpensive check that we don't divide by */
-/*        zero when computing L'. */
-
-    for (i__ = 1; i__ <= 3; ++i__) {
-	dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("dterm", i__1,
-		 "dnearp_", (ftnlen)458)] = l * gradm[(i__2 = i__ + i__ * 3 - 
-		4) < 9 && 0 <= i__2 ? i__2 : s_rnge("gradm", i__2, "dnearp_", 
-		(ftnlen)458)] + 1.;
-    }
-    for (i__ = 1; i__ <= 3; ++i__) {
-	if (dterm[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("dterm", 
-		i__1, "dnearp_", (ftnlen)463)] != 0.) {
-	    m[(i__1 = i__ + i__ * 3 - 4) < 9 && 0 <= i__1 ? i__1 : s_rnge(
-		    "m", i__1, "dnearp_", (ftnlen)464)] = 1. / dterm[(i__2 = 
-		    i__ - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("dterm", i__2, 
-		    "dnearp_", (ftnlen)464)];
-	} else {
-	    *found = FALSE_;
-	    chkout_("DNEARP", (ftnlen)6);
-	    return 0;
-	}
-    }
-    denom = vtmv_(grad, m, grad);
-    if (denom == 0.) {
+    if (failed_()) {
 	*found = FALSE_;
 	chkout_("DNEARP", (ftnlen)6);
 	return 0;
     }
-    lprime = vtmv_(grad, m, &state[3]) / denom;
-
-/*     Now that we have L' we can easily compute N'. Rewriting */
-/*     equation (2) from above we have. */
-
-/*        N'  = M * ( P' - L'*GRAD ) */
-
-    d__1 = -lprime;
-    vlcom_(&c_b16, &state[3], &d__1, grad, temp);
-    mxv_(m, temp, &dnear[3]);
-
-/*     Only one thing left to do.  Compute the derivative */
-/*     of the altitude ALT.  Recall that */
-
-/*                              GRAD */
-/*        ALT     = < P  -  N, ------ > */
-/*                             |GRAD| */
-
-/*                             GRAD */
-/*        dALT/dt = < P' - N', ------ > */
-/*                             |GRAD| */
-
-/*                                        GRAD */
-/*                 + < P  -  N, Deriv of{------} > */
-/*                                       |GRAD| */
-
-/*     The second term is zero.  To see this note that P - N is parallel */
-/*     to GRAD.  Moreover, since GRAD/|GRAD| is a unit vector its */
-/*     derivative is necessarily orthogonal to it.  Hence it is */
-/*     orthogonal to GRAD and P-N. */
-
-/*     Thus */
-/*                              GRAD */
-/*        dALT/dt = < P' - N', ------ > */
-/*                             |GRAD| */
-
-/*     But as we discussed earlier N' is orthogonal to GRAD.  Thus */
-
-/*                          GRAD */
-/*        dALT/dt = < P' , ------ > */
-/*                         |GRAD| */
-
-/*     We've already computed GRAD/|GRAD| (NORML). Hence */
-
-/*        dALT/dt = < P', NORML > */
-
-    dalt[1] = vdot_(&state[3], norml);
     chkout_("DNEARP", (ftnlen)6);
     return 0;
 } /* dnearp_ */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SPKE02 ( SPK, evaluate record, type 2 ) */
+/* $Procedure SPKE02 ( SPK, evaluate record, type 2 ) */
 /* Subroutine */ int spke02_(doublereal *et, doublereal *record, doublereal *
 	xyzdot)
 {
@@ -70,7 +70,7 @@
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Evaluation epoch. */
 /*     RECORD     I   Data record. */
@@ -78,47 +78,47 @@
 
 /* $ Detailed_Input */
 
-/*     ET          is the epoch at which a state vector or Euler angle */
-/*                 state is to be computed. The epoch is represented as */
-/*                 seconds past J2000 TDB. */
+/*     ET       is the epoch at which a state vector or Euler angle */
+/*              state is to be computed. The epoch is represented as */
+/*              seconds past J2000 TDB. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will yield three function components and their */
-/*                 derivatives with respect to time. The record */
-/*                 structure for SPK type 2 data is: */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will yield three function components and their */
+/*              derivatives with respect to time. The record */
+/*              structure for SPK type 2 data is: */
 
-/*                    +--------------------------------------+ */
-/*                    | record size (excluding this element) | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval midpoint           | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval radius             | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for X position component      | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for Y position component      | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for Z position component      | */
-/*                    +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | record size (excluding this element) | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval midpoint           | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval radius             | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for X position component      | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for Y position component      | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for Z position component      | */
+/*                 +--------------------------------------+ */
 
-/*                 In the above record */
+/*              In the above record */
 
-/*                    - Times are expressed as seconds past J2000 TDB. */
-/*                    - Position components have units of km. */
+/*                 - Times are expressed as seconds past J2000 TDB. */
+/*                 - Position components have units of km. */
 
-/*                 See PCKE02 for a description of PCK type 2 records. */
+/*              See PCKE02 for a description of PCK type 2 records. */
 
-/*                 RECORD must be declared by the caller with size large */
-/*                 enough to accommodate the largest record that can be */
-/*                 returned by this routine. See the INCLUDE file */
-/*                 spkrec.inc for the correct record length. */
+/*              RECORD must be declared by the caller with size large */
+/*              enough to accommodate the largest record that can be */
+/*              returned by this routine. See the INCLUDE file */
+/*              spkrec.inc for the correct record length. */
 
 /* $ Detailed_Output */
 
-/*     XYZDOT      is a 6-vector. In order, the components of XYZDOT are */
-/*                 X, Y, Z, X', Y', and Z'. Units for state evaluations */
-/*                 will be km and km/sec. Units for angles will be */
-/*                 radians and radians/sec. */
+/*     XYZDOT   is a 6-vector. In order, the components of XYZDOT are */
+/*              X, Y, Z, X', Y', and Z'. Units for state evaluations */
+/*              will be km and km/sec. Units for angles will be */
+/*              radians and radians/sec. */
 
 /* $ Parameters */
 
@@ -126,12 +126,12 @@
 
 /* $ Exceptions */
 
-/*     1) If the input record contains an invalid coefficient count, */
-/*        the error SPICE(INVALIDCOUNT) will be signaled. */
+/*     1)  If the input record contains an invalid coefficient count, */
+/*         the error SPICE(INVALIDCOUNT) is signaled. */
 
-/*     2) If the input record contains invalid domain transformation */
-/*        parameters, the error will be diagnosed by a routine in the */
-/*        call tree of this routine. */
+/*     2)  If the input record contains invalid domain transformation */
+/*         parameters, an error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
@@ -152,7 +152,7 @@
 /* $ Examples */
 
 /*     The data returned by the routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
 /*     completely. */
 
@@ -188,15 +188,24 @@
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     R.E. Thurman    (JPL) */
-/*     K.S. Zukor      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 2.0.0, 18-JAN-2014 (NJB) */
 
@@ -217,7 +226,7 @@
 
 /* -    SPICELIB Version 1.0.2, 23-AUG-1991 (HAN) */
 
-/*        SPK02 was removed from the Required_Reading section of the */
+/*        SPK02 was removed from the $Required_Reading section of the */
 /*        header. The information in the SPK02 Required Reading file */
 /*        is now part of the SPK Required Reading file. */
 
@@ -228,10 +237,9 @@
 /* -    SPICELIB Version 1.0.0, 31-JAN-1990 (RET) */
 
 /* -& */
-
 /* $ Index_Entries */
 
-/*     evaluate type_2 spk segment */
+/*     evaluate type_2 SPK segment */
 
 /* -& */
 
@@ -299,8 +307,8 @@
 
 	chbint_(&record[cofloc - 1], &degp, &record[1], et, &xyzdot[(i__1 = 
 		i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("xyzdot", i__1, 
-		"spke02_", (ftnlen)297)], &xyzdot[(i__2 = i__ + 2) < 6 && 0 <=
-		 i__2 ? i__2 : s_rnge("xyzdot", i__2, "spke02_", (ftnlen)297)]
+		"spke02_", (ftnlen)308)], &xyzdot[(i__2 = i__ + 2) < 6 && 0 <=
+		 i__2 ? i__2 : s_rnge("xyzdot", i__2, "spke02_", (ftnlen)308)]
 		);
     }
     return 0;

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      RMAIND ( Remainder --- double precision ) */
+/* $Procedure RMAIND ( Remainder --- double precision ) */
 /* Subroutine */ int rmaind_(doublereal *num, doublereal *denom, doublereal *
 	q, doublereal *rem)
 {
@@ -64,7 +64,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NUM        I   Numerator used to compute quotient and remainder. */
 /*     DENOM      I   Denominator used to compute quotient and remainder. */
@@ -73,16 +73,16 @@
 
 /* $ Detailed_Input */
 
-/*     NUM        is the numerator of a quotient */
+/*     NUM      is the numerator of a quotient */
 
-/*     DENOM      is the denominator of a quotient */
+/*     DENOM    is the denominator of a quotient */
 
 /* $ Detailed_Output */
 
-/*     Q          is the largest integer less than or equal to the */
-/*                quotient NUM/DENOM */
+/*     Q        is the largest integer less than or equal to the */
+/*              quotient NUM/DENOM */
 
-/*     REM        is the remainder of the integer division NUM/DENOM */
+/*     REM      is the remainder of the integer division NUM/DENOM */
 
 /* $ Parameters */
 
@@ -90,8 +90,7 @@
 
 /* $ Exceptions */
 
-/*     1) If DENOM is zero, the error 'SPICE(DIVIDEBYZERO)' will be */
-/*        signalled. */
+/*     1)  If DENOM is zero, the error SPICE(DIVIDEBYZERO) is signaled. */
 
 /* $ Files */
 
@@ -109,15 +108,15 @@
 
 /*         3) REM belongs to the half open interval [0, ABS(DENOM) ) */
 
-/*     This routine serves as a macro.  In this way the code to perform */
+/*     This routine serves as a macro. In this way the code to perform */
 /*     this task can be written and maintained in a single location. */
 
 /* $ Examples */
 
 /*     One frequently needs to compute the  ``Two pi modulus'' of a */
-/*     number.  For positive numbers the FORTRAN intrinsic mod */
-/*     function works well.  However, for negative numbers the */
-/*     intrinsic will return a negative modulus.  This routine */
+/*     number. For positive numbers the FORTRAN intrinsic mod */
+/*     function works well. However, for negative numbers the */
+/*     intrinsic will return a negative modulus. This routine */
 /*     can be used to compute the positive two pi modulus (MOD2PI) for */
 /*     any number X by the call: */
 
@@ -125,7 +124,8 @@
 
 /* $ Restrictions */
 
-/*     Arithmetic overflows are not trapped or detected by this routine. */
+/*     1)  Arithmetic overflows are not trapped or detected by this */
+/*         routine. */
 
 /* $ Literature_References */
 
@@ -133,12 +133,18 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 01-DEC-1995 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 01-DEC-1995 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

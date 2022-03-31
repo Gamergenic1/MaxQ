@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__7 = 7;
 
-/* $Procedure      CKR02 ( C-kernel, read pointing record, data type 2 ) */
+/* $Procedure CKR02 ( C-kernel, read pointing record, data type 2 ) */
 /* Subroutine */ int ckr02_(integer *handle, doublereal *descr, doublereal *
 	sclkdp, doublereal *tol, doublereal *record, logical *found)
 {
@@ -93,61 +93,61 @@ static integer c__7 = 7;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
 /*     SCLKDP     I   Spacecraft clock time. */
 /*     TOL        I   Time tolerance */
 /*     RECORD     O   Pointing data record. */
-/*     FOUND      O   True when data is found. */
+/*     FOUND      O   .TRUE. when data is found. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the integer handle of the CK file containing the */
-/*                segment. */
+/*     HANDLE   is the integer handle of the CK file containing the */
+/*              segment. */
 
-/*     DESCR      is the descriptor of the segment. */
+/*     DESCR    is the descriptor of the segment. */
 
-/*     SCLKDP     is the encoded spacecraft clock time for which */
-/*                pointing is being requested. */
+/*     SCLKDP   is the encoded spacecraft clock time for which */
+/*              pointing is being requested. */
 
-/*     TOL        is a time tolerance, measured in the same units as */
-/*                encoded spacecraft clock. */
+/*     TOL      is a time tolerance, measured in the same units as */
+/*              encoded spacecraft clock. */
 
-/*                When SCLKDP falls within the bounds of one of the */
-/*                intervals then the tolerance has no effect. However, */
-/*                if the request time is not in one of the intervals */
-/*                then the tolerance is used to determine if pointing */
-/*                at one of the interval endpoints should be returned. */
+/*              When SCLKDP falls within the bounds of one of the */
+/*              intervals then the tolerance has no effect. However, */
+/*              if the request time is not in one of the intervals */
+/*              then the tolerance is used to determine if pointing */
+/*              at one of the interval endpoints should be returned. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the pointing record.  Contents are as follows: */
+/*     RECORD   is the pointing record. Contents are as follows: */
 
-/*                   RECORD( 1  ) = Start time of interval. */
-/*                   RECORD( 2  ) = Time for which pointing was found. */
-/*                   RECORD( 3  ) = Seconds per tick rate. */
+/*                 RECORD( 1  ) = Start time of interval. */
+/*                 RECORD( 2  ) = Time for which pointing was found. */
+/*                 RECORD( 3  ) = Seconds per tick rate. */
 
-/*                   RECORD( 4  ) = q0 */
-/*                   RECORD( 5  ) = q1 */
-/*                   RECORD( 6  ) = q2 */
-/*                   RECORD( 7  ) = q3 */
+/*                 RECORD( 4  ) = q0 */
+/*                 RECORD( 5  ) = q1 */
+/*                 RECORD( 6  ) = q2 */
+/*                 RECORD( 7  ) = q3 */
 
-/*                   RECORD( 8  ) = av1 */
-/*                   RECORD( 9  ) = av2 */
-/*                   RECORD( 10 ) = av3 */
+/*                 RECORD( 8  ) = av1 */
+/*                 RECORD( 9  ) = av2 */
+/*                 RECORD( 10 ) = av3 */
 
-/*                The quantities q0 - q3 are the components of the */
-/*                quaternion that represents the C-matrix associated with */
-/*                the start time of the interval. The quantities av1, */
-/*                av2, and av3 represent the angular velocity vector of */
-/*                the interval. The components of the angular velocity */
-/*                vector are specified relative to the inertial reference */
-/*                frame of the segment. */
+/*              The quantities q0 - q3 are the components of the */
+/*              quaternion that represents the C-matrix associated with */
+/*              the start time of the interval. The quantities av1, */
+/*              av2, and av3 represent the angular velocity vector of */
+/*              the interval. The components of the angular velocity */
+/*              vector are specified relative to the inertial reference */
+/*              frame of the segment. */
 
-/*     FOUND      is true if a record was found to satisfy the pointing */
-/*                request. */
+/*     FOUND    is .TRUE. if a record was found to satisfy the pointing */
+/*              request. */
 
 /* $ Parameters */
 
@@ -156,16 +156,16 @@ static integer c__7 = 7;
 /* $ Exceptions */
 
 /*     1)  If the specified handle does not belong to any file that is */
-/*         currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         currently known to be open, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /*     2)  If DESCR is not a valid, packed descriptor of a segment in */
 /*         the CK file specified by HANDLE, the results of this routine */
 /*         are unpredictable. */
 
 /*     3)  If the segment is not of data type 2, as specified in the */
-/*         third integer component of the segment descriptor, then */
-/*         the error SPICE(WRONGDATATYPE) is signalled. */
+/*         third integer component of the segment descriptor, */
+/*         the error SPICE(WRONGDATATYPE) is signaled. */
 
 /* $ Files */
 
@@ -178,7 +178,7 @@ static integer c__7 = 7;
 /*     the structure of a type 2 pointing segment. */
 
 /*     This routine searches a type 2 segment and determines if the */
-/*     request for pointing can be satisfied by the segment.  If so, */
+/*     request for pointing can be satisfied by the segment. If so, */
 /*     then it returns information in the array RECORD that CKE02 uses */
 /*     to evaluate the pointing at the time for which pointing was found. */
 
@@ -189,19 +189,21 @@ static integer c__7 = 7;
 /*     endpoint closest to the request time, provided that endpoint is */
 /*     within the tolerance specified by the user. */
 
-
 /* $ Examples */
 
 /*     The CKRnn routines are usually used in tandem with the CKEnn */
 /*     routines, which evaluate the record returned by CKRnn to give */
 /*     the pointing information and output time. */
 
-/*     The following code fragment searches through a file (attached to */
-/*     HANDLE) for all segments applicable to the Voyager 2 wide angle */
-/*     camera, for a particular spacecraft clock time, that are of data */
-/*     types 1 or 2. It then evaluates the pointing for that epoch and */
-/*     prints the result. */
+/*     The following code fragment searches backwards through a file */
+/*     (attached to HANDLE) for all segments applicable to the Voyager 2 */
+/*     wide angle camera, for a particular spacecraft clock time, that */
+/*     are of data types 1 or 2. It then evaluates the pointing for that */
+/*     epoch and prints the result. */
 
+/*     The search performed here does not mimic the behavior of the CK */
+/*     reader APIs CKGP and CKGPAV, which consider data from multiple CK */
+/*     files, when available. See the CK Required reading for details. */
 
 /*           SC     = -32 */
 /*           INST   = -32002 */
@@ -219,10 +221,11 @@ static integer c__7 = 7;
 /*           CALL SCENCD ( SC, SCLKCH, SCLKDP ) */
 
 /*     C */
-/*     C     Search from the beginning through all segments. */
+/*     C     Search backwards from the end of the CK file through all */
+/*     C     of the segments. */
 /*     C */
-/*           CALL DAFBFS ( HANDLE ) */
-/*           CALL DAFFNA ( SFND   ) */
+/*           CALL DAFBBS ( HANDLE ) */
+/*           CALL DAFFPA ( SFND   ) */
 
 /*           DO WHILE ( SFND ) */
 
@@ -269,14 +272,14 @@ static integer c__7 = 7;
 
 /*              END IF */
 
-/*              CALL DAFFNA ( SFND ) */
+/*              CALL DAFFPA ( SFND ) */
 
 /*           END DO */
 
 /* $ Restrictions */
 
-/*     1) The file containing the segment should be opened for read, */
-/*        either by CKLPF or DAFOPR. */
+/*     1)  The file containing the segment should be opened for read, */
+/*         either by CKLPF or DAFOPR. */
 
 /* $ Literature_References */
 
@@ -284,9 +287,21 @@ static integer c__7 = 7;
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.2, 06-JUL-2021 (NJB) (JDR) */
+
+/*        Updated code example to use backwards search. Added */
+/*        note regarding difference between this search and those */
+/*        performed by the CK reader APIs CKGP and CKGPAV. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.1, 22-AUG-2006 (EDW) */
 
@@ -308,7 +323,7 @@ static integer c__7 = 7;
 /* -& */
 /* $ Index_Entries */
 
-/*     read ck type_2 pointing data record */
+/*     read CK type_2 pointing data record */
 
 /* -& */
 
@@ -570,7 +585,7 @@ static integer c__7 = 7;
 	if (*sclkdp <= stopi) {
 	    *found = TRUE_;
 	    start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("buffer", i__1, "ckr02_", (ftnlen)619)];
+		    s_rnge("buffer", i__1, "ckr02_", (ftnlen)633)];
 	    clkout = *sclkdp;
 	    index = i__;
 	} else {
@@ -586,7 +601,7 @@ static integer c__7 = 7;
 		if (*sclkdp - *tol <= stopi) {
 		    *found = TRUE_;
 		    start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 
-			    : s_rnge("buffer", i__1, "ckr02_", (ftnlen)638)];
+			    : s_rnge("buffer", i__1, "ckr02_", (ftnlen)652)];
 		    clkout = stopi;
 		    index = i__;
 		} else {
@@ -600,7 +615,7 @@ static integer c__7 = 7;
 
 		diff1 = *sclkdp - stopi;
 		diff2 = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("buffer", i__1, "ckr02_", (ftnlen)656)] - *
+			s_rnge("buffer", i__1, "ckr02_", (ftnlen)670)] - *
 			sclkdp;
 		if (min(diff1,diff2) <= *tol) {
 		    *found = TRUE_;
@@ -611,15 +626,15 @@ static integer c__7 = 7;
 		    if (diff2 <= diff1) {
 			start = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 
 				: s_rnge("buffer", i__1, "ckr02_", (ftnlen)
-				667)];
+				681)];
 			clkout = buffer[(i__1 = i__) < 100 && 0 <= i__1 ? 
 				i__1 : s_rnge("buffer", i__1, "ckr02_", (
-				ftnlen)668)];
+				ftnlen)682)];
 			index = i__ + 1;
 		    } else {
 			start = buffer[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
 				i__1 : s_rnge("buffer", i__1, "ckr02_", (
-				ftnlen)673)];
+				ftnlen)687)];
 			clkout = stopi;
 			index = i__;
 		    }

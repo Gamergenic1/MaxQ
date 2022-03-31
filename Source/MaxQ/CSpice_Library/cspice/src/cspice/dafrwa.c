@@ -56,7 +56,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     RECNO, */
 /*     WORDNO     I   Record, word numbers of a location within DAF. */
@@ -65,25 +65,25 @@
 /* $ Detailed_Input */
 
 /*     RECNO, */
-/*     WORDNO      are the record and word numbers of an arbitrary */
-/*                 location within a DAF. */
+/*     WORDNO   are the record and word numbers of an arbitrary */
+/*              location within a DAF. */
 
 /* $ Detailed_Output */
 
-/*     ADDR        is the corresponding address within the DAF. */
+/*     ADDR     is the corresponding address within the DAF. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If either RECNO or WORDNO is zero or negative, the error */
-/*        SPICE(DAFNOSUCHADDR) is signalled. */
+/*     1)  If either RECNO or WORDNO is zero or negative, the error */
+/*         SPICE(DAFNOSUCHADDR) is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -105,14 +105,24 @@
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved DAF */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
 
@@ -128,7 +138,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     record/word to daf address */
+/*     record/word to DAF address */
 
 /* -& */
 
@@ -208,7 +218,7 @@ L_dafarw:
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ADDR       I   Address within DAF. */
 /*     RECNO, */
@@ -216,26 +226,26 @@ L_dafarw:
 
 /* $ Detailed_Input */
 
-/*     ADDR        is an arbitrary address within a DAF. */
+/*     ADDR     is an arbitrary address within a DAF. */
 
 /* $ Detailed_Output */
 
 /*     RECNO, */
-/*     WORDNO      are the corresponding record and word numbers */
-/*                 within the DAF. */
+/*     WORDNO   are the corresponding record and word numbers */
+/*              within the DAF. */
 
 /* $ Parameters */
-
-/*      None. */
-
-/* $ Files */
 
 /*     None. */
 
 /* $ Exceptions */
 
-/*     1) If ADDR is zero or negative, the error SPICE(DAFNOSUCHADDR) */
-/*        is signalled. */
+/*     1)  If ADDR is zero or negative, the error SPICE(DAFNOSUCHADDR) */
+/*         is signaled. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -257,14 +267,24 @@ L_dafarw:
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved DAF */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
 
@@ -280,7 +300,7 @@ L_dafarw:
 /* -& */
 /* $ Index_Entries */
 
-/*     daf address to record/word */
+/*     DAF address to record/word */
 
 /* -& */
 

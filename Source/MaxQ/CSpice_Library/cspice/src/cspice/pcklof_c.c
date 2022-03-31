@@ -1,10 +1,10 @@
 /*
 
--Procedure pcklof_c ( PCK Kernel, Load binary file )
+-Procedure pcklof_c ( PCK, load binary file )
 
 -Abstract
 
-   Load a binary PCK file for use by the readers.  Return the
+   Load a binary PCK file for use by the readers. Return the
    handle of the loaded file which is used by other PCK routines to
    refer to the file.
 
@@ -35,11 +35,13 @@
 
 -Required_Reading
 
+   DAF
    PCK
 
 -Keywords
 
    FILES
+   PCK
 
 */
 
@@ -49,27 +51,27 @@
    #include "SpiceZmc.h"
 
 
-   void pcklof_c ( ConstSpiceChar * filename,
-                   SpiceInt       * handle    )
+   void pcklof_c ( ConstSpiceChar * fname,
+                   SpiceInt       * handle )
 
 /*
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   filename   I   Name of the file to be loaded.
+   fname      I   Name of the file to be loaded.
    handle     O   Loaded file's handle.
 
 -Detailed_Input
 
-   filename   Character name of the file to be loaded.
+   fname       is the character name of the file to be loaded.
 
 -Detailed_Output
 
-   handle     Integer handle assigned to the file upon loading.
-              Other PCK routine will subsequently use this number
-              to refer to the file.
+   handle      is the integer handle assigned to the file upon loading.
+               Other PCK routines will subsequently use this number to
+               refer to the file.
 
 -Parameters
 
@@ -77,44 +79,218 @@
 
 -Exceptions
 
-   1) If an attempt is made to load more files than is specified
-      by the paramater ftsize defined in pckbsr_, the error
-      SPICE(PCKFILETABLEFULL) is signalled.
+   1)  If an attempt is made to open more DAF files than is
+       specified by the parameter FTSIZE in DAF system, an error
+       is signaled by a routine in the call tree of this routine.
 
-   2) The error SPICE(EMPTYSTRING) is signalled if the input
-      string does not contain at least one character, since the
-      input string cannot be converted to a Fortran-style string
-      in this case.
+   2)  If an attempt is made to load more files than is specified by
+       the parameter FTSIZE in the PCK subsystem, and if the DAF
+       system has room to load another file, the error
+       SPICE(PCKFILETABLEFULL) is signaled by a routine in the call
+       tree of this routine. The current setting of FTSIZE does not
+       allow this situation to arise: the DAF system will trap the
+       error before this routine has the chance.
 
-   3) The error SPICE(NULLPOINTER) is signalled if the input string
-      pointer is null.
+   3)  This routine makes use of DAF file system routines and is
+       subject to all of the constraints imposed by the DAF file
+       system. See the DAF Required Reading daf.req or individual DAF
+       routines for details.
 
-   This routine makes use of DAF file system routines and is subject
-   to all of the constraints imposed by the DAF fuile system. See
-   the DAF Required Reading or individual DAF routines for details.
+   4)  If the `fname' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   5)  If the `fname' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
-   A file specified by filename, to be loaded.  The file is assigned a
-   handle by pcklof_c, which will be used by other routines to
-   refer to it.
+   A file specified by `fname', to be loaded. The file is assigned a
+   handle by pcklof_c, which will be used by other routines to refer
+   to it.
 
 -Particulars
 
    If there is room for a new file in the file table, pcklof_c creates
    an entry for it, and opens the file for reading.
 
-   Also, if the body table is empty, pcklof_c initializes it, this
-   being as good a place as any.
+   Also, if the file table is empty, pcklof_c initializes it.
 
 -Examples
 
-   Load a binary PCK kernel and return the integer handle.
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      pck      = "/kernels/gen/pck/earth6.bpc";
-      pcklof_c ( pck, &handle );
+   1) Load a high precision PCK file for the Earth and compute the
+      position transformation matrix from ITRF93 to J2000 at
+      2000 Jan 01 12:00:00 TDB.
 
-   Also see the Example in PCKLOF.FOR.
+      Use the PCK kernel below to load the required triaxial
+      ellipsoidal shape model and orientation data for the Earth.
+
+         earth_720101_070426.bpc
+
+
+      Example code begins here.
+
+
+      /.
+         Program pcklof_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main()
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble             xform  [3][3];
+
+         SpiceInt                handle;
+         SpiceInt                i;
+
+         /.
+         Open the PCK for read access. This call may be replaced (as
+         recommended by NAIF) by furnsh_c.
+         ./
+         pcklof_c ( "earth_720101_070426.bpc", &handle );
+
+         /.
+         Find the position transformation matrix at
+
+            2000 Jan 01 12:00:00 TDB
+
+         which corresponds to ephemeris time 0.
+         ./
+         pxform_c( "ITRF93", "J2000", 0.0, xform );
+
+         /.
+         Display the results.
+         ./
+         printf ("Position transformation from ITRF93 to J2000 frame:\n\n" );
+         for ( i = 0; i < 3; i++ )
+         {
+            printf("%19.10f %19.10f %19.10f\n",
+                    xform[i][0], xform[i][1], xform[i][2] );
+         }
+
+         /.
+         Close the PCK file. This call may be replaced (as
+         recommended by NAIF) by unload_c.
+         ./
+         pckuof_c ( handle );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Position transformation from ITRF93 to J2000 frame:
+
+             0.1769805935        0.9842143409       -0.0000251874
+            -0.9842143410        0.1769805928       -0.0000274792
+            -0.0000225878        0.0000296531        0.9999999993
+
+
+   2) The following example extracts the first 20 lines of the
+      comment area of a binary PCK, displaying the comments on
+      the terminal screen.
+
+
+      Example code begins here.
+
+
+      /.
+         Program pcklof_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main()
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define FILSIZ          256
+         #define LINLEN          1001
+         #define BUFFSZ          20
+
+         /.
+         Local variables.
+         ./
+         SpiceBoolean            done;
+
+         SpiceChar               pcknam [FILSIZ];
+         SpiceChar               buffer [BUFFSZ][LINLEN];
+
+         SpiceInt                handle;
+         SpiceInt                i;
+         SpiceInt                n;
+
+
+         prompt_c ( "Enter name of PCK > ", FILSIZ, pcknam );
+
+         /.
+         Open the PCK for read access. This operation could have
+         been done with dafopr_c.
+         ./
+         pcklof_c ( pcknam, &handle );
+
+         /.
+         Extract up to 20 lines from the comment area of the
+         loaded PCK file and display them on the terminal screen.
+         ./
+         dafec_c ( handle, BUFFSZ, LINLEN, &n, buffer, &done );
+
+         for ( i = 0;  i < n;  i++ )
+         {
+               printf ( "%s\n", buffer[i] );
+         }
+
+         /.
+         Close the PCK file. This operation could have been done
+         with dafcls_c.
+         ./
+         pckuof_c ( handle );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the hight precision PCK file for the Earth named
+      earth_720101_070426.bpc as input PCK file, the output was:
+
+
+      Enter name of PCK > earth_720101_070426.bpc
+
+
+      Binary "High Accuracy" Earth PCK File
+      ======================================
+
+      Created 27-APR-2007 by NJB (NAIF/JPL)
+      Original file name:   earth_720101_070426.bpc
+
+      Data Source
+
+         Input file:           EOP file 2007_04_26_long.eop
+                               (Copied from WWW URL
+                               http://epic.jpl.nasa.gov/nav/eop/latest.long)
+
+      Coverage
+
+         ET Start time:             1972 JAN 01 00:00:42.183
+         ET Stop time:              2007 APR 26 00:01:05.185
+
+         UTC Epoch of last datum:   26-APR-2007
+
 
 -Restrictions
 
@@ -122,31 +298,44 @@
 
 -Literature_References
 
-   DAF Required Reading
+   None.
 
 -Author_and_Institution
 
-   K.S. Zukor         (JPL)
-   E.D. Wright        (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+   K.S. Zukor          (JPL)
 
 -Version
 
+   -CSPICE Version 2.1.0, 01-NOV-2021 (JDR)
+
+       Changed input argument name "filename" to "fname" for
+       consistency with other routines.
+
+       Edited the header with NAIF standard. Added complete
+       code examples.
+
+       Moved the reference to DAF required reading from
+       -Literature_References to -Required_Reading.
+
    -CSPICE Version 2.0.1, 20-MAR-1998 (EDW)
 
-      Minor correction to header.
+       Minor correction to header.
 
    -CSPICE Version 2.0.0, 08-FEB-1998 (NJB)
 
-      Input argument filename was changed to type ConstSpiceChar *.
+       Input argument "filename" was changed to type ConstSpiceChar *.
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.
+       Re-implemented routine without dynamically allocated, temporary
+       strings.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW) (KSZ)
 
 -Index_Entries
 
-   load PCK orientation file
+   load PCK file
 
 -&
 */
@@ -161,18 +350,18 @@
 
 
    /*
-   Check the input string filename to make sure the pointer is non-null
+   Check the input string `fname' to make sure the pointer is non-null
    and the string length is non-zero.
    */
-   CHKFSTR ( CHK_STANDARD, "pcklof_c", filename );
+   CHKFSTR ( CHK_STANDARD, "pcklof_c", fname );
 
 
    /*
    Call the f2c'd Fortran routine.
    */
-   pcklof_ ( ( char       * )  filename,
+   pcklof_ ( ( char       * )  fname,
              ( integer    * )  handle,
-             ( ftnlen       )  strlen(filename)    );
+             ( ftnlen       )  strlen(fname)    );
 
 
    chkout_c ( "pcklof_c" );

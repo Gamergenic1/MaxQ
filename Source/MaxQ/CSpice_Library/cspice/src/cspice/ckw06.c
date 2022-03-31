@@ -15,7 +15,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__1 = 1;
 
-/* $Procedure      CKW06 ( CK, Write segment, type 6 ) */
+/* $Procedure CKW06 ( CK, Write segment, type 6 ) */
 /* Subroutine */ int ckw06_(integer *handle, integer *inst, char *ref, 
 	logical *avflag, doublereal *first, doublereal *last, char *segid, 
 	integer *nmini, integer *npkts, integer *subtps, integer *degres, 
@@ -428,12 +428,13 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of a CK file open for writing. */
 /*     INST       I   NAIF instrument ID code. */
 /*     REF        I   Reference frame name. */
-/*     AVFLAG     I   True if the segment will contain angular velocity. */
+/*     AVFLAG     I   Flag indicating if the segment will contain angular */
+/*                    velocity. */
 /*     FIRST      I   Start time of interval covered by segment. */
 /*     LAST       I   End time of interval covered by segment. */
 /*     SEGID      I   Segment identifier. */
@@ -450,274 +451,274 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the handle of a CK file that has been opened */
-/*                    for writing. */
+/*     HANDLE   is the handle of a CK file that has been opened */
+/*              for writing. */
 
 
-/*     INST           is a NAIF integer code associated with an */
-/*                    instrument or spacecraft structure whose */
-/*                    orientation is described by the segment to be */
-/*                    created. INST is treated by the SPICE frame */
-/*                    subsystem as a CK frame class ID (see the */
-/*                    Frames Required Reading for details). */
+/*     INST     is a NAIF integer code associated with an */
+/*              instrument or spacecraft structure whose */
+/*              orientation is described by the segment to be */
+/*              created. INST is treated by the SPICE frame */
+/*              subsystem as a CK frame class ID (see the */
+/*              Frames Required Reading for details). */
 
 
-/*     AVFLAG         is a logical flag which indicates whether or not */
-/*                    the segment will contain angular velocity. */
+/*     AVFLAG   is a logical flag which indicates whether or not */
+/*              the segment will contain angular velocity. */
 
 
-/*     REF            is the NAIF name for a reference frame relative to */
-/*                    which the pointing (attitude) information for INST */
-/*                    is specified. */
+/*     REF      is the NAIF name for a reference frame relative to */
+/*              which the pointing (attitude) information for INST */
+/*              is specified. */
 
 /*     FIRST, */
-/*     LAST           are, respectively, the bounds of the time interval */
-/*                    over which the segment defines the attitude of */
-/*                    INST. FIRST and LAST are encoded SCLK times. */
+/*     LAST     are, respectively, the bounds of the time interval */
+/*              over which the segment defines the attitude of */
+/*              INST. FIRST and LAST are encoded SCLK times. */
 
-/*                    FIRST must be greater than or equal to the first */
-/*                    mini-segment interval start time; LAST must be */
-/*                    less than or equal to the last mini-segment */
-/*                    interval stop time. See the description of IVLBDS */
-/*                    below. */
-
-
-/*     SEGID          is the segment identifier. A CK segment */
-/*                    identifier may contain up to 40 characters. */
+/*              FIRST must be greater than or equal to the first */
+/*              mini-segment interval start time; LAST must be */
+/*              less than or equal to the last mini-segment */
+/*              interval stop time. See the description of IVLBDS */
+/*              below. */
 
 
-/*     NMINI          is the number of mini-segments comprised by */
-/*                    the input data. Each mini-segment contains data */
-/*                    that could be stored in a type 5 segment. */
-/*                    The parameters and data of a mini-segment are: */
-
-/*                       - a packet count */
-/*                       - a type 6 subtype */
-/*                       - an interpolating polynomial degree */
-/*                       - a nominal SCLK rate in seconds/tick */
-/*                       - a sequence of type 6 data packets */
-/*                       - a sequence of packet epochs */
-
-/*                    These inputs are described below. */
+/*     SEGID    is the segment identifier. A CK segment */
+/*              identifier may contain up to 40 characters. */
 
 
-/*     NPKTS          is an array of packet counts. The Ith element of */
-/*                    NPKTS is the packet count of the Ith mini-segment. */
+/*     NMINI    is the number of mini-segments comprised by */
+/*              the input data. Each mini-segment contains data */
+/*              that could be stored in a type 5 segment. */
+/*              The parameters and data of a mini-segment are: */
 
-/*                    NPKTS has dimension NMINI. */
+/*                 - a packet count */
+/*                 - a type 6 subtype */
+/*                 - an interpolating polynomial degree */
+/*                 - a nominal SCLK rate in seconds/tick */
+/*                 - a sequence of type 6 data packets */
+/*                 - a sequence of packet epochs */
 
-
-/*     SUBTPS         is an array of type 6 subtypes. The Ith element of */
-/*                    SUBTPS is the subtype of the packets associated */
-/*                    with the Ith mini-segment. */
-
-/*                    SUBTPS has dimension NMINI. */
-
-
-/*     DEGRES         is an array of interpolating polynomial degrees. */
-/*                    The Ith element of DEGRES is the polynomial degree */
-/*                    of the packets associated with the Ith */
-/*                    mini-segment. */
-
-/*                    For subtypes 0 and 2, interpolation degrees must be */
-/*                    equivalent to 3 mod 4, that is, they must be in */
-/*                    the set */
-
-/*                       { 3, 7, 11, ..., MAXDEG } */
-
-/*                    For subtypes 1 and 3, interpolation degrees must */
-/*                    be odd and must be in the range 1:MAXDEG. */
-
-/*                    DEGRES has dimension NMINI. */
+/*              These inputs are described below. */
 
 
-/*     PACKTS         is an array of data packets representing the */
-/*                    orientation of INST relative to the frame REF. The */
-/*                    packets for a given mini-segment are stored */
-/*                    contiguously in increasing time order. The order */
-/*                    of the sets of packets for different mini-segments */
-/*                    is the same as the order of their corresponding */
-/*                    mini-segment intervals. */
+/*     NPKTS    is an array of packet counts. The Ith element of */
+/*              NPKTS is the packet count of the Ith mini-segment. */
 
-/*                    Each packet contains a SPICE-style quaternion and */
-/*                    optionally, depending on the segment subtype, */
-/*                    attitude derivative data, from which a C-matrix */
-/*                    and an angular velocity vector may be derived. */
-
-/*                    See the discussion of quaternion styles in */
-/*                    Particulars below. */
-
-/*                    The C-matrix CMAT represented by the Ith data */
-/*                    packet is a rotation matrix that transforms the */
-/*                    components of a vector expressed in the base frame */
-/*                    specified by REF to components expressed in the */
-/*                    instrument fixed frame at the time SCLKDP(I). */
-
-/*                    Thus, if a vector V has components x, y, z in the */
-/*                    base frame, then V has components x', y', z' */
-/*                    in the instrument fixed frame where: */
-
-/*                       [ x' ]     [          ] [ x ] */
-/*                       | y' |  =  |   CMAT   | | y | */
-/*                       [ z' ]     [          ] [ z ] */
-
-/*                    Attitude derivative information either explicitly */
-/*                    contained in, or else derived from, PACKTS(I) */
-/*                    gives the angular velocity of the instrument fixed */
-/*                    frame at time SCLKDP(I) with respect to the */
-/*                    reference frame specified by REF. */
-
-/*                    The direction of an angular velocity vector gives */
-/*                    the right-handed axis about which the instrument */
-/*                    fixed reference frame is rotating. The magnitude */
-/*                    of the vector is the magnitude of the */
-/*                    instantaneous velocity of the rotation, in radians */
-/*                    per second. */
-
-/*                    Packet contents and the corresponding */
-/*                    interpolation methods depend on the segment */
-/*                    subtype, and are as follows: */
-
-/*                       Subtype 0:  Hermite interpolation, 8-element */
-/*                                   packets. Quaternion and quaternion */
-/*                                   derivatives only, no angular */
-/*                                   velocity vector provided. */
-/*                                   Quaternion elements are listed */
-/*                                   first, followed by derivatives. */
-/*                                   Angular velocity is derived from */
-/*                                   the quaternions and quaternion */
-/*                                   derivatives. */
-
-/*                       Subtype 1:  Lagrange interpolation, 4-element */
-/*                                   packets. Quaternion only. Angular */
-/*                                   velocity is derived by */
-/*                                   differentiating the interpolating */
-/*                                   polynomials. */
-
-/*                       Subtype 2:  Hermite interpolation, 14-element */
-/*                                   packets. Quaternion and angular */
-/*                                   velocity vector, as well as */
-/*                                   derivatives of each, are provided. */
-/*                                   The quaternion comes first, then */
-/*                                   quaternion derivatives, then */
-/*                                   angular velocity and its */
-/*                                   derivatives. */
-
-/*                       Subtype 3:  Lagrange interpolation, 7-element */
-/*                                   packets. Quaternion and angular */
-/*                                   velocity vector provided.  The */
-/*                                   quaternion comes first. */
-
-/*                    Angular velocity is always specified relative to */
-/*                    the base frame. */
-
-/*                    Units of the input data are: */
-
-/*                       Quaternions                unitless */
-/*                       Quaternion derivatives     1/TDB second */
-/*                       Angular velocity           radians/TDB second */
-/*                       Angular acceleration       radians/TDB second**2 */
-
-/*                    For the Hermite subtypes (0 and 2), quaternion */
-/*                    representations must be selected so that, for */
-/*                    consecutive quaternions Q(I) and Q(I+1) in a */
-/*                    mini-segment, the distance between Q and Q(I+1) is */
-/*                    less than the distance between Q and -Q(I+1). The */
-/*                    Lagrange subtypes do not have this restriction. */
+/*              NPKTS has dimension NMINI. */
 
 
-/*     RATES          is an array of nominal rates of the spacecraft */
-/*                    clock associated with INST. The Ith element of */
-/*                    rates is the clock rate for the packets associated */
-/*                    with the Ith mini-segment. Units are seconds per */
-/*                    tick. Spacecraft clock rates are used to scale */
-/*                    angular velocity to radians/second. */
+/*     SUBTPS   is an array of type 6 subtypes. The Ith element of */
+/*              SUBTPS is the subtype of the packets associated */
+/*              with the Ith mini-segment. */
+
+/*              SUBTPS has dimension NMINI. */
 
 
-/*     SCLKDP         is an array containing epochs for all input */
-/*                    mini-segments. The epochs have a one-to-one */
-/*                    relationship with the packets in the input */
-/*                    packet array. The epochs are encoded SCLK times. */
+/*     DEGRES   is an array of interpolating polynomial degrees. */
+/*              The Ith element of DEGRES is the polynomial degree */
+/*              of the packets associated with the Ith */
+/*              mini-segment. */
 
-/*                    The epochs for a given mini-segment are stored */
-/*                    contiguously in increasing order. The order of the */
-/*                    sets of epochs for different mini-segments is the */
-/*                    same as the order of their corresponding */
-/*                    mini-segment intervals. */
+/*              For subtypes 0 and 2, interpolation degrees must be */
+/*              equivalent to 3 mod 4, that is, they must be in */
+/*              the set */
 
-/*                    For each mini-segment, "padding" is allowed: the */
-/*                    sequence of epochs for that mini-segment may start */
-/*                    before the corresponding mini-segment interval */
-/*                    start time and end after the corresponding */
-/*                    mini-segment interval stop time. Padding is used */
-/*                    to control behavior of interpolating polynomials */
-/*                    near mini-segment interval boundaries. */
+/*                 { 3, 7, 11, ..., MAXDEG } */
 
-/*                    Due to possible use of padding, the elements of */
-/*                    SCLKDP, taken as a whole, might not be in */
-/*                    increasing order. */
+/*              For subtypes 1 and 3, interpolation degrees must */
+/*              be odd and must be in the range 1:MAXDEG. */
+
+/*              DEGRES has dimension NMINI. */
 
 
-/*     IVLBDS         is an array of mini-segment interval boundary */
-/*                    times. This array is a strictly increasing list of */
-/*                    the mini-segment interval start times, to which */
-/*                    the end time for the last interval is appended. */
-/*                    The interval bounds are encoded SCLK times. */
+/*     PACKTS   is an array of data packets representing the */
+/*              orientation of INST relative to the frame REF. The */
+/*              packets for a given mini-segment are stored */
+/*              contiguously in increasing time order. The order */
+/*              of the sets of packets for different mini-segments */
+/*              is the same as the order of their corresponding */
+/*              mini-segment intervals. */
 
-/*                    The Ith mini-segment interval is the time */
-/*                    coverage interval of the Ith mini-segment (see the */
-/*                    description of NPKTS above). */
+/*              Each packet contains a SPICE-style quaternion and */
+/*              optionally, depending on the segment subtype, */
+/*              attitude derivative data, from which a C-matrix */
+/*              and an angular velocity vector may be derived. */
 
-/*                    For each mini-segment, the corresponding */
-/*                    mini-segment interval's start time is greater */
-/*                    than or equal to the mini-segment's first epoch. */
-/*                    The interval's stop time may exceed the */
-/*                    mini-segment's last epoch, allowing a single */
-/*                    coverage gap to exist between a mini-segment's */
-/*                    last epoch and its interval stop time. */
+/*              See the discussion of quaternion styles in */
+/*              $Particulars below. */
 
-/*                    The "interpolation interval" of the ith */
-/*                    mini-segment is contained in the ith mini-segment */
-/*                    interval: the interpolation interval extends from */
-/*                    IVLBDS(I) to the minimum of IVLBDS(I+1) and the */
-/*                    last epoch of the mini-segment. */
+/*              The C-matrix CMAT represented by the Ith data */
+/*              packet is a rotation matrix that transforms the */
+/*              components of a vector expressed in the base frame */
+/*              specified by REF to components expressed in the */
+/*              instrument fixed frame at the time SCLKDP(I). */
 
-/*                    For each mini-segment interval other than the */
-/*                    last, the interval's coverage stop time coincides */
-/*                    with the coverage start time of the next interval. */
+/*              Thus, if a vector V has components x, y, z in the */
+/*              base frame, then V has components x', y', z' */
+/*              in the instrument fixed frame where: */
 
-/*                    IVLBDS has dimension NMINI+1. */
+/*                 [ x' ]     [          ] [ x ] */
+/*                 | y' |  =  |   CMAT   | | y | */
+/*                 [ z' ]     [          ] [ z ] */
+
+/*              Attitude derivative information either explicitly */
+/*              contained in, or else derived from, PACKTS(I) */
+/*              gives the angular velocity of the instrument fixed */
+/*              frame at time SCLKDP(I) with respect to the */
+/*              reference frame specified by REF. */
+
+/*              The direction of an angular velocity vector gives */
+/*              the right-handed axis about which the instrument */
+/*              fixed reference frame is rotating. The magnitude */
+/*              of the vector is the magnitude of the */
+/*              instantaneous velocity of the rotation, in radians */
+/*              per second. */
+
+/*              Packet contents and the corresponding */
+/*              interpolation methods depend on the segment */
+/*              subtype, and are as follows: */
+
+/*                 Subtype 0:  Hermite interpolation, 8-element */
+/*                             packets. Quaternion and quaternion */
+/*                             derivatives only, no angular */
+/*                             velocity vector provided. */
+/*                             Quaternion elements are listed */
+/*                             first, followed by derivatives. */
+/*                             Angular velocity is derived from */
+/*                             the quaternions and quaternion */
+/*                             derivatives. */
+
+/*                 Subtype 1:  Lagrange interpolation, 4-element */
+/*                             packets. Quaternion only. Angular */
+/*                             velocity is derived by */
+/*                             differentiating the interpolating */
+/*                             polynomials. */
+
+/*                 Subtype 2:  Hermite interpolation, 14-element */
+/*                             packets. Quaternion and angular */
+/*                             velocity vector, as well as */
+/*                             derivatives of each, are provided. */
+/*                             The quaternion comes first, then */
+/*                             quaternion derivatives, then */
+/*                             angular velocity and its */
+/*                             derivatives. */
+
+/*                 Subtype 3:  Lagrange interpolation, 7-element */
+/*                             packets. Quaternion and angular */
+/*                             velocity vector provided. The */
+/*                             quaternion comes first. */
+
+/*              Angular velocity is always specified relative to */
+/*              the base frame. */
+
+/*              Units of the input data are: */
+
+/*                 Quaternions                unitless */
+/*                 Quaternion derivatives     1/TDB second */
+/*                 Angular velocity           radians/TDB second */
+/*                 Angular acceleration       radians/TDB second**2 */
+
+/*              For the Hermite subtypes (0 and 2), quaternion */
+/*              representations must be selected so that, for */
+/*              consecutive quaternions Q(I) and Q(I+1) in a */
+/*              mini-segment, the distance between Q and Q(I+1) is */
+/*              less than the distance between Q and -Q(I+1). The */
+/*              Lagrange subtypes do not have this restriction. */
 
 
-/*     SELLST         is a logical flag indicating to the CK type 6 */
-/*                    segment reader CKR06 how to select the */
-/*                    mini-segment interval when a request time */
-/*                    coincides with a time boundary shared by two */
-/*                    mini-segment intervals. When SELLST ("select */
-/*                    last") is .TRUE., the later interval is selected; */
-/*                    otherwise the earlier interval is selected. */
+/*     RATES    is an array of nominal rates of the spacecraft */
+/*              clock associated with INST. The Ith element of */
+/*              rates is the clock rate for the packets associated */
+/*              with the Ith mini-segment. Units are seconds per */
+/*              tick. Spacecraft clock rates are used to scale */
+/*              angular velocity to radians/second. */
+
+
+/*     SCLKDP   is an array containing epochs for all input */
+/*              mini-segments. The epochs have a one-to-one */
+/*              relationship with the packets in the input */
+/*              packet array. The epochs are encoded SCLK times. */
+
+/*              The epochs for a given mini-segment are stored */
+/*              contiguously in increasing order. The order of the */
+/*              sets of epochs for different mini-segments is the */
+/*              same as the order of their corresponding */
+/*              mini-segment intervals. */
+
+/*              For each mini-segment, "padding" is allowed: the */
+/*              sequence of epochs for that mini-segment may start */
+/*              before the corresponding mini-segment interval */
+/*              start time and end after the corresponding */
+/*              mini-segment interval stop time. Padding is used */
+/*              to control behavior of interpolating polynomials */
+/*              near mini-segment interval boundaries. */
+
+/*              Due to possible use of padding, the elements of */
+/*              SCLKDP, taken as a whole, might not be in */
+/*              increasing order. */
+
+
+/*     IVLBDS   is an array of mini-segment interval boundary */
+/*              times. This array is a strictly increasing list of */
+/*              the mini-segment interval start times, to which */
+/*              the end time for the last interval is appended. */
+/*              The interval bounds are encoded SCLK times. */
+
+/*              The Ith mini-segment interval is the time */
+/*              coverage interval of the Ith mini-segment (see the */
+/*              description of NPKTS above). */
+
+/*              For each mini-segment, the corresponding */
+/*              mini-segment interval's start time is greater */
+/*              than or equal to the mini-segment's first epoch. */
+/*              The interval's stop time may exceed the */
+/*              mini-segment's last epoch, allowing a single */
+/*              coverage gap to exist between a mini-segment's */
+/*              last epoch and its interval stop time. */
+
+/*              The "interpolation interval" of the ith */
+/*              mini-segment is contained in the ith mini-segment */
+/*              interval: the interpolation interval extends from */
+/*              IVLBDS(I) to the minimum of IVLBDS(I+1) and the */
+/*              last epoch of the mini-segment. */
+
+/*              For each mini-segment interval other than the */
+/*              last, the interval's coverage stop time coincides */
+/*              with the coverage start time of the next interval. */
+
+/*              IVLBDS has dimension NMINI+1. */
+
+
+/*     SELLST   is a logical flag indicating to the CK type 6 */
+/*              segment reader CKR06 how to select the */
+/*              mini-segment interval when a request time */
+/*              coincides with a time boundary shared by two */
+/*              mini-segment intervals. When SELLST ("select */
+/*              last") is .TRUE., the later interval is selected; */
+/*              otherwise the earlier interval is selected. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
 
-/*     MAXDEG         is the maximum allowed degree of the interpolating */
-/*                    polynomial. */
+/*     MAXDEG   is the maximum allowed degree of the interpolating */
+/*              polynomial. */
 
-/*                    See the INCLUDE file ck06.inc for the value of */
-/*                    MAXDEG. */
+/*              See the INCLUDE file ck06.inc for the value of */
+/*              MAXDEG. */
 
 /* $ Exceptions */
 
-/*     If any of the following exceptions occur, this routine will return */
-/*     without creating a new segment. */
+/*     If any of the following exceptions occur, this routine will */
+/*     return without creating a new segment. */
 
 
-/*     1)  If FIRST is greater than LAST then the error */
-/*         SPICE(BADDESCRTIMES) will be signaled. */
+/*     1)  If FIRST is greater than LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
 /*     2)  If REF is not a recognized name, the error */
 /*         SPICE(INVALIDREFFRAME) is signaled. */
@@ -732,46 +733,44 @@ static integer c__1 = 1;
 /*         is signaled. */
 
 /*     6)  If the elements of the array IVLBDS are not in strictly */
-/*         increasing order, the error SPICE(BOUNDSOUTOFORDER) will be */
+/*         increasing order, the error SPICE(BOUNDSOUTOFORDER) is */
 /*         signaled. */
 
 /*     7)  If the first interval start time IVLBDS(1) is greater than */
 /*         FIRST, or if the last interval end time IVLBDS(NMINI+1) is */
-/*         less than LAST, the error SPICE(COVERAGEGAP) will be */
-/*         signaled. */
+/*         less than LAST, the error SPICE(COVERAGEGAP) is signaled. */
 
 /*     8)  If any packet count in the array NPKTS is not at least 2, the */
-/*         error SPICE(TOOFEWPACKETS) will be signaled. */
+/*         error SPICE(TOOFEWPACKETS) is signaled. */
 
 /*     9)  If any subtype code in the array SUBTPS is not recognized, */
-/*         the error SPICE(INVALIDSUBTYPE) will be signaled. */
+/*         the error SPICE(INVALIDSUBTYPE) is signaled. */
 
-/*    10)  If any interpolation degree in the array DEGRES is not at */
+/*     10) If any interpolation degree in the array DEGRES is not at */
 /*         least 1 or is greater than MAXDEG, the error */
 /*         SPICE(INVALIDDEGREE) is signaled. */
 
-/*    11)  If the window size implied by any element of the array DEGRES */
+/*     11) If the window size implied by any element of the array DEGRES */
 /*         is odd, the error SPICE(BADWINDOWSIZE) is signaled. */
 
-/*    12)  If the elements of the array SCLKDP corresponding */
-/*         to a given mini-segment are not in strictly */
-/*         increasing order, the error SPICE(TIMESOUTOFORDER) will be */
-/*         signaled. */
+/*     12) If the elements of the array SCLKDP corresponding to a given */
+/*         mini-segment are not in strictly increasing order, the error */
+/*         SPICE(TIMESOUTOFORDER) is signaled. */
 
-/*    13)  If the first epoch of a mini-segment exceeds the start time */
+/*     13) If the first epoch of a mini-segment exceeds the start time */
 /*         of the associated mini-segment interval, or if the last */
 /*         epoch of a mini-segment is less than the interval start */
 /*         time, the error SPICE(BOUNDSDISAGREE) is signaled. However, */
 /*         the last epoch of a mini-segment may be less than the end */
 /*         time of the corresponding mini-segment interval. */
 
-/*    14)  If any quaternion has magnitude zero, the error */
+/*     14) If any quaternion has magnitude zero, the error */
 /*         SPICE(ZEROQUATERNION) is signaled. */
 
-/*    15)  Any error that occurs while writing the output segment will */
-/*         be diagnosed by routines in the call tree of this routine. */
+/*     15) If an error occurs while writing the output segment, the error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*    16)  This routine assumes that the rotation between adjacent */
+/*     16) This routine assumes that the rotation between adjacent */
 /*         quaternions that are stored in the same interval has a */
 /*         rotation angle of THETA radians, where */
 
@@ -785,23 +784,23 @@ static integer c__1 = 1;
 
 /*            THETA   +   2 * k * pi */
 
-/*         radians, where k is any integer.  These "large" rotations will */
+/*         radians, where k is any integer. These "large" rotations will */
 /*         yield invalid results when interpolated. The segment creator */
 /*         must ensure that the data stored in the segment will not be */
 /*         subject to this sort of ambiguity. */
 
-/*    17)  For the Hermite subtypes (0 and 2), quaternion */
+/*     17) For the Hermite subtypes (0 and 2), quaternion */
 /*         representations must be selected so that, for consecutive */
 /*         quaternions Q(I) and Q(I+1) in a mini-segment, the distance */
 /*         between Q and Q(I+1) is less than the distance between Q and */
 /*         -Q(I+1). */
 
-/*         If a pair of quaternions violating this condition is found */
-/*         in the input array PACKTS, the error SPICE(BADQUATSIGN) will */
-/*         be signaled. */
+/*         If a pair of quaternions violating this condition is found in */
+/*         the input array PACKTS, the error SPICE(BADQUATSIGN) is */
+/*         signaled. */
 
-/*    18)  If any element of the input RATES array is non-positive, the */
-/*         error SPICE(INVALIDSCLKRATE) will be signaled. */
+/*     18) If any element of the input RATES array is non-positive, the */
+/*         error SPICE(INVALIDSCLKRATE) is signaled. */
 
 /* $ Files */
 
@@ -823,12 +822,12 @@ static integer c__1 = 1;
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -948,7 +947,7 @@ static integer c__1 = 1;
 /*                   +-             -+ */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -1013,7 +1012,6 @@ static integer c__1 = 1;
 
 /*        M1*M2 */
 
-
 /* $ Examples */
 
 /*     Suppose that you have states and are prepared to produce */
@@ -1036,7 +1034,6 @@ static integer c__1 = 1;
 /*             .             NPKTS,   SUBTPS,  DEGRES,  PACKTS, */
 /*             .             RATES,   SCLKDP,  IVLBDS,  SELLST  ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -1047,16 +1044,21 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 02-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 11-AUG-2015 (NJB) */
 
 /*        Added check for invalid SCLK rates. */
 
-/*        Corrected error in header Exceptions section: changed */
+/*        Corrected error in header $Exceptions section: changed */
 /*        subscript N+1 to NMINI+1. Corrected typo in description */
 /*        of subtype 2 data. Added mention of angular acceleration */
 /*        units. */
@@ -1066,7 +1068,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write spk type_6 ephemeris data segment */
+/*     write SPK type_6 ephemeris data segment */
 
 /* -& */
 
@@ -1257,7 +1259,7 @@ static integer c__1 = 1;
 	    return 0;
 	}
 	pktsiz = pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "ckw06_", (ftnlen)1024)];
+		"pktszs", i__2, "ckw06_", (ftnlen)1026)];
 	if (odd_(&subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
@@ -1549,7 +1551,7 @@ static integer c__1 = 1;
 
 	subtyp = subtps[i__ - 1];
 	pktsiz = pktszs[(i__2 = subtyp) < 4 && 0 <= i__2 ? i__2 : s_rnge(
-		"pktszs", i__2, "ckw06_", (ftnlen)1367)];
+		"pktszs", i__2, "ckw06_", (ftnlen)1369)];
 	if (odd_(&subtyp)) {
 	    winsiz = degres[i__ - 1] + 1;
 	} else {
@@ -1642,7 +1644,7 @@ static integer c__1 = 1;
 /*        used as an array index. */
 
 	pktsiz = pktszs[(i__2 = subtps[i__ - 1]) < 4 && 0 <= i__2 ? i__2 : 
-		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1472)];
+		s_rnge("pktszs", i__2, "ckw06_", (ftnlen)1474)];
 
 /*        In order to compute the end pointer of the current */
 /*        mini-segment, we must compute the size, in terms */

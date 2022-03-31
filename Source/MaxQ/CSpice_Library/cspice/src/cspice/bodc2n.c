@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      BODC2N ( Body ID code to name translation ) */
+/* $Procedure BODC2N ( Body ID code to name translation ) */
 /* Subroutine */ int bodc2n_(integer *code, char *name__, logical *found, 
 	ftnlen name_len)
 {
@@ -55,47 +55,55 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     CODE       I   Integer ID code to be translated into a name. */
 /*     NAME       O   A common name for the body identified by CODE. */
-/*     FOUND      O   True if translated, otherwise false. */
+/*     FOUND      O   .TRUE. if translated, otherwise false. */
 /*     MAXL       P   Maximum length of NAME string. */
 
 /* $ Detailed_Input */
 
-/*     CODE        is an integer code for a body --- */
-/*                 a planet, satellite, barycenter, spacecraft, */
-/*                 asteroid, comet, or other ephemeris object. */
+/*     CODE     is an integer code for a body --- */
+/*              a planet, satellite, barycenter, spacecraft, */
+/*              asteroid, comet, or other ephemeris object. */
 
 /* $ Detailed_Output */
 
-/*     NAME        is a common name of the body identified by CODE. */
-/*                 If CODE has more than one translation, then the */
-/*                 most recently defined NAME corresponding to CODE */
-/*                 is returned.  NAME will have the exact format (case */
-/*                 and blanks) as when the name/code pair was defined. */
-/*                 If the input value of CODE is not recognized, NAME */
-/*                 will remain unchanged from its input value. */
+/*     NAME     is a common name of the body identified by CODE. */
+/*              If CODE has more than one translation, then the */
+/*              most recently defined NAME corresponding to CODE */
+/*              is returned. NAME will have the exact format (case */
+/*              and blanks) as when the name/code pair was defined. */
+/*              If the input value of CODE is not recognized, NAME */
+/*              will remain unchanged from its input value. */
 
-/*     FOUND       is true if CODE has a translation.  Otherwise, FOUND */
-/*                 is false. */
+/*     FOUND    is .TRUE. if CODE has a translation. Otherwise, FOUND */
+/*              is .FALSE. */
 
 /* $ Parameters */
 
-/*     MAXL        is the maximum allowable length of a body name. */
-/*                 This amount of storage space should be declared */
-/*                 to receive NAME, otherwise truncation may occur. */
-/*                 The value of this parameter may be found in the */
-/*                 include file 'zzbodtrn.inc'. */
+/*     MAXL     is the maximum allowable length of a body name. */
+/*              This amount of storage space should be declared */
+/*              to receive NAME, otherwise truncation may occur. */
+/*              The current value of this parameter is 36. See */
+/*              the SPICELIB include file zzbodtrn.inc for details. */
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If there is any problem with the body name-ID mapping kernel */
+/*         variables present in the kernel pool, an error is signaled by */
+/*         a routine in the call tree of this routine. */
 
 /* $ Files */
 
-/*     None. */
+/*     Body-name mappings may be defined at run time by loading text */
+/*     kernels containing kernel variable assignments of the form */
+
+/*        NAIF_BODY_NAME += ( <name 1>, ... ) */
+/*        NAIF_BODY_CODE += ( <code 1>, ... ) */
+
+/*     See naif_ids.req for details. */
 
 /* $ Particulars */
 
@@ -129,7 +137,7 @@
 
 /* $ Examples */
 
-/*     1.  Suppose you ran the utility program SPACIT to summarize */
+/*     1. Suppose you ran the utility program SPACIT to summarize */
 /*         an SPK ephemeris file and the following data was output */
 /*         to the terminal screen. */
 
@@ -159,7 +167,7 @@
 /*        translate them, as above. */
 
 
-/*     2.  In this example, we assume that BODDEF has not been called, */
+/*     2. In this example, we assume that BODDEF has not been called, */
 /*         so only the set of default name/code pairs has */
 /*         been defined. */
 
@@ -200,20 +208,30 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        description of MAXL parameter and added $Exceptions, */
+/*        $Restrictions and $Files. */
+
 /* -    SPICELIB Version 1.0.4, 16-MAY-2009 (EDW) */
 
-/*        Edit to Particulars section to document the BODC2S routine. */
+/*        Edit to $Particulars section to document the BODC2S routine. */
 
 /* -    SPICELIB Version 1.0.3, 28-FEB-2008 (BVS) */
 
-/*        Corrected the contents of the Required_Reading section. */
+/*        Corrected the contents of the $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.2, 26-AUG-2002 (FST) */
 
@@ -229,7 +247,7 @@
 /*        This was the BODC2N entry point from the original BODTRN */
 /*        subroutine that was in the NAIF toolkit SUPPORT library. */
 /*        When the private subroutine ZZBODTRN was added to SPICELIB, */
-/*        superceding the BODTRN from SUPPORT, the body ID code/name */
+/*        superseding the BODTRN from SUPPORT, the body ID code/name */
 /*        translation interface from the original BODTRN was moved to */
 /*        SPICELIB so that ID codes did not have to be hard coded by */
 /*        users of the toolkit. */

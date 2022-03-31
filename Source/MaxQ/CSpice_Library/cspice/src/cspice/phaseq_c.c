@@ -16,7 +16,7 @@
    PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
    TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
    WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
-   PARTICULAR USE OR PURPOSE (AS set_c FORTH IN UNITED STATES UCC
+   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
    SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
    SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
 
@@ -38,9 +38,9 @@
 
 -Keywords
 
-   PHASE ANGLE
    EPHEMERIS
    GEOMETRY
+   PHASE ANGLE
    SEARCH
 
 */
@@ -68,79 +68,73 @@
    illmn      I   Illuminating body name.
    obsrvr     I   Observer body.
    abcorr     I   Aberration correction flag.
-   retval     O   Value of phase angle.
+
+   The function returns the value of phase angle.
 
 -Detailed_Input
 
-   et         the time in ephemeris seconds past J2000 TDB at which
-              to compute the phase angle.
+   et          the time in ephemeris seconds past J2000 TDB at which
+               to compute the phase angle.
 
-   target     the name of the target body. Optionally, you may
-              supply a string containing the integer ID code
-              for the object. For example both "MOON" and "301"
-              are legitimate strings that indicate the Moon is the
-              target body.
+   target      the name of the target body. Optionally, you may
+               supply a string containing the integer ID code
+               for the object. For example both "MOON" and "301"
+               are legitimate strings that indicate the Moon is the
+               target body. The `target' string lack sensitivity to
+               case, leading and trailing blanks.
 
-              Case and leading or trailing blanks are not significant
-              in the string `target'.
+   illmn       the name of the illuminating body. Optionally, you may
+               supply a string containing the integer ID code
+               for the object. For example both "SUN" and "10"
+               are legitimate strings that indicate the sun is the
+               illuminating body. The `illmn' string lack sensitivity
+               to case, leading and trailing blanks.
 
-   illmn      the name of the illuminating body. Optionally, you may
-              supply a string containing the integer ID code
-              for the object. For example both "SUN" and "10"
-              are legitimate strings that indicate the sun is the
-              illuminating body.
+               In most cases, `illmn' is the sun.
 
-              Case and leading or trailing blanks are not significant
-              in the string `illmn'.
+   obsrvr      the name of the observer body. Optionally, you may
+               supply a string containing the integer ID code
+               for the object. For example both "MOON" and "301"
+               are legitimate strings that indicate the Moon is the
+               observer body. The `obsrvr' string lack sensitivity
+               to case, leading and trailing blanks.
 
-              In most cases, `illmn' is the sun.
+   abcorr      the string description of the aberration corrections to
+               apply to the state evaluations to account for one-way
+               light time and stellar aberration. The `abcorr' string
+               lack sensitivity to case, leading and trailing blanks.
 
-   obsrvr     the name of the observer body. Optionally, you may
-              supply a string containing the integer ID code
-              for the object. For example both "MOON" and "301"
-              are legitimate strings that indicate the Moon is the
-              observer body.
+               This routine accepts only reception mode aberration
+               corrections. See the header of spkezr_c for a detailed
+               description of the aberration correction options.
+               For convenience, the appropriate aberration options are
+               listed below:
 
-              Case and leading or trailing blanks are not significant
-              in the string `obsrvr'.
+                  "NONE"     Apply no correction. Returns the "true"
+                             geometric state.
 
-   abcorr     the string description of the aberration corrections to
-              apply to the state evaluations to account for one-way
-              light time and stellar aberration.
+                  "LT"       "Reception" case: correct for
+                             one-way light time using a Newtonian
+                             formulation.
 
-              This routine accepts only reception mode aberration
-              corrections. See the header of spkezr_c for a detailed
-              description of the aberration correction options.
-              For convenience, the appropriate aberration options are
-              listed below:
+                  "LT+S"     "Reception" case: correct for
+                             one-way light time and stellar
+                             aberration using a Newtonian
+                             formulation.
 
-                 "NONE"     Apply no correction. Returns the "true"
-                            geometric state.
+                  "CN"       "Reception" case: converged
+                             Newtonian light time correction.
 
-                 "LT"       "Reception" case:  correct for
-                            one-way light time using a Newtonian
-                            formulation.
-
-                 'LT+S'     "Reception" case:  correct for
-                            one-way light time and stellar
-                            aberration using a Newtonian
-                            formulation.
-
-                 "CN"       "Reception" case:  converged
-                            Newtonian light time correction.
-
-                 "CN+S"     "Reception" case:  converged
-                            Newtonian light time and stellar
-                            aberration corrections.
-
-              Case and leading or trailing blanks are not significant
-              in the string `abcorr'.
+                  "CN+S"     "Reception" case: converged
+                             Newtonian light time and stellar
+                             aberration corrections.
 
 -Detailed_Output
 
-   phaseq     is the optionally light-time corrected phase angle
-              between `target' and `illmn' as observed from `obsrvr'.
-              The range of `phaseq' is [0, pi] radians.
+   The function returns the optionally light-time corrected phase
+   angle between `target' and `illmn' as observed from `obsrvr'.
+
+   The range of the phase angle is [0, pi].
 
 -Parameters
 
@@ -148,15 +142,26 @@
 
 -Exceptions
 
-   1) The error SPICE(IDCODENOTFOUND) signals if the body name to
-      SPICE ID look-up fails for any of the `target', `illmn', or
-      `obsrvr' names.
+   1)  If the body name to SPICE ID look-up fails for any of the
+       `target', `illmn', or `obsrvr' names, the error
+       SPICE(IDCODENOTFOUND) is signaled by a routine in the call
+       tree of this routine.
 
-   2) The error SPICE(INVALIDOPTION) signals if the aberration
-      correct, `abcorr', indicates a transmission based correction.
+   2)  If the aberration correct, `abcorr', indicates a transmission
+       based correction, the error SPICE(INVALIDOPTION) is signaled
+       by a routine in the call tree of this routine.
 
-   3) The error SPICE(BODIESNOTDISTINCT) signals if the `target',
-      `illmn', and `obsrvr' are not unique.
+   3)  If the `target', `illmn', and `obsrvr' are not unique, the error
+       SPICE(BODIESNOTDISTINCT) is signaled by a routine in the call
+       tree of this routine.
+
+   4)  If any of the `target', `illmn', `obsrvr' or `abcorr' input
+       string pointers is null, the error SPICE(NULLPOINTER) is
+       signaled. The function returns the value retval.
+
+   5)  If any of the `target', `illmn', `obsrvr' or `abcorr' input
+       strings has zero length, the error SPICE(EMPTYSTRING) is
+       signaled. The function returns the value retval.
 
 -Files
 
@@ -169,39 +174,54 @@
    bodies).
 
 
-                       ILLMN      OBS
-       ILLMN as seen      ^       /
-       from TARG at       |      /
-       ET - LT.           |     /
-                         >|..../< phase angle
-                          |   /
-                        . |  /
-                      .   | /
-                     .    |v     TARG as seen from OBS
-               SEP   .   TARG    at ET
-                      .  /
-                        /
-                       v
 
-        PI = SEP + PHASE
+                     illmn     obsrvr
+     illmn as seen      ^       /
+     from target at     |      /
+     et - lt.           |     /
+                       >|..../< phase angle
+                        |   /
+                      . |  /
+                    .   | /
+                   .    |v        target as seen from obsrvr
+             sep   .  target      at et
+                    .  /
+                      /
+                     v
 
-        so
 
-        PHASE = PI - SEP
+
+      pi = sep + phase
+
+      so
+
+      phase = pi - sep
 
 -Examples
 
-   The numerical results shown for these examples may differ across
+   The numerical results shown for this example may differ across
    platforms. The results depend on the SPICE kernels used as
    input, the compiler and supporting libraries, and the machine
    specific arithmetic implementation.
 
+   1) Determine the time intervals from December 1, 2006 UTC to
+      January 31, 2007 UTC for which the sun-moon-earth configuration
+      phase angle satisfies the relation conditions with respect to a
+      reference value of .57598845 radians (the phase angle at
+      January 1, 2007 00:00:00.000 UTC, 33.001707 degrees). Also
+      determine the time intervals corresponding to the local maximum and
+      minimum phase angles, and the absolute maximum and minimum phase
+      angles during the search interval. The configuration defines the
+      sun as the illuminator, the moon as the target, and the earth as
+      the observer.
+
       Use the meta-kernel shown below to load the required SPICE
       kernels.
 
+
          KPL/MK
 
-         File name: standard.tm
+         File name: phaseq_ex1.tm
 
          This meta-kernel is intended to support operation of SPICE
          example programs. The kernels shown here should not be
@@ -230,18 +250,15 @@
 
          \begintext
 
-   Example:
+         End of meta-kernel
 
-      Determine the time intervals from December 1, 2006 UTC to
-      January 31, 2007 UTC for which the sun-moon-earth configuration
-      phase angle satisfies the relation conditions with respect to a
-      reference value of .57598845 radians (the phase angle at
-      January 1, 2007 00:00:00.000 UTC, 33.001707 degrees). Also
-      determine the time intervals corresponding to the local maximum and
-      minimum phase angles, and the absolute maximum and minimum phase
-      angles during the search interval. The configuration defines the
-      sun as the illuminator, the moon as the target, and the earth as
-      the observer.
+
+      Example code begins here.
+
+
+      /.
+         Program phaseq_ex1
+      ./
 
       #include <stdio.h>
       #include "SpiceUsr.h"
@@ -252,7 +269,7 @@
       #define  NLOOPS  7
 
       int main()
-         {
+      {
 
          /.
          Local variables
@@ -290,13 +307,12 @@
                                               "LOCMIN",
                                               "ABSMIN",
                                               "LOCMAX",
-                                              "ABSMAX",
-                                            };
+                                              "ABSMAX" };
 
          /.
          Load kernels.
          ./
-         furnsh_c ( "standard.tm" );
+         furnsh_c ( "phaseq_ex1.tm" );
 
          /.
          Store the time bounds of our search interval in
@@ -317,7 +333,7 @@
          adjust = 0.0;
 
          for ( j = 0;  j < NLOOPS;  j++ )
-            {
+         {
 
             printf ( "Relation condition: %s\n",  relate[j] );
 
@@ -333,14 +349,14 @@
             Display the results.
             ./
             if ( wncard_c(&result) == 0 )
-               {
+            {
                printf ( "Result window is empty.\n\n" );
-               }
+            }
             else
-               {
+            {
 
                for ( i = 0;  i < wncard_c(&result);  i++ )
-                  {
+               {
 
                   /.
                   Fetch the endpoints of the Ith interval
@@ -357,18 +373,21 @@
 
                   timout_c ( stop, TIMFMT, TIMLEN, endstr );
                   printf ( "Stop time  = %s %16.9f\n", endstr, phaseq );
-                  }
+               }
 
                printf("\n");
 
-               }
-
             }
 
-         return ( 0 );
          }
 
-   The program outputs:
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
 
       Relation condition: =
       Start time = 2006 DEC 02 13:31:34.414      0.575988450
@@ -418,6 +437,7 @@
       Start time = 2007 JAN 19 04:27:54.600      3.074603891
       Stop time  = 2007 JAN 19 04:27:54.600      3.074603891
 
+
 -Restrictions
 
    None.
@@ -428,13 +448,23 @@
 
 -Author_and_Institution
 
-   E.D. Wright    (JPL)
+   J. Diaz del Rio     (ODC Space)
+   B.V. Semenov        (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.0.2, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Renamed
+       example's meta-kernel. Corrected minor formatting issues in
+       code example.
+
+       Added entries #4 and #5 to -Exceptions section.
+
    -CSPICE Version 1.0.1, 02-FEB-2017 (BVS)
 
-      Shortened permutted index entry.
+       Shortened permutted index entry.
 
    -CSPICE Version 1.0.0, 08-MAR-2012 (EDW)
 

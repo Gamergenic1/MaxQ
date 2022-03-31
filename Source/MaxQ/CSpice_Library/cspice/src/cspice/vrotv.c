@@ -9,7 +9,7 @@
 
 static integer c__3 = 3;
 
-/* $Procedure      VROTV ( Vector rotation about an axis ) */
+/* $Procedure VROTV ( Vector rotation about an axis ) */
 /* Subroutine */ int vrotv_(doublereal *v, doublereal *axis, doublereal *
 	theta, doublereal *r__)
 {
@@ -65,7 +65,8 @@ static integer c__3 = 3;
 
 /* $ Keywords */
 
-/*     ROTATION,  VECTOR */
+/*     ROTATION */
+/*     VECTOR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -79,18 +80,18 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     V          is a 3-dimensional vector to be rotated. */
+/*     V        is a 3-dimensional vector to be rotated. */
 
-/*     AXIS       is the axis about which the rotation is to be */
-/*                performed. */
+/*     AXIS     is the axis about which the rotation is to be */
+/*              performed. */
 
-/*     THETA      is the angle through which V is to be rotated about */
-/*                AXIS. */
+/*     THETA    is the angle through which V is to be rotated about */
+/*              AXIS. */
 
 /* $ Detailed_Output */
 
-/*     R          is the result of rotating V about AXIS by THETA. */
-/*                If AXIS is the zero vector, R = V. */
+/*     R        is the result of rotating V about AXIS by THETA. */
+/*              If AXIS is the zero vector, R = V. */
 
 /* $ Parameters */
 
@@ -100,12 +101,12 @@ static integer c__3 = 3;
 
 /*     Error free. */
 
-/*     1)  If the input axis is the zero vector R will be returned */
+/*     1)  If the input axis is the zero vector, R will be returned */
 /*         as V. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
@@ -121,64 +122,71 @@ static integer c__3 = 3;
 
 /* $ Examples */
 
-/*      If AXIS = ( 0, 0, 1 ) and THETA = PI/2 then the following results */
-/*      for R will be obtained */
+/*     If AXIS = ( 0, 0, 1 ) and THETA = PI/2 then the following results */
+/*     for R will be obtained */
 
-/*              V                           R */
-/*         -------------             ---------------- */
-/*         ( 1, 2, 3 )                ( -2, 1, 3 ) */
-/*         ( 1, 0, 0 )                (  0, 1, 0 ) */
-/*         ( 0, 1, 0 )                ( -1, 0, 0 ) */
-
-
-/*      If AXIS = ( 0, 1, 0 ) and THETA = PI/2 then the following results */
-/*      for R will be obtained */
-
-/*              V                           R */
-/*         -------------             ---------------- */
-/*         ( 1, 2, 3 )                (  3, 2, -1 ) */
-/*         ( 1, 0, 0 )                (  0, 0, -1 ) */
-/*         ( 0, 1, 0 )                (  0, 1,  0 ) */
+/*             V                           R */
+/*        -------------             ---------------- */
+/*        ( 1, 2, 3 )                ( -2, 1, 3 ) */
+/*        ( 1, 0, 0 )                (  0, 1, 0 ) */
+/*        ( 0, 1, 0 )                ( -1, 0, 0 ) */
 
 
-/*      If AXIS = ( 1, 1, 1 ) and THETA = PI/2 then the following results */
-/*      for R will be obtained */
+/*     If AXIS = ( 0, 1, 0 ) and THETA = PI/2 then the following results */
+/*     for R will be obtained */
 
-/*              V                                     R */
-/*         -----------------------------   ----------------------------- */
-/*         ( 1.0,     2.0,     3.0     )   ( 2.577.., 0.845.., 2.577.. ) */
-/*         ( 2.577.., 0.845.., 2.577.. )   ( 3.0      2.0,     1.0     ) */
-/*         ( 3.0      2.0,     1.0     )   ( 1.422.., 3.154.., 1.422.. ) */
-/*         ( 1.422.., 3.154.., 1.422.. )   ( 1.0      2.0,     3.0     ) */
+/*             V                           R */
+/*        -------------             ---------------- */
+/*        ( 1, 2, 3 )                (  3, 2, -1 ) */
+/*        ( 1, 0, 0 )                (  0, 0, -1 ) */
+/*        ( 0, 1, 0 )                (  0, 1,  0 ) */
 
+
+/*     If AXIS = ( 1, 1, 1 ) and THETA = PI/2 then the following results */
+/*     for R will be obtained */
+
+/*             V                                     R */
+/*        -----------------------------   ----------------------------- */
+/*        ( 1.0,     2.0,     3.0     )   ( 2.577.., 0.845.., 2.577.. ) */
+/*        ( 2.577.., 0.845.., 2.577.. )   ( 3.0      2.0,     1.0     ) */
+/*        ( 3.0      2.0,     1.0     )   ( 1.422.., 3.154.., 1.422.. ) */
+/*        ( 1.422.., 3.154.., 1.422.. )   ( 1.0      2.0,     3.0     ) */
 
 /* $ Restrictions */
 
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.2, 5-FEB-2003 (NJB) */
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
 
-/*         Header examples were corrected.  Exceptions section */
-/*         filled in. Miscellaneous header corrections were made. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 1.0.2, 05-FEB-2003 (NJB) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/*        Header examples were corrected.  $Exceptions section */
+/*        filled in. Miscellaneous header corrections were made. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (NJB) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -186,17 +194,6 @@ static integer c__3 = 3;
 /*     vector rotation about an axis */
 
 /* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.1.0, 17-FEB-1989 (HAN) (NJB) */
-
-/*         Contents of the Exceptions section was changed */
-/*         to "error free" to reflect the decision that the */
-/*         module will never participate in error handling. */
-/*         Also, the declarations of the unused variable I and the */
-/*         unused function VDOT were removed. */
-/* -& */
-
 
 /*     SPICELIB functions */
 

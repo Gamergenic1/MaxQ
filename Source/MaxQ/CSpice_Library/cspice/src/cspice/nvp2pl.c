@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      NVP2PL ( Normal vector and point to plane ) */
+/* $Procedure NVP2PL ( Normal vector and point to plane ) */
 /* Subroutine */ int nvp2pl_(doublereal *normal, doublereal *point, 
 	doublereal *plane)
 {
@@ -23,7 +23,7 @@
 
 /* $ Abstract */
 
-/*     Make a SPICELIB plane from a normal vector and a point. */
+/*     Make a SPICE plane from a normal vector and a point. */
 
 /* $ Disclaimer */
 
@@ -63,7 +63,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     NORMAL, */
 /*     POINT      I   A normal vector and a point defining a plane. */
@@ -72,20 +72,19 @@
 /* $ Detailed_Input */
 
 /*     NORMAL, */
-/*     POINT */
-/*                    are, respectively, a normal vector and point that */
-/*                    define a plane in three-dimensional space.  NORMAL */
-/*                    need not be a unit vector. Let the symbol < a, b > */
-/*                    indicate the inner product of vectors a and b; */
-/*                    then the geometric plane is the set of vectors X */
-/*                    in three-dimensional space that satisfy */
+/*     POINT    are, respectively, a normal vector and point that */
+/*              define a plane in three-dimensional space. NORMAL */
+/*              need not be a unit vector. Let the symbol < a, b > */
+/*              indicate the inner product of vectors a and b; */
+/*              then the geometric plane is the set of vectors X */
+/*              in three-dimensional space that satisfy */
 
-/*                       < X - POINT, NORMAL >  =  0. */
+/*                 < X - POINT, NORMAL >  =  0. */
 
 /* $ Detailed_Output */
 
-/*     PLANE          is a SPICELIB plane that represents the geometric */
-/*                    plane defined by POINT and NORMAL. */
+/*     PLANE    is a SPICE plane that represents the geometric */
+/*              plane defined by POINT and NORMAL. */
 
 /* $ Parameters */
 
@@ -94,7 +93,7 @@
 /* $ Exceptions */
 
 /*     1)  If the input vector NORMAL is the zero vector, the error */
-/*         SPICE(ZEROVECTOR) is signalled. */
+/*         SPICE(ZEROVECTOR) is signaled. */
 
 /* $ Files */
 
@@ -103,17 +102,17 @@
 /* $ Particulars */
 
 /*     SPICELIB geometry routines that deal with planes use the `plane' */
-/*     data type to represent input and output planes.  This data type */
+/*     data type to represent input and output planes. This data type */
 /*     makes the subroutine interfaces simpler and more uniform. */
 
-/*     The SPICELIB routines that produce SPICELIB planes from data that */
+/*     The SPICELIB routines that produce SPICE planes from data that */
 /*     define a plane are: */
 
 /*        NVC2PL ( Normal vector and constant to plane ) */
 /*        NVP2PL ( Normal vector and point to plane    ) */
 /*        PSV2PL ( Point and spanning vectors to plane ) */
 
-/*     The SPICELIB routines that convert SPICELIB planes to data that */
+/*     The SPICELIB routines that convert SPICE planes to data that */
 /*     define a plane are: */
 
 /*        PL2NVC ( Plane to normal vector and constant ) */
@@ -127,7 +126,7 @@
 /* $ Examples */
 
 /*     1)  Project a vector V orthogonally onto a plane defined by POINT */
-/*         and NORMAL.  PROJ is the projection we want; it is the */
+/*         and NORMAL. PROJ is the projection we want; it is the */
 /*         closest vector in the plane to V. */
 
 /*            CALL NVP2PL ( NORMAL, POINT,  PLANE ) */
@@ -135,9 +134,9 @@
 
 
 /*     2)  Given a point in a plane and a normal vector, find the */
-/*         distance of the plane from the origin.  We make a */
+/*         distance of the plane from the origin. We make a */
 /*         `plane' from the point and normal, then convert the */
-/*         plane to a unit normal and constant.  The constant CONST */
+/*         plane to a unit normal and constant. The constant CONST */
 /*         is (according to the specification of PL2NVC) the distance of */
 /*         the plane from the origin. */
 
@@ -150,13 +149,22 @@
 
 /* $ Literature_References */
 
-/*     [1] `Calculus and Analytic Geometry', Thomas and Finney. */
+/*     [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry," */
+/*          7th Edition, Addison Wesley, 1988. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPILCIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 30-AUG-2005 (NJB) */
 
@@ -176,14 +184,6 @@
 /*     normal vector and point to plane */
 
 /* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 30-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VMINUS call. */
-
-/* -& */
 
 /*     SPICELIB functions */
 
@@ -191,13 +191,13 @@
 /*     Local parameters */
 
 
-/*     The contents of SPICELIB planes are as follows: */
+/*     The contents of SPICE planes are as follows: */
 
 /*        Elements NMLPOS through NMLPOS + 2 contain a unit normal */
 /*        vector for the plane. */
 
 /*        Element CONPOS contains a constant for the plane;  every point */
-/*        X in the plane satisifies */
+/*        X in the plane satisfies */
 
 /*           < X, PLANE(NMLPOS) >  =  PLANE(CONPOS). */
 

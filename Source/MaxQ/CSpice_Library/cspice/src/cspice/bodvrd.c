@@ -10,7 +10,7 @@
 static integer c__0 = 0;
 static integer c__1 = 1;
 
-/* $Procedure      BODVRD ( Return d.p. values from the kernel pool ) */
+/* $Procedure BODVRD ( Return d.p. values from the kernel pool ) */
 /* Subroutine */ int bodvrd_(char *bodynm, char *item, integer *maxn, integer 
 	*dim, doublereal *values, ftnlen bodynm_len, ftnlen item_len)
 {
@@ -150,46 +150,46 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     BODYNM     is the name of the body for which ITEM is requested. */
-/*                BODYNM is case-insensitive, and leading and trailing */
-/*                blanks in BODYNM are not significant. Optionally, you */
-/*                may supply the integer ID code for the object as an */
-/*                integer string.  For example both 'MOON' and '301' are */
-/*                legitimate strings that indicate the moon is the body */
-/*                of interest. */
+/*     BODYNM   is the name of the body for which ITEM is requested. */
+/*              BODYNM is case-insensitive, and leading and trailing */
+/*              blanks in BODYNM are not significant. Optionally, you */
+/*              may supply the integer ID code for the object as an */
+/*              integer string. For example both 'MOON' and '301' are */
+/*              legitimate strings that indicate the moon is the body */
+/*              of interest. */
 
-/*     ITEM       is the item to be returned. Together, the NAIF ID */
-/*                code of the body and the item name combine to form a */
-/*                kernel variable name, e.g., */
+/*     ITEM     is the item to be returned. Together, the NAIF ID */
+/*              code of the body and the item name combine to form a */
+/*              kernel variable name, e.g., */
 
-/*                      'BODY599_RADII' */
-/*                      'BODY401_POLE_RA' */
+/*                    'BODY599_RADII' */
+/*                    'BODY401_POLE_RA' */
 
-/*                The values associated with the kernel variable having */
-/*                the name constructed as shown are sought.  Below */
-/*                we'll take the shortcut of calling this kernel variable */
-/*                the "requested kernel variable." */
+/*              The values associated with the kernel variable having */
+/*              the name constructed as shown are sought. Below */
+/*              we'll take the shortcut of calling this kernel variable */
+/*              the "requested kernel variable." */
 
-/*                Note that ITEM *is* case-sensitive.  This attribute */
-/*                is inherited from the case-sensitivity of kernel */
-/*                variable names. */
+/*              Note that ITEM *is* case-sensitive. This attribute */
+/*              is inherited from the case-sensitivity of kernel */
+/*              variable names. */
 
-/*     MAXN       is the maximum number of values that may be returned. */
-/*                The output array VALUES must be declared with size at */
-/*                least MAXN.  It's an error to supply an output array */
-/*                that is too small to hold all of the values associated */
-/*                with the requested kernel variable. */
+/*     MAXN     is the maximum number of values that may be returned. */
+/*              The output array VALUES must be declared with size at */
+/*              least MAXN. It's an error to supply an output array */
+/*              that is too small to hold all of the values associated */
+/*              with the requested kernel variable. */
 
 /* $ Detailed_Output */
 
-/*     DIM        is the number of values returned; this is always the */
-/*                number of values associated with the requested kernel */
-/*                variable unless an error has been signaled. */
+/*     DIM      is the number of values returned; this is always the */
+/*              number of values associated with the requested kernel */
+/*              variable unless an error has been signaled. */
 
-/*     VALUES     is the array of values associated with the requested */
-/*                kernel variable.  If VALUES is too small to hold all */
-/*                of the values associated with the kernel variable, the */
-/*                returned values of DIM and VALUES are undefined. */
+/*     VALUES   is the array of values associated with the requested */
+/*              kernel variable. If VALUES is too small to hold all */
+/*              of the values associated with the kernel variable, the */
+/*              returned values of DIM and VALUES are undefined. */
 
 /* $ Parameters */
 
@@ -197,30 +197,30 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If the input body name cannot be translated to an ID code, */
-/*        and if the name is not a string representation of an integer */
-/*        (for example, '399'), the error SPICE(NOTRANSLATION) is */
-/*        signaled. */
+/*     1)  If the input body name cannot be translated to an ID code, */
+/*         and if the name is not a string representation of an integer */
+/*         (for example, '399'), the error SPICE(NOTRANSLATION) is */
+/*         signaled. */
 
-/*     2) If the requested kernel variable is not found in the kernel */
-/*        pool, the error SPICE(KERNELVARNOTFOUND) is signaled. */
+/*     2)  If the requested kernel variable is not found in the kernel */
+/*         pool, the error SPICE(KERNELVARNOTFOUND) is signaled. */
 
-/*     3) If the requested kernel variable is found but the associated */
-/*        values aren't numeric, the error SPICE(TYPEMISMATCH) is */
-/*        signaled. */
+/*     3)  If the requested kernel variable is found but the associated */
+/*         values aren't numeric, the error SPICE(TYPEMISMATCH) is */
+/*         signaled. */
 
-/*     4) The output array VALUES must be declared with sufficient size */
-/*        to contain all of the values associated with the requested */
-/*        kernel variable.  If the dimension of */
-/*        VALUES indicated by MAXN is too small to contain the */
-/*        requested values, the error SPICE(ARRAYTOOSMALL) is signaled. */
+/*     4)  If the dimension of VALUES indicated by MAXN is too small to */
+/*         contain the requested values, the error SPICE(ARRAYTOOSMALL) */
+/*         is signaled. The output array VALUES must be declared with */
+/*         sufficient size to contain all of the values associated with */
+/*         the requested kernel variable. */
 
-/*     5) If the input dimension MAXN indicates there is more room */
-/*        in VALUES than there really is---for example, if MAXN is */
-/*        10 but values is declared with dimension 5---and the dimension */
-/*        of the requested kernel variable is larger than the actual */
-/*        dimension of VALUES, then this routine may overwrite */
-/*        memory.  The results are unpredictable. */
+/*     5)  If the input dimension MAXN indicates there is more room */
+/*         in VALUES than there really is---for example, if MAXN is */
+/*         10 but values is declared with dimension 5---and the dimension */
+/*         of the requested kernel variable is larger than the actual */
+/*         dimension of VALUES, then this routine may overwrite */
+/*         memory. The results are unpredictable. */
 
 /* $ Files */
 
@@ -232,68 +232,153 @@ static integer c__1 = 1;
 /*     constructing names of requested kernel variables and by */
 /*     performing error checking. */
 
-/*     This routine is intended for use in cases where the maximum */
-/*     number of values that may be returned is known at compile */
-/*     time.  The caller fetches all of the values associated with */
-/*     the specified kernel variable via a single call to this */
-/*     routine.  If the number of values to be fetched cannot be */
-/*     known until run time, the lower-level routine  GDPOOL (an */
-/*     entry point of POOL) should be used instead.  GDPOOL supports */
+/*     This routine is intended for use in cases where the maximum number */
+/*     of values that may be returned is known at compile time. The */
+/*     caller fetches all of the values associated with the specified */
+/*     kernel variable via a single call to this routine. If the number */
+/*     of values to be fetched cannot be known until run time, the */
+/*     lower-level routine GDPOOL should be used instead. GDPOOL supports */
 /*     fetching arbitrary amounts of data in multiple "chunks." */
 
 /*     This routine is intended for use in cases where the requested */
-/*     kernel variable is expected to be present in the kernel pool.  If */
+/*     kernel variable is expected to be present in the kernel pool. If */
 /*     the variable is not found or has the wrong data type, this */
-/*     routine signals an error.  In cases where it is appropriate to */
+/*     routine signals an error. In cases where it is appropriate to */
 /*     indicate absence of an expected kernel variable by returning a */
 /*     boolean "found flag" with the value .FALSE., again the routine */
 /*     GDPOOL should be used. */
 
 /* $ Examples */
 
-/*     1)  When the kernel variable */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            BODY399_RADII */
+/*     1) Retrieve the radii of the Earth from the kernel pool, using */
+/*        both 'RADII' and 'radii' as the item name to return. Since */
+/*        the ITEM variable possesses case sensitivity, the later case */
+/*        should fail. Trap the error and print it to the output. */
 
-/*         is present in the kernel pool---normally because a PCK */
-/*         defining this variable has been loaded---the call */
+/*        Use the PCK kernel below to load the required triaxial */
+/*        ellipsoidal shape model for the Earth. */
 
-/*            CALL BODVRD ( 'EARTH', 'RADII', 3, DIM, VALUES ) */
-
-/*         returns the dimension and values associated with the variable */
-/*         'BODY399_RADII', for example, */
-
-/*            DIM       = 3 */
-/*            VALUES(1) = 6378.140 */
-/*            VALUES(2) = 6378.140 */
-/*            VALUES(3) = 6356.755 */
+/*           pck00008.tpc */
 
 
-/*     2)  The call */
-
-/*            CALL BODVRD ( 'earth', 'RADII', 3, DIM, VALUES ) */
-
-/*         will produce the same results shown in example (1), */
-/*         since the case of the input argument BODYNM is */
-/*         not significant. */
+/*        Example code begins here. */
 
 
-/*     3)  The call */
+/*              PROGRAM BODVRD_EX1 */
+/*              IMPLICIT NONE */
 
-/*            CALL BODVRD ( '399', 'RADII', 3, DIM, VALUES ) */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NVALS */
+/*              PARAMETER           ( NVALS = 3 ) */
 
-/*         will produce the same results shown in example (1), */
-/*         since strings containing integer codes are accepted */
-/*         by this routine. */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      VALUES (NVALS) */
+
+/*              INTEGER               DIM */
+
+/*        C */
+/*        C     Load a PCK. */
+/*        C */
+/*              CALL FURNSH ( 'pck00008.tpc' ) */
+
+/*        C */
+/*        C     When the kernel variable */
+/*        C */
+/*        C        BODY399_RADII */
+/*        C */
+/*        C     is present in the kernel pool---normally because a PCK */
+/*        C     defining this variable has been loaded (as is the case */
+/*        C     here)---the call */
+/*        C */
+/*              CALL BODVRD ( 'EARTH', 'RADII', 3, DIM, VALUES ) */
+
+/*        C */
+/*        C     returns the dimension and values associated with the */
+/*        C     variable 'BODY399_RADII' */
+/*        C */
+/*              WRITE(*,'(A,3F10.3)') 'EARTH RADII: ', VALUES */
+
+/*        C */
+/*        C     The call */
+/*        C */
+/*              CALL BODVRD ( 'earth', 'RADII', 3, DIM, VALUES ) */
+
+/*        C */
+/*        C     will produce the same results since the case of the */
+/*        C     input argument BODYNM is not significant. */
+/*        C */
+/*              WRITE(*,'(A,3F10.3)') 'earth RADII: ', VALUES */
+
+/*        C */
+/*        C     The call */
+/*        C */
+/*              CALL BODVRD ( '399', 'RADII', 3, DIM, VALUES ) */
+
+/*        C */
+/*        C     will also produce the same results since strings */
+/*        C     containing integer codes are accepted */
+/*        C     by this routine. */
+/*        C */
+/*              WRITE(*,'(A,3F10.3)') '''399'' RADII: ', VALUES */
+
+/*        C */
+/*        C     The ITEM variable possesses case sensitivity. This */
+/*        C     call should cause an error. */
+/*        C */
+/*              CALL BODVRD ( 'EARTH', 'radii', 3, DIM, VALUES ) */
+/*              WRITE(*,'(A,3F10.3)') 'EARTH radii: ', VALUES */
+
+/*              END */
 
 
-/*     4) The call */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*           CALL BODVRD ( 'EARTH', 'radii', 3, DIM, VALUES ) */
 
-/*        usually will cause a SPICE(KERNELVARNOTFOUND) error to be */
-/*        signaled, because this call will attempt to look up the */
-/*        values associated with a kernel variable of the name */
+/*        EARTH RADII:   6378.140  6378.140  6356.750 */
+/*        earth RADII:   6378.140  6378.140  6356.750 */
+/*        '399' RADII:   6378.140  6378.140  6356.750 */
+
+/*        ============================================================*** */
+
+/*        Toolkit version: N0066 */
+
+/*        SPICE(KERNELVARNOTFOUND) -- The Variable Was not Found in th*** */
+/*        Pool. */
+
+/*        The variable BODY399_radii could not be found in the kernel *** */
+
+/*        A traceback follows.  The name of the highest level module i*** */
+/*        BODVRD */
+
+/*        Oh, by the way:  The SPICELIB error handling actions are USER- */
+/*        TAILORABLE.  You can choose whether the Toolkit aborts or co*** */
+/*        when errors occur, which error messages to output, and where*** */
+/*        the output.  Please read the ERROR "Required Reading" file, *** */
+/*        the routines ERRACT, ERRDEV, and ERRPRT. */
+
+/*        ============================================================*** */
+
+
+/*        Warning: incomplete output. 8 lines extended past the right */
+/*        margin of the header and have been truncated. These lines are */
+/*        marked by "***" at the end of each line. */
+
+
+/*        Note that, usually, the last call will cause a */
+/*        SPICE(KERNELVARNOTFOUND) error to be signaled, because this */
+/*        call will attempt to look up the values associated with a */
+/*        kernel variable of the name */
 
 /*           'BODY399_radii' */
 
@@ -316,12 +401,21 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete example code based on the existing fragments. */
+
+/*        Removed note about GDPOOL being entry point of POOL from */
+/*        $Particulars section. */
 
 /* -    SPICELIB Version 1.2.0, 19-SEP-2013 (BVS) */
 
@@ -345,7 +439,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.1.0, 22-JUL-2004 (NJB) */
 
-/*        Updated to use BODS2C.  This simplifies the name-to-ID */
+/*        Updated to use BODS2C. This simplifies the name-to-ID */
 /*        mapping code. */
 
 /* -& */

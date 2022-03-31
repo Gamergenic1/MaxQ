@@ -133,6 +133,7 @@ static integer c__0 = 0;
     extern /* Subroutine */ int insang_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, logical *, doublereal *), pltnrm_(
 	    doublereal *, doublereal *, doublereal *, doublereal *);
+    doublereal xpt2[3];
 
 /* $ Abstract */
 
@@ -167,12 +168,12 @@ static integer c__0 = 0;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      GEOMETRY */
-/*      SHAPES */
+/*     GEOMETRY */
+/*     SHAPES */
 
 /* $ Declarations */
 
@@ -893,96 +894,108 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the file handle of a DSK file containing a shape */
-/*                model for a target body.  The shape model is stored */
-/*                in a type 2 DSK segment. */
+/*     HANDLE   is the file handle of a DSK file containing a shape */
+/*              model for a target body. The shape model is stored */
+/*              in a type 2 DSK segment. */
 
-/*     DLADSC     is the DLA descriptor of a type 2 DSK segment */
-/*                containing plate model data representing the surface of */
-/*                the target body.  The caller should declare DLADSC */
-/*                with size DLADSZ; this size parameter is defined in */
-/*                the INCLUDE file dla.inc.  Normally this descriptor */
-/*                will be obtained by a search through a DSK file */
-/*                using the DLA search routines; see the Examples */
-/*                header section below for a working code example */
-/*                illustrating a simple search. */
+/*     DLADSC   is the DLA descriptor of a type 2 DSK segment */
+/*              containing plate model data representing the surface of */
+/*              the target body. The caller should declare DLADSC */
+/*              with size DLADSZ; this size parameter is defined in */
+/*              the INCLUDE file dla.inc. Normally this descriptor */
+/*              will be obtained by a search through a DSK file */
+/*              using the DLA search routines; see the $Examples */
+/*              header section below for a working code example */
+/*              illustrating a simple search. */
 
-/*     VERTEX     is the vertex of a ray.  VERTEX is expressed relative */
-/*                to the body fixed reference frame associated with the */
-/*                target body.  This reference frame is the same frame */
-/*                relative to which the vertices of the plate model */
-/*                are expressed.  Units are km. */
+/*     VERTEX   is the vertex of a ray. VERTEX is expressed relative */
+/*              to the body fixed reference frame associated with the */
+/*              target body. This reference frame is the same frame */
+/*              relative to which the vertices of the plate model */
+/*              are expressed. Units are km. */
 
-/*                The vertex is required to be outside the target */
-/*                body. */
+/*              The vertex is required to be outside the target */
+/*              body. */
 
-/*     RAYDIR     is the ray's direction vector.  RAYDIR is expressed */
-/*                relative to the body fixed reference frame associated */
-/*                with the target body. */
+/*     RAYDIR   is the ray's direction vector. RAYDIR is expressed */
+/*              relative to the body fixed reference frame associated */
+/*              with the target body. */
 
 /* $ Detailed_Output */
 
-/*     PLID       is the ID of the plate closest to the input ray's */
-/*                vertex at which a ray-surface intercept exists. */
-/*                If no intercept exists, PLID is undefined. */
+/*     PLID     is the ID of the plate closest to the input ray's */
+/*              vertex at which a ray-surface intercept exists. */
+/*              If no intercept exists, PLID is undefined. */
 
-/*     XPT        is the ray-target intercept closest to the ray's */
-/*                vertex, if an intercept exists.  XPT is expressed */
-/*                relative to the body-fixed reference frame associated */
-/*                with the target body.  Units are km. */
+/*     XPT      is the ray-target intercept closest to the ray's */
+/*              vertex, if an intercept exists. XPT is expressed */
+/*              relative to the body-fixed reference frame associated */
+/*              with the target body. Units are km. */
 
-/*                If no intercept exists, XPT is undefined. */
+/*              If no intercept exists, XPT is undefined. */
 
-/*     FOUND      is a logical flag that indicates whether or not the */
-/*                ray does indeed intersect the target.  If the ray */
-/*                intersects a plate FOUND is .TRUE.  Otherwise FOUND is */
-/*                FALSE. */
+/*     FOUND    is a logical flag that indicates whether or not the */
+/*              ray does indeed intersect the target. If the ray */
+/*              intersects a plate FOUND is .TRUE. Otherwise FOUND is */
+/*              .FALSE. */
 
 /* $ Parameters */
 
+/*     XFRACT   is the default plate expansion fraction. This */
+/*              parameter can be overridden. */
 
-/*     XFRACT     is the default plate expansion fraction. This */
-/*                parameter can be overridden. See the include file */
+/*     See the include file */
 
-/*                   dsktol.inc */
-
-/*                for details. */
-
-
-/*     See the include files */
-
-/*        dla.inc */
-/*        dsk02.inc */
-/*        dskdsc.inc */
 /*        dsktol.inc */
 
-/*     for declarations of parameters used by this routine. */
+/*     for the values of tolerance parameters used by default by the */
+/*     ray-surface intercept algorithm. */
+
+/*     See the include file */
+
+/*        dla.inc */
+
+/*     for declarations of DLA descriptor sizes and documentation of the */
+/*     contents of DLA descriptors. */
+
+/*     See the include file */
+
+/*        dskdsc.inc */
+
+/*     for declarations of DSK descriptor sizes and documentation of the */
+/*     contents of DSK descriptors. */
+
+/*     See the include file */
+
+/*        dsk02.inc */
+
+/*     for declarations of DSK data type 2 (plate model) parameters. */
 
 /* $ Exceptions */
 
-/*     1)  If the input handle is invalid, the error will be diagnosed by */
-/*         routines in the call tree of this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     2)  If a file read error occurs, the error will be diagnosed by */
-/*         routines in the call tree of this routine. */
+/*     2)  If a file read error occurs, the error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     3)  If the input DLA descriptor is invalid, the effect of this */
-/*         routine is undefined. The error *may* be diagnosed by routines */
-/*         in the call  tree of this routine, but there are no */
+/*         routine is undefined. The error *may* be diagnosed by */
+/*         routines in the call tree of this routine, but there are no */
 /*         guarantees. */
 
 /*     4)  If an error occurs while trying to look up any component */
-/*         of the shape model, the error will be diagnosed by routines */
-/*         in the call tree of this routine. */
+/*         of the shape model, the error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /*     5)  If the input ray direction is the zero vector, the error */
 /*         SPICE(ZEROVECTOR) is signaled. */
 
-/*     6)  If the coarse voxel grid scale of the shape model is less than */
-/*         1, the error SPICE(VALUEOUTOFRANGE) is signaled. */
+/*     6)  If the coarse voxel grid scale of the shape model is less */
+/*         than 1, the error SPICE(VALUEOUTOFRANGE) is signaled. */
 
 /*     7)  If the coarse voxel grid of the shape model contains more */
-/*         than MAXCGR (see pltmax.inc) voxels, the error */
+/*         than MAXCGR (see dsk02.inc) voxels, the error */
 /*         SPICE(GRIDTOOLARGE) is signaled. */
 
 /*     8)  If the plate list for any intersected voxel is too large */
@@ -990,7 +1003,7 @@ static integer c__0 = 0;
 /*         is signaled. */
 
 /*     9)  Due to round-off errors, results from this routine may */
-/*         differ across platforms.  Results also may differ from */
+/*         differ across platforms. Results also may differ from */
 /*         those expected---and not necessarily by a small amount. */
 /*         For example, a ray may miss a plate it was expected to */
 /*         hit and instead hit another plate considerably farther */
@@ -998,7 +1011,7 @@ static integer c__0 = 0;
 
 /*     10) In the event that an intercept point lies on multiple */
 /*         plates (that is, the point is on an edge or vertex), */
-/*         a plate will be selected.  Due to round-off error, the */
+/*         a plate will be selected. Due to round-off error, the */
 /*         selection may vary across platforms. */
 
 /* $ Files */
@@ -1009,12 +1022,12 @@ static integer c__0 = 0;
 
 /*     This routine solves the ray-surface intercept problem for */
 /*     a specified ray and a surface represented by triangular plate */
-/*     model.  The surface representation is provided by data in a */
+/*     model. The surface representation is provided by data in a */
 /*     type 2 segment of a DSK file. */
 
 /*     This routine does not assume that the segment from which the */
 /*     surface model data are read represents the entire surface of */
-/*     the target body.  A program could call this routine repeatedly */
+/*     the target body. A program could call this routine repeatedly */
 /*     to find the surface intercept of a ray and a shape model */
 /*     partitioned into multiple segments. */
 
@@ -1030,508 +1043,634 @@ static integer c__0 = 0;
 
 /*     1) Find the surface intercept points corresponding to a latitude/ */
 /*        longitude grid of a specified resolution, for a specified */
-/*        target body.  This simple program assumes the shape model for */
-/*        the target body is stored in a single type 2 DSK segment, and */
-/*        that this segment is the first one in the DSK file to which it */
-/*        belongs. */
+/*        target body. */
 
-/*        In the following example program, the file */
-
-/*           phobos_3_3.bds */
-
-/*        is a DSK file containing a type 2 segment that provides a */
-/*        plate model representation of the surface of Phobos. In order */
-/*        to duplicate the example output, this kernel name should be */
-/*        supplied at the prompt. */
+/*        This simple program assumes the shape model for the target */
+/*        body is stored in a single type 2 DSK segment, and that this */
+/*        segment is the first one in the DSK file to which it belongs. */
 
 
-/*     C */
-/*     C     PROGRAM DSKX02_EX1 */
-/*     C     IMPLICIT NONE */
-/*     C */
-/*           INCLUDE 'dla.inc' */
-/*           INCLUDE 'dskdsc.inc' */
-/*           INCLUDE 'dsk02.inc' */
-/*     C */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      DSKSGR */
-/*           DOUBLE PRECISION      RPD */
-/*     C */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               FILSIZ */
-/*           PARAMETER           ( FILSIZ = 255 ) */
+/*        Example code begins here. */
 
-/*           INTEGER               NLAT */
-/*           PARAMETER           ( NLAT   = 9 ) */
 
-/*           INTEGER               NLON */
-/*           PARAMETER           ( NLON   = 9 ) */
+/*              PROGRAM DSKX02_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           DOUBLE PRECISION      TOL */
-/*           PARAMETER           ( TOL   =  1.D-12 ) */
+/*              INCLUDE 'dla.inc' */
+/*              INCLUDE 'dskdsc.inc' */
+/*              INCLUDE 'dsk02.inc' */
+/*        C */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DSKSGR */
+/*              DOUBLE PRECISION      RPD */
+/*        C */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               FILSIZ */
+/*              PARAMETER           ( FILSIZ = 255 ) */
 
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(FILSIZ)    DSK */
+/*              INTEGER               NLAT */
+/*              PARAMETER           ( NLAT   = 9 ) */
 
-/*           DOUBLE PRECISION      DSKDSC ( DSKDSZ ) */
-/*           DOUBLE PRECISION      LAT */
-/*           DOUBLE PRECISION      LON */
-/*           DOUBLE PRECISION      MAXR */
-/*           DOUBLE PRECISION      R */
-/*           DOUBLE PRECISION      RAYDIR ( 3 ) */
-/*           DOUBLE PRECISION      VERTEX ( 3 ) */
-/*           DOUBLE PRECISION      XLAT */
-/*           DOUBLE PRECISION      XLON */
-/*           DOUBLE PRECISION      XPT    ( 3 ) */
-/*           DOUBLE PRECISION      XR */
+/*              INTEGER               NLON */
+/*              PARAMETER           ( NLON   = 9 ) */
 
-/*           INTEGER               DLADSC ( DLADSZ ) */
-/*           INTEGER               HANDLE */
-/*           INTEGER               I */
-/*           INTEGER               J */
-/*           INTEGER               PLID */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              DOUBLE PRECISION      TOL */
+/*              PARAMETER           ( TOL   =  1.D-12 ) */
 
-/*           LOGICAL               FOUND */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(FILSIZ)    DSK */
 
-/*     C */
-/*     C     Prompt for the name of the DSK to read. */
-/*     C */
-/*           CALL PROMPT ( 'Enter DSK name > ', DSK ) */
-/*     C */
-/*     C     Open the DSK file for read access. */
-/*     C     We use the DAS-level interface for */
-/*     C     this function. */
-/*     C */
-/*           CALL DASOPR ( DSK, HANDLE ) */
-/*     C */
-/*     C     Begin a forward search through the */
-/*     C     kernel, treating the file as a DLA. */
-/*     C     In this example, it's a very short */
-/*     C     search. */
-/*     C */
-/*           CALL DLABFS ( HANDLE, DLADSC, FOUND ) */
+/*              DOUBLE PRECISION      DSKDSC ( DSKDSZ ) */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      MAXR */
+/*              DOUBLE PRECISION      R */
+/*              DOUBLE PRECISION      RAYDIR ( 3 ) */
+/*              DOUBLE PRECISION      VERTEX ( 3 ) */
+/*              DOUBLE PRECISION      XLAT */
+/*              DOUBLE PRECISION      XLON */
+/*              DOUBLE PRECISION      XPT    ( 3 ) */
+/*              DOUBLE PRECISION      XR */
 
-/*           IF ( .NOT. FOUND ) THEN */
-/*     C */
-/*     C        We arrive here only if the kernel */
-/*     C        contains no segments.  This is */
-/*     C        unexpected, but we're prepared for it. */
-/*     C */
-/*              CALL SETMSG ( 'No segments found ' */
-/*          .   //            'in DSK file #.'    ) */
-/*              CALL ERRCH  ( '#',  DSK           ) */
-/*              CALL SIGERR ( 'SPICE(NODATA)'     ) */
+/*              INTEGER               DLADSC ( DLADSZ ) */
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               PLID */
 
-/*           END IF */
+/*              LOGICAL               FOUND */
 
-/*     C */
-/*     C     If we made it this far, DLADSC is the */
-/*     C     DLA descriptor of the first segment. */
-/*     C */
-/*     C     We're going to generate the intercept points */
-/*     C     using a set of rays which point toward the */
-/*     C     origin and whose vertices are on a */
-/*     C     specified lat/lon grid.  To start out we */
-/*     C     must pick a reasonable range from the origin */
-/*     C     for the vertices:  the range must be large */
-/*     C     enough so that the vertices are guaranteed */
-/*     C     to be outside the target body but small */
-/*     C     enough that we don't lose too much precision */
-/*     C     in the surface intercept computation. */
-/*     C */
-/*     C     We'll look up the upper bound for the target */
-/*     C     radius, then use 2 times this value as the */
-/*     C     vertex magnitude. */
-/*     C */
-/*           CALL DSKGD ( HANDLE, DLADSC, DSKDSC ) */
+/*        C */
+/*        C     Prompt for the name of the DSK to read. */
+/*        C */
+/*              CALL PROMPT ( 'Enter DSK name > ', DSK ) */
+/*        C */
+/*        C     Open the DSK file for read access. */
+/*        C     We use the DAS-level interface for */
+/*        C     this function. */
+/*        C */
+/*              CALL DASOPR ( DSK, HANDLE ) */
+/*        C */
+/*        C     Begin a forward search through the */
+/*        C     kernel, treating the file as a DLA. */
+/*        C     In this example, it's a very short */
+/*        C     search. */
+/*        C */
+/*              CALL DLABFS ( HANDLE, DLADSC, FOUND ) */
 
-/*           MAXR = DSKSGR( DSKDSC ) */
-/*           R    = 2.D0 * MAXR */
+/*              IF ( .NOT. FOUND ) THEN */
+/*        C */
+/*        C        We arrive here only if the kernel */
+/*        C        contains no segments.  This is */
+/*        C        unexpected, but we're prepared for it. */
+/*        C */
+/*                 CALL SETMSG ( 'No segments found ' */
+/*             .   //            'in DSK file #.'    ) */
+/*                 CALL ERRCH  ( '#',  DSK           ) */
+/*                 CALL SIGERR ( 'SPICE(NODATA)'     ) */
 
-/*     C */
-/*     C     Now generate the intercept points.  We generate */
-/*     C     intercepts along latitude bounds, working from */
-/*     C     north to south. Latitude ranges from +80 to */
-/*     C     -80 degrees. Longitude ranges from 0 to 320 */
-/*     C     degrees. The increment is 20 degrees for */
-/*     C     latitude and 40 degrees for longitude. */
-/*     C */
-/*           DO I = 1, NLAT */
+/*              END IF */
 
-/*              LAT = RPD() * ( 100.D0 - 20.D0*I ) */
+/*        C */
+/*        C     If we made it this far, DLADSC is the */
+/*        C     DLA descriptor of the first segment. */
+/*        C */
+/*        C     We're going to generate the intercept points */
+/*        C     using a set of rays which point toward the */
+/*        C     origin and whose vertices are on a */
+/*        C     specified lat/lon grid.  To start out we */
+/*        C     must pick a reasonable range from the origin */
+/*        C     for the vertices:  the range must be large */
+/*        C     enough so that the vertices are guaranteed */
+/*        C     to be outside the target body but small */
+/*        C     enough that we don't lose too much precision */
+/*        C     in the surface intercept computation. */
+/*        C */
+/*        C     We'll look up the upper bound for the target */
+/*        C     radius, then use 2 times this value as the */
+/*        C     vertex magnitude. */
+/*        C */
+/*              CALL DSKGD ( HANDLE, DLADSC, DSKDSC ) */
 
-/*              DO J = 1, NLON */
+/*              MAXR = DSKDSC(MX3IDX) */
+/*              R    = 2.D0 * MAXR */
 
-/*                 LON = RPD() * 40.D0 * (J-1) */
-/*     C */
-/*     C           Produce a ray vertex for the current */
-/*     C           lat/lon value.  Negate the vertex to */
-/*     C           produce the ray's direction vector. */
-/*     C */
-/*                 CALL LATREC ( R, LON, LAT, VERTEX ) */
-/*                 CALL VMINUS ( VERTEX,      RAYDIR ) */
-/*     C */
-/*     C           Find the surface intercept for this */
-/*     C           ray. */
-/*     C */
-/*                 CALL DSKX02 ( HANDLE, DLADSC, VERTEX, */
-/*          .                    RAYDIR, PLID,   XPT,    FOUND  ) */
-/*     C */
-/*     C           Since the ray passes through the origin on */
-/*     C           the body-fixed frame associated with the */
-/*     C           target body, we'd rarely expect to find that */
-/*     C           the ray failed to intersect the surface. */
-/*     C           For safety, we check the FOUND flag.  (A */
-/*     C           "not found" condition could be a sign of */
-/*     C           a bug.) */
-/*     C */
-/*                 IF ( .NOT. FOUND ) THEN */
+/*        C */
+/*        C     Now generate the intercept points.  We generate */
+/*        C     intercepts along latitude bounds, working from */
+/*        C     north to south. Latitude ranges from +80 to */
+/*        C     -80 degrees. Longitude ranges from 0 to 320 */
+/*        C     degrees. The increment is 20 degrees for */
+/*        C     latitude and 40 degrees for longitude. */
+/*        C */
+/*              DO I = 1, NLAT */
 
-/*                    WRITE(*,*) ' ' */
-/*                    WRITE(*,*) 'Intercept not found!' */
-/*                    WRITE(*,*) '   Ray vertex:' */
-/*                    WRITE(*,*) '   Longitude (deg): ', LON/RPD() */
-/*                    WRITE(*,*) '   Latitude  (deg): ', LAT/RPD() */
-/*                    WRITE(*,*) '   Range      (km): ', R */
-/*                    WRITE(*,*) ' ' */
+/*                 LAT = RPD() * ( 100.D0 - 20.D0*I ) */
 
-/*                 ELSE */
-/*     C */
-/*     C              This is the normal case.  Display the */
-/*     C              intercept plate ID and the intercept */
-/*     C              point in both Cartesian and latitudinal */
-/*     C              coordinates.  Show the corresponding ray */
-/*     C              vertex to facilitate validation of results. */
-/*     C */
-/*     C              Use RECRAD rather than RECLAT to produce */
-/*     C              non-negative longitudes. */
-/*     C */
-/*                    CALL RECRAD ( XPT, XR, XLON, XLAT ) */
+/*                 DO J = 1, NLON */
 
-/*                    WRITE(*,*) ' ' */
-/*                    WRITE(*,*) 'Intercept found:' */
-/*                    WRITE(*,*) '   Plate ID:             ', PLID */
-/*                    WRITE(*, '(1X,A,3E14.6)' ) */
-/*          .         '   Cartesian coordinates:', XPT */
-/*                    WRITE(*,*) '   Latitudinal coordinates:' */
-/*                    WRITE(*,*) '   Longitude (deg): ', XLON/RPD() */
-/*                    WRITE(*,*) '   Latitude  (deg): ', XLAT/RPD() */
-/*                    WRITE(*,*) '   Range      (km): ', XR */
-/*                    WRITE(*,*) */
-/*                    WRITE(*,*) '   Ray vertex:' */
-/*                    WRITE(*,*) '   Longitude (deg): ', LON/RPD() */
-/*                    WRITE(*,*) '   Latitude  (deg): ', LAT/RPD() */
-/*                    WRITE(*,*) '   Range      (km): ', R */
-/*                    WRITE(*,*) ' ' */
+/*                    LON = RPD() * 40.D0 * (J-1) */
+/*        C */
+/*        C           Produce a ray vertex for the current */
+/*        C           lat/lon value.  Negate the vertex to */
+/*        C           produce the ray's direction vector. */
+/*        C */
+/*                    CALL LATREC ( R, LON, LAT, VERTEX ) */
+/*                    CALL VMINUS ( VERTEX,      RAYDIR ) */
+/*        C */
+/*        C           Find the surface intercept for this */
+/*        C           ray. */
+/*        C */
+/*                    CALL DSKX02 ( HANDLE, DLADSC, VERTEX, */
+/*             .                    RAYDIR, PLID,   XPT,    FOUND  ) */
+/*        C */
+/*        C           Since the ray passes through the origin on */
+/*        C           the body-fixed frame associated with the */
+/*        C           target body, we'd rarely expect to find that */
+/*        C           the ray failed to intersect the surface. */
+/*        C           For safety, we check the FOUND flag.  (A */
+/*        C           "not found" condition could be a sign of */
+/*        C           a bug.) */
+/*        C */
+/*                    IF ( .NOT. FOUND ) THEN */
 
-/*                 END IF */
+/*                       WRITE(*,*) ' ' */
+/*                       WRITE(*,*) 'Intercept not found!' */
+/*                       WRITE(*,*) '   Ray vertex:' */
+/*                       WRITE(*,*) '   Longitude (deg): ', LON/RPD() */
+/*                       WRITE(*,*) '   Latitude  (deg): ', LAT/RPD() */
+/*                       WRITE(*,*) '   Range      (km): ', R */
+/*                       WRITE(*,*) ' ' */
+
+/*                    ELSE */
+/*        C */
+/*        C              This is the normal case.  Display the */
+/*        C              intercept plate ID and the intercept */
+/*        C              point in both Cartesian and latitudinal */
+/*        C              coordinates.  Show the corresponding ray */
+/*        C              vertex to facilitate validation of results. */
+/*        C */
+/*        C              Use RECRAD rather than RECLAT to produce */
+/*        C              non-negative longitudes. */
+/*        C */
+/*                       CALL RECRAD ( XPT, XR, XLON, XLAT ) */
+
+/*                       WRITE(*,*) ' ' */
+/*                       WRITE(*,*) 'Intercept found:' */
+/*                       WRITE(*,*) '   Plate ID:             ', PLID */
+/*                       WRITE(*, '(1X,A,3F12.8)' ) */
+/*             .         '   Cartesian coordinates:', XPT */
+/*                       WRITE(*,*) '   Latitudinal coordinates:' */
+/*                       WRITE(*,*) '   Longitude (deg): ', XLON/RPD() */
+/*                       WRITE(*,*) '   Latitude  (deg): ', XLAT/RPD() */
+/*                       WRITE(*,*) '   Range      (km): ', XR */
+/*                       WRITE(*,*) */
+/*                       WRITE(*,*) '   Ray vertex:' */
+/*                       WRITE(*,*) '   Longitude (deg): ', LON/RPD() */
+/*                       WRITE(*,*) '   Latitude  (deg): ', LAT/RPD() */
+/*                       WRITE(*,*) '   Range      (km): ', R */
+/*                       WRITE(*,*) ' ' */
+
+/*                    END IF */
+
+/*                 END DO */
 
 /*              END DO */
-
-/*           END DO */
-/*     C */
-/*     C     Close the kernel.  This isn't necessary in a stand- */
-/*     C     alone program, but it's good practice in subroutines */
-/*     C     because it frees program and system resources. */
-/*     C */
-/*           CALL DASCLS ( HANDLE ) */
-/*           END */
+/*        C */
+/*        C     Close the kernel.  This isn't necessary in a stand- */
+/*        C     alone program, but it's good practice in subroutines */
+/*        C     because it frees program and system resources. */
+/*        C */
+/*              CALL DASCLS ( HANDLE ) */
+/*              END */
 
 
-
-/*     When this program was executed on a PC/Linux/gfortran platform, */
-/*     the output for the first 3 points (the rest of the output */
-/*     is not shown due to its large volume) was: */
-
-
-/*  Enter DSK name    > phobos_3_3.bds */
-
-/*    Intercept found: */
-/*       Plate ID:                   306940 */
-/*       Cartesian coordinates:  0.152088E+01  0.000000E+00  0.862533E+01 */
-/*       Latitudinal coordinates: */
-/*       Longitude (deg):    0.0000000000000000 */
-/*       Latitude  (deg):    79.999999999999986 */
-/*       Range      (km):    8.7583866856211507 */
-
-/*       Ray vertex: */
-/*       Longitude (deg):    0.0000000000000000 */
-/*       Latitude  (deg):    80.000000000000000 */
-/*       Range      (km):    28.023536291251524 */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the DSK file named phobos_3_3.bds, the output */
+/*        was: */
 
 
-/*    Intercept found: */
-/*       Plate ID:                   317112 */
-/*       Cartesian coordinates:  0.118970E+01  0.998280E+00  0.880777E+01 */
-/*       Latitudinal coordinates: */
-/*       Longitude (deg):    40.000000000000092 */
-/*       Latitude  (deg):    80.000000000000000 */
-/*       Range      (km):    8.9436459265318593 */
+/*        Enter DSK name > phobos_3_3.bds */
 
-/*       Ray vertex: */
-/*       Longitude (deg):    40.000000000000000 */
-/*       Latitude  (deg):    80.000000000000000 */
-/*       Range      (km):    28.023536291251524 */
+/*         Intercept found: */
+/*            Plate ID:                   306238 */
+/*            Cartesian coordinates:  1.52087789  0.00000000  8.62532711 */
+/*            Latitudinal coordinates: */
+/*            Longitude (deg):    0.0000000000000000 */
+/*            Latitude  (deg):    80.000000000000014 */
+/*            Range      (km):    8.7583866856211490 */
+
+/*            Ray vertex: */
+/*            Longitude (deg):    0.0000000000000000 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    28.023536291251524 */
 
 
-/*    Intercept found: */
-/*       Plate ID:                   324141 */
-/*       Cartesian coordinates:  0.277775E+00  0.157534E+01  0.907203E+01 */
-/*       Latitudinal coordinates: */
-/*       Longitude (deg):    80.000000000000043 */
-/*       Latitude  (deg):    79.999999999999986 */
-/*       Range      (km):    9.2119797003191035 */
+/*         Intercept found: */
+/*            Plate ID:                   317112 */
+/*            Cartesian coordinates:  1.18970365  0.99827989  8.80777185 */
+/*            Latitudinal coordinates: */
+/*            Longitude (deg):    40.000000000000000 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    8.9436459265318629 */
 
-/*       Ray vertex: */
-/*       Longitude (deg):    80.000000000000000 */
-/*       Latitude  (deg):    80.000000000000000 */
-/*       Range      (km):    28.023536291251524 */
+/*            Ray vertex: */
+/*            Longitude (deg):    40.000000000000000 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    28.023536291251524 */
+
+
+/*         Intercept found: */
+/*            Plate ID:                   324141 */
+/*            Cartesian coordinates:  0.27777518  1.57534131  9.07202903 */
+/*            Latitudinal coordinates: */
+/*            Longitude (deg):    80.000000000000028 */
+/*            Latitude  (deg):    80.000000000000014 */
+/*            Range      (km):    9.2119797003191017 */
+
+/*            Ray vertex: */
+/*            Longitude (deg):    80.000000000000000 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    28.023536291251524 */
+
+
+/*         Intercept found: */
+/*            Plate ID:                   327994 */
+/*            Cartesian coordinates: -0.81082405  1.40438846  9.19682344 */
+/*            Latitudinal coordinates: */
+/*            Longitude (deg):    120.00000000000001 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    9.3386992651610452 */
+
+/*            Ray vertex: */
+/*            Longitude (deg):    119.99999999999999 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    28.023536291251524 */
+
+
+/*         Intercept found: */
+/*            Plate ID:                   329431 */
+/*            Cartesian coordinates: -1.47820193  0.53802150  8.92132122 */
+/*            Latitudinal coordinates: */
+/*            Longitude (deg):    160.00000000000006 */
+/*            Latitude  (deg):    80.000000000000014 */
+/*            Range      (km):    9.0589469760393797 */
+
+/*            Ray vertex: */
+/*            Longitude (deg):    160.00000000000000 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    28.023536291251524 */
+
+
+/*         Intercept found: */
+/*            Plate ID:                   196042 */
+/*            Cartesian coordinates: -1.49854761 -0.54542673  9.04411256 */
+/*            Latitudinal coordinates: */
+/*            Longitude (deg):    200.00000000000000 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    9.1836325764960041 */
+
+/*            Ray vertex: */
+/*            Longitude (deg):    200.00000000000000 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    28.023536291251524 */
+
+
+/*         Intercept found: */
+/*            Plate ID:                   235899 */
+/*            Cartesian coordinates: -0.78240454 -1.35516441  8.87447325 */
+/*            Latitudinal coordinates: */
+/*            Longitude (deg):    239.99999999999991 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    9.0113763066160804 */
+
+/*            Ray vertex: */
+/*            Longitude (deg):    239.99999999999997 */
+/*            Latitude  (deg):    80.000000000000000 */
+/*            Range      (km):    28.023536291251524 */
+
+
+
+/*        [...] */
+
+
+/*        Warning: incomplete output. Only 100 out of 1135 lines have */
+/*        been provided. */
 
 
 /* $ Restrictions */
 
-/*     1) This is prototype code.  When this code is graduated into */
-/*        SPICELIB, the functionality or interface could change. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*     Woo, A. "Fast Ray-Box Intersection", Graphic Gems I, 395-396. */
+/*     [1]  A. Woo, "Fast Ray-Box Intersection", Graphic Gems I, */
+/*          395-396, Aug. 1990 */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     J.A. Bytof      (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J.A. Bytof         (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0 04-APR-2017 (NJB) */
+/* -    SPICELIB Version 1.1.0, 13-JAN-2021 (NJB) (JDR) (BVS) */
+
+/*        Bug fix: in some cases the previous version of this routine */
+/*        could still return an intercept outside of the segment */
+/*        boundaries by more than the allowed margin. In those cases, */
+/*        the returned plate ID was invalid. Both problems have been */
+/*        corrected. */
+
+/*        See $Revisions for details. */
+
+/*        Edited the header to comply with NAIF standard. Updated the */
+/*        example code to retrieve directly from the DSK descriptor the */
+/*        upper bound for the target radius. Added record in */
+/*        $Index_Entries. */
+
+/* -    SPICELIB Version 1.0.0, 04-APR-2017 (NJB) (EDW) (JAB) */
 
 /*        Added test for containment of intersection point */
 /*        within segment boundaries. Updated logic for saving */
 /*        segment attributes so that errors won't cause saved */
 /*        values to be improperly re-used on subsequent calls. */
 
-/*     24-FEB-2016 (NJB) */
+/*        24-FEB-2016 (NJB) */
 
-/*        Replaced call to TOGRID with call to ZZTOGRID. */
-/*        Replaced call to PLTREC with call to PLTNRM. */
-/*        Now obtains plate expansion fraction from DSKGTL. */
+/*           Replaced call to TOGRID with call to ZZTOGRID. */
+/*           Replaced call to PLTREC with call to PLTNRM. */
+/*           Now obtains plate expansion fraction from DSKGTL. */
 
-/*     25-FEB-2015 (NJB) */
+/*        25-FEB-2015 (NJB) */
 
-/*        Bug fix: now ray-voxel grid intercept is displaced toward */
-/*        the input ray's vertex only when the vertex is outside */
-/*        the target body's voxel grid. */
+/*           Bug fix: now ray-voxel grid intercept is displaced toward */
+/*           the input ray's vertex only when the vertex is outside */
+/*           the target body's voxel grid. */
 
-/*     10-SEP-2014 (NJB) */
+/*        10-SEP-2014 (NJB) */
 
-/*        Bug fix: during an intercept search over the voxel list */
-/*        returned by XDDA, if an intercept outside the current */
-/*        voxel---by more than a small tolerance---is found, the search */
-/*        rejects that intercept and continues until a valid intercept */
-/*        is found and all plates in the voxel containing that intercept */
-/*        have been checked for an intersection. The rejected intercept */
-/*        may later be determined to be a valid solution during a check */
-/*        of plates associated with a voxel that contains that */
-/*        intercept; in fact it is the correct solution if no other */
-/*        plates contain a solution closer to the ray's vertex. (Usually */
-/*        there is a unique voxel containing the intercept, but this is */
-/*        not so if the intercept lies on a voxel boundary not on an */
-/*        edge of the voxel grid.) */
+/*           Bug fix: during an intercept search over the voxel list */
+/*           returned by XDDA, if an intercept outside the current */
+/*           voxel---by more than a small tolerance---is found, the */
+/*           search rejects that intercept and continues until a */
+/*           valid intercept is found and all plates in the voxel */
+/*           containing that intercept have been checked for an */
+/*           intersection. The rejected intercept may later be */
+/*           determined to be a valid solution during a check of */
+/*           plates associated with a voxel that contains that */
+/*           intercept; in fact it is the correct solution if no */
+/*           other plates contain a solution closer to the ray's */
+/*           vertex. (Usually there is a unique voxel containing the */
+/*           intercept, but this is not so if the intercept lies on */
+/*           a voxel boundary not on an edge of the voxel grid.) */
 
-/*        Note that there's no need to look for intersections in voxels */
-/*        further out in the voxel list than the first one that contains */
-/*        an intercept. */
+/*           Note that there's no need to look for intersections in */
+/*           voxels further out in the voxel list than the first one */
+/*           that contains an intercept. */
 
-/*        The previous version of the routine terminated the search */
-/*        after checking all plates in the current voxel, after an */
-/*        intercept was found on any plate associated with that voxel. */
-/*        The intercept was not required to be contained in the voxel. */
+/*           The previous version of the routine terminated the */
+/*           search after checking all plates in the current voxel, */
+/*           after an intercept was found on any plate associated */
+/*           with that voxel. The intercept was not required to be */
+/*           contained in the voxel. */
 
-/*        See the Revisions section for details. */
+/*           See the $Revisions section for details. */
 
-/*     30-JUN-2014 (NJB) */
+/*        30-JUN-2014 (NJB) */
 
-/*        Bug fix: renamed "found" flag returned by ZZRAYBOX. */
+/*           Bug fix: renamed "found" flag returned by ZZRAYBOX. */
 
-/*        Added code to test for empty voxel list after */
-/*        voxel list compression. */
+/*           Added code to test for empty voxel list after */
+/*           voxel list compression. */
 
-/*        Last update was 15-JUN-2014 (NJB). */
+/*        15-JUN-2014 (NJB) */
 
-/*        Made some minor edits to in-line comments, and removed */
-/*        comments that had become inapplicable due to code changes. */
+/*           Made some minor edits to in-line comments, and removed */
+/*           comments that had become inapplicable due to code changes. */
 
-/*        Last update was 06-JUN-2014. */
+/*        06-JUN-2014 (NJB) */
 
-/*        Now expands plates slightly before performing ray-plate */
-/*        intersection computations. */
+/*           Now expands plates slightly before performing ray-plate */
+/*           intersection computations. */
 
-/*        Bug fix: now calls ZZRAYBOX to find the ray-box intercept. */
-/*        This reduces round-off error in the variable COORD. */
+/*           Bug fix: now calls ZZRAYBOX to find the ray-box intercept. */
+/*           This reduces round-off error in the variable COORD. */
 
-/* -       Last update was 02-MAY-2014 (NJB) */
+/*        02-MAY-2014 (NJB) */
 
-/*        Bug fix: added FAILED checks after each DSKI02 and DSKD02 */
-/*        call. */
+/*           Bug fix: added FAILED checks after each DSKI02 and DSKD02 */
+/*           call. */
 
-/*        Some precautionary measures were added: a backstop check for */
-/*        an empty voxel list was added after the XDDA call. A backstop */
-/*        initialization of PNTR was added before the plate collection */
-/*        loop. This initialization is needed only if the voxel list */
-/*        returned by XDDA is empty. The list should never be empty. */
+/*           Some precautionary measures were added: a backstop */
+/*           check for an empty voxel list was added after the XDDA */
+/*           call. A backstop initialization of PNTR was added */
+/*           before the plate collection loop. This initialization */
+/*           is needed only if the voxel list returned by XDDA is */
+/*           empty. The list should never be empty. */
 
-/*        Last update was 2.2.1 25-MAR-2014 (NJB) */
+/*        25-MAR-2014 (NJB) */
 
-/*        Bug fix: duplicate plates are now marked so that the */
-/*        unmarked instance is the one in the closest voxel to */
-/*        the ray's origin. */
+/*           Bug fix: duplicate plates are now marked so that the */
+/*           unmarked instance is the one in the closest voxel to */
+/*           the ray's origin. */
 
-/*        Bug fix: corrected buffer overflow error detection for */
-/*        insertion of plate IDs into plate ID array. */
+/*           Bug fix: corrected buffer overflow error detection for */
+/*           insertion of plate IDs into plate ID array. */
 
-/*     20-JUL-2011 (NJB) */
+/*        20-JUL-2011 (NJB) */
 
-/*        Bug fix: this routine now tests FAILED after its */
-/*        call to XDDA. */
+/*           Bug fix: this routine now tests FAILED after its */
+/*           call to XDDA. */
 
-/*        Header correction: the detailed input section */
-/*        now says that the ray's vertex *is* required to */
-/*        be outside the target body. */
+/*           Header correction: the detailed input section */
+/*           now says that the ray's vertex *is* required to */
+/*           be outside the target body. */
 
-/*     09-JUN-2011 (NJB) */
+/*        09-JUN-2011 (NJB) */
 
-/*        All large local arrays are now saved in order to support */
-/*        calling a C translation of this routine from Java. */
+/*           All large local arrays are now saved in order to support */
+/*           calling a C translation of this routine from Java. */
 
-/*        The buffer VIDXS is now initialized prior to its */
-/*        first use in an argument list. This was done to */
-/*        to suppress compiler warnings. The original code was */
-/*        correct, since along with the buffer, an array size */
-/*        of zero was passed to the called function. */
+/*           The buffer VIDXS is now initialized prior to its */
+/*           first use in an argument list. This was done to */
+/*           to suppress compiler warnings. The original code was */
+/*           correct, since along with the buffer, an array size */
+/*           of zero was passed to the called function. */
 
-/*        The example program was updated for compatibility with the */
-/*        final DSK descriptor layout. The output format was adjusted. */
-/*        Sample output from the program is now shown in the header. */
+/*           The example program was updated for compatibility with */
+/*           the final DSK descriptor layout. The output format was */
+/*           adjusted. Sample output from the program is now shown */
+/*           in the header. */
 
-/*     13-MAY-2010 (NJB) */
+/*        13-MAY-2010 (NJB) */
 
-/*        No longer uses plate records to weed out */
-/*        plates prior to ray-plate intercept tests. */
-/*        Now uses local vertex buffer. Logic for choosing */
-/*        plate when intercept is on edge or vertex has */
-/*        been simplified. */
+/*           No longer uses plate records to weed out */
+/*           plates prior to ray-plate intercept tests. */
+/*           Now uses local vertex buffer. Logic for choosing */
+/*           plate when intercept is on edge or vertex has */
+/*           been simplified. */
 
-/*     06-MAY-2010 (NJB) */
+/*        06-MAY-2010 (NJB) */
 
-/*        Now calls DSKB02 rather than DSKP02. */
+/*           Now calls DSKB02 rather than DSKP02. */
 
-/*     20-APR-2010 (NJB) */
+/*        20-APR-2010 (NJB) */
 
-/*        Updated header section order. */
+/*           Updated header section order. */
 
-/*     26-SEP-2008 (NJB) */
+/*        26-SEP-2008 (NJB) */
 
-/*        Moved OBSMAT computation out of loop. */
+/*           Moved OBSMAT computation out of loop. */
 
-/*     27-DEC-2006 (NJB) (EDW) */
+/*        27-DEC-2006 (NJB) (EDW) */
 
-/*        Header example was updated to show maximum radius */
-/*        being obtained from DSK descriptor rather than via */
-/*        all to DSKD02. */
+/*           Header example was updated to show maximum radius */
+/*           being obtained from DSK descriptor rather than via */
+/*           all to DSKD02. */
 
-/*     31-OCT-2006 (NJB) (EDW) */
+/*        31-OCT-2006 (NJB) (EDW) */
 
-/*        Modified to work with DLA-based kernels.  Many */
-/*        changes were made to the algorithm to improve */
-/*        execution speed. */
+/*           Modified to work with DLA-based kernels. Many */
+/*           changes were made to the algorithm to improve */
+/*           execution speed. */
 
-/*     19-AUG-2004 (EDW) */
+/*        19-AUG-2004 (EDW) */
 
-/*        Implemented "Fast Ray-Box Intersection" algorithm. */
-/*        Renamed routine DSKX02 from PLBORE_3. */
+/*           Implemented "Fast Ray-Box Intersection" algorithm. */
+/*           Renamed routine DSKX02 from PLBORE_3. */
 
-/*     25-FEB-1999 (JAB) */
+/*        25-FEB-1999 (JAB) */
 
-/*        Based on PLBORE and PLBORE_2. */
+/*           Based on PLBORE and PLBORE_2. */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     plate and plate model point intersected by ray */
+/*     intersection of ray and surface */
 
 /* -& */
 /* $ Revisions */
 
-/* -    10-SEP-2014 (NJB) */
+/* -    SPICELIB Version 1.1.0, 13-JAN-2021 (NJB) */
 
-/*        Bug fix: during an intercept search over the voxel list */
-/*        returned by XDDA, if an intercept outside the current */
-/*        voxel---by more than a small tolerance---is found, the search */
-/*        rejects that intercept and continues until a valid intercept */
-/*        is found and all plates in the voxel containing that intercept */
-/*        have been checked for an intersection. The rejected intercept */
-/*        may later be determined to be a valid solution during a check */
-/*        of plates associated with a voxel that contains that */
-/*        intercept; in fact it is the correct solution if no other */
-/*        plates contain a solution closer to the ray's vertex. (Usually */
-/*        there is a unique voxel containing the intercept, but this is */
-/*        not so if the intercept lies on a voxel boundary not on an */
-/*        edge of the voxel grid.) */
+/*        Bug fix: in some cases the previous version of this */
+/*        routine could return an intercept outside of the segment */
+/*        boundaries (the "outside intercept") by more than the */
+/*        allowed margin. In those cases, the returned plate ID was */
+/*        invalid. */
 
-/*        Note that there's no need to look for intersections in voxels */
-/*        further out in the voxel list than the first one that contains */
-/*        an intercept. */
+/*        Both problems have been corrected. */
 
-/*        The previous version of the routine terminated the search */
-/*        after checking all plates in the current voxel, after an */
-/*        intercept was found on any plate associated with that voxel. */
-/*        The intercept was not required to be contained in the voxel. */
+/*        Description of the bug */
+/*        ---------------------- */
 
-/*        In the previous version of the routine, an intercept found */
-/*        outside of the current voxel could effectively mask an */
-/*        intercept closer to the ray's vertex, as shown in the diagram */
-/*        below. */
+/*        In the case where all of the follow conditions hold: */
 
-/*        In this diagram, "V" represents the vertex of the ray. */
-/*        The letter sequences "Q*" and "P*" represent plates. */
-/*        Here the ray hits voxel 1 and finds an intercept on plate */
-/*        P* at the point marked by "@." No other intercepts on */
-/*        plates in voxel 1 exist, so the search terminates. The */
-/*        intercept marked by "$" is closer to the vertex but is not */
-/*        seen. */
+/*           - the input ray's intercepts exist both within and */
+/*             outside the segment's boundaries */
 
-/*                                V */
-/*                               / */
-/*                              / */
-/*                             / */
-/*           +--------------+-/------------+ */
-/*           |    voxel 2   |/    voxel 1  | */
-/*           |              /              | */
-/*           |        QQQQQ$|              | */
-/*           |            / |              | */
-/*           |           /  |              | */
-/*           |          /   |              | */
-/*           |       PP@PPPPPPPPPPPPPPP    | */
-/*           +--------------+--------------+ */
+/*           - the outside intercept is considered the nearest */
+/*             solution to the vertex at the time the intercept */
+/*             is found */
+
+/*           - the intercept that should have been selected was */
+/*             found before the outside intercept */
+
+/*           - both intercepts lie on plates belonging to the same voxel */
+
+/*        the outside intercept will overwrite the correct intercept. */
+
+/*        In the situation described above, the plate ID returned */
+/*        will not be that of the outside plate. */
+
+/*        Solution */
+/*        -------- */
+
+/*        Each intercept that passes the test for being closest, of */
+/*        all intercepts seen so far, to the ray's vertex is stored */
+/*        in a temporary variable. The output XPT is updated only */
+/*        when the intercept is found to lie within the segment's */
+/*        coordinate bounds, or outside the bounds by no more than */
+/*        the allowed margin. */
+
+/* -    SPICELIB Version 1.0.0, 04-APR-2017 (NJB) */
+
+/*        10-SEP-2014 (NJB) */
+
+/*           Bug fix: during an intercept search over the voxel */
+/*           list returned by XDDA, if an intercept outside the */
+/*           current voxel---by more than a small tolerance---is */
+/*           found, the search rejects that intercept and continues */
+/*           until a valid intercept is found and all plates in the */
+/*           voxel containing that intercept have been checked for */
+/*           an intersection. The rejected intercept may later be */
+/*           determined to be a valid solution during a check of */
+/*           plates associated with a voxel that contains that */
+/*           intercept; in fact it is the correct solution if no */
+/*           other plates contain a solution closer to the ray's */
+/*           vertex. (Usually there is a unique voxel containing */
+/*           the intercept, but this is not so if the intercept */
+/*           lies on a voxel boundary not on an edge of the voxel */
+/*           grid.) */
+
+/*           Note that there's no need to look for intersections in */
+/*           voxels further out in the voxel list than the first */
+/*           one that contains an intercept. */
+
+/*           The previous version of the routine terminated the */
+/*           search after checking all plates in the current voxel, */
+/*           after an intercept was found on any plate associated */
+/*           with that voxel. The intercept was not required to be */
+/*           contained in the voxel. */
+
+/*           In the previous version of the routine, an intercept */
+/*           found outside of the current voxel could effectively */
+/*           mask an intercept closer to the ray's vertex, as shown */
+/*           in the diagram below. */
+
+/*           In this diagram, "V" represents the vertex of the ray. */
+/*           The letter sequences "Q*" and "P*" represent plates. */
+/*           Here the ray hits voxel 1 and finds an intercept on */
+/*           plate P* at the point marked by "@." No other */
+/*           intercepts on plates in voxel 1 exist, so the search */
+/*           terminates. The intercept marked by "$" is closer to */
+/*           the vertex but is not seen. */
+
+/*                                   V */
+/*                                  / */
+/*                                 / */
+/*                                / */
+/*              +--------------+-/------------+ */
+/*              |    voxel 2   |/    voxel 1  | */
+/*              |              /              | */
+/*              |        QQQQQ$|              | */
+/*              |            / |              | */
+/*              |           /  |              | */
+/*              |          /   |              | */
+/*              |       PP@PPPPPPPPPPPPPPP    | */
+/*              +--------------+--------------+ */
 
 
-/*       The updated algorithm, when presented with the situation shown */
-/*       above, will check all plates in voxel 2 before terminating. */
+/*           The updated algorithm, when presented with the */
+/*           situation shown above, will check all plates in voxel */
+/*           2 before terminating. */
 
-/*       Note that the problem could occur in cases where voxels 1 and 2 */
-/*       are not adjacent. */
+/*           Note that the problem could occur in cases where */
+/*           voxels 1 and 2 are not adjacent. */
 
 /* -& */
 
@@ -1651,9 +1790,9 @@ static integer c__0 = 0;
 	}
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    grdext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("grdext",
-		     i__1, "dskx02_", (ftnlen)1026)] = vgrext[(i__2 = i__ - 1)
+		     i__1, "dskx02_", (ftnlen)1163)] = vgrext[(i__2 = i__ - 1)
 		     < 3 && 0 <= i__2 ? i__2 : s_rnge("vgrext", i__2, "dskx0"
-		    "2_", (ftnlen)1026)] * voxsiz;
+		    "2_", (ftnlen)1163)] * voxsiz;
 	}
 
 /*        Set the margin used for checking whether the ray's vertex */
@@ -1678,9 +1817,9 @@ static integer c__0 = 0;
 
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    cgrext[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("cgrext",
-		     i__1, "dskx02_", (ftnlen)1053)] = vgrext[(i__2 = i__ - 1)
+		     i__1, "dskx02_", (ftnlen)1190)] = vgrext[(i__2 = i__ - 1)
 		     < 3 && 0 <= i__2 ? i__2 : s_rnge("vgrext", i__2, "dskx0"
-		    "2_", (ftnlen)1053)] / cgscal;
+		    "2_", (ftnlen)1190)] / cgscal;
 	}
 	cgscl2 = cgscal * cgscal;
 /* Computing 3rd power */
@@ -1789,14 +1928,14 @@ static integer c__0 = 0;
 
 	for (j = 1; j <= 3; ++j) {
 	    cgxyz[(i__2 = j - 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("cgxyz", 
-		    i__2, "dskx02_", (ftnlen)1189)] = (voxlst[(i__3 = j + i__ 
+		    i__2, "dskx02_", (ftnlen)1326)] = (voxlst[(i__3 = j + i__ 
 		    * 3 - 4) < 150000 && 0 <= i__3 ? i__3 : s_rnge("voxlst", 
-		    i__3, "dskx02_", (ftnlen)1189)] - 1) / cgscal + 1;
+		    i__3, "dskx02_", (ftnlen)1326)] - 1) / cgscal + 1;
 	}
 	cvid = cgxyz[0] + cgrext[0] * (cgxyz[1] + cgxyz[2] * cgrext[1] - (
 		cgrext[1] + 1));
 	if (cgrptr[(i__2 = cvid - 1) < 100000 && 0 <= i__2 ? i__2 : s_rnge(
-		"cgrptr", i__2, "dskx02_", (ftnlen)1196)] > 0) {
+		"cgrptr", i__2, "dskx02_", (ftnlen)1333)] > 0) {
 
 /*           This coarse voxel is non-empty; add the index of the */
 /*           current voxel to the output list.  Save the coordinates of */
@@ -1804,20 +1943,20 @@ static integer c__0 = 0;
 
 	    ++to;
 	    vxlout[(i__2 = to - 1) < 50000 && 0 <= i__2 ? i__2 : s_rnge("vxl"
-		    "out", i__2, "dskx02_", (ftnlen)1203)] = i__;
+		    "out", i__2, "dskx02_", (ftnlen)1340)] = i__;
 	    for (j = 1; j <= 3; ++j) {
 		vxlcg[(i__2 = j + to * 3 - 4) < 150000 && 0 <= i__2 ? i__2 : 
-			s_rnge("vxlcg", i__2, "dskx02_", (ftnlen)1206)] = 
+			s_rnge("vxlcg", i__2, "dskx02_", (ftnlen)1343)] = 
 			cgxyz[(i__3 = j - 1) < 3 && 0 <= i__3 ? i__3 : s_rnge(
-			"cgxyz", i__3, "dskx02_", (ftnlen)1206)];
+			"cgxyz", i__3, "dskx02_", (ftnlen)1343)];
 	    }
 
 /*           Save the coarse voxel start pointer as well. */
 
 	    vxlstr[(i__2 = to - 1) < 50000 && 0 <= i__2 ? i__2 : s_rnge("vxl"
-		    "str", i__2, "dskx02_", (ftnlen)1211)] = cgrptr[(i__3 = 
+		    "str", i__2, "dskx02_", (ftnlen)1348)] = cgrptr[(i__3 = 
 		    cvid - 1) < 100000 && 0 <= i__3 ? i__3 : s_rnge("cgrptr", 
-		    i__3, "dskx02_", (ftnlen)1211)];
+		    i__3, "dskx02_", (ftnlen)1348)];
 	}
     }
 
@@ -1870,26 +2009,26 @@ static integer c__0 = 0;
 /*           the base of its parent coarse voxel. */
 
 	    j = vxlout[(i__2 = vi - 1) < 50000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "vxlout", i__2, "dskx02_", (ftnlen)1274)];
+		    "vxlout", i__2, "dskx02_", (ftnlen)1411)];
 	    fx = voxlst[(i__2 = j * 3 - 3) < 150000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1276)] - cgscal 
+		    s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1413)] - cgscal 
 		    * (vxlcg[(i__3 = vi * 3 - 3) < 150000 && 0 <= i__3 ? i__3 
-		    : s_rnge("vxlcg", i__3, "dskx02_", (ftnlen)1276)] - 1);
+		    : s_rnge("vxlcg", i__3, "dskx02_", (ftnlen)1413)] - 1);
 	    fy = voxlst[(i__2 = j * 3 - 2) < 150000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1277)] - cgscal 
+		    s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1414)] - cgscal 
 		    * (vxlcg[(i__3 = vi * 3 - 2) < 150000 && 0 <= i__3 ? i__3 
-		    : s_rnge("vxlcg", i__3, "dskx02_", (ftnlen)1277)] - 1);
+		    : s_rnge("vxlcg", i__3, "dskx02_", (ftnlen)1414)] - 1);
 	    fz = voxlst[(i__2 = j * 3 - 1) < 150000 && 0 <= i__2 ? i__2 : 
-		    s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1278)] - cgscal 
+		    s_rnge("voxlst", i__2, "dskx02_", (ftnlen)1415)] - cgscal 
 		    * (vxlcg[(i__3 = vi * 3 - 1) < 150000 && 0 <= i__3 ? i__3 
-		    : s_rnge("vxlcg", i__3, "dskx02_", (ftnlen)1278)] - 1);
+		    : s_rnge("vxlcg", i__3, "dskx02_", (ftnlen)1415)] - 1);
 	    offset = fx + cgscal * (fy - 1) + cgscl2 * (fz - 1);
 
 /*           Now compute the index of voxel-plate list pointer in */
 /*           the pointer array, and look up the pointer. */
 
 	    j = vxlstr[(i__2 = vi - 1) < 50000 && 0 <= i__2 ? i__2 : s_rnge(
-		    "vxlstr", i__2, "dskx02_", (ftnlen)1286)] + offset - 1;
+		    "vxlstr", i__2, "dskx02_", (ftnlen)1423)] + offset - 1;
 	    dski02_(handle, dladsc, &c__10, &j, &c__1, &dim, &voxptr);
 	    if (failed_()) {
 		chkout_("DSKX02", (ftnlen)6);
@@ -1917,7 +2056,7 @@ static integer c__0 = 0;
 		    dski02_(handle, dladsc, &c__11, &i__3, &nplate, &dim, &
 			    platid[(i__2 = pntr - 1) < 256000 && 0 <= i__2 ? 
 			    i__2 : s_rnge("platid", i__2, "dskx02_", (ftnlen)
-			    1320)]);
+			    1457)]);
 		    if (failed_()) {
 			chkout_("DSKX02", (ftnlen)6);
 			return 0;
@@ -1941,7 +2080,7 @@ static integer c__0 = 0;
 
 		filli_(&vi, &nplate, &source[(i__2 = pntr - 1) < 256000 && 0 
 			<= i__2 ? i__2 : s_rnge("source", i__2, "dskx02_", (
-			ftnlen)1349)]);
+			ftnlen)1486)]);
 	    }
 
 /*           NPLATE returns zero or greater. */
@@ -1981,13 +2120,13 @@ static integer c__0 = 0;
 /*           ID at index I-1 may have been "marked" via negation. */
 
 	    if (platid[(i__3 = ordvec[(i__2 = i__ - 1) < 256000 && 0 <= i__2 ?
-		     i__2 : s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1393)] 
+		     i__2 : s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1530)] 
 		    - 1) < 256000 && 0 <= i__3 ? i__3 : s_rnge("platid", i__3,
-		     "dskx02_", (ftnlen)1393)] == (i__6 = platid[(i__5 = 
+		     "dskx02_", (ftnlen)1530)] == (i__6 = platid[(i__5 = 
 		    ordvec[(i__4 = i__ - 2) < 256000 && 0 <= i__4 ? i__4 : 
-		    s_rnge("ordvec", i__4, "dskx02_", (ftnlen)1393)] - 1) < 
+		    s_rnge("ordvec", i__4, "dskx02_", (ftnlen)1530)] - 1) < 
 		    256000 && 0 <= i__5 ? i__5 : s_rnge("platid", i__5, "dsk"
-		    "x02_", (ftnlen)1393)], abs(i__6))) {
+		    "x02_", (ftnlen)1530)], abs(i__6))) {
 
 /*              The plates having indices ORDVEC(I-1) and ORDVEC(I) are */
 /*              duplicates. */
@@ -2001,7 +2140,7 @@ static integer c__0 = 0;
 /*              index ORDVEC(I). */
 
 		if (ordvec[(i__2 = i__ - 1) < 256000 && 0 <= i__2 ? i__2 : 
-			s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1407)] < 
+			s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1544)] < 
 			minidx) {
 
 /*                 The plate that was previously at the minimum index is */
@@ -2009,26 +2148,26 @@ static integer c__0 = 0;
 /*                 the current plate ID value is ORDVEC(I). */
 
 		    platid[(i__2 = minidx - 1) < 256000 && 0 <= i__2 ? i__2 : 
-			    s_rnge("platid", i__2, "dskx02_", (ftnlen)1413)] =
+			    s_rnge("platid", i__2, "dskx02_", (ftnlen)1550)] =
 			     -platid[(i__3 = minidx - 1) < 256000 && 0 <= 
 			    i__3 ? i__3 : s_rnge("platid", i__3, "dskx02_", (
-			    ftnlen)1413)];
+			    ftnlen)1550)];
 		    minidx = ordvec[(i__2 = i__ - 1) < 256000 && 0 <= i__2 ? 
 			    i__2 : s_rnge("ordvec", i__2, "dskx02_", (ftnlen)
-			    1414)];
+			    1551)];
 		} else {
 
 /*                 The current plate is a duplicate; mark it. */
 
 		    platid[(i__3 = ordvec[(i__2 = i__ - 1) < 256000 && 0 <= 
 			    i__2 ? i__2 : s_rnge("ordvec", i__2, "dskx02_", (
-			    ftnlen)1420)] - 1) < 256000 && 0 <= i__3 ? i__3 : 
-			    s_rnge("platid", i__3, "dskx02_", (ftnlen)1420)] =
+			    ftnlen)1557)] - 1) < 256000 && 0 <= i__3 ? i__3 : 
+			    s_rnge("platid", i__3, "dskx02_", (ftnlen)1557)] =
 			     -platid[(i__5 = ordvec[(i__4 = i__ - 1) < 256000 
 			    && 0 <= i__4 ? i__4 : s_rnge("ordvec", i__4, 
-			    "dskx02_", (ftnlen)1420)] - 1) < 256000 && 0 <= 
+			    "dskx02_", (ftnlen)1557)] - 1) < 256000 && 0 <= 
 			    i__5 ? i__5 : s_rnge("platid", i__5, "dskx02_", (
-			    ftnlen)1420)];
+			    ftnlen)1557)];
 		}
 	    } else {
 
@@ -2036,7 +2175,7 @@ static integer c__0 = 0;
 /*              ID has no duplicates. */
 
 		minidx = ordvec[(i__2 = i__ - 1) < 256000 && 0 <= i__2 ? i__2 
-			: s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1429)];
+			: s_rnge("ordvec", i__2, "dskx02_", (ftnlen)1566)];
 	    }
 	}
 
@@ -2061,7 +2200,7 @@ static integer c__0 = 0;
 /*           Retrieve the current plate ID. */
 
 	    j = platid[(i__1 = i__ - 1) < 256000 && 0 <= i__1 ? i__1 : s_rnge(
-		    "platid", i__1, "dskx02_", (ftnlen)1459)];
+		    "platid", i__1, "dskx02_", (ftnlen)1596)];
 	    if (j > 0) {
 
 /*              This is not a duplicate plate; consider it. */
@@ -2073,7 +2212,7 @@ static integer c__0 = 0;
 /*                 later voxel. */
 
 		    if (source[(i__1 = i__ - 1) < 256000 && 0 <= i__1 ? i__1 :
-			     s_rnge("source", i__1, "dskx02_", (ftnlen)1472)] 
+			     s_rnge("source", i__1, "dskx02_", (ftnlen)1609)] 
 			    > final) {
 
 /*                    This is a "late plate": it occurs in a voxel later */
@@ -2102,16 +2241,16 @@ static integer c__0 = 0;
 
 			vloc = isrchi_(&vids[(i__1 = k - 1) < 3 && 0 <= i__1 ?
 				 i__1 : s_rnge("vids", i__1, "dskx02_", (
-				ftnlen)1506)], &nvbuf, vidxs);
+				ftnlen)1643)], &nvbuf, vidxs);
 			if (vloc > 0) {
 
 /*                       The vertex was buffered; just copy it. */
 
 			    vequ_(&vbuff[(i__1 = vloc * 3 - 3) < 600 && 0 <= 
 				    i__1 ? i__1 : s_rnge("vbuff", i__1, "dsk"
-				    "x02_", (ftnlen)1512)], &points[(i__2 = k *
+				    "x02_", (ftnlen)1649)], &points[(i__2 = k *
 				     3 - 3) < 9 && 0 <= i__2 ? i__2 : s_rnge(
-				    "points", i__2, "dskx02_", (ftnlen)1512)])
+				    "points", i__2, "dskx02_", (ftnlen)1649)])
 				    ;
 			} else {
 
@@ -2119,11 +2258,11 @@ static integer c__0 = 0;
 
 			    start = (vids[(i__1 = k - 1) < 3 && 0 <= i__1 ? 
 				    i__1 : s_rnge("vids", i__1, "dskx02_", (
-				    ftnlen)1518)] - 1) * 3 + 1;
+				    ftnlen)1655)] - 1) * 3 + 1;
 			    dskd02_(handle, dladsc, &c__19, &start, &c__3, &
 				    dim, &points[(i__1 = k * 3 - 3) < 9 && 0 
 				    <= i__1 ? i__1 : s_rnge("points", i__1, 
-				    "dskx02_", (ftnlen)1520)]);
+				    "dskx02_", (ftnlen)1657)]);
 			    if (failed_()) {
 				chkout_("DSKX02", (ftnlen)6);
 				return 0;
@@ -2135,15 +2274,15 @@ static integer c__0 = 0;
 				++nvbuf;
 				vequ_(&points[(i__1 = k * 3 - 3) < 9 && 0 <= 
 					i__1 ? i__1 : s_rnge("points", i__1, 
-					"dskx02_", (ftnlen)1536)], &vbuff[(
+					"dskx02_", (ftnlen)1673)], &vbuff[(
 					i__2 = nvbuf * 3 - 3) < 600 && 0 <= 
 					i__2 ? i__2 : s_rnge("vbuff", i__2, 
-					"dskx02_", (ftnlen)1536)]);
+					"dskx02_", (ftnlen)1673)]);
 				vidxs[(i__1 = nvbuf - 1) < 200 && 0 <= i__1 ? 
 					i__1 : s_rnge("vidxs", i__1, "dskx02_"
-					, (ftnlen)1538)] = vids[(i__2 = k - 1)
+					, (ftnlen)1675)] = vids[(i__2 = k - 1)
 					 < 3 && 0 <= i__2 ? i__2 : s_rnge(
-					"vids", i__2, "dskx02_", (ftnlen)1538)
+					"vids", i__2, "dskx02_", (ftnlen)1675)
 					];
 			    }
 			}
@@ -2158,8 +2297,8 @@ static integer c__0 = 0;
 /*                 round-off error from causing the ray to miss the */
 /*                 plate. Compute the edges of the tetrahedral angle */
 /*                 with the observer as the apex and the vertices as */
-/*                 members of the edge rays. Finally see if the */
-/*                 boresight lies inside the tetrahedron. */
+/*                 members of the edge rays. Finally see if the ray */
+/*                 lies inside the tetrahedron. */
 
 		    vsubg_(points, obsmat, &c__9, edges);
 		    pltexp_(edges, &xpdfrc, xpnts);
@@ -2175,7 +2314,7 @@ static integer c__0 = 0;
 		    }
 		    if (hits) {
 
-/*                    The boresight intersects this plate. */
+/*                    The ray intersects this plate. */
 
 			if (! have || scale < near__) {
 
@@ -2188,10 +2327,14 @@ static integer c__0 = 0;
 /*                       If this intersection point is closer to the */
 /*                       ray's vertex than the last one, pick this point */
 /*                       and the plate it's on. */
-/*                          ___   ____   __________ */
-/*                          XPT = VTX2 + SCALE*UDIR */
 
-			    vlcom_(&c_b40, vtx2, &scale, udir, xpt);
+/*                       Note that we don't yet know that this solution */
+/*                       is valid. */
+
+/*                          ___    ____   __________ */
+/*                          XPT2 = VTX2 + SCALE*UDIR */
+
+			    vlcom_(&c_b40, vtx2, &scale, udir, xpt2);
 
 /*                       Compute the voxel grid coordinates of the */
 /*                       intercept. HITCOR is a double precision vector */
@@ -2199,25 +2342,25 @@ static integer c__0 = 0;
 /*                       be precise). Note that the components of HITCOR */
 /*                       are zero-based. */
 
-			    zztogrid_(xpt, voxori, &voxsiz, hitcor);
+			    zztogrid_(xpt2, voxori, &voxsiz, hitcor);
 
 /*                       Look up the voxel grid coordinates (integer, */
 /*                       1-based) of the current voxel. */
 
 			    k = vxlout[(i__2 = source[(i__1 = i__ - 1) < 
 				    256000 && 0 <= i__1 ? i__1 : s_rnge("sou"
-				    "rce", i__1, "dskx02_", (ftnlen)1615)] - 1)
+				    "rce", i__1, "dskx02_", (ftnlen)1756)] - 1)
 				     < 50000 && 0 <= i__2 ? i__2 : s_rnge(
-				    "vxlout", i__2, "dskx02_", (ftnlen)1615)];
+				    "vxlout", i__2, "dskx02_", (ftnlen)1756)];
 			    vxc1 = voxlst[(i__1 = k * 3 - 3) < 150000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("voxlst", i__1, 
-				    "dskx02_", (ftnlen)1617)];
+				    "dskx02_", (ftnlen)1758)];
 			    vxc2 = voxlst[(i__1 = k * 3 - 2) < 150000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("voxlst", i__1, 
-				    "dskx02_", (ftnlen)1618)];
+				    "dskx02_", (ftnlen)1759)];
 			    vxc3 = voxlst[(i__1 = k * 3 - 1) < 150000 && 0 <= 
 				    i__1 ? i__1 : s_rnge("voxlst", i__1, 
-				    "dskx02_", (ftnlen)1619)];
+				    "dskx02_", (ftnlen)1760)];
 			    invox = hitcor[0] > vxc1 - xtol - 1 && hitcor[0] <
 				     vxc1 + xtol && hitcor[1] > vxc2 - xtol - 
 				    1 && hitcor[1] < vxc2 + xtol && hitcor[2] 
@@ -2230,7 +2373,7 @@ static integer c__0 = 0;
 /*                          are extended using the "greedy" margin. */
 
 				dskgtl_(&c__2, &greedm);
-				zzinvelt_(xpt, &corsys, &dskdsc[6], &dskdsc[
+				zzinvelt_(xpt2, &corsys, &dskdsc[6], &dskdsc[
 					16], &greedm, &c__0, &inseg);
 				if (inseg) {
 
@@ -2241,13 +2384,14 @@ static integer c__0 = 0;
 /*                             intercepts beyond the voxel designated by */
 /*                             FINAL. */
 
+				    vequ_(xpt2, xpt);
 				    have = TRUE_;
 				    near__ = scale;
 				    *plid = j;
 				    final = source[(i__1 = i__ - 1) < 256000 
 					    && 0 <= i__1 ? i__1 : s_rnge(
 					    "source", i__1, "dskx02_", (
-					    ftnlen)1657)];
+					    ftnlen)1800)];
 
 /*                             Indicate that a solution was found. We'll */
 /*                             keep looking for a better one if PLID is */
@@ -2268,11 +2412,11 @@ static integer c__0 = 0;
 				    if ((i__3 = platid[(i__2 = k - 1) < 
 					    256000 && 0 <= i__2 ? i__2 : 
 					    s_rnge("platid", i__2, "dskx02_", 
-					    (ftnlen)1678)], abs(i__3)) == w) {
+					    (ftnlen)1821)], abs(i__3)) == w) {
 					platid[(i__2 = k - 1) < 256000 && 0 <=
 						 i__2 ? i__2 : s_rnge("platid"
 						, i__2, "dskx02_", (ftnlen)
-						1679)] = w;
+						1822)] = w;
 				    }
 				}
 			    }

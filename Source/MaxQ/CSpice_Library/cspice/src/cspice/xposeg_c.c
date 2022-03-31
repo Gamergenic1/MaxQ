@@ -1,12 +1,12 @@
 /*
 
--Procedure      xposeg_c ( Transpose a matrix, general )
+-Procedure xposeg_c ( Transpose a matrix, general )
 
 -Abstract
- 
-   Transpose a matrix of arbitrary size (in place, the matrix 
-   need not be square). 
- 
+
+   Transpose a matrix of arbitrary size (in place, the matrix
+   need not be square).
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   MATRIX 
- 
+
+   MATRIX
+
 */
 
    #include "SpiceUsr.h"
@@ -48,70 +48,71 @@
    #undef    xposeg_c
 
 
-   void xposeg_c ( const void   * matrix, 
-                   SpiceInt       nrow, 
-                   SpiceInt       ncol, 
-                   void         * xposem ) 
+   void xposeg_c ( const void   * matrix,
+                   SpiceInt       nrow,
+                   SpiceInt       ncol,
+                   void         * xposem )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   matrix     I   Matrix to be transposed. 
-   nrow       I   Number of rows of input matrix. 
-   ncol       I   Number of columns of input matrix. 
-   xposem     O   Transposed matrix (xposem can overwrite matrix). 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   matrix     I   Matrix to be transposed.
+   nrow       I   Number of rows of input matrix `matrix'.
+   ncol       I   Number of columns of input matrix `matrix'.
+   xposem     O   Transposed matrix.
+
 -Detailed_Input
- 
-   matrix         Matrix to be transposed. 
- 
-   nrow           Number of rows of input matrix. 
- 
-   ncol           Number of columns of input matrix. 
- 
+
+   matrix      is a matrix to be transposed.
+
+   nrow        is the number of rows of input matrix `matrix'.
+
+   ncol        is the number of columns of input matrix `matrix'.
+
 -Detailed_Output
- 
-   xposem         Transposed matrix.  xposem can overwrite matrix. 
- 
+
+   xposem      is the transposed matrix.
+
 -Parameters
- 
-   None. 
- 
--Files
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error Free. 
- 
-   1) If either nrow or ncol is less than or equal to zero, no action 
-      is taken. The routine simply returns. 
- 
+
+   Error free.
+
+   1)  If either `nrow' or `ncol' is less than or equal to zero, no
+       action is taken. The routine simply returns.
+
+-Files
+
+   None.
+
 -Particulars
- 
-   This routine transposes the input matrix and writes the 
-   result to the matrix xposem.  This algorithm is performed in 
-   such a way that the transpose can be performed in place.  That 
-   is, matrix and xposem can use the same storage area in memory. 
- 
-   NOTE:  The matrices matrix and xposem are declared 
-          one-dimensional for computational purposes only.  The 
+
+   This routine transposes the input matrix and writes the
+   result to the matrix `xposem'. This algorithm is performed in
+   such a way that the transpose can be performed in place. That
+   is, `matrix' and `xposem' can use the same storage area in memory.
+
+   NOTE:  The matrices `matrix' and `xposem' are declared
+          one-dimensional for computational purposes only. The
           calling program should declare them as matrix[nrow][ncol]
-          and xposem[ncol][nrow]. 
- 
-          This routine works on the assumption that the input and 
-          output matrices are defined as described above.  More 
-          specifically it assumes that the elements of the matrix 
-          to be transformed is stored in contiguous memory locations 
-          as shown here.  On output these elements will be 
-          rearranged in consecutive memory locations as shown. 
- 
- 
+          and xposem[ncol][nrow].
+
+          This routine works on the assumption that the input and
+          output matrices are defined as described above. More
+          specifically it assumes that the elements of the matrix
+          to be transformed is stored in contiguous memory locations
+          as shown here. On output these elements will be
+          rearranged in consecutive memory locations as shown.
+
+
              matrix                xposem
- 
+
              m[0][0]               m[0][0]
              m[0][1]               m[1][0]
              m[0][2]               m[2][0]
@@ -127,9 +128,9 @@
              .                     .
                                    m[nrow-1][1]
              .                     .
- 
+
              .                     .
- 
+
              .                     .
                                    m[0][ncol-1]
              m[nrow-1][0]          m[1][ncol-1]
@@ -138,63 +139,68 @@
              .                     .
              .                     .
              m[nrow-1][ncol-1]     m[nrow-1][ncol-1]
- 
- 
+
+
    For those familiar with permutations, this algorithm relies upon the
    fact that the transposition of a matrix, which has been stored as a
    string, is simply the action of a permutation applied to that
-   string.  Since any permutation can be decomposed as a product of
+   string. Since any permutation can be decomposed as a product of
    disjoint cycles, it is possible to transpose the matrix with only
-   one additional storage register.  However, once a cycle has been
+   one additional storage register. However, once a cycle has been
    computed it is necessary to find the next entry in the string that
-   has not been moved by the permutation.  For this reason the
+   has not been moved by the permutation. For this reason the
    algorithm is slower than would be necessary if the numbers of rows
    and columns were known in advance.
- 
--Examples
- 
-   This routine is primarily useful when attempting to transpose large
-   matrices, where inplace transposition is important.  For example
-   suppose you have the following declarations
- 
-      SpiceDouble           matrix [1003][800];
- 
-   If the transpose of the matrix is needed, it may not be possible to
-   fit a second matrix requiring the same storage into memory.  Instead
-   declare xposem as below so that no additional memory is allocated.
- 
-      SpiceDouble        (* xposem) [1003]  =  matrix;
-        
-   To obtain the transpose simply execute 
- 
-      xposeg_c ( matrix, 1003, 800, xposem ); 
- 
--Restrictions
- 
-   None. 
- 
--Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   W.L. Taber      (JPL) 
- 
--Literature_References
- 
-   None. 
- 
--Version
-  
-   -CSPICE Version 1.1.0, 24-JUL-2001   (NJB)
 
-       Changed protoype:  input matrix is now type (const void *).
+-Examples
+
+   This routine is primarily useful when attempting to transpose large
+   matrices, where inplace transposition is important. For example
+   suppose you have the following declarations
+
+      SpiceDouble           matrix [1003][800];
+
+   If the transpose of the matrix is needed, it may not be possible to
+   fit a second matrix requiring the same storage into memory. Instead
+   declare xposem as below so that no additional memory is allocated.
+
+      SpiceDouble        (* xposem) [1003]  =  matrix;
+
+   To obtain the transpose simply execute
+
+      xposeg_c ( matrix, 1003, 800, xposem );
+
+-Restrictions
+
+   None.
+
+-Literature_References
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+
+-Version
+
+   -CSPICE Version 1.1.1, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.1.0, 24-JUL-2001 (NJB)
+
+       Changed prototype: input matrix is now type (const void *).
        Implemented interface macro for casting input matrix to const.
 
    -CSPICE Version 1.0.0, 31-MAY-1999 (NJB) (WLT)
 
 -Index_Entries
- 
-   transpose a matrix general 
- 
+
+   transpose a matrix general
+
 -&
 */
 
@@ -216,7 +222,6 @@
                ( integer     * ) &ncol,
                ( integer     * ) &nrow,
                ( doublereal  * ) xposem );
-               
+
 
 } /* End xposeg_c */
-

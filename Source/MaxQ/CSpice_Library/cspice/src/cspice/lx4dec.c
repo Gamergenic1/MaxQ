@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LX4DEC (Scan for signed integer) */
+/* $Procedure LX4DEC (Scan for signed integer) */
 /* Subroutine */ int lx4dec_(char *string, integer *first, integer *last, 
 	integer *nchar, ftnlen string_len)
 {
@@ -22,7 +22,6 @@
 
 /*     Scan a string from a specified starting position for the */
 /*     end of a decimal number. */
-
 
 /* $ Disclaimer */
 
@@ -51,70 +50,70 @@
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       PARSING */
+/*     PARSING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STRING     I   any character string */
-/*      FIRST      I   first character to scan from in STRING */
-/*      LAST       O   last character that is part of a decimal number */
-/*      NCHAR      O   number of characters in the decimal number. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STRING     I   any character string */
+/*     FIRST      I   first character to scan from in STRING */
+/*     LAST       O   last character that is part of a decimal number */
+/*     NCHAR      O   number of characters in the decimal number. */
 
 /* $ Detailed_Input */
 
-/*     STRING      is any character string. */
+/*     STRING   is any character string. */
 
-/*     FIRST       is the location in the string to beginning scanning */
-/*                 for a decimal number.  It is assumed that the */
-/*                 decimal number begins at FIRST. */
+/*     FIRST    is the location in the string to beginning scanning */
+/*              for a decimal number. It is assumed that the */
+/*              decimal number begins at FIRST. */
 
 /* $ Detailed_Output */
 
-/*     LAST        is the last character at or after FIRST such that */
-/*                 the substring STRING(FIRST:LAST) is a decimal */
-/*                 number.  If there is no such substring, LAST */
-/*                 will be returned with the value FIRST-1. */
+/*     LAST     is the last character at or after FIRST such that */
+/*              the substring STRING(FIRST:LAST) is a decimal */
+/*              number. If there is no such substring, LAST */
+/*              will be returned with the value FIRST-1. */
 
-/*     NCHAR       is the number of characters in the decimal number */
-/*                 that begins at FIRST and ends at last.  If there */
-/*                 is no such string NCHAR will be given the value 0. */
+/*     NCHAR    is the number of characters in the decimal number */
+/*              that begins at FIRST and ends at last. If there */
+/*              is no such string NCHAR will be given the value 0. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If FIRST is beyond either end of the string, then */
-/*        LAST will be returned with the value FIRST and NCHAR */
-/*        will be returned with the value 0. */
+/*     1)  If FIRST is beyond either end of the string, then LAST will be */
+/*         returned with the value FIRST-1 and NCHAR will be returned */
+/*         with the value 0. */
 
-/*     2) If STRING(FIRST:FIRST) is not part of a decimal number */
-/*        then LAST will be returned with the value FIRST-1 and NCHAR */
-/*        will be returned with the value 0. */
+/*     2)  If STRING(FIRST:FIRST) is not part of a decimal number then */
+/*         LAST will be returned with the value FIRST-1 and NCHAR will be */
+/*         returned with the value 0. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This routine allows you to scan forward in a string to locate */
-/*     a decimal number that begins on the input character FIRST.  Note */
+/*     a decimal number that begins on the input character FIRST. Note */
 /*     that all signed integers are included in the list of decimal */
-/*     numbers.  See LX4SGN for a description of signed integers. */
+/*     numbers. See LX4SGN for a description of signed integers. */
 
 /*     We let S stand for a signed integer and U stand for */
-/*     an unsigned integer.  With this notation, the strings */
+/*     an unsigned integer. With this notation, the strings */
 /*     recognized as decimal numbers are: */
 
 /*        U */
@@ -125,7 +124,6 @@
 /*        -.U */
 /*        +.U */
 
-
 /* $ Examples */
 
 /*     Suppose you believe that a string has the form */
@@ -135,7 +133,7 @@
 /*     where X, Y, and Z are decimal numbers of some unknown */
 /*     length and % stands for some non-digit character. You could */
 /*     use this routine to locate the decimal numbers in the */
-/*     string as shown below.  We'll keep track of the beginning and */
+/*     string as shown below. We'll keep track of the beginning and */
 /*     ending of the decimal numbers in the integer arrays B and E. */
 
 /*     FIRST = 1 */
@@ -160,20 +158,28 @@
 
 /*     END DO */
 
-
 /* $ Restrictions */
+
+/*     None. */
+
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*      W.L. Taber      (JPL) */
-
-/* $ Literature_References */
-
-/*      None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 04-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Fixed return value for LAST in $Exceptions section entry #1. */
 
 /* -    SPICELIB Version 1.1.0, 28-NOV-1995 (WLT) */
 
@@ -182,7 +188,6 @@
 /*        strings before. */
 
 /* -    SPICELIB Version 1.0.0, 12-JUL-1994 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure                     HALFPI ( Half the value of pi ) */
+/* $Procedure HALFPI ( Half the value of pi ) */
 doublereal halfpi_(void)
 {
     /* Initialized data */
@@ -139,22 +139,26 @@ doublereal halfpi_(void)
 
 /* $ Author_and_Institution */
 
-/*     J. Diaz del Rio (ODC Space) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.2, 08-APR-2015 (JDR) */
+/* -    SPICELIB Version 1.0.3, 09-JUL-2020 (JDR) */
 
-/*         Minor edit to example comments eliminating typos. */
+/*        Edited the header to comply with NAIF standard. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.2, 08-APR-2015 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Minor edit to example comments eliminating typos. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

@@ -9,7 +9,7 @@
 
 static integer c__2 = 2;
 
-/* $Procedure      PRTPKG ( Declare Arguments for Error Message Routines ) */
+/* $Procedure PRTPKG ( Declare Arguments for Error Message Routines ) */
 logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl, 
 	logical *trace, logical *dfault, char *type__, ftnlen type_len)
 {
@@ -43,8 +43,8 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 
 /* $ Abstract */
 
-/*      Declare the arguments for the error message selection entry */
-/*      points.  DO NOT CALL THIS ROUTINE. */
+/*     Declare the arguments for the error message selection entry */
+/*     points.  DO NOT CALL THIS ROUTINE. */
 
 /* $ Disclaimer */
 
@@ -73,78 +73,91 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  ENTRY */
-/*      --------  ---  -------------------------------------------------- */
-
-/*      SHORT      I   SETPRT */
-/*      EXPL       I   SETPRT */
-/*      LONG       I   SETPRT */
-/*      TRACE      I   SETPRT */
-/*      DFAULT     I   SETPRT */
-/*      TYPE       I   MSGSEL */
-/*      FILEN      P   MSGSEL */
+/*     VARIABLE  I/O  ENTRY POINTS */
+/*     --------  ---  -------------------------------------------------- */
+/*     SHORT      I   SETPRT */
+/*     EXPL       I   SETPRT */
+/*     LONG       I   SETPRT */
+/*     TRACE      I   SETPRT */
+/*     DFAULT     I   SETPRT */
+/*     TYPE       I   MSGSEL */
+/*     FILEN      P   MSGSEL */
 
 /* $ Detailed_Input */
 
-/*      See the ENTRY points for discussions of their arguments. */
+/*     See the ENTRY points for discussions of their arguments. */
 
 /* $ Detailed_Output */
 
-/*      See the ENTRY points for discussions of their arguments. */
+/*     See the ENTRY points for discussions of their arguments. */
 
 /* $ Parameters */
 
-/*      See the ENTRY points for discussions of their parameters. */
+/*     See the ENTRY points for discussions of their parameters. */
 
 /* $ Exceptions */
 
-/*      This routine signals an error IF IT IS CALLED. */
+/*     1)  If PRTPKG is called directly, the error SPICE(BOGUSENTRY) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     DO NOT CALL THIS ROUTINE. */
 
-/*      The entry points declared in this routine are: */
+/*     The entry points declared in this routine are: */
 
-/*      SETPRT */
-/*      MSGSEL */
+/*        SETPRT */
+/*        MSGSEL */
 
-/*      There is no reason to call this subroutine. */
-/*      The purpose of this subroutine is to make the */
-/*      declarations required by the various entry points. */
-/*      This routine has no run-time function. */
+/*     There is no reason to call this subroutine. The purpose of this */
+/*     subroutine is to make the declarations required by the various */
+/*     entry points. This routine has no run-time function. */
 
 /* $ Examples */
 
-/*      None.  DO NOT CALL THIS ROUTINE. */
+/*     None.  DO NOT CALL THIS ROUTINE. */
 
 /* $ Restrictions */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     1)  DO NOT CALL THIS ROUTINE. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 3.26.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header of the PRTPKG umbrella routine and all its */
+/*        entry entry points to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.25.0, 10-MAR-2014 (BVS) */
 
@@ -253,23 +266,23 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 /* -    SPICELIB Version 3.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 3.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -277,14 +290,14 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/* -     SPICELIB Version 2.0.0, 9-NOV-1993 (HAN) */
+/* -    SPICELIB Version 2.0.0, 09-NOV-1993 (HAN) */
 
 /*         Module was updated to include the value for FILEN */
 /*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
 /*         NeXT platforms. Also, the previous value of 256 for */
 /*         Unix platforms was changed to 255. */
 
-/* -     SPICELIB Version 1.1.0, 12-OCT-1992 (HAN) */
+/* -    SPICELIB Version 1.1.0, 12-OCT-1992 (HAN) */
 
 /*         Updated module for multiple environments. */
 
@@ -292,12 +305,12 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 /*         create the source file for a specific environment given a */
 /*         master source file. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -330,13 +343,14 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
 
 /*         PRTPKG, though it performs no run-time function, must */
 /*         still return a value, in order to comply with the Fortran */
-/*         standard.  So, now it does. */
+/*         standard. So, now it does. */
 
 /* -     Beta Version 1.0.1, 08-FEB-1989 (NJB) */
 
 /*         Warnings added to discourage use of this routine. */
 /*         Parameter declarations moved to "Declarations" section. */
 /*         Two local declarations moved to the correct location. */
+
 /* -& */
 
 /*     SPICELIB functions */
@@ -365,13 +379,13 @@ logical prtpkg_0_(int n__, logical *short__, logical *long__, logical *expl,
     wrline_(device, "SPICE(BOGUSENTRY)", (ftnlen)128, (ftnlen)17);
     ret_val = FALSE_;
     return ret_val;
-/* $Procedure      SETPRT ( Store Error Message Types to be Output ) */
+/* $Procedure SETPRT ( Store Error Message Types to be Output ) */
 
 L_setprt:
 /* $ Abstract */
 
-/*      Store (a representation of) the selection of types of error */
-/*      messages to be output.  DO NOT CALL THIS ROUTINE. */
+/*     Store (a representation of) the selection of types of error */
+/*     messages to be output.  DO NOT CALL THIS ROUTINE. */
 
 /* $ Disclaimer */
 
@@ -400,121 +414,126 @@ L_setprt:
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 
-/*      LOGICAL               SHORT */
-/*      LOGICAL               EXPL */
-/*      LOGICAL               LONG */
-/*      LOGICAL               TRACE */
-/*      LOGICAL               DFAULT */
+/*     LOGICAL               SHORT */
+/*     LOGICAL               EXPL */
+/*     LOGICAL               LONG */
+/*     LOGICAL               TRACE */
+/*     LOGICAL               DFAULT */
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-
-/*      SHORT      I   Select output of short error message? */
-/*      EXPL       I   Select output of explanation of short message? */
-/*      LONG       I   Select output of long error message? */
-/*      TRACE      I   Select output of traceback? */
-/*      DFAULT     I   Select output of default message? */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     SHORT      I   Select output of short error message? */
+/*     EXPL       I   Select output of explanation of short message? */
+/*     LONG       I   Select output of long error message? */
+/*     TRACE      I   Select output of traceback? */
+/*     DFAULT     I   Select output of default message? */
 
 /* $ Detailed_Input */
 
-/*      SHORT    indicates whether the short error message is selected */
-/*               as one of the error messages to be output when an error */
-/*               is detected.  A value of .TRUE. indicates that the */
-/*               short error message IS selected. */
+/*     SHORT    indicates whether the short error message is selected */
+/*              as one of the error messages to be output when an error */
+/*              is detected. A value of .TRUE. indicates that the */
+/*              short error message IS selected. */
 
-/*      EXPL     indicates whether the explanatory text for the short */
-/*               error message is selected as one of the error messages */
-/*               to be output when an error is detected.  A value of */
-/*               .TRUE. indicates that the explanatory text for the */
-/*               short error message IS selected. */
+/*     EXPL     indicates whether the explanatory text for the short */
+/*              error message is selected as one of the error messages */
+/*              to be output when an error is detected. A value of */
+/*              .TRUE. indicates that the explanatory text for the */
+/*              short error message IS selected. */
 
-/*      LONG     indicates whether the long error message is selected */
-/*               as one of the error messages to be output when an error */
-/*               is detected.  A value of .TRUE. indicates that the */
-/*               long error message IS selected. */
+/*     LONG     indicates whether the long error message is selected */
+/*              as one of the error messages to be output when an error */
+/*              is detected. A value of .TRUE. indicates that the */
+/*              long error message IS selected. */
 
-/*      TRACE    indicates whether the traceback is selected */
-/*               as one of the error messages to be output when an error */
-/*               is detected.  A value of .TRUE. indicates that the */
-/*               traceback IS selected. */
+/*     TRACE    indicates whether the traceback is selected */
+/*              as one of the error messages to be output when an error */
+/*              is detected. A value of .TRUE. indicates that the */
+/*              traceback IS selected. */
 
-/*      DFAULT   indicates whether the default message is selected */
-/*               as one of the error messages to be output when an error */
-/*               is detected.  A value of .TRUE. indicates that the */
-/*               default message IS selected. */
-
+/*     DFAULT   indicates whether the default message is selected */
+/*              as one of the error messages to be output when an error */
+/*              is detected. A value of .TRUE. indicates that the */
+/*              default message IS selected. */
 
 /* $ Detailed_Output */
 
-/*      None. */
+/*     None. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      None. */
+/*     None. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     DO NOT CALL THIS ROUTINE. */
 
-/*      The effect of this routine is an ENVIRONMENTAL one.  This */
-/*      routine performs no output;  it stores the error message */
-/*      selection provided as input. */
+/*     The effect of this routine is an ENVIRONMENTAL one. This */
+/*     routine performs no output;  it stores the error message */
+/*     selection provided as input. */
 
-/*      Note that the actual output of error messages depends not */
-/*      only on the selection made using this routine, but also */
-/*      on the selection of the error output device (see ERRDEV) */
-/*      and the choice of error response action (see ERRACT). If */
-/*      the action is not 'IGNORE' (possible choices are */
-/*      'IGNORE', 'ABORT', 'DEFAULT', 'REPORT', and 'RETURN'), */
-/*      the selected error messages will be written to the chosen */
-/*      output device when an error is detected. */
+/*     Note that the actual output of error messages depends not */
+/*     only on the selection made using this routine, but also */
+/*     on the selection of the error output device (see ERRDEV) */
+/*     and the choice of error response action (see ERRACT). If */
+/*     the action is not 'IGNORE' (possible choices are */
+/*     'IGNORE', 'ABORT', 'DEFAULT', 'REPORT', and 'RETURN'), */
+/*     the selected error messages will be written to the chosen */
+/*     output device when an error is detected. */
 
 /* $ Examples */
 
-/*      1.  In this example, the short and long messages are selected. */
+/*     1. In this example, the short and long messages are selected. */
 
-/*      C */
-/*      C     Select short and long error messages for output */
-/*      C     (We don't examine the status returned because no */
-/*      C     errors are detected by SETPRT): */
-/*      C */
+/*     C */
+/*     C     Select short and long error messages for output */
+/*     C     (We don't examine the status returned because no */
+/*     C     errors are detected by SETPRT): */
+/*     C */
 
-/*            STATUS = SETPRT ( .TRUE., .FALSE., .TRUE., .FALSE., */
-/*           .                  .FALSE.                          ) */
-
-
+/*           STATUS = SETPRT ( .TRUE., .FALSE., .TRUE., .FALSE., */
+/*          .                  .FALSE.                          ) */
 
 /* $ Restrictions */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     1)  DO NOT CALL THIS ROUTINE. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.0.5, 17-JUL-2002 (BVS) */
 
@@ -523,28 +542,28 @@ L_setprt:
 /* -    SPICELIB Version 3.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -557,7 +576,7 @@ L_setprt:
 /* -     Beta Version 1.0.1, 08-FEB-1989 (NJB) */
 
 /*         Warnings added to discourage use of this routine in */
-/*         non-error-handling code.  Parameters section added. */
+/*         non-error-handling code. $Parameters section added. */
 
 /* -& */
 
@@ -594,13 +613,13 @@ L_setprt:
 
     ret_val = TRUE_;
     return ret_val;
-/* $Procedure      MSGSEL  ( Is This Message Type Selected for Output? ) */
+/* $Procedure MSGSEL  ( Is This Message Type Selected for Output? ) */
 
 L_msgsel:
 /* $ Abstract */
 
-/*      Indicate whether the specified message type has been selected */
-/*      for output. */
+/*     Indicate whether the specified message type has been selected */
+/*     for output. */
 
 /* $ Disclaimer */
 
@@ -629,98 +648,103 @@ L_msgsel:
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 
-/*      TYPE */
+/*     CHARACTER*(*)         TYPE */
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     TYPE       I   Type of message whose selection status is queried. */
+/*     FILEN      P   Maximum length of a file name. */
 
-/*      TYPE       I   Type of message whose selection status is queried. */
-/*      FILEN      P   Maximum length of a file name. */
-
-/*      The function takes the value .TRUE. if the message type indicated */
-/*      by TYPE has been selected for output to the error output device. */
-
+/*     The function returns the value .TRUE. if the message type */
+/*     indicated by TYPE has been selected for output to the error output */
+/*     device. */
 
 /* $ Detailed_Input */
 
-/*      TYPE   Refers to a type of error message.  Possible values */
-/*             are 'SHORT', 'EXPLAIN', 'LONG', 'DEFAULT', */
-/*             and 'TRACEBACK'. */
+/*     TYPE     is the type of error message. */
+
+/*              Possible values of TYPE are 'SHORT', 'EXPLAIN', 'LONG', */
+/*              'DEFAULT', and 'TRACEBACK'. */
 
 /* $ Detailed_Output */
 
-/*      The function takes the value .TRUE. if the message type indicated */
-/*      by TYPE has been selected for output to the error output device. */
+/*     The function returns the value .TRUE. if the message type */
+/*     indicated by TYPE has been selected for output to the error */
+/*     output device. */
 
 /* $ Parameters */
 
-/*      FILEN  is the maximum length of a file name. */
+/*     FILEN    is the maximum length of a file name. */
 
 /* $ Exceptions */
 
-/*      Additionally, invalid values of TYPE are detected. */
-
-/*      The short error message set in this case is: */
-/*      'SPICE(INVALIDMSGTYPE)' */
-
-/*      The handling of this error is a special case; to avoid recursion */
-/*      problems, SIGERR is not called when the error is detected. */
-/*      Instead, the short and long error messages are output directly. */
-
+/*     1)  If an invalid value of TYPE is detected, the error */
+/*         SPICE(INVALIDMSGTYPE) is signaled. The handling of this error */
+/*         is a special case; to avoid recursion problems, SIGERR is not */
+/*         called when the error is detected. Instead, the short and long */
+/*         error messages are output directly. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine is part of the SPICELIB error handling mechanism. */
+/*     This routine is part of the SPICELIB error handling mechanism. */
 
-/*      Note that even though a given type of message may have been */
-/*      selected for output, the output device and error response */
-/*      action must also have been selected appropriately. */
-/*      Use ERRDEV to choose the output device for error messages. */
-/*      Use ERRACT to choose the error response action.  Any action */
-/*      other than 'IGNORE' will result in error messages being */
-/*      written to the error output device when errors are detected. */
-/*      See ERRACT for details. */
+/*     Note that even though a given type of message may have been */
+/*     selected for output, the output device and error response */
+/*     action must also have been selected appropriately. */
+/*     Use ERRDEV to choose the output device for error messages. */
+/*     Use ERRACT to choose the error response action. Any action */
+/*     other than 'IGNORE' will result in error messages being */
+/*     written to the error output device when errors are detected. */
+/*     See ERRACT for details. */
 
 /* $ Examples */
 
+/*     1. We want to know if the short message has been selected */
+/*         for output: */
 
-/*      1.  We want to know if the short message has been selected */
-/*          for output: */
+/*         C */
+/*         C     Test whether the short message has been selected: */
+/*         C */
 
-/*          C */
-/*          C     Test whether the short message has been selected: */
-/*          C */
-
-/*                SELECT = MSGSEL ( 'SHORT' ) */
-
+/*               SELECT = MSGSEL ( 'SHORT' ) */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Corrected */
+/*        type declaration in $Declarations section. */
 
 /* -    SPICELIB Version 3.0.5, 17-JUL-2002 (BVS) */
 
@@ -729,28 +753,28 @@ L_msgsel:
 /* -    SPICELIB Version 3.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -762,7 +786,7 @@ L_msgsel:
 
 /* -     Beta Version 1.0.1, 08-FEB-1989 (NJB) */
 
-/*         Parameters section added; parameter declaration added */
+/*         $Parameters section added; parameter declaration added */
 /*         to brief I/O section as well. */
 
 /* -& */

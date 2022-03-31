@@ -133,7 +133,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -145,43 +145,43 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle assigned to a SPK file, and the */
-/*                 descriptor for a segment within the file. Together */
-/*                 they determine the ephemeris data from which the */
-/*                 state of the body is to be computed. */
+/*     DESCR    are the file handle assigned to a SPK file, and the */
+/*              descriptor for a segment within the file. Together */
+/*              they determine the ephemeris data from which the */
+/*              state of the body is to be computed. */
 
-/*     ET          is the epoch (ephemeris time) at which the state */
-/*                 is to be computed. */
+/*     ET       is the epoch (ephemeris time) at which the state */
+/*              is to be computed. */
 
-/*     REF         is the name of the reference frame to */
-/*                 which the vectors returned by the routine should */
-/*                 be rotated. This may be any frame supported by */
-/*                 the SPICELIB subroutine FRMCHG. */
+/*     REF      is the name of the reference frame to */
+/*              which the vectors returned by the routine should */
+/*              be rotated. This may be any frame supported by */
+/*              the SPICELIB subroutine FRMCHG. */
 
 /* $ Detailed_Output */
 
-/*     STATE       contains the position and velocity, at epoch ET, */
-/*                 for whatever body is covered by the specified segment. */
-/*                 STATE has six elements:  the first three contain the */
-/*                 body's position; the last three contain the body's */
-/*                 velocity.  These vectors are rotated into the */
-/*                 specified reference frame, the origin of */
-/*                 which is located at the center of motion for the */
-/*                 body (see CENTER, below).  Units are always km and */
-/*                 km/sec. */
+/*     STATE    contains the position and velocity, at epoch ET, */
+/*              for whatever body is covered by the specified segment. */
+/*              STATE has six elements: the first three contain the */
+/*              body's position; the last three contain the body's */
+/*              velocity. These vectors are rotated into the */
+/*              specified reference frame, the origin of */
+/*              which is located at the center of motion for the */
+/*              body (see CENTER, below).  Units are always km and */
+/*              km/sec. */
 
-/*     CENTER      is the integer ID code of the center of motion for */
-/*                 the state. */
+/*     CENTER   is the integer ID code of the center of motion for */
+/*              the state. */
 
 /* $ Parameters */
 
-/*     NONE. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the requested reference frame is not supported by the */
-/*        current version of CHGIRF, the error 'SPICE(SPKREFNOTSUPP)' */
-/*        is signalled. */
+/*     1)  If the requested reference frame is not supported by the */
+/*         current version of CHGIRF, the error SPICE(SPKREFNOTSUPP) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -194,7 +194,6 @@ static integer c__6 = 6;
 /*     has now largely been replaced by SPKPVN. SPKPV should not normally */
 /*     be called except by old software written before the release of */
 /*     SPKPVN. This routine should be considered obsolete. */
-
 
 /* $ Examples */
 
@@ -232,20 +231,27 @@ static integer c__6 = 6;
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     B.V. Semenov    (KPL) */
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 6.1.1, 14-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revision section. Moved SPK required reading from */
+/*        $Literature_References to $Required_Reading section. */
 
 /* -    SPICELIB Version 6.1.0, 06-DEC-2013 (BVS) (NJB) */
 
@@ -289,32 +295,7 @@ static integer c__6 = 6;
 /* $ Index_Entries */
 
 /*     position and velocity from ephemeris */
-/*     spk file position and velocity */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 6.0.0, 6-OCT-1994 (WLT) */
-
-/*        The routine was updated to handle non-inertial frames. */
-
-/* -    SPICELIB Version 5.0.0, 13-MAR-1995 (KRG) */
-
-/*        The routine was updated to handle type 14. */
-
-/*        A new exception, 3, was also added. */
-
-/* -    SPICELIB Version 4.0.0, 04-NOV-1994 (WLT) */
-
-/*        The routine was updated to handle type 15. */
-
-/* -    SPICELIB Version 3.0.0, 04-AUG-1993 (NJB) */
-
-/*        The routine was updated to handle types 08 and 09. */
-
-/* -    SPICELIB Version 2.0.0, 01-APR-1992 (JML) */
-
-/*        The routine was updated to handle type 05. */
+/*     SPK file position and velocity */
 
 /* -& */
 

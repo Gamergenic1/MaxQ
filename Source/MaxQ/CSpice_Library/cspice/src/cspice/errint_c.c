@@ -38,7 +38,8 @@
 
 -Keywords
 
-   ERROR, CONVERSION
+   CONVERSION
+   ERROR
 
 */
 
@@ -48,7 +49,7 @@
    #include "SpiceZmc.h"
 
    void errint_c ( ConstSpiceChar  * marker,
-                   SpiceInt          number  )
+                   SpiceInt          intnum  )
 
 /*
 
@@ -57,25 +58,25 @@
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
    marker     I   A substring of the error message to be replaced.
-   number     I   The integer to substitute for marker.
+   intnum     I   The integer to substitute for `marker'.
 
 -Detailed_Input
 
-   marker     is a character string which marks a position in
-              the long error message where a character string
-              representing an integer is to be substituted.
-              Leading and trailing blanks in marker are not
-              significant.
+   marker      is a character string which marks a position in
+               the long error message where a character string
+               representing an integer is to be substituted.
+               Leading and trailing blanks in `marker' are not
+               significant.
 
-              Case IS significant;  "XX" is considered to be
-              a different marker from "xx".
+               Case IS significant;  "XX" is considered to be
+               a different marker from "xx".
 
-   number     is an integer whose character representation will
-              be substituted for the first occurrence of marker
-              in the long error message.  This occurrence of the
-              substring indicated by marker will be removed, and
-              replaced by a character string, with no leading or
-              trailing blanks, representing number.
+   intnum      is an integer whose character representation will
+               be substituted for the first occurrence of `marker'
+               in the long error message. This occurrence of the
+               substring indicated by `marker' will be removed, and
+               replaced by a character string, with no leading or
+               trailing blanks, representing `intnum'.
 
 -Detailed_Output
 
@@ -87,13 +88,11 @@
 
 -Exceptions
 
-   1) The error SPICE(EMPTYSTRING) is signalled if the input
-      string does not contain at least one character, since the
-      input string cannot be converted to a Fortran-style string
-      in this case.
+   1)  If the `marker' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   2) The error SPICE(NULLPOINTER) is signalled if the input string
-      pointer is null.
+   2)  If the `marker' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
 
@@ -101,64 +100,104 @@
 
 -Particulars
 
-   This routine updates the current long error message.  If no marker
+   This routine updates the current long error message. If no marker
    is found, (e.g., in the case that the long error message is
-   blank), the routine has no effect.  If multiple instances of the
-   marker designated by marker are found, only the first one is
+   blank), the routine has no effect. If multiple instances of the
+   marker designated by `marker' are found, only the first one is
    replaced.
 
    If the character string resulting from the substitution
    exceeds the maximum length of the long error message, the
-   characters on the right are lost.  No error is signalled.
+   characters on the right are lost. No error is signaled.
 
    This routine has no effect if changes to the long message
    are not allowed.
 
 -Examples
 
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-   1.   In this example, the marker is:   #
-
-
-         The current long error message is:
-
-            "Invalid operation value.  The value was #".
-
-
-         After the call,
+   1) Create a user-defined error message, including both the
+      short and long messages, providing the value of two integer
+      variables within the long message, and signal the error.
 
 
-            errint_c ( "#",  5  );
-
-         The long error message becomes:
-
-            "Invalid operation value.  The value was 5".
+      Example code begins here.
 
 
+      /.
+         Program errint_ex1
+      ./
+      #include "SpiceUsr.h"
 
-   2.   In this example, the marker is:   XX
+      int main()
+      {
+
+         /.
+         Set long error message, with two different `marker'
+         strings where the value of the integer variables
+         will go.  Our markers are "#" and "XX".
+         ./
+         setmsg_c ( "LONG MESSAGE.  Invalid operation value. "
+                    "  The value was #.  Left endpoint "
+                    "exceeded right endpoint.  The left "
+                    "endpoint was:  XX.  The right endpoint "
+                    "was:  XX." );
+
+         /.
+         Insert the integer number where the # is now.
+         ./
+         errint_c ( "#", 5 );
+
+         /.
+         Insert another integer number in the long message
+         where the first XX is now.
+         ./
+         errint_c ( "XX", 910 );
+
+         /.
+         Signal the error.
+         ./
+         sigerr_c ( "SPICE(USERDEFINED)" );
+
+         return ( 0 );
+      }
 
 
-         The current long error message is:
-
-            "Left endpoint exceeded right endpoint.  The left"//
-            "endpoint was:  XX.  The right endpoint was:  XX."
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
 
 
-         After the call,
+      =====================================================================
 
-            errint_c ( "XX",  5  );
+      Toolkit version: N0066
 
-         The long error message becomes:
+      SPICE(USERDEFINED) --
 
-            "Left endpoint exceeded right endpoint.  The left"//
-            "endpoint was:  5.  The right endpoint was:  XX."
+      LONG MESSAGE. Invalid operation value. The value was 5. Left endpoint
+      exceeded right endpoint. The left endpoint was: 910. The right
+      endpoint was: XX.
 
+      Oh, by the way:  The SPICELIB error handling actions are USER-
+      TAILORABLE.  You can choose whether the Toolkit aborts or continues
+      when errors occur, which error messages to output, and where to send
+      the output.  Please read the ERROR "Required Reading" file, or see
+      the routines ERRACT, ERRDEV, and ERRPRT.
+
+      =====================================================================
+
+
+      Note that the execution of this program produces the error
+      SPICE(USERDEFINED), which follows the NAIF standard as
+      described in the ERROR required reading.
 
 -Restrictions
 
-   The caller must ensure that the message length, after sub-
-   stitution is performed, doesn't exceed LMSGLN characters.
+   1)  The caller must ensure that the message length, after sub-
+       stitution is performed, doesn't exceed LMSGLN characters.
 
 -Literature_References
 
@@ -166,16 +205,26 @@
 
 -Author_and_Institution
 
-   N.J. Bachman    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.2.0, 08-FEB-1998 (NJB)
+   -CSPICE Version 1.2.0, 13-AUG-2021 (JDR)
 
-      Re-implemented routine without dynamically allocated, temporary
-      strings.  Made various header fixes.
+       Changed the argument name "number" to "intnum" for consistency
+       with other routines.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997   (EDW)
+       Edited the header to comply with NAIF standard. Added
+       complete code example based on existing code fragments.
+
+   -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)
+
+       Re-implemented routine without dynamically allocated, temporary
+       strings. Made various header fixes.
+
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
 
 -Index_Entries
 
@@ -185,7 +234,6 @@
 */
 
 { /* Begin errint_c */
-
 
    /*
    Check the input string marker to make sure the pointer is non-null
@@ -199,7 +247,7 @@
    Call the f2c'd Fortran routine.
    */
    errint_ ( ( char    * ) marker,
-             ( integer * ) &number,
+             ( integer * ) &intnum,
              ( ftnlen    ) strlen(marker)  );
 
 

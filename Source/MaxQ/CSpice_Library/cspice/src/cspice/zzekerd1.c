@@ -39,7 +39,7 @@ static integer c__5 = 5;
 /* $ Abstract */
 
 /*     Find the last column value less than or equal to a specified key, */
-/*     for a specifed d.p. EK column having a type 1 index, using */
+/*     for a specified d.p. EK column having a type 1 index, using */
 /*     dictionary ordering on d.p. data values and record pointers. */
 
 /* $ Disclaimer */
@@ -533,6 +533,10 @@ static integer c__5 = 5;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    Beta Version 1.1.0, 18-MAY-1997 (NJB) */
 

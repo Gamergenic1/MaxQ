@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      JYEAR ( Seconds per julian year ) */
+/* $Procedure JYEAR ( Seconds per julian year ) */
 doublereal jyear_(void)
 {
     /* System generated locals */
@@ -42,11 +42,11 @@ doublereal jyear_(void)
 
 /* $ Required_Reading */
 
-/*  None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      CONSTANTS */
+/*     CONSTANTS */
 
 /* $ Declarations */
 
@@ -54,9 +54,7 @@ doublereal jyear_(void)
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O              DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      JYEAR       O   The number of seconds/julian year */
+/*     The function returns the number of seconds per julian year. */
 
 /* $ Detailed_Input */
 
@@ -64,35 +62,11 @@ doublereal jyear_(void)
 
 /* $ Detailed_Output */
 
-/*     The function returns the number of seconds per julian */
-/*     year. */
+/*     The function returns the number of seconds per julian year. */
 
 /* $ Parameters */
 
 /*     None. */
-
-/* $ Particulars */
-
-/*     The julian year is often used as a fundamental unit */
-/*     of time when dealing with ephemeris data.  For this */
-/*     reason its value in terms of ephemeris seconds is */
-/*     recorded in this function. */
-
-/* $ Examples */
-
-/*     Suppose you wish to compute the number of julian centuries */
-/*     that have elapsed since the ephemeris epoch J1950 (beginning */
-/*     of the julian year 1950) at a particular ET epoch.  The */
-/*     following line of code will do the trick. */
-
-
-/*        CENTRY = ( ET - UNITIM ( J1950(), 'JED', 'ET' ) ) */
-/*       .       / ( 100.0D0 * JYEAR() ) */
-
-
-/* $ Restrictions */
-
-/*      None. */
 
 /* $ Exceptions */
 
@@ -100,19 +74,45 @@ doublereal jyear_(void)
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
+/*     The julian year is often used as a fundamental unit of time when */
+/*     dealing with ephemeris data. For this reason its value in terms of */
+/*     ephemeris seconds is recorded in this function. */
+
+/* $ Examples */
+
+/*     Suppose you wish to compute the number of julian centuries */
+/*     that have elapsed since the ephemeris epoch J1950 (beginning */
+/*     of the julian year 1950) at a particular ET epoch. The */
+/*     following line of code will do the trick. */
+
+
+/*        CENTRY = ( ET - UNITIM ( J1950(), 'JED', 'ET' ) ) */
+/*       .       / ( 100.0D0 * JYEAR() ) */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      Explanatory Supplement to the Astronomical Almanac. */
-/*      Page 8. University Science Books, 20 Edgehill Road, */
-/*      Mill Valley, CA 94941 */
+/*     [1]  P. Kenneth Seidelmann (Ed.), "Explanatory Supplement to the */
+/*          Astronomical Almanac," Page 8, University Science Books, */
+/*          1992. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 08-APR-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 13-JUL-1993 (WLT) */
 

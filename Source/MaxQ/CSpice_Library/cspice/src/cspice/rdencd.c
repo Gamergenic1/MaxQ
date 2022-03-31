@@ -10,7 +10,7 @@
 static integer c__9 = 9;
 static integer c__1 = 1;
 
-/* $Procedure  RDENCD  ( Read encoded d.p. numbers from file ) */
+/* $Procedure RDENCD  ( Read encoded d.p. numbers from file ) */
 /* Subroutine */ int rdencd_(integer *unit, integer *n, doublereal *data)
 {
     /* System generated locals */
@@ -84,45 +84,44 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      UNIT      I    Fortran unit number of input text file. */
-/*      N         I    Number of d.p. numbers to read and decode. */
-/*      DATA      I    List of decoded d.p. numbers. */
+/*     UNIT      I    Fortran unit number of input text file. */
+/*     N         I    Number of d.p. numbers to read and decode. */
+/*     DATA      O    List of decoded d.p. numbers. */
 
 /* $ Detailed_Input */
 
-/*     UNIT     The Fortran unit number for a previously opened text */
+/*     UNIT     is the Fortran unit number for a previously opened text */
 /*              file. All reading will begin at the CURRENT POSITION */
 /*              in the text file. */
 
-/*     N        The number of encoded double precision numbers, to be */
+/*     N        is the number of encoded double precision numbers, to be */
 /*              read from the text file attached to UNIT. */
 
 /* $ Detailed_Output */
 
-/*     DATA     List of decoded double precision numbers read from the */
-/*              text file attached to UNIT. */
+/*     DATA     is the list of decoded double precision numbers read from */
+/*              the text file attached to UNIT. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1)   If N, the number of data items, is not positive, the error */
-/*          SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If N, the number of data items, is not positive, the error */
+/*         SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2)   If an error occurs while reading from the text file */
-/*          attached to  UNIT, the error SPICE(FILEREADFAILED) will */
-/*          be signalled. */
+/*     2)  If an error occurs while reading from the text file attached */
+/*         to UNIT, the error SPICE(FILEREADFAILED) is signaled. */
 
-/*     3)   If an error occurs while decoding a number, the error */
-/*          SPICE(DECODINGERROR) will be signalled. */
+/*     3)  If an error occurs while decoding a number, the error */
+/*         SPICE(DECODINGERROR) is signaled. */
 
 /* $ Files */
 
-/*     See the description of UNIT in Detailed_Input. */
+/*     See the description of UNIT in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -190,10 +189,18 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     F.S. Turner    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Fixed I/O type */
+/*        of argument DATA in $Brief_I/O table. */
 
 /* -    SPICELIB Version 1.1.0, 19-MAR-1999 (FST) */
 
@@ -206,7 +213,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*      read and decode encoded d.p. numbers from a text file */
+/*     read and decode encoded d.p. numbers from a text file */
 
 /* -& */
 
@@ -280,7 +287,7 @@ static integer c__1 = 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    iostat = do_lio(&c__9, &c__1, work + (((i__2 = i__ - 1) < 64 && 0 
 		    <= i__2 ? i__2 : s_rnge("work", i__2, "rdencd_", (ftnlen)
-		    265)) << 6), (ftnlen)64);
+		    274)) << 6), (ftnlen)64);
 	    if (iostat != 0) {
 		goto L100001;
 	    }
@@ -309,7 +316,7 @@ L100001:
 	i__2 = nitms;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 	    hx2dp_(work + (((i__1 = i__ - 1) < 64 && 0 <= i__1 ? i__1 : 
-		    s_rnge("work", i__1, "rdencd_", (ftnlen)289)) << 6), &
+		    s_rnge("work", i__1, "rdencd_", (ftnlen)298)) << 6), &
 		    data[itmbeg + i__ - 2], &error, errmsg, (ftnlen)64, (
 		    ftnlen)80);
 	    if (error) {
@@ -317,7 +324,7 @@ L100001:
 			"item #: #. #", (ftnlen)63);
 		errint_("#", &i__, (ftnlen)1);
 		errch_("#", work + (((i__1 = i__ - 1) < 64 && 0 <= i__1 ? 
-			i__1 : s_rnge("work", i__1, "rdencd_", (ftnlen)295)) 
+			i__1 : s_rnge("work", i__1, "rdencd_", (ftnlen)304)) 
 			<< 6), (ftnlen)1, (ftnlen)64);
 		errch_("#", errmsg, (ftnlen)1, (ftnlen)80);
 		sigerr_("SPICE(DECODINGERROR)", (ftnlen)20);

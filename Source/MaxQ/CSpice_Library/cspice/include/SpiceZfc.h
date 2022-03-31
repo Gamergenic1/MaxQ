@@ -49,6 +49,18 @@
 
 -Version
 
+   -CSPICE Version 7.1.0, 28-NOV-2021 (BVS)
+
+      Updated for:
+       
+         MAC-OSX-M1-64BIT-CLANG_C
+          
+      environment. Added the corresponding tag:
+       
+         CSPICE_MAC_OSX_M1_64BIT_CLANG
+
+      tag to the #ifdefs set.
+
    -CSPICE Version 7.0.0, 10-MAR-2014 (BVS)
 
       Reformatted version lines.
@@ -156,6 +168,7 @@
       || defined( CSPICE_PC_CYGWIN_64BIT_GCC )        \
       || defined( CSPICE_PC_LINUX_64BIT_GCC    )      \
       || defined( CSPICE_MAC_OSX_INTEL_64BIT_GCC )    \
+      || defined( CSPICE_MAC_OSX_M1_64BIT_CLANG )     \
       || defined( CSPICE_SUN_SOLARIS_INTEL_64BIT_CC ) \
       || defined( CSPICE_SUN_SOLARIS_64BIT_NATIVE)    \
       || defined( CSPICE_SUN_SOLARIS_64BIT_GCC )        )
@@ -282,6 +295,35 @@ extern int axisar_(doublereal *axis, doublereal *angle, doublereal *r__);
 /*:ref: vrotv_ 14 4 7 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
  
+extern int azlcpo_(char *method, char *target, doublereal *et, char *abcorr, logical *azccw, logical *elplsz, doublereal *obspos, char *obsctr, char *obsref, doublereal *azlsta, doublereal *lt, ftnlen method_len, ftnlen target_len, ftnlen abcorr_len, ftnlen obsctr_len, ftnlen obsref_len);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: bods2c_ 14 4 13 4 12 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: namfrm_ 14 3 13 4 124 */
+/*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: eqstr_ 12 4 13 13 124 124 */
+/*:ref: ident_ 14 1 7 */
+/*:ref: rotmat_ 14 4 7 7 4 7 */
+/*:ref: pi_ 7 0 */
+/*:ref: moved_ 14 3 7 4 7 */
+/*:ref: zzgftreb_ 14 2 4 7 */
+/*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
+/*:ref: surfnm_ 14 5 7 7 7 7 7 */
+/*:ref: twovec_ 14 5 7 4 7 4 7 */
+/*:ref: spkcpo_ 14 16 13 7 13 13 13 7 13 13 7 7 124 124 124 124 124 124 */
+/*:ref: mxv_ 14 3 7 7 7 */
+/*:ref: recazl_ 14 6 7 12 12 7 7 7 */
+/*:ref: dazldr_ 14 6 7 7 7 12 12 7 */
+ 
+extern int azlrec_(doublereal *range, doublereal *az, doublereal *el, logical *azccw, logical *elplsz, doublereal *rectan);
+/*:ref: latrec_ 14 4 7 7 7 7 */
+ 
 extern doublereal b1900_(void);
  
 extern doublereal b1950_(void);
@@ -351,6 +393,8 @@ extern int bodeul_(integer *body, doublereal *et, doublereal *ra, doublereal *de
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
 /*:ref: pckeul_ 14 6 4 7 12 13 7 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: bodfnd_ 12 3 4 13 124 */
 /*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
 /*:ref: rpd_ 7 0 */
@@ -358,14 +402,16 @@ extern int bodeul_(integer *body, doublereal *et, doublereal *ra, doublereal *de
 /*:ref: zzbodbry_ 4 1 4 */
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
-/*:ref: spd_ 7 0 */
 /*:ref: j2000_ 7 0 */
-/*:ref: cleard_ 14 2 4 7 */
+/*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
 /*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: spd_ 7 0 */
+/*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
+/*:ref: cleard_ 14 2 4 7 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
-/*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: vdotg_ 7 3 7 7 4 */
 /*:ref: halfpi_ 7 0 */
 /*:ref: irfrot_ 14 3 4 4 7 */
@@ -591,7 +637,7 @@ extern int ckcls_(integer *handle);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int ckcov_(char *ck, integer *idcode, logical *needav, char *level, doublereal *tol, char *timsys, doublereal *cover, ftnlen ck_len, ftnlen level_len, ftnlen timsys_len);
+extern int ckcov_(char *ckfnm, integer *idcode, logical *needav, char *level, doublereal *tol, char *timsys, doublereal *cover, ftnlen ckfnm_len, ftnlen level_len, ftnlen timsys_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -601,8 +647,8 @@ extern int ckcov_(char *ck, integer *idcode, logical *needav, char *level, doubl
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
-/*:ref: ckmeta_ 14 4 4 13 4 124 */
 /*:ref: failed_ 12 0 */
+/*:ref: ckmeta_ 14 4 4 13 4 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
 /*:ref: dafbfs_ 14 1 4 */
 /*:ref: daffna_ 14 1 12 */
@@ -809,6 +855,7 @@ extern int ckgr05_(integer *handle, doublereal *descr, integer *recno, doublerea
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
+/*:ref: failed_ 12 0 */
  
 extern int ckgr06_(integer *handle, doublereal *descr, integer *msno, integer *recno, doublereal *record);
 /*:ref: return_ 12 0 */
@@ -914,16 +961,16 @@ extern int cknr05_(integer *handle, doublereal *descr, integer *nrec);
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafgda_ 14 4 4 4 4 7 */
  
-extern int ckobj_(char *ck, integer *ids, ftnlen ck_len);
+extern int ckobj_(char *ckfnm, integer *ids, ftnlen ckfnm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: dafbfs_ 14 1 4 */
 /*:ref: daffna_ 14 1 12 */
 /*:ref: dafgs_ 14 1 7 */
@@ -931,7 +978,7 @@ extern int ckobj_(char *ck, integer *ids, ftnlen ck_len);
 /*:ref: insrti_ 14 2 4 4 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int ckopn_(char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
+extern int ckopn_(char *fname, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafonw_ 14 10 13 13 4 4 13 4 4 124 124 124 */
@@ -1331,11 +1378,11 @@ extern int cyclec_(char *instr, char *dir, integer *ncycle, char *outstr, ftnlen
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: gcd_ 4 2 4 4 */
  
-extern int cyllat_(doublereal *r__, doublereal *longc, doublereal *z__, doublereal *radius, doublereal *long__, doublereal *lat);
+extern int cyllat_(doublereal *r__, doublereal *clon, doublereal *z__, doublereal *radius, doublereal *lon, doublereal *lat);
  
-extern int cylrec_(doublereal *r__, doublereal *long__, doublereal *z__, doublereal *rectan);
+extern int cylrec_(doublereal *r__, doublereal *clon, doublereal *z__, doublereal *rectan);
  
-extern int cylsph_(doublereal *r__, doublereal *longc, doublereal *z__, doublereal *radius, doublereal *colat, doublereal *long__);
+extern int cylsph_(doublereal *r__, doublereal *clon, doublereal *z__, doublereal *radius, doublereal *colat, doublereal *slon);
  
 extern doublereal dacosh_(doublereal *x);
 /*:ref: return_ 12 0 */
@@ -1588,7 +1635,7 @@ extern int dafcs_(integer *handle);
 /*:ref: dafwdr_ 14 3 4 4 7 */
 /*:ref: dafwcr_ 14 4 4 4 13 124 */
  
-extern int dafgda_(integer *handle, integer *begin, integer *end, doublereal *data);
+extern int dafgda_(integer *handle, integer *baddr, integer *eaddr, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -1697,6 +1744,7 @@ extern int dafnrr_(integer *reads, integer *reqs);
 /*:ref: minai_ 14 4 4 4 4 4 */
 /*:ref: zzdafgdr_ 14 4 4 4 7 12 */
 /*:ref: failed_ 12 0 */
+/*:ref: intmax_ 4 0 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: zzddhrcm_ 14 3 4 4 4 */
 /*:ref: dafhsf_ 14 3 4 4 4 */
@@ -1860,8 +1908,8 @@ extern int dasadc_(integer *handle, integer *n, integer *bpos, integer *epos, ch
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
-/*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
+/*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: daswrc_ 14 4 4 4 13 124 */
 /*:ref: dasurc_ 14 6 4 4 4 4 13 124 */
 /*:ref: dascud_ 14 3 4 4 4 */
@@ -1870,25 +1918,25 @@ extern int dasadd_(integer *handle, integer *n, doublereal *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
-/*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: daswrd_ 14 3 4 4 7 */
 /*:ref: dasurd_ 14 5 4 4 4 4 7 */
 /*:ref: dascud_ 14 3 4 4 4 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int dasadi_(integer *handle, integer *n, integer *data);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dashfs_ 14 9 4 4 4 4 4 4 4 4 4 */
-/*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: daswri_ 14 3 4 4 4 */
 /*:ref: dasuri_ 14 5 4 4 4 4 4 */
 /*:ref: dascud_ 14 3 4 4 4 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int dasbt_(char *binfil, integer *xfrlun, ftnlen binfil_len);
 /*:ref: return_ 12 0 */
@@ -1922,9 +1970,9 @@ extern int dascls_(integer *handle);
 /*:ref: elemi_ 12 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasham_ 14 3 4 13 124 */
+/*:ref: failed_ 12 0 */
 /*:ref: daswbr_ 14 1 4 */
 /*:ref: zzddhhlu_ 14 5 4 13 12 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -2110,13 +2158,13 @@ extern int dasrdc_(integer *handle, integer *first, integer *last, integer *bpos
  
 extern int dasrdd_(integer *handle, integer *first, integer *last, doublereal *data);
 /*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
-/*:ref: dasrrd_ 14 5 4 4 4 4 7 */
 /*:ref: failed_ 12 0 */
+/*:ref: dasrrd_ 14 5 4 4 4 4 7 */
  
 extern int dasrdi_(integer *handle, integer *first, integer *last, integer *data);
 /*:ref: dasa2l_ 14 7 4 4 4 4 4 4 4 */
-/*:ref: dasrri_ 14 5 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
+/*:ref: dasrri_ 14 5 4 4 4 4 4 */
  
 extern int dasrfr_(integer *handle, char *idword, char *ifname, integer *nresvr, integer *nresvc, integer *ncomr, integer *ncomc, ftnlen idword_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
@@ -2266,6 +2314,14 @@ extern doublereal datanh_(doublereal *x);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
+extern int dazldr_(doublereal *x, doublereal *y, doublereal *z__, logical *azccw, logical *elplsz, doublereal *jacobi);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: dlatdr_ 14 4 7 7 7 7 */
+ 
 extern doublereal dcbrt_(doublereal *x);
  
 extern int dcyldr_(doublereal *x, doublereal *y, doublereal *z__, doublereal *jacobi);
@@ -2366,14 +2422,14 @@ extern int diffi_(integer *a, integer *b, integer *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dlabbs_(integer *handle, integer *descr, logical *found);
+extern int dlabbs_(integer *handle, integer *dladsc, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dlabfs_(integer *handle, integer *descr, logical *found);
+extern int dlabfs_(integer *handle, integer *dladsc, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
@@ -2400,13 +2456,13 @@ extern int dlaens_(integer *handle);
 /*:ref: dasudi_ 14 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int dlafns_(integer *handle, integer *descr, integer *nxtdsc, logical *found);
+extern int dlafns_(integer *handle, integer *dladsc, integer *nxtdsc, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
  
-extern int dlafps_(integer *handle, integer *descr, integer *prvdsc, logical *found);
+extern int dlafps_(integer *handle, integer *dladsc, integer *prvdsc, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -2441,14 +2497,9 @@ extern int dnearp_(doublereal *state, doublereal *a, doublereal *b, doublereal *
 /*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
-/*:ref: vsub_ 14 3 7 7 7 */
-/*:ref: mxv_ 14 3 7 7 7 */
-/*:ref: unorm_ 14 3 7 7 7 */
-/*:ref: vdot_ 7 2 7 7 */
-/*:ref: vtmv_ 7 3 7 7 7 */
-/*:ref: vlcom_ 14 5 7 7 7 7 7 */
+/*:ref: zzdnpt_ 14 8 7 7 7 7 7 7 7 12 */
  
-extern int dp2hx_(doublereal *number, char *string, integer *length, ftnlen string_len);
+extern int dp2hx_(doublereal *number, char *hxstr, integer *hxssiz, ftnlen hxstr_len);
 /*:ref: int2hx_ 14 4 4 13 4 124 */
  
 extern int dpfmt_(doublereal *x, char *pictur, char *str, ftnlen pictur_len, ftnlen str_len);
@@ -2484,7 +2535,7 @@ extern int dpgrdr_(char *body, doublereal *x, doublereal *y, doublereal *z__, do
  
 extern doublereal dpr_(void);
  
-extern int dpspce_(doublereal *time, doublereal *geophs, doublereal *elems, doublereal *state);
+extern int dpspce_(doublereal *et, doublereal *geophs, doublereal *elems, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: twopi_ 7 0 */
@@ -2504,9 +2555,18 @@ extern int dpstrf_(doublereal *x, integer *sigdig, char *format, char *string, f
 /*:ref: zzvststr_ 14 4 7 13 4 124 */
 /*:ref: zzvsbstr_ 14 6 4 4 12 13 12 124 */
  
-extern int drdcyl_(doublereal *r__, doublereal *long__, doublereal *z__, doublereal *jacobi);
+extern int drdazl_(doublereal *range, doublereal *az, doublereal *el, logical *azccw, logical *elplsz, doublereal *jacobi);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: drdlat_ 14 4 7 7 7 7 */
  
-extern int drdgeo_(doublereal *long__, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi);
+extern int drdcyl_(doublereal *r__, doublereal *clon, doublereal *z__, doublereal *jacobi);
+ 
+extern int drdgeo_(doublereal *lon, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -2514,7 +2574,7 @@ extern int drdgeo_(doublereal *long__, doublereal *lat, doublereal *alt, doubler
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int drdlat_(doublereal *r__, doublereal *long__, doublereal *lat, doublereal *jacobi);
+extern int drdlat_(doublereal *r__, doublereal *lon, doublereal *lat, doublereal *jacobi);
  
 extern int drdpgr_(char *body, doublereal *lon, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *jacobi, ftnlen body_len);
 /*:ref: return_ 12 0 */
@@ -2532,7 +2592,7 @@ extern int drdpgr_(char *body, doublereal *lon, doublereal *lat, doublereal *alt
 /*:ref: plnsns_ 4 1 4 */
 /*:ref: drdgeo_ 14 6 7 7 7 7 7 7 */
  
-extern int drdsph_(doublereal *r__, doublereal *colat, doublereal *long__, doublereal *jacobi);
+extern int drdsph_(doublereal *r__, doublereal *colat, doublereal *slon, doublereal *jacobi);
  
 extern int drotat_(doublereal *angle, integer *iaxis, doublereal *dmout);
 /*:ref: chkin_ 14 2 13 124 */
@@ -2556,9 +2616,10 @@ extern int dskcls_(integer *handle, logical *optmiz);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dascls_ 14 1 4 */
 /*:ref: dasham_ 14 3 4 13 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: daswbr_ 14 1 4 */
 /*:ref: dasllc_ 14 1 4 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int dskd02_(integer *handle, integer *dladsc, integer *item, integer *start, integer *room, integer *n, doublereal *values);
 /*:ref: chkin_ 14 2 13 124 */
@@ -2617,17 +2678,17 @@ extern int dskn02_(integer *handle, integer *dladsc, integer *plid, doublereal *
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: ucrss_ 14 3 7 7 7 */
  
-extern int dskobj_(char *dsk, integer *bodids, ftnlen dsk_len);
+extern int dskobj_(char *dskfnm, integer *bodids, ftnlen dskfnm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasopr_ 14 3 13 4 124 */
 /*:ref: dlabfs_ 14 3 4 4 12 */
-/*:ref: failed_ 12 0 */
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: dskgd_ 14 3 4 4 7 */
 /*:ref: cardi_ 4 1 4 */
@@ -2674,17 +2735,17 @@ extern int dskrb2_(integer *nv, doublereal *vrtces, integer *np, integer *plates
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int dsksrf_(char *dsk, integer *bodyid, integer *srfids, ftnlen dsk_len);
+extern int dsksrf_(char *dskfnm, integer *bodyid, integer *srfids, ftnlen dskfnm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: dasopr_ 14 3 13 4 124 */
 /*:ref: dlabfs_ 14 3 4 4 12 */
-/*:ref: failed_ 12 0 */
 /*:ref: movei_ 14 3 4 4 4 */
 /*:ref: dskgd_ 14 3 4 4 7 */
 /*:ref: cardi_ 4 1 4 */
@@ -2914,9 +2975,9 @@ extern int edterm_(char *trmtyp, char *source, char *target, doublereal *et, cha
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zzbods2c_ 14 9 4 13 4 12 13 4 12 124 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
-/*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: failed_ 12 0 */
+/*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: zzcorepc_ 14 5 13 7 7 7 124 */
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: zzedterm_ 14 9 13 7 7 7 7 7 4 7 124 */
@@ -3488,7 +3549,7 @@ extern int errhan_(char *marker, integer *handle, ftnlen marker_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
-extern int errint_(char *marker, integer *integr, ftnlen marker_len);
+extern int errint_(char *marker, integer *intnum, ftnlen marker_len);
 /*:ref: allowd_ 12 0 */
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: getlms_ 14 2 13 124 */
@@ -3511,7 +3572,7 @@ extern int errprt_(char *op, char *list, ftnlen op_len, ftnlen list_len);
 extern integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len, ftnlen array_len);
 /*:ref: eqstr_ 12 4 13 13 124 124 */
  
-extern int et2lst_(doublereal *et, integer *body, doublereal *long__, char *type__, integer *hr, integer *mn, integer *sc, char *time, char *ampm, ftnlen type_len, ftnlen time_len, ftnlen ampm_len);
+extern int et2lst_(doublereal *et, integer *body, doublereal *lon, char *type__, integer *hr, integer *mn, integer *sc, char *time, char *ampm, ftnlen type_len, ftnlen time_len, ftnlen ampm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -3553,7 +3614,7 @@ extern int et2utc_(doublereal *et, char *format, integer *prec, char *utcstr, ft
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int etcal_(doublereal *et, char *string, ftnlen string_len);
+extern int etcal_(doublereal *et, char *calstr, ftnlen calstr_len);
 /*:ref: spd_ 7 0 */
 /*:ref: intmax_ 4 0 */
 /*:ref: intmin_ 4 0 */
@@ -3583,7 +3644,15 @@ extern int ev2lin_(doublereal *et, doublereal *geophs, doublereal *elems, double
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: brcktd_ 7 3 7 7 7 */
  
-extern logical even_(integer *i__);
+extern logical even_(integer *ival);
+ 
+extern int evsgp4_(doublereal *et, doublereal *geophs, doublereal *elems, doublereal *state);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: xxsgp4i_ 14 3 7 7 4 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: xxsgp4e_ 14 2 7 7 */
  
 extern doublereal exact_(doublereal *number, doublereal *value, doublereal *tol);
  
@@ -3596,7 +3665,7 @@ extern int excess_(integer *number, char *struct__, ftnlen struct_len);
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern logical exists_(char *file, ftnlen file_len);
+extern logical exists_(char *fname, ftnlen fname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3677,13 +3746,13 @@ extern int fovtrg_(char *inst, char *target, char *tshape, char *tframe, char *a
 extern int frame_(doublereal *x, doublereal *y, doublereal *z__);
 /*:ref: vhatip_ 14 1 7 */
  
-extern int framex_(char *cname, char *frname, integer *frcode, integer *cent, integer *class__, integer *clssid, logical *found, ftnlen cname_len, ftnlen frname_len);
+extern int framex_(char *cname, char *frname, integer *frcode, integer *cent, integer *frclss, integer *clssid, logical *found, ftnlen cname_len, ftnlen frname_len);
 extern int namfrm_(char *frname, integer *frcode, ftnlen frname_len);
 extern int frmnam_(integer *frcode, char *frname, ftnlen frname_len);
-extern int frinfo_(integer *frcode, integer *cent, integer *class__, integer *clssid, logical *found);
+extern int frinfo_(integer *frcode, integer *cent, integer *frclss, integer *clssid, logical *found);
 extern int cidfrm_(integer *cent, integer *frcode, char *frname, logical *found, ftnlen frname_len);
 extern int cnmfrm_(char *cname, integer *frcode, char *frname, logical *found, ftnlen cname_len, ftnlen frname_len);
-extern int ccifrm_(integer *class__, integer *clssid, integer *frcode, char *frname, integer *cent, logical *found, ftnlen frname_len);
+extern int ccifrm_(integer *frclss, integer *clssid, integer *frcode, char *frname, integer *cent, logical *found, ftnlen frname_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -3721,6 +3790,7 @@ extern int frmchg_(integer *frame1, integer *frame2, doublereal *et, doublereal 
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -3728,14 +3798,13 @@ extern int frmchg_(integer *frame1, integer *frame2, doublereal *et, doublereal 
 /*:ref: zzmsxf_ 14 3 7 4 7 */
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: zznofcon_ 14 7 7 4 4 4 4 13 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: invstm_ 14 2 7 7 */
  
 extern int frmget_(integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: cleard_ 14 2 4 7 */
+/*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: irfrot_ 14 3 4 4 7 */
 /*:ref: failed_ 12 0 */
@@ -3744,6 +3813,7 @@ extern int frmget_(integer *infrm, doublereal *et, doublereal *xform, integer *o
 /*:ref: ckfxfm_ 14 5 4 7 7 4 12 */
 /*:ref: tkfram_ 14 4 4 7 4 12 */
 /*:ref: zzdynfrm_ 14 5 4 4 7 7 4 */
+/*:ref: zzswfxfm_ 14 6 4 7 4 7 4 12 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
@@ -3757,7 +3827,7 @@ extern integer frstpc_(char *string, ftnlen string_len);
  
 extern integer gcd_(integer *a, integer *b);
  
-extern int georec_(doublereal *long__, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *rectan);
+extern int georec_(doublereal *lon, doublereal *lat, doublereal *alt, doublereal *re, doublereal *f, doublereal *rectan);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -3813,11 +3883,13 @@ extern int getfov_(integer *instid, integer *room, char *shape, char *frame, dou
 /*:ref: bsrchc_ 4 5 13 4 13 124 124 */
 /*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
+/*:ref: vzero_ 12 1 7 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: vcrss_ 14 3 7 7 7 */
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: convrt_ 14 6 7 13 13 7 124 124 */
+/*:ref: failed_ 12 0 */
 /*:ref: vrotv_ 14 4 7 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: unorm_ 14 3 7 7 7 */
@@ -3825,6 +3897,17 @@ extern int getfov_(integer *instid, integer *room, char *shape, char *frame, dou
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
+ 
+extern int getfvn_(char *inst, integer *room, char *shape, char *frame, doublereal *bsight, integer *n, doublereal *bounds, ftnlen inst_len, ftnlen shape_len, ftnlen frame_len);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: zzctruin_ 14 1 4 */
+/*:ref: zzbods2c_ 14 9 4 13 4 12 13 7 12 124 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: getfov_ 14 9 7 4 13 13 7 4 7 124 124 */
  
 extern int getlun_(integer *unit);
 /*:ref: return_ 12 0 */
@@ -4156,6 +4239,7 @@ extern int hx2dp_(char *string, doublereal *number, logical *error, char *errmsg
 /*:ref: dpmin_ 7 0 */
 /*:ref: dpmax_ 7 0 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
+/*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
 /*:ref: hx2int_ 14 6 13 4 12 13 124 124 */
  
 extern int hx2int_(char *string, integer *number, logical *error, char *errmsg, ftnlen string_len, ftnlen errmsg_len);
@@ -4194,7 +4278,8 @@ extern int illum_(char *target, doublereal *et, char *abcorr, char *obsrvr, doub
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: vsub_ 14 3 7 7 7 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
  
@@ -4219,7 +4304,7 @@ extern int illumf_(char *method, char *target, char *ilusrc, doublereal *et, cha
 /*:ref: spkcpo_ 14 16 13 7 13 13 13 7 13 13 7 7 124 124 124 124 124 124 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: vminus_ 14 2 7 7 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: zzsudski_ 14 4 4 4 4 4 */
 /*:ref: zzsbfnrm_ 14 7 4 4 4 7 4 7 7 */
@@ -4249,14 +4334,14 @@ extern int illumg_(char *method, char *target, char *ilusrc, doublereal *et, cha
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: spkcpt_ 14 16 7 13 13 7 13 13 13 13 7 7 124 124 124 124 124 124 */
 /*:ref: spkcpo_ 14 16 13 7 13 13 13 7 13 13 7 7 124 124 124 124 124 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: zzsbfnrm_ 14 7 4 4 4 7 4 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
  
-extern int ilumin_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *solar, doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
+extern int ilumin_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *obsrvr, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, doublereal *phase, doublereal *incdnc, doublereal *emissn, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen obsrvr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: illumg_ 14 19 13 13 13 7 13 13 13 7 7 7 7 7 7 124 124 124 124 124 124 */
@@ -4459,7 +4544,7 @@ extern int intstr_(integer *number, char *string, ftnlen string_len);
 extern int inttxt_(integer *n, char *string, ftnlen string_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
  
-extern int invert_(doublereal *m1, doublereal *mout);
+extern int invert_(doublereal *m, doublereal *mout);
 /*:ref: det_ 7 1 7 */
 /*:ref: filld_ 14 3 7 4 7 */
 /*:ref: vsclg_ 14 4 7 7 4 7 */
@@ -4477,10 +4562,7 @@ extern int invort_(doublereal *m, doublereal *mit);
 /*:ref: xpose_ 14 2 7 7 */
  
 extern int invstm_(doublereal *mat, doublereal *invmat);
-/*:ref: return_ 12 0 */
-/*:ref: chkin_ 14 2 13 124 */
 /*:ref: xposbl_ 14 5 7 4 4 4 7 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int ioerr_(char *action, char *file, integer *iostat, ftnlen action_len, ftnlen file_len);
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
@@ -4545,11 +4627,11 @@ extern int gr2jul_(integer *year, integer *month, integer *day, integer *doy);
  
 extern doublereal jyear_(void);
  
-extern int keeper_(integer *which, char *kind, char *file, integer *count, char *filtyp, integer *handle, char *source, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
+extern int keeper_(integer *which, char *kind, char *file, integer *count, char *filtyp, integer *handle, char *srcfil, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen srcfil_len);
 extern int furnsh_(char *file, ftnlen file_len);
 extern int ktotal_(char *kind, integer *count, ftnlen kind_len);
-extern int kdata_(integer *which, char *kind, char *file, char *filtyp, char *source, integer *handle, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
-extern int kinfo_(char *file, char *filtyp, char *source, integer *handle, logical *found, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len);
+extern int kdata_(integer *which, char *kind, char *file, char *filtyp, char *srcfil, integer *handle, logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen srcfil_len);
+extern int kinfo_(char *file, char *filtyp, char *srcfil, integer *handle, logical *found, ftnlen file_len, ftnlen filtyp_len, ftnlen srcfil_len);
 extern int kclear_(void);
 extern int unload_(char *file, ftnlen file_len);
 /*:ref: chkin_ 14 2 13 124 */
@@ -4623,7 +4705,7 @@ extern doublereal kpsolv_(doublereal *evec);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int kxtrct_(char *keywd, char *terms, integer *nterms, char *string, logical *found, char *substr, ftnlen keywd_len, ftnlen terms_len, ftnlen string_len, ftnlen substr_len);
+extern int kxtrct_(char *keywd, char *terms, integer *nterms, char *wordsq, logical *found, char *substr, ftnlen keywd_len, ftnlen terms_len, ftnlen wordsq_len, ftnlen substr_len);
 /*:ref: wdindx_ 4 4 13 13 124 124 */
 /*:ref: nblen_ 4 2 13 124 */
 /*:ref: fndnwd_ 14 5 13 4 4 4 124 */
@@ -4634,11 +4716,11 @@ extern integer lastnb_(char *string, ftnlen string_len);
  
 extern integer lastpc_(char *string, ftnlen string_len);
  
-extern int latcyl_(doublereal *radius, doublereal *long__, doublereal *lat, doublereal *r__, doublereal *longc, doublereal *z__);
+extern int latcyl_(doublereal *radius, doublereal *lon, doublereal *lat, doublereal *r__, doublereal *clon, doublereal *z__);
  
-extern int latrec_(doublereal *radius, doublereal *long__, doublereal *lat, doublereal *rectan);
+extern int latrec_(doublereal *radius, doublereal *lon, doublereal *lat, doublereal *rectan);
  
-extern int latsph_(doublereal *radius, doublereal *long__, doublereal *lat, doublereal *rho, doublereal *colat, doublereal *longs);
+extern int latsph_(doublereal *radius, doublereal *lon, doublereal *lat, doublereal *rho, doublereal *colat, doublereal *slon);
 /*:ref: halfpi_ 7 0 */
  
 extern int latsrf_(char *method, char *target, doublereal *et, char *fixref, integer *npts, doublereal *lonlat, doublereal *srfpts, ftnlen method_len, ftnlen target_len, ftnlen fixref_len);
@@ -4708,10 +4790,10 @@ extern int limbpt_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: zzbods2c_ 14 9 4 13 4 12 13 4 12 124 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: zzbods2c_ 14 9 4 13 4 12 13 4 12 124 124 */
 /*:ref: zznamfrm_ 14 7 4 13 4 13 4 124 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -4747,6 +4829,7 @@ extern int limbpt_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: spkssb_ 14 5 4 7 13 7 124 */
 /*:ref: touchd_ 7 1 7 */
 /*:ref: spkgps_ 14 7 4 7 13 4 7 7 124 */
+/*:ref: stlabx_ 14 3 7 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: pxform_ 14 6 13 13 7 7 124 124 */
@@ -5022,21 +5105,21 @@ extern int mtxm_(doublereal *m1, doublereal *m2, doublereal *mout);
  
 extern int mtxmg_(doublereal *m1, doublereal *m2, integer *nc1, integer *nr1r2, integer *nc2, doublereal *mout);
  
-extern int mtxv_(doublereal *matrix, doublereal *vin, doublereal *vout);
+extern int mtxv_(doublereal *m, doublereal *vin, doublereal *vout);
  
 extern int mtxvg_(doublereal *m1, doublereal *v2, integer *nc1, integer *nr1r2, doublereal *vout);
  
 extern int mxm_(doublereal *m1, doublereal *m2, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
-extern int mxmg_(doublereal *m1, doublereal *m2, integer *row1, integer *col1, integer *col2, doublereal *mout);
+extern int mxmg_(doublereal *m1, doublereal *m2, integer *nr1, integer *nc1r2, integer *nc2, doublereal *mout);
  
 extern int mxmt_(doublereal *m1, doublereal *m2, doublereal *mout);
 /*:ref: moved_ 14 3 7 4 7 */
  
 extern int mxmtg_(doublereal *m1, doublereal *m2, integer *nr1, integer *nc1c2, integer *nr2, doublereal *mout);
  
-extern int mxv_(doublereal *matrix, doublereal *vin, doublereal *vout);
+extern int mxv_(doublereal *m, doublereal *vin, doublereal *vout);
  
 extern int mxvg_(doublereal *m1, doublereal *v2, integer *nr1, integer *nc1r2, doublereal *vout);
  
@@ -5071,6 +5154,7 @@ extern int nearpt_(doublereal *positn, doublereal *a, doublereal *b, doublereal 
 /*:ref: vdist_ 7 2 7 7 */
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: vperp_ 14 3 7 7 7 */
+/*:ref: vzero_ 12 1 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
 extern int nextwd_(char *string, char *next, char *rest, ftnlen string_len, ftnlen next_len, ftnlen rest_len);
@@ -5153,7 +5237,7 @@ extern int npsgpt_(doublereal *ep1, doublereal *ep2, doublereal *point, doublere
  
 extern int nthwd_(char *string, integer *nth, char *word, integer *loc, ftnlen string_len, ftnlen word_len);
  
-extern int nvc2pl_(doublereal *normal, doublereal *const__, doublereal *plane);
+extern int nvc2pl_(doublereal *normal, doublereal *konst, doublereal *plane);
 /*:ref: return_ 12 0 */
 /*:ref: unorm_ 14 3 7 7 7 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -5191,7 +5275,7 @@ extern int occult_(char *targ1, char *shape1, char *frame1, char *targ2, char *s
 /*:ref: zzgfocst_ 14 2 7 12 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern logical odd_(integer *i__);
+extern logical odd_(integer *ival);
  
 extern logical opsgnd_(doublereal *x, doublereal *y);
  
@@ -5398,16 +5482,16 @@ extern int pckcls_(integer *handle);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int pckcov_(char *pck, integer *idcode, doublereal *cover, ftnlen pck_len);
+extern int pckcov_(char *pckfnm, integer *idcode, doublereal *cover, ftnlen pckfnm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: dafbfs_ 14 1 4 */
 /*:ref: daffna_ 14 1 12 */
 /*:ref: dafgs_ 14 1 7 */
@@ -5449,16 +5533,16 @@ extern int pckeul_(integer *body, doublereal *et, logical *found, char *ref, dou
 /*:ref: pcke02_ 14 3 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckfrm_(char *pck, integer *ids, ftnlen pck_len);
+extern int pckfrm_(char *pckfnm, integer *ids, ftnlen pckfnm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: dafbfs_ 14 1 4 */
 /*:ref: daffna_ 14 1 12 */
 /*:ref: dafgs_ 14 1 7 */
@@ -5542,7 +5626,7 @@ extern int pckuds_(doublereal *descr, integer *body, integer *frame, integer *ty
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pckw02_(integer *handle, integer *body, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
+extern int pckw02_(integer *handle, integer *clssid, char *frame, doublereal *first, doublereal *last, char *segid, doublereal *intlen, integer *n, integer *polydg, doublereal *cdata, doublereal *btime, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -5624,7 +5708,7 @@ extern int pjelpl_(doublereal *elin, doublereal *plane, doublereal *elout);
 /*:ref: cgv2el_ 14 4 7 7 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int pl2nvc_(doublereal *plane, doublereal *normal, doublereal *const__);
+extern int pl2nvc_(doublereal *plane, doublereal *normal, doublereal *konst);
 /*:ref: vequ_ 14 2 7 7 */
  
 extern int pl2nvp_(doublereal *plane, doublereal *normal, doublereal *point);
@@ -5682,9 +5766,9 @@ extern doublereal pltvol_(integer *nv, doublereal *vrtces, integer *np, integer 
  
 extern int polyds_(doublereal *coeffs, integer *deg, integer *nderiv, doublereal *t, doublereal *p);
  
-extern int pool_(char *kernel, integer *unit, char *name__, char *names, integer *nnames, char *agent, integer *n, doublereal *values, logical *found, logical *update, integer *start, integer *room, char *cvals, integer *ivals, char *type__, char *uwvars, integer *uwptrs, integer *uwpool, char *uwagnt, integer *usrctr, ftnlen kernel_len, ftnlen name_len, ftnlen names_len, ftnlen agent_len, ftnlen cvals_len, ftnlen type_len, ftnlen uwvars_len, ftnlen uwagnt_len);
+extern int pool_(char *fname, integer *unit, char *name__, char *names, integer *nnames, char *agent, integer *n, doublereal *values, logical *found, logical *update, integer *start, integer *room, char *cvals, integer *ivals, char *type__, char *uwvars, integer *uwptrs, integer *uwpool, char *uwagnt, integer *usrctr, ftnlen fname_len, ftnlen name_len, ftnlen names_len, ftnlen agent_len, ftnlen cvals_len, ftnlen type_len, ftnlen uwvars_len, ftnlen uwagnt_len);
 extern int clpool_(void);
-extern int ldpool_(char *kernel, ftnlen kernel_len);
+extern int ldpool_(char *fname, ftnlen fname_len);
 extern int rtpool_(char *name__, integer *n, doublereal *values, logical *found, ftnlen name_len);
 extern int expool_(char *name__, logical *found, ftnlen name_len);
 extern int wrpool_(integer *unit);
@@ -5766,7 +5850,7 @@ extern doublereal prodad_(doublereal *array, integer *n);
  
 extern integer prodai_(integer *array, integer *n);
  
-extern int prompt_(char *prmpt, char *string, ftnlen prmpt_len, ftnlen string_len);
+extern int prompt_(char *dspmsg, char *buffer, ftnlen dspmsg_len, ftnlen buffer_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -5869,7 +5953,7 @@ extern int pxfrm2_(char *from, char *to, doublereal *etfrom, doublereal *etto, d
  
 extern int q2m_(doublereal *q, doublereal *r__);
  
-extern int qderiv_(integer *n, doublereal *f0, doublereal *f2, doublereal *delta, doublereal *dfdt);
+extern int qderiv_(integer *ndim, doublereal *f0, doublereal *f2, doublereal *delta, doublereal *dfdt);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -6008,10 +6092,14 @@ extern int readln_(integer *unit, char *line, logical *eof, ftnlen line_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int reccyl_(doublereal *rectan, doublereal *r__, doublereal *long__, doublereal *z__);
+extern int recazl_(doublereal *rectan, logical *azccw, logical *elplsz, doublereal *range, doublereal *az, doublereal *el);
+/*:ref: recrad_ 14 4 7 7 7 7 */
 /*:ref: twopi_ 7 0 */
  
-extern int recgeo_(doublereal *rectan, doublereal *re, doublereal *f, doublereal *long__, doublereal *lat, doublereal *alt);
+extern int reccyl_(doublereal *rectan, doublereal *r__, doublereal *clon, doublereal *z__);
+/*:ref: twopi_ 7 0 */
+ 
+extern int recgeo_(doublereal *rectan, doublereal *re, doublereal *f, doublereal *lon, doublereal *lat, doublereal *alt);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6022,7 +6110,7 @@ extern int recgeo_(doublereal *rectan, doublereal *re, doublereal *f, doublereal
 /*:ref: surfnm_ 14 5 7 7 7 7 7 */
 /*:ref: reclat_ 14 4 7 7 7 7 */
  
-extern int reclat_(doublereal *rectan, doublereal *radius, doublereal *long__, doublereal *lat);
+extern int reclat_(doublereal *rectan, doublereal *radius, doublereal *lon, doublereal *lat);
  
 extern int recpgr_(char *body, doublereal *rectan, doublereal *re, doublereal *f, doublereal *lon, doublereal *lat, doublereal *alt, ftnlen body_len);
 /*:ref: return_ 12 0 */
@@ -6046,7 +6134,7 @@ extern int recrad_(doublereal *rectan, doublereal *range, doublereal *ra, double
 /*:ref: reclat_ 14 4 7 7 7 7 */
 /*:ref: twopi_ 7 0 */
  
-extern int recsph_(doublereal *rectan, doublereal *r__, doublereal *colat, doublereal *long__);
+extern int recsph_(doublereal *rectan, doublereal *r__, doublereal *colat, doublereal *slon);
  
 extern int refchg_(integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
 /*:ref: return_ 12 0 */
@@ -6054,6 +6142,7 @@ extern int refchg_(integer *frame1, integer *frame2, doublereal *et, doublereal 
 /*:ref: ident_ 14 1 7 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -6061,7 +6150,6 @@ extern int refchg_(integer *frame1, integer *frame2, doublereal *et, doublereal 
 /*:ref: zzrxr_ 14 3 7 4 7 */
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: zznofcon_ 14 7 7 4 4 4 4 13 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: xpose_ 14 2 7 7 */
  
 extern int remlac_(integer *ne, integer *loc, char *array, integer *na, ftnlen array_len);
@@ -6142,7 +6230,7 @@ extern int repmc_(char *in, char *marker, char *value, char *out, ftnlen in_len,
 /*:ref: lastnb_ 4 2 13 124 */
 /*:ref: zzrepsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repmct_(char *in, char *marker, integer *value, char *case__, char *out, ftnlen in_len, ftnlen marker_len, ftnlen case_len, ftnlen out_len);
+extern int repmct_(char *in, char *marker, integer *value, char *rtcase, char *out, ftnlen in_len, ftnlen marker_len, ftnlen rtcase_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -6177,7 +6265,20 @@ extern int repmi_(char *in, char *marker, integer *value, char *out, ftnlen in_l
 /*:ref: intstr_ 14 3 4 13 124 */
 /*:ref: zzrepsub_ 14 8 13 4 4 13 13 124 124 124 */
  
-extern int repmot_(char *in, char *marker, integer *value, char *case__, char *out, ftnlen in_len, ftnlen marker_len, ftnlen case_len, ftnlen out_len);
+extern int repml_(char *in, char *marker, logical *value, char *rtcase, char *out, ftnlen in_len, ftnlen marker_len, ftnlen rtcase_len, ftnlen out_len);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: ucase_ 14 4 13 13 124 124 */
+/*:ref: isrchc_ 4 5 13 4 13 124 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: frstnb_ 4 2 13 124 */
+/*:ref: lastnb_ 4 2 13 124 */
+/*:ref: repsub_ 14 8 13 4 4 13 13 124 124 124 */
+ 
+extern int repmot_(char *in, char *marker, integer *value, char *rtcase, char *out, ftnlen in_len, ftnlen marker_len, ftnlen rtcase_len, ftnlen out_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: ljust_ 14 4 13 13 124 124 */
@@ -6251,6 +6352,7 @@ extern int rotget_(integer *infrm, doublereal *et, doublereal *rotate, integer *
 /*:ref: ckfrot_ 14 5 4 7 7 4 12 */
 /*:ref: tkfram_ 14 4 4 7 4 12 */
 /*:ref: zzdynrot_ 14 5 4 4 7 7 4 */
+/*:ref: zzswfxfm_ 14 6 4 7 4 7 4 12 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
@@ -6298,35 +6400,37 @@ extern logical samsbi_(char *str1, integer *b1, integer *e1, char *str2, integer
  
 extern logical samsub_(char *str1, integer *b1, integer *e1, char *str2, integer *b2, integer *e2, ftnlen str1_len, ftnlen str2_len);
  
-extern int sc01_(integer *sc, char *clkstr, doublereal *ticks, doublereal *sclkdp, doublereal *et, ftnlen clkstr_len);
+extern int sc01_(integer *sc, char *clkstr, doublereal *ticks, doublereal *sclkdp, doublereal *et, integer *npartn, doublereal *parbeg, doublereal *parend, integer *clktyp, ftnlen clkstr_len);
 extern int sctk01_(integer *sc, char *clkstr, doublereal *ticks, ftnlen clkstr_len);
 extern int scfm01_(integer *sc, doublereal *ticks, char *clkstr, ftnlen clkstr_len);
 extern int scte01_(integer *sc, doublereal *sclkdp, doublereal *et);
 extern int scet01_(integer *sc, doublereal *et, doublereal *sclkdp);
 extern int scec01_(integer *sc, doublereal *et, doublereal *sclkdp);
+extern int scty01_(integer *sc, integer *clktyp);
+extern int scpr01_(integer *sc, integer *npartn, doublereal *parbeg, doublereal *parend);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
-/*:ref: movec_ 14 5 13 4 13 124 124 */
-/*:ref: suffix_ 14 5 13 4 13 124 124 */
-/*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
-/*:ref: swpool_ 14 5 13 4 13 124 124 */
+/*:ref: zzscin01_ 14 6 4 4 4 4 4 4 */
 /*:ref: zzctruin_ 14 1 4 */
-/*:ref: zzcvpool_ 14 4 13 4 12 124 */
-/*:ref: scli01_ 14 6 13 4 4 4 4 124 */
-/*:ref: scld01_ 14 6 13 4 4 4 7 124 */
+/*:ref: zzscup01_ 14 21 4 4 4 4 4 4 7 4 4 4 4 4 4 4 4 4 4 4 4 4 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: lparsm_ 14 8 13 13 4 4 13 124 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: nparsd_ 14 6 13 7 13 4 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
-/*:ref: sumai_ 4 2 4 4 */
 /*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: sumai_ 4 2 4 4 */
 /*:ref: dpstrf_ 14 6 7 4 13 13 124 124 */
 /*:ref: prefix_ 14 5 13 4 13 124 124 */
+/*:ref: suffix_ 14 5 13 4 13 124 124 */
 /*:ref: unitim_ 7 5 7 13 13 124 124 */
+/*:ref: zzpctrck_ 14 2 4 12 */
+/*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
+/*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
+/*:ref: moved_ 14 3 7 4 7 */
  
 extern int scanit_(char *string, integer *start, integer *room, integer *nmarks, char *marks, integer *mrklen, integer *pnters, integer *ntokns, integer *ident, integer *beg, integer *end, ftnlen string_len, ftnlen marks_len);
 extern int scanpr_(integer *nmarks, char *marks, integer *mrklen, integer *pnters, ftnlen marks_len);
@@ -6417,15 +6521,15 @@ extern int sce2t_(integer *sc, doublereal *et, doublereal *sclkdp);
 extern int scencd_(integer *sc, char *sclkch, doublereal *sclkdp, ftnlen sclkch_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: cpos_ 4 5 13 13 4 124 124 */
-/*:ref: sctiks_ 14 4 4 13 7 124 */
+/*:ref: scpart_ 14 4 4 4 7 7 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
-/*:ref: scpart_ 14 4 4 4 7 7 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
+/*:ref: cpos_ 4 5 13 13 4 124 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: sctiks_ 14 4 4 13 7 124 */
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
  
 extern int scfmt_(integer *sc, doublereal *ticks, char *clkstr, ftnlen clkstr_len);
@@ -6452,6 +6556,7 @@ extern int scld01_(char *name__, integer *sc, integer *maxnv, integer *n, double
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
+/*:ref: failed_ 12 0 */
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
@@ -6460,33 +6565,24 @@ extern int scld01_(char *name__, integer *sc, integer *maxnv, integer *n, double
 extern int scpars_(integer *sc, char *sclkch, logical *error, char *msg, doublereal *sclkdp, ftnlen sclkch_len, ftnlen msg_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
-/*:ref: cpos_ 4 5 13 13 4 124 124 */
 /*:ref: sctype_ 4 1 4 */
 /*:ref: failed_ 12 0 */
-/*:ref: scps01_ 14 7 4 13 12 13 7 124 124 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: scpart_ 14 4 4 4 7 7 */
+/*:ref: cpos_ 4 5 13 13 4 124 124 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
+/*:ref: scps01_ 14 7 4 13 12 13 7 124 124 */
 /*:ref: nparsi_ 14 6 13 4 13 4 124 124 */
 /*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
  
 extern int scpart_(integer *sc, integer *nparts, doublereal *pstart, doublereal *pstop);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: suffix_ 14 5 13 4 13 124 124 */
-/*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
-/*:ref: swpool_ 14 5 13 4 13 124 124 */
-/*:ref: zzctruin_ 14 1 4 */
-/*:ref: zzcvpool_ 14 4 13 4 12 124 */
-/*:ref: scld01_ 14 6 13 4 4 4 7 124 */
-/*:ref: failed_ 12 0 */
+/*:ref: scpr01_ 14 4 4 4 7 7 */
 /*:ref: chkout_ 14 2 13 124 */
-/*:ref: setmsg_ 14 2 13 124 */
-/*:ref: errint_ 14 3 13 4 124 */
-/*:ref: sigerr_ 14 2 13 124 */
  
 extern int scps01_(integer *sc, char *clkstr, logical *error, char *msg, doublereal *ticks, ftnlen clkstr_len, ftnlen msg_len);
 /*:ref: return_ 12 0 */
@@ -6544,13 +6640,7 @@ extern int scid2n_(integer *clkid, char *clknam, logical *found, ftnlen clknam_l
 extern integer sctype_(integer *sc);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: suffix_ 14 5 13 4 13 124 124 */
-/*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
-/*:ref: swpool_ 14 5 13 4 13 124 124 */
-/*:ref: zzctruin_ 14 1 4 */
-/*:ref: zzcvpool_ 14 4 13 4 12 124 */
-/*:ref: scli01_ 14 6 13 4 4 4 4 124 */
-/*:ref: failed_ 12 0 */
+/*:ref: scty01_ 14 2 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
 extern int sdiffc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen b_len, ftnlen c_len);
@@ -6872,7 +6962,7 @@ extern int spcec_(integer *handle, integer *unit);
 /*:ref: errfnm_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
  
-extern int spcopn_(char *spc, char *ifname, integer *handle, ftnlen spc_len, ftnlen ifname_len);
+extern int spcopn_(char *fname, char *ifname, integer *handle, ftnlen fname_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafopn_ 14 8 13 4 4 13 4 4 124 124 */
@@ -6910,14 +7000,14 @@ extern int spct2b_(integer *unit, char *binary, ftnlen binary_len);
  
 extern doublereal spd_(void);
  
-extern int sphcyl_(doublereal *radius, doublereal *colat, doublereal *slong, doublereal *r__, doublereal *long__, doublereal *z__);
+extern int sphcyl_(doublereal *radius, doublereal *colat, doublereal *slon, doublereal *r__, doublereal *clon, doublereal *z__);
  
-extern int sphlat_(doublereal *r__, doublereal *colat, doublereal *longs, doublereal *radius, doublereal *long__, doublereal *lat);
+extern int sphlat_(doublereal *r__, doublereal *colat, doublereal *slon, doublereal *radius, doublereal *lon, doublereal *lat);
 /*:ref: halfpi_ 7 0 */
  
-extern int sphrec_(doublereal *r__, doublereal *colat, doublereal *long__, doublereal *rectan);
+extern int sphrec_(doublereal *r__, doublereal *colat, doublereal *slon, doublereal *rectan);
  
-extern doublereal sphsd_(doublereal *radius, doublereal *long1, doublereal *lat1, doublereal *long2, doublereal *lat2);
+extern doublereal sphsd_(doublereal *radius, doublereal *lon1, doublereal *lat1, doublereal *lon2, doublereal *lat2);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -6956,7 +7046,7 @@ extern int spk14e_(integer *handle);
 extern int spkacs_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -7011,13 +7101,13 @@ extern int spkapp_(integer *targ, doublereal *et, char *ref, doublereal *sobs, c
 extern int spkaps_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: irfnum_ 14 3 13 4 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: irfnum_ 14 3 13 4 124 */
 /*:ref: spkltc_ 14 10 4 7 13 13 7 7 7 7 124 124 */
 /*:ref: zzstelab_ 14 6 12 7 7 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
@@ -7071,16 +7161,16 @@ extern int spkcls_(integer *handle);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: dafcls_ 14 1 4 */
  
-extern int spkcov_(char *spk, integer *idcode, doublereal *cover, ftnlen spk_len);
+extern int spkcov_(char *spkfnm, integer *idcode, doublereal *cover, ftnlen spkfnm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: dafbfs_ 14 1 4 */
 /*:ref: daffna_ 14 1 12 */
 /*:ref: dafgs_ 14 1 7 */
@@ -7199,7 +7289,6 @@ extern int spke10_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: pi_ 7 0 */
-/*:ref: twopi_ 7 0 */
 /*:ref: xxsgp4i_ 14 3 7 7 4 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -7208,8 +7297,7 @@ extern int spke10_(doublereal *et, doublereal *record, doublereal *state);
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
-/*:ref: zzteme_ 14 2 7 7 */
-/*:ref: invstm_ 14 2 7 7 */
+/*:ref: zzteme_ 14 3 7 7 7 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
  
@@ -7440,16 +7528,16 @@ extern int spkltc_(integer *targ, doublereal *et, char *ref, char *abcorr, doubl
 /*:ref: touchd_ 7 1 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
-extern int spkobj_(char *spk, integer *ids, ftnlen spk_len);
+extern int spkobj_(char *spkfnm, integer *ids, ftnlen spkfnm_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: getfat_ 14 6 13 13 13 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: dafopr_ 14 3 13 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: dafbfs_ 14 1 4 */
 /*:ref: daffna_ 14 1 12 */
 /*:ref: dafgs_ 14 1 7 */
@@ -7469,7 +7557,7 @@ extern int spkopa_(char *file, integer *handle, ftnlen file_len);
 /*:ref: failed_ 12 0 */
 /*:ref: dafopw_ 14 3 13 4 124 */
  
-extern int spkopn_(char *name__, char *ifname, integer *ncomch, integer *handle, ftnlen name_len, ftnlen ifname_len);
+extern int spkopn_(char *fname, char *ifname, integer *ncomch, integer *handle, ftnlen fname_len, ftnlen ifname_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafonw_ 14 10 13 13 4 4 13 4 4 124 124 124 */
@@ -7903,7 +7991,7 @@ extern int spksub_(integer *handle, doublereal *descr, char *ident, doublereal *
 /*:ref: spks21_ 14 5 4 4 4 7 7 */
 /*:ref: errint_ 14 3 13 4 124 */
  
-extern int spkuds_(doublereal *descr, integer *body, integer *center, integer *frame, integer *type__, doublereal *first, doublereal *last, integer *begin, integer *end);
+extern int spkuds_(doublereal *descr, integer *body, integer *center, integer *frame, integer *type__, doublereal *first, doublereal *last, integer *baddrs, integer *eaddrs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: dafus_ 14 5 7 4 4 7 4 */
@@ -7980,7 +8068,7 @@ extern int spkw05_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: dafada_ 14 2 7 4 */
 /*:ref: dafena_ 14 0 */
  
-extern int spkw08_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epoch1, doublereal *step, ftnlen frame_len, ftnlen segid_len);
+extern int spkw08_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *begtim, doublereal *step, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -8027,7 +8115,7 @@ extern int spkw10_(integer *handle, integer *body, integer *center, char *frame,
 /*:ref: sgwfpk_ 14 5 4 4 7 4 7 */
 /*:ref: sgwes_ 14 1 4 */
  
-extern int spkw12_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *epoch1, doublereal *step, ftnlen frame_len, ftnlen segid_len);
+extern int spkw12_(integer *handle, integer *body, integer *center, char *frame, doublereal *first, doublereal *last, char *segid, integer *degree, integer *n, doublereal *states, doublereal *begtim, doublereal *step, ftnlen frame_len, ftnlen segid_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
@@ -8214,13 +8302,14 @@ extern int srfnrm_(char *method, char *target, doublereal *et, char *fixref, int
 /*:ref: zzsbfnrm_ 14 7 4 4 4 7 4 7 7 */
 /*:ref: vhatip_ 14 1 7 */
  
-extern int srfrec_(integer *body, doublereal *long__, doublereal *lat, doublereal *rectan);
+extern int srfrec_(integer *body, doublereal *lon, doublereal *lat, doublereal *rectan);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: latrec_ 14 4 7 7 7 7 */
 /*:ref: edpnt_ 14 5 7 7 7 7 7 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int srfs2c_(char *srfstr, char *bodstr, integer *code, logical *found, ftnlen srfstr_len, ftnlen bodstr_len);
 /*:ref: return_ 12 0 */
@@ -8267,7 +8356,7 @@ extern int srfxpt_(char *method, char *target, doublereal *et, char *abcorr, cha
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: dasine_ 7 2 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
@@ -8388,14 +8477,14 @@ extern int stmp03_(doublereal *x, doublereal *c0, doublereal *c1, doublereal *c2
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int stpool_(char *item, integer *nth, char *contin, char *string, integer *size, logical *found, ftnlen item_len, ftnlen contin_len, ftnlen string_len);
+extern int stpool_(char *item, integer *nth, char *contin, char *nthstr, integer *size, logical *found, ftnlen item_len, ftnlen contin_len, ftnlen nthstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int str2et_(char *string, doublereal *et, ftnlen string_len);
+extern int str2et_(char *timstr, doublereal *et, ftnlen timstr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: timdef_ 14 6 13 13 13 124 124 124 */
@@ -8438,7 +8527,7 @@ extern int subpnt_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: zzsudski_ 14 4 4 4 4 4 */
 /*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: vminus_ 14 2 7 7 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
 /*:ref: vsub_ 14 3 7 7 7 */
@@ -8464,7 +8553,8 @@ extern int subpt_(char *method, char *target, doublereal *et, char *abcorr, char
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: cidfrm_ 14 5 4 4 13 12 124 */
 /*:ref: spkez_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: vminus_ 14 2 7 7 */
@@ -8493,7 +8583,7 @@ extern int subslr_(char *method, char *target, doublereal *et, char *fixref, cha
 /*:ref: zzsudski_ 14 4 4 4 4 4 */
 /*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: vminus_ 14 2 7 7 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
 /*:ref: vsub_ 14 3 7 7 7 */
 /*:ref: zzsbfxr_ 14 9 4 4 4 7 4 7 7 7 12 */
@@ -8518,7 +8608,8 @@ extern int subsol_(char *method, char *target, doublereal *et, char *abcorr, cha
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: cidfrm_ 14 5 4 4 13 12 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: ltime_ 14 7 7 4 13 4 7 7 124 */
@@ -9181,7 +9272,7 @@ extern int syseti_(char *name__, integer *value, char *tabsym, integer *tabptr, 
 /*:ref: inslai_ 14 5 4 4 4 4 4 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sytrnc_(char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
+extern int sytrnc_(char *name__, integer *idx1, integer *idx2, char *tabsym, integer *tabptr, char *tabval, ftnlen name_len, ftnlen tabsym_len, ftnlen tabval_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9193,7 +9284,7 @@ extern int sytrnc_(char *name__, integer *i__, integer *j, char *tabsym, integer
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sytrnd_(char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sytrnd_(char *name__, integer *idx1, integer *idx2, char *tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9205,7 +9296,7 @@ extern int sytrnd_(char *name__, integer *i__, integer *j, char *tabsym, integer
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int sytrni_(char *name__, integer *i__, integer *j, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
+extern int sytrni_(char *name__, integer *idx1, integer *idx2, char *tabsym, integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardc_ 4 2 13 124 */
@@ -9216,6 +9307,49 @@ extern int sytrni_(char *name__, integer *i__, integer *j, char *tabsym, integer
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
+ 
+extern int tangpt_(char *method, char *target, doublereal *et, char *fixref, char *abcorr, char *corloc, char *obsrvr, char *dref, doublereal *dvec, doublereal *tanpt, doublereal *alt, doublereal *range, doublereal *srfpt, doublereal *trgepc, doublereal *srfvec, ftnlen method_len, ftnlen target_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen corloc_len, ftnlen obsrvr_len, ftnlen dref_len);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: zzctruin_ 14 1 4 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: eqstr_ 12 4 13 13 124 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: ljucrs_ 14 5 4 13 13 124 124 */
+/*:ref: vzero_ 12 1 7 */
+/*:ref: zzbods2c_ 14 9 4 13 4 12 13 4 12 124 124 */
+/*:ref: zzbodvcd_ 14 7 4 13 4 4 4 7 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: zznamfrm_ 14 7 4 13 4 13 4 124 124 */
+/*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: spkpos_ 14 11 13 7 13 13 13 7 7 124 124 124 124 */
+/*:ref: vminus_ 14 2 7 7 */
+/*:ref: edpnt_ 14 5 7 7 7 7 7 */
+/*:ref: vnorm_ 7 1 7 */
+/*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
+/*:ref: vequ_ 14 2 7 7 */
+/*:ref: refchg_ 14 4 4 4 7 7 */
+/*:ref: mxv_ 14 3 7 7 7 */
+/*:ref: npedln_ 14 7 7 7 7 7 7 7 7 */
+/*:ref: vsub_ 14 3 7 7 7 */
+/*:ref: nplnpt_ 14 5 7 7 7 7 7 */
+/*:ref: vdot_ 7 2 7 7 */
+/*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
+/*:ref: vdist_ 7 2 7 7 */
+/*:ref: spkssb_ 14 5 4 7 13 7 124 */
+/*:ref: clight_ 7 0 */
+/*:ref: pxform_ 14 6 13 13 7 7 124 124 */
+/*:ref: mtxv_ 14 3 7 7 7 */
+/*:ref: vadd_ 14 3 7 7 7 */
+/*:ref: stlabx_ 14 3 7 7 7 */
+/*:ref: stelab_ 14 3 7 7 7 */
+/*:ref: cleard_ 14 2 4 7 */
+/*:ref: touchd_ 7 1 7 */
+/*:ref: vrel_ 7 2 7 7 */
  
 extern int tcheck_(doublereal *tvec, char *type__, logical *mods, char *modify, logical *ok, char *error, ftnlen type_len, ftnlen modify_len, ftnlen error_len);
 extern int tparch_(char *type__, ftnlen type_len);
@@ -9350,6 +9484,7 @@ extern int tisbod_(char *ref, integer *body, doublereal *et, doublereal *tsipm, 
 /*:ref: zzbodbry_ 4 1 4 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
 /*:ref: j2000_ 7 0 */
+/*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
 /*:ref: failed_ 12 0 */
@@ -9367,7 +9502,7 @@ extern int tisbod_(char *ref, integer *body, doublereal *et, doublereal *tsipm, 
 /*:ref: irfrot_ 14 3 4 4 7 */
 /*:ref: mxm_ 14 3 7 7 7 */
  
-extern int tkfram_(integer *id, doublereal *rot, integer *frame, logical *found);
+extern int tkfram_(integer *frcode, doublereal *rot, integer *frame, logical *found);
 /*:ref: lnkini_ 14 2 4 4 */
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -9386,10 +9521,10 @@ extern int tkfram_(integer *id, doublereal *rot, integer *frame, logical *found)
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: rtrim_ 4 2 13 124 */
 /*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: badkpv_ 12 10 13 13 13 4 4 13 124 124 124 124 */
 /*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
-/*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
 /*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
 /*:ref: moved_ 14 3 7 4 7 */
@@ -9398,8 +9533,8 @@ extern int tkfram_(integer *id, doublereal *rot, integer *frame, logical *found)
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
 /*:ref: convrt_ 14 6 7 13 13 7 124 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: eul2m_ 14 7 7 7 7 4 4 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: vhatg_ 14 3 7 4 7 */
 /*:ref: q2m_ 14 2 7 7 */
 /*:ref: swpool_ 14 5 13 4 13 124 124 */
@@ -9419,7 +9554,7 @@ extern integer touchi_(integer *int__);
  
 extern logical touchl_(logical *log__);
  
-extern int tparse_(char *string, doublereal *sp2000, char *error, ftnlen string_len, ftnlen error_len);
+extern int tparse_(char *string, doublereal *sp2000, char *errmsg, ftnlen string_len, ftnlen errmsg_len);
 /*:ref: tpartv_ 14 15 13 7 4 13 13 12 12 12 13 13 124 124 124 124 124 */
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: j2000_ 7 0 */
@@ -9451,7 +9586,7 @@ extern int tpartv_(char *string, doublereal *tvec, integer *ntvec, char *type__,
 /*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
 /*:ref: rtrim_ 4 2 13 124 */
  
-extern int tpictr_(char *sample, char *pictur, logical *ok, char *error, ftnlen sample_len, ftnlen pictur_len, ftnlen error_len);
+extern int tpictr_(char *sample, char *pictur, logical *ok, char *errmsg, ftnlen sample_len, ftnlen pictur_len, ftnlen errmsg_len);
 /*:ref: tpartv_ 14 15 13 7 4 13 13 12 12 12 13 13 124 124 124 124 124 */
  
 extern doublereal trace_(doublereal *matrix);
@@ -9475,6 +9610,14 @@ extern int trcoff_(void);
 /*:ref: failed_ 12 0 */
 /*:ref: intstr_ 14 3 4 13 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
+ 
+extern doublereal trgsep_(doublereal *et, char *targ1, char *shape1, char *frame1, char *targ2, char *shape2, char *frame2, char *obsrvr, char *abcorr, ftnlen targ1_len, ftnlen shape1_len, ftnlen frame1_len, ftnlen targ2_len, ftnlen shape2_len, ftnlen frame2_len, ftnlen obsrvr_len, ftnlen abcorr_len);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: zzspin_ 14 20 13 13 13 13 13 13 13 13 4 4 7 4 124 124 124 124 124 124 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: zzsepq_ 7 10 7 4 4 7 7 4 13 13 124 124 */
  
 extern int ttrans_(char *from, char *to, doublereal *tvec, ftnlen from_len, ftnlen to_len);
 /*:ref: return_ 12 0 */
@@ -9730,20 +9873,30 @@ extern int vperp_(doublereal *a, doublereal *b, doublereal *p);
  
 extern int vprjp_(doublereal *vin, doublereal *plane, doublereal *vout);
 /*:ref: return_ 12 0 */
-/*:ref: chkin_ 14 2 13 124 */
 /*:ref: pl2nvc_ 14 3 7 7 7 */
+/*:ref: approx_ 12 3 7 7 7 */
+/*:ref: vnorm_ 7 1 7 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
 /*:ref: vdot_ 7 2 7 7 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int vprjpi_(doublereal *vin, doublereal *projpl, doublereal *invpl, doublereal *vout, logical *found);
 /*:ref: return_ 12 0 */
-/*:ref: chkin_ 14 2 13 124 */
 /*:ref: pl2nvc_ 14 3 7 7 7 */
+/*:ref: approx_ 12 3 7 7 7 */
+/*:ref: vnorm_ 7 1 7 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: dpmax_ 7 0 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int vproj_(doublereal *a, doublereal *b, doublereal *p);
 /*:ref: vdot_ 7 2 7 7 */
@@ -9878,14 +10031,14 @@ extern int wnfetd_(doublereal *window, integer *n, doublereal *left, doublereal 
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnfild_(doublereal *small, doublereal *window);
+extern int wnfild_(doublereal *smlgap, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: scardd_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnfltd_(doublereal *small, doublereal *window);
+extern int wnfltd_(doublereal *smlint, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: cardd_ 4 1 7 */
@@ -9930,7 +10083,7 @@ extern logical wnreld_(doublereal *a, char *op, doublereal *b, ftnlen op_len);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnsumd_(doublereal *window, doublereal *meas, doublereal *avg, doublereal *stddev, integer *short__, integer *long__);
+extern int wnsumd_(doublereal *window, doublereal *meas, doublereal *avg, doublereal *stddev, integer *idxsml, integer *idxlon);
 /*:ref: return_ 12 0 */
 /*:ref: cardd_ 4 1 7 */
 /*:ref: even_ 12 1 4 */
@@ -9949,7 +10102,7 @@ extern int wnunid_(doublereal *a, doublereal *b, doublereal *c__);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
-extern int wnvald_(integer *size, integer *n, doublereal *a);
+extern int wnvald_(integer *size, integer *n, doublereal *window);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: odd_ 12 1 4 */
@@ -10068,10 +10221,10 @@ extern int xfmsta_(doublereal *istate, char *icosys, char *ocosys, char *body, d
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: vequg_ 14 3 7 4 7 */
 /*:ref: zzbods2c_ 14 9 4 13 4 12 13 4 12 124 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: failed_ 12 0 */
-/*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: dpmax_ 7 0 */
+/*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: cylrec_ 14 4 7 7 7 7 */
 /*:ref: drdcyl_ 14 4 7 7 7 7 */
 /*:ref: latrec_ 14 4 7 7 7 7 */
@@ -10717,6 +10870,17 @@ extern doublereal zzdiv_(doublereal *numr, doublereal *denom);
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
  
+extern int zzdnpt_(doublereal *state, doublereal *nearp, doublereal *a, doublereal *b, doublereal *c__, doublereal *dnear, doublereal *dalt, logical *found);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: vsub_ 14 3 7 7 7 */
+/*:ref: mxv_ 14 3 7 7 7 */
+/*:ref: unorm_ 14 3 7 7 7 */
+/*:ref: vdot_ 7 2 7 7 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: vtmv_ 7 3 7 7 7 */
+/*:ref: vlcom_ 14 5 7 7 7 7 7 */
+ 
 extern int zzdscm_(doublereal *epoch, doublereal *eccp, doublereal *argpp, doublereal *tc, doublereal *inclp, doublereal *nodep, doublereal *np, doublereal *snodm, doublereal *cnodm, doublereal *sinim, doublereal *cosim, doublereal *sinomm, doublereal *cosomm, doublereal *day, doublereal *e3, doublereal *ee2, doublereal *eccm, doublereal *emsq, doublereal *gam, doublereal *peo, doublereal *pgho, doublereal *pho, doublereal *pinco, doublereal *plo, doublereal *rtemsq, doublereal *se2, doublereal *se3, doublereal *sgh2, doublereal *sgh3, doublereal *sgh4, doublereal *sh2, doublereal *sh3, doublereal *si2, doublereal *si3, doublereal *sl2, doublereal *sl3, doublereal *sl4, doublereal *s1, doublereal *s2, doublereal *s3, doublereal *s4, doublereal *s5, doublereal *s6, doublereal *s7, doublereal *ss1, doublereal *ss2, doublereal *ss3, doublereal *ss4, doublereal *ss5, doublereal *ss6, doublereal *ss7, doublereal *sz1, doublereal *sz2, doublereal *sz3, doublereal *sz11, doublereal *sz12, doublereal *sz13, doublereal *sz21, doublereal *sz22, doublereal *sz23, doublereal *sz31, doublereal *sz32, doublereal *sz33, doublereal *xgh2, doublereal *xgh3, doublereal *xgh4, doublereal *xh2, doublereal *xh3, doublereal *xi2, doublereal *xi3, doublereal *xl2, doublereal *xl3, doublereal *xl4, doublereal *xn, doublereal *z1, doublereal *z2, doublereal *z3, doublereal *z11, doublereal *z12, doublereal *z13, doublereal *z21, doublereal *z22, doublereal *z23, doublereal *z31, doublereal *z32, doublereal *z33, doublereal *zmol, doublereal *zmos);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -11020,9 +11184,9 @@ extern int zzdynfr0_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: frmnam_ 14 3 4 13 124 */
 /*:ref: zzdynfid_ 14 6 13 4 13 4 124 124 */
-/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -11049,16 +11213,17 @@ extern int zzdynfr0_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: qderiv_ 14 5 4 7 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: zzspkzp1_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: zzcorepc_ 14 5 13 7 7 7 124 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
 /*:ref: cidfrm_ 14 5 4 4 13 12 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: vminug_ 14 3 7 4 7 */
 /*:ref: dnearp_ 14 7 7 7 7 7 7 7 12 */
 /*:ref: vsubg_ 14 4 7 7 4 7 */
+/*:ref: zzprscor_ 14 3 13 12 124 */
 /*:ref: zzspksb1_ 14 5 4 7 13 7 124 */
 /*:ref: zzdynvad_ 14 8 13 4 13 4 4 7 124 124 */
 /*:ref: convrt_ 14 6 7 13 13 7 124 124 */
@@ -11071,6 +11236,7 @@ extern int zzdynfr0_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: zztwovxf_ 14 5 7 4 7 4 7 */
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
+/*:ref: namfrm_ 14 3 13 4 124 */
  
 extern int zzdynfrm_(integer *infram, integer *center, doublereal *et, doublereal *xform, integer *basfrm);
 /*:ref: return_ 12 0 */
@@ -11080,9 +11246,9 @@ extern int zzdynfrm_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: frmnam_ 14 3 4 13 124 */
 /*:ref: zzdynfid_ 14 6 13 4 13 4 124 124 */
-/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -11109,16 +11275,17 @@ extern int zzdynfrm_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: qderiv_ 14 5 4 7 7 7 7 */
 /*:ref: vequ_ 14 2 7 7 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: zzspkzp0_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: zzcorepc_ 14 5 13 7 7 7 124 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
 /*:ref: cidfrm_ 14 5 4 4 13 12 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: vminug_ 14 3 7 4 7 */
 /*:ref: dnearp_ 14 7 7 7 7 7 7 7 12 */
 /*:ref: vsubg_ 14 4 7 7 4 7 */
+/*:ref: zzprscor_ 14 3 13 12 124 */
 /*:ref: zzspksb0_ 14 5 4 7 13 7 124 */
 /*:ref: zzdynvad_ 14 8 13 4 13 4 4 7 124 124 */
 /*:ref: convrt_ 14 6 7 13 13 7 124 124 */
@@ -11131,6 +11298,7 @@ extern int zzdynfrm_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: zztwovxf_ 14 5 7 4 7 4 7 */
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
+/*:ref: namfrm_ 14 3 13 4 124 */
  
 extern int zzdynoac_(char *frname, integer *frcode, char *item, integer *maxn, integer *n, char *values, logical *found, ftnlen frname_len, ftnlen item_len, ftnlen values_len);
 /*:ref: return_ 12 0 */
@@ -11172,9 +11340,9 @@ extern int zzdynrot_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: frmnam_ 14 3 4 13 124 */
 /*:ref: zzdynfid_ 14 6 13 4 13 4 124 124 */
-/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -11199,15 +11367,16 @@ extern int zzdynrot_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: zzspkzp0_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: zzspkez0_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: vhat_ 14 2 7 7 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: zzcorepc_ 14 5 13 7 7 7 124 */
 /*:ref: mxv_ 14 3 7 7 7 */
 /*:ref: cidfrm_ 14 5 4 4 13 12 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
 /*:ref: vsub_ 14 3 7 7 7 */
+/*:ref: zzprscor_ 14 3 13 12 124 */
 /*:ref: zzspksb0_ 14 5 4 7 13 7 124 */
 /*:ref: zzdynvad_ 14 8 13 4 13 4 4 7 124 124 */
 /*:ref: convrt_ 14 6 7 13 13 7 124 124 */
@@ -11221,6 +11390,7 @@ extern int zzdynrot_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: twovec_ 14 5 7 4 7 4 7 */
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
+/*:ref: namfrm_ 14 3 13 4 124 */
  
 extern int zzdynrt0_(integer *infram, integer *center, doublereal *et, doublereal *rotate, integer *basfrm);
 /*:ref: return_ 12 0 */
@@ -11230,9 +11400,9 @@ extern int zzdynrt0_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: frmnam_ 14 3 4 13 124 */
 /*:ref: zzdynfid_ 14 6 13 4 13 4 124 124 */
-/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: zzdynvac_ 14 9 13 4 13 4 4 13 124 124 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
 /*:ref: ucase_ 14 4 13 13 124 124 */
@@ -11255,30 +11425,32 @@ extern int zzdynrt0_(integer *infram, integer *center, doublereal *et, doublerea
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zzdynbid_ 14 6 13 4 13 4 124 124 */
 /*:ref: zzspkzp1_ 14 9 4 7 13 13 4 7 7 124 124 */
-/*:ref: zzspkez1_ 14 9 4 7 13 13 4 7 7 124 124 */
+/*:ref: zzspkez0_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: vhat_ 14 2 7 7 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: zzcorepc_ 14 5 13 7 7 7 124 */
 /*:ref: mxv_ 14 3 7 7 7 */
 /*:ref: cidfrm_ 14 5 4 4 13 12 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: vminus_ 14 2 7 7 */
 /*:ref: nearpt_ 14 6 7 7 7 7 7 7 */
 /*:ref: vsub_ 14 3 7 7 7 */
+/*:ref: zzprscor_ 14 3 13 12 124 */
 /*:ref: zzspksb1_ 14 5 4 7 13 7 124 */
 /*:ref: zzdynvad_ 14 8 13 4 13 4 4 7 124 124 */
 /*:ref: convrt_ 14 6 7 13 13 7 124 124 */
 /*:ref: latrec_ 14 4 7 7 7 7 */
+/*:ref: vequ_ 14 2 7 7 */
 /*:ref: stlabx_ 14 3 7 7 7 */
 /*:ref: stelab_ 14 3 7 7 7 */
-/*:ref: vequ_ 14 2 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
 /*:ref: etcal_ 14 3 7 13 124 */
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: twovec_ 14 5 7 4 7 4 7 */
 /*:ref: zzdynvai_ 14 8 13 4 13 4 4 4 124 124 */
 /*:ref: polyds_ 14 5 7 4 4 7 7 */
+/*:ref: namfrm_ 14 3 13 4 124 */
  
 extern int zzdynvac_(char *frname, integer *frcode, char *item, integer *maxn, integer *n, char *values, ftnlen frname_len, ftnlen item_len, ftnlen values_len);
 /*:ref: return_ 12 0 */
@@ -11917,6 +12089,7 @@ extern integer zzekesiz_(integer *handle, integer *segdsc, integer *coldsc, inte
 extern int zzekff01_(integer *handle, integer *segno, integer *rcptrs);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
+/*:ref: cleari_ 14 2 4 4 */
 /*:ref: zzeksrd_ 14 3 4 4 4 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -11925,7 +12098,6 @@ extern int zzekff01_(integer *handle, integer *segno, integer *rcptrs);
 /*:ref: zzekmloc_ 14 4 4 4 4 4 */
 /*:ref: dasrdi_ 14 4 4 4 4 4 */
 /*:ref: zzekpgpg_ 14 4 4 4 4 4 */
-/*:ref: cleari_ 14 2 4 4 */
 /*:ref: zzekpgwi_ 14 3 4 4 4 */
 /*:ref: zzektrit_ 14 2 4 4 */
 /*:ref: zzektr1s_ 14 4 4 4 4 4 */
@@ -13369,6 +13541,7 @@ extern int zzfrmch0_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -13376,7 +13549,6 @@ extern int zzfrmch0_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: zzmsxf_ 14 3 7 4 7 */
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: zznofcon_ 14 7 7 4 4 4 4 13 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: invstm_ 14 2 7 7 */
  
 extern int zzfrmch1_(integer *frame1, integer *frame2, doublereal *et, doublereal *xform);
@@ -13384,6 +13556,7 @@ extern int zzfrmch1_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -13391,43 +13564,44 @@ extern int zzfrmch1_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: zzmsxf_ 14 3 7 4 7 */
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: zznofcon_ 14 7 7 4 4 4 4 13 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: invstm_ 14 2 7 7 */
  
 extern int zzfrmgt0_(integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
+/*:ref: cleard_ 14 2 4 7 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: irfrot_ 14 3 4 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: tisbod_ 14 5 13 4 7 7 124 */
 /*:ref: invstm_ 14 2 7 7 */
-/*:ref: namfrm_ 14 3 13 4 124 */
-/*:ref: irfrot_ 14 3 4 4 7 */
 /*:ref: ckfxfm_ 14 5 4 7 7 4 12 */
 /*:ref: tkfram_ 14 4 4 7 4 12 */
 /*:ref: zzdynfr0_ 14 5 4 4 7 7 4 */
+/*:ref: zzswfxfm_ 14 6 4 7 4 7 4 12 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: failed_ 12 0 */
  
 extern int zzfrmgt1_(integer *infrm, doublereal *et, doublereal *xform, integer *outfrm, logical *found);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
+/*:ref: cleard_ 14 2 4 7 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: chkout_ 14 2 13 124 */
+/*:ref: irfrot_ 14 3 4 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: tisbod_ 14 5 13 4 7 7 124 */
 /*:ref: invstm_ 14 2 7 7 */
-/*:ref: namfrm_ 14 3 13 4 124 */
-/*:ref: irfrot_ 14 3 4 4 7 */
 /*:ref: ckfxfm_ 14 5 4 7 7 4 12 */
 /*:ref: tkfram_ 14 4 4 7 4 12 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
+/*:ref: zzswfxfm_ 14 6 4 7 4 7 4 12 */
 /*:ref: errch_ 14 4 13 13 124 124 */
-/*:ref: failed_ 12 0 */
  
 extern int zzftpchk_(char *string, logical *ftperr, ftnlen string_len);
 /*:ref: zzftpstr_ 14 8 13 13 13 13 124 124 124 124 */
@@ -13531,7 +13705,7 @@ extern int zzgfcosd_(U_fp udfunc, doublereal *et, logical *decres);
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: bodfnd_ 12 3 4 13 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: bodc2s_ 14 3 4 13 124 */
 /*:ref: recpgr_ 14 8 13 7 7 7 7 7 7 124 */
@@ -13651,15 +13825,16 @@ extern int zzgffvst_(doublereal *time, logical *vistat);
 /*:ref: failed_ 12 0 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: cmprss_ 14 7 13 4 13 13 124 124 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
-/*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: vzero_ 12 1 7 */
 /*:ref: vhat_ 14 2 7 7 */
 /*:ref: getfov_ 14 9 4 4 13 13 7 4 7 124 124 */
+/*:ref: vhatip_ 14 1 7 */
 /*:ref: zzfovaxi_ 14 5 13 4 7 7 124 */
 /*:ref: vequ_ 14 2 7 7 */
 /*:ref: vsep_ 7 2 7 7 */
 /*:ref: halfpi_ 7 0 */
+/*:ref: errdp_ 14 3 13 7 124 */
 /*:ref: dpr_ 7 0 */
 /*:ref: nvc2pl_ 14 3 7 7 7 */
 /*:ref: vrotv_ 14 4 7 7 7 7 */
@@ -13668,6 +13843,7 @@ extern int zzgffvst_(doublereal *time, logical *vistat);
 /*:ref: vnorm_ 7 1 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
 /*:ref: ucrss_ 14 3 7 7 7 */
+/*:ref: vsclip_ 14 2 7 7 */
 /*:ref: frame_ 14 3 7 7 7 */
 /*:ref: mxv_ 14 3 7 7 7 */
 /*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
@@ -13777,14 +13953,13 @@ extern int zzgfocst_(doublereal *time, logical *ocstat);
 /*:ref: isrchc_ 4 5 13 4 13 124 124 */
 /*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: suffix_ 14 5 13 4 13 124 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
-/*:ref: errint_ 14 3 13 4 124 */
-/*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: minad_ 14 4 7 4 7 4 */
 /*:ref: maxad_ 14 4 7 4 7 4 */
 /*:ref: namfrm_ 14 3 13 4 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: errint_ 14 3 13 4 124 */
 /*:ref: zzsudski_ 14 4 4 4 4 4 */
 /*:ref: zzminrad_ 14 1 7 */
 /*:ref: zzmaxrad_ 14 1 7 */
@@ -13898,12 +14073,12 @@ extern int zzgfrelx_(U_fp udstep, U_fp udrefn, U_fp udqdec, U_fp udcond, S_fp ud
 /*:ref: zzwninsd_ 14 5 7 7 13 7 124 */
 /*:ref: swapi_ 14 2 4 4 */
  
-extern int zzgfrpwk_(integer *unit, doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
-extern int zzgftswk_(doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
+extern int zzgfrpwk_(integer *unit, doublereal *total, doublereal *wait, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
+extern int zzgftswk_(doublereal *total, doublereal *wait, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
 extern int zzgfwkin_(doublereal *incr);
-extern int zzgfwkad_(doublereal *freq, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
+extern int zzgfwkad_(doublereal *wait, integer *tcheck, char *begin, char *end, ftnlen begin_len, ftnlen end_len);
 extern int zzgfwkun_(integer *unit);
-extern int zzgfwkmo_(integer *unit, doublereal *total, doublereal *freq, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
+extern int zzgfwkmo_(integer *unit, doublereal *total, doublereal *wait, integer *tcheck, char *begin, char *end, doublereal *incr, ftnlen begin_len, ftnlen end_len);
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
@@ -14014,25 +14189,25 @@ extern int zzgfspx_(char *xabcr, integer *xbod, char *yref, char *xref, integer 
 /*:ref: spkez_ 14 9 4 7 13 13 4 7 7 124 124 */
 /*:ref: dvsep_ 7 2 7 7 */
 /*:ref: dhfa_ 7 2 7 7 */
-/*:ref: zzgfspq_ 14 11 7 4 4 7 7 4 13 13 7 124 124 */
+/*:ref: zzsepq_ 7 10 7 4 4 7 7 4 13 13 124 124 */
  
 extern int zzgfssin_(char *method, integer *trgid, doublereal *et, char *fixref, char *abcorr, integer *obsid, char *dref, integer *dctr, doublereal *dvec, doublereal *radii, doublereal *state, logical *found, ftnlen method_len, ftnlen fixref_len, ftnlen abcorr_len, ftnlen dref_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bodc2s_ 14 3 4 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: sxform_ 14 6 13 13 7 7 124 124 */
 /*:ref: moved_ 14 3 7 4 7 */
 /*:ref: cleard_ 14 2 4 7 */
 /*:ref: mxvg_ 14 5 7 7 4 4 7 */
 /*:ref: namfrm_ 14 3 13 4 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
-/*:ref: failed_ 12 0 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: spkgeo_ 14 7 4 7 13 4 7 7 124 */
 /*:ref: vminug_ 14 3 7 4 7 */
@@ -14055,15 +14230,15 @@ extern int zzgfssob_(char *method, integer *trgid, doublereal *et, char *fixref,
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bodc2s_ 14 3 4 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: eqstr_ 12 4 13 13 124 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
 /*:ref: namfrm_ 14 3 13 4 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
-/*:ref: failed_ 12 0 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: spkgeo_ 14 7 4 7 13 4 7 7 124 */
 /*:ref: vminug_ 14 3 7 4 7 */
@@ -14090,10 +14265,11 @@ extern int zzgftreb_(integer *body, doublereal *axes);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
-/*:ref: chkout_ 14 2 13 124 */
  
 extern int zzgfudb_(U_fp udfuns, U_fp udfunb, doublereal *tol, U_fp udstep, U_fp udrefn, logical *rpt, S_fp udrepi, U_fp udrepu, S_fp udrepf, logical *bail, L_fp udbail, doublereal *cnfine, doublereal *result);
 /*:ref: return_ 12 0 */
@@ -14674,6 +14850,7 @@ extern int zzrefch0_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: ident_ 14 1 7 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -14681,7 +14858,6 @@ extern int zzrefch0_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: zzrxr_ 14 3 7 4 7 */
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: zznofcon_ 14 7 7 4 4 4 4 13 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: xpose_ 14 2 7 7 */
  
 extern int zzrefch1_(integer *frame1, integer *frame2, doublereal *et, doublereal *rotate);
@@ -14690,6 +14866,7 @@ extern int zzrefch1_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: ident_ 14 1 7 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
@@ -14697,7 +14874,6 @@ extern int zzrefch1_(integer *frame1, integer *frame2, doublereal *et, doublerea
 /*:ref: zzrxr_ 14 3 7 4 7 */
 /*:ref: isrchi_ 4 3 4 4 4 */
 /*:ref: zznofcon_ 14 7 7 4 4 4 4 13 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: xpose_ 14 2 7 7 */
  
 extern int zzrepsub_(char *in, integer *left, integer *right, char *string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len);
@@ -14711,15 +14887,16 @@ extern int zzrotgt0_(integer *infrm, doublereal *et, doublereal *rotate, integer
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: cleard_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: irfrot_ 14 3 4 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: tipbod_ 14 5 13 4 7 7 124 */
 /*:ref: xpose_ 14 2 7 7 */
-/*:ref: namfrm_ 14 3 13 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: ckfrot_ 14 5 4 7 7 4 12 */
 /*:ref: tkfram_ 14 4 4 7 4 12 */
 /*:ref: zzdynrt0_ 14 5 4 4 7 7 4 */
+/*:ref: zzswfxfm_ 14 6 4 7 4 7 4 12 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: errch_ 14 4 13 13 124 124 */
@@ -14729,17 +14906,18 @@ extern int zzrotgt1_(integer *infrm, doublereal *et, doublereal *rotate, integer
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: cleard_ 14 2 4 7 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: irfrot_ 14 3 4 4 7 */
+/*:ref: failed_ 12 0 */
 /*:ref: tipbod_ 14 5 13 4 7 7 124 */
 /*:ref: xpose_ 14 2 7 7 */
-/*:ref: namfrm_ 14 3 13 4 124 */
-/*:ref: failed_ 12 0 */
 /*:ref: ckfrot_ 14 5 4 7 7 4 12 */
 /*:ref: tkfram_ 14 4 4 7 4 12 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
+/*:ref: zzswfxfm_ 14 6 4 7 4 7 4 12 */
 /*:ref: errch_ 14 4 13 13 124 124 */
  
 extern int zzrtnmat_(doublereal *v, doublereal *m);
@@ -14877,6 +15055,29 @@ extern int zzryxsph_(doublereal *vertex, doublereal *udir, doublereal *r__, doub
 /*:ref: vdot_ 7 2 7 7 */
 /*:ref: vlcom_ 14 5 7 7 7 7 7 */
  
+extern int zzscad01_(integer *sc, integer *hdsclk, integer *scpool, integer *clklst, integer *dpfree, doublereal *dpbuff, integer *ifree, integer *intbuf, integer *scbase, integer *sclkat);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: movec_ 14 5 13 4 13 124 124 */
+/*:ref: suffix_ 14 5 13 4 13 124 124 */
+/*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
+/*:ref: zzhsiavl_ 14 2 4 4 */
+/*:ref: zzscin01_ 14 6 4 4 4 4 4 4 */
+/*:ref: zzhsiadd_ 14 6 4 4 4 4 4 12 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: scli01_ 14 6 13 4 4 4 4 124 */
+/*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: scld01_ 14 6 13 4 4 4 7 124 */
+ 
+extern int zzscin01_(integer *hdsclk, integer *scpool, integer *clklst, integer *dpfree, integer *ifree, integer *prvsc);
+/*:ref: zzhsiini_ 14 3 4 4 4 */
+/*:ref: cleari_ 14 2 4 4 */
+ 
 extern logical zzsclk_(integer *ckid, integer *sclkid);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -14892,6 +15093,16 @@ extern logical zzsclk_(integer *ckid, integer *sclkid);
 /*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
 /*:ref: removi_ 14 2 4 4 */
  
+extern int zzscup01_(integer *sc, integer *polctr, integer *hdsclk, integer *scpool, integer *clklst, integer *dpfree, doublereal *dpbuff, integer *ifree, integer *intbuf, integer *scbase, integer *prvsc, integer *nfield, integer *delcde, integer *timsys, integer *ncoeff, integer *npart, integer *cofbas, integer *strbas, integer *endbas, integer *modbas, integer *offbas);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: zzpctrck_ 14 2 4 12 */
+/*:ref: zzscin01_ 14 6 4 4 4 4 4 4 */
+/*:ref: zzhsichk_ 14 5 4 4 4 4 4 */
+/*:ref: zzscad01_ 14 10 4 4 4 4 4 7 4 4 4 4 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+ 
 extern int zzsecprt_(integer *isynfl, doublereal *dg, doublereal *del, doublereal *xni, doublereal *omegao, doublereal *atime, doublereal *omgdot, doublereal *xli, doublereal *xfact, doublereal *xldot, doublereal *xndot, doublereal *xnddt);
  
 extern int zzsegbox_(doublereal *dskdsc, doublereal *boxctr, doublereal *maxr);
@@ -14904,6 +15115,20 @@ extern int zzsegbox_(doublereal *dskdsc, doublereal *boxctr, doublereal *maxr);
 /*:ref: errint_ 14 3 13 4 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
+ 
+extern doublereal zzsepq_(doublereal *et, integer *bod1, integer *bod2, doublereal *r1, doublereal *r2, integer *obs, char *abcorr, char *ref, ftnlen abcorr_len, ftnlen ref_len);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: spkezp_ 14 9 4 7 13 13 4 7 7 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: vnorm_ 7 1 7 */
+/*:ref: dasine_ 7 2 7 7 */
+/*:ref: vsep_ 7 2 7 7 */
  
 extern int zzsfxcor_(S_fp udnear, S_fp udmaxr, S_fp udrayx, integer *trgcde, doublereal *et, char *abcorr, logical *uselt, logical *usecn, logical *usestl, logical *xmit, char *fixref, integer *obscde, integer *dfrcde, integer *dclass, integer *dcentr, doublereal *dvec, doublereal *spoint, doublereal *trgepc, doublereal *srfvec, logical *found, ftnlen abcorr_len, ftnlen fixref_len);
 /*:ref: return_ 12 0 */
@@ -14931,6 +15156,7 @@ extern int zzsfxcor_(S_fp udnear, S_fp udmaxr, S_fp udrayx, integer *trgcde, dou
 /*:ref: vsep_ 7 2 7 7 */
 /*:ref: vdist_ 7 2 7 7 */
 /*:ref: clight_ 7 0 */
+/*:ref: nplnpt_ 14 5 7 7 7 7 7 */
 /*:ref: touchd_ 7 1 7 */
 /*:ref: vhatip_ 14 1 7 */
 /*:ref: vscl_ 14 3 7 7 7 */
@@ -14981,7 +15207,7 @@ extern int zzraynp_(doublereal *vertex, doublereal *raydir, doublereal *et, doub
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: sigerr_ 14 2 13 124 */
 /*:ref: chkout_ 14 2 13 124 */
-/*:ref: bodvcd_ 14 6 4 13 4 4 7 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
 /*:ref: failed_ 12 0 */
 /*:ref: setmsg_ 14 2 13 124 */
 /*:ref: errint_ 14 3 13 4 124 */
@@ -14995,10 +15221,27 @@ extern int zzraynp_(doublereal *vertex, doublereal *raydir, doublereal *et, doub
 extern int zzsizeok_(integer *size, integer *psize, integer *dsize, integer *offset, logical *ok, integer *n);
 /*:ref: rmaini_ 14 4 4 4 4 4 */
  
+extern int zzspin_(char *targ1, char *shape1, char *frame1, char *targ2, char *shape2, char *frame2, char *obsrvr, char *abcorr, integer *bods, integer *frames, doublereal *mxrad, integer *obs, ftnlen targ1_len, ftnlen shape1_len, ftnlen frame1_len, ftnlen targ2_len, ftnlen shape2_len, ftnlen frame2_len, ftnlen obsrvr_len, ftnlen abcorr_len);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: bods2c_ 14 4 13 4 12 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: ljucrs_ 14 5 4 13 13 124 124 */
+/*:ref: isrchc_ 4 5 13 4 13 124 124 */
+/*:ref: zzgftreb_ 14 2 4 7 */
+/*:ref: namfrm_ 14 3 13 4 124 */
+/*:ref: frinfo_ 14 5 4 4 4 4 12 */
+ 
 extern int zzspkac0_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -15013,7 +15256,7 @@ extern int zzspkac0_(integer *targ, doublereal *et, char *ref, char *abcorr, int
 extern int zzspkac1_(integer *targ, doublereal *et, char *ref, char *abcorr, integer *obs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: irfnum_ 14 3 13 4 124 */
@@ -15068,7 +15311,7 @@ extern int zzspkap1_(integer *targ, doublereal *et, char *ref, doublereal *sobs,
 extern int zzspkas0_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15083,7 +15326,7 @@ extern int zzspkas0_(integer *targ, doublereal *et, char *ref, char *abcorr, dou
 extern int zzspkas1_(integer *targ, doublereal *et, char *ref, char *abcorr, doublereal *stobs, doublereal *accobs, doublereal *starg, doublereal *lt, doublereal *dlt, ftnlen ref_len, ftnlen abcorr_len);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
-/*:ref: zzprscor_ 14 3 13 12 124 */
+/*:ref: zzvalcor_ 14 3 13 12 124 */
 /*:ref: failed_ 12 0 */
 /*:ref: chkout_ 14 2 13 124 */
 /*:ref: setmsg_ 14 2 13 124 */
@@ -15577,6 +15820,71 @@ extern int zzstelab_(logical *xmit, doublereal *accobs, doublereal *vobs, double
 /*:ref: vadd_ 14 3 7 7 7 */
 /*:ref: qderiv_ 14 5 4 7 7 7 7 */
  
+extern int zzswfcln_(integer *hdfram, integer *frpool, integer *basbeg, integer *framat);
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: cleari_ 14 2 4 4 */
+/*:ref: zzhsiini_ 14 3 4 4 4 */
+/*:ref: chkout_ 14 2 13 124 */
+ 
+extern int zzswffet_(integer *framid, integer *hdfram, integer *frpool, integer *fidlst, integer *basbeg, integer *free, integer *bascnt, logical *usetim, logical *binary, integer *clsses, integer *clsids, integer *baslst, doublereal *starts, doublereal *stops, integer *framat);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: repmi_ 14 7 13 13 4 13 124 124 124 */
+/*:ref: gipool_ 14 7 13 4 4 4 4 12 124 */
+/*:ref: gcpool_ 14 8 13 4 4 4 13 12 124 124 */
+/*:ref: failed_ 12 0 */
+/*:ref: zzswfcln_ 14 4 4 4 4 4 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: repmc_ 14 8 13 13 13 13 124 124 124 124 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: zzdynbid_ 14 6 13 4 13 4 124 124 */
+/*:ref: dtpool_ 14 6 13 12 4 13 124 124 */
+/*:ref: errch_ 14 4 13 13 124 124 */
+/*:ref: zzhsiavl_ 14 2 4 4 */
+/*:ref: zzhsiadd_ 14 6 4 4 4 4 4 12 */
+/*:ref: namfrm_ 14 3 13 4 124 */
+/*:ref: frinfo_ 14 5 4 4 4 4 12 */
+/*:ref: gdpool_ 14 7 13 4 4 4 7 12 124 */
+/*:ref: str2et_ 14 3 13 7 124 */
+/*:ref: errdp_ 14 3 13 7 124 */
+/*:ref: etcal_ 14 3 7 13 124 */
+ 
+extern int zzswfini_(integer *hdfram, integer *frpool, integer *fidlst, integer *basbeg, integer *free, integer *prvat, integer *prvfrm, logical *samfrm);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: zzhsiini_ 14 3 4 4 4 */
+/*:ref: failed_ 12 0 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: cleari_ 14 2 4 4 */
+ 
+extern int zzswfxfm_(integer *infrm, doublereal *et, integer *ndim, doublereal *xform, integer *outfrm, logical *found);
+/*:ref: return_ 12 0 */
+/*:ref: chkin_ 14 2 13 124 */
+/*:ref: zzswfini_ 14 8 4 4 4 4 4 4 4 12 */
+/*:ref: zzctruin_ 14 1 4 */
+/*:ref: filld_ 14 3 7 4 7 */
+/*:ref: setmsg_ 14 2 13 124 */
+/*:ref: errint_ 14 3 13 4 124 */
+/*:ref: sigerr_ 14 2 13 124 */
+/*:ref: chkout_ 14 2 13 124 */
+/*:ref: zzpctrck_ 14 2 4 12 */
+/*:ref: zzhsichk_ 14 5 4 4 4 4 4 */
+/*:ref: zzswffet_ 14 15 4 4 4 4 4 4 4 12 12 4 4 4 7 7 4 */
+/*:ref: failed_ 12 0 */
+/*:ref: lstled_ 4 3 7 4 7 */
+/*:ref: ckfxfm_ 14 5 4 7 7 4 12 */
+/*:ref: ckfrot_ 14 5 4 7 7 4 12 */
+/*:ref: tkfram_ 14 4 4 7 4 12 */
+/*:ref: moved_ 14 3 7 4 7 */
+/*:ref: tisbod_ 14 5 13 4 7 7 124 */
+/*:ref: invstm_ 14 2 7 7 */
+/*:ref: tipbod_ 14 5 13 4 7 7 124 */
+/*:ref: xpose_ 14 2 7 7 */
+/*:ref: irfrot_ 14 3 4 4 7 */
+/*:ref: ident_ 14 1 7 */
+ 
 extern int zztangnt_(integer *curve, doublereal *srcrad, integer *shape, integer *trgcde, integer *nsurf, integer *srflst, integer *fixfid, doublereal *et, doublereal *plnvec, doublereal *axis, doublereal *schstp, doublereal *soltol, doublereal *result, doublereal *points);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
@@ -15635,7 +15943,7 @@ extern int zztansta_(doublereal *angle, logical *ocultd, doublereal *point);
 /*:ref: vsclip_ 14 2 7 7 */
 /*:ref: vadd_ 14 3 7 7 7 */
  
-extern int zzteme_(doublereal *et, doublereal *mt);
+extern int zzteme_(doublereal *et, doublereal *j2tm, doublereal *tm2j);
 /*:ref: return_ 12 0 */
 /*:ref: chkin_ 14 2 13 124 */
 /*:ref: zzeprc76_ 14 2 7 7 */

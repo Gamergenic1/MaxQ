@@ -13,7 +13,7 @@ static doublereal c_b10 = 0.;
 static doublereal c_b11 = 1.;
 static doublereal c_b12 = 2.;
 
-/* $Procedure   NPELPT  ( Nearest point on ellipse to point ) */
+/* $Procedure NPELPT  ( Nearest point on ellipse to point ) */
 /* Subroutine */ int npelpt_(doublereal *point, doublereal *ellips, 
 	doublereal *pnear, doublereal *dist)
 {
@@ -97,26 +97,26 @@ static doublereal c_b12 = 2.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     POINT      I   Point whose distance to an ellipse is to be found. */
-/*     ELLIPS     I   A SPICELIB ellipse. */
+/*     ELLIPS     I   A SPICE ellipse. */
 /*     PNEAR      O   Nearest point on ellipse to input point. */
 /*     DIST       O   Distance of input point to ellipse. */
 
 /* $ Detailed_Input */
 
-/*     ELLIPS         is a SPICELIB ellipse that represents an ellipse */
-/*                    in three-dimensional space. */
+/*     POINT    is a point in 3-dimensional space. */
 
-/*     POINT          is a point in 3-dimensional space. */
+/*     ELLIPS   is a SPICE ellipse that represents an ellipse */
+/*              in three-dimensional space. */
 
 /* $ Detailed_Output */
 
-/*     PNEAR          is the nearest point on ELLIPS to POINT. */
+/*     PNEAR    is the nearest point on ELLIPS to POINT. */
 
-/*     DIST           is the distance between POINT and PNEAR.  This is */
-/*                    the distance between POINT and the ellipse. */
+/*     DIST     is the distance between POINT and PNEAR. This is */
+/*              the distance between POINT and the ellipse. */
 
 /* $ Parameters */
 
@@ -124,17 +124,20 @@ static doublereal c_b12 = 2.;
 
 /* $ Exceptions */
 
-/*     1)  Invalid ellipses will be diagnosed by routines called by */
-/*         this routine. */
+/*     1)  If the input ellipse ELLIPS has one or both semi-axis lengths */
+/*         equal to zero, the error SPICE(DEGENERATECASE) is signaled. */
 
-/*     2)  Ellipses having one or both semi-axis lengths equal to zero */
-/*         are turned away at the door; the error SPICE(DEGENERATECASE) */
-/*         is signalled. */
-
-/*     3)  If the geometric ellipse represented by ELLIPS does not */
+/*     2)  If the geometric ellipse represented by ELLIPS does not */
 /*         have a unique point nearest to the input point, any point */
 /*         at which the minimum distance is attained may be returned */
 /*         in PNEAR. */
+
+/*     3)  If a ratio of non-zero ellipse radii violates the constraints */
+/*         imposed by NEARPT, an error is signaled by a routine in the */
+/*         call tree of this routine. */
+
+/*     4)  The routine does not check for overflow when scaling or */
+/*         translating the input point. */
 
 /* $ Files */
 
@@ -145,34 +148,34 @@ static doublereal c_b12 = 2.;
 /*     Given an ellipse and a point in 3-dimensional space, if the */
 /*     orthogonal projection of the point onto the plane of the ellipse */
 /*     is on or outside of the ellipse, then there is a unique point on */
-/*     the ellipse closest to the original point.  This routine finds */
-/*     that nearest point on the ellipse.  If the projection falls inside */
+/*     the ellipse closest to the original point. This routine finds */
+/*     that nearest point on the ellipse. If the projection falls inside */
 /*     the ellipse, there may be multiple points on the ellipse that are */
-/*     at the minimum distance from the original point.  In this case, */
+/*     at the minimum distance from the original point. In this case, */
 /*     one such closest point will be returned. */
 
 /*     This routine returns a distance, rather than an altitude, in */
-/*     contrast to the SPICELIB routine NEARPT.  Because our ellipse is */
+/*     contrast to the SPICELIB routine NEARPT. Because our ellipse is */
 /*     situated in 3-space and not 2-space, the input point is not */
-/*     `inside' or `outside' the ellipse, so the notion of altitude does */
-/*     not apply to the problem solved by this routine.  In the case of */
+/*     "inside" or "outside" the ellipse, so the notion of altitude does */
+/*     not apply to the problem solved by this routine. In the case of */
 /*     NEARPT, the input point is on, inside, or outside the ellipsoid, */
 /*     so it makes sense to speak of its altitude. */
 
 /* $ Examples */
 
-/*     1)  For planetary rings that can be modelled as flat disks with */
+/*     1)  For planetary rings that can be modeled as flat disks with */
 /*         elliptical outer boundaries, the distance of a point in */
 /*         space from a ring's outer boundary can be computed using this */
-/*         routine.  Suppose CENTER, SMAJOR, and SMINOR are the center, */
+/*         routine. Suppose CENTER, SMAJOR, and SMINOR are the center, */
 /*         semi-major axis, and semi-minor axis of the ring's boundary. */
 /*         Suppose also that SCPOS is the position of a spacecraft. */
 /*         SCPOS, CENTER, SMAJOR, and SMINOR must all be expressed in */
-/*         the same coordinate system.  We can find the distance from */
+/*         the same coordinate system. We can find the distance from */
 /*         the spacecraft to the ring using the code fragment */
 
 /*            C */
-/*            C     Make a SPICELIB ellipse representing the ring, */
+/*            C     Make a SPICE ellipse representing the ring, */
 /*            C     then use NPELPT to find the distance between */
 /*            C     the spacecraft position and RING. */
 /*            C */
@@ -184,10 +187,9 @@ static doublereal c_b12 = 2.;
 /*         ellipsoid can be reduced to the problem of finding the */
 /*         distance between the same line and an ellipse; this problem in */
 /*         turn can be reduced to the problem of finding the distance */
-/*         between an ellipse and a point.  The routine NPEDLN carries */
+/*         between an ellipse and a point. The routine NPEDLN carries */
 /*         out this process and uses NPELPT to find the ellipse-to-point */
 /*         distance. */
-
 
 /* $ Restrictions */
 
@@ -199,9 +201,19 @@ static doublereal c_b12 = 2.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 24-AUG-2021 (JDR) (NJB) */
+
+/*        Added IMPLICT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added entries #3 and #4 to $Exceptions section. */
 
 /* -    SPICELIB Version 1.2.0, 02-SEP-2005 (NJB) */
 
@@ -219,14 +231,6 @@ static doublereal c_b12 = 2.;
 /* $ Index_Entries */
 
 /*     nearest point on ellipse to point */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.2.0, 02-SEP-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VADD, VSCL, MTXV and MXV calls. */
 
 /* -& */
 
@@ -346,7 +350,7 @@ static doublereal c_b12 = 2.;
 /*     z-semi-axis. */
 
 
-/*     Find the nearest point to PRJPNT on the ellipoid, PNEAR. */
+/*     Find the nearest point to PRJPNT on the ellipsoid, PNEAR. */
 
     d__1 = minlen / majlen;
     nearpt_(prjpnt, &c_b11, &d__1, &c_b12, pnear, dist);

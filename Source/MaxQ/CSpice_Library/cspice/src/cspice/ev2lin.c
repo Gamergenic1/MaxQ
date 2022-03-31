@@ -12,7 +12,7 @@ static doublereal c_b92 = 3.5;
 static doublereal c_b153 = 1.5;
 static integer c__20 = 20;
 
-/* $Procedure      EV2LIN ( Evaluate "two-line" element data) */
+/* $Procedure EV2LIN ( Evaluate "two-line" element data, near-earth ) */
 /* Subroutine */ int ev2lin_(doublereal *et, doublereal *geophs, doublereal *
 	elems, doublereal *state)
 {
@@ -77,9 +77,14 @@ static integer c__20 = 20;
 
 /* $ Abstract */
 
-/*     This routine evaluates NORAD two-line element data for */
-/*     near-earth orbiting spacecraft (that is spacecraft with */
-/*     orbital periods less than 225 minutes). */
+/*     Deprecated: This routine has been superseded by the SPICELIB */
+/*     routine EVSGP4. *ALL* TLE evaluations should use that routine. */
+/*     NAIF supports EV2LIN only for backward compatibility. */
+
+/*     Evaluate NORAD two-line element data for near-earth, earth */
+/*     orbiting spacecraft (that is spacecraft with orbital periods */
+/*     less-than 225 minutes). This evaluator uses algorithms as */
+/*     described in Hoots 1980 [1]. */
 
 /* $ Disclaimer */
 
@@ -108,152 +113,318 @@ static integer c__20 = 20;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       EPHEMERIS */
+/*     EPHEMERIS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*     ET          I   Epoch in seconds past ephemeris epoch J2000. */
-/*     GEOPHS      I   Geophysical constants */
-/*     ELEMS       I   Two-line element data */
-/*     STATE       O   Evaluated state */
-/*     NMODL       P   Parameter controlling number of buffered elements. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ET         I   Epoch in seconds past ephemeris epoch J2000. */
+/*     GEOPHS     I   Geophysical constants */
+/*     ELEMS      I   Two-line element data */
+/*     STATE      O   Evaluated state */
+/*     NMODL      P   Parameter controlling number of buffered elements. */
 
 /* $ Detailed_Input */
 
-/*     ET          is the poch in seconds past ephemeris epoch J2000 */
-/*                 at which a state should be produced from the */
-/*                 input elements. */
+/*     ET       is the epoch in TDB seconds past ephemeris epoch J2000 */
+/*              at which a state should be produced from the */
+/*              input elements. */
 
-/*     GEOPHS      is a collection of 8 geophysical constants needed */
-/*                 for computing a state.  The order of these */
-/*                 constants must be: */
+/*     GEOPHS   is a collection of 8 geophysical constants needed */
+/*              for computing a state. The order of these */
+/*              constants must be: */
 
-/*                 GEOPHS(1) = J2 gravitational harmonic for earth */
-/*                 GEOPHS(2) = J3 gravitational harmonic for earth */
-/*                 GEOPHS(3) = J4 gravitational harmonic for earth */
+/*                 GEOPHS(1) = J2 gravitational harmonic for Earth. */
+/*                 GEOPHS(2) = J3 gravitational harmonic for Earth. */
+/*                 GEOPHS(3) = J4 gravitational harmonic for Earth. */
 
-/*                 These first three constants are dimensionless. */
+/*              These first three constants are dimensionless. */
 
-/*                 GEOPHS(4) = KE: Square root of the GM for earth where */
-/*                             GM is expressed in earth radii cubed per */
+/*                 GEOPHS(4) = KE: Square root of the GM for Earth where */
+/*                             GM is expressed in Earth radii cubed per */
 /*                             minutes squared. */
 
-/*                 GEOPHS(5) = QO: Low altitude bound for atmospheric */
+/*                 GEOPHS(5) = QO: High altitude bound for atmospheric */
 /*                             model in km. */
 
-/*                 GEOPHS(6) = SO: High altitude bound for atmospheric */
+/*                 GEOPHS(6) = SO: Low altitude bound for atmospheric */
 /*                             model in km. */
 
 /*                 GEOPHS(7) = RE: Equatorial radius of the earth in km. */
 
-
 /*                 GEOPHS(8) = AE: Distance units/earth radius */
 /*                             (normally 1) */
 
-/*                 Below are currently recommended values for these */
-/*                 items: */
+/*              Below are currently recommended values for these */
+/*              items: */
 
-/*                   J2 =    1.082616D-3 */
-/*                   J3 =   -2.53881D-6 */
-/*                   J4 =   -1.65597D-6 */
+/*                 J2 =    1.082616D-3 */
+/*                 J3 =   -2.53881D-6 */
+/*                 J4 =   -1.65597D-6 */
 
-/*                 The next item is the square root of GM for the */
-/*                 earth given in units of earth-radii**1.5/Minute */
+/*              The next item is the square root of GM for the Earth */
+/*              given in units of earth-radii**1.5/Minute */
 
-/*                   KE =    7.43669161D-2 */
+/*                 KE =    7.43669161D-2 */
 
-/*                 The next two items give the top and */
-/*                 bottom of the atmospheric drag model */
-/*                 used by the type 10 ephemeris type. */
-/*                 Don't adjust these unless you understand */
-/*                 the full implications of such changes. */
+/*              The next two items define the top and bottom of the */
+/*              atmospheric drag model used by the type 10 ephemeris */
+/*              type. Don't adjust these unless you understand the full */
+/*              implications of such changes. */
 
-/*                   QO =  120.0D0 */
-/*                   SO =   78.0D0 */
+/*                 QO =  120.0D0 */
+/*                 SO =   78.0D0 */
 
-/*                 The following is the equatorial radius */
-/*                 of the earth as used by NORAD in km. */
+/*              The ER value is the equatorial radius in km of the Earth */
+/*              as used by NORAD. */
 
-/*                   ER = 6378.135D0 */
+/*                 ER = 6378.135D0 */
 
-/*                 The value of AE is the number of */
-/*                 distance units per earth radii used by */
-/*                 the NORAD state propagation software. */
-/*                 The value should be 1 unless you've got */
-/*                 a very good understanding of the NORAD */
-/*                 routine SGP4 and the affect of changing */
-/*                 this value.. */
+/*              The value of AE is the number of distance units per */
+/*              Earth radii used by the NORAD state propagation */
+/*              software. The value should be 1 unless you've got a very */
+/*              good understanding of the NORAD routine SGP4 and the */
+/*              affect of changing this value. */
 
-/*                   AE =    1.0D0 */
+/*                 AE =    1.0D0 */
 
-/*     ELEMS       is an array containg two-line element data */
-/*                 as prescribed below. The elements XNDD6O and BSTAR */
-/*                 must already be scaled by the proper exponent stored */
-/*                 in the two line elements set.  Moreover, the */
-/*                 various items must be converted to the units shown */
-/*                 here. */
+/*     ELEMS    is an array containing two-line element data */
+/*              as prescribed below. The elements NDD6O and BSTAR */
+/*              must already be scaled by the proper exponent stored */
+/*              in the two line elements set. Moreover, the */
+/*              various items must be converted to the units shown */
+/*              here. */
 
-/*                    ELEMS (  1 ) = XNDT2O in radians/minute**2 */
-/*                    ELEMS (  2 ) = XNDD6O in radians/minute**3 */
-/*                    ELEMS (  3 ) = BSTAR */
-/*                    ELEMS (  4 ) = XINCL  in radians */
-/*                    ELEMS (  5 ) = XNODEO in radians */
-/*                    ELEMS (  6 ) = EO */
-/*                    ELEMS (  7 ) = OMEGAO in radians */
-/*                    ELEMS (  8 ) = XMO    in radians */
-/*                    ELEMS (  9 ) = XNO    in radians/minute */
-/*                    ELEMS ( 10 ) = EPOCH of the elements in seconds */
-/*                                   past ephemeris epoch J2000. */
+/*                 ELEMS (  1 ) = NDT20 in radians/minute**2 */
+/*                 ELEMS (  2 ) = NDD60 in radians/minute**3 */
+/*                 ELEMS (  3 ) = BSTAR */
+/*                 ELEMS (  4 ) = INCL  in radians */
+/*                 ELEMS (  5 ) = NODE0 in radians */
+/*                 ELEMS (  6 ) = ECC */
+/*                 ELEMS (  7 ) = OMEGA in radians */
+/*                 ELEMS (  8 ) = M0    in radians */
+/*                 ELEMS (  9 ) = N0    in radians/minute */
+/*                 ELEMS ( 10 ) = EPOCH of the elements in seconds */
+/*                                past ephemeris epoch J2000. */
 
 /* $ Detailed_Output */
 
-/*     STATE       is the state produced by evaluating the input elements */
-/*                 at the input epoch ET. Units are km and km/sec. */
+/*     STATE    is the state produced by evaluating the input elements */
+/*              at the input epoch ET. Units are km and km/sec relative */
+/*              to the TEME reference frame. */
 
 /* $ Parameters */
 
-/*      NMODL      is a parameter that controls how many element sets */
-/*                 can be buffered internally.  Since there are a lot */
-/*                 of computations that are independent of time these */
-/*                 are buffered and only computed if an unbuffered */
-/*                 model is supplied.  This value should always */
-/*                 be at least 2.  Increasing it a great deal is not */
-/*                 advised since the time needed to search the */
-/*                 buffered elements for a match increases linearly */
-/*                 with the NMODL.  Imperically, 6 seems to be a good */
-/*                 break even value for NMODL. */
+/*     NMODL    is a parameter that controls how many element sets */
+/*              can be buffered internally. Since there are a lot */
+/*              of computations that are independent of time these */
+/*              are buffered and only computed if an unbuffered */
+/*              model is supplied. This value should always */
+/*              be at least 2. Increasing it a great deal is not */
+/*              advised since the time needed to search the */
+/*              buffered elements for a match increases linearly */
+/*              with the NMODL. Empirically, 6 seems to be a good */
+/*              break even value for NMODL. */
 
 /* $ Exceptions */
 
-/*     1) No checks are made on the reasonableness of the inputs. */
+/*     1)  No checks are made on the reasonableness of the inputs. */
 
-/*     2) SPICE(ITERATIONEXCEEDED) signals if the EST calculation loop */
-/*        exceds the MXLOOP value. This error should signal only for */
-/*        bad (nonphysical) TLEs. */
+/*     2)  If the number of iterations for the calculation exceeds the */
+/*         limit for this value, the error SPICE(ITERATIONEXCEEDED) is */
+/*         signaled. This error should signal only for bad (nonphysical) */
+/*         TLEs. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
 /*     This routine evaluates NORAD two-line element sets for */
-/*     near-earth orbitting satellites.  Near earth is defined to */
-/*     be a satellite with an orbital period of less than 225 */
-/*     minutes.  This code is an adaptation of the NORAD routine */
-/*     SGP4 to elliminate common blocks, allow buffering of models */
-/*     and intermediate parameters and double precision calculations. */
+/*     near-earth orbiting satellites using the algorithms described in */
+/*     Hoots 1980 [1]. This code is an adaptation of */
+/*     the NORAD routine SGP4 to eliminate common blocks, allow */
+/*     buffering of models and intermediate parameters and double */
+/*     precision calculations. */
+
+/*     Near earth is as an orbital period of less than 225 */
+/*     minutes. */
 
 /* $ Examples */
 
-/*     None. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Suppose you have a set of two-line elements for the LUME 1 */
+/*        cubesat. This example shows how you can use this routine */
+/*        together with the routine GETELM to propagate a state to an */
+/*        epoch of interest. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: ev2lin_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name           Contents */
+/*              ---------           ------------------------------------ */
+/*              naif0012.tls        Leapseconds */
+/*              geophysical.ker     geophysical constants for evaluation */
+/*                                  of two-line element sets. */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'naif0012.tls', */
+/*                                  'geophysical.ker'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM EV2LIN_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         TIMSTR */
+/*              PARAMETER           ( TIMSTR = '2020-05-26 02:25:00' ) */
+
+/*              INTEGER               PNAMLN */
+/*              PARAMETER           ( PNAMLN = 2  ) */
+
+/*              INTEGER               TLELLN */
+/*              PARAMETER           ( TLELLN = 69 ) */
+
+/*        C */
+/*        C     The LUME-1 cubesat is an Earth orbiting object; set */
+/*        C     the center ID to the Earth ID. */
+/*        C */
+/*              INTEGER               CENTER */
+/*              PARAMETER           ( CENTER  = 399     ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(PNAMLN)    NOADPN ( 8  ) */
+/*              CHARACTER*(TLELLN)    TLE    ( 2  ) */
+
+/*              DOUBLE PRECISION      ELEMS  ( 10 ) */
+/*              DOUBLE PRECISION      EPOCH */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      GEOPHS ( 8  ) */
+/*              DOUBLE PRECISION      STATE  ( 6  ) */
+
+/*              INTEGER               I */
+/*              INTEGER               N */
+
+/*        C */
+/*        C     These are the variables that will hold the constants */
+/*        C     required by EV2LIN. These constants are available from */
+/*        C     the loaded PCK file, which provides the actual values */
+/*        C     and units as used by NORAD propagation model. */
+/*        C */
+/*        C        Constant   Meaning */
+/*        C        --------   ------------------------------------------ */
+/*        C        J2         J2 gravitational harmonic for Earth. */
+/*        C        J3         J3 gravitational harmonic for Earth. */
+/*        C        J4         J4 gravitational harmonic for Earth. */
+/*        C        KE         Square root of the GM for Earth. */
+/*        C        QO         High altitude bound for atmospheric model. */
+/*        C        SO         Low altitude bound for atmospheric model. */
+/*        C        ER         Equatorial radius of the Earth. */
+/*        C        AE         Distance units/earth radius. */
+/*        C */
+/*              DATA          NOADPN  /  'J2', 'J3', 'J4', 'KE', */
+/*             .                         'QO', 'SO', 'ER', 'AE'  / */
+
+/*        C */
+/*        C     Define the Two-Line Element set for LUME-1. */
+/*        C */
+/*              TLE(1)  = '1 43908U 18111AJ  20146.60805006  .00000806' */
+/*             .      //                   '  00000-0  34965-4 0  9999' */
+/*              TLE(2)  = '2 43908  97.2676  47.2136 0020001 220.6050 ' */
+/*             .      //                   '139.3698 15.24999521 78544' */
+
+/*        C */
+/*        C     Load the PCK file that provides the geophysical */
+/*        C     constants required for the evaluation of the two-line */
+/*        C     elements sets. Load also an LSK, as it is required by */
+/*        C     GETELM to perform time conversions. Use a meta-kernel for */
+/*        C     convenience. */
+/*        C */
+/*              CALL FURNSH ( 'ev2lin_ex1.tm' ) */
+
+/*        C */
+/*        C     Retrieve the data from the kernel, and place it on */
+/*        C     the GEOPHS array. */
+/*        C */
+/*              DO I = 1, 8 */
+
+/*                 CALL BODVCD ( CENTER, NOADPN(I), 1, N, GEOPHS(I) ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Convert the Two Line Elements lines to the element sets. */
+/*        C     Set the lower bound for the years to be the beginning */
+/*        C     of the space age. */
+/*        C */
+/*              CALL GETELM ( 1957, TLE, EPOCH, ELEMS ) */
+
+/*        C */
+/*        C     Now propagate the state using EV2LIN to the epoch of */
+/*        C     interest. */
+/*        C */
+/*              CALL STR2ET ( TIMSTR, ET ) */
+/*              CALL EV2LIN ( ET, GEOPHS, ELEMS, STATE ) */
+
+/*        C */
+/*        C     Display the results. */
+/*        C */
+/*              WRITE(*,'(2A)')       'Epoch   : ', TIMSTR */
+/*              WRITE(*,'(A,3F16.8)') 'Position:', (STATE(I), I=1,3) */
+/*              WRITE(*,'(A,3F16.8)') 'Velocity:', (STATE(I), I=4,6) */
+
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Epoch   : 2020-05-26 02:25:00 */
+/*        Position:  -4644.60403398  -5038.95025540   -337.27141117 */
+/*        Velocity:     -0.45719025      0.92884817     -7.55917355 */
+
 
 /* $ Restrictions */
 
@@ -261,13 +432,44 @@ static integer c__20 = 20;
 
 /* $ Literature_References */
 
-/*      None. */
+/*     [1]  F. Hoots and R. Roehrich, "Spacetrack Report #3: Models for */
+/*          Propagation of the NORAD Element Sets," U.S. Air Force */
+/*          Aerospace Defense Command, Colorado Springs, CO, 1980. */
+
+/*     [2]  F. Hoots, "Spacetrack Report #6: Models for Propagation of */
+/*          Space Command Element Sets,"  U.S. Air Force Aerospace */
+/*          Defense Command, Colorado Springs, CO, 1986. */
+
+/*     [3]  F. Hoots, P. Schumacher and R. Glover, "History of Analytical */
+/*          Orbit Modeling in the U. S. Space Surveillance System," */
+/*          Journal of Guidance, Control, and Dynamics. 27(2):174-185, */
+/*          2004. */
+
+/*     [4]  D. Vallado, P. Crawford, R. Hujsak and T. Kelso, "Revisiting */
+/*          Spacetrack Report #3," paper AIAA 2006-6753 presented at the */
+/*          AIAA/AAS Astrodynamics Specialist Conference, Keystone, CO., */
+/*          August 21-24, 2006. */
 
 /* $ Author_and_Institution */
 
-/*      W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 01-NOV-2021 (JDR) (EDW) */
+
+/*        Declared routine as deprecated. */
+
+/*        Corrected the description of QO and SO constants in the */
+/*        detailed description of the input argument GEOPHS and the input */
+/*        element names in ELEMS. */
+
+/*        Added Spacetrack Report #3 to literature references. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example based on existing fragments. */
 
 /* -    SPICELIB Version 1.1.0, 15-SEP-2014 (EDW) */
 
@@ -305,11 +507,11 @@ static integer c__20 = 20;
 /* -& */
 /* $ Index_Entries */
 
-/*     Evaluate NORAD two-line element data. */
+/*     DEPRECATED Evaluate NORAD two-line element data. */
 
 /* -& */
 
-/*     Spicelib functions */
+/*     SPICELIB functions */
 
 
 /*     Local Parameters */
@@ -322,7 +524,7 @@ static integer c__20 = 20;
 /*     KJ2  --- location of J2 */
 /*     KJ3  --- location of J3 */
 /*     KJ4  --- location if J4 */
-/*     KKE  --- location of KE = sqrt(GM) in eart-radii**1.5/MIN */
+/*     KKE  --- location of KE = sqrt(GM) in earth-radii**1.5/MIN */
 /*     KQO  --- upper bound of atmospheric model in KM */
 /*     KSO  --- lower bound of atmospheric model in KM */
 /*     KER  --- earth equatorial radius in KM. */
@@ -347,7 +549,7 @@ static integer c__20 = 20;
 /*     The parameters NEXT and PREV are used in our linked list */
 /*     LIST(NEXT,I) points to the list item the occurs after */
 /*     list item I.  LIST ( PREV, I ) points to the list item */
-/*     that preceeds list item I. */
+/*     that precedes list item I. */
 /*     NEXT */
 /*     PREV */
 
@@ -389,12 +591,12 @@ static integer c__20 = 20;
 	pix2 = twopi_();
 	for (i__ = 1; i__ <= 8; ++i__) {
 	    lstgeo[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("lstgeo",
-		     i__1, "ev2lin_", (ftnlen)605)] = 0.;
+		     i__1, "ev2lin_", (ftnlen)807)] = 0.;
 	}
 	for (i__ = 1; i__ <= 6; ++i__) {
 	    for (j = 1; j <= 10; ++j) {
 		elemnt[(i__1 = j + i__ * 10 - 11) < 60 && 0 <= i__1 ? i__1 : 
-			s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)610)] = 0.;
+			s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)812)] = 0.;
 	    }
 	}
 
@@ -406,19 +608,19 @@ static integer c__20 = 20;
 /*        LIST(PREV,I)   points to the latest ephemeris model used */
 /*                       that was used more recently than I. */
 
-/*        HEAD           points to the most recently used ephemris */
+/*        HEAD           points to the most recently used ephemeris */
 /*                       model. */
 
 
 	head = 1;
 	list[(i__1 = (head << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("list"
-		, i__1, "ev2lin_", (ftnlen)629)] = 0;
+		, i__1, "ev2lin_", (ftnlen)831)] = 0;
 	list[0] = 2;
 	for (i__ = 2; i__ <= 5; ++i__) {
 	    list[(i__1 = (i__ << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)634)] = i__ + 1;
+		    "list", i__1, "ev2lin_", (ftnlen)836)] = i__ + 1;
 	    list[(i__1 = (i__ << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)635)] = i__ - 1;
+		    "list", i__1, "ev2lin_", (ftnlen)837)] = i__ - 1;
 	}
 	list[10] = 0;
 	list[11] = 5;
@@ -434,7 +636,7 @@ static integer c__20 = 20;
 	    geophs[5]) {
 	for (i__ = 1; i__ <= 8; ++i__) {
 	    lstgeo[(i__1 = i__ - 1) < 8 && 0 <= i__1 ? i__1 : s_rnge("lstgeo",
-		     i__1, "ev2lin_", (ftnlen)657)] = geophs[i__ - 1];
+		     i__1, "ev2lin_", (ftnlen)859)] = geophs[i__ - 1];
 	}
 	j2 = geophs[0];
 	j3 = geophs[1];
@@ -499,14 +701,14 @@ static integer c__20 = 20;
 	while(recog && i__ > 0) {
 	    recog = recog && elemnt[(i__1 = i__ + n * 10 - 11) < 60 && 0 <= 
 		    i__1 ? i__1 : s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)
-		    733)] == elems[i__ - 1];
+		    935)] == elems[i__ - 1];
 	    --i__;
 	}
 	unrec = ! recog;
 	if (unrec) {
 	    last = n;
 	    n = list[(i__1 = (n << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)741)];
+		    "list", i__1, "ev2lin_", (ftnlen)943)];
 	}
     }
     if (n == 0) {
@@ -525,28 +727,28 @@ static integer c__20 = 20;
 /*        link them together. */
 
 	before = list[(i__1 = (n << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		"list", i__1, "ev2lin_", (ftnlen)762)];
+		"list", i__1, "ev2lin_", (ftnlen)964)];
 	after = list[(i__1 = (n << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		"list", i__1, "ev2lin_", (ftnlen)763)];
+		"list", i__1, "ev2lin_", (ftnlen)965)];
 	list[(i__1 = (before << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		"list", i__1, "ev2lin_", (ftnlen)765)] = after;
+		"list", i__1, "ev2lin_", (ftnlen)967)] = after;
 	if (after != 0) {
 	    list[(i__1 = (after << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge(
-		    "list", i__1, "ev2lin_", (ftnlen)768)] = before;
+		    "list", i__1, "ev2lin_", (ftnlen)970)] = before;
 	}
 
 /*        Now the guy that will come after N is the current */
 /*        head of the list.  N will have no predecessor. */
 
 	list[(i__1 = (n << 1) - 2) < 12 && 0 <= i__1 ? i__1 : s_rnge("list", 
-		i__1, "ev2lin_", (ftnlen)774)] = head;
+		i__1, "ev2lin_", (ftnlen)976)] = head;
 	list[(i__1 = (n << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("list", 
-		i__1, "ev2lin_", (ftnlen)775)] = 0;
+		i__1, "ev2lin_", (ftnlen)977)] = 0;
 
 /*        The predecessor the current head of the list becomes N */
 
 	list[(i__1 = (head << 1) - 1) < 12 && 0 <= i__1 ? i__1 : s_rnge("list"
-		, i__1, "ev2lin_", (ftnlen)779)] = n;
+		, i__1, "ev2lin_", (ftnlen)981)] = n;
 
 /*        and finally, N becomes the head of the list. */
 
@@ -559,63 +761,63 @@ static integer c__20 = 20;
 /*        routine. */
 
 	aodp = prelim[(i__1 = n * 29 - 29) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)794)];
+		"prelim", i__1, "ev2lin_", (ftnlen)996)];
 	aycof = prelim[(i__1 = n * 29 - 28) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)795)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)997)];
 	c1 = prelim[(i__1 = n * 29 - 27) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)796)];
+		"prelim", i__1, "ev2lin_", (ftnlen)998)];
 	c4 = prelim[(i__1 = n * 29 - 26) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)797)];
+		"prelim", i__1, "ev2lin_", (ftnlen)999)];
 	c5 = prelim[(i__1 = n * 29 - 25) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)798)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1000)];
 	cosio = prelim[(i__1 = n * 29 - 24) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)799)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1001)];
 	d2 = prelim[(i__1 = n * 29 - 23) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)800)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1002)];
 	d3 = prelim[(i__1 = n * 29 - 22) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)801)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1003)];
 	d4 = prelim[(i__1 = n * 29 - 21) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)802)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1004)];
 	delmo = prelim[(i__1 = n * 29 - 20) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)803)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1005)];
 	eta = prelim[(i__1 = n * 29 - 19) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)804)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1006)];
 	omgcof = prelim[(i__1 = n * 29 - 18) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)805)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1007)];
 	omgdot = prelim[(i__1 = n * 29 - 17) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)806)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1008)];
 	perige = prelim[(i__1 = n * 29 - 16) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)807)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1009)];
 	sinio = prelim[(i__1 = n * 29 - 15) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)808)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1010)];
 	sinmo = prelim[(i__1 = n * 29 - 14) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)809)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1011)];
 	t2cof = prelim[(i__1 = n * 29 - 13) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)810)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1012)];
 	t3cof = prelim[(i__1 = n * 29 - 12) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)811)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1013)];
 	t4cof = prelim[(i__1 = n * 29 - 11) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)812)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1014)];
 	t5cof = prelim[(i__1 = n * 29 - 10) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)813)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1015)];
 	x1mth2 = prelim[(i__1 = n * 29 - 9) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)814)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1016)];
 	x3thm1 = prelim[(i__1 = n * 29 - 8) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)815)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1017)];
 	x7thm1 = prelim[(i__1 = n * 29 - 7) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)816)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1018)];
 	xlcof = prelim[(i__1 = n * 29 - 6) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)817)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1019)];
 	xmcof = prelim[(i__1 = n * 29 - 5) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)818)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1020)];
 	xmdot = prelim[(i__1 = n * 29 - 4) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)819)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1021)];
 	xnodcf = prelim[(i__1 = n * 29 - 3) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)820)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1022)];
 	xnodot = prelim[(i__1 = n * 29 - 2) < 174 && 0 <= i__1 ? i__1 : 
-		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)821)];
+		s_rnge("prelim", i__1, "ev2lin_", (ftnlen)1023)];
 	xnodp = prelim[(i__1 = n * 29 - 1) < 174 && 0 <= i__1 ? i__1 : s_rnge(
-		"prelim", i__1, "ev2lin_", (ftnlen)822)];
+		"prelim", i__1, "ev2lin_", (ftnlen)1024)];
     } else {
 
 /*        Compute all of the intermediate items needed. */
@@ -734,70 +936,70 @@ static integer c__20 = 20;
 /*        results from the above computations. */
 
 	prelim[(i__1 = n * 29 - 29) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)992)] = aodp;
+		"im", i__1, "ev2lin_", (ftnlen)1194)] = aodp;
 	prelim[(i__1 = n * 29 - 28) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)993)] = aycof;
+		"im", i__1, "ev2lin_", (ftnlen)1195)] = aycof;
 	prelim[(i__1 = n * 29 - 27) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)994)] = c1;
+		"im", i__1, "ev2lin_", (ftnlen)1196)] = c1;
 	prelim[(i__1 = n * 29 - 26) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)995)] = c4;
+		"im", i__1, "ev2lin_", (ftnlen)1197)] = c4;
 	prelim[(i__1 = n * 29 - 25) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)996)] = c5;
+		"im", i__1, "ev2lin_", (ftnlen)1198)] = c5;
 	prelim[(i__1 = n * 29 - 24) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)997)] = cosio;
+		"im", i__1, "ev2lin_", (ftnlen)1199)] = cosio;
 	prelim[(i__1 = n * 29 - 23) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)998)] = d2;
+		"im", i__1, "ev2lin_", (ftnlen)1200)] = d2;
 	prelim[(i__1 = n * 29 - 22) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)999)] = d3;
+		"im", i__1, "ev2lin_", (ftnlen)1201)] = d3;
 	prelim[(i__1 = n * 29 - 21) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1000)] = d4;
+		"im", i__1, "ev2lin_", (ftnlen)1202)] = d4;
 	prelim[(i__1 = n * 29 - 20) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1001)] = delmo;
+		"im", i__1, "ev2lin_", (ftnlen)1203)] = delmo;
 	prelim[(i__1 = n * 29 - 19) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1002)] = eta;
+		"im", i__1, "ev2lin_", (ftnlen)1204)] = eta;
 	prelim[(i__1 = n * 29 - 18) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1003)] = omgcof;
+		"im", i__1, "ev2lin_", (ftnlen)1205)] = omgcof;
 	prelim[(i__1 = n * 29 - 17) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1004)] = omgdot;
+		"im", i__1, "ev2lin_", (ftnlen)1206)] = omgdot;
 	prelim[(i__1 = n * 29 - 16) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1005)] = perige;
+		"im", i__1, "ev2lin_", (ftnlen)1207)] = perige;
 	prelim[(i__1 = n * 29 - 15) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1006)] = sinio;
+		"im", i__1, "ev2lin_", (ftnlen)1208)] = sinio;
 	prelim[(i__1 = n * 29 - 14) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1007)] = sinmo;
+		"im", i__1, "ev2lin_", (ftnlen)1209)] = sinmo;
 	prelim[(i__1 = n * 29 - 13) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1008)] = t2cof;
+		"im", i__1, "ev2lin_", (ftnlen)1210)] = t2cof;
 	prelim[(i__1 = n * 29 - 12) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1009)] = t3cof;
+		"im", i__1, "ev2lin_", (ftnlen)1211)] = t3cof;
 	prelim[(i__1 = n * 29 - 11) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1010)] = t4cof;
+		"im", i__1, "ev2lin_", (ftnlen)1212)] = t4cof;
 	prelim[(i__1 = n * 29 - 10) < 174 && 0 <= i__1 ? i__1 : s_rnge("prel"
-		"im", i__1, "ev2lin_", (ftnlen)1011)] = t5cof;
+		"im", i__1, "ev2lin_", (ftnlen)1213)] = t5cof;
 	prelim[(i__1 = n * 29 - 9) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1012)] = x1mth2;
+		, i__1, "ev2lin_", (ftnlen)1214)] = x1mth2;
 	prelim[(i__1 = n * 29 - 8) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1013)] = x3thm1;
+		, i__1, "ev2lin_", (ftnlen)1215)] = x3thm1;
 	prelim[(i__1 = n * 29 - 7) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1014)] = x7thm1;
+		, i__1, "ev2lin_", (ftnlen)1216)] = x7thm1;
 	prelim[(i__1 = n * 29 - 6) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1015)] = xlcof;
+		, i__1, "ev2lin_", (ftnlen)1217)] = xlcof;
 	prelim[(i__1 = n * 29 - 5) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1016)] = xmcof;
+		, i__1, "ev2lin_", (ftnlen)1218)] = xmcof;
 	prelim[(i__1 = n * 29 - 4) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1017)] = xmdot;
+		, i__1, "ev2lin_", (ftnlen)1219)] = xmdot;
 	prelim[(i__1 = n * 29 - 3) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1018)] = xnodcf;
+		, i__1, "ev2lin_", (ftnlen)1220)] = xnodcf;
 	prelim[(i__1 = n * 29 - 2) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1019)] = xnodot;
+		, i__1, "ev2lin_", (ftnlen)1221)] = xnodot;
 	prelim[(i__1 = n * 29 - 1) < 174 && 0 <= i__1 ? i__1 : s_rnge("prelim"
-		, i__1, "ev2lin_", (ftnlen)1020)] = xnodp;
+		, i__1, "ev2lin_", (ftnlen)1222)] = xnodp;
 
 /*        Finally, move these elements in the storage area */
 /*        for checking the next time through. */
 
 	for (i__ = 1; i__ <= 10; ++i__) {
 	    elemnt[(i__1 = i__ + n * 10 - 11) < 60 && 0 <= i__1 ? i__1 : 
-		    s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)1026)] = elems[
+		    s_rnge("elemnt", i__1, "ev2lin_", (ftnlen)1228)] = elems[
 		    i__ - 1];
 	}
     }
@@ -859,7 +1061,7 @@ static integer c__20 = 20;
     xll = temp * xlcof * axn;
     xlt = xl + xll;
 
-/*     Solve keplers equation. */
+/*     Solve Kepler's equation. */
 
 /*     We are going to solve for the roots of this equation by */
 /*     using a mixture of Newton's method and the prescription for */
@@ -1065,7 +1267,7 @@ static integer c__20 = 20;
 
 /*     Thus as long as our original estimate (determined using */
 /*     the contraction method) gets within a reasonable tolerance */
-/*     of x, we can use Newton's method to acheive faster */
+/*     of x, we can use Newton's method to achieve faster */
 /*     convergence. */
 
     m = sqrt(axn * axn + ayn * ayn);

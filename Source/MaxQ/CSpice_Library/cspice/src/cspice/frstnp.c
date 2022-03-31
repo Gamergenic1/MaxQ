@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  FRSTNP ( First non-printable character ) */
+/* $Procedure FRSTNP ( First non-printable character ) */
 integer frstnp_(char *string, ftnlen string_len)
 {
     /* System generated locals */
@@ -21,7 +21,7 @@ integer frstnp_(char *string, ftnlen string_len)
 
 /*     Return the index of the first non-printable character in a */
 /*     character string. ASCII characters 32-126 are considered */
-/*     printable by this routine.  (Blanks are considered printable.) */
+/*     printable by this routine. (Blanks are considered printable.) */
 
 /* $ Disclaimer */
 
@@ -64,66 +64,24 @@ integer frstnp_(char *string, ftnlen string_len)
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   Input character string. */
-/*     FRSTNP     O   Index of first non-printable character in STRING. */
+
+/*     The function returns the index of first non-printable character in */
+/*     STRING. */
 
 /* $ Detailed_Input */
 
-/*     STRING         is the input character string. */
+/*     STRING   is the input character string. */
 
 /* $ Detailed_Output */
 
-/*     FRSTNP         is the index of the first non-printable character */
-/*                    in the input string. Characters having integer */
-/*                    codes outside the range 32-126 are considered to be */
-/*                    non-printable characters.  Blanks are considered to */
-/*                    be printable characters.  If the input string */
-/*                    contains no non-printable characters, FRSTNP is */
-/*                    zero. */
+/*     The function returns the index of the first non-printable */
+/*     character in the input string. Characters having integer codes */
+/*     outside the range 32-126 are considered to be non-printable */
+/*     characters. Blanks are considered to be printable characters. If */
+/*     the input string contains no non-printable characters, FRSTNP is */
+/*     zero. */
 
 /* $ Parameters */
-
-/*     None. */
-
-/* $ Particulars */
-
-/*     This routine may be used to assist in validating strings that */
-/*     are intended to be free of non-printable characters. */
-
-/*     This routine and LASTNP treat blanks as printable characters. */
-/*     This choice prevents embedded blanks from causing false positive */
-/*     results in tests of strings for invalid characters.  Note that the */
-/*     routines FRSTPC and LASTPC treat blanks as non-printable. */
-
-/* $ Examples */
-
-/*     The program */
-
-/*        INTEGER         FRSTNP */
-/*        INTEGER         LASTNP */
-
-/*        CHARACTER*10    S */
-
-/*        S( 1: 1) = 'A' */
-/*        S( 2: 2) = CHAR ( 2 ) */
-/*        S( 3: 3) = CHAR ( 3 ) */
-/*        S( 4: 4) = 'A' */
-/*        S( 5: 5) = 'B' */
-/*        S( 6: 6) = 'C' */
-/*        S( 7: 7) = CHAR ( 7 ) */
-/*        S( 8: 8) = CHAR ( 8 ) */
-/*        S( 9: 9) = CHAR ( 9 ) */
-/*        S(10:10) = ' ' */
-
-/*        WRITE (*,*) 'Non-printable characters found in range ' */
-/*       .             FRSTNP(S), ' to ', LASTNP(S) */
-
-/*        END */
-
-/*     produces the following output: */
-
-/*        Non-printable characters found in range 2 to 9. */
-
-/* $ Restrictions */
 
 /*     None. */
 
@@ -135,16 +93,93 @@ integer frstnp_(char *string, ftnlen string_len)
 
 /*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*     N.J. Bachman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     This routine may be used to assist in validating strings that */
+/*     are intended to be free of non-printable characters. */
+
+/*     This routine treats blanks as printable characters. This choice */
+/*     prevents embedded blanks from causing false positive results in */
+/*     tests of strings for invalid characters. Note that the routine */
+/*     FRSTPC and LASTPC treat blanks as non-printable. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Find the first non-printable character in a given string, */
+/*        considering blanks as printable characters. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM FRSTNP_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               FRSTNP */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*10    S */
+
+/*        C */
+/*        C     Add some random characters to the string, some of them */
+/*        C     non-printable. */
+/*        C */
+/*              S( 1: 1) = 'A' */
+/*              S( 2: 2) = ' ' */
+/*              S( 3: 3) = CHAR ( 3 ) */
+/*              S( 4: 4) = 'A' */
+/*              S( 5: 5) = 'B' */
+/*              S( 6: 6) = 'C' */
+/*              S( 7: 7) = CHAR ( 7 ) */
+/*              S( 8: 8) = CHAR ( 8 ) */
+/*              S( 9: 9) = CHAR ( 9 ) */
+/*              S(10:10) = ' ' */
+
+/*              WRITE (*,'(A,I2)') 'First non-printable character ' */
+/*             .//                 'found at index', FRSTNP(S) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        First non-printable character found at index 3 */
+
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     I.M. Underwood     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 07-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Created */
+/*        complete code example from existing fragment. */
 
 /* -    SPICELIB Version 1.0.0, 16-JUN-1995 (NJB) (IMU) */
 

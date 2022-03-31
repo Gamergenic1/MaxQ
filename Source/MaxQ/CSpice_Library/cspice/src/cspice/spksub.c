@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      SPKSUB ( S/P Kernel, subset ) */
+/* $Procedure SPKSUB ( S/P Kernel, subset ) */
 /* Subroutine */ int spksub_(integer *handle, doublereal *descr, char *ident, 
 	doublereal *begin, doublereal *end, integer *newh, ftnlen ident_len)
 {
@@ -92,7 +92,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of source segment. */
 /*     DESCR      I   Descriptor of source segment. */
@@ -105,20 +105,19 @@ static integer c__6 = 6;
 
 /*     HANDLE, */
 /*     DESCR, */
-/*     IDENT       are the file handle assigned to a SPK file, the */
-/*                 descriptor for a segment within the file, and the */
-/*                 identifier for that segment. Together they determine */
-/*                 a complete set of ephemeris data, from which a */
-/*                 subset is to be extracted. */
+/*     IDENT    are the file handle assigned to a SPK file, the */
+/*              descriptor for a segment within the file, and the */
+/*              identifier for that segment. Together they determine a */
+/*              complete set of ephemeris data, from which a subset is to */
+/*              be extracted. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset. */
+/*     END      are the initial and final epochs (ephemeris time) of the */
+/*              subset. */
 
-/*     NEWH        is the file handle assigned to the file in which */
-/*                 the new segment is to be written. The file must */
-/*                 be open for write access. NEWH and HANDLE may refer */
-/*                 to the same file. */
+/*     NEWH     is the file handle assigned to the file in which the new */
+/*              segment is to be written. The file must be open for write */
+/*              access. NEWH and HANDLE may refer to the same file. */
 
 /* $ Detailed_Output */
 
@@ -130,18 +129,16 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1) If the condition */
+/*     1)  If the condition */
 
-/*           ALPHA  <  BEGIN  <  END  <  OMEGA */
-/*                  -         -       - */
+/*            ALPHA  <=  BEGIN  <=  END  <=  OMEGA */
 
-/*        is not satisfied (where ALPHA and OMEGA are the initial */
-/*        and final epochs of the segment respectively), the error */
-/*        'SPICE(SPKNOTASUBSET)' is signaled. */
+/*         is not satisfied (where ALPHA and OMEGA are the initial and */
+/*         final epochs of the segment respectively), the error */
+/*         SPICE(SPKNOTASUBSET) is signaled. */
 
-/*     2) If the segment type is not supported by the current */
-/*        version of SPKSUB, the error 'SPICE(SPKTYPENOTSUPP)' */
-/*        is signaled. */
+/*     2)  If the segment type is not supported by the current version of */
+/*         SPKSUB, the error SPICE(SPKTYPENOTSUPP) is signaled. */
 
 /* $ Files */
 
@@ -162,10 +159,10 @@ static integer c__6 = 6;
 /*     original segment, and with the same descriptor, with the */
 /*     following components changed: */
 
-/*     1)  ALPHA and OMEGA (DCD(1) and DCD(2)) are assigned the values */
+/*     1)  ALPHA and OMEGA (DC(1) and DC(2)) are assigned the values */
 /*         specified by BEGIN and END. */
 
-/*     2)  The beginning and ending segment addresses (ICD(5) and ICD(6)) */
+/*     2)  The beginning and ending segment addresses (IC(5) and IC(6)) */
 /*         are changed to reflect the location of the new segment. */
 
 /* $ Examples */
@@ -194,30 +191,38 @@ static integer c__6 = 6;
 /*           CALL DAFFNA ( FOUND ) */
 /*        END DO */
 
-
 /* $ Restrictions */
 
-/*     1) There is no way for SPKSUB to verify that the descriptor and */
-/*        identifier are the original ones for the segment. Changing */
-/*        the descriptor can cause the data in the new segment to be */
-/*        evaluated incorrectly; changing the identifier can destroy */
-/*        the path from the data back to its original source. */
+/*     1)  There is no way for SPKSUB to verify that the descriptor and */
+/*         identifier are the original ones for the segment. Changing */
+/*         the descriptor can cause the data in the new segment to be */
+/*         evaluated incorrectly; changing the identifier can destroy */
+/*         the path from the data back to its original source. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 9.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. Moved SPK required reading from */
+/*        $Literature_References to $Required_Reading section. */
 
 /* -    SPICELIB Version 9.0.0, 23-DEC-2013 (NJB) */
 
@@ -266,44 +271,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     subset of spk file */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 9.0.0, 23-DEC-2013 (NJB) */
-
-/*        The routine was updated to handle types 19, 20 and 21. Some */
-/*        minor changes were made to comments. */
-
-/* -    SPICELIB Version 8.0.0, 12-AUG-2002 (NJB) */
-
-/*        The routine was updated to handle type 18. */
-
-/* -    SPICELIB Version 6.0.0, 30-JUN-1997 (WLT) */
-
-/*        The routine was updated to handle types 10 and 17. */
-
-/* -    SPICELIB Version 5.0.0, 10-MAR-1995 (KRG) */
-
-/*        The routine was updated to handle type 14. */
-
-/* -    SPICELIB Version 4.0.0, 07-NOV-1994 (WLT) */
-
-/*        The routine was updated to handle type 15. */
-
-/* -    SPICELIB Version 3.0.0, 05-AUG-1993 (NJB) */
-
-/*        The routine was updated to handle types 08 and 09. */
-
-/* -    SPICELIB Version 2.0.0, 01-APR-1992 (JML) */
-
-/*        1) The routine was updated to handle type 05. */
-
-/*        2) DESCR was being used as both an input and output */
-/*           variable when it was only supposed to be used for */
-/*           input. A new local variable, NDSCR, was added where DESCR */
-/*           was being altered. */
+/*     subset of SPK file */
 
 /* -& */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            APPROX ( Approximate equality ) */
+/* $Procedure APPROX ( Approximate equality ) */
 logical approx_(doublereal *x, doublereal *y, doublereal *tol)
 {
     /* System generated locals */
@@ -14,8 +14,8 @@ logical approx_(doublereal *x, doublereal *y, doublereal *tol)
 
 /* $ Abstract */
 
-/*     True if two double precision numbers are equal to within some */
-/*     tolerance. */
+/*     Return .TRUE. if two double precision numbers are equal to */
+/*     within some tolerance. */
 
 /* $ Disclaimer */
 
@@ -60,22 +60,21 @@ logical approx_(doublereal *x, doublereal *y, doublereal *tol)
 /*     Y          I   Double precision numbers. */
 /*     TOL        I   Tolerance. */
 
-/*     The function is true whenever |X - Y| < TOL. */
-/*                                           - */
+/*     The function is .TRUE. whenever |X - Y| <= TOL. */
 
 /* $ Detailed_Input */
 
 /*     X, */
-/*     Y           are arbitrary double precision numbers. */
+/*     Y        are arbitrary double precision numbers. */
 
-/*     TOL         is a tolerance. X and Y are considered to be equal */
-/*                 if they differ by no more than this amount. If TOL */
-/*                 is negative, X and Y are never considered equal. */
+/*     TOL      is a tolerance. X and Y are considered to be equal */
+/*              if they differ by no more than this amount. If TOL */
+/*              is negative, X and Y are never considered equal. */
 
 /* $ Detailed_Output */
 
-/*     The function is true whenever |X - Y| < TOL, and is false */
-/*     otherwise.                            - */
+/*     The function is .TRUE. whenever |X - Y| <= TOL, and is .FALSE. */
+/*     otherwise. */
 
 /* $ Parameters */
 
@@ -83,7 +82,7 @@ logical approx_(doublereal *x, doublereal *y, doublereal *tol)
 
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
@@ -118,16 +117,24 @@ logical approx_(doublereal *x, doublereal *y, doublereal *tol)
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990  (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

@@ -3,10 +3,10 @@
 -Procedure dpmax_c ( Largest DP number )
 
 -Abstract
- 
-   Return the value of the largest (positive) number representable 
-   in a double precision variable. 
- 
+
+   Return the value of the largest (positive) number representable
+   in a double precision variable.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,83 +33,82 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   CONSTANTS 
- 
+
+   CONSTANTS
+
 */
 
    #include "SpiceUsr.h"
 
-   SpiceDouble dpmax_c () 
+   SpiceDouble dpmax_c ()
 
 /*
 
 -Brief_I/O
- 
-   The function returns the value of the largest (positive) number 
-   that can be represented in a double precision variable. 
- 
+
+   The function returns the value of the largest (positive) number
+   that can be represented in a double precision variable.
+
 -Detailed_Input
- 
-   None. 
- 
+
+   None.
+
 -Detailed_Output
- 
-   The function returns the value of the largest (positive) number 
-   that can be represented in a double precision variable. 
- 
-   This value varies from machine to machine.  The value is defined by 
+
+   The function returns the value of the largest (positive) number
+   that can be represented in a double precision variable.
+
+   This value varies from machine to machine. The value is defined by
    the macro DBL_MAX from the ANSI standard header file float.h.
    According to the ANSI standard, DBL_MAX must be at least
-   
-      1.E+37 
-         
- 
+
+      1.E+37
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   The function always returns a constant value, set by the user 
-   prior to compilation. 
- 
+
+   The function always returns a constant value, set by the user
+   prior to compilation.
+
 -Examples
- 
-   The following code fragments illustrate the use of dpmax_c. 
-   Note in the second example that the smallest negative number 
-   is not necessarily the negative of the largest positive number. 
- 
+
+   The following code fragments illustrate the use of dpmax_c.
+   Note in the second example that the smallest negative number
+   is not necessarily the negative of the largest positive number.
+
    1) Set a range variable for a star or ephemeris object.
-      
+
       /.
-      Compute the distance to each object. For stars, use 
-      a "very large" distance. 
+      Compute the distance to each object. For stars, use
+      a "very large" distance.
       ./
-      
+
       for ( i = 0;  i < n;  i++ )
       {
-         if (  strcmp ( type[i], "star" )  ) 
+         if (  strcmp ( type[i], "star" )  )
          {
             /.
             The object is not a star.
             ./
-            
+
             range[i] = vnorm_c ( state[i] );
          }
-         else 
+         else
          {
             range[i] = sqrt ( dpmax_c() ) / 2.;
          }
@@ -118,47 +117,51 @@
 
 
    2) Initialize a CSPICE "window."
-   
+
       /.
-      The window originally has one interval, from "minus 
-      infinity" to "plus infinity". 
+      The window originally has one interval, from "minus
+      infinity" to "plus infinity".
       ./
-      
+
       winsiz    =  2;
       window[0] =  dpmin_c();
       window[1] =  dpmax_c() ;
 
-      scardd_ ( &winsiz, window ); 
-      
- 
--Restrictions
- 
-   None. 
- 
--Literature_References
- 
-   None.
-    
--Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   H.A. Neilan     (JPL) 
-   M.J. Spencer    (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
--Version
- 
-   -CSPICE Version 1.1.0, 23-JUL-2001 (NJB)
-     
-      Removed tab characters from source file.
+      scardd_ ( &winsiz, window );
 
-   -CSPICE Version 1.0.0, 16-OCT-1998 (NJB)
+-Restrictions
+
+   None.
+
+-Literature_References
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   M.J. Spencer        (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
+-Version
+
+   -CSPICE Version 1.1.1, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.1.0, 23-JUL-2001 (NJB)
+
+       Removed tab characters from source file.
+
+   -CSPICE Version 1.0.0, 16-OCT-1998 (NJB) (HAN) (MJS) (WLT) (IMU)
 
 -Index_Entries
- 
-   largest d.p. number 
- 
+
+   largest d.p. number
+
 -&
 */
 
@@ -178,8 +181,8 @@
       value = dpmax_();
       first = SPICEFALSE;
    }
-   
+
    return ( value );
-   
+
 
 } /* End dpmax_c */

@@ -12,7 +12,7 @@ static integer c__2 = 2;
 static integer c__200 = 200;
 static integer c__400 = 400;
 
-/* $Procedure      DELTET ( Delta ET, ET - UTC ) */
+/* $Procedure DELTET ( Delta ET, ET - UTC ) */
 /* Subroutine */ int deltet_(doublereal *epoch, char *eptype, doublereal *
 	delta, ftnlen eptype_len)
 {
@@ -94,43 +94,45 @@ static integer c__400 = 400;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      EPOCH      I   Input epoch (seconds past J2000). */
-/*      EPTYPE     I   Type of input epoch ('UTC' or 'ET'). */
-/*      DELTA      O   Delta ET (ET-UTC) at input epoch. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     EPOCH      I   Input epoch (seconds past J2000). */
+/*     EPTYPE     I   Type of input epoch ('UTC' or 'ET'). */
+/*     DELTA      O   Delta ET (ET-UTC) at input epoch. */
 
 /* $ Detailed_Input */
 
-/*      EPOCH       is the epoch at which Delta ET is to be computed. */
-/*                  This may be either UTC or ephemeris seconds past */
-/*                  J2000, as specified by EPTYPE. */
+/*     EPOCH    is the epoch at which "delta ET" is to be computed. */
+/*              EPOCH may be either UTC or ephemeris seconds past */
+/*              J2000, as specified by EPTYPE. */
 
-/*      EPTYPE      indicates the type of input epoch. It may be either */
-/*                  of the following: */
+/*     EPTYPE   is the type of input epoch. It may be either */
+/*              of the following: */
 
-/*                     'UTC'    input is UTC seconds past J2000. */
-/*                     'ET'     input is ephemeris seconds past J2000. */
+/*                 'UTC'    UTC seconds past J2000 UTC. */
 
+/*                 'ET'     Ephemeris seconds past J2000 TDB, */
+/*                          also known as barycentric dynamical */
+/*                          time (TDB). */
 
 /* $ Detailed_Output */
 
-/*      DELTA       is the value of */
+/*     DELTA    is the value of */
 
-/*                     Delta ET = ET - UTC */
+/*                 "delta ET" = ET - UTC */
 
-/*                  at the input epoch. This is added to UTC to give */
-/*                  ET, or subtracted from ET to give UTC. The routine */
-/*                  is reversible: that is, given the following calls, */
+/*              at the input epoch. This is added to UTC to give */
+/*              ET, or subtracted from ET to give UTC. The routine */
+/*              is reversible: that is, given the following calls, */
 
-/*                     CALL DELTET ( UTC,      'UTC', DEL1 ) */
-/*                     CALL DELTET ( UTC+DEL1, 'ET',  DEL2 ) */
+/*                 CALL DELTET ( UTC,      'UTC', DEL1 ) */
+/*                 CALL DELTET ( UTC+DEL1, 'ET',  DEL2 ) */
 
-/*                  the expression */
+/*              the expression */
 
-/*                     ( DEL1 .EQ. DEL2 ) */
+/*                 ( DEL1 .EQ. DEL2 ) */
 
-/*                  is always true. */
+/*              is always .TRUE. */
 
 /* $ Parameters */
 
@@ -138,75 +140,91 @@ static integer c__400 = 400;
 
 /* $ Exceptions */
 
-/*     1) If the input epoch is not recognized, the error */
-/*        SPICE(INVALIDEPOCH) is signaled. */
+/*     1)  If the input epoch is not recognized, the error */
+/*         SPICE(INVALIDEPOCH) is signaled. */
 
-/*     2) If the variables necessary for the computation of DELTA */
-/*        have not been loaded into the kernel pool, the error */
-/*        SPICE(KERNELVARNOTFOUND) is signaled. */
+/*     2)  If the variables necessary for the computation of DELTA */
+/*         have not been loaded into the kernel pool, the error */
+/*         SPICE(KERNELVARNOTFOUND) is signaled. */
 
-/*     3) If the number of leapseconds in the pool is greater than */
-/*        the local leapseconds buffer size, the error */
-/*        SPICE(BUFFEROVERFLOW) is signaled. */
+/*     3)  If the number of leapseconds in the pool is greater than */
+/*         the local leapseconds buffer size, the error */
+/*         SPICE(BUFFEROVERFLOW) is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      The constants necessary for computing the offset are taken */
-/*      from the kernel pool, where they are assumed to have been */
-/*      loaded from a kernel file. */
+/*     The constants necessary for computing the offset are taken */
+/*     from the kernel pool, where they are assumed to have been */
+/*     loaded from a kernel file. */
 
-/*      The tables are consulted to determine the number of leap seconds */
-/*      preceding the input epoch. Also, an approximation to the periodic */
-/*      yearly variation (which has an amplitude of just under two */
-/*      milliseconds) in the difference between ET and TAI (Atomic Time) */
-/*      is computed. The final value of Delta ET is given by */
+/*     The tables are consulted to determine the number of leap seconds */
+/*     preceding the input epoch. Also, an approximation to the periodic */
+/*     yearly variation (which has an amplitude of just under two */
+/*     milliseconds) in the difference between ET and TAI (Atomic Time) */
+/*     is computed. The final value of Delta ET is given by */
 
-/*            Delta ET = ( ET - TAI ) + leap seconds */
+/*        Delta ET = ( ET - TAI ) + leap seconds */
 
 /* $ Examples */
 
-/*      The following example shows how DELTET may be used to convert */
-/*      from UTC seconds past J2000 to ephemeris seconds past J2000. */
+/*     The following example shows how DELTET may be used to convert */
+/*     from UTC seconds past J2000 to ephemeris seconds past J2000. */
 
-/*            CALL DELTET ( UTCSEC, 'UTC', DELTA ) */
-/*            ET = UTCSEC + DELTA */
+/*        CALL DELTET ( UTCSEC, 'UTC', DELTA ) */
+/*        ET = UTCSEC + DELTA */
 
-/*      The following example shows how DELTET may be used to convert */
-/*      from ephemeris seconds past J2000 to UTC seconds past J2000. */
+/*     The following example shows how DELTET may be used to convert */
+/*     from ephemeris seconds past J2000 to UTC seconds past J2000. */
 
-/*            CALL DELTET ( ET, 'ET', DELTA ) */
-/*            UTCSEC = ET - DELTA */
+/*        CALL DELTET ( ET, 'ET', DELTA ) */
+/*        UTCSEC = ET - DELTA */
 
-/*      See the TIME required reading for further examples. */
+/*     See the Time required reading time.req for further examples. */
 
 /* $ Restrictions */
 
-/*      The routines UTC2ET and ET2UTC are preferred for conversions */
-/*      between UTC and ET. This routine is provided mainly as a utility */
-/*      for UTC2ET and ET2UTC. */
+/*     1)  The routines STR2ET and ET2UTC are preferred for conversions */
+/*         between UTC and ET. This routine is provided mainly as a */
+/*         utility for STR2ET and ET2UTC. */
 
-/*      The kernel pool containing leapseconds and relativistic terms */
-/*      MUST be loaded prior to calling this subroutine. Examples */
-/*      demonstrating how to load a kernel pool are included in the */
-/*      Required Reading file time.req and in the "Examples" */
-/*      section of this header. For more general information about */
-/*      kernel pools, please consult the Required Reading file */
-/*      kernel.req. */
+/*     2)  A leapseconds kernel containing leapseconds and relativistic */
+/*         terms MUST be loaded prior to calling this subroutine. */
+/*         Examples demonstrating how to load a kernel pool are included */
+/*         in the Required Reading file time.req and in the $Examples */
+/*         section of this header. For more general information about */
+/*         kernel pools, please consult the Required Reading file */
+/*         kernel.req. */
 
 /* $ Literature_References */
 
-/*      Astronomical Almanac. */
+/*     [1]  "The Astronomical Almanac for the Year 1990," United States */
+/*          Naval Observatory, U.S. Government Printing Office, */
+/*          Washington, D.C., 1989. */
 
 /* $ Author_and_Institution */
 
-/*      W.M. Owen       (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.M. Owen          (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary entries in $Revisions section. */
+
+/*        Replaced reference to UTC2ET with STR2ET in $Restrictions */
+/*        section. */
 
 /* -    SPICELIB Version 1.2.2, 18-APR-2014 (BVS) */
 
@@ -219,14 +237,14 @@ static integer c__400 = 400;
 /* -    SPICELIB Version 1.2.0, 24-AUG-1998 (WLT) */
 
 /*        The previous upgrade introduced an error in the fetch */
-/*        of the variable DELTET/M from the kernel pool.  This */
+/*        of the variable DELTET/M from the kernel pool. This */
 /*        error was corrected. */
 
 /* -    SPICELIB Version 1.1.0, 20-APR-1998 (NJB) */
 
 /*        Calls to RTPOOL were replaced with calls to GDPOOL, which */
-/*        does more robust error checking.  Check for buffer overflow */
-/*        was added.  Local declarations were re-organized. */
+/*        does more robust error checking. Check for buffer overflow */
+/*        was added. Local declarations were re-organized. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -243,27 +261,16 @@ static integer c__400 = 400;
 /* -& */
 /* $ Revisions */
 
-/* -     SPICELIB Version 1.2.0, 24-AUG-1998 (WLT) */
+/* -    Beta Version 1.1.0, 06-OCT-1988 (IMU) */
 
-/*         The previous upgrade introduced an error in the fetch */
-/*         of the variable DELTET/M from the kernel pool.  This */
-/*         error was corrected. */
+/*        Tim Colvin of Rand noticed that times returned by UTC2ET */
+/*        and TPARSE differed by one second. Upon closer */
+/*        inspection, crack NAIF staff members deduced that in fact */
+/*        Mr. Colvin had not loaded the kernel pool, and were */
+/*        surprised to learn that no error had occurred. */
 
-/* -     SPICELIB Version 1.1.0, 20-APR-1998 (NJB) */
-
-/*         Calls to RTPOOL were replaced with calls to GDPOOL, which */
-/*         does more robust error checking. */
-
-/* -     Beta Version 1.1.0, 06-OCT-1988 (IMU) */
-
-/*         Tim Colvin of Rand noticed that times returned by UTC2ET */
-/*         and TPARSE differed by one second. Upon closer inspection, */
-/*         crack NAIF staff members deduced that in fact Mr. Colvin */
-/*         had not loaded the kernel pool, and were surprised to learn */
-/*         that no error had occurred. */
-
-/*         Multiple FOUND flags and a bevy of new error messages were */
-/*         implemented to cope with this unfortunate oversight. */
+/*        Multiple FOUND flags and a bevy of new error messages */
+/*        were implemented to cope with this unfortunate oversight. */
 
 /* -& */
 
@@ -328,9 +335,9 @@ static integer c__400 = 400;
 		" not be found in the kernel pool: #", (ftnlen)94);
 	for (i__ = 1; i__ <= 5; ++i__) {
 	    if (! found[(i__1 = i__ - 1) < 5 && 0 <= i__1 ? i__1 : s_rnge(
-		    "found", i__1, "deltet_", (ftnlen)341)]) {
+		    "found", i__1, "deltet_", (ftnlen)350)]) {
 		errch_("#", missed + ((i__1 = i__ - 1) < 5 && 0 <= i__1 ? 
-			i__1 : s_rnge("missed", i__1, "deltet_", (ftnlen)342))
+			i__1 : s_rnge("missed", i__1, "deltet_", (ftnlen)351))
 			 * 20, (ftnlen)1, (ftnlen)20);
 	    }
 	}
@@ -357,9 +364,9 @@ static integer c__400 = 400;
 	i__1 = nleap;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (*epoch >= dleap[(i__2 = (i__ << 1) - 1) < 400 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)375)]) {
+		    i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)384)]) {
 		leaps = dleap[(i__2 = (i__ << 1) - 2) < 400 && 0 <= i__2 ? 
-			i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)376)];
+			i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)385)];
 	    }
 	}
 
@@ -376,25 +383,25 @@ static integer c__400 = 400;
 	i__1 = nleap;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (*epoch > dleap[(i__2 = (i__ << 1) - 1) < 400 && 0 <= i__2 ? 
-		    i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)393)]) {
+		    i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)402)]) {
 		d__1 = dleap[(i__2 = (i__ << 1) - 1) < 400 && 0 <= i__2 ? 
-			i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)395)] 
+			i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)404)] 
 			+ dta + dleap[(i__3 = (i__ << 1) - 2) < 400 && 0 <= 
 			i__3 ? i__3 : s_rnge("dleap", i__3, "deltet_", (
-			ftnlen)395)];
+			ftnlen)404)];
 		aet = d_nint(&d__1);
 		ma = m[0] + m[1] * aet;
 		ea = ma + eb * sin(ma);
 		ettai = k * sin(ea);
 		et = dleap[(i__2 = (i__ << 1) - 1) < 400 && 0 <= i__2 ? i__2 :
-			 s_rnge("dleap", i__2, "deltet_", (ftnlen)401)] + dta 
+			 s_rnge("dleap", i__2, "deltet_", (ftnlen)410)] + dta 
 			+ dleap[(i__3 = (i__ << 1) - 2) < 400 && 0 <= i__3 ? 
-			i__3 : s_rnge("dleap", i__3, "deltet_", (ftnlen)401)] 
+			i__3 : s_rnge("dleap", i__3, "deltet_", (ftnlen)410)] 
 			+ ettai;
 		if (*epoch >= et) {
 		    leaps = dleap[(i__2 = (i__ << 1) - 2) < 400 && 0 <= i__2 ?
 			     i__2 : s_rnge("dleap", i__2, "deltet_", (ftnlen)
-			    404)];
+			    413)];
 		}
 	    }
 	}

@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__1 = 1;
 
-/* $Procedure      PLNSNS ( Planetographic Longitude Sense ) */
+/* $Procedure PLNSNS ( Planetographic Longitude Sense ) */
 integer plnsns_(integer *bodid)
 {
     /* System generated locals */
@@ -32,8 +32,8 @@ integer plnsns_(integer *bodid)
 
 /* $ Abstract */
 
-/*    This function returns the quotient of the planetographic */
-/*    and planetocentric longitude for a user specified body. */
+/*     Indicate for a specified body whether planetographic and */
+/*     planetocentric longitude increase in the same sense. */
 
 /* $ Disclaimer */
 
@@ -73,30 +73,33 @@ integer plnsns_(integer *bodid)
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     BODID      I   is the NAIF id-code of some solar system object. */
+/*     BODID      I   is the NAIF integer ID code of some solar system */
+/*                    object. */
 
-/*     Function returns planetographic/planetocentric */
+/*     The function returns 1 if planetographic and planetocentric */
+/*     longitude for the specified body increase in the same sense, and */
+/*     -1 if they increase in the opposite sense. */
 
 /* $ Detailed_Input */
 
-/*     BODID      is the NAIF id-code of some planet, asteroid, comet */
-/*                or natural satellite of a planet. */
+/*     BODID    is the NAIF id-code of some planet, asteroid, comet */
+/*              or natural satellite of a planet. */
 
 /* $ Detailed_Output */
 
-/*     Based upon loaded PCK values in the kernel pool, the function */
-/*     returns the quotient */
+/*     The function returns 1 if planetographic and planetocentric */
+/*     longitude increase in the same sense for the input body, and */
+/*     -1 if they increase in the opposite sense. Planetocentric */
+/*     longitude always increases in the counterclockwise direction */
+/*     about the +Z axis of the body-fixed, body-centered reference */
+/*     frame of the specified body. */
 
-/*           planetographic longitude */
-/*           ------------------------ */
-/*           planetocentric longitude */
+/*     The sense in which planetographic longitude increases for the */
+/*     body specified by BODID is based upon loaded PCK values in */
+/*     the kernel pool. */
 
-/*     for the body specified by BODID.  I.e.  1 if planetographic */
-/*     and planetocentric longitude are the same for the input body, */
-/*     -1 if the planetographic and planetocentric longitude are */
-/*     opposite for the specified body.  If PCK information for */
-/*     the specified body can not be located in the kernel pool */
-/*     the function returns the value 0. */
+/*     If PCK information for the specified body can not be located in */
+/*     the kernel pool, the function returns the value 0. */
 
 /* $ Parameters */
 
@@ -106,9 +109,9 @@ integer plnsns_(integer *bodid)
 
 /*     Error free. */
 
-/*     1) If sufficient orientation information for the object */
-/*     specified by BODID is not available in the kernel pool, */
-/*     the function returns the value 0. */
+/*     1)  If sufficient orientation information for the object */
+/*         specified by BODID is not available in the kernel pool, */
+/*         the function returns the value 0. */
 
 /* $ Files */
 
@@ -130,14 +133,14 @@ integer plnsns_(integer *bodid)
 /*     Suppose that you have the planetographic coordinates */
 /*     of some point on the surface of an object and that you */
 /*     need to convert these coordinates to bodyfixed rectangular */
-/*     coordinates.  This conversion requires knowledge of the */
-/*     sense of planetographic longitude.  The code fragment below */
+/*     coordinates. This conversion requires knowledge of the */
+/*     sense of planetographic longitude. The code fragment below */
 /*     shows how you go about using this routine to perform the */
 /*     conversion. */
 
 /*     We assume that the variables LAT, LONG, HEIGHT contain the */
 /*     planetographic latitude, longitude and height above the */
-/*     reference surface of some point.  Moreover, let F be the */
+/*     reference surface of some point. Moreover, let F be the */
 /*     flattening factor for the reference spheroid. */
 
 /*     ( F = (Equatorial Radius - Polar Radius ) / Equatorial Radius ) */
@@ -162,16 +165,14 @@ integer plnsns_(integer *bodid)
 
 /*     Now convert the planetographic coordinates with */
 /*     planetographic longitude replaced by planetocentric */
-/*     longitude rectangular coordinates.  (Note the conversion */
+/*     longitude rectangular coordinates. (Note the conversion */
 /*     to planetocentric longitude is required because GEOREC */
 /*     assumes that the ordering latitude, longitude, altitude */
-/*     is a right handed ordering.  Replacing planetographic */
+/*     is a right handed ordering. Replacing planetographic */
 /*     longitude by planetocentric longitude ensures that we */
 /*     have a right handed coordinate system.) */
 
 /*        CALL GEOREC ( LAT, PCLONG, HEIGHT, EQRAD, F, REC ) */
-
-
 
 /* $ Restrictions */
 
@@ -183,17 +184,22 @@ integer plnsns_(integer *bodid)
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 11-MAY-2009 (BVS) */
 
 /*        Replaced LDPOOL with FURNSN in the header. Re-ordered header */
 /*        sections. */
 
-/* -    SPICELIB Version 1.0.0, 7-JAN-1997 (WLT) */
-
+/* -    SPICELIB Version 1.0.0, 07-JAN-1997 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

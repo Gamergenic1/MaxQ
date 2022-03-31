@@ -63,21 +63,21 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     BINARY     I   Name of an existing binary SPK or CK file. */
 /*     TEXT       I   Name of a text file to be created. */
 
 /* $ Detailed_Input */
 
-/*     BINARY      is the name of an existing binary SPK or CK file */
-/*                 that may contain comments in its comment area as */
-/*                 written by the routine SPCAC. */
+/*     BINARY   is the name of an existing binary SPK or CK file */
+/*              that may contain comments in its comment area as */
+/*              written by the routine SPCAC. */
 
-/*     TEXT        is the name of a text SPK or CK file to be created. */
-/*                 The text file will contain the same data and comments */
-/*                 as the binary file, but in a form more suitable for */
-/*                 transfer between heterogeneous computing environments. */
+/*     TEXT     is the name of a text SPK or CK file to be created. */
+/*              The text file will contain the same data and comments */
+/*              as the binary file, but in a form more suitable for */
+/*              transfer between heterogeneous computing environments. */
 
 /* $ Detailed_Output */
 
@@ -87,15 +87,15 @@
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If there is an IOSTAT error while opening, reading, or writing */
+/*         a file, the error is signaled by a routine in the call tree of */
+/*         this routine. */
+
 /* $ Files */
 
 /*     See arguments BINARY and TEXT. */
-
-/* $ Exceptions */
-
-/*     1) If there is an IOSTAT error while opening, reading, */
-/*        or writing a file, a routine that SPCB2A calls will */
-/*        diagnose and signal an error. */
 
 /* $ Particulars */
 
@@ -104,24 +104,24 @@
 /*     binary representations of numbers, you must convert SPK and CK */
 /*     files to text format when porting from one system to another. */
 /*     After converting the file to text, you can transfer it using */
-/*     a transfer protocol program like Kermit or FTP.  Then, convert */
+/*     a transfer protocol program like Kermit or FTP. Then, convert */
 /*     the text file back to binary format. */
 
 /*     The following is a list of the SPICELIB routines that convert */
 /*     SPK and CK files between binary and text format: */
 
-/*        SPCA2B    converts text to binary.  It opens the text file, */
+/*        SPCA2B    converts text to binary. It opens the text file, */
 /*                  creates a new binary file, and closes both files. */
 
-/*        SPCB2A    converts binary to text.  It opens the binary file, */
+/*        SPCB2A    converts binary to text. It opens the binary file, */
 /*                  creates a new text file, and closes both files. */
 
-/*        SPCT2B    converts text to binary.  It creates a new binary */
-/*                  file and closes it.  The text file is open on */
+/*        SPCT2B    converts text to binary. It creates a new binary */
+/*                  file and closes it. The text file is open on */
 /*                  entrance and exit. */
 
-/*        SPCB2T    converts binary to text.  It opens the binary */
-/*                  file and closes it.  The text file is open on */
+/*        SPCB2T    converts binary to text. It opens the binary */
+/*                  file and closes it. The text file is open on */
 /*                  entrance and exit */
 
 /*     See the SPC required reading for more information */
@@ -130,7 +130,7 @@
 /* $ Examples */
 
 /*     This is an example of how to use SPCB2A and SPCA2B for */
-/*     transferring files.  Suppose A.BSP is a binary SPK file in */
+/*     transferring files. Suppose A.BSP is a binary SPK file in */
 /*     environment 1; to transfer it to environment 2, follow */
 /*     these three steps: */
 
@@ -165,9 +165,17 @@
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -179,7 +187,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     binary spk or ck to ascii */
+/*     binary SPK or CK to ascii */
 
 /* -& */
 

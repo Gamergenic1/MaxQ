@@ -10,7 +10,7 @@
 static integer c__25 = 25;
 static integer c__1 = 1;
 
-/* $Procedure      SPKE21 ( S/P Kernel, evaluate, type 21 ) */
+/* $Procedure SPKE21 ( S/P Kernel, evaluate, type 21 ) */
 /* Subroutine */ int spke21_(doublereal *et, doublereal *record, doublereal *
 	state)
 {
@@ -163,7 +163,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Evaluation epoch. */
 /*     RECORD     I   Data record. */
@@ -173,61 +173,61 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     ET          is an epoch at which a state vector is to be */
-/*                 computed. The epoch is represented as seconds past */
-/*                 J2000 TDB. */
+/*     ET       is an epoch at which a state vector is to be */
+/*              computed. The epoch is represented as seconds past */
+/*              J2000 TDB. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will give the state (position and velocity) of an */
-/*                 ephemeris object, relative to its center of motion, */
-/*                 in an inertial reference frame. */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will give the state (position and velocity) of an */
+/*              ephemeris object, relative to its center of motion, */
+/*              in an inertial reference frame. */
 
-/*                 The contents of RECORD are as follows: */
+/*              The contents of RECORD are as follows: */
 
-/*                    RECORD(1):         The difference table size per */
-/*                                       Cartesian component. Call this */
-/*                                       size MAXDIM; then the difference */
-/*                                       line (MDA) size DLSIZE is */
+/*                 RECORD(1):         The difference table size per */
+/*                                    Cartesian component. Call this */
+/*                                    size MAXDIM; then the difference */
+/*                                    line (MDA) size DLSIZE is */
 
-/*                                         ( 4 * MAXDIM ) + 11 */
+/*                                      ( 4 * MAXDIM ) + 11 */
 
-/*                    RECORD(2) */
-/*                       ... */
-/*                    RECORD(1+DLSIZE):  An extended difference line. */
-/*                                       The contents are: */
+/*                 RECORD(2) */
+/*                    ... */
+/*                 RECORD(1+DLSIZE):  An extended difference line. */
+/*                                    The contents are: */
 
-/*                       Dimension  Description */
-/*                       ---------  ---------------------------------- */
-/*                       1          Reference epoch of difference line */
-/*                       MAXDIM     Stepsize function vector */
-/*                       1          Reference position vector,  x */
-/*                       1          Reference velocity vector,  x */
-/*                       1          Reference position vector,  y */
-/*                       1          Reference velocity vector,  y */
-/*                       1          Reference position vector,  z */
-/*                       1          Reference velocity vector,  z */
-/*                       MAXDIM,3   Modified divided difference */
-/*                                  arrays (MDAs) */
-/*                       1          Maximum integration order plus 1 */
-/*                       3          Integration order array */
+/*                    Dimension  Description */
+/*                    ---------  ---------------------------------- */
+/*                    1          Reference epoch of difference line */
+/*                    MAXDIM     Stepsize function vector */
+/*                    1          Reference position vector,  x */
+/*                    1          Reference velocity vector,  x */
+/*                    1          Reference position vector,  y */
+/*                    1          Reference velocity vector,  y */
+/*                    1          Reference position vector,  z */
+/*                    1          Reference velocity vector,  z */
+/*                    MAXDIM,3   Modified divided difference */
+/*                               arrays (MDAs) */
+/*                    1          Maximum integration order plus 1 */
+/*                    3          Integration order array */
 
 /* $ Detailed_Output */
 
-/*     STATE       is the state resulting from evaluation of the input */
-/*                 record at ET. Units are km and km/sec. */
+/*     STATE    is the state resulting from evaluation of the input */
+/*              record at ET. Units are km and km/sec. */
 
 /* $ Parameters */
 
-/*     MAXTRM      is the maximum number of terms allowed in */
-/*                 each component of the difference table */
-/*                 contained in the input argument RECORD. */
-/*                 See the INCLUDE file spk21.inc for the value */
-/*                 of MAXTRM. */
+/*     MAXTRM   is the maximum number of terms allowed in */
+/*              each component of the difference table */
+/*              contained in the input argument RECORD. */
+/*              See the INCLUDE file spk21.inc for the value */
+/*              of MAXTRM. */
 
 /* $ Exceptions */
 
-/*     1) If the maximum table size of the input record exceeds */
-/*        MAXTRM, the error SPICE(DIFFLINETOOLARGE) is signaled. */
+/*     1)  If the maximum table size of the input record exceeds */
+/*         MAXTRM, the error SPICE(DIFFLINETOOLARGE) is signaled. */
 
 /* $ Files */
 
@@ -247,28 +247,36 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     Unknown. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     F.T. Krogh      (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     F.T. Krogh         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 03-FEB-2014 (NJB) (FTK) (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_21 spk segment */
+/*     evaluate type_21 SPK segment */
 
 /* -& */
 
@@ -351,7 +359,7 @@ static integer c__1 = 1;
     for (i__ = 1; i__ <= 3; ++i__) {
 	moved_(&record[i__ * maxdim + 8], &maxdim, &dt[(i__1 = i__ * 25 - 25) 
 		< 75 && 0 <= i__1 ? i__1 : s_rnge("dt", i__1, "spke21_", (
-		ftnlen)289)]);
+		ftnlen)299)]);
     }
     kqmax1 = (integer) record[(maxdim << 2) + 8];
     kq[0] = (integer) record[(maxdim << 2) + 9];
@@ -381,7 +389,7 @@ static integer c__1 = 1;
 /*        Make sure we're not about to attempt division by zero. */
 
 	if (g[(i__2 = j - 1) < 25 && 0 <= i__2 ? i__2 : s_rnge("g", i__2, 
-		"spke21_", (ftnlen)320)] == 0.) {
+		"spke21_", (ftnlen)330)] == 0.) {
 	    chkin_("SPKE21", (ftnlen)6);
 	    setmsg_("A  value of zero was found at index # of the step size "
 		    "vector.", (ftnlen)62);
@@ -391,13 +399,13 @@ static integer c__1 = 1;
 	    return 0;
 	}
 	fc[(i__2 = j) < 25 && 0 <= i__2 ? i__2 : s_rnge("fc", i__2, "spke21_",
-		 (ftnlen)332)] = tp / g[(i__3 = j - 1) < 25 && 0 <= i__3 ? 
-		i__3 : s_rnge("g", i__3, "spke21_", (ftnlen)332)];
+		 (ftnlen)342)] = tp / g[(i__3 = j - 1) < 25 && 0 <= i__3 ? 
+		i__3 : s_rnge("g", i__3, "spke21_", (ftnlen)342)];
 	wc[(i__2 = j - 1) < 24 && 0 <= i__2 ? i__2 : s_rnge("wc", i__2, "spk"
-		"e21_", (ftnlen)333)] = delta / g[(i__3 = j - 1) < 25 && 0 <= 
-		i__3 ? i__3 : s_rnge("g", i__3, "spke21_", (ftnlen)333)];
+		"e21_", (ftnlen)343)] = delta / g[(i__3 = j - 1) < 25 && 0 <= 
+		i__3 ? i__3 : s_rnge("g", i__3, "spke21_", (ftnlen)343)];
 	tp = delta + g[(i__2 = j - 1) < 25 && 0 <= i__2 ? i__2 : s_rnge("g", 
-		i__2, "spke21_", (ftnlen)334)];
+		i__2, "spke21_", (ftnlen)344)];
     }
 
 /*     Collect KQMAX1 reciprocals. */
@@ -405,7 +413,7 @@ static integer c__1 = 1;
     i__1 = kqmax1;
     for (j = 1; j <= i__1; ++j) {
 	w[(i__2 = j - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, "spke2"
-		"1_", (ftnlen)342)] = 1. / (doublereal) j;
+		"1_", (ftnlen)352)] = 1. / (doublereal) j;
     }
 
 /*     Compute the W(K) terms needed for the position interpolation */
@@ -420,13 +428,13 @@ static integer c__1 = 1;
 	i__1 = jx;
 	for (j = 1; j <= i__1; ++j) {
 	    w[(i__2 = j + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2,
-		     "spke21_", (ftnlen)359)] = fc[(i__3 = j) < 25 && 0 <= 
-		    i__3 ? i__3 : s_rnge("fc", i__3, "spke21_", (ftnlen)359)] 
+		     "spke21_", (ftnlen)369)] = fc[(i__3 = j) < 25 && 0 <= 
+		    i__3 ? i__3 : s_rnge("fc", i__3, "spke21_", (ftnlen)369)] 
 		    * w[(i__4 = j + ks1 - 1) < 27 && 0 <= i__4 ? i__4 : 
-		    s_rnge("w", i__4, "spke21_", (ftnlen)359)] - wc[(i__5 = j 
+		    s_rnge("w", i__4, "spke21_", (ftnlen)369)] - wc[(i__5 = j 
 		    - 1) < 24 && 0 <= i__5 ? i__5 : s_rnge("wc", i__5, "spke"
-		    "21_", (ftnlen)359)] * w[(i__6 = j + ks - 1) < 27 && 0 <= 
-		    i__6 ? i__6 : s_rnge("w", i__6, "spke21_", (ftnlen)359)];
+		    "21_", (ftnlen)369)] * w[(i__6 = j + ks - 1) < 27 && 0 <= 
+		    i__6 ? i__6 : s_rnge("w", i__6, "spke21_", (ftnlen)369)];
 	}
 	ks = ks1;
 	--ks1;
@@ -437,19 +445,19 @@ static integer c__1 = 1;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke21_", (ftnlen)373)];
+		 "spke21_", (ftnlen)383)];
 	sum = 0.;
 	for (j = kqq; j >= 1; --j) {
 	    sum += dt[(i__1 = j + i__ * 25 - 26) < 75 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke21_", (ftnlen)377)] * w[(i__2 = j 
+		    s_rnge("dt", i__1, "spke21_", (ftnlen)387)] * w[(i__2 = j 
 		    + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke21_", (ftnlen)377)];
+		    "spke21_", (ftnlen)387)];
 	}
 	state[(i__1 = i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke21_", (ftnlen)380)] = refpos[(i__2 = i__ - 1) < 3 && 0 
+		 "spke21_", (ftnlen)390)] = refpos[(i__2 = i__ - 1) < 3 && 0 
 		<= i__2 ? i__2 : s_rnge("refpos", i__2, "spke21_", (ftnlen)
-		380)] + delta * (refvel[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
-		i__3 : s_rnge("refvel", i__3, "spke21_", (ftnlen)380)] + 
+		390)] + delta * (refvel[(i__3 = i__ - 1) < 3 && 0 <= i__3 ? 
+		i__3 : s_rnge("refvel", i__3, "spke21_", (ftnlen)390)] + 
 		delta * sum);
     }
 
@@ -460,13 +468,13 @@ static integer c__1 = 1;
     i__1 = jx;
     for (j = 1; j <= i__1; ++j) {
 	w[(i__2 = j + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		"spke21_", (ftnlen)390)] = fc[(i__3 = j) < 25 && 0 <= i__3 ? 
-		i__3 : s_rnge("fc", i__3, "spke21_", (ftnlen)390)] * w[(i__4 =
+		"spke21_", (ftnlen)400)] = fc[(i__3 = j) < 25 && 0 <= i__3 ? 
+		i__3 : s_rnge("fc", i__3, "spke21_", (ftnlen)400)] * w[(i__4 =
 		 j + ks1 - 1) < 27 && 0 <= i__4 ? i__4 : s_rnge("w", i__4, 
-		"spke21_", (ftnlen)390)] - wc[(i__5 = j - 1) < 24 && 0 <= 
-		i__5 ? i__5 : s_rnge("wc", i__5, "spke21_", (ftnlen)390)] * w[
+		"spke21_", (ftnlen)400)] - wc[(i__5 = j - 1) < 24 && 0 <= 
+		i__5 ? i__5 : s_rnge("wc", i__5, "spke21_", (ftnlen)400)] * w[
 		(i__6 = j + ks - 1) < 27 && 0 <= i__6 ? i__6 : s_rnge("w", 
-		i__6, "spke21_", (ftnlen)390)];
+		i__6, "spke21_", (ftnlen)400)];
     }
     --ks;
 
@@ -474,18 +482,18 @@ static integer c__1 = 1;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	kqq = kq[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("kq", i__1,
-		 "spke21_", (ftnlen)400)];
+		 "spke21_", (ftnlen)410)];
 	sum = 0.;
 	for (j = kqq; j >= 1; --j) {
 	    sum += dt[(i__1 = j + i__ * 25 - 26) < 75 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dt", i__1, "spke21_", (ftnlen)404)] * w[(i__2 = j 
+		    s_rnge("dt", i__1, "spke21_", (ftnlen)414)] * w[(i__2 = j 
 		    + ks - 1) < 27 && 0 <= i__2 ? i__2 : s_rnge("w", i__2, 
-		    "spke21_", (ftnlen)404)];
+		    "spke21_", (ftnlen)414)];
 	}
 	state[(i__1 = i__ + 2) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1,
-		 "spke21_", (ftnlen)407)] = refvel[(i__2 = i__ - 1) < 3 && 0 
+		 "spke21_", (ftnlen)417)] = refvel[(i__2 = i__ - 1) < 3 && 0 
 		<= i__2 ? i__2 : s_rnge("refvel", i__2, "spke21_", (ftnlen)
-		407)] + delta * sum;
+		417)] + delta * sum;
     }
     return 0;
 } /* spke21_ */

@@ -20,10 +20,12 @@ static integer c__3 = 3;
 
     /* Local variables */
     integer i__, n;
-    extern /* Subroutine */ int chkin_(char *, ftnlen), bodvcd_(integer *, 
-	    char *, integer *, integer *, doublereal *, ftnlen), sigerr_(char 
-	    *, ftnlen), chkout_(char *, ftnlen), setmsg_(char *, ftnlen), 
-	    errint_(char *, integer *, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen);
+    extern logical failed_(void);
+    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
+	    *, doublereal *, ftnlen), sigerr_(char *, ftnlen), chkout_(char *,
+	     ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
+	    ftnlen);
     extern logical return_(void);
 
 /* $ Abstract */
@@ -59,6 +61,7 @@ static integer c__3 = 3;
 /* $ Required_Reading */
 
 /*     NAIF_IDS */
+/*     SPK */
 
 /* $ Keywords */
 
@@ -74,25 +77,24 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     BODY       is the NAIF ID code of the body for which the axes are */
-/*                requested. Bodies are numbered according to the */
-/*                standard NAIF numbering scheme described in the */
-/*                required reading (naif_ids.req) document. */
+/*     BODY     is the NAIF ID code of the body for which the axes are */
+/*              requested. Bodies are numbered according to the */
+/*              standard NAIF numbering scheme described in the */
+/*              required reading (naif_ids.req) document. */
 
 /* $ Detailed_Output */
 
-/*     AXES       are the lengths of the axes of the body, in km. */
+/*     AXES     are the lengths of the axes of the body, in km. */
 
-/*                      AXES(1)  is the longest equatorial radius of */
-/*                               the body. For satellites, this axis is */
-/*                               typically pointed toward the primary */
-/*                               planet. */
+/*                    AXES(1)  is the longest equatorial radius of */
+/*                             the body. For satellites, this axis is */
+/*                             typically pointed toward the primary */
+/*                             planet. */
 
-/*                      AXES(2)  is the shortest equatorial radius of */
-/*                               the body. */
+/*                    AXES(2)  is the shortest equatorial radius of */
+/*                             the body. */
 
-/*                      AXES(3)  is the polar radius of the body. */
-
+/*                    AXES(3)  is the polar radius of the body. */
 
 /* $ Parameters */
 
@@ -100,21 +102,30 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1)   If the body specified does not have 3 axes defined, */
-/*          then the error SPICE(ZEROAXISLENGTH) is signaled. */
+/*     1)  If the RADII kernel pool data for body specified does not have */
+/*         exactly 3 axes defined, the error SPICE(INVALIDCOUNT) is */
+/*         signaled. */
+
+/*     2)  If the RADII kernel pool data for body specified contains any */
+/*         zero or negative values, the error SPICE(BADAXISLENGTH) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*     PCK data:  triaxial radii for the target body must be loaded */
-/*     into the kernel pool.  Typically this is done by loading a */
+/*     PCK data: triaxial radii for the target body must be loaded */
+/*     into the kernel pool. Typically this is done by loading a */
 /*     text PCK file via LDPOOL or a general kernel loader */
 /*     such as FURNSH. */
 
 /* $ Particulars */
 
-/*     ZZGFTREB returns the lengths of the axes of the target body. */
+/*     ZZGFTREB returns the lengths of the axes of BODY. It serves */
+/*     as a wrapper to the kernel data access call, the confirms */
+/*     return of reasonable values. */
+
 /*     Appropriate SPK and PCK data must be available to the calling */
-/*     program before this routine is called. */
+/*     program before this routine is called.for missing kernel data */
+/*     or non physical values. */
 
 /* $ Examples */
 
@@ -135,22 +146,27 @@ static integer c__3 = 3;
 
 /* $ Literature_References */
 
-/*     1) Refer to the SPK required reading file for a complete list of */
-/*     the NAIF integer ID codes for bodies. */
-
-/*     2) ''Report of the IAU/IAG/COSPAR Working Group on Cartographic */
-/*     Coordinates and Rotational Elements of the Planets and */
-/*     Satellites: 1991,'' March 3, 1992. */
+/*     [1]  "Report of the IAU/IAG/COSPAR Working Group on Cartographic */
+/*          Coordinates and Rotational Elements of the Planets and */
+/*          Satellites: 1991", March 3, 1992. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     L.S. Elson     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB version 1.0.0  05-MAR-2003 (EDW) */
+/* -    SPICELIB Version 1.1.0, 11-SEP-2021 (EDW) (JDR) */
+
+/*        Corrected short error messages token string. Axes length */
+/*        error is signaled on less-than or equal-to zero. */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
+
+/* -    SPICELIB Version 1.0.0, 05-MAR-2003 (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -169,34 +185,37 @@ static integer c__3 = 3;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZGFTREB", (ftnlen)8);
     }
+    chkin_("ZZGFTREB", (ftnlen)8);
 
-/*     Look it up in the kernel pool. */
+/*     Look up BODY radii in the kernel pool. */
 
     bodvcd_(body, "RADII", &c__3, &n, axes, (ftnlen)5);
+    if (failed_()) {
+	chkout_("ZZGFTREB", (ftnlen)8);
+	return 0;
+    }
     if (n != 3) {
-	setmsg_("Only # axes were found  for ID # . Three axes are needed.", (
-		ftnlen)57);
+	setmsg_("Only # axes were found  for ID #. Three axes expected.", (
+		ftnlen)54);
 	errint_("#", &n, (ftnlen)1);
 	errint_("#", body, (ftnlen)1);
-	sigerr_("SPICE(ZEROAXISLENGTH)", (ftnlen)21);
+	sigerr_("SPICE(INVALIDCOUNT)", (ftnlen)19);
 	chkout_("ZZGFTREB", (ftnlen)8);
 	return 0;
     } else {
 	for (i__ = 1; i__ <= 3; ++i__) {
 	    if (axes[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("axes",
-		     i__1, "zzgftreb_", (ftnlen)185)] < 0.) {
-		setmsg_("The # axis of body # is negative.  Please check you"
-			"r text PCK file. You should fix the  # component of "
-			"the kernel pool variable  BODY#_RADII. ", (ftnlen)142)
-			;
+		     i__1, "zzgftreb_", (ftnlen)207)] <= 0.) {
+		setmsg_("Degenerate case. The # axis of body # is negative o"
+			"r zero.  Please check the text PCK file. You should "
+			"fix the # component of the kernel pool variable  BOD"
+			"Y#_RADII. ", (ftnlen)165);
 		errint_("#", &i__, (ftnlen)1);
 		errint_("#", body, (ftnlen)1);
 		errint_("#", &i__, (ftnlen)1);
 		errint_("#", body, (ftnlen)1);
-		sigerr_("SPICE(BADAXISNUMBERS)", (ftnlen)21);
+		sigerr_("SPICE(BADAXISLENGTH)", (ftnlen)20);
 		chkout_("ZZGFTREB", (ftnlen)8);
 		return 0;
 	    }

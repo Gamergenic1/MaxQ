@@ -44,95 +44,192 @@
    #include "SpiceUsr.h"
    #include "SpiceZmc.h"
    #undef    vdotg_c
-   
+
 
    SpiceDouble vdotg_c ( ConstSpiceDouble   * v1,
                          ConstSpiceDouble   * v2,
                          SpiceInt             ndim )
+
 /*
 
 -Brief_I/O
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-    v1        I     First vector in the dot product.
-    v2        I     Second vector in the dot product.
-    ndim      I     Dimension of v1 and v2.
+   v1         I   First vector in the dot product.
+   v2         I   Second vector in the dot product.
+   ndim       I   Dimension of `v1' and `v2'.
 
-   The function returns the value of the dot product of v1 and v2.
+   The function returns the value of the dot product of `v1' and `v2'.
 
 -Detailed_Input
 
-   v1      This may be any double precision vector of arbitrary
-           dimension.
+   v1,
+   v2          are two arbitrary double precision n-dimensional
+               vectors.
 
-   v2      This may be any double precision vector of arbitrary
-           dimension.
+   ndim        is the dimension of `v1' and `v2'.
 
 -Detailed_Output
 
-   The function returns the value of the dot product of v1 and v2.
+   The function returns the value of the dot product (inner product)
+   of `v1' and `v2':
+
+      < v1, v2 >
 
 -Parameters
 
    None.
 
--Particulars
-
-   vdotg_c calculates the dot product of v1 and v2 by a simple
-   application of the definition.  No error checking is
-   performed to prevent or recover from numeric overflow.
-
--Examples
-
-   Suppose that given two n-dimensional vectors, we want to change
-   one of the vectors until the two vectors are perpendicular.
-   The following code fragment demonstrates the use of vdot_c to do
-   so.
-
-    dot = vdotg_c ( v1, v2, ndim );
-
-    while ( dot != 0. )
-       {
-
-         /. change one of the vectors ./
-                  ....
-
-        dot = vdotg_c ( v1, v2, ndim );
-       }
-
-
--Restrictions
-
-   The user is responsible for determining that the vectors v1 and
-   v2 are not so large as to cause numeric overflow.  In most cases
-   this won't present a problem.
-
 -Exceptions
 
-   1)  If ndim is not physically realistic, greater than zero, a
-       BADDIMENSION error is signaled.  The value 0. is returned.
+   Error free.
 
 -Files
 
    None.
 
--Author_and_Institution
+-Particulars
 
-   W.M. Owen       (JPL)
-   E.D. Wright     (JPL)
+   vdotg_c calculates the dot product of `v1' and `v2' by a simple
+   application of the definition:
+
+                  ndim-1
+                 .------
+                  \
+      vdotg_c  =   )  v1[i] * v2[i]
+                  /
+                 '------
+                    i=0
+
+   No error checking is performed to prevent or recover from numeric
+   overflow.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Suppose that you have a set of double precision n-dimensional
+      vectors. Check if they are orthogonal to the Z-axis in
+      n-dimensional space.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vdotg_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define NDIM         4
+         #define SETSIZ       5
+
+         /.
+         Local variables.
+         ./
+         SpiceInt             i;
+
+         /.
+         Define the vector set.
+         ./
+         SpiceDouble          v1     [SETSIZ][NDIM] = {
+                                   { 1.0,  0.0,  0.0, 0.0 },
+                                   { 0.0,  1.0,  0.0, 3.0 },
+                                   { 0.0,  0.0, -6.0, 0.0 },
+                                   {10.0,  0.0, -1.0, 0.0 },
+                                   { 0.0,  0.0,  0.0, 1.0 } };
+
+         SpiceDouble          z      [NDIM] = { 0.0,  0.0,  1.0, 0.0 };
+
+         /.
+         Check the orthogonality with respect to `z' of each
+         vector in `v1'.
+         ./
+         for ( i = 0; i < SETSIZ; i++ )
+         {
+
+            printf( "\n" );
+            printf( "Input vector (V1):  %5.1f %5.1f %5.1f %5.1f\n",
+                              v1[i][0], v1[i][1], v1[i][2], v1[i][3] );
+
+            if ( vdotg_c ( v1[i], z, NDIM ) == 0.0 )
+            {
+               printf( "V1 and Z are orthogonal.\n" );
+            }
+            else
+            {
+               printf( "V1 and Z are NOT orthogonal.\n" );
+            }
+
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input vector (V1):    1.0   0.0   0.0   0.0
+      V1 and Z are orthogonal.
+
+      Input vector (V1):    0.0   1.0   0.0   3.0
+      V1 and Z are orthogonal.
+
+      Input vector (V1):    0.0   0.0  -6.0   0.0
+      V1 and Z are NOT orthogonal.
+
+      Input vector (V1):   10.0   0.0  -1.0   0.0
+      V1 and Z are NOT orthogonal.
+
+      Input vector (V1):    0.0   0.0   0.0   1.0
+      V1 and Z are orthogonal.
+
+
+-Restrictions
+
+   1)  The user is responsible for determining that the vectors `v1'
+       and `v2' are not so large as to cause numeric overflow. In
+       most cases this will not present a problem.
 
 -Literature_References
 
    None.
 
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
+
 -Version
+
+   -CSPICE Version 1.2.0, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example. Improved -Particulars section.
+
+       Removed check for "ndim" being positive in order to replicate
+       behavior of SPICELIB equivalent routine.
 
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vectors const.  Converted check-in style to discovery.
+       Made input vectors const. Converted check-in style to discovery.
 
-   -CSPICE Version 1.0.0, 31-MAR-1998   (EDW)
+   -CSPICE Version 1.0.0, 31-MAR-1998 (EDW) (WMO)
 
 -Index_Entries
 
@@ -146,46 +243,32 @@
    /*
    Local variables
    */
-
    SpiceInt                i;
    SpiceDouble             dot;
 
 
    /*
-   Use discovery check-in.
+   Error free:  no error tracing required.
    */
 
 
-   /* Initialize dot to zero. */
-   
+   /*
+   Initialize dot to zero.
+   */
    dot  = 0.;
 
-
-   /* Check ndim is cool.  Dimension is positive definite. */
-   
-   if ( ndim <= 0 )
-      {
-      
-      chkin_c    ( "vdotg_c"                                      );
-      SpiceError ( "Vector dimension less than or equal to zero",
-                   "BADDIMENSION"                                 );
-      chkout_c   ( "vdotg_c"                                      );
-      return     ( 0.                                             );
-      
-      }
-
-
-   /* Do the calculation.  Not very involved. */
-   
+   /*
+   Do the calculation.  Not very involved.
+   */
    for ( i = 0; i < ndim; i++ )
-      {
+   {
       dot += v1[i] * v2[i];
-      }
+   }
 
-
-   /* Return the value. */
-
+   /*
+   Return the value.
+   */
    return dot;
-   
+
 
 } /* End vdotg_c */

@@ -13,7 +13,7 @@ static integer c__3 = 3;
 static integer c__0 = 0;
 static integer c__1 = 1;
 
-/* $Procedure      OUTMSG ( Output Error Messages ) */
+/* $Procedure OUTMSG ( Output Error Messages ) */
 /* Subroutine */ int outmsg_(char *list, ftnlen list_len)
 {
     /* Initialized data */
@@ -175,39 +175,39 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     LIST           is a list of error message types.  A list is a */
-/*                    character string containing one or more words */
-/*                    from the following list, separated by commas. */
+/*     LIST     is a list of error message types. A list is a */
+/*              character string containing one or more words */
+/*              from the following list, separated by commas. */
 
-/*                       SHORT */
-/*                       EXPLAIN */
-/*                       LONG */
-/*                       TRACEBACK */
-/*                       DEFAULT */
+/*                 SHORT */
+/*                 EXPLAIN */
+/*                 LONG */
+/*                 TRACEBACK */
+/*                 DEFAULT */
 
-/*                    Each type of error message specified in LIST will */
-/*                    be output when an error is detected, if it is */
-/*                    enabled for output.  Note that DEFAULT does */
-/*                    NOT refer to the "default message selection," */
-/*                    but rather to a special message that is output */
-/*                    when the error action is 'DEFAULT'.  This message */
-/*                    is a statement referring the user to the error */
-/*                    handling documentation. */
+/*              Each type of error message specified in LIST will */
+/*              be output when an error is detected, if it is */
+/*              enabled for output. Note that DEFAULT does */
+/*              NOT refer to the "default message selection," */
+/*              but rather to a special message that is output */
+/*              when the error action is 'DEFAULT'.  This message */
+/*              is a statement referring the user to the error */
+/*              handling documentation. */
 
-/*                    Messages are never duplicated in the output; for */
-/*                    instance, supplying a value of LIST such as */
+/*              Messages are never duplicated in the output; for */
+/*              instance, supplying a value of LIST such as */
 
-/*                       'SHORT, SHORT' */
+/*                 'SHORT, SHORT' */
 
-/*                    does NOT result in the output of two short */
-/*                    messages. */
+/*              does NOT result in the output of two short */
+/*              messages. */
 
-/*                    The words in LIST may appear in mixed case; */
-/*                    for example, the call */
+/*              The words in LIST may appear in mixed case; */
+/*              for example, the call */
 
-/*                       CALL OUTMSG ( 'ShOrT' ) */
+/*                 CALL OUTMSG ( 'ShOrT' ) */
 
-/*                    will work. */
+/*              will work. */
 
 /* $ Detailed_Output */
 
@@ -215,64 +215,76 @@ static integer c__1 = 1;
 
 /* $ Parameters */
 
-/*     FILEN          is the maximum device name length that can be */
-/*                    accommodated by this routine. */
+/*     FILEN    is the maximum device name length that can be */
+/*              accommodated by this routine. */
 
-/*     NAMELN         is the maximum length of an individual module name. */
+/*     NAMELN   is the maximum length of an individual module name. */
 
-/*     LL             is the maximum line length for the output message. */
-/*                    If the output message string is very long, it is */
-/*                    displayed over several lines, each of which has a */
-/*                    maximum length of LL characters. */
+/*     LL       is the maximum line length for the output message. */
+/*              If the output message string is very long, it is */
+/*              displayed over several lines, each of which has a */
+/*              maximum length of LL characters. */
 
 /* $ Exceptions */
 
-/*     1)  This routine detects invalid message types in the argument, */
-/*         LIST.   The short error message in this case is */
-/*         'SPICE(INVALIDLISTITEM)' */
+/*     1)  If an invalid message type is provided in LIST, the error */
+/*         SPICE(INVALIDLISTITEM) is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      This routine is part of the SPICELIB error handling */
-/*      mechanism. */
+/*     This routine is part of the SPICELIB error handling */
+/*     mechanism. */
 
-/*      This routine outputs the error messages specified in LIST that */
-/*      have been enabled for output (use the SPICELIB routine ERRPRT */
-/*      to enable or disable output of specified types of error */
-/*      messages).  A border is written out preceding and following the */
-/*      messages.  Output is directed to the current error output device. */
+/*     This routine outputs the error messages specified in LIST that */
+/*     have been enabled for output (use the SPICELIB routine ERRPRT */
+/*     to enable or disable output of specified types of error */
+/*     messages).  A border is written out preceding and following the */
+/*     messages. Output is directed to the current error output device. */
 
 /* $ Examples */
 
-/*      1)  Output the short and long error messages: */
+/*     1)  Output the short and long error messages: */
 
-/*         C */
-/*         C     Output short and long messages: */
-/*         C */
-/*               CALL OUTMSG ( 'SHORT, LONG' ) */
+/*        C */
+/*        C     Output short and long messages: */
+/*        C */
+/*              CALL OUTMSG ( 'SHORT, LONG' ) */
 
 /* $ Restrictions */
 
-/*      1)  This routine is intended for use by the SPICELIB error */
-/*          handling mechanism.  SPICELIB users are not expected to */
-/*          need to call this routine. */
+/*     1)  This routine is intended for use by the SPICELIB error */
+/*         handling mechanism. SPICELIB users are not expected to */
+/*         need to call this routine. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      K.R. Gehringer  (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      M.J. Spencer    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.29.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 5.28.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 5.27.0, 10-MAR-2014 (BVS) */
 
@@ -388,93 +400,92 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 5.1.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 5.1.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
-/* -     SPICELIB Version 5.1.2, 28-JUL-1999 (WLT) */
+/* -    SPICELIB Version 5.1.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
-/* -     SPICELIB Version 5.1.1, 18-MAR-1999 (WLT) */
+/* -    SPICELIB Version 5.1.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
-/* -     SPICELIB Version 5.1.0, 13-JAN-1999 (BVS) */
+/* -    SPICELIB Version 5.1.0, 13-JAN-1999 (BVS) */
 
-/*         ``errhnd.inc'' file was included. Long and short error */
-/*         message lengths parameter declarations were deleted. Long */
-/*         and short error message string sizes were changed to those */
-/*         declared in ``errhnd.inc''. */
+/*        ``errhnd.inc'' file was included. Long and short error */
+/*        message lengths parameter declarations were deleted. Long */
+/*        and short error message string sizes were changed to those */
+/*        declared in ``errhnd.inc''. */
 
-/* -     SPICELIB Version 5.0.0, 08-APR-1998 (NJB) */
+/* -    SPICELIB Version 5.0.0, 08-APR-1998 (NJB) */
 
-/*         Module was updated for the PC-LINUX platform. */
+/*        Module was updated for the PC-LINUX platform. */
 
-/* -     SPICELIB Version 4.0.0, 09-MAY-1996 (KRG) */
+/* -    SPICELIB Version 4.0.0, 09-MAY-1996 (KRG) */
 
-/*         Added the toolkit version to the output error message. */
+/*        Added the toolkit version to the output error message. */
 
-/*         Updated this routine to be consistent with the trace package */
-/*         revisions. This primarily affects the creation of the */
-/*         traceback string. */
+/*        Updated this routine to be consistent with the trace package */
+/*        revisions. This primarily affects the creation of the */
+/*        traceback string. */
 
-/*         Long error messages are now wrapped on word boundaries when */
-/*         they are longer than the output line length. Note that this */
-/*         only happens for long error messages obtained from GETLMS, */
-/*         and not for the error messages displayed by this subroutine */
-/*         and other error handling subroutines that write their own */
-/*         error messages. */
+/*        Long error messages are now wrapped on word boundaries when */
+/*        they are longer than the output line length. Note that this */
+/*        only happens for long error messages obtained from GETLMS, */
+/*        and not for the error messages displayed by this subroutine */
+/*        and other error handling subroutines that write their own */
+/*        error messages. */
 
-/* -     SPICELIB Version 3.0.0, 09-NOV-1993 (HAN) */
+/* -    SPICELIB Version 3.0.0, 09-NOV-1993 (HAN) */
 
-/*         Module was updated to include the value for FILEN */
-/*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
-/*         NeXT platforms. Also, the previous value of 256 for */
-/*         Unix platforms was changed to 255. */
+/*        Module was updated to include the value for FILEN */
+/*        for the Silicon Graphics, DEC Alpha-OSF/1, and */
+/*        NeXT platforms. Also, the previous value of 256 for */
+/*        Unix platforms was changed to 255. */
 
-/* -     SPICELIB Version 2.2.0, 12-OCT-1992 (HAN) */
+/* -    SPICELIB Version 2.2.0, 12-OCT-1992 (HAN) */
 
 /*        Updated module for multiple environments. Moved the parameter */
-/*        LL to the Declarations section of the header since it's */
+/*        LL to the $Declarations section of the header since it's */
 /*        environment dependent. */
 
 /*        The code was also reformatted so that a utility program can */
 /*        create the source file for a specific environment given a */
 /*        master source file. */
 
-/* -     SPICELIB Version 2.1.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 2.1.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
+/* -    SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
 
-/*         Module was updated to include the value of LL for the */
-/*         Macintosh. */
+/*        Module was updated to include the value of LL for the */
+/*        Macintosh. */
 
-/* -     SPICELIB Version 2.0.0, 28-MAR-1991 (NJB) */
+/* -    SPICELIB Version 2.0.0, 28-MAR-1991 (NJB) */
 
-/*         Work-around for MS Fortran compiler error under DOS 3.10 */
-/*         was made.  Some substring bounds were simplified using RTRIM. */
-/*         Updates were made to the header to clarify the text and */
-/*         improve the header's appearance.  The default error message */
-/*         was slightly de-uglified. */
+/*        Work-around for MS Fortran compiler error under DOS 3.10 */
+/*        was made. Some substring bounds were simplified using RTRIM. */
+/*        Updates were made to the header to clarify the text and */
+/*        improve the header's appearance. The default error message */
+/*        was slightly de-uglified. */
 
-/*         The IBM PC version of this routine now uses an output line */
-/*         length of 78 characters rather than 80.  This prevents */
-/*         wrapping of the message borders and default error message. */
+/*        The IBM PC version of this routine now uses an output line */
+/*        length of 78 characters rather than 80. This prevents */
+/*        wrapping of the message borders and default error message. */
 
-
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -484,103 +495,103 @@ static integer c__1 = 1;
 /* -& */
 /* $ Revisions */
 
-/* -     SPICELIB Version 5.1.0, 13-JAN-1999 (BVS) */
+/* -    SPICELIB Version 5.1.0, 13-JAN-1999 (BVS) */
 
-/*         ``errhnd.inc'' file was included. Long and short error */
-/*         message lengths parameter declarations were deleted. Long */
-/*         and short error message string size were changed to those */
-/*         declared in ``errhnd.inc''. */
+/*        ``errhnd.inc'' file was included. Long and short error */
+/*        message lengths parameter declarations were deleted. Long */
+/*        and short error message string size were changed to those */
+/*        declared in ``errhnd.inc''. */
 
-/* -     SPICELIB Version 5.0.0, 08-APR-1998 (NJB) */
+/* -    SPICELIB Version 5.0.0, 08-APR-1998 (NJB) */
 
-/*         Module was updated for the PC-LINUX platform. */
+/*        Module was updated for the PC-LINUX platform. */
 
-/* -     SPICELIB Version 4.0.0, 09-MAY-1996 (KRG) */
+/* -    SPICELIB Version 4.0.0, 09-MAY-1996 (KRG) */
 
-/*         Added the toolkit version to the output error message. */
+/*        Added the toolkit version to the output error message. */
 
-/*         Updated this routine to be consistent with the trace package */
-/*         revisions. This primarily affects the creation of the */
-/*         traceback string. */
+/*        Updated this routine to be consistent with the trace package */
+/*        revisions. This primarily affects the creation of the */
+/*        traceback string. */
 
-/*         Long error messages are now wrapped on word boundaries when */
-/*         they are longer than the output line length. Note that this */
-/*         only happens for long error messages obtained from GETLMS, */
-/*         and not for the error messages displayed by this subroutine */
-/*         and other error handling subroutines that write their own */
-/*         error messages. */
+/*        Long error messages are now wrapped on word boundaries when */
+/*        they are longer than the output line length. Note that this */
+/*        only happens for long error messages obtained from GETLMS, */
+/*        and not for the error messages displayed by this subroutine */
+/*        and other error handling subroutines that write their own */
+/*        error messages. */
 
-/* -     SPICELIB Version 3.0.0, 9-NOV-1993 (HAN) */
+/* -    SPICELIB Version 3.0.0, 9-NOV-1993 (HAN) */
 
-/*         Module was updated to include the value for FILEN */
-/*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
-/*         NeXT platforms. Also, the previous value of 256 for */
-/*         Unix platforms was changed to 255. */
+/*        Module was updated to include the value for FILEN */
+/*        for the Silicon Graphics, DEC Alpha-OSF/1, and */
+/*        NeXT platforms. Also, the previous value of 256 for */
+/*        Unix platforms was changed to 255. */
 
-/* -     SPICELIB Version 2.2.0, 12-OCT-1992 (HAN) */
+/* -    SPICELIB Version 2.2.0, 12-OCT-1992 (HAN) */
 
 /*        Updated module for multiple environments. Moved the */
-/*        parameter LL to the Declarations section of the header since */
+/*        parameter LL to the $Declarations section of the header since */
 /*        it's environment dependent. */
 
 /*        The code was also reformatted so that a utility program can */
 /*        create the source file for a specific environment given a */
 /*        master source file. */
 
-/* -     SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
+/* -    SPICELIB Version 2.1.0, 15-MAY-1991 (MJS) */
 
-/*         Module was updated to include the value of LL for the */
-/*         Macintosh. */
+/*        Module was updated to include the value of LL for the */
+/*        Macintosh. */
 
-/* -     SPICELIB Version 2.0.0, 28-MAR-1991 (NJB) */
+/* -    SPICELIB Version 2.0.0, 28-MAR-1991 (NJB) */
 
-/*         1)  Work-around for MS Fortran compiler error under DOS 3.10 */
-/*             was made.  The compiler did not correctly handle code that */
-/*             concatenated strings whose bounds involved the intrinsic */
-/*             MAX function. */
+/*        1)  Work-around for MS Fortran compiler error under DOS 3.10 */
+/*            was made. The compiler did not correctly handle code that */
+/*            concatenated strings whose bounds involved the intrinsic */
+/*            MAX function. */
 
-/*         2)  Some substring bounds were simplified using RTRIM. */
+/*        2)  Some substring bounds were simplified using RTRIM. */
 
-/*         3)  Updates were made to the header to clarify the text and */
-/*             improve the header's appearance. */
+/*        3)  Updates were made to the header to clarify the text and */
+/*            improve the header's appearance. */
 
-/*         4)  Declarations were re-organized. */
+/*        4)  $Declarations were re-organized. */
 
-/*         5)  The default error message was slightly de-uglified. */
+/*        5)  The default error message was slightly de-uglified. */
 
-/*         6)  The IBM PC version of this routine now uses an output line */
-/*             length of 78 characters rather than 80.  This prevents */
-/*             wrapping of the message borders and default error message. */
+/*        6)  The IBM PC version of this routine now uses an output line */
+/*            length of 78 characters rather than 80. This prevents */
+/*            wrapping of the message borders and default error message. */
 
-/* -     Beta Version 1.3.0, 19-JUL-1989 (NJB) */
+/* -    Beta Version 1.3.0, 19-JUL-1989 (NJB) */
 
-/*         Calls to REMSUB removed; blanking and left-justifying used */
-/*         instead.  This was done because REMSUB handles substring */
-/*         bounds differently than in previous versions, and no longer */
-/*         handles all possible inputs as required by this routine. */
-/*         LJUST, which is used now, is error free. */
+/*        Calls to REMSUB removed; blanking and left-justifying used */
+/*        instead. This was done because REMSUB handles substring */
+/*        bounds differently than in previous versions, and no longer */
+/*        handles all possible inputs as required by this routine. */
+/*        LJUST, which is used now, is error free. */
 
-/*         Also, an instance of .LT. was changed to .LE.   The old code */
-/*         caused a line break one character too soon.  A minor bug, but */
-/*         a bug nonetheless. */
+/*        Also, an instance of .LT. was changed to .LE. The old code */
+/*        caused a line break one character too soon. A minor bug, but */
+/*        a bug nonetheless. */
 
-/*         Also, two substring bounds were changed to ensure that they */
-/*         remain greater than zero. */
+/*        Also, two substring bounds were changed to ensure that they */
+/*        remain greater than zero. */
 
-/* -     Beta Version 1.2.0, 16-FEB-1989 (NJB) */
+/* -    Beta Version 1.2.0, 16-FEB-1989 (NJB) */
 
-/*         Warnings added to discourage use of this routine in */
-/*         non-error-handling code.  Parameters section updated to */
-/*         describe FILEN and NAMLEN. */
+/*        Warnings added to discourage use of this routine in */
+/*        non-error-handling code. $Parameters section updated to */
+/*        describe FILEN and NAMLEN. */
 
-/*         Declaration of unused function FAILED removed. */
+/*        Declaration of unused function FAILED removed. */
 
-/* -     Beta Version 1.1.0, 06-OCT-1988 (NJB) */
+/* -    Beta Version 1.1.0, 06-OCT-1988 (NJB) */
 
-/*         Test added to ensure substring upper bound is greater than 0. */
-/*         REMAIN must be greater than 0 when used as the upper bound */
-/*         for a substring of NAME.  Also, substring upper bound in */
-/*         WRLINE call is now forced to be greater than 0. */
+/*        Test added to ensure substring upper bound is greater than 0. */
+/*        REMAIN must be greater than 0 when used as the upper bound */
+/*        for a substring of NAME. Also, substring upper bound in */
+/*        WRLINE call is now forced to be greater than 0. */
 
 /* -& */
 
@@ -631,7 +642,7 @@ static integer c__1 = 1;
     i__1 = numwrd;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	ucase_(words + ((i__2 = i__ - 1) < 5 && 0 <= i__2 ? i__2 : s_rnge(
-		"words", i__2, "outmsg_", (ftnlen)613)) * 9, upword, (ftnlen)
+		"words", i__2, "outmsg_", (ftnlen)629)) * 9, upword, (ftnlen)
 		9, (ftnlen)9);
 	if (s_cmp(upword, "SHORT", (ftnlen)9, (ftnlen)5) == 0) {
 	    short__ = TRUE_;
@@ -661,7 +672,7 @@ static integer c__1 = 1;
 /* Writing concatenation */
 	    i__3[0] = 29, a__1[0] = "The invalid message type was ";
 	    i__3[1] = 9, a__1[1] = words + ((i__2 = i__ - 1) < 5 && 0 <= i__2 
-		    ? i__2 : s_rnge("words", i__2, "outmsg_", (ftnlen)650)) * 
+		    ? i__2 : s_rnge("words", i__2, "outmsg_", (ftnlen)666)) * 
 		    9;
 	    s_cat(ch__1, a__1, i__3, &c__2, (ftnlen)38);
 	    wrline_(device, ch__1, (ftnlen)128, (ftnlen)38);
@@ -946,7 +957,7 @@ static integer c__1 = 1;
 
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    wrline_(device, defmsg + ((i__1 = i__ - 1) < 4 && 0 <= i__1 ? 
-		    i__1 : s_rnge("defmsg", i__1, "outmsg_", (ftnlen)971)) * 
+		    i__1 : s_rnge("defmsg", i__1, "outmsg_", (ftnlen)987)) * 
 		    78, (ftnlen)128, (ftnlen)78);
 	}
 	wrline_(device, " ", (ftnlen)128, (ftnlen)1);

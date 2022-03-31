@@ -74,7 +74,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of file containing source segment. */
 /*     BADDR      I   Beginning address in file of source segment. */
@@ -86,25 +86,25 @@ static integer c__1 = 1;
 
 /*     HANDLE, */
 /*     BADDR, */
-/*     EADDR       are the file handle assigned to an SPK file, and the */
-/*                 beginning and ending addresses of a segment within */
-/*                 that file.  Together they determine a complete set of */
-/*                 ephemeris data, from which a subset is to be */
-/*                 extracted. */
+/*     EADDR    are the file handle assigned to an SPK file, and the */
+/*              beginning and ending addresses of a segment within */
+/*              that file. Together they determine a complete set of */
+/*              ephemeris data, from which a subset is to be */
+/*              extracted. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset. */
+/*     END      are the initial and final epochs (ephemeris time) */
+/*              of the subset. */
 
-/*                 The first epoch for which there will be ephemeris */
-/*                 data in the new segment will be the greatest time */
-/*                 in the source segment that is less than or equal */
-/*                 to BEGIN. */
+/*              The first epoch for which there will be ephemeris */
+/*              data in the new segment will be the greatest time */
+/*              in the source segment that is less than or equal */
+/*              to BEGIN. */
 
-/*                 The last epoch for which there will be ephemeris */
-/*                 data in the new segment will be the smallest time */
-/*                 in the source segment that is greater than or equal */
-/*                 to END. */
+/*              The last epoch for which there will be ephemeris */
+/*              data in the new segment will be the smallest time */
+/*              in the source segment that is greater than or equal */
+/*              to END. */
 
 /* $ Detailed_Output */
 
@@ -128,7 +128,7 @@ static integer c__1 = 1;
 /*     handle, and written to the current DAF open for writing. */
 
 /*     The segment descriptor and summary must already have been written */
-/*     prior to calling this routine.  The segment must be ended */
+/*     prior to calling this routine. The segment must be ended */
 /*     external to this routine. */
 
 /* $ Particulars */
@@ -159,7 +159,7 @@ static integer c__1 = 1;
 
 /*        End the array to which this routine writes data. */
 
-/*     Much of this procedure is carried out by the routine SPKSUB.  The */
+/*     Much of this procedure is carried out by the routine SPKSUB. The */
 /*     examples of that routine illustrate more fully the process */
 /*     described above. */
 
@@ -173,12 +173,18 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.1.0, 07-SEP-2001 (EDW) */
 
@@ -187,7 +193,7 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 2.0.0, 27-AUG-1994 (NJB) */
 
-/*        Bug fix:  Sufficient bracketing states are now included in the */
+/*        Bug fix: Sufficient bracketing states are now included in the */
 /*        output segment to ensure duplication of states given by source */
 /*        segment. */
 
@@ -198,11 +204,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_9 spk segment */
-
-/* -& */
-/* $ Revisions */
-
+/*     subset type_9 SPK segment */
 
 /* -& */
 

@@ -20,7 +20,7 @@ integer wdcnt_(char *string, ftnlen string_len)
 
 /* $ Abstract */
 
-/*      Return the number of words in a string. */
+/*     Return the number of words in a string. */
 
 /* $ Disclaimer */
 
@@ -53,27 +53,30 @@ integer wdcnt_(char *string, ftnlen string_len)
 
 /* $ Keywords */
 
-/*      STRING,  WORD */
+/*     STRING */
+/*     WORD */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STRING     I   Input character string. */
-/*      WDCNT      O   The number of words in string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STRING     I   Input character string. */
+
+/*     The function returns the number of words in the input string */
+/*     STRING. */
 
 /* $ Detailed_Input */
 
-/*      STRING      is the input string to be parsed. It contains */
-/*                  some number of words, where a word is any string */
-/*                  of consecutive non-blank characters delimited */
-/*                  by a blank or by either end of the string. */
+/*     STRING   is the input string to be parsed. It contains some number */
+/*              of words, where a word is any string of consecutive */
+/*              non-blank characters delimited by a blank or by either */
+/*              end of the string. */
 
 /* $ Detailed_Output */
 
-/*      WDCNT       is the number of words in the input character */
-/*                  string. */
+/*     The function returns the number of words in the input character */
+/*     string STRING. */
 
 /* $ Parameters */
 
@@ -81,61 +84,70 @@ integer wdcnt_(char *string, ftnlen string_len)
 
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      WDCNT, like NTHWD and NEXTWD, is useful primarily for parsing */
-/*      input commands consisting of one or more words, where a word is */
-/*      defined to be any sequence of consecutive non-blank characters */
-/*      delimited by either a blank or by either end of the string. */
+/*     WDCNT, like NTHWD and NEXTWD, is useful primarily for parsing */
+/*     input commands consisting of one or more words, where a word is */
+/*     defined to be any sequence of consecutive non-blank characters */
+/*     delimited by either a blank or by either end of the string. */
 
 /* $ Examples */
 
-/*      The following examples illustrate the use of WDCNT. */
+/*     The following examples illustrate the use of WDCNT. */
 
-/*            WDCNT ( 'Now is the time'  )   = 4 */
-/*            WDCNT ( '  for all  '      )   = 2 */
-/*            WDCNT ( 'good,men.to_come' )   = 1 */
-/*            WDCNT ( ' '                )   = 0 */
+/*           WDCNT ( 'Now is the time'  )   = 4 */
+/*           WDCNT ( '  for all  '      )   = 2 */
+/*           WDCNT ( 'good,men.to_come' )   = 1 */
+/*           WDCNT ( ' '                )   = 0 */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 10-JAN-2005 (EDW) */
+/* -    SPICELIB Version 1.2.0, 08-APR-2021 (JDR) */
 
-/*         Added logic to prevent the evaluation of STRING(LOC:LOC) */
-/*         if LOC exceeds the length of string. Functionally, the */
-/*         evaluation had no effect on WDCNT's output, but the NAG */
-/*         F95 compiler flagged the evaluation as an array */
-/*         overrun error. This occurred because given: */
+/*        Added IMPLICIT NONE statement. */
 
-/*             A .AND. B */
+/*        Edited the header to comply with NAIF standard. */
 
-/*         NAG evaluates A then B then performs the logical */
-/*         comparison. */
+/* -    SPICELIB Version 1.1.0, 10-JAN-2005 (EDW) */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Added logic to prevent the evaluation of STRING(LOC:LOC) */
+/*        if LOC exceeds the length of string. Functionally, the */
+/*        evaluation had no effect on WDCNT's output, but the NAG */
+/*        F95 compiler flagged the evaluation as an array */
+/*        overrun error. This occurred because given: */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*            A .AND. B */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        NAG evaluates A then B then performs the logical */
+/*        comparison. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

@@ -9,7 +9,7 @@
 
 static integer c__4 = 4;
 
-/* $Procedure   STCC01 ( STAR catalog type 1, check whether type 1 ) */
+/* $Procedure STCC01 ( STAR catalog type 1, check whether type 1 ) */
 /* Subroutine */ int stcc01_(char *catfnm, char *tabnam, logical *istyp1, 
 	char *errmsg, ftnlen catfnm_len, ftnlen tabnam_len, ftnlen errmsg_len)
 {
@@ -211,29 +211,29 @@ static integer c__4 = 4;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     CATFNM      I   Catalog file name. */
-/*     TABNAM      O   Catalog table name. */
-/*     ISTYP1      O   True when file is type 1 star catalog. */
-/*     ERRMSG      O   Error message. */
+/*     CATFNM     I   Catalog file name. */
+/*     TABNAM     O   Catalog table name. */
+/*     ISTYP1     O   .TRUE. when file is type 1 star catalog. */
+/*     ERRMSG     O   Error message. */
 
 /* $ Detailed_Input */
 
-/*     CATFNM      is the name of the catalog file. */
+/*     CATFNM   is the name of the catalog file. */
 
 /* $ Detailed_Output */
 
-/*     TABNAM      is the name of the data table contained in the */
-/*                 catalog. Set to blank if file is not a type 1 star */
-/*                 catalog. */
+/*     TABNAM   is the name of the data table contained in the */
+/*              catalog. Set to blank if file is not a type 1 star */
+/*              catalog. */
 
-/*     ISTYP1      is TRUE when the file is a type 1 star catalog. FALSE */
-/*                 otherwise. */
+/*     ISTYP1   is .TRUE. when the file is a type 1 star catalog. .FALSE. */
+/*              otherwise. */
 
-/*     ERRMSG      is a diagnostic message indicating why the file is */
-/*                 not a type 1 star catalog. Set to blank if the file */
-/*                 is a type 1 star catalog. */
+/*     ERRMSG   is a diagnostic message indicating why the file is */
+/*              not a type 1 star catalog. Set to blank if the file */
+/*              is a type 1 star catalog. */
 
 /* $ Parameters */
 
@@ -241,14 +241,16 @@ static integer c__4 = 4;
 
 /* $ Exceptions */
 
-/*     1)  If the indicated file cannot be opened, the error will be */
-/*         diagnosed by routines called by this routine. */
+/*     1)  If the indicated file cannot be opened, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
-/*     2)  If the indicated file has the wrong architecture version, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*     2)  If the indicated file has the wrong architecture version, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     3)  If an I/O error occurs while reading the indicated file, the */
-/*         error will be diagnosed by routines called by this routine. */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -315,9 +317,16 @@ static integer c__4 = 4;
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 16-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 15-MAY-1996 (BVS) */
 
@@ -411,25 +420,25 @@ static integer c__4 = 4;
     for (i__ = 1; i__ <= 7; ++i__) {
 	found = FALSE_;
 	j = isrchc_(cat1nm + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 : 
-		s_rnge("cat1nm", i__1, "stcc01_", (ftnlen)319)) << 5), &ncols,
+		s_rnge("cat1nm", i__1, "stcc01_", (ftnlen)332)) << 5), &ncols,
 		 cnames, (ftnlen)32, (ftnlen)32);
 	if (j > 0) {
 	    found = s_cmp(cat1dt + (((i__1 = i__ - 1) < 7 && 0 <= i__1 ? i__1 
-		    : s_rnge("cat1dt", i__1, "stcc01_", (ftnlen)322)) << 2), 
+		    : s_rnge("cat1dt", i__1, "stcc01_", (ftnlen)335)) << 2), 
 		    dtypes + (((i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("dtypes", i__2, "stcc01_", (ftnlen)322)) << 2), (
+		    s_rnge("dtypes", i__2, "stcc01_", (ftnlen)335)) << 2), (
 		    ftnlen)4, (ftnlen)4) == 0 && ! nullok[(i__3 = j - 1) < 
 		    100 && 0 <= i__3 ? i__3 : s_rnge("nullok", i__3, "stcc01_"
-		    , (ftnlen)322)];
+		    , (ftnlen)335)];
 	}
 	if (! found) {
 /* Writing concatenation */
 	    i__4[0] = 8, a__1[0] = " Column ";
 	    i__4[1] = nblen_(cat1nm + (((i__2 = i__ - 1) < 7 && 0 <= i__2 ? 
-		    i__2 : s_rnge("cat1nm", i__2, "stcc01_", (ftnlen)326)) << 
+		    i__2 : s_rnge("cat1nm", i__2, "stcc01_", (ftnlen)339)) << 
 		    5), (ftnlen)32), a__1[1] = cat1nm + (((i__1 = i__ - 1) < 
 		    7 && 0 <= i__1 ? i__1 : s_rnge("cat1nm", i__1, "stcc01_", 
-		    (ftnlen)326)) << 5);
+		    (ftnlen)339)) << 5);
 	    i__4[2] = 16, a__1[2] = " is not found or";
 	    i__4[3] = 33, a__1[3] = " improperly declared in the file.";
 	    s_cat(errmsg, a__1, i__4, &c__4, errmsg_len);

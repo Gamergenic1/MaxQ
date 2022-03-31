@@ -21,8 +21,8 @@
 
 /* $ Abstract */
 
-/*      Take the symmetric difference of two double precision sets */
-/*      to form a third set. */
+/*     Take the symmetric difference of two double precision sets */
+/*     to form a third set. */
 
 /* $ Disclaimer */
 
@@ -51,115 +51,122 @@
 
 /* $ Required_Reading */
 
-/*      SETS */
+/*     SETS */
 
 /* $ Keywords */
 
-/*      CELLS, SETS */
+/*     CELLS */
+/*     SETS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A          I   First input set. */
-/*      B          I   Second input set. */
-/*      C          O   Symmetric difference of A and B. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A          I   First input set. */
+/*     B          I   Second input set. */
+/*     C          O   Symmetric difference of A and B. */
 
 /* $ Detailed_Input */
 
+/*     A        is a set. */
 
-/*      A           is a set. */
 
-
-/*      B           is a set, distinct from A. */
+/*     B        is a set, distinct from A. */
 
 /* $ Detailed_Output */
 
-/*      C           is a set, distinct from sets A and B, which */
-/*                  contains the symmetric difference of A and B */
-/*                  (that is, all of the elements which are in A */
-/*                  OR in B, but NOT in both). */
+/*     C        is a set, distinct from sets A and B, which */
+/*              contains the symmetric difference of A and B */
+/*              (that is, all of the elements which are in A */
+/*              OR in B, but NOT in both). */
 
-/*                  If the size (maximum cardinality) of C is smaller */
-/*                  than the cardinality of the symmetric difference of */
-/*                  A and B, then only as many items as will fit in C */
-/*                  are included, and an error is signalled. */
+/*              If the size (maximum cardinality) of C is smaller */
+/*              than the cardinality of the symmetric difference of */
+/*              A and B, then only as many items as will fit in C */
+/*              are included, and an error is signaled. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      The SYMMETRIC DIFFERENCE of two sets contains every */
-/*      element which is in the first set OR in the second set, */
-/*      but NOT in both sets. */
-
-/*            {a,b}      sym. difference {c,d}     =  {a,b,c,d} */
-/*            {a,b,c}                    {b,c,d}      {a,d} */
-/*            {a,b,c,d}                  {}           {a,b,c,d} */
-/*            {}                         {a,b,c,d}    {a,b,c,d} */
-/*            {}                         {}           {} */
-
-/*      The following call */
-
-/*            CALL SDIFFC  ( PLANETS, ASTEROIDS, RESULT ) */
-
-/*      places the symmetric difference of the character sets PLANETS and */
-/*      ASTEROIDS into the character set RESULT. */
-
-/*      The output set must be distinct from both of the input sets. */
-/*      For example, the following calls are invalid. */
-
-/*            CALL SDIFFI ( CURRENT,     NEW, CURRENT ) */
-/*            CALL SDIFFI (     NEW, CURRENT, CURRENT ) */
-
-/*      In each of the examples above, whether or not the subroutine */
-/*      signals an error, the results will almost certainly be wrong. */
-/*      Nearly the same effect can be achieved, however, by placing the */
-/*      result into a temporary set, which is immediately copied back */
-/*      into one of the input sets, as shown below. */
-
-/*            CALL SDIFFI ( CURRENT, NEW,  TEMP ) */
-/*            CALL COPYI  ( TEMP,    NEW ) */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the symmetric difference of the two sets causes an excess of */
-/*        elements, the error SPICE(SETEXCESS) is signalled. */
+/*     1)  If the symmetric difference of the two sets causes an excess */
+/*         of elements, the error SPICE(SETEXCESS) is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     None. */
+
+/* $ Examples */
+
+/*     The SYMMETRIC DIFFERENCE of two sets contains every */
+/*     element which is in the first set OR in the second set, */
+/*     but NOT in both sets. */
+
+/*           {a,b}      sym. difference {c,d}     =  {a,b,c,d} */
+/*           {a,b,c}                    {b,c,d}      {a,d} */
+/*           {a,b,c,d}                  {}           {a,b,c,d} */
+/*           {}                         {a,b,c,d}    {a,b,c,d} */
+/*           {}                         {}           {} */
+
+/*     The following call */
+
+/*           CALL SDIFFC  ( PLANETS, ASTEROIDS, RESULT ) */
+
+/*     places the symmetric difference of the character sets PLANETS and */
+/*     ASTEROIDS into the character set RESULT. */
+
+/*     The output set must be distinct from both of the input sets. */
+/*     For example, the following calls are invalid. */
+
+/*           CALL SDIFFI ( CURRENT,     NEW, CURRENT ) */
+/*           CALL SDIFFI (     NEW, CURRENT, CURRENT ) */
+
+/*     In each of the examples above, whether or not the subroutine */
+/*     signals an error, the results will almost certainly be wrong. */
+/*     Nearly the same effect can be achieved, however, by placing the */
+/*     result into a temporary set, which is immediately copied back */
+/*     into one of the input sets, as shown below. */
+
+/*           CALL SDIFFI ( CURRENT, NEW,  TEMP ) */
+/*           CALL COPYI  ( TEMP,    NEW ) */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      C.A. Curzon     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -171,7 +178,7 @@
 
 /* -    Beta Version 1.1.0, 06-JAN-1989 (NJB) */
 
-/*        Calling protocol of EXCESS changed.  Call to SETMSG removed. */
+/*        Calling protocol of EXCESS changed. Call to SETMSG removed. */
 
 /* -& */
 

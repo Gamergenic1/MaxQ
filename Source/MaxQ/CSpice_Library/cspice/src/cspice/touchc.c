@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      TOUCHC ( Touch a variable ) */
+/* $Procedure TOUCHC ( Touch a variable ) */
 /* Character */ VOID touchc_(char *ret_val, ftnlen ret_val_len, char *string, 
 	ftnlen string_len)
 {
@@ -40,24 +40,24 @@
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      STRING     I   any character string */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     STRING     I   any character string */
 
-/*       The function returns the first character of the string. */
+/*      The function returns the first character of the string. */
 
 /* $ Detailed_Input */
 
-/*     STRING      is any character string */
+/*     STRING   is any character string */
 
 /* $ Detailed_Output */
 
@@ -65,24 +65,23 @@
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This is a utility routine so that formal arguments to a routine */
 /*     that are never used can be given the appearance of being used */
-/*     to a compiler.  In this way it is possible to leave "hooks" in */
+/*     to a compiler. In this way it is possible to leave "hooks" in */
 /*     a calling sequence even if those variables are for the moment */
-/*     unused.  Similarly, variables declared for future use can be left */
+/*     unused. Similarly, variables declared for future use can be left */
 /*     in place so that they don't need to be commented out */
 
 /* $ Examples */
@@ -90,7 +89,7 @@
 /*     Suppose that a routine takes as an argument a */
 /*     fortran structure implemented as a set of parallel arrays. */
 /*     But that one of the arrays is not needed for the purposes of */
-/*     the routine.  This routine allows you to touch that array */
+/*     the routine. This routine allows you to touch that array */
 /*     without changing it. */
 
 
@@ -105,7 +104,7 @@
 
 /*        Even though we don't need to do anything with the values */
 /*        array, it's passed for the sake of uniformity in calling */
-/*        sequences.  Touch the VALUES array so that the compiler */
+/*        sequences. Touch the VALUES array so that the compiler */
 /*        will think it's been used. */
 
 /*        VALUES(1)(1:1) = TOUCHC ( VALUES(1)(1:1) ) */
@@ -117,25 +116,27 @@
 /*        END IF */
 /*        RETURN */
 
-
-
 /* $ Restrictions */
 
-/*     If you use this routine, it would be a very good idea to */
-/*     write down why you are using it in the calling routine. */
-
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
+/*     1)  If you use this routine, it would be a very good idea to */
+/*         write down why you are using it in the calling routine. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 6-MAy-1994 (WLT) */
+/* -    SPICELIB Version 1.0.1, 16-AUG-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 06-MAY-1994 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      VHAT ( "V-Hat", unit vector along V, 3 dimensions ) */
+/* $Procedure VHAT ( "V-Hat", unit vector along V, 3 dimensions ) */
 /* Subroutine */ int vhat_(doublereal *v1, doublereal *vout)
 {
     doublereal vmag;
@@ -13,8 +13,8 @@
 
 /* $ Abstract */
 
-/*      Find the unit vector along a double precision 3-dimensional */
-/*      vector. */
+/*     Find the unit vector along a double precision 3-dimensional */
+/*     vector. */
 
 /* $ Disclaimer */
 
@@ -47,82 +47,149 @@
 
 /* $ Keywords */
 
-/*      VECTOR */
+/*     VECTOR */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*       V1        I     Vector to be normalized. */
-/*       VOUT      O     Unit vector V1 / |V1|. */
-/*                       If V1 = 0, VOUT will also be zero. */
-/*                       VOUT can overwrite V1. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     V1         I   Vector to be normalized. */
+/*     VOUT       O   Unit vector V1 / |V1|. */
 
 /* $ Detailed_Input */
 
-/*      V1      This is any double precision, 3-dimensional vector.  If */
-/*              this vector is the zero vector, this routine will detect */
-/*              it, and will not attempt to divide by zero. */
+/*     V1       is any double precision, 3-dimensional vector. */
 
 /* $ Detailed_Output */
 
-/*      VOUT    VOUT contains the unit vector in the direction of V1. If */
-/*              V1 represents the zero vector, then VOUT will also be the */
-/*              zero vector.  VOUT may overwrite V1. */
+/*     VOUT     is the unit vector in the direction of V1. */
+
+/*              If V1 represents the zero vector, then VOUT will also be */
+/*              the zero vector. VOUT may overwrite V1. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     Error free. */
+
+/*     1)  If V1 represents the zero vector, then VOUT will also be the */
+/*         zero vector. */
+
+/* $ Files */
+
+/*     None. */
+
 /* $ Particulars */
 
-/*      VHAT determines the magnitude of V1 and then divides each */
-/*      component of V1 by the magnitude.  This process is highly stable */
-/*      over the whole range of 3-dimensional vectors. */
+/*     VHAT determines the magnitude of V1 and then divides each */
+/*     component of V1 by the magnitude. This process is highly stable */
+/*     over the whole range of 3-dimensional vectors. */
 
 /* $ Examples */
 
-/*      The following table shows how selected V1 implies VOUT. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*      V1                    VOUT */
-/*      ------------------    ------------------ */
-/*      (5, 12, 0)            (5/13, 12/13, 0) */
-/*      (1D-7, 2D-7, 2D-7)    (1/3, 2/3, 2/3) */
+/*     1) Define a set of vectors and compute their corresponding unit */
+/*        vector. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM VHAT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               SETSIZ */
+/*              PARAMETER           ( SETSIZ = 2 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      SETA ( 3, SETSIZ ) */
+/*              DOUBLE PRECISION      VOUT ( 3 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define the vector set. */
+/*        C */
+/*              DATA                  SETA / 5.D0,  12.D0,  0.D0, */
+/*             .                             1.D-7,  2.D-7, 2.D-7 / */
+
+/*        C */
+/*        C     Calculate the unit vectors. */
+/*        C */
+/*              DO I=1, SETSIZ */
+
+/*                 CALL VHAT ( SETA(1,I), VOUT ) */
+
+/*                 WRITE(*,'(A,3F13.8)') 'Vector     : ', */
+/*             .                                   ( SETA(J,I), J=1,3 ) */
+/*                 WRITE(*,'(A,3F13.8)') 'Unit vector: ', VOUT */
+/*                 WRITE(*,*) ' ' */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Vector     :    5.00000000  12.00000000   0.00000000 */
+/*        Unit vector:    0.38461538   0.92307692   0.00000000 */
+
+/*        Vector     :    0.00000010   0.00000020   0.00000020 */
+/*        Unit vector:    0.33333333   0.66666667   0.66666667 */
 
 
 /* $ Restrictions */
 
-/*      There is no known case whereby floating point overflow may occur. */
-/*      Thus, no error recovery or reporting scheme is incorporated */
-/*      into this subroutine. */
-
-/* $ Exceptions */
-
-/*      Error free. */
-
-/* $ Files */
-
-/*      None. */
-
-/* $ Author_and_Institution */
-
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
-/*      W.M. Owen       (JPL) */
+/*     1)  There is no known case whereby floating point overflow may */
+/*         occur. Thus, no error recovery or reporting scheme is */
+/*         incorporated into this subroutine. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.M. Owen          (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 05-JUL-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) */
+/*        Updated the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Added complete code example to $Examples section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WMO) (HAN) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -130,16 +197,12 @@
 /*     unitize a 3-dimensional vector */
 
 /* -& */
-/* $ Revisions */
 
-/* -     Beta Version 1.1.0, 10-FEB-1989 (HAN) (NJB) */
+/*     SPICELIB functions */
 
-/*         Contents of the Exceptions section was changed */
-/*         to "error free" to reflect the decision that the */
-/*         module will never participate in error handling. */
-/*         Also, the declaration of the unused variable I was */
-/*         removed. */
-/* -& */
+
+/*     Local variables */
+
 
 /*  Obtain the magnitude of V1 */
 

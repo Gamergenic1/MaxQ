@@ -292,9 +292,10 @@ static integer c__0 = 0;
 
 /* $ Particulars */
 
-/*     This routine operates by side effects:  it allocates a series of */
-/*     new, contiguous EK data pages for a specified segment.  The */
-/*     segment's metadata are updated to reflect aquisition of the pages. */
+/*     This routine operates by side effects: it allocates a series of */
+/*     new, contiguous EK data pages for a specified segment. The */
+/*     segment's metadata are updated to reflect acquisition of the */
+/*     pages. */
 
 /*     This routine, not ZZEKAPS, should be used when contiguous pages */
 /*     are required. */
@@ -329,6 +330,10 @@ static integer c__0 = 0;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    Beta Version 1.0.0, 09-NOV-1995 (NJB) */
 

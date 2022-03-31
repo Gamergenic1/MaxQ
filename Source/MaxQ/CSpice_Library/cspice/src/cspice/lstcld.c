@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure   LSTCLD ( Last closest double precision array element ) */
+/* $Procedure LSTCLD ( Last closest double precision array element ) */
 integer lstcld_(doublereal *x, integer *n, doublereal *array)
 {
     /* System generated locals */
@@ -16,8 +16,8 @@ integer lstcld_(doublereal *x, integer *n, doublereal *array)
 
 /* $ Abstract */
 
-/*     Given a number X and an array of non-decreasing numbers, find */
-/*     the index of the array element whose value is closest to X. */
+/*     Find the index of the array element closest to a given number X */
+/*     in an array of non-decreasing numbers. */
 
 /* $ Disclaimer */
 
@@ -67,36 +67,47 @@ integer lstcld_(doublereal *x, integer *n, doublereal *array)
 
 /* $ Detailed_Input */
 
-/*     X       is the value to be compared with the elements of ARRAY. */
+/*     X        is the value to be compared with the elements of ARRAY. */
 
-/*     N       is the number of elements in ARRAY. */
+/*     N        is the number of elements in ARRAY. */
 
-/*     ARRAY   is an array of double precision numbers such that */
+/*     ARRAY    is an array of double precision numbers such that */
 
-/*                        ARRAY( I ) <= ARRAY( J ) */
+/*                         ARRAY( I ) <= ARRAY( J ) */
 
-/*             for all I < J. */
+/*              for all I < J. */
 
 /* $ Detailed_Output */
 
-/*     LSTCLD  is the index of the element of the non-decreasing */
-/*             sequence: {ARRAY(I) : 1 <= I <= N} that is closest */
-/*             to X.  In other words, ARRAY( LSTCLD( X, N, ARRAY ) ) */
-/*             is the element of ARRAY whose value is closest to X. */
+/*     LSTCLD   is the index of the element of the non-decreasing */
+/*              sequence: {ARRAY(I) : 1 <= I <= N} that is closest */
+/*              to X. In other words, ARRAY( LSTCLD( X, N, ARRAY ) ) */
+/*              is the element of ARRAY whose value is closest to X. */
 
-/*             If X falls precisely on the midpoint of consecutive array */
-/*             elements, the index of the larger of the two values is */
-/*             returned. */
+/*              If X falls precisely on the midpoint of consecutive array */
+/*              elements, the index of the larger of the two values is */
+/*              returned. */
 
-/*             If X is closest to a value which appears more than */
-/*             once in the array (since the array is ordered, these */
-/*             elements would have to be consecutive), the highest index */
-/*             for that value will be returned. */
+/*              If X is closest to a value which appears more than */
+/*              once in the array (since the array is ordered, these */
+/*              elements would have to be consecutive), the highest index */
+/*              for that value will be returned. */
 
-/*             LSTCLD = I for some I in the range 1 to N, unless N is */
-/*             less than or equal to zero, in which case LSTCLD is zero. */
+/*              LSTCLD = I for some I in the range 1 to N, unless N is */
+/*              less than or equal to zero, in which case LSTCLD is zero. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/*     1)  If the value of N is non-positive, LSTCLD returns the value */
+/*         zero. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -130,19 +141,8 @@ integer lstcld_(doublereal *x, integer *n, doublereal *array)
 
 /* $ Restrictions */
 
-/*     If the sequence is not non-decreasing, the routine will run */
-/*     to completion but the index found will not mean anything. */
-
-/* $ Exceptions */
-
-/*     Error free. */
-
-/*     1) If the value of N is non-positive, LSTCLD returns the value */
-/*        zero. */
-
-/* $ Files */
-
-/*     None. */
+/*     1)  If the sequence is not non-decreasing, the routine will run */
+/*         to completion but the index found will not mean anything. */
 
 /* $ Literature_References */
 
@@ -150,10 +150,17 @@ integer lstcld_(doublereal *x, integer *n, doublereal *array)
 
 /* $ Author_and_Institution */
 
-/*     M.J. Spencer    (JPL) */
-/*     R.E. Thurman    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

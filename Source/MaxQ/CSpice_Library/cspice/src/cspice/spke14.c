@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SPKE14 ( S/P Kernel, evaluate, type 14 ) */
+/* $Procedure SPKE14 ( S/P Kernel, evaluate, type 14 ) */
 /* Subroutine */ int spke14_(doublereal *et, doublereal *record, doublereal *
 	state)
 {
@@ -65,7 +65,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Epoch for which a state is desired. */
 /*     RECORD     I   Record from a type 14 SPK segment valid for ET. */
@@ -105,7 +105,7 @@
 /*     A type 14 record contains six sets of Chebyshev coefficients, */
 /*     one set each for the position coordinates X, Y, and Z, and one */
 /*     set each for the velocity coordinates X', Y', and Z' of a state */
-/*     vector.  SPKE14 calls the routine CHBVAL to evalute each */
+/*     vector.  SPKE14 calls the routine CHBVAL to evaluate each */
 /*     Chebyshev polynomial, and arrive at the complete state. */
 
 /* $ Examples */
@@ -115,9 +115,9 @@
 /*     SPK files. */
 
 /*     The data returned by the SPKRnn routine is in a raw form, taken */
-/*     directly from the segment.  As such, it will be not be directly */
+/*     directly from the segment. As such, it will be not be directly */
 /*     useful to a user unless they have a complete understanding of the */
-/*     structure of the data type.  Given that understanding, however, */
+/*     structure of the data type. Given that understanding, however, */
 /*     the SPKRnn routines could be used to "dump" and check segment data */
 /*     for a particular epoch before evaluating the record to obtain a */
 /*     state vector, as in the example which follows. */
@@ -155,21 +155,27 @@
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 17-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 10-MAR-1995 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_14 spk segment */
+/*     evaluate type_14 SPK segment */
 
 /* -& */
 
@@ -218,7 +224,7 @@
 
 	chbval_(&record[cofloc - 1], &degree, &record[1], et, &state[(i__1 = 
 		i__ - 1) < 6 && 0 <= i__1 ? i__1 : s_rnge("state", i__1, 
-		"spke14_", (ftnlen)216)]);
+		"spke14_", (ftnlen)223)]);
     }
     chkout_("SPKE14", (ftnlen)6);
     return 0;

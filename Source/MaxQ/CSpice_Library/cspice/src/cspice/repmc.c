@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure  REPMC  ( Replace marker with character string ) */
+/* $Procedure REPMC  ( Replace marker with character string ) */
 /* Subroutine */ int repmc_(char *in, char *marker, char *value, char *out, 
 	ftnlen in_len, ftnlen marker_len, ftnlen value_len, ftnlen out_len)
 {
@@ -77,35 +77,32 @@
 
 /* $ Detailed_Input */
 
-/*     IN             is an arbitrary character string. */
+/*     IN       is an arbitrary character string. */
 
-/*     MARKER         is an arbitrary character string. The first */
-/*                    occurrence of MARKER in the input string is */
-/*                    to be replaced by VALUE. */
+/*     MARKER   is an arbitrary character string. The first occurrence of */
+/*              MARKER in the input string is to be replaced by VALUE. */
 
-/*                    Leading and trailing blanks in MARKER are NOT */
-/*                    significant. In particular, no substitution is */
-/*                    performed if MARKER is blank. */
+/*              Leading and trailing blanks in MARKER are NOT */
+/*              significant. In particular, no substitution is performed */
+/*              if MARKER is blank. */
 
-/*     VALUE          is an arbitrary character string. */
+/*     VALUE    is the replacement character string. */
 
-/*                    Leading and trailing blanks in VALUE are NOT */
-/*                    significant: the portion of VALUE that is */
-/*                    substituted for MARKER extends from its first */
-/*                    non-blank character to its last non-blank */
-/*                    character. */
+/*              Leading and trailing blanks in VALUE are NOT significant: */
+/*              the portion of VALUE that is substituted for MARKER */
+/*              extends from its first non-blank character to its last */
+/*              non-blank character. */
 
-/*                    However, if VALUE is blank, a single blank is */
-/*                    substituted for the first occurrence of MARKER. */
+/*              However, if VALUE is blank, a single blank is substituted */
+/*              for the first occurrence of MARKER. */
 
 /* $ Detailed_Output */
 
-/*     OUT            is the string obtained by substituting VALUE */
-/*                    (leading and trailing blanks excepted) for */
-/*                    the first occurrence of MARKER in the input */
-/*                    string. */
+/*     OUT      is the string obtained by substituting VALUE (leading and */
+/*              trailing blanks excepted) for the first occurrence of */
+/*              MARKER in the input string. */
 
-/*                    OUT and IN must be identical or disjoint. */
+/*              OUT and IN must be identical or disjoint. */
 
 /* $ Parameters */
 
@@ -113,17 +110,17 @@
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) If OUT does not have sufficient length to accommodate the */
-/*        result of the substitution, the result will be truncated on */
-/*        the right. */
+/*     1)  If OUT does not have sufficient length to accommodate the */
+/*         result of the substitution, the result will be truncated on */
+/*         the right. */
 
-/*     2) If MARKER is blank, or if MARKER is not a substring of IN, */
-/*        no substitution is performed. (OUT and IN are identical.) */
+/*     2)  If MARKER is blank, or if MARKER is not a substring of IN, */
+/*         no substitution is performed. (OUT and IN are identical.) */
 
-/*     3) If VALUE is blank, a single blank is substituted for the */
-/*        first occurrence of MARKER. */
+/*     3)  If VALUE is blank, a single blank is substituted for the */
+/*         first occurrence of MARKER. */
 
 /* $ Files */
 
@@ -154,67 +151,83 @@
 
 /*        REPMC    ( Replace marker with character string value ) */
 /*        REPMD    ( Replace marker with double precision value ) */
-/*        REPMF    ( Replace marker with formatted d.p. value ) */
-/*        REPMI    ( Replace marker with integer value ) */
-/*        REPMCT   ( Replace marker with cardinal text) */
-/*        REPMOT   ( Replace marker with ordinal text ) */
+/*        REPMF    ( Replace marker with formatted d.p. value   ) */
+/*        REPMI    ( Replace marker with integer value          ) */
+/*        REPML    ( Replace marker with logical value          ) */
+/*        REPMCT   ( Replace marker with cardinal text          ) */
+/*        REPMOT   ( Replace marker with ordinal text           ) */
 
 /* $ Examples */
 
-/*     1. Let */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*           MARKER = '#' */
-/*           IN     = 'Invalid operation value.  The value was:  #' */
-
-/*        Then following the call, */
-
-/*           CALL REPMC ( IN, '#', 'append', IN  ) */
-
-/*        IN is */
-
-/*           'Invalid operation value.  The value was:  append' */
+/*     1) The following example illustrate the use of REPMC to */
+/*        replace a marker within a string with a character string */
+/*        value. */
 
 
-/*     2. Let */
-
-/*           MARKER = ' XX ' */
-/*           IN     = 'A syntax error occurred.  The token XX was not */
-/*                     recognized.  Did you mean to say XX?' */
-
-/*        Then following the call, */
-
-/*           CALL REPMC ( IN, '  XX  ', '  FND  ', OUT ) */
-
-/*        OUT is */
-
-/*           'A syntax error occurred.  The token FND was not */
-/*            recognized.  Did you mean to say XX?' */
+/*        Example code begins here. */
 
 
-/*     3. Let */
+/*              PROGRAM REPMC_EX1 */
+/*              IMPLICIT NONE */
 
-/*           MARKER = '&' */
-/*           NUM    = 23 */
-/*           CHANCE = 'fair' */
-/*           SCORE  = 4.665D0 */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER                 STRLEN */
+/*              PARAMETER             ( STRLEN = 80 ) */
 
-/*        Then following the sequence of calls, */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(STRLEN)      INSTR */
+/*              CHARACTER*(STRLEN)      MARKER */
+/*              CHARACTER*(STRLEN)      OUTSTR */
 
-/*           CALL REPMI ( 'There are & routines that have a '  // */
-/*          .             '& chance of meeting your needs.'    // */
-/*          .             'The maximum score was &.', */
-/*          .             '&', */
-/*          .             NUM, */
-/*          .             MSG  ) */
+/*        C */
+/*        C     1. Single marker */
+/*        C */
+/*              MARKER = '#' */
+/*              INSTR  = 'Invalid value. The value was:  #' */
 
-/*           CALL REPMC ( MSG, '&', CHANCE, MSG ) */
+/*              CALL REPMC ( INSTR, MARKER, 'append', OUTSTR ) */
 
-/*           CALL REPMF ( MSG, '&', SCORE, 4, 'F', MSG ) */
+/*              WRITE(*,*) 'Case 1: Single marker.' */
+/*              WRITE(*,*) '   Input : ', INSTR */
+/*              WRITE(*,*) '   Output: ', OUTSTR */
+/*              WRITE(*,*) */
 
-/*        MSG is */
+/*        C */
+/*        C     2. Multiple markers */
+/*        C */
+/*              MARKER = ' XX ' */
+/*              INSTR  = 'The token XX was not recognized. Was it XX?' */
 
-/*           'There are 23 routines that have a fair chance of */
-/*            meeting your needs.  The maximum score was 4.665.' */
+/*              CALL REPMC ( INSTR, MARKER, '  FND  ', OUTSTR ) */
+
+/*              WRITE(*,*) 'Case 2: Multiple markers.' */
+/*              WRITE(*,*) '   Input : ', INSTR */
+/*              WRITE(*,*) '   Output: ', OUTSTR */
+/*              WRITE(*,*) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Case 1: Single marker. */
+/*            Input : Invalid value. The value was:  # */
+/*            Output: Invalid value. The value was:  append */
+
+/*         Case 2: Multiple markers. */
+/*            Input : The token XX was not recognized. Was it XX? */
+/*            Output: The token FND was not recognized. Was it XX? */
 
 
 /* $ Restrictions */
@@ -227,12 +240,22 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 21-AUG-2020 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example, based on existing fragments. */
+
+/*        Added REPML to the list of available replace marker routines. */
 
 /* -    SPICELIB Version 1.2.0, 21-SEP-2013 (BVS) */
 

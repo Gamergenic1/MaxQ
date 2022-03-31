@@ -9,7 +9,7 @@
 
 static integer c__3 = 3;
 
-/* $Procedure      REPSUB ( Replace one substring with another ) */
+/* $Procedure REPSUB ( Replace one substring with another ) */
 /* Subroutine */ int repsub_(char *in, integer *left, integer *right, char *
 	string, char *out, ftnlen in_len, ftnlen string_len, ftnlen out_len)
 {
@@ -85,28 +85,28 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     IN         is an arbitrary character string. */
+/*     IN       is an arbitrary character string. */
 
 /*     LEFT, */
-/*     RIGHT      are the ends of the substring to be replaced. */
-/*                Legitimate substrings satisfy the following */
-/*                conditions */
+/*     RIGHT    are the ends of the substring to be replaced. */
+/*              Legitimate substrings satisfy the following */
+/*              conditions */
 
-/*                    RIGHT > LEFT - 2 */
-/*                    LEFT  > 1 */
-/*                    RIGHT < LEN(STRING) + 1 */
+/*                  RIGHT > LEFT - 2 */
+/*                  LEFT  > 1 */
+/*                  RIGHT < LEN(STRING) + 1 */
 
-/*                This allows users to refer to zero-length substrings */
-/*                (null substrings) of IN. */
+/*              This allows users to refer to zero-length substrings */
+/*              (null substrings) of IN. */
 
-/*     STRING     is the replacement string. Essentially, the */
-/*                substring (LEFT:RIGHT) is removed from the */
-/*                input string, and STRING is inserted at the */
-/*                point of removal. */
+/*     STRING   is the replacement string. Essentially, the */
+/*              substring (LEFT:RIGHT) is removed from the */
+/*              input string, and STRING is inserted at the */
+/*              point of removal. */
 
 /* $ Detailed_Output */
 
-/*     OUT        is the resulting string. OUT may overwrite IN. */
+/*     OUT      is the resulting string. OUT may overwrite IN. */
 
 /* $ Parameters */
 
@@ -114,21 +114,21 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1) If RIGHT is one less than LEFT, the substring to */
-/*        replace will be the null substring.  In this case, */
-/*        STRING will be inserted between IN(:RIGHT) and IN(LEFT:). */
+/*     1)  If RIGHT is one less than LEFT, the substring to */
+/*         replace will be the null substring. In this case, */
+/*         STRING will be inserted between IN(:RIGHT) and IN(LEFT:). */
 
-/*     2) If LEFT is smaller than one, the error SPICE(BEFOREBEGSTR) */
-/*        is signalled. */
+/*     2)  If LEFT is smaller than one, the error SPICE(BEFOREBEGSTR) */
+/*         is signaled. */
 
-/*     3) If RIGHT is greater than the length of the input string, */
-/*        the error SPICE(PASTENDSTR) is signalled. */
+/*     3)  If RIGHT is greater than the length of the input string, */
+/*         the error SPICE(PASTENDSTR) is signaled. */
 
-/*     4) If RIGHT is less than LEFT-1, the error SPICE(BADSUBSTR) */
-/*        is signalled. */
+/*     4)  If RIGHT is less than LEFT-1, the error SPICE(BADSUBSTR) */
+/*         is signaled. */
 
-/*     5) Whenever the output string is too small to hold the result, */
-/*        the result is truncated on the right. */
+/*     5)  Whenever the output string is too small to hold the result, */
+/*         the result is truncated on the right. */
 
 /* $ Files */
 
@@ -159,11 +159,11 @@ static integer c__3 = 3;
 /*        END DO */
 
 /*     This routine can also be used to insert substring between */
-/*     two characters.  Consider the string: */
+/*     two characters. Consider the string: */
 
-/*         IN   = 'The defendent,, was found innocent.' */
+/*         IN   = 'The defendant,, was found innocent.' */
 
-/*     to insert ' Emelda Marcos' between the first and second commas */
+/*     to insert ' Imelda Marcos' between the first and second commas */
 /*     determine the location of the pair ',,' */
 
 /*        RIGHT = POS ( IN, ',,', 1 ) */
@@ -171,16 +171,16 @@ static integer c__3 = 3;
 
 /*     then */
 
-/*        CALL REPSUB ( IN, LEFT, RIGHT, ' Emelda Marcos', OUT ) */
+/*        CALL REPSUB ( IN, LEFT, RIGHT, ' Imelda Marcos', OUT ) */
 
 /*     The output (OUT) will have the value: */
 
-/*        'The defendent, Emelda Marcos, was found innocent.' */
+/*        'The defendant, Imelda Marcos, was found innocent.' */
 
 /* $ Restrictions */
 
-/*     The memory used by STRING and OUT must be disjoint. The memory */
-/*     used by IN and OUT must be identical or disjoint. */
+/*     1)  The memory used by STRING and OUT must be disjoint. The memory */
+/*         used by IN and OUT must be identical or disjoint. */
 
 /* $ Literature_References */
 
@@ -188,10 +188,17 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
-/*     I.M. Underwood (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 17-JUN-1999 (WLT) */
 

@@ -11,7 +11,7 @@ static integer c__2 = 2;
 static integer c__6 = 6;
 static integer c__12 = 12;
 
-/* $Procedure      CKNR04 ( C-kernel, number of records, data type 4 ) */
+/* $Procedure CKNR04 ( C-kernel, number of records, data type 4 ) */
 /* Subroutine */ int cknr04_(integer *handle, doublereal *descr, integer *
 	nrec)
 {
@@ -26,9 +26,9 @@ static integer c__12 = 12;
 
 /* $ Abstract */
 
-/*     Given the handle of a CK file and the descriptor of a type 4 */
-/*     segment in that file, return the number of pointing instances */
-/*     in that segment. */
+/*     Return the number of pointing records in a CK type 04 segment. */
+/*     The segment is identified by a CK file handle and segment */
+/*     descriptor. */
 
 /* $ Disclaimer */
 
@@ -257,7 +257,7 @@ static integer c__12 = 12;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of the file containing the segment. */
 /*     DESCR      I   The descriptor of the type 4 segment. */
@@ -265,16 +265,16 @@ static integer c__12 = 12;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                segment. The file should have been opened for read */
-/*                or write access, either by CKLPF, DAFOPR, or DAFOPW. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              segment. The file should have been opened for read */
+/*              or write access, either by CKLPF, DAFOPR, or DAFOPW. */
 
-/*     DESCR      The packed descriptor of a data type 4 segment. */
+/*     DESCR    is the packed descriptor of a data type 4 segment. */
 
 /* $ Detailed_Output */
 
-/*     NREC       The number of pointing records in the type 4 */
-/*                segment. */
+/*     NREC     is the number of pointing records in the type 4 */
+/*              segment. */
 
 /* $ Parameters */
 
@@ -283,11 +283,11 @@ static integer c__12 = 12;
 /* $ Exceptions */
 
 /*     1)  If the segment indicated by DESCR is not a type 4 segment, */
-/*         the error 'SPICE(CKWRONGDATATYPE)' is signalled. */
+/*         the error SPICE(CKWRONGDATATYPE) is signaled. */
 
 /*     2)  If the specified handle does not belong to any DAF file that */
-/*         is currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         is currently known to be open, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     3)  If DESCR is not a valid descriptor of a segment in the CK */
 /*         file specified by HANDLE, the results of this routine are */
@@ -319,7 +319,7 @@ static integer c__12 = 12;
 /*     C */
 /*           INCLUDE               'ckparam.inc' */
 /*     C */
-/*     C     Declarations. */
+/*     C     $Declarations. */
 /*     C */
 /*           DOUBLE PRECISION      DCD    ( 2 ) */
 /*           DOUBLE PRECISION      DESCR  ( 5 ) */
@@ -405,9 +405,9 @@ static integer c__12 = 12;
 
 /* $ Restrictions */
 
-/*     1) The binary CK file containing the segment whose descriptor */
-/*        was passed to this routine must be opened for read or write */
-/*        access by either CKLPF, DAFOPR, or DAFOPW. */
+/*     1)  The binary CK file containing the segment whose descriptor */
+/*         was passed to this routine must be opened for read or write */
+/*         access by either CKLPF, DAFOPR, or DAFOPW. */
 
 /* $ Literature_References */
 
@@ -415,10 +415,15 @@ static integer c__12 = 12;
 
 /* $ Author_and_Institution */
 
-/*     Y.K. Zaiko     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     Y.K. Zaiko         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 18-APR-2014 (BVS) */
 

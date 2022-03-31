@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      REMOVC ( Remove an item from a character set ) */
+/* $Procedure REMOVC ( Remove an item from a character set ) */
 /* Subroutine */ int removc_(char *item, char *a, ftnlen item_len, ftnlen 
 	a_len)
 {
@@ -28,7 +28,7 @@
 
 /* $ Abstract */
 
-/*      Remove an item from a character set. */
+/*     Remove an item from a character set. */
 
 /* $ Disclaimer */
 
@@ -57,91 +57,190 @@
 
 /* $ Required_Reading */
 
-/*      SETS */
+/*     SETS */
 
 /* $ Keywords */
 
-/*      CELLS, SETS */
+/*     CELLS */
+/*     SETS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ITEM       I   Item to be removed. */
-/*      A         I/O  Removal set. */
-/*      ERROR      O   Error flag. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ITEM       I   Item to be removed. */
+/*     A         I-O  Removal set. */
 
 /* $ Detailed_Input */
 
-/*      ITEM        is an item which is to be removed from the */
-/*                  specified set. ITEM may or may not already */
-/*                  be an element of the set. */
+/*     ITEM     is an item which is to be removed from the specified set. */
+/*              ITEM may or may not already be an element of the set. */
+/*              Trailing blanks in ITEM are not significant. */
 
+/*     A        is a SPICE set. */
 
-/*      A           is a set. */
-
-
-/*                  On input, A may or may not contain the input item */
-/*                  as an element. */
+/*              On input, A may or may not contain the input item as an */
+/*              element. */
 
 /* $ Detailed_Output */
 
-/*      A           on output contains the difference of the input set */
-/*                  and the input item. If the item is not an element of */
-/*                  the set, the set is not changed. */
+/*     A        on output, contains the difference of the input set and */
+/*              the input item. If the item is not an element of the set, */
+/*              the set is not changed. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      In the following example, the element 'PLUTO' is removed from */
-/*      the character set PLANETS and inserted into the character set */
-/*      ASTEROIDS. */
-
-/*            CALL REMOVC ( 'PLUTO', PLANETS          ) */
-/*            CALL INSRTC ( 'PLUTO', ASTEROIDS, ERROR ) */
-
-/*      If 'PLUTO' is not an element of PLANETS, then the contents of */
-/*      PLANETS are not changed. Similarly, if 'PLUTO' is already an */
-/*      element of ASTEROIDS, the contents of ASTEROIDS remain unchanged. */
-
-/*      Because inserting an element into a set can increase the */
-/*      cardinality of the set, the insertion routines return an */
-/*      error flag. The flag is blank if the set is large enough to */
-/*      hold the new element. Otherwise, a message (constructed by */
-/*      the cell routine EXCESS) is returned. */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      None. */
+/*     1)  If the input set A has invalid cardinality, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     2)  If the input set A has invalid size, an error is signaled by a */
+/*         routine in the call tree of this routine. */
+
+/*     3)  The data values in set A must be monotone strictly increasing. */
+/*         This is not checked. If this condition is not met, the results */
+/*         are unpredictable. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     None. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Create a set with all the original planets of the Solar */
+/*        System and then remove Pluto from that set. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM REMOVC_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER                 CARDC */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER                 LBCELL */
+/*              PARAMETER             ( LBCELL = -5  ) */
+
+/*              INTEGER                 PNAMSZ */
+/*              PARAMETER             ( PNAMSZ   = 7 ) */
+
+/*              INTEGER                 SETDIM */
+/*              PARAMETER             ( SETDIM   = 9 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(PNAMSZ)      LIST   ( SETDIM        ) */
+/*              CHARACTER*(PNAMSZ)      PLNETS ( LBCELL:SETDIM ) */
+
+/*              INTEGER                 I */
+
+/*        C */
+/*        C     Create the original planets list. */
+/*        C */
+/*              DATA                    LIST  / */
+/*             .                'MERCURY', 'VENUS',   'EARTH', */
+/*             .                'MARS',    'JUPITER', 'SATURN', */
+/*             .                'URANUS',  'NEPTUNE', 'PLUTO'   / */
+
+/*        C */
+/*        C     Initialize the empty set. */
+/*        C */
+/*              CALL VALIDC ( SETDIM, 0, PLNETS ) */
+
+/*        C */
+/*        C     Insert the list of planets into the set. If the item is */
+/*        C     an element of the set, the set is not changed. */
+/*        C */
+/*              DO I = 1, SETDIM */
+
+/*                 CALL INSRTC ( LIST(I), PLNETS ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Remove the Pluto from the set. If the Pluto is not an */
+/*        C     element of the set, the set is not changed. */
+/*        C */
+/*              CALL REMOVC ( 'PLUTO', PLNETS ) */
+
+/*        C */
+/*        C     Output the contents of PLNETS. */
+/*        C */
+/*              WRITE(*,*) 'Planets of the Solar System:' */
+
+/*              DO I = 1, CARDC ( PLNETS ) */
+
+/*                 WRITE(*,*) '   ', PLNETS(I) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Planets of the Solar System: */
+/*            EARTH */
+/*            JUPITER */
+/*            MARS */
+/*            MERCURY */
+/*            NEPTUNE */
+/*            SATURN */
+/*            URANUS */
+/*            VENUS */
+
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      C.A. Curzon     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. Extended the $Exceptions section. */
+
+/*        Updated description of argument ITEM to indicate that trailing */
+/*        blanks are not significant */
+
+/*        Removed unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -154,14 +253,6 @@
 /* $ Index_Entries */
 
 /*     remove an item from a character set */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 2.0.0, 13-MAR-1989 (NJB) */
-
-/*        Now participates in error handling.  References to RETURN, */
-/*        CHKIN, and CHKOUT added. */
 
 /* -& */
 

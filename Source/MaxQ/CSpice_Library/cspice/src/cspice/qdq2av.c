@@ -71,44 +71,44 @@ static doublereal c_b3 = -2.;
 
 /* $ Detailed_Input */
 
-/*     Q              is a unit length 4-vector representing a */
-/*                    SPICE-style quaternion. See the discussion of */
-/*                    quaternion styles in Particulars below. */
+/*     Q        is a unit length 4-vector representing a */
+/*              SPICE-style quaternion. See the discussion of */
+/*              quaternion styles in $Particulars below. */
 
-/*     DQ             is a 4-vector representing the derivative of */
-/*                    Q with respect to time. */
+/*     DQ       is a 4-vector representing the derivative of */
+/*              Q with respect to time. */
 
 /* $ Detailed_Output */
 
-/*     AV             is 3-vector representing the angular velocity */
-/*                    defined by Q and DQ, that is, the angular velocity */
-/*                    of the frame defined by the rotation matrix */
-/*                    associated with Q.  This rotation matrix can be */
-/*                    obtained via the SPICELIB routine Q2M; see the */
-/*                    Particulars section for the explicit matrix */
-/*                    entries. */
+/*     AV       is 3-vector representing the angular velocity */
+/*              defined by Q and DQ, that is, the angular velocity */
+/*              of the frame defined by the rotation matrix */
+/*              associated with Q. This rotation matrix can be */
+/*              obtained via the SPICELIB routine Q2M; see the */
+/*              $Particulars section for the explicit matrix */
+/*              entries. */
 
-/*                    AV is the vector (imaginary) part of the */
-/*                    quaternion product */
+/*              AV is the vector (imaginary) part of the */
+/*              quaternion product */
 
-/*                             * */
-/*                       -2 * Q  * DQ */
+/*                       * */
+/*                 -2 * Q  * DQ */
 
-/*                    This angular velocity is the same vector that */
-/*                    could be obtained (much less efficiently ) by */
-/*                    mapping Q and DQ to the corresponding C-matrix R */
-/*                    and its derivative DR, then calling the SPICELIB */
-/*                    routine XF2RAV. */
+/*              This angular velocity is the same vector that */
+/*              could be obtained (much less efficiently ) by */
+/*              mapping Q and DQ to the corresponding C-matrix R */
+/*              and its derivative DR, then calling the SPICELIB */
+/*              routine XF2RAV. */
 
-/*                    AV has units of */
+/*              AV has units of */
 
-/*                       radians / T */
+/*                 radians / T */
 
-/*                    where */
+/*              where */
 
-/*                       1 / T */
+/*                 1 / T */
 
-/*                    is the unit associated with DQ. */
+/*              is the unit associated with DQ. */
 
 /* $ Parameters */
 
@@ -118,16 +118,15 @@ static doublereal c_b3 = -2.;
 
 /*     Error free. */
 
-/*     1) A unitized version of input quaternion is used in the */
-/*        computation.  No attempt is made to diagnose an invalid */
-/*        input quaternion. */
+/*     1)  A unitized version of input quaternion is used in the */
+/*         computation. No attempt is made to diagnose an invalid */
+/*         input quaternion. */
 
 /* $ Files */
 
 /*     None. */
 
 /* $ Particulars */
-
 
 /*     Quaternion Styles */
 /*     ----------------- */
@@ -136,12 +135,12 @@ static doublereal c_b3 = -2.;
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -261,7 +260,7 @@ static doublereal c_b3 = -2.;
 /*                   +-             -+ */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -346,7 +345,7 @@ static doublereal c_b3 = -2.;
 /*     time-dependent rotation, the associated angular velocity at a */
 /*     given time is a function of the rotation and its derivative at */
 /*     that time. This fact enables us to extend a proof for a limited */
-/*     subset of rotations to *all* rotations:  if we find a formula */
+/*     subset of rotations to *all* rotations: if we find a formula */
 /*     that, for any rotation in our subset, gives us the angular */
 /*     velocity as a function of the rotation and its derivative, then */
 /*     that formula must be true for all rotations. */
@@ -360,8 +359,8 @@ static doublereal c_b3 = -2.;
 /*     velocity and that is equal to the identity matrix at t = 0. */
 
 /*     For future reference, we'll consider C to represent a coordinate */
-/*     transformation from frame F1 to frame F2.  We'll call F1 the */
-/*     "base frame" of C.  We'll let AVF2 be the angular velocity of */
+/*     transformation from frame F1 to frame F2. We'll call F1 the */
+/*     "base frame" of C. We'll let AVF2 be the angular velocity of */
 /*     M(t) relative to F2 and AVF1 be the same angular velocity */
 /*     relative to F1. */
 
@@ -436,7 +435,7 @@ static doublereal c_b3 = -2.;
 /*        --------|     =   1/2 * A                                  (11) */
 /*           dt   |t=0 */
 
-/*     which is a quaternion with scalar part zero.  This allows us to */
+/*     which is a quaternion with scalar part zero. This allows us to */
 /*     rewrite the quaternion derivative */
 
 /*        d(QR(t))| */
@@ -476,20 +475,28 @@ static doublereal c_b3 = -2.;
 /*        AVF1  = -2 * QC  * DQ                                      (18) */
 
 /*     The relation (18) has now been demonstrated for quaternions */
-/*     having constant, unit magnitude angular velocity.  But since */
+/*     having constant, unit magnitude angular velocity. But since */
 /*     all time-dependent quaternions having value QC and derivative */
 /*     DQ at a given time t have the same angular velocity at time t, */
 /*     that angular velocity must be AVF1. */
 
 /* $ Examples */
 
-/*     The following test program creates a quaternion and quaternion */
-/*     derivative from a known rotation matrix and angular velocity */
-/*     vector.  The angular velocity is recovered from the quaternion */
-/*     and quaternion derivative by calling QDQ2AV and by an */
-/*     alternate method; the results are displayed for comparison. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*              PROGRAM TQDQ2AV */
+/*     1) The following test program creates a quaternion and quaternion */
+/*        derivative from a known rotation matrix and angular velocity */
+/*        vector. The angular velocity is recovered from the quaternion */
+/*        and quaternion derivative by calling QDQ2AV and by an */
+/*        alternate method; the results are displayed for comparison. */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM QDQ2AV_EX1 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     Start with a known rotation and angular velocity.  Find */
@@ -646,11 +653,26 @@ static doublereal c_b3 = -2.;
 /*        C     The results should match to nearly full double */
 /*        C     precision. */
 /*        C */
-/*              WRITE(*,*) 'Original angular velocity:  ', EXPAV */
-/*              WRITE(*,*) 'QDQ2AV''s angular velocity:  ', AV */
-/*              WRITE(*,*) 'XF2RAV''s angular velocity:  ', AVX */
+/*              WRITE(*,*) 'Original angular velocity:' */
+/*              WRITE(*,'(1X,3F20.16)') EXPAV */
+/*              WRITE(*,*) 'QDQ2AV''s angular velocity:' */
+/*              WRITE(*,'(1X,3F20.16)') AV */
+/*              WRITE(*,*) 'XF2RAV''s angular velocity:' */
+/*              WRITE(*,'(1X,3F20.16)') AVX */
 
 /*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Original angular velocity: */
+/*           1.0000000000000000  2.0000000000000000  3.0000000000000000 */
+/*         QDQ2AV's angular velocity: */
+/*           0.9999999999999998  1.9999999999999996  2.9999999999999991 */
+/*         XF2RAV's angular velocity: */
+/*           1.0000000000000002  2.0000000000000000  3.0000000000000000 */
 
 
 /* $ Restrictions */
@@ -663,9 +685,16 @@ static doublereal c_b3 = -2.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.2, 04-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard.. */
+/*        Changed code example output format to fit within the $Examples */
+/*        section without modifications. */
 
 /* -    SPICELIB Version 1.1.1, 26-FEB-2008 (NJB) */
 
@@ -679,15 +708,15 @@ static doublereal c_b3 = -2.;
 
 /* -    SPICELIB Version 1.0.1, 24-FEB-2004 (NJB) */
 
-/*        Made minor edits to the Particulars header section. */
+/*        Made minor edits to the $Particulars header section. */
 
 /* -    SPICELIB Version 1.0.0, 26-AUG-2002 (NJB) */
-
 
 /* -& */
 /* $ Index_Entries */
 
 /*     angular velocity from  quaternion and derivative */
+
 /* -& */
 /* $ Revisions */
 

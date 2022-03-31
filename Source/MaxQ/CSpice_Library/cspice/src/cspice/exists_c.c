@@ -37,7 +37,7 @@
 
 -Keywords
 
-    FILES
+   FILES
 
 */
 
@@ -60,15 +60,15 @@
 
 -Detailed_Input
 
-   fname        is the name of the file in question.This may be
-                any unambigous file name valid on the user's
-                computer, for example
+   fname       is the name of the file in question.This may be
+               any unambiguous file name valid on the user's
+               computer, for example
 
-                   '/usr/dir1/dir2/DATA.DAT'
-                   './DATA.DAT'
-                   'c:\usr\dir1\dir2\data.dat'
+                  '/usr/dir1/dir2/DATA.DAT'
+                  './DATA.DAT'
+                  'c:\usr\dir1\dir2\data.dat'
 
-                Environment or shell variables may not be used.
+               Environment or shell variables may not be used.
 
 -Detailed_Output
 
@@ -81,11 +81,20 @@
 
 -Exceptions
 
-   1) If the input name is blank, the error SPICE(BLANKFILENAME) will
-      be signaled. (This test is currently unimplemented.)
+   1)  If the filename is blank, the error SPICE(BLANKFILENAME) is
+       signaled by a routine in the call tree of this routine.
 
-   2) If an error occurs during the execution existence test,
-      the error SPICE(INQUIREFAILED) is signaled.
+   2)  If an I/O error occurs while checking the existence of the
+       indicated file, the error SPICE(INQUIREFAILED) is signaled by
+       a routine in the call tree of this routine.
+
+   3)  If the `fname' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled. The function returns the value
+       SPICEFALSE.
+
+   4)  If the `fname' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled. The function returns the value
+       SPICEFALSE.
 
 -Files
 
@@ -97,18 +106,72 @@
 
 -Examples
 
-   The following code fragment illustrates the use of exists_c.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      if ( exists_c ( file ) )
+   1) Given two arbitrary files (one of them the actual code example
+      source file), determine if they exists.
+
+      Example code begins here.
+
+
+      /.
+         Program exists_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local constants.
+         ./
+         #define FILEN        15
+
+         /.
+         Local variables.
+         ./
+
+         SpiceInt             i;
+
+         /.
+         Define an array of file names.
+         ./
+         SpiceChar            fname  [2][FILEN] = { "exists_ex1.txt",
+                                                    "exists_ex1.prg" };
+
+         for ( i = 0; i < 2; i++ )
          {
-         update ( file );
+
+            if ( exists_c ( fname[i] ) )
+            {
+
+               printf( "The file %s exists.\n", fname[i] );
+
+            }
+            else
+            {
+
+               printf( "Cannot find the file %s\n", fname[i] );
+
+            }
+
          }
-      else
-         {
-         setmsg_c ( "Input file does not exist." );
-         sigerr_c ( "FILENOTFOUND"               );
-         return;
-         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Cannot find the file exists_ex1.txt
+      The file exists_ex1.prg exists.
+
 
 -Restrictions
 
@@ -120,11 +183,18 @@
 
 -Author_and_Institution
 
-   K.R. Gehringer  (JPL)
-   H.A. Neilan     (JPL)
-   I.M. Underwood  (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   K.R. Gehringer      (JPL)
 
 -Version
+
+   -CSPICE Version 1.1.2, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+       Added complete code example.
+
+       Added entries #3 and #4 to -Exceptions section.
 
    -CSPICE Version 1.1.1, 01-JUL-2014 (NJB)
 
@@ -133,12 +203,12 @@
    -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)
 
        References to C2F_CreateStr_Sig were removed; code was
-       cleaned up accordingly.  String checks are now done using
+       cleaned up accordingly. String checks are now done using
        the macro CHKFSTR_VAL.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (NJB) (KRG)
 
-       Based on SPICELIB Version 2.1.0, 4-MAR-1996 (KRG)
+       Based on SPICELIB Version 2.1.0, 04-MAR-1996 (KRG)
 
 -Index_Entries
 

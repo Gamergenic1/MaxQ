@@ -14,7 +14,7 @@ static integer c__8 = 8;
 static integer c__3 = 3;
 static integer c__2 = 2;
 
-/* $Procedure      TCHECK ( Time Check ) */
+/* $Procedure TCHECK ( Time Check ) */
 /* Subroutine */ int tcheck_0_(int n__, doublereal *tvec, char *type__, 
 	logical *mods, char *modify, logical *ok, char *error, ftnlen 
 	type_len, ftnlen modify_len, ftnlen error_len)
@@ -53,16 +53,19 @@ static integer c__2 = 2;
     extern logical eqstr_(char *, char *, ftnlen, ftnlen);
     static integer second, leapdy;
     static char messge[200];
-    static integer minute, day;
+    static integer minute;
+    static logical modtru;
+    static integer day;
     static doublereal doy;
 
 /* $ Abstract */
 
-/*     If component checking is enabled, this routine */
-/*     determines whether the components of a time vector are in */
-/*     the "usual" range for the components.  If component checking */
-/*     is not enabled, this routine simply returns after setting */
-/*     the outputs. */
+/*     Determine whether the components of a time vector are in the */
+/*     "usual" range for the components, if component checking is */
+/*     enabled. */
+
+/*     If component checking is not enabled, this routine simply */
+/*     returns after setting the outputs. */
 
 /* $ Disclaimer */
 
@@ -111,23 +114,23 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
-/*     TVEC       is an array of double precision numbers that */
-/*                represent the components of some calendar epoch. */
+/*     TVEC     is an array of double precision numbers that */
+/*              represent the components of some calendar epoch. */
 
-/*     TYPE       is kind of calendar epoch represented by TVEC */
-/*                legitimate values are 'YMD' and 'YD' */
+/*     TYPE     is kind of calendar epoch represented by TVEC */
+/*              legitimate values are 'YMD' and 'YD' */
 
-/*     MODS       is a logical flag indicating whether any of the */
-/*                items in MODIFY are non-blank.  If some item */
-/*                in MODIFY is non-blank, MODS will be TRUE.  If */
-/*                all items in MODIFY are blank, MODS will be FALSE. */
+/*     MODS     is a logical flag indicating whether any of the */
+/*              items in MODIFY are non-blank. If some item */
+/*              in MODIFY is non-blank, MODS will be .TRUE. If */
+/*              all items in MODIFY are blank, MODS will be .FALSE. */
 
-/*     MODIFY     is an array of strings indicating how the */
-/*                interpretation of the various components of TVEC */
-/*                should be modified.  Blank values indicate that */
-/*                the default interpretation should be applied. */
-/*                Non-blank components will have the following values */
-/*                and meanings. */
+/*     MODIFY   is an array of strings indicating how the */
+/*              interpretation of the various components of TVEC */
+/*              should be modified. Blank values indicate that */
+/*              the default interpretation should be applied. */
+/*              Non-blank components will have the following values */
+/*              and meanings. */
 
 
 /*               Component   Meaning   Possible Non-blank Modifier Values */
@@ -138,23 +141,22 @@ static integer c__2 = 2;
 /*               4           System    'UTC',  'TDB', 'TDT' */
 /*               5           Time Zone 'UTC+i:i', 'UTC-i:i' */
 
-
 /* $ Detailed_Output */
 
-/*     OK        is returned TRUE if all components of TVEC are within */
-/*               the normal range of values.  If some problem arises, */
-/*               OK will be returned with the value FALSE.  Note that */
-/*               component checking has not been enabled by a call */
-/*               to TPARCH, the value of OK is automatically set to */
-/*               TRUE. */
+/*     OK       is returned .TRUE. if all components of TVEC are within */
+/*              the normal range of values. If some problem arises, */
+/*              OK will be returned with the value .FALSE. Note that */
+/*              component checking has not been enabled by a call */
+/*              to TPARCH, the value of OK is automatically set to */
+/*              .TRUE. */
 
-/*     ERROR     If OK is returned with the value TRUE, ERROR will be */
-/*               returned as a blank.  However, if OK is FALSE, ERROR */
-/*               will contain a diagnostic indicating what was wrong */
-/*               with the components of TVEC. Note that */
-/*               component checking has not been enabled by a call */
-/*               to TPARCH, the value of ERROR is automatically set to */
-/*               a blank. */
+/*     ERROR    if OK is returned with the value .TRUE., ERROR will be */
+/*              returned as a blank. However, if OK is .FALSE., ERROR */
+/*              will contain a diagnostic indicating what was wrong */
+/*              with the components of TVEC. Note that */
+/*              component checking has not been enabled by a call */
+/*              to TPARCH, the value of ERROR is automatically set to */
+/*              a blank. */
 
 /* $ Parameters */
 
@@ -164,8 +166,8 @@ static integer c__2 = 2;
 
 /*     Error free. */
 
-/*     1) All problems with TVEC are diagnosed via the logical OK */
-/*        and the message ERROR. */
+/*     1)  All problems with TVEC are reported via the logical OK */
+/*         and the message ERROR. */
 
 /* $ Files */
 
@@ -178,8 +180,8 @@ static integer c__2 = 2;
 /*     routine simply sets the outputs as indicated above and returns. */
 
 /*     Usually strings such as February 32, 1997 are regarded as */
-/*     erroneous.  However, the SPICE time subsystem is capable */
-/*     of attaching meaning to such strings.  The routines TPARCH and */
+/*     erroneous. However, the SPICE time subsystem is capable */
+/*     of attaching meaning to such strings. The routines TPARCH and */
 /*     TCHECK allow you to treat such strings as erroneous throughout */
 /*     the SPICE time sub-system. */
 
@@ -193,7 +195,7 @@ static integer c__2 = 2;
 
 /*        Months must be in the range from 1 to 12 and must be integers. */
 
-/*        Days of the month must be in the normal ranges.  For example */
+/*        Days of the month must be in the normal ranges. For example */
 /*             if the month specified is January, the day of the month */
 /*             must be greater than or equal to 1.0D0 and strictly less */
 /*             than 32.0D0 (The normal range for February is a function */
@@ -205,7 +207,7 @@ static integer c__2 = 2;
 /*             The Gregorian calendar is used to determine leap years.) */
 
 /*        Hours must be greater than or equal to 0.0D0 and strictly */
-/*             less than 24.0D0.  If the AMPM modifier is included */
+/*             less than 24.0D0. If the AMPM modifier is included */
 /*             hours must be greater than or equal to 1.0D0 and strictly */
 /*             less than 13.0D0. */
 
@@ -225,7 +227,7 @@ static integer c__2 = 2;
 /*     it will be called in the following fashion */
 
 /*        CALL TPARTV ( STRING, TVEC, NTVEC,  TYPE, */
-/*    .                 MODIFY, MODS, YABBRV, SUCCES, ERROR ) */
+/*       .              MODIFY, MODS, YABBRV, SUCCES, ERROR ) */
 
 /*        IF ( .NOT. SUCCES ) THEN */
 
@@ -252,7 +254,7 @@ static integer c__2 = 2;
 /* $ Examples */
 
 /*     Suppose that you have parsed a string (via TPARTV) and want */
-/*     to enforce normal ranges of the components.  The following */
+/*     to enforce normal ranges of the components. The following */
 /*     sequence of calls will perform the checks on components. */
 
 /*        get the current checking setting */
@@ -290,23 +292,33 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.1.0 31-JAN-2017 (NJB) */
+/* -    SPICELIB Version 1.2.0, 01-NOV-2021 (JDR) (EDW) */
+
+/*        Added logic to prevent evaluation of MODIFY when MODS false. */
+
+/*        Added text listing routines affected and not affected by */
+/*        explicit assignments to TPARCH. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.1.0, 31-JAN-2017 (NJB) */
 
 /*        Bug fix: updated logic so that B.C. leap years are recognized. */
 
-/* -    SPICELIB Version 1.0.1 10-FEB-2014 (BVS) */
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
 
-/*        Fixed typo in the Declarations section in the TPARCH header: */
+/*        Fixed typo in the $Declarations section in the TPARCH header: */
 /*        STRING -> TYPE. */
 
 /* -    SPICELIB Version 1.0.0, 26-JUL-1996 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -352,7 +364,11 @@ static integer c__2 = 2;
 /*     checks. */
 
     year = i_dnnt(tvec);
-    if (s_cmp(modify, "B.C.", modify_len, (ftnlen)4) == 0) {
+    modtru = FALSE_;
+    if (*mods) {
+	modtru = s_cmp(modify, "B.C.", modify_len, (ftnlen)4) == 0;
+    }
+    if (modtru) {
 	myear = 1 - year;
     } else {
 	myear = year;
@@ -373,8 +389,12 @@ static integer c__2 = 2;
 /*     was specified.  We set up valid range as well as the out */
 /*     of range messages here. */
 
-    if (*mods && s_cmp(modify + modify_len * 3, " ", modify_len, (ftnlen)1) !=
-	     0) {
+    modtru = FALSE_;
+    if (*mods) {
+	modtru = s_cmp(modify + modify_len * 3, " ", modify_len, (ftnlen)1) !=
+		 0;
+    }
+    if (modtru) {
 	hubnd = 13.;
 	hlbnd = 1.;
 	s_copy(messge, "The hours component of the time specified was #. Whe"
@@ -455,21 +475,21 @@ static integer c__2 = 2;
 	    return 0;
 	} else if (tvec[2] < 1. || tvec[2] >= dinmon[(i__1 = month - 1) < 12 
 		&& 0 <= i__1 ? i__1 : s_rnge("dinmon", i__1, "tcheck_", (
-		ftnlen)496)] + 1.) {
+		ftnlen)518)] + 1.) {
 	    *ok = FALSE_;
 	    s_copy(error, "The day of the month specified for the month of #"
 		    " was #.  For # the day must be at least 1.0D0 and less t"
 		    "han #. ", error_len, (ftnlen)112);
 	    repmc_(error, "#", mnames + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)503)) *
+		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)525)) *
 		     10, error, error_len, (ftnlen)1, (ftnlen)10, error_len);
 	    repmd_(error, "#", &tvec[2], &c__3, error, error_len, (ftnlen)1, 
 		    error_len);
 	    repmc_(error, "#", mnames + ((i__1 = month - 1) < 12 && 0 <= i__1 
-		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)505)) *
+		    ? i__1 : s_rnge("mnames", i__1, "tcheck_", (ftnlen)527)) *
 		     10, error, error_len, (ftnlen)1, (ftnlen)10, error_len);
 	    d__1 = dinmon[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 : 
-		    s_rnge("dinmon", i__1, "tcheck_", (ftnlen)506)] + 1.;
+		    s_rnge("dinmon", i__1, "tcheck_", (ftnlen)528)] + 1.;
 	    repmd_(error, "#", &d__1, &c__2, error, error_len, (ftnlen)1, 
 		    error_len);
 	    return 0;
@@ -477,7 +497,7 @@ static integer c__2 = 2;
 	i__1 = month - 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    doy += dinmon[(i__2 = i__ - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		    "dinmon", i__2, "tcheck_", (ftnlen)512)];
+		    "dinmon", i__2, "tcheck_", (ftnlen)534)];
 	}
 	doy += tvec[2];
     }
@@ -503,6 +523,11 @@ static integer c__2 = 2;
 
 /*        We allow for the possibility that we might have a leapsecond. */
 
+	modtru = FALSE_;
+	if (*mods) {
+	    modtru = s_cmp(modify + modify_len * 3, "P.M.", modify_len, (
+		    ftnlen)4) == 0;
+	}
 	if (tvec[second - 1] < 61. && tvec[second - 1] > 0. && tvec[minute - 
 		1] == 59. && tvec[hour - 1] == 23. && (doy == dinyr || doy == 
 		jun30)) {
@@ -510,9 +535,8 @@ static integer c__2 = 2;
 /*           Don't do anything. */
 
 	} else if (tvec[second - 1] < 61. && tvec[second - 1] > 0. && tvec[
-		minute - 1] == 59. && tvec[hour - 1] == 11. && *mods && s_cmp(
-		modify + modify_len * 3, "P.M.", modify_len, (ftnlen)4) == 0 
-		&& (doy == dinyr || doy == jun30)) {
+		minute - 1] == 59. && tvec[hour - 1] == 11. && modtru && (doy 
+		== dinyr || doy == jun30)) {
 
 /*           Don't do anything. */
 
@@ -549,11 +573,11 @@ static integer c__2 = 2;
 			    error_len, (ftnlen)178);
 		    repmc_(error, "#", cname + ((i__3 = comp - 1) < 4 && 0 <= 
 			    i__3 ? i__3 : s_rnge("cname", i__3, "tcheck_", (
-			    ftnlen)608)) * 7, error, error_len, (ftnlen)1, (
+			    ftnlen)634)) * 7, error, error_len, (ftnlen)1, (
 			    ftnlen)7, error_len);
 		    repmc_(error, "#", cname + ((i__3 = k - 1) < 4 && 0 <= 
 			    i__3 ? i__3 : s_rnge("cname", i__3, "tcheck_", (
-			    ftnlen)609)) * 7, error, error_len, (ftnlen)1, (
+			    ftnlen)635)) * 7, error, error_len, (ftnlen)1, (
 			    ftnlen)7, error_len);
 		    repmd_(error, "#", &tvec[j - 1], &c__2, error, error_len, 
 			    (ftnlen)1, error_len);
@@ -574,9 +598,9 @@ static integer c__2 = 2;
 L_tparch:
 /* $ Abstract */
 
-/*     Restrict the set of strings that are recognized by */
-/*     SPICE time parsing routines to those that have standard */
-/*     values for all time components. */
+/*     Restrict the set of strings that are recognized by SPICE time */
+/*     parsing routines to those that have standard values for all time */
+/*     components. */
 
 /* $ Disclaimer */
 
@@ -605,11 +629,12 @@ L_tparch:
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     TIME */
 
 /* $ Keywords */
 
-/*     PARSING, TIME */
+/*     PARSING */
+/*     TIME */
 
 /* $ Declarations */
 
@@ -619,69 +644,65 @@ L_tparch:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     TYPE       I   String:  Use 'YES' to restrict time inputs. */
+/*     TYPE       I   String: Use 'YES' to restrict time inputs. */
 
 /* $ Detailed_Input */
 
-/*     TYPE         is a character string that is used to adjust the */
-/*                  set of strings that will be regarded as valid */
-/*                  time strings by SPICE time parsing routines. */
+/*     TYPE     is a character string that is used to adjust the set of */
+/*              strings that will be regarded as valid time strings by */
+/*              SPICE time parsing routines. */
 
-/*                  The default behavior of SPICE time software */
-/*                  is to allow */
-/*                  an extended range of values for the various */
-/*                  components (tokens) of a time string.  For example, */
-/*                  using its default behavior, TPARSE would regard */
-/*                  1993 JAN 367 as a valid time string and return */
-/*                  the UTCSEC value that corresponds to Jan 2, 1994. */
+/*              The default behavior of SPICE time software is to allow */
+/*              an extended range of values for the various components */
+/*              (tokens) of a time string. For example, using its default */
+/*              behavior, TPARSE would regard 1993 JAN 367 as a valid */
+/*              time string and return the UTC seconds past the J2000 */
+/*              epoch value that corresponds to Jan 2, 1994. */
 
-/*                  While this is a "reasonable" interpretation of */
-/*                  such a string, there may be occasions when such */
-/*                  a string should be regarded as an error. */
+/*              While this is a "reasonable" interpretation of such a */
+/*              string, there may be occasions when such a string should */
+/*              be regarded as an error. */
 
-/*                  By calling TPARCH with a value of 'YES', the */
-/*                  action of the time software will be modified. Strings */
-/*                  that have components that are out of the */
-/*                  range of values used in most English discourse */
-/*                  will be regarded as errors.  Thus the numeric */
-/*                  values of MONTH, DAY, HOUR, MINUTE, and SECOND */
-/*                  must satisfy the following conditions to be */
-/*                  regarded as legitimate calendar time strings. */
+/*              By calling TPARCH with a value of 'YES', the action of */
+/*              the time software will be modified. Strings that have */
+/*              components that are out of the range of values used in */
+/*              most English discourse will be regarded as errors. Thus */
+/*              the numeric values of MONTH, DAY, HOUR, MINUTE, and */
+/*              SECOND must satisfy the following conditions to be */
+/*              regarded as legitimate calendar time strings. */
 
-/*                  ITEM     Valid Range */
-/*                  ----     ------------------------------------- */
-/*                  MONTH    1 to 13 */
-/*                  DAY      1 to 365 (366 for leap years) when */
-/*                           DAY is interpreted as the day of year */
-/*                           i.e. the month token is empty. */
-/*                           1 to 31  if month is January */
-/*                           1 to 28 (29 in leap years) if month is */
+/*                 ITEM     Valid Range */
+/*                 ------   ----------------------------------------- */
+/*                 MONTH    1 to 13 */
+/*                 DAY      1 to 365 (366 for leap years) when */
+/*                          DAY is interpreted as the day of year */
+/*                          i.e. the month token is empty. */
+/*                          1 to 31  if month is January */
+/*                          1 to 28  (29 in leap years) if month is */
 /*                                   February */
-/*                           1 to 31  if month is March */
-/*                           1 to 30  if month is April */
-/*                           1 to 31  if month is May */
-/*                           1 to 31  if month is June */
-/*                           1 to 30  if month is July */
-/*                           1 to 31  if month is August */
-/*                           1 to 30  if month is September */
-/*                           1 to 31  if month is October */
-/*                           1 to 30  if month is November */
-/*                           1 to 31  if month is December */
-/*                    HOUR   0 to 23 */
-/*                    MINUTE 0 to 59 */
-/*                    SECOND 0 up to but not including 60 on days that */
-/*                           can not have a leapsecond. */
-/*                           0 up to but not including 61 for times */
-/*                           that are the last second of June or */
-/*                           December.  In other words, */
-/*                                JUN 30, 23:59:60.xxxxxx...x */
-/*                           and  DEC 31, 23:59:60.xxxxxx...x */
+/*                          1 to 31  if month is March */
+/*                          1 to 30  if month is April */
+/*                          1 to 31  if month is May */
+/*                          1 to 31  if month is June */
+/*                          1 to 30  if month is July */
+/*                          1 to 31  if month is August */
+/*                          1 to 30  if month is September */
+/*                          1 to 31  if month is October */
+/*                          1 to 30  if month is November */
+/*                          1 to 31  if month is December */
+/*                 HOUR     0 to 23 */
+/*                 MINUTE   0 to 59 */
+/*                 SECOND   0 up to but not including 60 on days that */
+/*                          can not have a leapsecond. */
+/*                          0 up to but not including 61 for times */
+/*                          that are the last second of June or */
+/*                          December. In other words, */
+/*                               JUN 30, 23:59:60.xxxxxx...x */
+/*                          and  DEC 31, 23:59:60.xxxxxx...x */
 
-/*                    To reset the action of time software to the default */
-/*                    action, set TYPE to a value that is not */
-/*                    equivalent to 'YES' when case and spaces are */
-/*                    ignored. */
-
+/*              To reset the action of time software to the default */
+/*              action, set TYPE to a value that is not equivalent to */
+/*              'YES' when case and spaces are ignored. */
 
 /* $ Detailed_Output */
 
@@ -702,37 +723,118 @@ L_tparch:
 /* $ Particulars */
 
 /*     This routine is used to alter the collections of strings */
-/*     that SPICE software regards as legitimate calendar strings.  The */
+/*     that SPICE software regards as legitimate calendar strings. The */
 /*     default behavior of SPICE software is to accept strings such */
 /*     as FEB 34, 1993 and to interpret these in a "natural way" */
-/*     (FEB 34, 1993 is regarded as MARCH 6, 1993.)  This behavior */
+/*     (FEB 34, 1993 is regarded as MARCH 6, 1993.) This behavior */
 /*     is sometimes useful for "private" programs that you write. */
 /*     However, such a string may be a typo (a finger accidentally hit */
-/*     two keys for the day instead of one).  Given that this string */
-/*     does not appear in common usage,  you may want to consider */
-/*     that it is more likely the result of erroneous input.  You */
+/*     two keys for the day instead of one). Given that this string */
+/*     does not appear in common usage, you may want to consider */
+/*     that it is more likely the result of erroneous input. You */
 /*     can alter the behavior of SPICE software so that it will */
-/*     treat such a string as an error.  To do this call this entry */
+/*     treat such a string as an error. To do this call this entry */
 /*     point with TYPE having the value 'YES'. */
 
 /*        CALL TPARCH ( 'YES' ) */
 
 /*     Until the behavior is reset by calling TPARCH with a value */
-/*     other than 'YES' (such as 'NO'),  SPICE software will treat all */
+/*     other than 'YES' (such as 'NO'), SPICE software will treat all */
 /*     out-of-bound components of time strings as errors. */
 
 /*     If you are happy with the SPICE default interpretation of */
 /*     strings, you do not need to make any calls to TPARCH. */
 
+/*     All time parsing routines --including the top-level APIs TPARSE */
+/*     and UTC2ET-- respect the setting assigned by TPARCH, except the */
+/*     SPICELIB routine STR2ET. */
+
 /* $ Examples */
 
-/*     When accepting times as input interactively, you usually */
-/*     READ a string typed at a keyboard and then pass that string */
-/*     to UTC2ET to convert it to an ephemeris time.  If you want */
-/*     to restrict the strings accepted by UTC2ET, place the */
-/*     following call at a point early in your program. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL TPARCH ( 'YES' ) */
+/*     1) When accepting times as input interactively, you usually */
+/*        read a string typed at a keyboard and then pass that string */
+/*        to the SPICE time system to convert it to an ephemeris time. */
+/*        The default behavior of SPICE software is to accept strings */
+/*        such as FEB 34, 1993 and to interpret these in a "natural way" */
+/*        (FEB 34, 1993 is regarded as MARCH 6, 1993.) The following */
+/*        example code demonstrates how to modify this behavior. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM TPARCH_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              CHARACTER*(*)         TIMSTR */
+/*              PARAMETER           ( TIMSTR = 'FEB 34, 1993' ) */
+
+/*              INTEGER               ERRMLN */
+/*              PARAMETER           ( ERRMLN = 1000 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(ERRMLN)    ERRMSG */
+
+/*              DOUBLE PRECISION      SP2000 */
+
+/*        C */
+/*        C     First, demonstrate the default behavior of SPICE. */
+/*        C     Let's get the number of UTC seconds past J2000 epoch. */
+/*        C */
+/*              CALL TPARSE ( TIMSTR, SP2000, ERRMSG ) */
+
+/*              IF ( ERRMSG .EQ. ' ' ) THEN */
+
+/*                 WRITE(*,'(A,F18.6)') 'UTC (s): ', SP2000 */
+
+/*              ELSE */
+
+/*                 WRITE(*,'(2A)') 'Error  : ', ERRMSG */
+
+/*              END IF */
+
+/*        C */
+/*        C     Now, turn error checking on and parse the time string */
+/*        C     again. */
+/*        C */
+/*              CALL TPARCH ( 'YES' ) */
+/*              CALL TPARSE ( TIMSTR, SP2000, ERRMSG ) */
+
+/*              IF ( ERRMSG .EQ. ' ' ) THEN */
+
+/*                 WRITE(*,'(A,F18.6)') 'UTC (s): ', SP2000 */
+
+/*              ELSE */
+
+/*                 WRITE(*,'(2A)') 'Error  : ', ERRMSG */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        UTC (s):  -215352000.000000 */
+/*        Error  : The day of the month specified for the month of Feb*** */
+
+
+/*        Warning: incomplete output. 1 line extended past the right */
+/*        margin of the header and has been truncated. This line is */
+/*        marked by "***" at the end of the line. */
+
 
 /* $ Restrictions */
 
@@ -744,17 +846,28 @@ L_tparch:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 01-NOV-2021 (JDR) (EDW) */
 
-/* -    SPICELIB Version 1.0.1 10-FEB-2014 (BVS) */
+/*        Added text listing routines affected and not affected by */
+/*        explicit assignments to TPARCH. */
 
-/*        Fixed typo in the Declarations section: STRING -> TYPE. */
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. */
 
-/* -    SPICELIB Version 1.0.0, 7-APR-1996 (WLT) */
+/*        Added TIME to $Required_Reading list. */
+
+/* -    SPICELIB Version 1.0.1, 10-FEB-2014 (BVS) */
+
+/*        Fixed typo in the $Declarations section: STRING -> TYPE. */
+
+/* -    SPICELIB Version 1.0.0, 07-APR-1996 (WLT) */
 
 /*        The entry point TPARCH was moved from TPARSE to the routine */
 /*        TCHECK so that all time parsing actions could be centralized. */
@@ -824,11 +937,11 @@ L_tchckd:
 
 /* $ Detailed_Output */
 
-/*     TYPE       is a string that gives the answer to the question */
-/*                "Is checking of components enabled?"  If checking */
-/*                is enabled, the value returned will be "YES" if */
-/*                checking is not enabled, the value returned will */
-/*                be "NO". */
+/*     TYPE     is a string that gives the answer to the question */
+/*              "Is checking of components enabled?"  If checking */
+/*              is enabled, the value returned will be "YES" if */
+/*              checking is not enabled, the value returned will */
+/*              be "NO". */
 
 /* $ Parameters */
 
@@ -845,7 +958,7 @@ L_tchckd:
 /* $ Particulars */
 
 /*     This entry point allows you to "fetch" the current settings */
-/*     regarding the checking of components of a time string.  This */
+/*     regarding the checking of components of a time string. This */
 /*     allows you to temporarily set the action to whatever is desired */
 /*     in a particular piece of code and then reset the action to */
 /*     the setting in effect prior to the routines activities. */
@@ -885,12 +998,16 @@ L_tchckd:
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 7-APR-1996 (WLT) */
+/* -    SPICELIB Version 1.0.1, 17-AUG-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 07-APR-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

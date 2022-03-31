@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      NPARSD ( Double Precision parsing of a string ) */
+/* $Procedure NPARSD ( Double Precision parsing of a string ) */
 /* Subroutine */ int nparsd_(char *string, doublereal *x, char *error, 
 	integer *ptr, ftnlen string_len, ftnlen error_len)
 {
@@ -110,13 +110,13 @@ static integer c__1 = 1;
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*      ALPHANUMERIC */
-/*      CONVERSION */
-/*      PARSING */
+/*     ALPHANUMERIC */
+/*     CONVERSION */
+/*     PARSING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -130,66 +130,70 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     STRING     A character string that represents a numeric value. */
-/*                Commas and spaces may be used in this string for */
-/*                ease of reading and writing the number.  They */
-/*                are treated as insignificant but non-error-producing */
-/*                characters. */
+/*     STRING   is a character string that represents a numeric value. */
+/*              Commas and spaces may be used in this string for */
+/*              ease of reading and writing the number. They */
+/*              are treated as insignificant but non-error-producing */
+/*              characters. */
 
-/*                For exponential representation the characters */
-/*                'E','D','e','d' may be used. */
+/*              For exponential representation the characters */
+/*              'E','D','e','d' may be used. */
 
-/*                The following are legitimate numeric expressions */
+/*              The following are legitimate numeric expressions */
 
-/*                 +12.2 e-1 */
-/*                 -3. 1415 9276 */
-/*                 1e12 */
-/*                 E10 */
+/*               +12.2 e-1 */
+/*               -3. 1415 9276 */
+/*               1e12 */
+/*               E10 */
 
-/*                The program also recognizes the following  mnemonics */
-/*                'PI', 'pi', 'Pi', 'pI' */
-/*                '+PI', '+pi', '+Pi', '+pI' */
-/*                '-PI', '-pi', '-Pi', '-pI' */
-/*                and returns the value */
-/*                ( + OR - ) 3.1415 9265 3589 7932 3846 2600 D0 as */
-/*                appropriate. */
+/*              The program also recognizes the following  mnemonics */
+/*              'PI', 'pi', 'Pi', 'pI' */
+/*              '+PI', '+pi', '+Pi', '+pI' */
+/*              '-PI', '-pi', '-Pi', '-pI' */
+/*              and returns the value */
+/*              ( + OR - ) 3.1415 9265 3589 7932 3846 2600 D0 as */
+/*              appropriate. */
 
 /* $ Detailed_Output */
 
-/*     X          Double precision parsed value of input string. If an */
-/*                error is encountered, X is not changed. */
+/*     X        double precision parsed value of input string. If an */
+/*              error is encountered, X is not changed. */
 
-/*     ERROR      is a message indicating that the string could */
-/*                not be parsed due to use of an unexpected or misplaced */
-/*                character or due to a string representing a number */
-/*                too large for double precision.  If the number was */
-/*                successfully parsed, ERROR will be returned as a blank. */
+/*     ERROR    is a message indicating that the string could */
+/*              not be parsed due to use of an unexpected or misplaced */
+/*              character or due to a string representing a number */
+/*              too large for double precision. If the number was */
+/*              successfully parsed, ERROR will be returned as a blank. */
 
-/*                In particular, blank strings, or strings that do not */
-/*                contain either a digit or exponent character will */
-/*                be regarded as errors. */
+/*              In particular, blank strings, or strings that do not */
+/*              contain either a digit or exponent character will */
+/*              be regarded as errors. */
 
-/*     PTR        This indicates which character was being used when */
-/*                the error occurred.  If no error occurs, PTR is */
-/*                returned as 0. */
+/*     PTR      this indicates which character was being used when */
+/*              the error occurred. If no error occurs, PTR is */
+/*              returned as 0. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If the string is non-numeric, PTR indicates the location in */
-/*        the string where the error occurred, and ERROR contains a */
-/*        descriptive error message. */
+/*     1)  If the string is non-numeric, PTR indicates the location in */
+/*         the string where the error occurred, and ERROR contains a */
+/*         descriptive error message. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
 /*     This routine parses an input character string that represents a */
 /*     number, checks for overflow, unexpected or misplaced */
-/*     characters.  It returns the double precision number or an error */
+/*     characters. It returns the double precision number or an error */
 /*     message. */
 
 /* $ Examples */
@@ -208,33 +212,37 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     Due to rounding errors this routine may not be able to parse */
-/*     the decimal character string representation of the largest */
-/*     and smallest double precision numbers. */
-
-/* $ Files */
-
-/*     None. */
-
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     1)  Due to rounding errors this routine may not be able to parse */
+/*         the decimal character string representation of the largest */
+/*         and smallest double precision numbers. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 3.6.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 3.5.0, 15-AUG-2002 (WLT) */
 
 /*        Replaced the call to INSSUB with a call to ZZINSSUB so */
 /*        that this routine can legitimately call itself Error Free */
 
-/* -    SPICELIB Version 3.4.0, 3-DEC-2001 */
+/* -    SPICELIB Version 3.4.0, 03-DEC-2001 (NJB) */
 
 /*        Added an extra check to make sure that ICHAR of any character */
 /*        of the input string is positive. */
@@ -260,8 +268,8 @@ static integer c__1 = 1;
 /* -    SPICELIB Version 3.1.0, 12-JUL-1994 (WLT) */
 
 /*        The previous version of the routine assumed that the range */
-/*        of values of ICHAR was 0 to 128.  That turns out not to be */
-/*        true on some machines.  If a character whose ICHAR value is */
+/*        of values of ICHAR was 0 to 128. That turns out not to be */
+/*        true on some machines. If a character whose ICHAR value is */
 /*        outside this range is detected, it is now handled properly */
 /*        as an unexpected character. */
 
@@ -272,18 +280,18 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 2.0.0, 28-AUG-1992 (WLT) (KRG) */
 
-/*        The basic algorithm was completely re-written.  As a result */
+/*        The basic algorithm was completely re-written. As a result */
 /*        the routine now runs an order of magnitude faster than */
-/*        it did before.  In addition, strings that do not contain */
+/*        it did before. In addition, strings that do not contain */
 /*        enough information to assign a value to the string are now */
-/*        regarded as errors.  These include blank strings or strings */
+/*        regarded as errors. These include blank strings or strings */
 /*        that contain only a sign characters, blanks and commas. */
 
 /*        In addition the error diagnosis and checking for overflow */
 /*        was greatly enhanced. */
 
 /*        Note: strings may now parse with slightly different values */
-/*        from the previous version of NPARSD.  The current */
+/*        from the previous version of NPARSD. The current */
 /*        implementation is more accurate in converting strings to */
 /*        double precision numbers. */
 
@@ -294,91 +302,18 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.1.0, 17-APR-1990 (WLT) */
 
-/*        Bug fix.  The subscript used to reference individual characters */
-/*        of the input string could sometimes step out of bounds.  This */
+/*        Bug fix. The subscript used to reference individual characters */
+/*        of the input string could sometimes step out of bounds. This */
 /*        went unnoticed until NAIF began compiling with the CHECK=BOUNDS */
 /*        option of the DEC Fortran compiler. */
 
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (HAN) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     parse a character_string to a d.p. number */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 3.3.0, 29-FEB-1996 (KRG) */
-
-/*        The declaration for the SPICELIB function PI is now */
-/*        preceded by an EXTERNAL statement declaring PI to be an */
-/*        external function. This removes a conflict with any */
-/*        compilers that have a PI intrinsic function. */
-
-/*        Removed the error message and storage for the unexpected */
-/*        comma error message. This variable was set but never used, */
-/*        and according to the spec for this routine a comma is a valid */
-/*        delimiter, treated like a space, within numbers. */
-
-/* -    SPICELIB Version 3.2.0, 10-JAN-1995 (WLT) */
-
-/*        Changed error strings from parameters to assignments to */
-/*        compensate for shortcomings of the Absoft FORTRAN compiler */
-/*        on the NeXT. */
-
-/* -    SPICELIB Version 3.1.0, 12-JUL-1994 (WLT) */
-
-/*        The previous version of the routine assumed that the range */
-/*        of values of ICHAR was 0 to 128.  That turns out not to be */
-/*        true on some machines.  If a character whose ICHAR value is */
-/*        outside this range is detected, it is now handled properly */
-/*        as an unexpected character. */
-
-/* -    SPICELIB Version 3.0.0, 24-FEB-1993 (WLT) */
-
-/*        The previous version of the algorithm interpreted P or p as 1. */
-/*        This was not the intent of the routine and was corrected. */
-
-/* -    SPICELIB Version 2.0.0, 28-AUG-1992 (WLT) (KRG) */
-
-/*        The basic algorithm was completely re-written.  As a result */
-/*        the routine now runs an order of magnitude faster than */
-/*        it did before.  In addition, strings that do not contain */
-/*        enough information to assign a value to the string are now */
-/*        regarded as errors.  These include blank strings or strings */
-/*        that contain only a sign characters, blanks and commas. */
-
-/*        In addition the error diagnosis and checking for overflow */
-/*        was greatly enhanced. */
-
-/*        In general the current algorithm is more robust and much */
-/*        faster than the previous version. */
-
-/*        Note: strings may now parse with slightly different values */
-/*        from the previous version of NPARSD.  The current */
-/*        implementation is more accurate in converting strings to */
-/*        double precision numbers. */
-
-/* -    SPICELIB Version 1.1.0, 17-APR-1990 (WLT) */
-
-/*        Bug fix.  The subscript used to reference individual characters */
-/*        of the input string could sometimes step out of bounds.  This */
-/*        went unnoticed until NAIF began compiling with the CHECK=BOUNDS */
-/*        option of the DEC Fortran compiler. */
-
-/* -    Beta Version 1.1.0, 16-FEB-1989 (HAN) (NJB) */
-
-/*        Contents of the Exceptions section was changed to "error free" */
-/*        to reflect the decision that the module will never participate */
-/*        in error handling. */
-
-/*        An example was added to the header, and the Exceptions section */
-/*        was completed. */
-
-/*        Declaration of unused variables J, K and unused function */
-/*        LASTNB removed. */
 
 /* -& */
 
@@ -411,75 +346,75 @@ static integer c__1 = 1;
 		". ", (ftnlen)160, (ftnlen)54);
 	blank = ' ';
 	values[(i__1 = '0' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)476)] = 0.;
+		i__1, "nparsd_", (ftnlen)412)] = 0.;
 	values[(i__1 = '1' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)477)] = 1.;
+		i__1, "nparsd_", (ftnlen)413)] = 1.;
 	values[(i__1 = '2' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)478)] = 2.;
+		i__1, "nparsd_", (ftnlen)414)] = 2.;
 	values[(i__1 = '3' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)479)] = 3.;
+		i__1, "nparsd_", (ftnlen)415)] = 3.;
 	values[(i__1 = '4' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)480)] = 4.;
+		i__1, "nparsd_", (ftnlen)416)] = 4.;
 	values[(i__1 = '5' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)481)] = 5.;
+		i__1, "nparsd_", (ftnlen)417)] = 5.;
 	values[(i__1 = '6' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)482)] = 6.;
+		i__1, "nparsd_", (ftnlen)418)] = 6.;
 	values[(i__1 = '7' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)483)] = 7.;
+		i__1, "nparsd_", (ftnlen)419)] = 7.;
 	values[(i__1 = '8' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)484)] = 8.;
+		i__1, "nparsd_", (ftnlen)420)] = 8.;
 	values[(i__1 = '9' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)485)] = 9.;
+		i__1, "nparsd_", (ftnlen)421)] = 9.;
 	values[(i__1 = '-' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)486)] = -1.;
+		i__1, "nparsd_", (ftnlen)422)] = -1.;
 	values[(i__1 = '+' - 1) < 128 && 0 <= i__1 ? i__1 : s_rnge("values", 
-		i__1, "nparsd_", (ftnlen)487)] = 1.;
+		i__1, "nparsd_", (ftnlen)423)] = 1.;
 	class__[(i__1 = ' ') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)489)] = 4;
+		 "nparsd_", (ftnlen)425)] = 4;
 	class__[(i__1 = ',') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)490)] = 4;
+		 "nparsd_", (ftnlen)426)] = 4;
 	class__[(i__1 = '.') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)492)] = 2;
+		 "nparsd_", (ftnlen)428)] = 2;
 	class__[(i__1 = 'E') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)494)] = 3;
+		 "nparsd_", (ftnlen)430)] = 3;
 	class__[(i__1 = 'D') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)495)] = 3;
+		 "nparsd_", (ftnlen)431)] = 3;
 	class__[(i__1 = 'e') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)496)] = 3;
+		 "nparsd_", (ftnlen)432)] = 3;
 	class__[(i__1 = 'd') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)497)] = 3;
+		 "nparsd_", (ftnlen)433)] = 3;
 	class__[(i__1 = '+') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)499)] = 7;
+		 "nparsd_", (ftnlen)435)] = 7;
 	class__[(i__1 = '-') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)500)] = 7;
+		 "nparsd_", (ftnlen)436)] = 7;
 	class__[(i__1 = '1') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)502)] = 1;
+		 "nparsd_", (ftnlen)438)] = 1;
 	class__[(i__1 = '2') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)503)] = 1;
+		 "nparsd_", (ftnlen)439)] = 1;
 	class__[(i__1 = '3') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)504)] = 1;
+		 "nparsd_", (ftnlen)440)] = 1;
 	class__[(i__1 = '4') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)505)] = 1;
+		 "nparsd_", (ftnlen)441)] = 1;
 	class__[(i__1 = '5') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)506)] = 1;
+		 "nparsd_", (ftnlen)442)] = 1;
 	class__[(i__1 = '6') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)507)] = 1;
+		 "nparsd_", (ftnlen)443)] = 1;
 	class__[(i__1 = '7') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)508)] = 1;
+		 "nparsd_", (ftnlen)444)] = 1;
 	class__[(i__1 = '8') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)509)] = 1;
+		 "nparsd_", (ftnlen)445)] = 1;
 	class__[(i__1 = '9') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)510)] = 1;
+		 "nparsd_", (ftnlen)446)] = 1;
 	class__[(i__1 = '0') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)511)] = 1;
+		 "nparsd_", (ftnlen)447)] = 1;
 	class__[(i__1 = 'p') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)513)] = 5;
+		 "nparsd_", (ftnlen)449)] = 5;
 	class__[(i__1 = 'P') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)514)] = 5;
+		 "nparsd_", (ftnlen)450)] = 5;
 	class__[(i__1 = 'i') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)515)] = 6;
+		 "nparsd_", (ftnlen)451)] = 6;
 	class__[(i__1 = 'I') < 129 && 0 <= i__1 ? i__1 : s_rnge("class", i__1,
-		 "nparsd_", (ftnlen)516)] = 6;
+		 "nparsd_", (ftnlen)452)] = 6;
 
 /*        Finally create the numbers that will be used for checking */
 /*        for floating point overflow. */
@@ -681,7 +616,7 @@ static integer c__1 = 1;
 /*        The action taken depends upon the class of the token. */
 
 	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)739)] == 1) {
+		"class", i__2, "nparsd_", (ftnlen)675)] == 1) {
 
 /*           Once a digit has been encountered, we can no longer */
 /*           allow the string 'PI' or a sign until an exponent */
@@ -703,7 +638,7 @@ static integer c__1 = 1;
 		if (intval < intbnd) {
 		    intval = intval * 10. + values[(i__2 = id - 1) < 128 && 0 
 			    <= i__2 ? i__2 : s_rnge("values", i__2, "nparsd_",
-			     (ftnlen)761)];
+			     (ftnlen)697)];
 		} else {
 
 /*                 Once the integer exceeds a given bound, */
@@ -719,7 +654,7 @@ static integer c__1 = 1;
 			roundi = FALSE_;
 			if (values[(i__2 = id - 1) < 128 && 0 <= i__2 ? i__2 :
 				 s_rnge("values", i__2, "nparsd_", (ftnlen)
-				779)] > 5.) {
+				715)] > 5.) {
 			    intval += 1.;
 			}
 		    }
@@ -746,13 +681,13 @@ static integer c__1 = 1;
 		    if (decval < intbnd) {
 			decval = decval * 10. + values[(i__2 = id - 1) < 128 
 				&& 0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-				"nparsd_", (ftnlen)808)];
+				"nparsd_", (ftnlen)744)];
 			ecount += -1;
 		    } else if (roundd) {
 			roundd = FALSE_;
 			if (values[(i__2 = id - 1) < 128 && 0 <= i__2 ? i__2 :
 				 s_rnge("values", i__2, "nparsd_", (ftnlen)
-				815)] >= 5.) {
+				751)] >= 5.) {
 			    decval += 1.;
 			}
 		    }
@@ -772,7 +707,7 @@ static integer c__1 = 1;
 		    if (divisr < intbnd) {
 			decval = decval * 10. + values[(i__2 = id - 1) < 128 
 				&& 0 <= i__2 ? i__2 : s_rnge("values", i__2, 
-				"nparsd_", (ftnlen)835)];
+				"nparsd_", (ftnlen)771)];
 			divisr *= 10.;
 		    }
 		}
@@ -812,7 +747,7 @@ static integer c__1 = 1;
 
 		    expval = expval * 10. + dpsign[1] * values[(i__2 = id - 1)
 			     < 128 && 0 <= i__2 ? i__2 : s_rnge("values", 
-			    i__2, "nparsd_", (ftnlen)877)];
+			    i__2, "nparsd_", (ftnlen)813)];
 		}
 
 /*           Even though this character is a digit, its not expected */
@@ -830,7 +765,7 @@ static integer c__1 = 1;
 		return 0;
 	    }
 	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)898)] == 2) {
+		"class", i__2, "nparsd_", (ftnlen)834)] == 2) {
 	    if (pntok) {
 		bpiok = FALSE_;
 		epiok = FALSE_;
@@ -852,7 +787,7 @@ static integer c__1 = 1;
 		return 0;
 	    }
 	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)925)] == 3) {
+		"class", i__2, "nparsd_", (ftnlen)861)] == 3) {
 	    sigchr = TRUE_;
 	    if (expok) {
 		bpiok = FALSE_;
@@ -876,12 +811,12 @@ static integer c__1 = 1;
 		return 0;
 	    }
 	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)955)] == 7) {
+		"class", i__2, "nparsd_", (ftnlen)891)] == 7) {
 	    if (signok) {
 		dpsign[(i__2 = signdx - 1) < 2 && 0 <= i__2 ? i__2 : s_rnge(
-			"dpsign", i__2, "nparsd_", (ftnlen)959)] = values[(
+			"dpsign", i__2, "nparsd_", (ftnlen)895)] = values[(
 			i__3 = id - 1) < 128 && 0 <= i__3 ? i__3 : s_rnge(
-			"values", i__3, "nparsd_", (ftnlen)959)];
+			"values", i__3, "nparsd_", (ftnlen)895)];
 		signok = FALSE_;
 	    } else {
 		nexti = i__ + 1;
@@ -895,7 +830,7 @@ static integer c__1 = 1;
 		return 0;
 	    }
 	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)976)] == 5) {
+		"class", i__2, "nparsd_", (ftnlen)912)] == 5) {
 	    sigchr = TRUE_;
 	    if (bpiok) {
 		doint = FALSE_;
@@ -918,7 +853,7 @@ static integer c__1 = 1;
 		return 0;
 	    }
 	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)1005)] == 6) {
+		"class", i__2, "nparsd_", (ftnlen)941)] == 6) {
 	    if (epiok) {
 		doint = FALSE_;
 		dodec = FALSE_;
@@ -942,7 +877,7 @@ static integer c__1 = 1;
 		return 0;
 	    }
 	} else if (class__[(i__2 = id) < 129 && 0 <= i__2 ? i__2 : s_rnge(
-		"class", i__2, "nparsd_", (ftnlen)1035)] == 4) {
+		"class", i__2, "nparsd_", (ftnlen)971)] == 4) {
 
 /*           We don't do anything. */
 
@@ -1032,7 +967,7 @@ static integer c__1 = 1;
 	    expval += 10.;
 	}
 	value /= lookup[(i__1 = -((integer) expval)) < 11 && 0 <= i__1 ? i__1 
-		: s_rnge("lookup", i__1, "nparsd_", (ftnlen)1139)];
+		: s_rnge("lookup", i__1, "nparsd_", (ftnlen)1075)];
 
 /*     If the exponent is positive ... */
 
@@ -1057,9 +992,9 @@ static integer c__1 = 1;
 /*        going to happen. */
 
 	if (value < dpmax_() / lookup[(i__1 = exp__) < 11 && 0 <= i__1 ? i__1 
-		: s_rnge("lookup", i__1, "nparsd_", (ftnlen)1172)]) {
+		: s_rnge("lookup", i__1, "nparsd_", (ftnlen)1108)]) {
 	    value *= lookup[(i__1 = exp__) < 11 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lookup", i__1, "nparsd_", (ftnlen)1174)];
+		    "lookup", i__1, "nparsd_", (ftnlen)1110)];
 	} else {
 	    s_copy(error, toobig, error_len, (ftnlen)160);
 	    *ptr = i_len(string, string_len) + 1;

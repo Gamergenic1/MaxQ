@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      INVORT ( Invert nearly orthogonal matrices ) */
+/* $Procedure INVORT ( Invert nearly orthogonal matrices ) */
 /* Subroutine */ int invort_(doublereal *m, doublereal *mit)
 {
     /* Initialized data */
@@ -35,8 +35,10 @@
 
 /* $ Abstract */
 
-/*     Construct the inverse of a 3x3 matrix with orthogonal columns */
-/*     and non-zero norms using a numerical stable algorithm. */
+/*     Construct the inverse of a 3x3 matrix with orthogonal columns and */
+/*     non-zero column norms using a numerically stable algorithm. The */
+/*     rows of the output matrix are the columns of the input matrix */
+/*     divided by the length squared of the corresponding columns. */
 
 /* $ Disclaimer */
 
@@ -74,19 +76,19 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     M          I   A 3x3 matrix. */
-/*     MIT        I   M after transposition and scaling of rows. */
+/*     MIT        O   M after transposition and scaling of rows. */
 
 /* $ Detailed_Input */
 
-/*     M          is a 3x3 matrix. */
+/*     M        is a 3x3 matrix. */
 
 /* $ Detailed_Output */
 
-/*     MIT        is the matrix obtained by transposing M and dividing */
-/*                the rows by squares of their norms. */
+/*     MIT      is the matrix obtained by transposing M and dividing */
+/*              the rows by squares of their norms. */
 
 /* $ Parameters */
 
@@ -94,13 +96,12 @@
 
 /* $ Exceptions */
 
-/*     1) If any of the columns of M have zero length, the error */
-/*        SPICE(ZEROLENGTHCOLUMN) will be signaled. */
+/*     1)  If any of the columns of M have zero length, the error */
+/*         SPICE(ZEROLENGTHCOLUMN) is signaled. */
 
-/*     2) If any column is too short to allow computation of the */
-/*        reciprocal of its length without causing a floating */
-/*        point overflow, the error SPICE(COLUMNTOOSMALL) will */
-/*        be signaled. */
+/*     2)  If any column is too short to allow computation of the */
+/*         reciprocal of its length without causing a floating */
+/*         point overflow, the error SPICE(COLUMNTOOSMALL) is signaled. */
 
 /* $ Files */
 
@@ -110,7 +111,7 @@
 
 /*     Suppose that M is the matrix */
 
-/*             -                      - */
+/*            .-                      -. */
 /*            |   A*u    B*v     C*w   | */
 /*            |      1      1       1  | */
 /*            |                        | */
@@ -119,14 +120,14 @@
 /*            |                        | */
 /*            |   A*u    B*v     C*w   | */
 /*            |      3      3       3  | */
-/*             -                      - */
+/*            `-                      -' */
 
 /*     where the vectors (u , u , u ),  (v , v , v ),  and (w , w , w ) */
 /*                         1   2   3      1   2   3          1   2   3 */
 /*     are unit vectors. This routine produces the matrix: */
 
 
-/*             -                      - */
+/*            .-                      -. */
 /*            |   a*u    a*u     a*u   | */
 /*            |      1      2       3  | */
 /*            |                        | */
@@ -135,20 +136,99 @@
 /*            |                        | */
 /*            |   c*w    c*w     c*w   | */
 /*            |      1      2       3  | */
-/*             -                      - */
+/*            `-                      -' */
 
 /*     where a = 1/A, b = 1/B, and c = 1/C. */
 
 /* $ Examples */
 
-/*     Suppose that you have a matrix M whose columns are orthogonal */
-/*     and have non-zero norm (but not necessarily norm 1).  Then the */
-/*     routine INVORT can be used to construct the inverse of M: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL INVORT ( M, INVERS ) */
+/*     1) Given a double precision 3x3 matrix with mutually orthogonal */
+/*        rows of arbitrary length, compute its inverse. Check that the */
+/*        original matrix times the computed inverse produces the */
+/*        identity matrix. */
 
-/*     This method is numerically more robust than calling the */
-/*     routine INVERT. */
+/*        Example code begins here. */
+
+
+/*              PROGRAM INVORT_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      IMAT ( 3, 3 ) */
+/*              DOUBLE PRECISION      M    ( 3, 3 ) */
+/*              DOUBLE PRECISION      MOUT ( 3, 3 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               J */
+
+/*        C */
+/*        C     Define a matrix to invert. */
+/*        C */
+/*              DATA                  M  /  0.D0,  0.5D0, 0.D0, */
+/*             .                           -1.D0,  0.D0,  0.D0, */
+/*             .                            0.D0,  0.D0,  1.D0 / */
+
+/*              WRITE(*,*) 'Original Matrix:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( M(I,J), J=1,3 ) */
+
+/*              END DO */
+/*        C */
+/*        C     Invert the matrix, then output. */
+/*        C */
+/*              CALL INVORT ( M, MOUT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Inverse Matrix:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( MOUT(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Check the M times MOUT produces the identity matrix. */
+/*        C */
+/*              CALL MXM ( M, MOUT, IMAT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Original times inverse:' */
+/*              DO I=1, 3 */
+
+/*                 WRITE(*,'(3F16.7)') ( IMAT(I,J), J=1,3 ) */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Original Matrix: */
+/*               0.0000000      -1.0000000       0.0000000 */
+/*               0.5000000       0.0000000       0.0000000 */
+/*               0.0000000       0.0000000       1.0000000 */
+
+/*         Inverse Matrix: */
+/*               0.0000000       2.0000000       0.0000000 */
+/*              -1.0000000       0.0000000       0.0000000 */
+/*               0.0000000       0.0000000       1.0000000 */
+
+/*         Original times inverse: */
+/*               1.0000000       0.0000000       0.0000000 */
+/*               0.0000000       1.0000000       0.0000000 */
+/*               0.0000000       0.0000000       1.0000000 */
+
 
 /* $ Restrictions */
 
@@ -160,14 +240,26 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Fixed I/O type */
+/*        of argument MIT in $Brief_I/O table. Extended $Abstract */
+/*        section. */
+
+/*        Added complete code example to $Examples section. */
+
 /* -    SPICELIB Version 1.1.1, 14-NOV-2013 (EDW) */
 
-/*        Edit to Abstract. Eliminated unneeded Revisions section. */
+/*        Edit to $Abstract. Eliminated unneeded $Revisions section. */
 
 /* -    SPICELIB Version 1.1.0, 02-SEP-2005 (NJB) */
 
@@ -211,9 +303,9 @@
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	unorm_(&m[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : s_rnge("m", 
-		i__1, "invort_", (ftnlen)208)], &temp[(i__2 = i__ * 3 - 3) < 
+		i__1, "invort_", (ftnlen)304)], &temp[(i__2 = i__ * 3 - 3) < 
 		9 && 0 <= i__2 ? i__2 : s_rnge("temp", i__2, "invort_", (
-		ftnlen)208)], &length);
+		ftnlen)304)], &length);
 	if (length == 0.) {
 	    chkin_("INVORT", (ftnlen)6);
 	    setmsg_("Column # of the input matrix has a norm of zero. ", (
@@ -241,7 +333,7 @@
 	}
 	scale = 1. / length;
 	vsclip_(&scale, &temp[(i__1 = i__ * 3 - 3) < 9 && 0 <= i__1 ? i__1 : 
-		s_rnge("temp", i__1, "invort_", (ftnlen)246)]);
+		s_rnge("temp", i__1, "invort_", (ftnlen)342)]);
     }
 
 /*     If we make it this far, we just need to transpose TEMP into MIT. */

@@ -62,8 +62,6 @@
      CHKOSTR
      CHKOSTR_VAL
      CHKPTR
-     Constants
-     Even
      F2C_MAP_CELL
      Index values
      MOVED
@@ -72,7 +70,6 @@
      MaxVal
      MinAbs
      MinVal
-     Odd
      SpiceError
      TolOrFail
 
@@ -82,12 +79,17 @@
    Do not use or alter any entry.  Or else!
 
 -Author_and_Institution
- 
+
    N.J. Bachman    (JPL)
-   E.D. Wright     (JPL) 
+   E.D. Wright     (JPL)
 
 -Version
- 
+
+   -CSPICE Version 6.0.0, 21-FEB-2021   (NJB)
+
+      Deleted macros for physical constants and dates. Deleted macros `Even`
+      and `Odd`.
+
    -CSPICE Version 5.0.0, 07-FEB-2017   (NJB)
 
       Updated MaxAbs and MinAbs macros to cast their input arguments
@@ -106,17 +108,17 @@
       allocated memory for the "Fortran cell" is freed.
 
    -CSPICE Version 4.1.0, 06-DEC-2002   (NJB)
-   
-      Bug fix:  added previous missing, bracketing parentheses to 
-      references to input cell pointer argument in macro 
+
+      Bug fix:  added previous missing, bracketing parentheses to
+      references to input cell pointer argument in macro
       CELLINIT.
 
       Changed CELLINIT macro so it no longer initializes to zero
       length all strings in data array of a character cell.  Instead,
-      strings are terminated with a null in their final element.  
+      strings are terminated with a null in their final element.
 
    -CSPICE Version 4.0.0, 22-AUG-2002   (NJB)
-   
+
        Added macro definitions to support CSPICE cells and sets:
 
           C2F_MAP_CELL
@@ -144,23 +146,23 @@
           F2C_MAP_CELL
 
    -CSPICE Version 3.0.0, 09-JAN-1998   (NJB)
-   
-       Added output string check macros CHKOSTR and CHKOSTR_VAL.  
+
+       Added output string check macros CHKOSTR and CHKOSTR_VAL.
        Removed variable name arguments from macros
-       
+
           CHKPTR
           CHKPTR_VAL
           CHKFSTR
           CHKRSTR_VAL
-          
-       The strings containing names of the checked variables are now 
+
+       The strings containing names of the checked variables are now
        generated from the variables themselves via the # operator.
-       
+
    -CSPICE Version 2.0.0, 03-DEC-1997   (NJB)
-   
-       Added pointer check macro CHKPTR and Fortran string check macro 
+
+       Added pointer check macro CHKPTR and Fortran string check macro
        CHKFSTR.
-       
+
    -CSPICE Version 1.0.0, 25-OCT-1997   (EDW)
 */
 
@@ -191,7 +193,7 @@
 
 
 
-/* 
+/*
 Define a tolerance test for those pesky double precision reals.
 True if the difference is less than the tolerance, false otherwise.
 The tolerance refers to a percentage. x, y and tol should be declared
@@ -248,18 +250,6 @@ Return a value which is the maximum/minimum value of two values.
 
 
 
-
-
-/*
-Determine whether a value is even or odd
-*/
-#define Even( x ) ( ( (x) & 1 ) == 0 )
-#define Odd ( x ) ( ( (x) & 1 ) != 0 )
-
-
-
-
-
 /*
 Array indexes for vectors.
 */
@@ -270,27 +260,6 @@ Array indexes for vectors.
 #define  SpiceVx        3
 #define  SpiceVy        4
 #define  SpiceVz        5
-
-
-
-
-/*
-Physical constants and dates.
-*/
-
-#define  B1900     2415020.31352
-#define  J1900     2415020.0
-#define  JYEAR     31557600.0
-#define  TYEAR     31556925.9747
-#define  J1950     2433282.5
-#define  SPD       86400.0
-#define  B1950     2433282.42345905
-#define  J2100     2488070.0
-#define  CLIGHT    299792.458
-#define  J2000     2451545.0
-
-
-
 
 
 /*
@@ -305,7 +274,7 @@ Common literal values.
 
 /*
 Macro CHKPTR is used for checking for a null pointer.  CHKPTR uses
-the constants 
+the constants
 
    CHK_STANDARD
    CHK_DISCOVER
@@ -327,7 +296,7 @@ to control tracing behavior.  Values  and meanings are:
                          before returning, if necessary.
                          In such cases the caller must test
                          failed_c() after the macro call.
-                         
+
 CHKPTR should be used in void functions.  In non-void functions,
 use CHKPTR_VAL, which is defined below.
 
@@ -504,12 +473,12 @@ use CHKOSTR_VAL, which is defined below.
 
 
    /*
-   Definitions for Cells and Sets 
+   Definitions for Cells and Sets
    */
 
 
    /*
-   Cell initialization macros 
+   Cell initialization macros
    */
    #define CELLINIT( cellPtr )                                       \
                                                                      \
@@ -545,7 +514,7 @@ use CHKOSTR_VAL, which is defined below.
          }                                                           \
                                                                      \
          (cellPtr)->init = SPICETRUE;                                \
-      }                                                             
+      }
 
 
    #define CELLINIT2( cellPtr1, cellPtr2 )                           \
@@ -562,7 +531,7 @@ use CHKOSTR_VAL, which is defined below.
 
 
    /*
-   Data type checking macros: 
+   Data type checking macros:
    */
    #define CELLTYPECHK( errHandling, modname, dType, cellPtr1 )      \
                                                                      \
@@ -734,7 +703,7 @@ use CHKOSTR_VAL, which is defined below.
 
 
 
-      
+
    #define CELLMATCH3_VAL( errHandling, modname,  cellPtr1,          \
                            cellPtr2,    cellPtr3, retval    )        \
                                                                      \
@@ -745,7 +714,7 @@ use CHKOSTR_VAL, which is defined below.
                         cellPtr2,    cellPtr3, retval );
 
    /*
-   Set checking macros: 
+   Set checking macros:
    */
    #define CELLISSETCHK( errHandling, modname, cellPtr1 )            \
                                                                      \
@@ -771,8 +740,8 @@ use CHKOSTR_VAL, which is defined below.
                chkout_c ( modname );                                 \
                return;                                               \
             }                                                        \
-         }                                                           
-                                                                     
+         }
+
 
    #define CELLISSETCHK_VAL( errHandling,  modname,                  \
                              cellPtr1,     retval  )                 \
@@ -815,7 +784,7 @@ use CHKOSTR_VAL, which is defined below.
                                                                      \
        CELLISSETCHK_VAL( errHandling, modname, cellPtr1, retval );   \
        CELLISSETCHK_VAL( errHandling, modname, cellPtr2, retval );   \
- 
+
 
 
    #define CELLISSETCHK3( errHandling,  modname,                     \
@@ -839,7 +808,7 @@ use CHKOSTR_VAL, which is defined below.
    */
 
    /*
-   Macros that map one or more character C cells to dynamically 
+   Macros that map one or more character C cells to dynamically
    allocated Fortran-style character cells:
    */
    #define C2F_MAP_CELL( caller, CCell, fCell, fLen )                \
@@ -847,7 +816,7 @@ use CHKOSTR_VAL, which is defined below.
       {                                                              \
          /*                                                          \
          fCell and fLen are to be passed by reference, as if this    \
-         macro were a function.                                      \    
+         macro were a function.                                      \
                                                                      \
                                                                      \
          Caution: dynamically allocates array fCell, which is to be  \
@@ -931,7 +900,7 @@ use CHKOSTR_VAL, which is defined below.
 
    /*
    Macro that maps a Fortran-style character cell to a C cell
-   (Note: this macro frees the Fortran cell): 
+   (Note: this macro frees the Fortran cell):
    */
 
    #define F2C_MAP_CELL( fCell, fLen, CCell )                        \
@@ -983,7 +952,7 @@ use CHKOSTR_VAL, which is defined below.
       }
 
 
-   
+
 /*
-   End of header SpiceZmc.h 
+   End of header SpiceZmc.h
 */

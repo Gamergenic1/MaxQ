@@ -1,9 +1,9 @@
 /*
 
--Procedure  rpd_c ( Radians per degree ) 
+-Procedure rpd_c ( Radians per degree )
 
 -Abstract
- 
+
    Return the number of radians per degree.
 
 -Disclaimer
@@ -35,9 +35,9 @@
 
    None.
 
--Keywords 
- 
-   CONSTANTS 
+-Keywords
+
+   CONSTANTS
 
 */
 
@@ -49,46 +49,46 @@
 /*
 
 -Brief_I/O
- 
-   The function returns the number of radians per degree. 
- 
--Detailed_Input 
- 
-   None. 
- 
--Detailed_Output 
+
+   The function returns the number of radians per degree.
+
+-Detailed_Input
+
+   None.
+
+-Detailed_Output
 
    The function returns the number of radians per degree: pi/180.
    The value of pi is determined by the ACOS function. That is,
 
       rpd = acos ( -1. ) / 180.
 
--Files 
- 
-   None. 
- 
--Exceptions 
- 
-   Error free. 
- 
--Particulars 
- 
-   When the function is referenced, the value computed as shown 
+-Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+-Files
+
+   None.
+
+-Particulars
+
+   When the function is referenced, the value computed as shown
    above is returned.
- 
--Parameters 
- 
-   None. 
 
 -Examples
- 
+
    The code fragment below illustrates the use of rpd_c.
- 
+
       /. Convert all angles to radians for output  ./
 
-         clock *= rpd_c() 
-         cone  *= rpd_c() 
-         twist *= rpd_c()  
+         clock *= rpd_c()
+         cone  *= rpd_c()
+         twist *= rpd_c()
 
 -Restrictions
 
@@ -100,11 +100,14 @@
 
 -Author_and_Institution
 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
-   E.D. Wright     (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.1, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
 
    -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
 
@@ -115,7 +118,6 @@
 -&
 */
 
- 
 { /* Begin rpd_c */
 
    /*
@@ -123,7 +125,7 @@
    */
 
    static SpiceDouble  value = 0.;
-  
+
 
    if ( value == 0. )
       {
@@ -134,4 +136,3 @@
    return value;
 
 } /* End rpd_c */
-

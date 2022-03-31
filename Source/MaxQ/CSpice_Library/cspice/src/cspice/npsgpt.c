@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      NPSGPT ( Nearest point on line segment ) */
+/* $Procedure NPSGPT ( Nearest point on line segment ) */
 /* Subroutine */ int npsgpt_(doublereal *ep1, doublereal *ep2, doublereal *
 	point, doublereal *pnear, doublereal *dist)
 {
@@ -62,7 +62,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     EP1, */
 /*     EP2        I   Endpoints of a line segment. */
@@ -73,16 +73,16 @@
 /* $ Detailed_Input */
 
 /*     EP1, */
-/*     EP2        are the endpoints of a line segment in 3-dimensional */
-/*                space. EP1 and EP2 need not be distinct. */
+/*     EP2      are the endpoints of a line segment in 3-dimensional */
+/*              space. EP1 and EP2 need not be distinct. */
 
-/*     POINT      is an arbitrary point in 3-dimensional space. */
+/*     POINT    is an arbitrary point in 3-dimensional space. */
 
 /* $ Detailed_Output */
 
-/*     PNEAR      is the closest point on the line segment to POINT. */
+/*     PNEAR    is the closest point on the line segment to POINT. */
 
-/*     DIST       is the distance between POINT and PNEAR. */
+/*     DIST     is the distance between POINT and PNEAR. */
 
 /* $ Parameters */
 
@@ -90,8 +90,8 @@
 
 /* $ Exceptions */
 
-/*     1) The input segment is allowed to be degenerate: it may be */
-/*        a single point. */
+/*     1)  The input segment is allowed to be degenerate: it may be */
+/*         a single point. */
 
 /* $ Files */
 
@@ -103,7 +103,7 @@
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as input */
 /*     (if any), the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
@@ -116,7 +116,7 @@
 /*        Example code begins here. */
 
 
-/*              PROGRAM EX1 */
+/*              PROGRAM NPSGPT_EX1 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     Local parameters */
@@ -158,8 +158,8 @@
 /*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran/64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
 /*        Endpoint 1:     1.00000000  -2.00000000   3.00000000 */
@@ -180,11 +180,16 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 02-FEB-MAR-2016 (NJB) */
+/* -    SPICELIB Version 1.0.1, 06-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 02-FEB-2016 (NJB) */
 
 /*        Updated from DSKLIB Version 1.0.0, 20-MAR-2015 (NJB) */
 

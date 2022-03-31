@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYENQI ( Enqueue a value onto a symbol ) */
+/* $Procedure SYENQI ( Enqueue a value onto a symbol ) */
 /* Subroutine */ int syenqi_(char *name__, integer *value, char *tabsym, 
 	integer *tabptr, integer *tabval, ftnlen name_len, ftnlen tabsym_len)
 {
@@ -84,47 +84,48 @@ static integer c__1 = 1;
 /*     VALUE      I   Value to be enqueued. */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol onto which the value is to */
-/*                be enqueued. If NAME is not in the symbol table, a new */
-/*                symbol having the value VALUE is created. */
+/*     NAME     is the name of the symbol onto which the value is to */
+/*              be enqueued. If NAME is not in the symbol table, a new */
+/*              symbol having the value VALUE is created. */
 
-/*     VALUE      is the value to be enqueued onto the symbol, NAME. */
-/*                The value is inserted in the value table after the */
-/*                last value associated with the symbol. */
+/*     VALUE    is the value to be enqueued onto the symbol, NAME. */
+/*              The value is inserted in the value table after the */
+/*              last value associated with the symbol. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of an integer symbol table. */
-/*                The symbol NAME may or may not be in the symbol */
-/*                table. */
+/*     TABVAL   are the components of an integer symbol table. */
+/*              The symbol NAME may or may not be in the symbol */
+/*              table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      are the components of an integer symbol table. */
-/*                 On output, the value table contains the new value */
-/*                 in addition to the old values associated with the */
-/*                 symbol NAME. The pointer table is updated to */
-/*                 reflect the change in the dimension of the symbol. */
+/*     TABVAL   are the components of an integer symbol table. */
+
+/*              On output, the value table contains the new value in */
+/*              addition to the old values associated with the symbol */
+/*              NAME. The pointer table is updated to reflect the change */
+/*              in the dimension of the symbol. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the addition of the new value to the symbol table causes an */
+/*         overflow in the value table, the error SPICE(VALUETABLEFULL) */
+/*         is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the addition of the new value to the symbol table */
-/*        causes an overflow in the value table, the error */
-/*        SPICE(VALUETABLEFULL) is signalled. */
 
 /* $ Particulars */
 
@@ -144,7 +145,7 @@ static integer c__1 = 1;
 
 /*     The call, */
 
-/*     CALL SYENQI ( 'books', 12, TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYENQI ( 'books', 12, TABSYM, TABPTR, TABVAL ) */
 
 /*     produces the symbol table: */
 
@@ -158,7 +159,7 @@ static integer c__1 = 1;
 
 /*     The next call, */
 
-/*     CALL SYENQI ( 'desks', 23, TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYENQI ( 'desks', 23, TABSYM, TABPTR, TABVAL ) */
 
 /*     then produces the symbol table: */
 
@@ -183,17 +184,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

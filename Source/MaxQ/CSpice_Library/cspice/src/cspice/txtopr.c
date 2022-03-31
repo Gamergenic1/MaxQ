@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      TXTOPR ( Text file, open for read ) */
+/* $Procedure TXTOPR ( Text file, open for read ) */
 /* Subroutine */ int txtopr_(char *fname, integer *unit, ftnlen fname_len)
 {
     /* System generated locals */
@@ -63,18 +63,18 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     FNAME      I   Name of file. */
 /*     UNIT       O   Logical unit. */
 
 /* $ Detailed_Input */
 
-/*     FNAME          is the name of the text file to be opened. */
+/*     FNAME    is the name of the text file to be opened. */
 
 /* $ Detailed_Output */
 
-/*     UNIT           is the logical unit connected to the opened file. */
+/*     UNIT     is the logical unit connected to the opened file. */
 
 /* $ Parameters */
 
@@ -82,11 +82,11 @@
 
 /* $ Exceptions */
 
-/*     1) If FNAME is a blank string, the error SPICE(BLANKFILENAME) is */
-/*        signalled. */
+/*     1)  If FNAME is a blank string, the error SPICE(BLANKFILENAME) is */
+/*         signaled. */
 
-/*     2) If the file cannot be opened, the error SPICE(FILEOPENFAILED) */
-/*        is signalled. */
+/*     2)  If the file cannot be opened, the error SPICE(FILEOPENFAILED) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -142,23 +142,37 @@
 
 /* $ Restrictions */
 
-/*     The file, FNAME, must exist prior to calling TXTOPR. */
+/*     1)  The file, FNAME, must exist prior to calling TXTOPR. */
 
 /* $ Literature_References */
 
-/*     1. "Lahey F77L EM/32 FORTRAN Language Reference Manual", page */
-/*        145. */
+/*     [1]  "Lahey F77L EM/32 FORTRAN Language Reference Manual", p.145. */
 
-/*     2. "Absoft FORTRAN 77 Language Reference Manual", page 7-12 for */
-/*        the NeXT. */
+/*     [2]  "Language Reference Manual", Absoft Fortran V3.2, page 7-12 */
+/*          (for the NeXT), 1993. */
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean    (JPL) */
-/*     H.A. Neilan    (JPL) */
-/*     M.J. Spencer   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 2.26.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.25.0, 10-MAR-2014 (BVS) */
 
@@ -273,23 +287,23 @@
 /* -    SPICELIB Version 2.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 2.0.3, 16-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 2.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 2.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -299,8 +313,8 @@
 
 /* -    SPICELIB Version 1.3.0, 11-NOV-1993 (HAN) */
 
-/*         Module was updated for the Silicon Graphics, DEC Alpha-OSF/1, */
-/*         and NeXT platforms. */
+/*        Module was updated for the Silicon Graphics, DEC Alpha-OSF/1, */
+/*        and NeXT platforms. */
 
 /* -    SPICELIB Version 1.2.0, 12-OCT-1992 (HAN) */
 
@@ -334,8 +348,8 @@
 
 /* -    SPICELIB Version 1.3.0, 11-NOV-1993 (HAN) */
 
-/*         Module was updated for the Silicon Graphics, DEC Alpha-OSF/1, */
-/*         and NeXT platforms. */
+/*        Module was updated for the Silicon Graphics, DEC Alpha-OSF/1, */
+/*        and NeXT platforms. */
 
 /* -    SPICELIB Version 1.2.0, 12-OCT-1992 (HAN) */
 

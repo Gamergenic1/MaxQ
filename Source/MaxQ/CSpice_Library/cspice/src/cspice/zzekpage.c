@@ -414,8 +414,14 @@ static integer c__15 = 15;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 14-OCT-2021 (BVS) */
+
+/*        Bug fix: fixed routine name in CHKIN/CHKOUT calls in */
+/*        entry point ZZEKPGPG (ZZEKPGBS -> ZZEKPGPG). */
 
 /* -    SPICELIB Version 1.1.0, 07-FEB-2015 (NJB) */
 
@@ -2484,8 +2490,14 @@ L_zzekpgpg:
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-OCT-2021 (BVS) */
+
+/*        Bug fix: fixed routine name in CHKIN/CHKOUT calls (ZZEKPGBS */
+/*        -> ZZEKPGPG). */
 
 /* -    Beta Version 1.0.0, 18-OCT-1995 (NJB) */
 
@@ -2500,11 +2512,11 @@ L_zzekpgpg:
 	*p = (*addrss - 1) / 256;
 	*base = (*p - 1 << 8) + 256;
     } else {
-	chkin_("ZZEKPGBS", (ftnlen)8);
+	chkin_("ZZEKPGPG", (ftnlen)8);
 	setmsg_("The data type code # was not recognized.", (ftnlen)40);
 	errint_("#", type__, (ftnlen)1);
 	sigerr_("SPICE(INVALIDTYPE)", (ftnlen)18);
-	chkout_("ZZEKPGBS", (ftnlen)8);
+	chkout_("ZZEKPGPG", (ftnlen)8);
 	return 0;
     }
     return 0;

@@ -61,7 +61,7 @@ static integer c__16 = 16;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of file containing source segment. */
 /*     BADDR      I   Beginning address in file of source segment. */
@@ -73,15 +73,15 @@ static integer c__16 = 16;
 
 /*     HANDLE, */
 /*     BADDR, */
-/*     EADDR       are the file handle assigned to an SPK file, and the */
-/*                 beginning and ending addresses of a segment within */
-/*                 that file.  Together they determine a complete set of */
-/*                 ephemeris data, from which a subset is to be */
-/*                 extracted. */
+/*     EADDR    are the file handle assigned to an SPK file, and the */
+/*              beginning and ending addresses of a segment within */
+/*              that file. Together they determine a complete set of */
+/*              ephemeris data, from which a subset is to be */
+/*              extracted. */
 
 /*     BEGIN, */
-/*     END         are the initial and final epochs (ephemeris time) */
-/*                 of the subset. */
+/*     END      are the initial and final epochs (ephemeris time) */
+/*              of the subset. */
 
 /* $ Detailed_Output */
 
@@ -105,7 +105,7 @@ static integer c__16 = 16;
 /*     handle, and written to the current DAF open for writing. */
 
 /*     The segment descriptor and summary must already have been written */
-/*     prior to calling this routine.  The segment must be ended */
+/*     prior to calling this routine. The segment must be ended */
 /*     external to this routine. */
 
 /* $ Particulars */
@@ -134,7 +134,7 @@ static integer c__16 = 16;
 
 /*        End the array to which this routine writes data. */
 
-/*     Much of this procedure is carried out by the routine SPKSUB.  The */
+/*     Much of this procedure is carried out by the routine SPKSUB. The */
 /*     examples of that routine illustrate more fully the process */
 /*     described above. */
 
@@ -148,25 +148,27 @@ static integer c__16 = 16;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
 /*        Replaced DAFRDA call with DAFGDA. */
 /*        Added IMPLICIT NONE. */
 
-/* -    SPICELIB Version 1.0.0, 7-NOV-1994 (WLT) */
+/* -    SPICELIB Version 1.0.0, 07-NOV-1994 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_15 spk segment */
-
-/* -& */
-/* $ Revisions */
-
+/*     subset type_15 SPK segment */
 
 /* -& */
 

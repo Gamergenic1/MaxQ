@@ -80,19 +80,21 @@
 /*              RA, DEC, and W. All of the angles and the angular rates */
 /*              of the axes are given in degrees. */
 
-/*              See the $ Particulars section for details on how to store */
+/*              See the $Particulars section for details on how to store */
 /*              the coefficient sets in the array. */
 
 /*     EPOCHS   contains the epochs (ephemeris seconds past J2000) */
-/*              corresponding to the elements in COEFFS.  The I'th */
+/*              corresponding to the elements in COEFFS. The I'th */
 /*              epoch must equal the epoch of the I'th set of */
 /*              coefficients. The epochs must form a strictly increasing */
 /*              sequence. */
 
 /* $ Detailed_Output */
 
-/*     None.    The data is stored in a segment in the binary PCK file */
-/*              associated with HANDLE. */
+/*     None. */
+
+/*     The data is stored in a segment in the binary PCK file */
+/*     associated with HANDLE. */
 
 /* $ Parameters */
 
@@ -100,8 +102,8 @@
 
 /* $ Exceptions */
 
-/*     1) If the number of coefficient sets and epochs is not positive, */
-/*        the error SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If the number of coefficient sets and epochs is not positive, */
+/*         the error SPICE(INVALIDARGUMENT) is signaled. */
 
 /* $ Files */
 
@@ -234,7 +236,7 @@
 /*     Example 2: */
 
 /*        In this example we want to add type O3 PCK records, as */
-/*        described above in the $ Particulars section, to the segment */
+/*        described above in the $Particulars section, to the segment */
 /*        being written as they are generated. The ability to write the */
 /*        records in this way is useful if computer memory is limited. It */
 /*        may also be convenient from a programming perspective to write */
@@ -309,9 +311,9 @@
 
 /* $ Restrictions */
 
-/*     1) The type 03 PCK segment to which we are adding data must have */
-/*        been started by the routine PCK03B, the routine which begins a */
-/*        type 03 PCK segment. */
+/*     1)  The type 03 PCK segment to which we are adding data must have */
+/*         been started by the routine PCK03B, the routine which begins a */
+/*         type 03 PCK segment. */
 
 /* $ Literature_References */
 
@@ -319,13 +321,19 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer      (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.2, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.1, 03-JAN-2014 (EDW) */
 
-/*        Minor edits to Procedure; clean trailing whitespace. */
+/*        Minor edits to $Procedure; clean trailing whitespace. */
 /*        Corrected order of header sections to conform to NAIF */
 /*        standard. */
 
@@ -338,7 +346,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     add data to a type_03 pck segment */
+/*     add data to a type_03 PCK segment */
 
 /* -& */
 

@@ -462,7 +462,7 @@ static integer c__32 = 32;
 
 /*     2)  If SEGNO is not the index of an existing segment in the */
 /*         specified file, the error SPICE(INDEXOUTOFRANGE) will be */
-/*         signalled.  The output arguments will not be modified. */
+/*         signaled.  The output arguments will not be modified. */
 
 /*     3)  If an I/O error occurs while attempting to obtain summary */
 /*         information for the specified segment, the error will be */
@@ -545,6 +545,10 @@ static integer c__32 = 32;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.1.0, 03-JUL-1996 (NJB) */
 

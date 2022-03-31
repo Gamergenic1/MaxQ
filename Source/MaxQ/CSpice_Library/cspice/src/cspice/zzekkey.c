@@ -609,7 +609,7 @@ static integer c__11 = 11;
 /*     DSCLST     I   Array of column descriptors for constraints. */
 /*     OPS        I   Operations used in query constraints. */
 /*     DTYPES     I   Data types of scalar values used in constraints. */
-/*     CHRBUF     I   Buffer containting query tokens. */
+/*     CHRBUF     I   Buffer containing query tokens. */
 /*     CBEGS      I   Begin indices of character query tokens. */
 /*     CENDS      I   End indices of character query tokens. */
 /*     DVALS      I   D.p. values used in query constraints. */
@@ -761,7 +761,7 @@ static integer c__11 = 11;
 /*         are, respectively, 1 and 0. */
 
 /*     3)  If the number of input constraints is out of range, the error */
-/*         SPICE(INVALIDCOUNT) is signalled. */
+/*         SPICE(INVALIDCOUNT) is signaled. */
 
 /* $ Files */
 
@@ -785,7 +785,7 @@ static integer c__11 = 11;
 
 /*     Note that the NE operator is not of much use here. */
 
-/*     The set of candidate rows simultaneously satisifies all such */
+/*     The set of candidate rows simultaneously satisfies all such */
 /*     constraints on the key column, and therefore is the intersection */
 /*     of the set of rows satisfying each such constraint.  This method */
 /*     of selecting candidate rows can rapidly eliminate large numbers of */
@@ -821,6 +821,10 @@ static integer c__11 = 11;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 02-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.2.0, 26-JUL-1996 (NJB) */
 
@@ -896,10 +900,10 @@ static integer c__11 = 11;
 	while(j <= *ncnstr && ! fnd) {
 	    if (active[j - 1] && clidxs[j - 1] == idxset[(i__2 = i__ + 5) < 
 		    1006 && 0 <= i__2 ? i__2 : s_rnge("idxset", i__2, "zzekk"
-		    "ey_", (ftnlen)427)]) {
+		    "ey_", (ftnlen)431)]) {
 		fnd = TRUE_;
 		conmap[(i__2 = i__ - 1) < 1000 && 0 <= i__2 ? i__2 : s_rnge(
-			"conmap", i__2, "zzekkey_", (ftnlen)429)] = j;
+			"conmap", i__2, "zzekkey_", (ftnlen)433)] = j;
 	    } else {
 		++j;
 	    }
@@ -930,7 +934,7 @@ static integer c__11 = 11;
 /*        Get the attribute list pointer for the current column. */
 
 	col = idxset[(i__1 = eltidx + 5) < 1006 && 0 <= i__1 ? i__1 : s_rnge(
-		"idxset", i__1, "zzekkey_", (ftnlen)468)];
+		"idxset", i__1, "zzekkey_", (ftnlen)472)];
 
 /*        Set the initial values of MINPTR, MAXPTR, and NMATCH */
 
@@ -1116,7 +1120,7 @@ static integer c__11 = 11;
 	*key = best;
     }
     i__ = conmap[(i__1 = ordi_(key, idxset) - 1) < 1000 && 0 <= i__1 ? i__1 : 
-	    s_rnge("conmap", i__1, "zzekkey_", (ftnlen)694)];
+	    s_rnge("conmap", i__1, "zzekkey_", (ftnlen)698)];
     movei_(&dsclst[i__ * 11 - 11], &c__11, keydsc);
 
 /*     De-activate constraints on the key column that we've already */

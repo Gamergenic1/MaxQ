@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            SAMEAI ( Are two integer arrays the same? ) */
+/* $Procedure SAMEAI ( Are two integer arrays the same? ) */
 logical sameai_(integer *a1, integer *a2, integer *ndim)
 {
     /* System generated locals */
@@ -55,7 +55,7 @@ logical sameai_(integer *a1, integer *a2, integer *ndim)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     A1         I    First array to be compared. */
 /*     A2         I    Second array to be compared. */
@@ -66,10 +66,10 @@ logical sameai_(integer *a1, integer *a2, integer *ndim)
 /* $ Detailed_Input */
 
 /*     A1, */
-/*     A2              are two integer arrays to be compared.  A1 and */
-/*                     A2 must have the same dimension. */
+/*     A2       are two integer arrays to be compared.  A1 and */
+/*              A2 must have the same dimension. */
 
-/*     NDIM            is the common dimension of A1 and A2. */
+/*     NDIM     is the common dimension of A1 and A2. */
 
 /* $ Detailed_Output */
 
@@ -89,7 +89,7 @@ logical sameai_(integer *a1, integer *a2, integer *ndim)
 
 /* $ Particulars */
 
-/*     This function can be thought of as a macro.  It replaces the */
+/*     This function can be thought of as a macro. It replaces the */
 /*     loop */
 
 /*        SAME  = .TRUE. */
@@ -105,9 +105,7 @@ logical sameai_(integer *a1, integer *a2, integer *ndim)
 
 /*        END DO */
 
-
 /* $ Examples */
-
 
 /*     1)  Test two integer arrays A1 and A2 for equality, where both */
 /*         arrays have declared length 10: */
@@ -124,11 +122,18 @@ logical sameai_(integer *a1, integer *a2, integer *ndim)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.0, 19-DEC-1995  (NJB) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

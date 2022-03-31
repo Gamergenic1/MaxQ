@@ -9,7 +9,7 @@
 
 static doublereal c_b2 = .1;
 
-/* $Procedure      M2Q ( Matrix to quaternion ) */
+/* $Procedure M2Q ( Matrix to quaternion ) */
 /* Subroutine */ int m2q_(doublereal *r__, doublereal *q)
 {
     /* Builtin functions */
@@ -70,46 +70,46 @@ static doublereal c_b2 = .1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     R          I   A rotation matrix. */
 /*     Q          O   A unit quaternion representing R. */
 
 /* $ Detailed_Input */
 
-/*     R              is a rotation matrix. */
+/*     R        is a rotation matrix. */
 
 /* $ Detailed_Output */
 
-/*     Q              is a unit-length SPICE-style quaternion */
-/*                    representing R. See the discussion of quaternion */
-/*                    styles in Particulars below. */
+/*     Q        is a unit-length SPICE-style quaternion */
+/*              representing R. See the discussion of quaternion */
+/*              styles in $Particulars below. */
 
-/*                    Q is a 4-dimensional vector. If R rotates vectors */
-/*                    in the counterclockwise sense by an angle of theta */
-/*                    radians about a unit vector A, where */
+/*              Q is a 4-dimensional vector. If R rotates vectors */
+/*              in the counterclockwise sense by an angle of theta */
+/*              radians about a unit vector A, where */
 
-/*                       0 < theta < pi */
-/*                         -       - */
+/*                 0 < theta < pi */
+/*                   -       - */
 
-/*                    then letting h = theta/2, */
+/*              then letting h = theta/2, */
 
-/*                       Q = ( cos(h), sin(h)A ,  sin(h)A ,  sin(h)A ). */
-/*                                            1          2          3 */
+/*                 Q = ( cos(h), sin(h)A ,  sin(h)A ,  sin(h)A ). */
+/*                                      1          2          3 */
 
-/*                    The restriction that theta must be in the range */
-/*                    [0, pi] determines the output quaternion Q */
-/*                    uniquely except when theta = pi; in this special */
-/*                    case, both of the quaternions */
+/*              The restriction that theta must be in the range */
+/*              [0, pi] determines the output quaternion Q */
+/*              uniquely except when theta = pi; in this special */
+/*              case, both of the quaternions */
 
-/*                       Q = ( 0,  A ,  A ,  A  ) */
-/*                                  1    2    3 */
-/*                    and */
+/*                 Q = ( 0,  A ,  A ,  A  ) */
+/*                            1    2    3 */
+/*              and */
 
-/*                       Q = ( 0, -A , -A , -A  ) */
-/*                                  1    2    3 */
+/*                 Q = ( 0, -A , -A , -A  ) */
+/*                            1    2    3 */
 
-/*                   are possible outputs. */
+/*              are possible outputs. */
 
 /* $ Parameters */
 
@@ -117,8 +117,8 @@ static doublereal c_b2 = .1;
 
 /* $ Exceptions */
 
-/*     1)   If R is not a rotation matrix, the error SPICE(NOTAROTATION) */
-/*          is signaled. */
+/*     1)  If R is not a rotation matrix, the error SPICE(NOTAROTATION) */
+/*         is signaled. */
 
 /* $ Files */
 
@@ -152,7 +152,7 @@ static doublereal c_b2 = .1;
 /*        CALL M2Q ( R, Q ) */
 /*        CALL Q2M ( Q, R ) */
 
-/*     leave R unchanged, except for round-off error.  However, the */
+/*     leave R unchanged, except for round-off error. However, the */
 /*     calls */
 
 /*        CALL Q2M ( Q, R ) */
@@ -169,12 +169,12 @@ static doublereal c_b2 = .1;
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -294,7 +294,7 @@ static doublereal c_b2 = .1;
 /*                   +-             -+ */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -358,7 +358,6 @@ static doublereal c_b2 = .1;
 /*     represents the matrix product */
 
 /*        M1*M2 */
-
 
 /* $ Examples */
 
@@ -439,10 +438,17 @@ static doublereal c_b2 = .1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.1, 27-FEB-2008 (NJB) */
 

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYPOPC ( Pop a value from a particular symbol ) */
+/* $Procedure SYPOPC ( Pop a value from a particular symbol ) */
 /* Subroutine */ int sypopc_(char *name__, char *tabsym, integer *tabptr, 
 	char *tabval, char *value, logical *found, ftnlen name_len, ftnlen 
 	tabsym_len, ftnlen tabval_len, ftnlen value_len)
@@ -81,51 +81,49 @@ static integer c__1 = 1;
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   Name of the symbol whose associated value is to be */
 /*                    popped. */
-
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
-
+/*     TABVAL    I-O  Components of the symbol table. */
 /*     VALUE      O   Value that was popped. */
-/*     FOUND      O   True if the symbol exists, false if it does not. */
+/*     FOUND      O   .TRUE. if the symbol exists, .FALSE. otherwise. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose associated value is to */
-/*                be popped. If NAME is not in the symbol table, FOUND */
-/*                is false. */
+/*     NAME     is the name of the symbol whose associated value is to */
+/*              be popped. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
+/*     TABVAL   are the components of a character symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
-/*                The value is removed from the symbol table, and the */
-/*                remaining values associated with the symbol are moved */
-/*                forward in the value table. If no other values are */
-/*                associated with the symbol, the symbol is removed from */
-/*                the symbol table. */
+/*     TABVAL   are the components of a character symbol table. */
 
-/*     VALUE      is the value that was popped. This value was the first */
-/*                value in the symbol table that was associated with the */
-/*                symbol NAME. */
+/*              On output, the value is removed from the symbol table, */
+/*              and the remaining values associated with the symbol are */
+/*              moved forward in the value table. If no other values are */
+/*              associated with the symbol, the symbol is removed from */
+/*              the symbol table. */
 
-/*     FOUND      is true if NAME is in the symbol table, otherwise */
-/*                it is false. */
+/*     VALUE    is the value that was popped. This value was the first */
+/*              value in the symbol table that was associated with the */
+/*              symbol NAME. */
+
+/*     FOUND    is .TRUE. if NAME is in the symbol table, otherwise it is */
+/*              .FALSE. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
+/* $ Exceptions */
 
 /*     None. */
 
-/* $ Exceptions */
+/* $ Files */
 
 /*     None. */
 
@@ -147,7 +145,8 @@ static integer c__1 = 1;
 
 /*     The call, */
 
-/*     CALL SYPOPC ( 'EINSTEIN', TABSYM, TABPTR, TABVAL, VALUE, FOUND ) */
+/*        CALL SYPOPC ( 'EINSTEIN', TABSYM, TABPTR, TABVAL, */
+/*       .                                  VALUE,  FOUND  ) */
 
 /*     modifies the contents of the symbol table to be: */
 
@@ -156,12 +155,12 @@ static integer c__1 = 1;
 /*                        BROWNIAN MOTION */
 /*        FERMI     -->   NUCLEAR FISSION */
 
-/*     FOUND is TRUE, and VALUE is 'SPECIAL RELATIVITY'. */
+/*     FOUND is .TRUE., and VALUE is 'SPECIAL RELATIVITY'. */
 
 
 /*     The next call, */
 
-/*     CALL SYPOPC ( 'FERMI', TABSYM, TABPTR, TABVAL, VALUE, FOUND ) */
+/*        CALL SYPOPC ( 'FERMI', TABSYM, TABPTR, TABVAL, VALUE, FOUND ) */
 
 /*     modifies the contents of the symbol table to be: */
 
@@ -170,9 +169,9 @@ static integer c__1 = 1;
 /*                        PHOTOELECTRIC EFFECT */
 /*                        BROWNIAN MOTION */
 
-/*      FOUND is TRUE, and VALUE is 'NUCLEAR FISSION'. Note that because */
-/*      "FERMI" had only one value associated with it, it was removed */
-/*      from the symbol table. */
+/*      FOUND is .TRUE., and VALUE is 'NUCLEAR FISSION'. Note that */
+/*      because "FERMI" had only one value associated with it, it was */
+/*      removed from the symbol table. */
 
 /* $ Restrictions */
 
@@ -184,17 +183,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

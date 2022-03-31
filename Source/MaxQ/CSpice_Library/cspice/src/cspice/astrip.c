@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure     ASTRIP ( STRIP Ascii characters from a string ) */
+/* $Procedure ASTRIP ( STRIP Ascii characters from a string ) */
 /* Subroutine */ int astrip_(char *instr, char *asciib, char *asciie, char *
 	outstr, ftnlen instr_len, ftnlen asciib_len, ftnlen asciie_len, 
 	ftnlen outstr_len)
@@ -24,8 +24,8 @@
 
 /* $ Abstract */
 
-/*      Remove from a character string all characters which fall */
-/*      between specified starting and ending characters, inclusive. */
+/*     Remove from a character string all characters which fall */
+/*     between specified starting and ending characters, inclusive. */
 
 /* $ Disclaimer */
 
@@ -58,121 +58,129 @@
 
 /* $ Keywords */
 
-/*      ASCII,  CHARACTER */
+/*     ASCII */
+/*     CHARACTER */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      INSTR      I   Input string. */
-/*      ASCIIB     I   First ASCII character in range to be stripped. */
-/*      ASCIIE     I   Last ASCII character in range to be stripped. */
-/*      OUTSTR     O   Output (stripped) string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     INSTR      I   Input string. */
+/*     ASCIIB     I   First ASCII character in range to be stripped. */
+/*     ASCIIE     I   Last ASCII character in range to be stripped. */
+/*     OUTSTR     O   Output (stripped) string. */
 
 /* $ Detailed_Input */
 
-/*      INSTR       Is a character string from which all characters */
-/*                  between ASCIIB and ASCIIE, inclusive, are to be */
-/*                  removed. */
+/*     INSTR    is a character string from which all characters */
+/*              between ASCIIB and ASCIIE, inclusive, are to be */
+/*              removed. */
 
-/*      ASCIIB      Is the first ASCII character in the range of */
-/*                  characters to be removed from the input string. */
-/*                  ASCIIB is itself removed from the string, if */
-/*                  it occurs. */
+/*     ASCIIB   is the first ASCII character in the range of */
+/*              characters to be removed from the input string. */
+/*              ASCIIB is itself removed from the string, if */
+/*              it occurs. */
 
-/*      ASCIIE      Is the last ASCII character in the range of */
-/*                  characters to be removed from the input string. */
-/*                  ASCIIE is itself removed from the string, if */
-/*                  it occurs. */
+/*     ASCIIE   is the last ASCII character in the range of */
+/*              characters to be removed from the input string. */
+/*              ASCIIE is itself removed from the string, if */
+/*              it occurs. */
 
 /* $ Detailed_Output */
 
-/*      OUTSTR      Is the input string after all the character */
-/*                  between ASCIIB and ASCIIE, inclusive, have */
-/*                  been removed. */
+/*     OUTSTR   is the input string after all the character */
+/*              between ASCIIB and ASCIIE, inclusive, have */
+/*              been removed. */
 
-/*                  If OUTSTR is not large enough to hold the output */
-/*                  string, it is truncated on the right. */
+/*              If OUTSTR is not large enough to hold the output */
+/*              string, it is truncated on the right. */
 
-/*                  OUTSTR may overwrite INSTR. */
+/*              OUTSTR may overwrite INSTR. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      ASTRIP checks each character */
-/*      in INSTR to determine if it falls between the characters ASCIIB */
-/*      and ASCIIE.  If so this character is removed from the string */
-/*      (and the string is shortened). Remaining characters are copied */
-/*      to the output string. */
-
-/* $ Examples */
-
-/*      The following examples illustrate the use of ASTRIP. */
-
-/*            ASCIIB = 'b' */
-/*            ASCIIE = 'k' */
-/*            INSTR  = 'Now is the time for all good men to come quick.' */
-/*            OUTSTR = 'Now s t tm or all oo mn to om qu.' */
-
-/*            ASCIIB = 'a' */
-/*            ASCIIE = 'z' */
-/*            INSTR  = 'SELECT column TIME FROM table TEST' */
-/*            OUTSTR = 'SELECT TIME FROM TEST' */
-
-/*            ASCIIB = 'a' */
-/*            ASCIIE = 'z' */
-/*            INSTR  = 'this is going to be an empty string' */
-/*            OUTSTR = ' ' */
-
-/*            ASCIIB = '!' */
-/*            ASCIIE = '!' */
-/*            INSTR  = 'Only 32 more shopping days until Christmas!' */
-/*            OUTSTR = 'Only 32 more shopping days until Christmas' */
-
-/*      ASTRIP may also be used to strip ASCII control characters */
-/*      (line feeds, tab stops, and so on), as shown in the example */
-/*      below. */
-
-/*            ASCIIB = CHAR ( 0  ) */
-/*            ASCIIE = CHAR ( 31 ) */
-/*            CALL ASTRIP ( STRING, ASCIIB, ASCIIE, STRING ) */
-
-/* $ Restrictions */
-
-/*      If ASCIIB and ASCIIE are not properly ordered (that is, */
-/*      if ICHAR(ASCIIB) is not less than or equal to ICHAR(ASCIIE)) */
-/*      then ASTRIP will not function as described. (In fact, it will */
-/*      copy the input string to the output string without change.) */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     ASTRIP checks each character */
+/*     in INSTR to determine if it falls between the characters ASCIIB */
+/*     and ASCIIE. If so this character is removed from the string */
+/*     (and the string is shortened). Remaining characters are copied */
+/*     to the output string. */
+
+/* $ Examples */
+
+/*     The following examples illustrate the use of ASTRIP. */
+
+/*           ASCIIB = 'b' */
+/*           ASCIIE = 'k' */
+/*           INSTR  = 'Now is the time for all good men to come quick.' */
+/*           OUTSTR = 'Now s t tm or all oo mn to om qu.' */
+
+/*           ASCIIB = 'a' */
+/*           ASCIIE = 'z' */
+/*           INSTR  = 'SELECT column TIME FROM table TEST' */
+/*           OUTSTR = 'SELECT TIME FROM TEST' */
+
+/*           ASCIIB = 'a' */
+/*           ASCIIE = 'z' */
+/*           INSTR  = 'this is going to be an empty string' */
+/*           OUTSTR = ' ' */
+
+/*           ASCIIB = '!' */
+/*           ASCIIE = '!' */
+/*           INSTR  = 'Only 32 more shopping days until Christmas!' */
+/*           OUTSTR = 'Only 32 more shopping days until Christmas' */
+
+/*     ASTRIP may also be used to strip ASCII control characters */
+/*     (line feeds, tab stops, and so on), as shown in the example */
+/*     below. */
+
+/*           ASCIIB = CHAR ( 0  ) */
+/*           ASCIIE = CHAR ( 31 ) */
+/*           CALL ASTRIP ( STRING, ASCIIB, ASCIIE, STRING ) */
+
+/* $ Restrictions */
+
+/*     1)  If ASCIIB and ASCIIE are not properly ordered (that is, */
+/*         if ICHAR(ASCIIB) is not less than or equal to ICHAR(ASCIIE)) */
+/*         then ASTRIP will not function as described. (In fact, it will */
+/*         copy the input string to the output string without change.) */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

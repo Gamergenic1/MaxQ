@@ -93,9 +93,9 @@ static logical c_false = FALSE_;
 
 /* $ Keywords */
 
+/*     EPHEMERIS */
 /*     EVENT */
 /*     GEOMETRY */
-/*     EPHEMERIS */
 /*     SEARCH */
 /*     WINDOW */
 
@@ -403,7 +403,7 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LBCELL     P   SPICE Cell lower bound. */
 /*     CNVTOL     P   Default convergence tolerance. */
@@ -419,100 +419,97 @@ static logical c_false = FALSE_;
 /*     MW         I   Workspace window size. */
 /*     NW         I   The number of workspace windows needed for */
 /*                    the search. */
-/*     WORK      I-O   Array of workspace windows. */
-/*     RESULT    I-O   SPICE window containing results. */
+/*     WORK       O   Array of workspace windows. */
+/*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
-/*     TARGET   the string name of a target body.  Optionally, you may */
-/*              supply the integer ID code for the object as an */
-/*              integer string.  For example both 'MOON' and '301' */
-/*              are legitimate strings that indicate the moon is the */
-/*              target body. */
+/*     TARGET   is the name of a target body. Optionally, you may supply */
+/*              a string containing the integer ID code for the object. */
+/*              For example both 'MOON' and '301' are legitimate strings */
+/*              that indicate the Moon is the target body. */
 
 /*              Case and leading or trailing blanks are not significant */
 /*              in the string TARGET. */
 
-/*     ILLMN    the string name of the illuminating body. This will */
-/*              normally be 'SUN' but the algorithm can use any */
-/*              ephemeris object */
+/*     ILLMN    is the name of the illuminating body. This will normally */
+/*              be 'SUN' but the algorithm can use any ephemeris object. */
 
 /*              Case and leading or trailing blanks are not significant */
 /*              in the string ILLMN. */
 
-/*     ABCORR   the string description of the aberration corrections to */
-/*              apply to the state evaluations to account for one-way */
-/*              light time and stellar aberration. */
+/*     ABCORR   is the description of the aberration corrections to apply */
+/*              to the state evaluations to account for one-way light */
+/*              time and stellar aberration. */
 
 /*              This routine accepts only reception mode aberration */
 /*              corrections. See the header of SPKEZR for a detailed */
-/*              description of the aberration correction options. */
-/*              For convenience, the allowed aberation options are */
-/*              listed below: */
+/*              description of the aberration correction options. For */
+/*              convenience, the allowed aberration options are listed */
+/*              below: */
 
 /*                 'NONE'     Apply no correction. Returns the "true" */
 /*                            geometric state. */
 
-/*                 'LT'       "Reception" case:  correct for */
+/*                 'LT'       "Reception" case: correct for */
 /*                            one-way light time using a Newtonian */
 /*                            formulation. */
 
-/*                 'LT+S'     "Reception" case:  correct for */
+/*                 'LT+S'     "Reception" case: correct for */
 /*                            one-way light time and stellar */
 /*                            aberration using a Newtonian */
 /*                            formulation. */
 
-/*                 'CN'       "Reception" case:  converged */
+/*                 'CN'       "Reception" case: converged */
 /*                            Newtonian light time correction. */
 
-/*                'CN+S'      "Reception" case:  converged */
+/*                'CN+S'      "Reception" case: converged */
 /*                            Newtonian light time and stellar */
 /*                            aberration corrections. */
 
 /*              Case and leading or trailing blanks are not significant */
 /*              in the string ABCORR. */
 
-/*     OBSRVR   the string name of an observing body.  Optionally, you */
-/*              may supply the ID code of the object as an integer */
-/*              string. For example both "MOON" and "301" are legitimate */
+/*     OBSRVR   is the name of an observing body. Optionally, you may */
+/*              supply a string containing the integer ID code for the */
+/*              object. For example both "MOON" and "301" are legitimate */
 /*              strings that indicate the Moon is the observer. */
 
 /*              Case and leading or trailing blanks are not significant */
 /*              in the string OBSRVR. */
 
-/*     RELATE   the string or character describing the relational */
-/*              operator that defines the constraint on the */
-/*              phase angle of the observer-target vector. The result */
-/*              window found by this routine indicates the time intervals */
-/*              where the constraint is satisfied. Supported values of */
-/*              RELATE and corresponding meanings are shown below: */
+/*     RELATE   is a relational operator used to define a constraint on a */
+/*              specified phase angle. The result window found by this */
+/*              routine indicates the time intervals where the constraint */
+/*              is satisfied. Supported values of RELATE and */
+/*              corresponding meanings are shown below: */
 
-/*                 '>'       The phase angle value is greater than the */
-/*                           reference value REFVAL. */
+/*                 '>'        The phase angle value is greater than the */
+/*                            reference value REFVAL. */
 
-/*                 '='       The phase angle value is equal to the */
-/*                           reference value REFVAL. */
+/*                 '='        The phase angle value is equal to the */
+/*                            reference value REFVAL. */
 
-/*                 '<'       The phase angle value is less than the */
-/*                           reference value REFVAL. */
+/*                 '<'        The phase angle value is less than the */
+/*                            reference value REFVAL. */
 
-/*                 'ABSMAX'  The phase angle value is at an absolute */
-/*                           maximum. */
+/*                 'ABSMAX'   The phase angle value is at an absolute */
+/*                            maximum. */
 
-/*                 'ABSMIN'  The phase angle value is at an absolute */
-/*                           minimum. */
+/*                 'ABSMIN'   The phase angle value is at an absolute */
+/*                            minimum. */
 
-/*                 'LOCMAX'  The phase angle value is at a local */
-/*                           maximum. */
+/*                 'LOCMAX'   The phase angle value is at a local */
+/*                            maximum. */
 
-/*                 'LOCMIN'  The phase angle value is at a local */
-/*                           minimum. */
+/*                 'LOCMIN'   The phase angle value is at a local */
+/*                            minimum. */
 
-/*              The caller may indicate that the region of interest */
-/*              is the set of time intervals where the quantity is */
-/*              within a specified measure of an absolute extremum. */
-/*              The argument ADJUST (described below) is used to */
-/*              specify this measure. */
+/*              RELATE may be used to specify an "adjusted" absolute */
+/*              extremum constraint: this requires the phase angle to be */
+/*              within a specified offset relative to an absolute */
+/*              extremum. The argument ADJUST (described below) is used */
+/*              to specify this offset. */
 
 /*              Local extrema are considered to exist only in the */
 /*              interiors of the intervals comprising the confinement */
@@ -522,32 +519,32 @@ static logical c_false = FALSE_;
 /*              Case and leading or trailing blanks are not */
 /*              significant in the string RELATE. */
 
-/*     REFVAL   the double precision reference value used together with */
-/*              the argument RELATE to define an equality or inequality */
-/*              to satisfy by the phase angle of the observer-target */
-/*              vector. See the discussion of RELATE above for */
-/*              further information. */
+/*     REFVAL   is the double precision reference value used together */
+/*              with the argument RELATE to define an equality or */
+/*              inequality to be satisfied by the phase angle. See the */
+/*              discussion of RELATE above for further information. */
 
 /*              The units of REFVAL are radians. */
 
-/*     ADJUST   a double precision value used to modify searches for */
-/*              absolute extrema: when RELATE is set to ABSMAX or ABSMIN */
-/*              and ADJUST is set to a positive value, GFPA finds */
-/*              times when the phase angle is within */
-/*              ADJUST radians of the specified extreme value. */
+/*     ADJUST   is a double precision value used to modify searches for */
+/*              absolute extrema: when RELATE is set to 'ABSMAX' or */
+/*              'ABSMIN' and ADJUST is set to a positive value, GFPA */
+/*              finds times when the phase angle is within ADJUST radians */
+/*              of the specified extreme value. */
 
-/*              For RELATE set to ABSMAX, the RESULT window contains */
+/*              For RELATE set to 'ABSMAX', the RESULT window contains */
 /*              time intervals when the phase angle has */
 /*              values between ABSMAX - ADJUST and ABSMAX. */
 
-/*              For RELATE set to ABSMIN, the RESULT window contains */
+/*              For RELATE set to 'ABSMIN', the RESULT window contains */
 /*              time intervals when the phase angle has */
 /*              values between ABSMIN and ABSMIN + ADJUST. */
 
 /*              ADJUST is not used for searches for local extrema, */
 /*              equality or inequality conditions. */
 
-/*     STEP     the double precision time step size to use in the search. */
+/*     STEP     is the double precision time step size to use in the */
+/*              search. */
 
 /*              STEP must be short enough for a search using this step */
 /*              size to locate the time intervals where the phase angle */
@@ -563,21 +560,28 @@ static logical c_false = FALSE_;
 
 /*              STEP has units of TDB seconds. */
 
-/*     CNFINE   a double precision SPICE window that confines the time */
+/*     CNFINE   is a double precision SPICE window that confines the time */
 /*              period over which the specified search is conducted. */
 /*              CNFINE may consist of a single interval or a collection */
 /*              of intervals. */
 
 /*              In some cases the confinement window can be used to */
 /*              greatly reduce the time period that must be searched */
-/*              for the desired solution. See the Particulars section */
+/*              for the desired solution. See the $Particulars section */
 /*              below for further discussion. */
 
-/*              See the Examples section below for a code example */
+/*              The endpoints of the time intervals comprising CNFINE are */
+/*              interpreted as seconds past J2000 TDB. */
+
+/*              See the $Examples section below for a code example */
 /*              that shows how to create a confinement window. */
 
 /*              CNFINE must be initialized by the caller using the */
 /*              SPICELIB routine SSIZED. */
+
+/*              In some cases the observer's state may be computed at */
+/*              times outside of CNFINE by as much as 2 seconds. See */
+/*              $Particulars for details. */
 
 /*     MW       is a parameter specifying the length of the SPICE */
 /*              windows in the workspace array WORK (see description */
@@ -620,8 +624,23 @@ static logical c_false = FALSE_;
 /*              an input argument is that this allows run-time */
 /*              error checking to be performed.) */
 
-/*     WORK     is an array used to store workspace windows. This */
-/*              array should be declared by the caller as shown: */
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
+
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFPA conducts its search. */
+
+/* $ Detailed_Output */
+
+/*     WORK     is an array used to store workspace windows. */
+
+/*              This array should be declared by the caller as shown: */
 
 /*                 INCLUDE 'gf.inc' */
 /*                    ... */
@@ -634,25 +653,16 @@ static logical c_false = FALSE_;
 
 /*              WORK need not be initialized by the caller. */
 
-/*     RESULT   a double precision SPICE window that will contain the */
-/*              search results. RESULT must be initialized using */
-/*              a call to SSIZED. RESULT must be declared and initialized */
-/*              with sufficient size to capture the full set of time */
-/*              intervals within the search region on which the specified */
-/*              constraint is satisfied. */
+/*              WORK is modified by this routine. The caller should */
+/*              re-initialize this array before attempting to use it for */
+/*              any other purpose. */
 
-/*              If RESULT is non-empty on input, its contents */
-/*              will be discarded before GFPA conducts its */
-/*              search. */
+/*     RESULT   is the SPICE window of intervals, contained within the */
+/*              confinement window CNFINE, on which the specified phase */
+/*              angle constraint is satisfied. */
 
-/* $ Detailed_Output */
-
-/*     WORK     the input workspace array, modified by this */
-/*              routine. */
-
-/*     RESULT   the SPICE window of intervals, contained within the */
-/*              confinement window CNFINE, on which the specified */
-/*              constraint is satisfied. */
+/*              The endpoints of the time intervals comprising RESULT are */
+/*              interpreted as seconds past J2000 TDB. */
 
 /*              If the search is for local extrema, or for absolute */
 /*              extrema with ADJUST set to zero, then normally each */
@@ -660,12 +670,12 @@ static logical c_false = FALSE_;
 /*              right endpoints of each interval will be identical. */
 
 /*              If no times within the confinement window satisfy the */
-/*              constraint, RESULT will return with a cardinality of */
-/*              zero. */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL   the integer value defining the lower bound for */
+/*     LBCELL   is the integer value defining the lower bound for */
 /*              SPICE Cell arrays (a SPICE window is a kind of cell). */
 
 /*     CNVTOL   is the default convergence tolerance used for finding */
@@ -695,9 +705,9 @@ static logical c_false = FALSE_;
 /*         to run unacceptably slowly and in some cases, find spurious */
 /*         roots. */
 
-/*         This routine does not diagnose invalid step sizes, except */
-/*         that if the step size is non-positive, the error */
-/*         SPICE(INVALIDSTEP) is signaled. */
+/*         This routine does not diagnose invalid step sizes, except that */
+/*         if the step size is non-positive, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  Due to numerical errors, in particular, */
 
@@ -710,49 +720,55 @@ static logical c_false = FALSE_;
 /*         RESULT window. One technique to handle such a situation, */
 /*         slightly contract RESULT using the window routine WNCOND. */
 
-/*     3)  SPICE(INVALIDDIMENSION) signals if workspace window size, MW, */
-/*         is not at least 2 and an even value. */
+/*     3)  If workspace window size, MW, is not at least 2 and an even */
+/*         value, the error SPICE(INVALIDDIMENSION) is signaled is */
+/*         signaled. */
 
-/*     4)  SPICE(INVALIDDIMENSION) signals if workspace window count, */
-/*         NW, is not at least NWPA. */
+/*     4)  If workspace window count, NW, is not at least NWPA, the error */
+/*         SPICE(INVALIDDIMENSION) is signaled is signaled. */
 
-/*     5)  SPICE(INVALIDDIMENSION) signals if result window, RESULT, */
-/*         is not at least 2 and an even value. */
+/*     5)  If result window, RESULT, is not at least 2 and an even value, */
+/*         the error SPICE(INVALIDDIMENSION) is signaled is signaled. */
 
 /*     6)  If RESULT has insufficient capacity to contain the */
 /*         number of intervals on which the specified angle condition */
-/*         is met, the error will be diagnosed by a routine in the call */
+/*         is met, an error is signaled by a routine in the call */
 /*         tree of this routine. */
 
 /*     7)  If an error (typically cell overflow) occurs during */
-/*         window arithmetic, the error will be diagnosed by a routine */
+/*         window arithmetic, the error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /*     8)  If the relational operator RELATE is not recognized, an */
 /*         error is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     9)  If ADJUST is negative an error is signaled from a routine in */
+/*     9)  If ADJUST is negative, an error is signaled by a routine in */
 /*         the call tree of this routine. */
 
-/*         A non-zero value for ADJUST when RELATE has any value other */
-/*         than "ABSMIN" or "ABSMAX" causes the error SPICE(INVALIDVALUE) */
-/*         to signal from a routine in the call tree of this routine. */
+/*     10) If ADJUST has a non-zero value when RELATE has any value other */
+/*         than 'ABSMIN' or 'ABSMAX', an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
-/*     10) If any of the input body names, TARGET, ILLMN, OBSRVR, do */
+/*     11) If any of the input body names, TARGET, ILLMN, OBSRVR, do */
 /*         not map to NAIF ID codes, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
-/*     11) If the input body names, TARGET, ILLMN, OBSRVR, are not */
+/*     12) If the input body names, TARGET, ILLMN, OBSRVR, are not */
 /*         distinct, an error is signaled by a routine in the call */
 /*         tree of this routine. */
 
-/*     12) If required ephemerides or other kernel data are not */
+/*     13) If required ephemerides or other kernel data are not */
 /*         available, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*     13) An error signals from a routine in the call tree of */
-/*         this routine for any transmit mode aberration correction. */
+/*     14) If the aberration correction specifier contains an */
+/*         unrecognized value, an error is signaled by a routine in the */
+/*         call tree of this routine. */
+
+/*     15) If a transmit mode aberration correction is requested, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
@@ -761,34 +777,39 @@ static logical c_false = FALSE_;
 
 /*     The following data are required: */
 
-/*        - SPK data: the calling application must load ephemeris data */
-/*          for the targets, observer, and any intermediate objects in */
-/*          a chain connecting the targets and observer that cover the */
-/*          time period specified by the window CNFINE. If aberration */
-/*          corrections are used, the states of target and observer */
-/*          relative to the solar system barycenter must be calculable */
-/*          from the available ephemeris data. Typically ephemeris data */
-/*          are made available by loading one or more SPK files using */
-/*          FURNSH. */
+/*     -  SPK data: the calling application must load ephemeris data */
+/*        for the targets, observer, and any intermediate objects in */
+/*        a chain connecting the targets and observer that cover the */
+/*        time period specified by the window CNFINE. If aberration */
+/*        corrections are used, the states of target and observer */
+/*        relative to the solar system barycenter must be calculable */
+/*        from the available ephemeris data. Typically ephemeris data */
+/*        are made available by loading one or more SPK files using */
+/*        FURNSH. */
+
+/*     -  In some cases the observer's state may be computed at times */
+/*        outside of CNFINE by as much as 2 seconds; data required to */
+/*        compute this state must be provided by loaded kernels. See */
+/*        $Particulars for details. */
 
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
 
 /* $ Particulars */
 
-/*                       ILLMN      OBS */
-/*       ILLMN as seen      *       / */
-/*       from TARG at       |      / */
-/*       ET - LT.           |     / */
-/*                         >|..../< phase angle */
-/*                          |   / */
-/*                        . |  / */
-/*                      .   | / */
-/*                     .     *     TARG as seen from OBS */
-/*               SEP   .   TARG    at ET */
-/*                      .  / */
-/*                        / */
-/*                       * */
+/*                        ILLMN      OBS */
+/*        ILLMN as seen      *       / */
+/*        from TARG at       |      / */
+/*        ET - LT.           |     / */
+/*                          >|..../< phase angle */
+/*                           |   / */
+/*                         . |  / */
+/*                       .   | / */
+/*                      .     *     TARG as seen from OBS */
+/*                SEP   .   TARG    at ET */
+/*                       .  / */
+/*                         / */
+/*                        * */
 
 /*     This routine determines if the caller-specified constraint */
 /*     condition on the geometric event (phase angle) is satisfied for */
@@ -825,8 +846,9 @@ static logical c_false = FALSE_;
 /*     of the solution set for any inequality constraint is contained in */
 /*     the union of */
 
-/*        - the set of points where an equality constraint is met */
-/*        - the boundary points of the confinement window */
+/*     -  the set of points where an equality constraint is met */
+
+/*     -  the boundary points of the confinement window */
 
 /*     the solutions of both equality and inequality constraints can be */
 /*     found easily once the monotone windows have been found. */
@@ -924,19 +946,62 @@ static logical c_false = FALSE_;
 /*     to reduce the size of the time period over which a relatively */
 /*     slow search of interest must be performed. */
 
+/*     Certain types of searches require the state of the observer, */
+/*     relative to the solar system barycenter, to be computed at times */
+/*     slightly outside the confinement window CNFINE. The time window */
+/*     that is actually used is the result of "expanding" CNFINE by a */
+/*     specified amount "T": each time interval of CNFINE is expanded by */
+/*     shifting the interval's left endpoint to the left and the right */
+/*     endpoint to the right by T seconds. Any overlapping intervals are */
+/*     merged. (The input argument CNFINE is not modified.) */
+
+/*     The window expansions listed below are additive: if both */
+/*     conditions apply, the window expansion amount is the sum of the */
+/*     individual amounts. */
+
+/*     -  If a search uses an equality constraint, the time window */
+/*        over which the state of the observer is computed is expanded */
+/*        by 1 second at both ends of all of the time intervals */
+/*        comprising the window over which the search is conducted. */
+
+/*     -  If a search uses stellar aberration corrections, the time */
+/*        window over which the state of the observer is computed is */
+/*        expanded as described above. */
+
+/*     When light time corrections are used, expansion of the search */
+/*     window also affects the set of times at which the light time- */
+/*     corrected state of the target is computed. */
+
+/*     In addition to the possible 2 second expansion of the search */
+/*     window that occurs when both an equality constraint and stellar */
+/*     aberration corrections are used, round-off error should be taken */
+/*     into account when the need for data availability is analyzed. */
+
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
+/*     1) Determine the time windows from December 1, 2006 UTC to */
+/*        January 31, 2007 UTC for which the sun-moon-earth configuration */
+/*        phase angle satisfies the relation conditions with respect to a */
+/*        reference value of .57598845 radians (the phase angle at */
+/*        January 1, 2007 00:00:00.000 UTC, 33.001707 degrees). Also */
+/*        determine the time windows corresponding to the local maximum */
+/*        and minimum phase angles, and the absolute maximum and minimum */
+/*        phase angles during the search interval. The configuration */
+/*        defines the Sun as the illuminator, the Moon as the target, */
+/*        and the Earth as the observer. */
+
 /*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
 
+
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: gfpa_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -965,18 +1030,13 @@ static logical c_false = FALSE_;
 
 /*           \begintext */
 
-/*     Determine the time windows from December 1, 2006 UTC to */
-/*     January 31, 2007 UTC for which the sun-moon-earth configuration */
-/*     phase angle satisfies the relation conditions with respect to a */
-/*     reference value of .57598845 radians (the phase angle at */
-/*     January 1, 2007 00:00:00.000 UTC, 33.001707 degrees). Also */
-/*     determine the time windows corresponding to the local maximum and */
-/*     minimum phase angles, and the absolute maximum and minimum phase */
-/*     angles during the search interval. The configuration defines the */
-/*     sun as the illuminator, the moon as the target, and the earth as */
-/*     the observer. */
+/*           End of meta-kernel */
 
-/*              PROGRAM GFPA_T */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM GFPA_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
@@ -1039,6 +1099,16 @@ static logical c_false = FALSE_;
 /*              INTEGER               I */
 /*              INTEGER               J */
 
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement, workspace and result windows CNFINE, */
+/*        C     WORK and RESULT are saved because this practice helps to */
+/*        C     prevent stack overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+/*              SAVE                  WORK */
 
 /*        C */
 /*        C     The relation values for the search. */
@@ -1055,7 +1125,7 @@ static logical c_false = FALSE_;
 /*        C */
 /*        C     Load kernels. */
 /*        C */
-/*              CALL FURNSH ( 'standard.tm' ) */
+/*              CALL FURNSH ( 'gfpa_ex1.tm' ) */
 
 /*        C */
 /*        C     Initialize windows. */
@@ -1148,7 +1218,10 @@ static logical c_false = FALSE_;
 
 /*              END */
 
-/*     The program outputs: */
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
 
 /*         Relation condition: = */
 /*        Start time = 2006-DEC-02 13:31:34.414       0.575988450 */
@@ -1179,30 +1252,31 @@ static logical c_false = FALSE_;
 /*        Stop time  = 2007-JAN-30 11:41:32.557       0.575988450 */
 
 /*         Relation condition: LOCMIN */
-/*        Start time = 2006-DEC-05 00:16:50.416       0.086121423 */
-/*        Stop time  = 2006-DEC-05 00:16:50.416       0.086121423 */
-/*        Start time = 2007-JAN-03 14:18:32.086       0.079899769 */
-/*        Stop time  = 2007-JAN-03 14:18:32.086       0.079899769 */
+/*        Start time = 2006-DEC-05 00:16:50.317       0.086121423 */
+/*        Stop time  = 2006-DEC-05 00:16:50.317       0.086121423 */
+/*        Start time = 2007-JAN-03 14:18:31.977       0.079899769 */
+/*        Stop time  = 2007-JAN-03 14:18:31.977       0.079899769 */
 
 /*         Relation condition: ABSMIN */
-/*        Start time = 2007-JAN-03 14:18:32.086       0.079899769 */
-/*        Stop time  = 2007-JAN-03 14:18:32.086       0.079899769 */
+/*        Start time = 2007-JAN-03 14:18:31.977       0.079899769 */
+/*        Stop time  = 2007-JAN-03 14:18:31.977       0.079899769 */
 
 /*         Relation condition: LOCMAX */
-/*        Start time = 2006-DEC-20 14:09:10.496       3.055062862 */
-/*        Stop time  = 2006-DEC-20 14:09:10.496       3.055062862 */
-/*        Start time = 2007-JAN-19 04:27:54.694       3.074603891 */
-/*        Stop time  = 2007-JAN-19 04:27:54.694       3.074603891 */
+/*        Start time = 2006-DEC-20 14:09:10.392       3.055062862 */
+/*        Stop time  = 2006-DEC-20 14:09:10.392       3.055062862 */
+/*        Start time = 2007-JAN-19 04:27:54.600       3.074603891 */
+/*        Stop time  = 2007-JAN-19 04:27:54.600       3.074603891 */
 
 /*         Relation condition: ABSMAX */
-/*        Start time = 2007-JAN-19 04:27:54.694       3.074603891 */
-/*        Stop time  = 2007-JAN-19 04:27:54.694       3.074603891 */
+/*        Start time = 2007-JAN-19 04:27:54.600       3.074603891 */
+/*        Stop time  = 2007-JAN-19 04:27:54.600       3.074603891 */
+
 
 /* $ Restrictions */
 
-/*     1) The kernel files to be used by this routine must be loaded */
-/*        (normally using the SPICELIB routine FURNSH) before this */
-/*        routine is called. */
+/*     1)  The kernel files to be used by this routine must be loaded */
+/*         (normally using the SPICELIB routine FURNSH) before this */
+/*         routine is called. */
 
 /* $ Literature_References */
 
@@ -1210,17 +1284,33 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     E.D. Wright    (JPL) */
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Updated description of RELATE, REFVAL, WORK and RESULT */
+/*        arguments in $Brief_I/O, $Detailed_Input and $Detailed_Output. */
+
+/*        Added SAVE statements for CNFINE, WORK and RESULT variables in */
+/*        code example. */
+
+/*        Replaced entry #9 by new entries #9 and #10, and added entry */
+/*        #14 in $Exceptions. */
+
+/*        Updated header to describe use of expanded confinement window. */
 
 /* -    SPICELIB Version 1.0.0, 15-JUL-2014 (EDW) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*   GF phase angle search */
+/*     GF phase angle search */
 
 /* -& */
 

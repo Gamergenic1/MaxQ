@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SPKE20 ( SPK, evaluate Chebyshev polynomials, type 20 ) */
+/* $Procedure SPKE20 ( SPK, evaluate Chebyshev polynomials, type 20 ) */
 /* Subroutine */ int spke20_(doublereal *et, doublereal *record, doublereal *
 	xyzdot)
 {
@@ -70,7 +70,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Evaluation epoch. */
 /*     RECORD     I   Data record. */
@@ -78,55 +78,54 @@
 
 /* $ Detailed_Input */
 
-/*     ET          is the epoch at which a state vector or Euler angle */
-/*                 state is to be computed. The epoch is represented as */
-/*                 seconds past J2000 TDB. */
+/*     ET       is the epoch at which a state vector or Euler angle */
+/*              state is to be computed. The epoch is represented as */
+/*              seconds past J2000 TDB. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will yield three function components and their */
-/*                 derivatives with respect to time. The record */
-/*                 structure for SPK type 20 data is: */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will yield three function components and their */
+/*              derivatives with respect to time. The record */
+/*              structure for SPK type 20 data is: */
 
-/*                    +--------------------------------------+ */
-/*                    | record size (excluding this element) | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval midpoint           | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval radius             | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for X velocity component      | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for Y velocity component      | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for Z velocity component      | */
-/*                    +--------------------------------------+ */
-/*                    | X position component                 | */
-/*                    +--------------------------------------+ */
-/*                    | Y position component                 | */
-/*                    +--------------------------------------+ */
-/*                    | Z position component                 | */
-/*                    +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | record size (excluding this element) | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval midpoint           | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval radius             | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for X velocity component      | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for Y velocity component      | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for Z velocity component      | */
+/*                 +--------------------------------------+ */
+/*                 | X position component                 | */
+/*                 +--------------------------------------+ */
+/*                 | Y position component                 | */
+/*                 +--------------------------------------+ */
+/*                 | Z position component                 | */
+/*                 +--------------------------------------+ */
 
-/*                 In the above record */
+/*              In the above record */
 
-/*                    - Times are expressed as seconds past J2000 TDB. */
-/*                    - Position components have units of km. */
-/*                    - Velocity coefficients have units of km/s. */
+/*                 - Times are expressed as seconds past J2000 TDB. */
+/*                 - Position components have units of km. */
+/*                 - Velocity coefficients have units of km/s. */
 
-/*                 See PCKE20 for a description of PCK type 20 records. */
+/*              See PCKE20 for a description of PCK type 20 records. */
 
-/*                 PCK type 20 records contain coefficients for Euler */
-/*                 angle rates and Euler angles corresponding to the */
-/*                 interval midpoint. See PCKE20 for a more detailed */
-/*                 description of the contents of PCK type 20 records. */
-
+/*              PCK type 20 records contain coefficients for Euler */
+/*              angle rates and Euler angles corresponding to the */
+/*              interval midpoint. See PCKE20 for a more detailed */
+/*              description of the contents of PCK type 20 records. */
 
 /* $ Detailed_Output */
 
-/*     XYZDOT      is a 6-vector. In order, the components of XYZDOT are */
-/*                 X, Y, Z, X', Y', and Z'. Units for state evaluations */
-/*                 will be km and km/sec. Units for angles will be */
-/*                 radians and radians/sec. */
+/*     XYZDOT   is a 6-vector. In order, the components of XYZDOT are */
+/*              X, Y, Z, X', Y', and Z'. Units for state evaluations */
+/*              will be km and km/sec. Units for angles will be */
+/*              radians and radians/sec. */
 
 /* $ Parameters */
 
@@ -134,12 +133,12 @@
 
 /* $ Exceptions */
 
-/*     1) If the input record contains an invalid coefficient count, */
-/*        the error SPICE(INVALIDCOUNT) will be signaled. */
+/*     1)  If the input record contains an invalid coefficient count, */
+/*         the error SPICE(INVALIDCOUNT) is signaled. */
 
-/*     2) If the input record contains invalid domain transformation */
-/*        parameters, the error will be diagnosed by a routine in the */
-/*        call tree of this routine. */
+/*     2)  If the input record contains invalid domain transformation */
+/*         parameters, an error is signaled by a routine in the */
+/*         call tree of this routine. */
 
 /* $ Files */
 
@@ -202,24 +201,31 @@
 
 /* $ Literature_References */
 
-/*     NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and */
-/*     User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     R.E. Thurman    (JPL) */
-/*     K.S. Zukor      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     R.E. Thurman       (JPL) */
+/*     K.S. Zukor         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 14-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Moved SPK */
+/*        required reading from $Literature_References to */
+/*        $Required_Reading section. */
 
 /* -    SPICELIB Version 1.0.0, 17-JAN-2014 (NJB) (RET) (KSZ) */
 
 /* -& */
-
 /* $ Index_Entries */
 
-/*     evaluate type_20 spk segment */
+/*     evaluate type_20 SPK segment */
 
 /* -& */
 
@@ -272,8 +278,8 @@
 	j = (i__ - 1) * ncof + 4;
 	chbigr_(&degp, &record[j - 1], &record[1], et, &xyzdot[(i__1 = i__ + 
 		2) < 6 && 0 <= i__1 ? i__1 : s_rnge("xyzdot", i__1, "spke20_",
-		 (ftnlen)273)], &intgrl[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
-		i__2 : s_rnge("intgrl", i__2, "spke20_", (ftnlen)273)]);
+		 (ftnlen)283)], &intgrl[(i__2 = i__ - 1) < 3 && 0 <= i__2 ? 
+		i__2 : s_rnge("intgrl", i__2, "spke20_", (ftnlen)283)]);
     }
 
 /*     Add the position vector or Euler angles at the interval midpoint */

@@ -15,7 +15,7 @@ static integer c__0 = 0;
 static integer c__4 = 4;
 static integer c__3 = 3;
 
-/* $Procedure      SGFRVI ( Generic Segments: Fetch ref. value and index ) */
+/* $Procedure SGFRVI ( Generic Segments: Fetch ref. value and index ) */
 /* Subroutine */ int sgfrvi_(integer *handle, doublereal *descr, doublereal *
 	x, doublereal *value, integer *indx, logical *found)
 {
@@ -63,9 +63,9 @@ static integer c__3 = 3;
 
 /* $ Abstract */
 
-/*     Given the handle of a DAF and the descriptor associated with */
-/*     a generic DAF segment in the file, find the reference value */
-/*     associated with the value X and it's index. */
+/*     Find the reference value associated with the value X and its */
+/*     index in a generic segment. The segment is identified by a DAF */
+/*     file handle and segment descriptor. */
 
 /* $ Disclaimer */
 
@@ -94,7 +94,7 @@ static integer c__3 = 3;
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
@@ -103,7 +103,7 @@ static integer c__3 = 3;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of a DAF open for reading. */
 /*     DESCR      I   The descriptor for a DAF generic segment. */
@@ -114,55 +114,55 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of a DAF open for reading */
+/*     HANDLE   is the handle of a DAF open for reading */
 
-/*     DESCR      is the descriptor of the generic segment that we are */
-/*                going to search for a reference value to associate with */
-/*                X. */
+/*     DESCR    is the descriptor of the generic segment that we are */
+/*              going to search for a reference value to associate with */
+/*              X. */
 
-/*     X          a value for which the associated reference value */
-/*                and reference index is requested. */
+/*     X        is a value for which the associated reference value */
+/*              and reference index is requested. */
 
 /* $ Detailed_Output */
 
-/*     VALUE      is the reference value associated with the input value */
-/*                X. */
+/*     VALUE    is the reference value associated with the input value */
+/*              X. */
 
-/*     INDX       is the index of VALUE within the set of reference */
-/*                values for the generic segment. This value may be used */
-/*                to obtain a particular packet of data from the generic */
-/*                segment. */
+/*     INDX     is the index of VALUE within the set of reference */
+/*              values for the generic segment. This value may be used */
+/*              to obtain a particular packet of data from the generic */
+/*              segment. */
 
-/*     FOUND      is a logical flag indicating whether a reference value */
-/*                associated with X was found. If a reference value was */
-/*                found, FOUND will have a value of TRUE; otherwise it */
-/*                will have a value of FALSE. */
+/*     FOUND    is a logical flag indicating whether a reference value */
+/*              associated with X was found. If a reference value was */
+/*              found, FOUND will have a value of .TRUE.; otherwise it */
+/*              will have a value of .FALSE. */
 
 /* $ Parameters */
 
 /*     This subroutine makes use of parameters defined in the file */
 /*     'sgparam.inc'. */
 
-/* $ Files */
-
-/*      See the description of HANDLE above. */
-
 /* $ Exceptions */
 
-/*     1) The error SPICE(UNKNOWNREFDIR) will be signalled if */
-/*        the reference directory structure is unrecognized.  The most */
-/*        likely cause of this error is that an upgrade to your */
-/*        version of the SPICE toolkit is needed. */
+/*     1)  If the reference directory structure is unrecognized, the */
+/*         error SPICE(UNKNOWNREFDIR) is signaled. The most likely cause */
+/*         of this error is that an upgrade to your version of the SPICE */
+/*         toolkit is needed. */
 
-/*     2) If a value computed for the index of an implicitly indexed */
-/*        generic segment is too large to be represented as an integer, */
-/*        the error SPICE(INDEXTOOLARGE) will be signalled. */
+/*     2)  If a value computed for the index of an implicitly indexed */
+/*         generic segment is too large to be represented as an integer, */
+/*         the error SPICE(INDEXTOOLARGE) is signaled. */
+
+/* $ Files */
+
+/*     See the description of HANDLE above. */
 
 /* $ Particulars */
 
 /*     This routine allows you to easily find the index and value */
 /*     of the reference item that should be associated with a */
-/*     value X.  Given this information you can then easily retrieve */
+/*     value X. Given this information you can then easily retrieve */
 /*     the packet that should be associated with X. */
 
 /* $ Examples */
@@ -192,22 +192,27 @@ static integer c__3 = 3;
 
 /*        CALL SGFPKT ( HANDLE, DESCR, INDX, EPHEM ) */
 
-
 /* $ Restrictions */
 
-/*     The segment described by DESCR MUST be a generic segment, */
-/*     otherwise the results of this routine are not predictable. */
-
-/* $ Author_and_Institution */
-
-/*      K.R. Gehringer  (JPL) */
-/*      W.L. Taber      (JPL) */
+/*     1)  The segment described by DESCR MUST be a generic segment, */
+/*         otherwise the results of this routine are not predictable. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 07-SEP-2001 (EDW) */
 
@@ -228,7 +233,7 @@ static integer c__3 = 3;
 
 /*                 MYVALU = BUFFER(BFINDX) */
 
-/* -    SPICELIB Version 1.0.0, 28-Mar-1994 (KRG) (WLT) */
+/* -    SPICELIB Version 1.0.0, 28-MAR-1994 (KRG) (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -237,7 +242,7 @@ static integer c__3 = 3;
 
 /* -& */
 
-/*     Spicelib Functions */
+/*     SPICELIB Functions */
 
 
 /*     Local Parameters */
@@ -678,7 +683,7 @@ static integer c__3 = 3;
 	setmsg_("The generic DAF segment you attempted to read has an unsupp"
 		"orted reference directory structure. The integer code given "
 		"for this structure is #, and allowed codes are within the ra"
-		"nge # to #. The likely cause of this anamoly is your version"
+		"nge # to #. The likely cause of this anomaly is your version"
 		" of SPICELIB needs updating. Contact your system administrat"
 		"or or NAIF for a toolkit update.", (ftnlen)331);
 	errint_("#", &myrdrt, (ftnlen)1);
@@ -796,7 +801,7 @@ static integer c__3 = 3;
 /*              are done, X = BUFFER(NFETCH), or X > BUFFER(NFETCH). */
 
 		if (*x == buffer[(i__1 = nfetch - 1) < 101 && 0 <= i__1 ? 
-			i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)417)]
+			i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)425)]
 			) {
 
 /*                 If X = BUFFER(NFETCH) we are done, we have a directory */
@@ -830,7 +835,7 @@ static integer c__3 = 3;
 
 		done = TRUE_;
 		if (*x == buffer[(i__1 = rdridx - 1) < 101 && 0 <= i__1 ? 
-			i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)455)]
+			i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)463)]
 			) {
 		    isdirv = TRUE_;
 		}
@@ -921,7 +926,7 @@ static integer c__3 = 3;
 	}
 
 /*        Now, if we have a candidate for a reference value, lets make */
-/*        sure, based onthe type of index we have. */
+/*        sure, based on the type of index we have. */
 
 	if (myrdrt == 2) {
 
@@ -952,16 +957,16 @@ static integer c__3 = 3;
 
 			if (*x > buffer[(i__1 = bfindx - 1) < 101 && 0 <= 
 				i__1 ? i__1 : s_rnge("buffer", i__1, "sgfrvi_"
-				, (ftnlen)595)]) {
+				, (ftnlen)603)]) {
 			    myfnd = TRUE_;
 			    myvalu = buffer[(i__1 = bfindx - 1) < 101 && 0 <= 
 				    i__1 ? i__1 : s_rnge("buffer", i__1, 
-				    "sgfrvi_", (ftnlen)598)];
+				    "sgfrvi_", (ftnlen)606)];
 			} else {
 			    myfnd = TRUE_;
 			    myvalu = buffer[(i__1 = bfindx - 2) < 101 && 0 <= 
 				    i__1 ? i__1 : s_rnge("buffer", i__1, 
-				    "sgfrvi_", (ftnlen)603)];
+				    "sgfrvi_", (ftnlen)611)];
 			    --myindx;
 			}
 		    } else {
@@ -973,11 +978,11 @@ static integer c__3 = 3;
 
 			if (*x > buffer[(i__1 = myindx - 1) < 101 && 0 <= 
 				i__1 ? i__1 : s_rnge("buffer", i__1, "sgfrvi_"
-				, (ftnlen)615)]) {
+				, (ftnlen)623)]) {
 			    myfnd = TRUE_;
 			    myvalu = buffer[(i__1 = myindx - 1) < 101 && 0 <= 
 				    i__1 ? i__1 : s_rnge("buffer", i__1, 
-				    "sgfrvi_", (ftnlen)618)];
+				    "sgfrvi_", (ftnlen)626)];
 			} else {
 
 /*                       We did not find a reference value. X was */
@@ -998,7 +1003,7 @@ static integer c__3 = 3;
 
 /*              We have a reference directory value, and we are done. */
 /*              Either the reference directory value is the one we */
-/*              want or the reference value immediately preceeding it */
+/*              want or the reference value immediately preceding it */
 /*              is the one we want. */
 
 		myfnd = TRUE_;
@@ -1017,7 +1022,7 @@ static integer c__3 = 3;
 /*           value. At this point, either we have the value and index */
 /*           we want or X is before the first reference value of the */
 /*           generic segment. We consider two cases, the first when X */
-/*           is not a referecne directory value, and the second when */
+/*           is not a reference directory value, and the second when */
 /*           it is. */
 
 	    if (! isdirv) {
@@ -1031,7 +1036,7 @@ static integer c__3 = 3;
 		    myfnd = TRUE_;
 		    myvalu = buffer[(i__1 = bfindx - 1) < 101 && 0 <= i__1 ? 
 			    i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)
-			    684)];
+			    692)];
 		} else if (myindx == 0) {
 
 /*                 We did not find a reference value. X was < the */
@@ -1075,17 +1080,17 @@ static integer c__3 = 3;
 /*                 the event of a tie. */
 
 		    if (buffer[(i__1 = i__) < 101 && 0 <= i__1 ? i__1 : 
-			    s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)734)] - 
+			    s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)742)] - 
 			    *x <= *x - buffer[(i__2 = i__ - 1) < 101 && 0 <= 
 			    i__2 ? i__2 : s_rnge("buffer", i__2, "sgfrvi_", (
-			    ftnlen)734)]) {
+			    ftnlen)742)]) {
 			++i__;
 			++myindx;
 		    }
 		    myfnd = TRUE_;
 		    myvalu = buffer[(i__1 = i__ - 1) < 101 && 0 <= i__1 ? 
 			    i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)
-			    742)];
+			    750)];
 		} else if (myindx == 0) {
 
 /*                 X is before the first reference value for the */
@@ -1104,7 +1109,7 @@ static integer c__3 = 3;
 		    myfnd = TRUE_;
 		    myvalu = buffer[(i__1 = bfindx - 1) < 101 && 0 <= i__1 ? 
 			    i__1 : s_rnge("buffer", i__1, "sgfrvi_", (ftnlen)
-			    762)];
+			    770)];
 		}
 	    } else {
 

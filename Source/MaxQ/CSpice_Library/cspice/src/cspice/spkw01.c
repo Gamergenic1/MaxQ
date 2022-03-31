@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SPKW01 ( Write SPK segment, type 1 ) */
+/* $Procedure SPKW01 ( Write SPK segment, type 1 ) */
 /* Subroutine */ int spkw01_(integer *handle, integer *body, integer *center, 
 	char *frame, doublereal *first, doublereal *last, char *segid, 
 	integer *n, doublereal *dlines, doublereal *epochs, ftnlen frame_len, 
@@ -82,7 +82,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an SPK file open for writing. */
 /*     BODY       I   NAIF code for an ephemeris object. */
@@ -97,82 +97,82 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the file handle of an SPK file that has been */
-/*                    opened for writing. */
+/*     HANDLE   is the file handle of an SPK file that has been */
+/*              opened for writing. */
 
-/*     BODY           is the NAIF integer code for an ephemeris object */
-/*                    whose state relative to another body is described */
-/*                    by the segment to be created. */
+/*     BODY     is the NAIF integer code for an ephemeris object */
+/*              whose state relative to another body is described */
+/*              by the segment to be created. */
 
-/*     CENTER         is the NAIF integer code for the center of motion */
-/*                    of the object identified by BODY. */
+/*     CENTER   is the NAIF integer code for the center of motion */
+/*              of the object identified by BODY. */
 
-/*     FRAME          is the NAIF name for a reference frame relative to */
-/*                    which the state information for BODY is specified. */
+/*     FRAME    is the NAIF name for a reference frame relative to */
+/*              which the state information for BODY is specified. */
+
 /*     FIRST, */
-/*     LAST           are, respectively, the start and stop times of */
-/*                    the time interval over which the segment defines */
-/*                    the state of BODY. */
+/*     LAST     are, respectively, the start and stop times of */
+/*              the time interval over which the segment defines */
+/*              the state of BODY. */
 
-/*     SEGID          is the segment identifier.  An SPK segment */
-/*                    identifier may contain up to 40 characters. */
+/*     SEGID    is the segment identifier. An SPK segment */
+/*              identifier may contain up to 40 characters. */
 
-/*     N              is the number of difference lines in the input */
-/*                    difference line array. */
+/*     N        is the number of difference lines in the input */
+/*              difference line array. */
 
-/*     DLINES         contains a time-ordered array of difference lines */
-/*                    The Ith difference line occupies elements (1,I) */
-/*                    through (71,I) of DLINES.  Each difference line */
-/*                    represents the state (x, y, z, dx/dt, dy/dt, */
-/*                    dz/dt, in kilometers and kilometers per second) */
-/*                    of BODY relative to CENTER, specified relative to */
-/*                    FRAME, for an interval of time.  The time interval */
-/*                    covered by the Ith difference line ends at the */
-/*                    Ith element of the array EPOCHS (described below). */
-/*                    The interval covered by the first difference line */
-/*                    starts at the segment start time. */
+/*     DLINES   contains a time-ordered array of difference lines */
+/*              The Ith difference line occupies elements (1,I) */
+/*              through (71,I) of DLINES. Each difference line */
+/*              represents the state (x, y, z, dx/dt, dy/dt, */
+/*              dz/dt, in kilometers and kilometers per second) */
+/*              of BODY relative to CENTER, specified relative to */
+/*              FRAME, for an interval of time. The time interval */
+/*              covered by the Ith difference line ends at the */
+/*              Ith element of the array EPOCHS (described below). */
+/*              The interval covered by the first difference line */
+/*              starts at the segment start time. */
 
-/*                    The contents of a difference line are as shown */
-/*                    below: */
+/*              The contents of a difference line are as shown */
+/*              below: */
 
-/*                       Dimension  Description */
-/*                       ---------  ---------------------------------- */
-/*                       1          Reference epoch of difference line */
-/*                       15         Stepsize function vector */
-/*                       1          Reference position vector,  x */
-/*                       1          Reference velocity vector,  x */
-/*                       1          Reference position vector,  y */
-/*                       1          Reference velocity vector,  y */
-/*                       1          Reference position vector,  z */
-/*                       1          Reference velocity vector,  z */
-/*                       15,3       Modified divided difference */
-/*                                  arrays (MDAs) */
-/*                       1          Maximum integration order plus 1 */
-/*                       3          Integration order array */
+/*                 Dimension  Description */
+/*                 ---------  ---------------------------------- */
+/*                 1          Reference epoch of difference line */
+/*                 15         Stepsize function vector */
+/*                 1          Reference position vector,  x */
+/*                 1          Reference velocity vector,  x */
+/*                 1          Reference position vector,  y */
+/*                 1          Reference velocity vector,  y */
+/*                 1          Reference position vector,  z */
+/*                 1          Reference velocity vector,  z */
+/*                 15,3       Modified divided difference */
+/*                            arrays (MDAs) */
+/*                 1          Maximum integration order plus 1 */
+/*                 3          Integration order array */
 
-/*                    The reference position and velocity are those of */
-/*                    BODY relative to CENTER at the reference epoch. */
-/*                    (A difference line is essentially a polynomial */
-/*                    expansion of acceleration about the reference */
-/*                    epoch.) */
+/*              The reference position and velocity are those of */
+/*              BODY relative to CENTER at the reference epoch. */
+/*              (A difference line is essentially a polynomial */
+/*              expansion of acceleration about the reference */
+/*              epoch.) */
 
 
-/*     EPOCHS         is an array of epochs corresponding to the members */
-/*                    of the state array.  The epochs are specified as */
-/*                    seconds past J2000, TDB. */
+/*     EPOCHS   is an array of epochs corresponding to the members */
+/*              of the state array. The epochs are specified as */
+/*              seconds past J2000, TDB. */
 
-/*                    The first difference line covers the time interval */
-/*                    from the segment start time to EPOCHS(1).  For */
-/*                    I > 1, the Ith difference line covers the half-open */
-/*                    time interval from, but not including, EPOCHS(I-1) */
-/*                    through EPOCHS(I). */
+/*              The first difference line covers the time interval */
+/*              from the segment start time to EPOCHS(1).  For */
+/*              I > 1, the Ith difference line covers the half-open */
+/*              time interval from, but not including, EPOCHS(I-1) */
+/*              through EPOCHS(I). */
 
-/*                    The elements of EPOCHS must be strictly increasing. */
-
+/*              The elements of EPOCHS must be strictly increasing. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
@@ -184,27 +184,27 @@ static integer c__1 = 1;
 /*     If any of the following exceptions occur, this routine will return */
 /*     without creating a new segment. */
 
-/*     1) If FRAME is not a recognized name, the error */
-/*        SPICE(INVALIDREFFRAME) is signaled. */
+/*     1)  If FRAME is not a recognized name, the error */
+/*         SPICE(INVALIDREFFRAME) is signaled. */
 
-/*     2) If the last non-blank character of SEGID occurs past index 40, */
-/*        the error SPICE(SEGIDTOOLONG) is signaled. */
+/*     2)  If the last non-blank character of SEGID occurs past index 40, */
+/*         the error SPICE(SEGIDTOOLONG) is signaled. */
 
-/*     3) If SEGID contains any nonprintable characters, the error */
-/*        SPICE(NONPRINTABLECHARS) is signaled. */
+/*     3)  If SEGID contains any nonprintable characters, the error */
+/*         SPICE(NONPRINTABLECHARS) is signaled. */
 
-/*     4) If the number of difference lines N is not at least one, */
-/*        the error SPICE(INVALIDCOUNT) will be signaled. */
+/*     4)  If the number of difference lines N is not at least one, */
+/*         the error SPICE(INVALIDCOUNT) is signaled. */
 
-/*     5) If FIRST is greater than or equal to LAST then the error */
-/*        SPICE(BADDESCRTIMES) will be signaled. */
+/*     5)  If FIRST is greater than or equal to LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
-/*     6) If the elements of the array EPOCHS are not in strictly */
-/*        increasing order, the error SPICE(TIMESOUTOFORDER) will be */
-/*        signaled. */
+/*     6)  If the elements of the array EPOCHS are not in strictly */
+/*         increasing order, the error SPICE(TIMESOUTOFORDER) is */
+/*         signaled. */
 
-/*     7) If the last epoch EPOCHS(N) is less than LAST, the error */
-/*        SPICE(BADDESCRTIMES) will be signaled. */
+/*     7)  If the last epoch EPOCHS(N) is less than LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
 /* $ Files */
 
@@ -241,8 +241,8 @@ static integer c__1 = 1;
 
 /* $ Restrictions */
 
-/*     1) The validity of the difference lines is not checked by */
-/*        this routine. */
+/*     1)  The validity of the difference lines is not checked by */
+/*         this routine. */
 
 /* $ Literature_References */
 
@@ -250,14 +250,19 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.2, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.0.1, 07-APR-2010 (NJB) */
 
-/*        Updated Detailed_Input to state that the elements */
-/*        of EPOCHS must be strictly increasing. The Exceptions */
+/*        Updated $Detailed_Input to state that the elements */
+/*        of EPOCHS must be strictly increasing. The $Exceptions */
 /*        section already described this error condition. */
 
 /* -    SPICELIB Version 1.0.0, 30-JAN-2003 (NJB) */
@@ -265,7 +270,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write spk type_1 ephemeris data segment */
+/*     write SPK type_1 ephemeris data segment */
 
 /* -& */
 

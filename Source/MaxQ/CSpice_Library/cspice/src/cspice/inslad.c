@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      INSLAD (Insert at location in double precision array) */
+/* $Procedure INSLAD (Insert at location in double precision array) */
 /* Subroutine */ int inslad_(doublereal *elts, integer *ne, integer *loc, 
 	doublereal *array, integer *na)
 {
@@ -21,8 +21,8 @@
 
 /* $ Abstract */
 
-/*      Insert one or more elements into a double precision array at */
-/*      the indicated location. */
+/*     Insert one or more elements into a double precision array at */
+/*     the indicated location. */
 
 /* $ Disclaimer */
 
@@ -55,122 +55,131 @@
 
 /* $ Keywords */
 
-/*      ARRAY,  ASSIGNMENT */
+/*     ARRAY */
+/*     ASSIGNMENT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ELTS       I   Elements to be inserted. */
-/*      NE         I   Number of elements to be inserted. */
-/*      LOC        I   Location of the first inserted element. */
-/*      ARRAY     I/O  Input/output array. */
-/*      NA        I/O  Number of elements in the input/output array. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ELTS       I   Elements to be inserted. */
+/*     NE         I   Number of elements to be inserted. */
+/*     LOC        I   Location of the first inserted element. */
+/*     ARRAY     I-O  Input/output array. */
+/*     NA        I-O  Number of elements in the input/output array. */
 
 /* $ Detailed_Input */
 
-/*      ELTS        contains one or more elements which are to be */
-/*                  inserted into the input array. */
+/*     ELTS     contains one or more elements which are to be */
+/*              inserted into the input array. */
 
-/*      NE          is the number of elements to be inserted. */
+/*     NE       is the number of elements to be inserted. */
 
-/*      LOC         is the location in the array at which the first */
-/*                  element of ELTS is to be inserted. LOC must be */
-/*                  within the interval [1, NA+1]. To append to */
-/*                  ARRAY, set LOC equal to NA+1. */
+/*     LOC      is the location in the array at which the first */
+/*              element of ELTS is to be inserted. LOC must be */
+/*              within the interval [1, NA+1]. To append to */
+/*              ARRAY, set LOC equal to NA+1. */
 
-/*      ARRAY       on input, is the original array. */
+/*     ARRAY    on input, is the original array. */
 
-/*      NA          on input, is the number of elements in ARRAY. */
+/*     NA       on input, is the number of elements in ARRAY. */
 
 /* $ Detailed_Output */
 
-/*      ARRAY       on output, is the original array with the elements */
-/*                  of ELT inserted into positions LOC through LOC+NE-1. */
-/*                  The original elements in these positions are moved */
-/*                  back to make room for the inserted elements. */
+/*     ARRAY    on output, is the original array with the elements */
+/*              of ELT inserted into positions LOC through LOC+NE-1. */
+/*              The original elements in these positions are moved */
+/*              back to make room for the inserted elements. */
 
-/*      NA          on output, is the number of elements in ARRAY. */
+/*     NA       on output, is the number of elements in ARRAY. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The elements in positions LOC through LOC+NE-1 are moved back */
-/*      by NE spaces to make room for the new elements, which are then */
-/*      inserted into the vacated spaces. */
-
-/* $ Examples */
-
-/*      Let */
-
-/*            ELTS(1) = 5.0D0        NA = 4      ARRAY(1) =  1.0D0 */
-/*            ELTS(2) = 6.0D0                    ARRAY(2) =  2.0D0 */
-/*            ELTS(3) = 7.0D0                    ARRAY(3) =  3.0D0 */
-/*                                               ARRAY(4) =  4.0D0 */
-
-/*      Then the call */
-
-/*            CALL INSLAD ( ELTS, 3, 3, ARRAY, NA ) */
-
-/*      yields the following result: */
-
-/*            NA = 7      ARRAY(1) = 1.0D0 */
-/*                        ARRAY(2) = 2.0D0 */
-/*                        ARRAY(3) = 5.0D0 */
-/*                        ARRAY(4) = 6.0D0 */
-/*                        ARRAY(5) = 7.0D0 */
-/*                        ARRAY(6) = 3.0D0 */
-/*                        ARRAY(7) = 4.0D0 */
-
-
-/*      The following calls to INSLAD signal errors. */
-
-/*      CALL INSLAD ( ELTS, 3, -1, ARRAY, NA ) */
-/*      CALL INSLAD ( ELTS, 3,  6, ARRAY, NA ) */
-/*      CALL INSLAD ( ELTS, 3,  2, ARRAY, -1 ) */
-/*      CALL INSLAD ( ELTS, 3, -1, ARRAY, -1 ) */
-
-/* $ Restrictions */
-
-/*      The array must be large enough to contain both the original */
-/*      and the inserted elements. */
-
 /* $ Exceptions */
 
-/*     1) The dimension of the array is set equal to zero if its */
-/*        input value is less than one. */
+/*     1)  The dimension of the array is set equal to zero if its */
+/*         input value is less than one. */
 
-/*     2) If LOC is not in the interval [1, NA+1], the error */
-/*        SPICE(INVALIDINDEX) is signalled. */
+/*     2)  If LOC is not in the interval [1, NA+1], the error */
+/*         SPICE(INVALIDINDEX) is signaled. */
 
-/*     3) If the number of elements to be inserted is less than one, */
-/*        the array is not modified. */
+/*     3)  If the number of elements to be inserted is less than one, */
+/*         the array is not modified. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      H.A. Neilan     (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     The elements in positions LOC through LOC+NE-1 are moved back */
+/*     by NE spaces to make room for the new elements, which are then */
+/*     inserted into the vacated spaces. */
+
+/* $ Examples */
+
+/*     Let */
+
+/*           ELTS(1) = 5.0D0        NA = 4      ARRAY(1) =  1.0D0 */
+/*           ELTS(2) = 6.0D0                    ARRAY(2) =  2.0D0 */
+/*           ELTS(3) = 7.0D0                    ARRAY(3) =  3.0D0 */
+/*                                              ARRAY(4) =  4.0D0 */
+
+/*     Then the call */
+
+/*           CALL INSLAD ( ELTS, 3, 3, ARRAY, NA ) */
+
+/*     yields the following result: */
+
+/*           NA = 7      ARRAY(1) = 1.0D0 */
+/*                       ARRAY(2) = 2.0D0 */
+/*                       ARRAY(3) = 5.0D0 */
+/*                       ARRAY(4) = 6.0D0 */
+/*                       ARRAY(5) = 7.0D0 */
+/*                       ARRAY(6) = 3.0D0 */
+/*                       ARRAY(7) = 4.0D0 */
+
+
+/*     The following calls to INSLAD signal errors. */
+
+/*     CALL INSLAD ( ELTS, 3, -1, ARRAY, NA ) */
+/*     CALL INSLAD ( ELTS, 3,  6, ARRAY, NA ) */
+/*     CALL INSLAD ( ELTS, 3,  2, ARRAY, -1 ) */
+/*     CALL INSLAD ( ELTS, 3, -1, ARRAY, -1 ) */
+
+/* $ Restrictions */
+
+/*     1)  The array must be large enough to contain both the original */
+/*         and the inserted elements. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -183,8 +192,8 @@
 /* -     Beta Version 2.0.0, 30-DEC-1988 (HAN) */
 
 /*         If the location at which the elements are to be inserted is */
-/*         not in the interval [1, NA+1], an error is signalled. */
-/*         Locations not within that interval refer to non-exixtent */
+/*         not in the interval [1, NA+1], an error is signaled. */
+/*         Locations not within that interval refer to non-existent */
 /*         array elements. (To append to the array, the location */
 /*         should be equal to NA+1.) */
 
@@ -193,7 +202,7 @@
 /*         was negative. To avoid this problem the maximum of zero and */
 /*         the input dimension becomes the dimension used by the */
 /*         the routine. In this case, the only valid location at which */
-/*         to insert is 1. If it is not 1, an error is signalled */
+/*         to insert is 1. If it is not 1, an error is signaled */
 /*         when the location is checked. */
 
 /* -& */

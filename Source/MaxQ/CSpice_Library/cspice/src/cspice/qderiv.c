@@ -6,7 +6,7 @@
 #include "f2c.h"
 
 /* $Procedure QDERIV ( Quadratic derivative ) */
-/* Subroutine */ int qderiv_(integer *n, doublereal *f0, doublereal *f2, 
+/* Subroutine */ int qderiv_(integer *ndim, doublereal *f0, doublereal *f2, 
 	doublereal *delta, doublereal *dfdt)
 {
     /* System generated locals */
@@ -21,7 +21,7 @@
 /* $ Abstract */
 
 /*     Estimate the derivative of a function by finding the derivative */
-/*     of a quadratic approximating function.  This derivative estimate */
+/*     of a quadratic approximating function. This derivative estimate */
 /*     is equivalent to that found by computing the average of forward */
 /*     and backward differences. */
 
@@ -64,7 +64,7 @@
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  ------------------------------------------------- */
-/*     N          I   Dimension of function to be differentiated. */
+/*     NDIM       I   Dimension of function to be differentiated. */
 /*     F0         I   Function values at left endpoint. */
 /*     F2         I   Function values at right endpoint. */
 /*     DELTA      I   Separation of abscissa points. */
@@ -72,45 +72,45 @@
 
 /* $ Detailed_Input */
 
-/*     N              is the dimension of the function to be */
-/*                    differentiated.  The derivative of each */
-/*                    function component will be found. */
+/*     NDIM     is the dimension of the function to be */
+/*              differentiated. The derivative of each */
+/*              function component will be found. */
 
-/*     F0             is an array of N function values at a point on */
-/*                    the real line; we'll refer to this point as X0. */
+/*     F0       is an array of NDIM function values at a point on */
+/*              the real line; we'll refer to this point as X0. */
 
-/*     F2             is an array of N function values at a second point */
-/*                    on the real line; we'll refer to this point as X2. */
-/*                    The points X0 and X2 must satisfy */
+/*     F2       is an array of NDIM function values at a second */
+/*              point on the real line; we'll refer to this point */
+/*              as X2. The points X0 and X2 must satisfy */
 
-/*                       X2 = X0 + 2 * DELTA */
+/*                 X2 = X0 + 2 * DELTA */
 
 
-/*     DELTA          is one half of the difference between X2 and X0: */
+/*     DELTA    is one half of the difference between X2 and X0: */
 
-/*                       DELTA = ( X2 - X0 ) / 2 */
+/*                 DELTA = ( X2 - X0 ) / 2 */
 
-/*                    DELTA may be negative but must be non-zero. */
+/*              DELTA may be negative but must be non-zero. */
 
 /* $ Detailed_Output */
 
-/*     DFDT           is an N-dimensional vector representing an estimate */
-/*                    of the derivative of the input function at the */
-/*                    midpoint X1 of the interval between X0 and X2. */
+/*     DFDT     is an N-dimensional vector representing an estimate */
+/*              of the derivative of the input function at the */
+/*              midpoint X1 of the interval between X0 and X2. */
 
-/*                    The Ith component of DFDT is */
+/*              The Ith component of DFDT is */
 
-/*                       ( 1 / (2*DELTA) ) * ( F2(I) - F0(I) ) */
+/*                 ( 1 / (2*DELTA) ) * ( F2(I) - F0(I) ) */
 
-/*                    We may regard this estimate as the derivative */
-/*                    at X1 of a parabola fitted to the points */
+/*              We may regard this estimate as the derivative */
+/*              at X1 of a parabola fitted to the points */
 
-/*                        ( X0, F0(I) ),  ( X2, F2(I) ) */
+/*                  ( X0, F0(I) ),  ( X2, F2(I) ) */
 
-/*                    We may also regard this derivative as the average */
-/*                    of the forward and backward first-order */
-/*                    differences of the input function defined by */
-/*                    F0(I), F2(I), and DELTA. */
+/*              We may also regard this derivative as the average */
+/*              of the forward and backward first-order */
+/*              differences of the input function defined by */
+/*              F0(I), F2(I), and DELTA. */
 
 /* $ Parameters */
 
@@ -118,10 +118,10 @@
 
 /* $ Exceptions */
 
-/*     1) If DELTA is zero, the error SPICE(DIVIDEBYZERO) is signaled. */
+/*     1)  If DELTA is zero, the error SPICE(DIVIDEBYZERO) is signaled. */
 
-/*     2) If N is less than 1, this routine will fail in a system- */
-/*        dependent manner. */
+/*     2)  If NDIM is less than 1, this routine will fail in a */
+/*         system-dependent manner. */
 
 /* $ Files */
 
@@ -136,7 +136,7 @@
 /*     that obtained by fitting each component of the function with a */
 /*     parabola at the points */
 
-/*        (X0, F(X0)), (X1, F(X1)), (X2, F(X2)) */
+/*        (X0, f(X0)), (X1, f(X1)), (X2, f(X2)) */
 
 /*     where */
 
@@ -147,49 +147,76 @@
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+
 /*     1) Estimate the derivative of x**2 at x = 2. */
 
-/*           IMPLICIT NONE */
+/*        Example code begins here. */
 
-/*           DOUBLE PRECISION     DELTA */
-/*           DOUBLE PRECISION     DFDT  (1) */
-/*           DOUBLE PRECISION     F0    (1) */
-/*           DOUBLE PRECISION     F2    (1) */
-/*           INTEGER              N */
 
-/*           N     = 1 */
-/*           DELTA = 1.D-3 */
-/*           F0(1) = ( 2.D0 - DELTA ) ** 2.D0 */
-/*           F2(1) = ( 2.D0 + DELTA ) ** 2.D0 */
+/*              PROGRAM QDERIV_EX1 */
+/*              IMPLICIT NONE */
 
-/*           CALL QDERIV ( N, F0, F2, DELTA, DFDT ) */
+/*              DOUBLE PRECISION     DELTA */
+/*              DOUBLE PRECISION     DFDT  (1) */
+/*              DOUBLE PRECISION     F0    (1) */
+/*              DOUBLE PRECISION     F2    (1) */
+/*              INTEGER              N */
 
-/*           WRITE ( *, '(1X,A,E25.16)'  ) '4 - DFDT(1) = ', 4 - DFDT(1) */
-/*           END */
+/*              N     = 1 */
+/*              DELTA = 1.D-3 */
+/*              F0(1) = ( 2.D0 - DELTA ) ** 2.D0 */
+/*              F2(1) = ( 2.D0 + DELTA ) ** 2.D0 */
 
-/*        The difference displayed is platform-dependent, but */
+/*              CALL QDERIV ( N, F0, F2, DELTA, DFDT ) */
+
+/*              WRITE ( *, '(1X,A,E25.16)'  ) '4 - DFDT(1) = ', */
+/*             .                               4 - DFDT(1) */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         4 - DFDT(1) =    0.4547473508864641E-12 */
+
+
+/*        Note that the difference displayed is platform-dependent, but */
 /*        should be on the order of 1.E-12. */
 
 /* $ Restrictions */
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 05-AUG-2020 (JDR) */
+
+/*        Changed input argument name "N" to "NDIM" for consistency with */
+/*        other routines. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 18-DEC-2004 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*        Estimate function derivative using quadratic fit */
+/*     Estimate function derivative using quadratic fit */
 
 /* -& */
 
@@ -219,7 +246,7 @@
 
     d__1 = .5 / *delta;
     d__2 = -.5 / *delta;
-    vlcomg_(n, &d__1, f2, &d__2, f0, dfdt);
+    vlcomg_(ndim, &d__1, f2, &d__2, f0, dfdt);
     return 0;
 } /* qderiv_ */
 

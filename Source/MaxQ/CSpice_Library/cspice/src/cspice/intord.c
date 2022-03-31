@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      INTORD ( Convert an integer to ordinal text ) */
+/* $Procedure INTORD ( Convert an integer to ordinal text ) */
 /* Subroutine */ int intord_(integer *n, char *string, ftnlen string_len)
 {
     /* Builtin functions */
@@ -75,44 +75,43 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     N         is an integer (less than 10**12 in absolute value). */
-/*               Moreover, if N is less than zero, -N must be a */
-/*               a legitimate number on the host machine. */
+/*     N        is an integer (less than 10**12 in absolute value). */
+/*              Moreover, if N is less than zero, -N must be a */
+/*              a legitimate number on the host machine. */
 
-/*               In the context of this routine N represents the */
-/*               ranking of some item within a group. */
-
+/*              In the context of this routine N represents the */
+/*              ranking of some item within a group. */
 
 /* $ Detailed_Output */
 
-/*     STRING    is the English ordinal equivalent of N.  STRING will */
-/*               contain only upper case letters. */
+/*     STRING   is the English ordinal equivalent of N. STRING will */
+/*              contain only upper case letters. */
 
 /* $ Parameters */
 
-/*     MAXORD    is one more than the length of the longest ordinal */
-/*               string that can be produced by a call to this routine: */
-/*               One string of maximum length is: */
+/*     MAXORD   is one more than the length of the longest ordinal */
+/*              string that can be produced by a call to this routine: */
+/*              One string of maximum length is: */
 
-/*                  'NEGATIVE '                                  // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVEN BILLION '       // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVEN MILLION '       // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVEN THOUSAND '      // */
-/*                  'SEVEN HUNDRED SEVENTY-SEVENTH' */
+/*                 'NEGATIVE '                                  // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVEN BILLION '       // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVEN MILLION '       // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVEN THOUSAND '      // */
+/*                 'SEVEN HUNDRED SEVENTY-SEVENTH' */
 
-/*               It has 147 characters. */
+/*              It has 147 characters. */
 
-/*               The parameter MAXORD is used to declare a local string */
-/*               of sufficient length to allow the construction of */
-/*               any ordinal string. */
+/*              The parameter MAXORD is used to declare a local string */
+/*              of sufficient length to allow the construction of */
+/*              any ordinal string. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If the resulting ordinal is longer than the output string, */
-/*        it will be truncated on the right, leaving only the most */
-/*        significant portion of the ordinal. */
+/*     1)  If the resulting ordinal is longer than the output string, */
+/*         it will be truncated on the right, leaving only the most */
+/*         significant portion of the ordinal. */
 
 /* $ Files */
 
@@ -128,21 +127,21 @@ static integer c__0 = 0;
 
 /* $ Examples */
 
-/*      N           STRING */
-/*      ------      ------------------------------------------- */
-/*      -6          NEGATIVE SIXTH */
-/*       1          FIRST */
-/*       2          SECOND */
-/*       3          THIRD */
-/*       4          FOURTH */
-/*       20         TWENTIETH */
-/*       21         TWENTY-FIRST */
-/*       99         NINETY-NINTH */
-/*       82131      EIGHTY-TWO THOUSAND ONE HUNDRED THIRTY-FIRST */
+/*     N           STRING */
+/*     ------      ------------------------------------------- */
+/*     -6          NEGATIVE SIXTH */
+/*      1          FIRST */
+/*      2          SECOND */
+/*      3          THIRD */
+/*      4          FOURTH */
+/*      20         TWENTIETH */
+/*      21         TWENTY-FIRST */
+/*      99         NINETY-NINTH */
+/*      82131      EIGHTY-TWO THOUSAND ONE HUNDRED THIRTY-FIRST */
 
 /* $ Restrictions */
 
-/*      1) Whatever restrictions apply to INTTXT apply to this routine */
+/*     1)  Whatever restrictions apply to INTTXT apply to this routine */
 /*         as well. */
 
 /* $ Literature_References */
@@ -151,9 +150,16 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

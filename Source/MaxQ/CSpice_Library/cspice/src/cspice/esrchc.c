@@ -53,7 +53,8 @@ integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /* $ Keywords */
 
-/*     ARRAY,  SEARCH */
+/*     ARRAY */
+/*     SEARCH */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -64,45 +65,45 @@ integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 /*     NDIM       I   Dimension of ARRAY. */
 /*     ARRAY      I   Character string array to search. */
 
-/*     The function returns the index of the first array entry */
-/*     equivalent to VALUE, or zero if none is found. */
+/*     The function returns the index of the first array entry equivalent */
+/*     to VALUE, or zero if none is found. */
 
 /* $ Detailed_Input */
 
-/*     VALUE      I   is an arbitrary character string. */
+/*     VALUE    is an arbitrary character string. */
 
-/*     NDIM       I   is the dimension of (number of elements in) */
-/*                    an array of character strings. */
+/*     NDIM     is the dimension of (number of elements in) an array of */
+/*              character strings. */
 
-/*     ARRAY      I   is the array. */
+/*     ARRAY    is the array. */
 
 /* $ Detailed_Output */
 
-/*     The function returns the index of the first element of the */
-/*     input array equivalent to the input value, or zero if the */
-/*     array contains no such elements. */
+/*     The function returns the index of the first element of the input */
+/*     array equivalent to the input value, or zero if the array contains */
+/*     no such elements. */
 
-/*     Two strings are equivalent if they contain the same characters */
-/*     in the same order, when blanks are ignored and uppercase and */
+/*     Two strings are equivalent if they contain the same characters in */
+/*     the same order, when blanks are ignored and uppercase and */
 /*     lowercase characters are considered equal. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
 /* $ Particulars */
 
-/*     ESRCHC is identical to ISRCHC, except that it looks for */
-/*     the first equivalent string (as defined by EQSTR) instead */
-/*     of the first identical one. */
+/*     ESRCHC is identical to ISRCHC, except that it looks for the first */
+/*     equivalent string (as defined by EQSTR) instead of the first */
+/*     identical one. */
 
 /* $ Examples */
 
@@ -124,8 +125,8 @@ integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /* $ Restrictions */
 
-/*     ESRCHC assumes that the function EQSTR does not participate */
-/*     in normal SPICELIB error handling. */
+/*     1)  ESRCHC assumes that the function EQSTR does not participate */
+/*         in normal SPICELIB error handling. */
 
 /* $ Literature_References */
 
@@ -133,9 +134,17 @@ integer esrchc_(char *value, integer *ndim, char *array, ftnlen value_len,
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

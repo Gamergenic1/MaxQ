@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      FNDNWD ( Find the next word after an index ) */
+/* $Procedure FNDNWD ( Find the next word after an index ) */
 /* Subroutine */ int fndnwd_(char *string, integer *start, integer *b, 
 	integer *e, ftnlen string_len)
 {
@@ -55,7 +55,9 @@
 
 /* $ Keywords */
 
-/*     PARSING,  SEARCH,  WORD */
+/*     PARSING */
+/*     SEARCH */
+/*     WORD */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -69,23 +71,31 @@
 
 /* $ Detailed_Input */
 
-/*     STRING     Is a character string that potentially consists of */
-/*                words of text. */
+/*     STRING   is a character string that potentially consists of */
+/*              words of text. */
 
-/*     START      Is the index of a letter within the string from which */
-/*                to start looking for the next word. */
+/*     START    is the index of a letter within the string from which */
+/*              to start looking for the next word. */
 
 /* $ Detailed_Output */
 
-/*     B          Is the index of the first letter of the word substring */
-/*                of STRING that begins at or after position START.  If */
-/*                there are no such substrings I is returned as 0. */
+/*     B        is the index of the first letter of the word substring */
+/*              of STRING that begins at or after position START. If */
+/*              there are no such substrings I is returned as 0. */
 
-/*     E          Is the index of the last letter of the word substring */
-/*                of STRING that begins at or after position START.  If */
-/*                there are no such substrings J is returned as 0. */
+/*     E        is the index of the last letter of the word substring */
+/*              of STRING that begins at or after position START. If */
+/*              there are no such substrings J is returned as 0. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -96,7 +106,8 @@
 /*     that starts on or after the specified location. */
 
 /* $ Examples */
-/*                       1         2         3         4         5 */
+
+/*     1         2         3         4         5 */
 /*              12345678901234567890123456789012345678901234567890 */
 /*     STRING: 'Now is the time for all good men to go home to bed' */
 
@@ -120,23 +131,22 @@
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     Error free. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 15-OCT-1993 (WLT) */
 

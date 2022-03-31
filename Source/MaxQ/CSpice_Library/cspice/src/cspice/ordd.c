@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      ORDD ( The ordinal position of an element in a set ) */
+/* $Procedure ORDD ( The ordinal position of an element in a set ) */
 integer ordd_(doublereal *item, doublereal *set)
 {
     /* System generated locals */
@@ -20,9 +20,8 @@ integer ordd_(doublereal *item, doublereal *set)
 
 /* $ Abstract */
 
-/*     The function returns the ordinal position of any given item in a */
-/*     set.  If the item does not appear in the set, the function returns */
-/*     zero. */
+/*     Return the ordinal position of a given item in a set. If the */
+/*     item does not appear in the set, return zero. */
 
 /* $ Disclaimer */
 
@@ -70,24 +69,32 @@ integer ordd_(doublereal *item, doublereal *set)
 
 /* $ Detailed_Input */
 
-/*     ITEM      Is an DOUBLE PRECISION value to be located within a */
-/*               set. */
+/*     ITEM     is a double precision value to be located within a set. */
 
-/*     SET       Is a properly validated SPICELIB set that is to be */
-/*               searched for the occurrence of item. */
+/*     SET      is a properly validated SPICE set that is to be */
+/*              searched for the occurrence of ITEM. */
 
 /* $ Detailed_Output */
 
 /*     The function returns the ordinal position of ITEM within SET. */
-/*     If ITEM is not an element of SET, the function is returned as 0. */
+/*     Ordinal positions range from 1 to N, where N is the cardinality of */
+/*     the set. */
+
+/*     If ITEM is not an element of SET, the function returns 0. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If the input set has invalid cardinality, an error is signaled */
+/*         by a routine in the call tree of this routine. ORDD returns an */
+/*         unspecified value in this case. */
+
+/*     2)  If the input set has invalid size, an error is signaled by a */
+/*         routine in the call tree of this routine. ORDD returns an */
+/*         unspecified value in this case. */
 
 /* $ Files */
 
@@ -96,7 +103,7 @@ integer ordd_(doublereal *item, doublereal *set)
 /* $ Particulars */
 
 /*     A natural ordering can be imposed upon the elements of any */
-/*     SPICELIB set, be it INTEGER, CHARACTER or DOUBLE PRECISION.  For */
+/*     SPICE set, be it INTEGER, CHARACTER or DOUBLE PRECISION. For */
 /*     character strings the ASCII collating sequence serves as the */
 /*     ordering relation, for DOUBLE PRECISION and INTEGER variables */
 /*     the arithmetic ordering is used. */
@@ -118,44 +125,43 @@ integer ordd_(doublereal *item, doublereal *set)
 /*                                 10 is 7 */
 
 /*     Given an item of the SET, this routine returns its ordinal */
-/*     position.  If the item is not in the set, this function returns */
+/*     position. If the item is not in the set, this function returns */
 /*     a value of 0. */
 
 /* $ Examples */
 
 /*     Suppose that you wished to find the relative position of a value */
-/*     in a large list of values stored within an array.  Say we want */
+/*     in a large list of values stored within an array. Say we want */
 /*     to know the relative position of item I of ARRAY withing the */
 /*     set of values represented in ARRAY. */
 
 /*     The following sequence of subroutine calls would allow you */
 /*     determine the relative position of the value ARRAY(I). */
 
-/*     INTEGER               N */
-/*     PARAMETER           ( N = something useful ) */
+/*        INTEGER               N */
+/*        PARAMETER           ( N = something useful ) */
 
-/*     DOUBLE PRECISION      ARRAY (         N ) */
-/*     DOUBLE PRECISION      SET   ( LBCELL: N ) */
-/*     INTEGER               I */
+/*        DOUBLE PRECISION      ARRAY (         N ) */
+/*        DOUBLE PRECISION      SET   ( LBCELL: N ) */
+/*        INTEGER               I */
 
-/*     INTEGER               NVALID */
-/*     INTEGER               POSITION */
-
+/*        INTEGER               NVALID */
+/*        INTEGER               POSITION */
 
 /*     set the value of NVALID to be the number of valid elements in the */
 /*     array ARRAY */
 
-/*     CALL MOVED  ( ARRAY, N,      SET(1) ) */
-/*     CALL VALIDD ( N,     NVALID, SET    ) */
+/*        CALL MOVED  ( ARRAY, N,      SET(1) ) */
+/*        CALL VALIDD ( N,     NVALID, SET    ) */
 
-/*     POSITION = ORDD ( ARRAY(I), SET ) */
+/*        POSITION = ORDD ( ARRAY(I), SET ) */
 
 /*     POSITION now contains the ordinal position of ARRAY(I) within the */
 /*     values represented in the array. */
 
 /* $ Restrictions */
 
-/*     SET must be a validated or empty set. */
+/*     1)  SET must be a validated or empty set. */
 
 /* $ Literature_References */
 
@@ -163,40 +169,42 @@ integer ordd_(doublereal *item, doublereal *set)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Extended */
+/*        $Detailed_Output and $Exceptions section. */
+
+/*        Removed unnecessary $Revisions section. */
+
 /* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
 
-/*       If the value of the function RETURN is TRUE upon execution of */
-/*       this module, this function is assigned a default value of */
-/*       either 0, 0.0D0, .FALSE., or blank depending on the type of the */
-/*       function. */
+/*        If the value of the function RETURN is .TRUE. upon execution of */
+/*        this module, this function is assigned a default value of */
+/*        either 0, 0.0D0, .FALSE., or blank depending on the type of the */
+/*        function. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*        Comment section for permuted index source lines was added */
-/*        following the header. */
+/*         Comment section for permuted index source lines was added */
+/*         following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     the ordinal position of an element in a set */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 2.0.0, 13-MAR-1989 (NJB) */
-
-/*        Now participates in error handling.  References to RETURN, */
-/*        CHKIN, and CHKOUT added. */
 
 /* -& */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            NCPOSR (NOT character position, reverse) */
+/* $Procedure NCPOSR (NOT character position, reverse) */
 integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len, 
 	ftnlen chars_len)
 {
@@ -75,19 +75,19 @@ integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len,
 
 /* $ Detailed_Input */
 
-/*     STR        is any character string. */
+/*     STR      is any character string. */
 
-/*     CHARS      is a character string containing a collection of */
-/*                characters.  Spaces in CHARS are significant. */
+/*     CHARS    is a character string containing a collection of */
+/*              characters. Spaces in CHARS are significant. */
 
-/*     START      is the position in STR to begin looking for */
-/*                characters not in CHARS. */
+/*     START    is the position in STR to begin looking for */
+/*              characters not in CHARS. */
 
 /* $ Detailed_Output */
 
 /*     The function returns the index of the last character of STR (at */
 /*     or before index START) that is not one of the characters in the */
-/*     string CHARS.  No such character is found, the fucntion returns */
+/*     string CHARS. No such character is found, the function returns */
 /*     zero. */
 
 /* $ Parameters */
@@ -96,12 +96,12 @@ integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len,
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) If START is less than 1, NCPOSR returns zero. */
+/*     1)  If START is less than 1, NCPOSR returns zero. */
 
-/*     2) If START is greater than LEN(STRING), the search begins */
-/*        at the last character of the string. */
+/*     2)  If START is greater than LEN(STRING), the search begins */
+/*         at the last character of the string. */
 
 /* $ Files */
 
@@ -165,11 +165,16 @@ integer ncposr_(char *str, char *chars, integer *start, ftnlen str_len,
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.3, 31-JAN-2008 (BVS) */
 

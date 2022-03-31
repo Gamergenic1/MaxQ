@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            BEINT  ( Be an Integer? ) */
+/* $Procedure BEINT  ( Be an Integer? ) */
 logical beint_(char *string, ftnlen string_len)
 {
     /* System generated locals */
@@ -51,7 +51,7 @@ logical beint_(char *string, ftnlen string_len)
 
 /* $ Required_Reading */
 
-/*     WORDS */
+/*     None. */
 
 /* $ Keywords */
 
@@ -63,22 +63,22 @@ logical beint_(char *string, ftnlen string_len)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   Character string. */
 
-/*     The function returns TRUE if the string represents an integer. */
-/*     Otherwise, it returns FALSE. */
+/*     The function returns .TRUE. if the string represents an integer. */
+/*     Otherwise, it returns .FALSE. */
 
 /* $ Detailed_Input */
 
-/*     STRING      is any string. */
+/*     STRING   is any string. */
 
 /* $ Detailed_Output */
 
 /*     If the input string contains an integer (as defined in */
-/*     $Particulars below), the function returns TRUE. Otherwise, */
-/*     the function returns FALSE. */
+/*     $Particulars below), the function returns .TRUE. Otherwise, */
+/*     the function returns .FALSE. */
 
 /* $ Parameters */
 
@@ -94,12 +94,12 @@ logical beint_(char *string, ftnlen string_len)
 
 /* $ Particulars */
 
-/*      An integer may be either of the following: */
+/*     An integer may be either of the following: */
 
-/*         1) An unsigned integer (as defined by function BEUNS). */
+/*        1) An unsigned integer (as defined by function BEUNS). */
 
-/*         2) A sign ('+' or '-') followed by an unsigned */
-/*            integer. */
+/*        2) A sign ('+' or '-') followed by an unsigned */
+/*           integer. */
 
 /* $ Examples */
 
@@ -163,9 +163,16 @@ logical beint_(char *string, ftnlen string_len)
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-NOV-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 01-DEC-1995 (WLT) */
 

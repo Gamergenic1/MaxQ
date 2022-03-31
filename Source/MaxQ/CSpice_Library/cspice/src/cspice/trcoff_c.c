@@ -1,11 +1,11 @@
 /*
 
--Procedure  trcoff_c  ( Turn tracing off )
+-Procedure trcoff_c  ( Turn tracing off )
 
 -Abstract
- 
-   Disable tracing. 
- 
+
+   Disable tracing.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   ERROR 
- 
+
+   ERROR
+
 -Keywords
- 
-   ERROR 
- 
+
+   ERROR
+
 */
 
    #include "SpiceUsr.h"
@@ -46,90 +46,91 @@
    #include "SpiceZst.h"
 
 
-   void trcoff_c ( void ) 
+   void trcoff_c ( void )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
- 
-   None. 
- 
+
+   None.
+
 -Detailed_Input
- 
-   None. 
- 
+
+   None.
+
 -Detailed_Output
- 
-   None. 
- 
+
+   None.
+
 -Parameters
- 
-   None. 
- 
--Files
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
+-Files
+
+   None.
+
 -Particulars
- 
-   This routine disables tracing.  Checking in or out does not modify 
-   the current traceback any further after trcoff_c is called. The 
-   routines trcnam_, trcdep_, and qcktrc_ will return information 
-   based on the traceback at the point where trcoff_c is called. 
- 
-   Once tracing has been disabled, it cannot be re-enabled. 
- 
-   Additionally, trcoff_c blanks out the existing trace, since the 
-   trace will usually be invalid at the time an error is signalled. 
-   The frozen copy of the trace, if there is one, is not modified. 
- 
+
+   This routine disables tracing. Checking in or out does not modify
+   the current traceback any further after trcoff_c is called. The
+   routines trcnam_, trcdep_, and qcktrc_ will return information
+   based on the traceback at the point where trcoff_c is called.
+
+   Once tracing has been disabled, it cannot be re-enabled.
+
+   Additionally, trcoff_c blanks out the existing trace, since the
+   trace will usually be invalid at the time an error is signaled.
+   The frozen copy of the trace, if there is one, is not modified.
+
 -Examples
- 
+
    1)    /.
-               Program initialization: 
-           
-                    . 
-                    . 
-                    . 
-           
-               We disable tracing to enhance speed: 
-         ./  
+               Program initialization:
+
+                    .
+                    .
+                    .
+
+               We disable tracing to enhance speed:
+         ./
                trcoff_c ();
          /.
-               More initialization code: 
+               More initialization code:
          ./
-                    . 
-                    . 
-                    . 
- 
+                    .
+                    .
+                    .
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   K.R. Gehringer  (JPL) 
- 
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
+
 -Version
+
+   -CSPICE Version 1.0.1, 13-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
 
    -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
 
 -Index_Entries
- 
-   turn tracing off 
- 
+
+   turn tracing off
+
 -&
 */
 

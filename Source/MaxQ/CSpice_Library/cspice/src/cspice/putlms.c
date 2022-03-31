@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PUTLMS ( Store Long Error Message ) */
+/* $Procedure PUTLMS ( Store Long Error Message ) */
 /* Subroutine */ int putlms_0_(int n__, char *msg, ftnlen msg_len)
 {
     /* Initialized data */
@@ -46,9 +46,11 @@
 
 /* $ Abstract */
 
-/*     PUTLMS is a low-level data structure access routine which stores */
-/*     the long error message.  DO NOT CALL THIS ROUTINE.  USE SETMSG, */
-/*     NOT PUTLMS, TO SET THE CURRENT LONG ERROR MESSAGE. */
+/*     Store a long error message. */
+
+/*     PUTLMS is a low-level data structure access routine. */
+/*     DO NOT CALL THIS ROUTINE. USE SETMSG, NOT PUTLMS, TO SET THE */
+/*     CURRENT LONG ERROR MESSAGE. */
 
 /* $ Disclaimer */
 
@@ -140,7 +142,8 @@
 
 /* $ Detailed_Input */
 
-/*     MSG   The current long error message.  This value will be saved. */
+/*     MSG      is the current long error message. This value will be */
+/*              saved. */
 
 /* $ Detailed_Output */
 
@@ -148,8 +151,8 @@
 
 /* $ Parameters */
 
-/*     LMSGLN  is the maximum length of the long error message.  See */
-/*             the include file errhnd.inc for the value of LMSGLN. */
+/*     LMSGLN   is the maximum length of the long error message. See */
+/*              the include file errhnd.inc for the value of LMSGLN. */
 
 /* $ Exceptions */
 
@@ -164,7 +167,7 @@
 /*     DO NOT CALL THIS ROUTINE. */
 
 /*     This routine should be used only by routines within the SPICELIB */
-/*     error handling system.  Other routines should use SETMSG to set */
+/*     error handling system. Other routines should use SETMSG to set */
 /*     the long error message. */
 
 /* $ Examples */
@@ -173,8 +176,8 @@
 
 /* $ Restrictions */
 
-/*     Calls to this routine by routines outside of the SPICELIB error */
-/*     handling system may interfere with error processing. */
+/*     1)  Calls to this routine by routines outside of the SPICELIB */
+/*         error handling system may interfere with error processing. */
 
 /* $ Literature_References */
 
@@ -182,16 +185,23 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 27-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Index_Entries entry. */
 
 /* -    SPICELIB Version 1.1.0, 29-JUL-1997 (NJB) */
 
 /*        Maximum length of the long error message is now represented */
-/*        by the parameter LMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
+/*        by the parameter LMSGLN. Miscellaneous header fixes were */
+/*        made. Some indentation and vertical white space abnormalities */
+/*        in the code were fixed. Some dubious comments were deleted */
 /*        from the code. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -204,7 +214,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
+/*     store long error message */
 
 /* -& */
 /* $ Revisions */
@@ -212,15 +222,15 @@
 /* -    SPICELIB Version 1.1.0, 29-JUL-1997 (NJB) */
 
 /*        Maximum length of the long error message is now represented */
-/*        by the parameter LMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
+/*        by the parameter LMSGLN. Miscellaneous header fixes were */
+/*        made. Some indentation and vertical white space abnormalities */
+/*        in the code were fixed. Some dubious comments were deleted */
 /*        from the code. */
 
-/* -     Beta Version 1.0.1, 08-FEB-1989 (NJB) */
+/* -    Beta Version 1.0.1, 08-FEB-1989 (NJB) */
 
-/*         Warnings added to discourage use of this routine in */
-/*         non-error-handling code. */
+/*        Warnings added to discourage use of this routine in */
+/*        non-error-handling code. */
 
 /* -& */
 
@@ -241,7 +251,7 @@
 
     s_copy(savmsg, msg, (ftnlen)1840, msg_len);
     return 0;
-/* $Procedure      GETLMS ( Get Long Error Message ) */
+/* $Procedure GETLMS ( Get Long Error Message ) */
 
 L_getlms:
 /* $ Abstract */
@@ -289,7 +299,6 @@ L_getlms:
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-
 /*     MSG        O   The current long error message. */
 
 /* $ Detailed_Input */
@@ -298,9 +307,9 @@ L_getlms:
 
 /* $ Detailed_Output */
 
-/*     MSG    is the current long error message.  See the */
-/*            "required reading" file for a detailed discussion */
-/*            of error messages. */
+/*     MSG      is the current long error message. See the */
+/*              "required reading" file for a detailed discussion */
+/*              of error messages. */
 
 /* $ Parameters */
 
@@ -308,10 +317,10 @@ L_getlms:
 
 /* $ Exceptions */
 
-/*     None. */
+/*     Error free. */
 
-/*     However, this routine is part of the SPICELIB error */
-/*     handling mechanism. */
+/*     1)  However, this routine is part of the SPICELIB error */
+/*         handling mechanism. */
 
 /* $ Files */
 
@@ -336,16 +345,23 @@ L_getlms:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.3, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Index_Entries entry. Removed unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.0.2, 29-JUL-1997 (NJB) */
 
 /*        Maximum length of the long error message is now represented */
-/*        by the parameter LMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
+/*        by the parameter LMSGLN. Miscellaneous header fixes were */
+/*        made. Some indentation and vertical white space abnormalities */
+/*        in the code were fixed. Some dubious comments were deleted */
 /*        from the code. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -358,18 +374,7 @@ L_getlms:
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.0.2, 29-JUL-1997 (NJB) */
-
-/*        Maximum length of the long error message is now represented */
-/*        by the parameter LMSGLN.  Miscellaneous header fixes were */
-/*        made.  Some indentation and vertical white space abnormalities */
-/*        in the code were fixed.  Some dubious comments were deleted */
-/*        from the code. */
+/*     get current long error message */
 
 /* -& */
 

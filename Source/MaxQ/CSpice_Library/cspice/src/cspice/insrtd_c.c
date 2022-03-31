@@ -3,9 +3,9 @@
 -Procedure insrtd_c ( Insert an item into a double precision set )
 
 -Abstract
- 
-   Insert an item into a double precision set. 
- 
+
+   Insert an item into a double precision set.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,131 +32,221 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   SETS 
- 
+
+   SETS
+
 -Keywords
- 
-   CELLS, SETS 
- 
+
+   CELLS
+   SETS
+
 */
 
-#include "SpiceUsr.h"
-#include "SpiceZfc.h"
-#include "SpiceZmc.h"
-
+   #include "SpiceUsr.h"
+   #include "SpiceZfc.h"
+   #include "SpiceZmc.h"
 
    void insrtd_c ( SpiceDouble     item,
-                   SpiceCell     * set  )
+                   SpiceCell     * a    )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   item       I   Item to be inserted. 
-   set       I/O  Insertion set. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   item       I   Item to be inserted.
+   a         I-O  Insertion set.
+
 -Detailed_Input
- 
-   item        is an item which is to be inserted into the 
-               specified set. item may or may not already 
-               be an element of the set. 
 
+   item        is an item which is to be inserted into the specified
+               set. `item' may or may not already be an element of the
+               set.
 
-   set         is a CSPICE set.  set must be declared as a double
-               precision SpiceCell. 
+   a           is a SPICE set.
 
-               On input, set  may or may not contain the input item 
-               as an element. 
- 
+               On input, `a' may or may not contain the input item as an
+               element.
+
+               `a' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( a, ASZ );
+
+               where ASZ is the maximum capacity of `a'.
+
 -Detailed_Output
 
-   set         on output contains the union of the input set and 
-               the singleton set containing the input item.
- 
--Parameters
- 
-   None. 
- 
--Exceptions
- 
-   1) If the input set argument is a SpiceCell of type other than
-      double precision, the error SPICE(TYPEMISMATCH) is signaled.
+   a           on output, contains the union of the input set and the
+               singleton set containing the input item, unless there was
+               not sufficient room in the set for the item to be
+               included, in which case the set is not changed and an
+               error is signaled.
 
-   2) If the insertion of the element into the set causes an excess 
-      of elements, the error SPICE(SETEXCESS) is signaled. 
- 
-   3) If the input set argument does not qualify as a CSPICE set, 
-      the error SPICE(NOTASET) will be signaled.  CSPICE sets have
-      their data elements sorted in increasing order and contain
-      no duplicate data elements.
+-Parameters
+
+   None.
+
+-Exceptions
+
+   1)  If the insertion of the element into the set causes an excess
+       of elements, the error SPICE(SETEXCESS) is signaled.
+
+   2)  If the `a' cell argument has a type other than SpiceDouble,
+       the error SPICE(TYPEMISMATCH) is signaled.
+
+   3)  If the `a' cell argument does not qualify as a SPICE set, the
+       error SPICE(NOTASET) is signaled. SPICE sets have their data
+       elements stored in increasing order and contain no duplicate
+       elements.
 
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   None. 
- 
+
+   None.
+
 -Examples
- 
-   1) In the following code fragment, a list of camera exposure
-      durations are taken from the array expList and inserted into the
-      set expDur.
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Create an integer set for ten elements, insert items
+      to it and then remove the even values.
 
 
-         #include "SpiceUsr.h"
-                .
-                .
-                .
+      Example code begins here.
+
+
+      /.
+         Program insrtd_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
          /.
-         The number of list items is NLIST.
+         Local constants.
          ./
-         SpiceDouble        expList[NLIST] = 
-                            { 
-                               0.5, 2.0, 0.5, 30.0, 0.01, 30.0 
-                            };
+         #define SETDIM       10
 
          /.
-         Declare the set with maximum number of elements MAXSIZ.
+         Local variables.
          ./
-         SPICEDOUBLE_CELL ( expDur,   MAXSIZ );
-                .
-                .
-                .
-         for ( i = 0;  i < NLIST;  i++ )
+         SPICEDOUBLE_CELL   ( a     , SETDIM );
+         SpiceInt             i;
+
+         /.
+         Create a list of items and even numbers.
+         ./
+         SpiceDouble          even   [SETDIM] = {
+                                          0.0,  2.0,  4.0,  6.0,  8.0,
+                                         10.0, 12.0, 14.0, 16.0, 18.0  };
+
+         SpiceDouble          items  [SETDIM] = {
+                                          0.0,  1.0,  1.0,  2.0,  3.0,
+                                          5.0,  8.0, 10.0, 13.0, 21.0  };
+
+         /.
+         Initialize the empty set.
+         ./
+         valid_c ( SETDIM, 0, &a );
+
+         /.
+         Insert the list of double precision numbers into the
+         set. If the item is an element of the set, the set is
+         not changed.
+         ./
+         for ( i = 0; i < SETDIM; i++ )
          {
-            insrtd_c ( expList[i], &expDur );
+            insrtd_c ( items[i], &a );
          }
-        
+
          /.
-         At this point expDur contains the set
-
-           { 0.01, 0.5, 2.0, 30.0 }
-
+         Output the original contents of set `a'.
          ./
+         printf( "Items in original set A:\n" );
+
+         for ( i = 0; i < card_c( &a ); i++ )
+         {
+            printf( "%6.1f", SPICE_CELL_ELEM_D( &a, i ) );
+         }
+
+         printf( " \n" );
+
+         /.
+         Remove the even values. If the item is not an element of
+         the set, the set is not changed.
+         ./
+         for ( i = 0; i < SETDIM; i++ )
+         {
+            removd_c ( even[i], &a );
+         }
+
+         /.
+         Output the contents of `a'.
+         ./
+         printf( "Odd numbers in set A:\n" );
+
+         for ( i = 0; i < card_c( &a ); i++ )
+         {
+            printf( "%6.1f", SPICE_CELL_ELEM_D( &a, i ) );
+         }
+
+         printf( " \n" );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Items in original set A:
+         0.0   1.0   2.0   3.0   5.0   8.0  10.0  13.0  21.0
+      Odd numbers in set A:
+         1.0   3.0   5.0  13.0  21.0
 
 
 -Restrictions
- 
-   None. 
+
+   None.
 
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   C.A. Curzon     (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   C.A. Curzon         (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 2.1.0, 24-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+       Added complete code example.
+
+       Changed the argument name "set" to "a" for consistency with other
+       routines.
+
+       Extended description of argument "a" in -Detailed_Input to include
+       type and preferred declaration method.
+
    -CSPICE Version 2.0.0, 01-NOV-2005 (NJB)
 
        Long error message was updated to include size of
@@ -165,17 +255,18 @@
    -CSPICE Version 1.0.0, 07-AUG-2002 (NJB) (CAC) (WLT) (IMU)
 
 -Index_Entries
- 
-   insert an item into a d.p. set 
- 
+
+   insert an item into a d.p. set
+
 -&
 */
+
 {
    /*
    local variables
    */
    SpiceBoolean            inSet;
-   
+
    SpiceDouble           * ddata;
 
    SpiceInt                i;
@@ -183,51 +274,51 @@
 
 
    /*
-   Use discovery check-in. 
+   Use discovery check-in.
    */
-   
-   /*
-   Make sure we're working with a double precision cell. 
-   */
-   CELLTYPECHK ( CHK_DISCOVER, "insrtd_c", SPICE_DP, set );
 
-   ddata = (SpiceDouble *) (set->data);
+   /*
+   Make sure we're working with a double precision cell.
+   */
+   CELLTYPECHK ( CHK_DISCOVER, "insrtd_c", SPICE_DP, a );
+
+   ddata = (SpiceDouble *) (a->data);
 
    /*
    Make sure the input cell is a set.
    */
-   CELLISSETCHK ( CHK_DISCOVER, "insrtd_c", set );
+   CELLISSETCHK ( CHK_DISCOVER, "insrtd_c", a );
 
 
    /*
-   Initialize the set if necessary. 
+   Initialize the set if necessary.
    */
-   CELLINIT ( set );
+   CELLINIT ( a );
 
 
    /*
    Is the item already in the set? If not, it needs to be inserted.
    */
-   loc   =  lstled_c ( item,  set->card,  ddata );
+   loc   =  lstled_c ( item,  a->card,  ddata );
 
    inSet =  (  loc  >  -1  ) && ( item == ddata[loc] );
- 
+
    if ( inSet )
    {
       return;
    }
 
-   
+
    /*
-   It's an error if the set has no room left. 
+   It's an error if the set has no room left.
    */
 
-   if ( set->card == set->size )
+   if ( a->card == a->size )
    {
       chkin_c  ( "insrtd_c"                                       );
       setmsg_c ( "An element could not be inserted into the set "
                  "due to lack of space; set size is #."           );
-      errint_c ( "#", set->size                                   );
+      errint_c ( "#", a->size                                     );
       sigerr_c ( "SPICE(SETEXCESS)"                               );
       chkout_c ( "insrtd_c"                                       );
       return;
@@ -235,11 +326,11 @@
 
 
    /*
-   Make room by moving the items that come after index loc in the set. 
+   Make room by moving the items that come after index loc in the set.
    Insert the item after index loc.
    */
-   
-   for (  i = (set->card);   i > loc+1;   i--  )
+
+   for (  i = (a->card);   i > loc+1;   i--  )
    {
       ddata[i] = ddata[i-1];
    }
@@ -250,12 +341,11 @@
    /*
    Increment the set's cardinality.
    */
-   (set->card) ++;
+   (a->card) ++;
 
 
    /*
-   Sync the set. 
+   Sync the set.
    */
-   zzsynccl_c ( C2F, set );
+   zzsynccl_c ( C2F, a );
 }
-

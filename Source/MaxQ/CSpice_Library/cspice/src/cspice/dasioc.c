@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      DASIOC ( DAS, Fortran I/O, character ) */
+/* $Procedure DASIOC ( DAS, Fortran I/O, character ) */
 /* Subroutine */ int dasioc_(char *action, integer *unit, integer *recno, 
 	char *record, ftnlen action_len, ftnlen record_len)
 {
@@ -74,7 +74,7 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ACTION     I   Action to take (read or write). */
 /*     UNIT       I   Fortran unit connected to DAS file. */
@@ -83,38 +83,38 @@ static integer c__1 = 1;
 
 /* $ Detailed_Input */
 
-/*     ACTION         is a character string specifying whether to read */
-/*                    from or write to the specified DAS file.  Possible */
-/*                    values are: */
+/*     ACTION   is a character string specifying whether to read */
+/*              from or write to the specified DAS file. Possible */
+/*              values are: */
 
-/*                       'READ' */
-/*                       'WRITE' */
+/*                 'READ' */
+/*                 'WRITE' */
 
-/*                    Case and leading or trailing blanks are not */
-/*                    significant. */
+/*              Case and leading or trailing blanks are not */
+/*              significant. */
 
 
-/*     UNIT           is the Fortran unit number connected to the DAS */
-/*                    file that is to be read or written.  Given the */
-/*                    handle of the DAS file, the unit number can be */
-/*                    obtained using ZZDDHHLU. */
+/*     UNIT     is the Fortran unit number connected to the DAS */
+/*              file that is to be read or written. Given the */
+/*              handle of the DAS file, the unit number can be */
+/*              obtained using ZZDDHHLU. */
 
-/*     RECNO          is the Fortran record number of the record to be */
-/*                    read or written. */
+/*     RECNO    is the Fortran record number of the record to be */
+/*              read or written. */
 
-/*     RECORD         is a character array whose contents are to be */
-/*                    written to record RECNO, if ACTION is WRITE. */
+/*     RECORD   is a character array whose contents are to be */
+/*              written to record RECNO, if ACTION is WRITE. */
 
 /* $ Detailed_Output */
 
-/*     RECORD         is a character array whose contents are to be */
-/*                    set equal to those of record RECNO, if ACTION is */
-/*                    READ. */
+/*     RECORD   is a character array whose contents are to be */
+/*              set equal to those of record RECNO, if ACTION is */
+/*              READ. */
 
 /* $ Parameters */
 
-/*     NWC            is the number of characters in a DAS character */
-/*                    record. */
+/*     NWC      is the number of characters in a DAS character */
+/*              record. */
 
 /* $ Exceptions */
 
@@ -134,7 +134,7 @@ static integer c__1 = 1;
 /* $ Particulars */
 
 /*     Normally, routines outside of SPICELIB will not need to call this */
-/*     routine directly.  Writes to DAS files should be performed using */
+/*     routine directly. Writes to DAS files should be performed using */
 /*     the DASADx and DASUDx routines; reads should be performed using */
 /*     the DASRDx routines. */
 
@@ -192,7 +192,6 @@ static integer c__1 = 1;
 /*            CALL ZZDDHHLU ( HANDLE,  'DAS', .FALSE., UNIT   ) */
 /*            CALL DASIOC   ( 'WRITE', UNIT,  10,      RECORD ) */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -203,10 +202,17 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 05-FEB-2015 (NJB) */
 
@@ -220,6 +226,7 @@ static integer c__1 = 1;
 /*     perform Fortran reads of character records */
 /*     perform Fortran writes of character records */
 /*     perform low-level I/O for DAS routines */
+
 /* -& */
 
 /*     SPICELIB functions */

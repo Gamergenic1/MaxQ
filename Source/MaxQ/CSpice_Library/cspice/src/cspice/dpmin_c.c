@@ -3,10 +3,10 @@
 -Procedure dpmin_c ( Smallest DP number )
 
 -Abstract
- 
-   Return the value of the smallest (negative) number representable 
-   in a double precision variable. 
- 
+
+   Return the value of the smallest (negative) number representable
+   in a double precision variable.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,110 +33,114 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   None. 
- 
+
+   None.
+
 -Keywords
- 
-   CONSTANTS 
- 
+
+   CONSTANTS
+
 */
 
    #include "SpiceUsr.h"
 
-   SpiceDouble dpmin_c () 
+   SpiceDouble dpmin_c ()
 
 /*
 
 -Brief_I/O
- 
-   The function returns the value of the smallest (negative) number 
-   that can be represented in a double precision variable. 
- 
+
+   The function returns the value of the smallest (negative) number
+   that can be represented in a double precision variable.
+
 -Detailed_Input
- 
-   None. 
- 
+
+   None.
+
 -Detailed_Output
- 
-   The function returns the value of the smallest (negative) number 
-   that can be represented in a double precision variable. 
- 
-   This value varies from machine to machine.  Usually, the value is 
+
+   The function returns the value of the smallest (negative) number
+   that can be represented in a double precision variable.
+
+   This value varies from machine to machine. Usually, the value is
    defined as the negative of the macro DBL_MAX from the ANSI standard
-   header file float.h.  According to the ANSI standard, DBL_MAX must be 
+   header file float.h. According to the ANSI standard, DBL_MAX must be
    at least
-   
-      1.E+37 
-      
-   Therefore dpmin_c usually returns a value less than or equal to 
+
+      1.E+37
+
+   Therefore dpmin_c usually returns a value less than or equal to
 
      -1.E+37
-        
+
    Exceptional systems would be those where DBL_MAX cannot be negated.
-   Currently no such systems are supported.      
- 
+   Currently no such systems are supported.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   The function always returns a constant value, set by the user 
-   prior to compilation. 
- 
+
+   The function always returns a constant value, set by the user
+   prior to compilation.
+
 -Examples
- 
-   The following code fragments illustrate the use of dpmin_c. 
+
+   The following code fragments illustrate the use of dpmin_c.
    Note in the example that the smallest negative number is not assumed
-   to be the negative of the largest positive number. 
- 
+   to be the negative of the largest positive number.
+
    1) Initialize a CSPICE "window."
-   
+
       /.
-      The window originally has one interval, from "minus 
-      infinity" to "plus infinity". 
+      The window originally has one interval, from "minus
+      infinity" to "plus infinity".
       ./
-      
+
       winsiz    =  2;
       window[0] =  dpmin_c();
       window[1] =  dpmax_c() ;
 
-      scardd_ ( &winsiz, window ); 
-      
- 
+      scardd_ ( &winsiz, window );
+
 -Restrictions
- 
-   None. 
- 
--Literature_References
- 
+
    None.
-    
+
+-Literature_References
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   H.A. Neilan     (JPL) 
-   M.J. Spencer    (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   M.J. Spencer        (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
-   -CSPICE Version 1.0.0, 19-OCT-1998 (NJB)
+
+   -CSPICE Version 1.0.1, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 19-OCT-1998 (NJB) (HAN) (MJS) (WLT) (IMU)
 
 -Index_Entries
- 
-   smallest d.p. number 
- 
+
+   smallest d.p. number
+
 -&
 */
 
@@ -156,8 +160,8 @@
       value = dpmin_();
       first = SPICEFALSE;
    }
-   
+
    return ( value );
-   
+
 
 } /* End dpmin_c */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SCTIKS ( Convert spacecraft clock string to ticks. ) */
+/* $Procedure SCTIKS ( Convert spacecraft clock string to ticks. ) */
 /* Subroutine */ int sctiks_(integer *sc, char *clkstr, doublereal *ticks, 
 	ftnlen clkstr_len)
 {
@@ -56,10 +56,9 @@
 /*     TIME */
 
 /* $ Declarations */
-
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SC         I   NAIF spacecraft identification code. */
 /*     CLKSTR     I   Character representation of a spacecraft clock. */
@@ -67,85 +66,84 @@
 
 /* $ Detailed_Input */
 
-/*     SC         is the NAIF ID number for the spacecraft whose clock */
-/*                string is being converted. */
+/*     SC       is the NAIF ID number for the spacecraft whose clock */
+/*              string is being converted. */
 
-/*     CLKSTR     is a character string representing a spacecraft clock */
-/*                time, WITHOUT PARTITION NUMBER. */
+/*     CLKSTR   is a character string representing a spacecraft clock */
+/*              time, WITHOUT PARTITION NUMBER. */
 
-/*                Using Galileo as an example, the full format is */
+/*              Using Galileo as an example, the full format is */
 
-/*                               wwwwwwww:xx:y:z */
+/*                             wwwwwwww:xx:y:z */
 
-/*                where z is a mod-8 counter (values 0-7) which */
-/*                increments approximately once every 8 1/3 ms., y is a */
-/*                mod-10 counter (values 0-9) which increments once */
-/*                every time z turns over, i.e., approximately once every */
-/*                66 2/3 ms., xx is a mod-91 (values 0-90) counter */
-/*                which increments once every time y turns over, i.e., */
-/*                once every 2/3 seconds. wwwwwwww is the Real-Time Image */
-/*                Count (RIM), which increments once every time xx turns */
-/*                over, i.e., once every 60 2/3 seconds. The roll-over */
-/*                expression for the RIM is 16777215, which corresponds */
-/*                to approximately 32 years. */
+/*              where z is a mod-8 counter (values 0-7) which */
+/*              increments approximately once every 8 1/3 ms., y is a */
+/*              mod-10 counter (values 0-9) which increments once */
+/*              every time z turns over, i.e., approximately once every */
+/*              66 2/3 ms., xx is a mod-91 (values 0-90) counter */
+/*              which increments once every time y turns over, i.e., */
+/*              once every 2/3 seconds. wwwwwwww is the Real-Time Image */
+/*              Count (RIM), which increments once every time xx turns */
+/*              over, i.e., once every 60 2/3 seconds. The roll-over */
+/*              expression for the RIM is 16777215, which corresponds */
+/*              to approximately 32 years. */
 
-/*                wwwwwwww, xx, y, and z are referred to interchangeably */
-/*                as the fields or components of the spacecraft clock. */
-/*                SCLK components may be separated by any of the */
-/*                following characters: ' '  '.'  ':'  ','  '-' */
-/*                Any number of spaces may separate the components and */
-/*                the delimiters. The presence of the RIM component */
-/*                is required. Successive components may be omitted, and */
-/*                in such cases are assumed to represent zero values. */
+/*              wwwwwwww, xx, y, and z are referred to interchangeably */
+/*              as the fields or components of the spacecraft clock. */
+/*              SCLK components may be separated by any of the */
+/*              following characters: ' '  '.'  ':'  ','  '-' */
+/*              Any number of spaces may separate the components and */
+/*              the delimiters. The presence of the RIM component */
+/*              is required. Successive components may be omitted, and */
+/*              in such cases are assumed to represent zero values. */
 
-/*                Values for the individual components may exceed the */
-/*                maximum expected values. For instance, '0:0:0:9' is */
-/*                an acceptable Galileo clock string, and will convert */
-/*                to the same number of ticks as '0:0:1:1'. */
+/*              Values for the individual components may exceed the */
+/*              maximum expected values. For instance, '0:0:0:9' is */
+/*              an acceptable Galileo clock string, and will convert */
+/*              to the same number of ticks as '0:0:1:1'. */
 
-/*                Consecutive delimiters containing no intervening digits */
-/*                are treated as if they delimit zero components. */
+/*              Consecutive delimiters containing no intervening digits */
+/*              are treated as if they delimit zero components. */
 
-/*                Trailing zeros should always be included to match the */
-/*                length of the counter.  For example, a Galileo clock */
-/*                count of '25684.90' should not be represented as */
-/*                '25684.9'. */
+/*              Trailing zeros should always be included to match the */
+/*              length of the counter.  For example, a Galileo clock */
+/*              count of '25684.90' should not be represented as */
+/*              '25684.9'. */
 
-/*                Some spacecraft clock components have offset, or */
-/*                starting, values different from zero.  For example, */
-/*                with an offset value of 1, a mod 20 counter would */
-/*                cycle from 1 to 20 instead of from 0 to 19. */
+/*              Some spacecraft clock components have offset, or */
+/*              starting, values different from zero. For example, */
+/*              with an offset value of 1, a mod 20 counter would */
+/*              cycle from 1 to 20 instead of from 0 to 19. */
 
-/*                See the SCLK required reading for a detailed */
-/*                description of the Voyager and Mars Observer clock */
-/*                formats. */
-
+/*              See the SCLK required reading for a detailed */
+/*              description of the Voyager and Mars Observer clock */
+/*              formats. */
 
 /* $ Detailed_Output */
 
-/*     TICKS      is the number of ticks represented by the spacecraft */
-/*                clock string. A tick is defined to be the smallest */
-/*                time increment expressible by the spacecraft clock. */
+/*     TICKS    is the number of ticks represented by the spacecraft */
+/*              clock string. A tick is defined to be the smallest */
+/*              time increment expressible by the spacecraft clock. */
 
-/*                An analogy may be drawn between a spacecraft clock */
-/*                and a standard wall clock, measuring hours, minutes */
-/*                and seconds. The number of ticks represented by the */
-/*                wall clock string */
-/*                                     hh:mm:ss */
+/*              An analogy may be drawn between a spacecraft clock */
+/*              and a standard wall clock, measuring hours, minutes */
+/*              and seconds. The number of ticks represented by the */
+/*              wall clock string */
+/*                                   hh:mm:ss */
 
-/*                would be the number of seconds represented by that */
-/*                time. */
+/*              would be the number of seconds represented by that */
+/*              time. */
 
-/*                For example: */
+/*              For example: */
 
-/*                         00:00:10  would convert to 10 */
-/*                         00:01:00  would convert to 60 */
-/*                         00:10:00  would convert to 600 */
-/*                         01:00:00  would convert to 3600 */
-/*                         01:01:00  would convert to 3660 */
+/*                       00:00:10  would convert to 10 */
+/*                       00:01:00  would convert to 60 */
+/*                       00:10:00  would convert to 600 */
+/*                       01:00:00  would convert to 3600 */
+/*                       01:01:00  would convert to 3660 */
 
-/*                See the Examples section below for examples for */
-/*                actual spacecraft clocks. */
+/*              See the $Examples section below for examples for */
+/*              actual spacecraft clocks. */
 
 /* $ Parameters */
 
@@ -153,13 +151,14 @@
 
 /* $ Exceptions */
 
-/*     1)  If the spacecraft clock type is not supported then the */
-/*         error SPICE(NOTSUPPORTED) is signalled. */
+/*     1)  If the spacecraft clock type is not supported, the */
+/*         error SPICE(NOTSUPPORTED) is signaled. */
 
 /*     2)  If any of the extracted clock components cannot be parsed as */
 /*         integers, or the string has too many components, or the value */
-/*         of one of the components is less than the offset value, then */
-/*         the error is diagnosed by routines called by this routine. */
+/*         of one of the components is less than the offset value, then, */
+/*         an error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*     3)  Invalid spacecraft ID's are not diagnosed. */
 
@@ -171,11 +170,11 @@
 
 /*     Each spacecraft is assigned a clock type code in the kernel file. */
 /*     SCTIKS calls the function SCTYPE to determine this value. If the */
-/*     clock type is supported by SPICELIB, then the routine TIKSnn is */
-/*     called to handle the actual conversion from clock format to number */
-/*     of ticks. The nn in TIKSnn refers to the spacecraft clock type */
-/*     code. Different spacecraft have distict clock formats but can */
-/*     still be of the same clock type. */
+/*     clock type is supported by SPICE, then the SPICELIB routine TIKSnn */
+/*     is called to handle the actual conversion from clock format to */
+/*     number of ticks. The nn in TIKSnn refers to the spacecraft clock */
+/*     type code. Different spacecraft have distinct clock formats but */
+/*     can still be of the same clock type. */
 
 /*     The TIKSnn routines are entry points to the routines SCLKnn, which */
 /*     also contain the ticks-to-clock format conversion routines FMTnn. */
@@ -278,7 +277,6 @@
 /*          '1-1-1'                48800 */
 /*          '1-1-2'                48801 */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -289,10 +287,19 @@
 
 /* $ Author_and_Institution */
 
-/*     J.M. Lynch     (JPL) */
-/*     R.E. Thurman   (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     R.E. Thurman       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 01-NOV-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 22-AUG-2006 (EDW) */
 

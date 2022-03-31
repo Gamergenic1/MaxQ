@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKGR05 ( C-kernel, get record, type 05 ) */
+/* $Procedure CKGR05 ( C-kernel, get record, type 05 ) */
 /* Subroutine */ int ckgr05_(integer *handle, doublereal *descr, integer *
 	recno, doublereal *record)
 {
@@ -25,6 +25,7 @@ static integer c__6 = 6;
     extern /* Subroutine */ int chkin_(char *, ftnlen), dafus_(doublereal *, 
 	    integer *, integer *, doublereal *, integer *), dafgda_(integer *,
 	     integer *, integer *, doublereal *);
+    extern logical failed_(void);
     integer packsz;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen), setmsg_(char *, ftnlen), errint_(char *, integer *, 
@@ -37,8 +38,9 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Given the handle and descriptor of a type 5 segment in a CK file, */
-/*     return a specified pointing instance from that segment. */
+/*     Return a specified pointing instance from a CK type 05 segment. */
+/*     The segment is identified by a CK file handle and segment */
+/*     descriptor. */
 
 /* $ Disclaimer */
 
@@ -165,7 +167,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of the file containing the segment. */
 /*     DESCR      I   The segment descriptor. */
@@ -174,77 +176,77 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                desired segment. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              desired segment. */
 
-/*     DESCR      is the packed descriptor of the data type 5 segment. */
+/*     DESCR    is the packed descriptor of the data type 5 segment. */
 
-/*     RECNO      is the number of the discrete pointing instance to be */
-/*                returned from the data type 5 segment. */
+/*     RECNO    is the number of the discrete pointing instance to be */
+/*              returned from the data type 5 segment. */
 
 /* $ Detailed_Output */
 
-/*     RECORD     is the pointing instance indexed by RECNO in the */
-/*                segment.  The contents are as follows: */
+/*     RECORD   is the pointing instance indexed by RECNO in the */
+/*              segment. The contents are as follows: */
 
-/*                   RECORD( 1 ) = CLKOUT */
+/*                 RECORD( 1 ) = CLKOUT */
 
-/*                CLKOUT is the encoded spacecraft clock time associated */
-/*                with the returned pointing values. */
+/*              CLKOUT is the encoded spacecraft clock time associated */
+/*              with the returned pointing values. */
 
-/*                   RECORD( 2 ) = SUBTYP */
+/*                 RECORD( 2 ) = SUBTYP */
 
-/*                SUBTYP is the CK type 5 subtype code.  This code */
-/*                identifies the structure and meaning of the rest */
-/*                of the record.  However, all subtypes have a */
-/*                quaternion stored in elements 3-6. */
+/*              SUBTYP is the CK type 5 subtype code. This code */
+/*              identifies the structure and meaning of the rest */
+/*              of the record. However, all subtypes have a */
+/*              quaternion stored in elements 3-6. */
 
-/*                   RECORD( 3 ) = q0 */
-/*                   RECORD( 4 ) = q1 */
-/*                   RECORD( 5 ) = q2 */
-/*                   RECORD( 6 ) = q3 */
+/*                 RECORD( 3 ) = q0 */
+/*                 RECORD( 4 ) = q1 */
+/*                 RECORD( 5 ) = q2 */
+/*                 RECORD( 6 ) = q3 */
 
-/*                Subtype 1 ends here; there are no angular velocity */
-/*                data.  Angular velocity is derived by differentiating */
-/*                Lagrange interpolating polynomials. */
+/*              Subtype 1 ends here; there are no angular velocity */
+/*              data. Angular velocity is derived by differentiating */
+/*              Lagrange interpolating polynomials. */
 
-/*                   RECORD(  7 ) =  ] */
-/*                   RECORD(  8 ) =  ] --- For subtypes 0 and 2, these */
-/*                   RECORD(  9 ) =  ]     elements contain a quaternion */
-/*                   RECORD( 10 ) =  ]     derivative.  For subtype 3, */
-/*                                         elements 7-9 contain an */
-/*                                         angular velocity vector; */
-/*                                         element 10 is unassigned. */
+/*                 RECORD(  7 ) =  ] */
+/*                 RECORD(  8 ) =  ] --- For subtypes 0 and 2, these */
+/*                 RECORD(  9 ) =  ]     elements contain a quaternion */
+/*                 RECORD( 10 ) =  ]     derivative. For subtype 3, */
+/*                                       elements 7-9 contain an */
+/*                                       angular velocity vector; */
+/*                                       element 10 is unassigned. */
 
-/*                                         All subtypes except subtype */
-/*                                         2 stop here. */
+/*                                       All subtypes except subtype */
+/*                                       2 stop here. */
 
-/*                   RECORD( 11 ) =  ] */
-/*                   RECORD( 12 ) =  ] --- For subtype 2, these */
-/*                   RECORD( 13 ) =  ]     elements contain an angular */
-/*                                         velocity vector. */
+/*                 RECORD( 11 ) =  ] */
+/*                 RECORD( 12 ) =  ] --- For subtype 2, these */
+/*                 RECORD( 13 ) =  ]     elements contain an angular */
+/*                                       velocity vector. */
 
 
-/*                   RECORD( 14 ) =  ] */
-/*                   RECORD( 15 ) =  ] --- For subtype 2, these */
-/*                   RECORD( 16 ) =  ]     elements contain the */
-/*                                         derivative of an angular */
-/*                                         velocity vector. */
+/*                 RECORD( 14 ) =  ] */
+/*                 RECORD( 15 ) =  ] --- For subtype 2, these */
+/*                 RECORD( 16 ) =  ]     elements contain the */
+/*                                       derivative of an angular */
+/*                                       velocity vector. */
 
-/*                The quantities q0 - q3 are the components of the */
-/*                quaternion that represents the C-matrix that transforms */
-/*                vectors from the inertial reference frame of the */
-/*                segment to the instrument frame at time CLKOUT. */
+/*              The quantities q0 - q3 are the components of the */
+/*              quaternion that represents the C-matrix that transforms */
+/*              vectors from the inertial reference frame of the */
+/*              segment to the instrument frame at time CLKOUT. */
 
-/*                Quaternion derivatives, angular velocity, or the */
-/*                derivative of angular velocity are returned only */
-/*                these are supported by the segment subtype and */
-/*                if the segment descriptor indicates that angular */
-/*                velocity is present. */
+/*              Quaternion derivatives, angular velocity, or the */
+/*              derivative of angular velocity are returned only */
+/*              these are supported by the segment subtype and */
+/*              if the segment descriptor indicates that angular */
+/*              velocity is present. */
 
-/*                The components of the angular velocity vector are */
-/*                specified relative to the inertial reference frame of */
-/*                the segment. */
+/*              The components of the angular velocity vector are */
+/*              specified relative to the inertial reference frame of */
+/*              the segment. */
 
 /* $ Parameters */
 
@@ -260,8 +262,8 @@ static integer c__6 = 6;
 /*         SPICE(CKNONEXISTREC) is signaled. */
 
 /*     3)  If the specified handle does not belong to any DAF file that */
-/*         is currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         is currently known to be open, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     4)  If DESCR is not a valid descriptor of a segment in the CK */
 /*         file specified by HANDLE, the results of this routine are */
@@ -281,14 +283,14 @@ static integer c__6 = 6;
 /*     see the CK required reading. */
 
 /*     This is a utility routine that may be used to read the individual */
-/*     pointing instances that make up a type 5 segment.  It is normally */
+/*     pointing instances that make up a type 5 segment. It is normally */
 /*     used in conjunction with CKNR05, which gives the number of */
 /*     pointing instances stored in a segment. */
 
 /* $ Examples */
 
 /*     Suppose that MOC.BC is a CK file that contains segments of */
-/*     data type 5.  Then the following code fragment extracts the */
+/*     data type 5. Then the following code fragment extracts the */
 /*     SCLK time and boresight vector for each pointing instance */
 /*     in the first segment in the file. */
 
@@ -315,7 +317,7 @@ static integer c__6 = 6;
 /*           CALL DAFOPR ( 'MOC.BC', HANDLE ) */
 
 /*     C */
-/*     C     Begin forward search.  Find the first array. */
+/*     C     Begin forward search. Find the first array. */
 /*     C */
 /*           CALL DAFBFS ( HANDLE ) */
 /*           CALL DAFFNA ( FOUND  ) */
@@ -377,7 +379,6 @@ static integer c__6 = 6;
 
 /*           END IF */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -388,17 +389,27 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman (JPL) */
-/*     J.M. Lynch (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Bug fix: added FAILED tests after all DAFGDA calls but the */
+/*        last. */
+
+/*        Added explicit conversion to INTEGER for SUBTYP. */
 
 /* -    SPICELIB Version 1.0.0, 27-AUG-2002 (NJB) (JML) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     get ck type_5 record */
+/*     get CK type_5 record */
 
 /* -& */
 
@@ -425,9 +436,8 @@ static integer c__6 = 6;
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("CKGR05", (ftnlen)6);
     }
+    chkin_("CKGR05", (ftnlen)6);
 
 /*     The unpacked descriptor contains the following information */
 /*     about the segment: */
@@ -470,7 +480,11 @@ static integer c__6 = 6;
     i__1 = end - 3;
     i__2 = end - 3;
     dafgda_(handle, &i__1, &i__2, &record[1]);
-    subtyp = (integer) record[1];
+    if (failed_()) {
+	chkout_("CKGR05", (ftnlen)6);
+	return 0;
+    }
+    subtyp = i_dnnt(&record[1]);
     if (subtyp == 0) {
 	packsz = 8;
     } else if (subtyp == 1) {
@@ -488,6 +502,10 @@ static integer c__6 = 6;
 	return 0;
     }
     dafgda_(handle, &end, &end, &npoint);
+    if (failed_()) {
+	chkout_("CKGR05", (ftnlen)6);
+	return 0;
+    }
     nrec = i_dnnt(&npoint);
 
 /*     If a request was made for a record which doesn't exist, then */
@@ -508,6 +526,10 @@ static integer c__6 = 6;
     addr__ = beg + packsz * (*recno - 1);
     i__1 = addr__ + packsz - 1;
     dafgda_(handle, &addr__, &i__1, &record[2]);
+    if (failed_()) {
+	chkout_("CKGR05", (ftnlen)6);
+	return 0;
+    }
 
 /*     Next get the SCLK time.  Need to go past all of the NREC pointing */
 /*     records (PACKSZ * NREC numbers), and then to the RECNOth SCLK */

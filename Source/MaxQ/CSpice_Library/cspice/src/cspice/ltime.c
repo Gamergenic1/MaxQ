@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LTIME ( Light Time ) */
+/* $Procedure LTIME ( Light Time ) */
 /* Subroutine */ int ltime_(doublereal *etobs, integer *obs, char *dir, 
 	integer *targ, doublereal *ettarg, doublereal *elapsd, ftnlen dir_len)
 {
@@ -31,10 +31,10 @@
 
 /* $ Abstract */
 
-/*     This routine computes the transmit (or receive) time */
-/*     of a signal at a specified target, given the receive */
-/*     (or transmit) time at a specified observer. The elapsed */
-/*     time between transmit and receive is also returned. */
+/*     Compute the transmission (or reception) time of a signal at a */
+/*     specified target, given the reception (or transmission) time at a */
+/*     specified observer. Also return the elapsed time between */
+/*     transmission and reception. */
 
 /* $ Disclaimer */
 
@@ -63,104 +63,102 @@
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       SPK */
+/*     SPK */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ETOBS      I   Epoch of a signal at some observer */
-/*      OBS        I   NAIF-id of some observer */
-/*      DIR        I   Direction the signal travels ( '->' or '<-' ) */
-/*      TARG       I   NAIF-id of the target object */
-/*      ETTARG     O   Epoch of the signal at the target */
-/*      ELAPSD     O   Time between transmit and receipt of the signal */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ETOBS      I   Epoch of a signal at some observer. */
+/*     OBS        I   NAIF ID of some observer. */
+/*     DIR        I   Direction the signal travels ( '->' or '<-' ). */
+/*     TARG       I   NAIF ID of the target object. */
+/*     ETTARG     O   Epoch of the signal at the target. */
+/*     ELAPSD     O   Time between transmit and receipt of the signal. */
 
 /* $ Detailed_Input */
 
-/*     ETOBS       is an epoch expressed in ephemeris second (TDB) */
-/*                 past the epoch of the J2000 reference system. */
-/*                 This is the time at which an electromagnetic */
-/*                 signal is "at" the observer. */
+/*     ETOBS    is an epoch expressed as ephemeris seconds past J2000 */
+/*              TDB. This is the time at which an electromagnetic signal */
+/*              is "at" the observer. */
 
-/*     OBS         is the NAIF-id of some observer. */
+/*     OBS      is the NAIF ID of some observer. */
 
-/*     DIR         is the direction the signal travels.  The */
-/*                 acceptable values are '->' and '<-'.  When */
-/*                 you read the calling sequence from left to */
-/*                 right, the "arrow" given by DIR indicates */
-/*                 which way the electromagnetic signal is travelling. */
+/*     DIR      is the direction the signal travels. The */
+/*              acceptable values are '->' and '<-'. When */
+/*              you read the calling sequence from left to */
+/*              right, the "arrow" given by DIR indicates */
+/*              which way the electromagnetic signal is traveling. */
 
-/*                 If the argument list reads as below, */
+/*              If the argument list reads as below, */
 
-/*                  ..., OBS, '->', TARG, ... */
+/*                 ..., OBS, '->', TARG, ... */
 
-/*                 the signal is travelling from the observer to the */
-/*                 target. */
+/*              the signal is traveling from the observer to the */
+/*              target. */
 
-/*                 If the argument reads as */
+/*              If the argument reads as */
 
-/*                  ..., OBS, '<-', TARG */
+/*                 ..., OBS, '<-', TARG */
 
-/*                 the signal is travelling from the target to */
-/*                 the observer. */
+/*              the signal is traveling from the target to */
+/*              the observer. */
 
-/*     TARG        is the NAIF-id of the target. */
+/*     TARG     is the NAIF ID of the target. */
 
 /* $ Detailed_Output */
 
-/*     ETTARG      is the epoch expressed in ephemeris seconds (TDB) */
-/*                 past the epoch of the J2000 reference system */
-/*                 at which the electromagnetic signal is "at" the */
-/*                 target body. */
+/*     ETTARG   is the epoch expressed as ephemeris seconds past J2000 */
+/*              TDB at which the electromagnetic signal is "at" the */
+/*              target body. */
 
-/*                 Note ETTARG is computed using only Newtonian */
-/*                 assumptions about the propagation of light. */
+/*              Note ETTARG is computed using only Newtonian */
+/*              assumptions about the propagation of light. */
 
-/*     ELAPSD      is the number of ephemeris seconds (TDB) between */
-/*                 transmission and receipt of the signal. */
+/*     ELAPSD   is the number of ephemeris seconds (TDB) between */
+/*              transmission and receipt of the signal. */
+
+/*              ELAPSD is computed as: */
 
 /*                 ELAPSD = DABS( ETOBS - ETTARG ) */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If DIR is not one of '->' or '<-' the error */
-/*       'SPICE(BADDIRECTION)' will be signalled. In this case */
-/*        ETTARG and ELAPSD will not be altered from their */
-/*        input values. */
+/*     1)  If DIR is not one of '->' or '<-', the error */
+/*         SPICE(BADDIRECTION) is signaled. In this case */
+/*         ETTARG and ELAPSD will not be altered from their */
+/*         input values. */
 
-/*     2) If insufficient ephemeris information is available to */
-/*        compute the outputs ETTARG and ELAPSD, or if observer */
-/*        or target is not recognized, the problems is diagnosed */
-/*        by a routine in the call tree of this routine. */
+/*     2)  If insufficient ephemeris information is available to */
+/*         compute the outputs ETTARG and ELAPSD, or if observer */
+/*         or target is not recognized, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
-/*        In this case, the value of ETTARG will be set to ETOBS */
-/*        and ELAPSD will be set to zero. */
+/*         In this case, the value of ETTARG will be set to ETOBS */
+/*         and ELAPSD will be set to zero. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
-
 /*     Suppose a radio signal travels between two solar system */
 /*     objects. Given an ephemeris for the two objects, which way */
-/*     the signal is travelling, and the time when the signal is */
+/*     the signal is traveling, and the time when the signal is */
 /*     "at" at one of the objects (the observer OBS), this routine */
 /*     determines when the signal is "at" the other object (the */
-/*     target TARG).   It also returns the elapsed time between */
+/*     target TARG). It also returns the elapsed time between */
 /*     transmission and receipt of the signal. */
-
 
 /* $ Examples */
 
@@ -171,7 +169,7 @@
 /*     is -77. */
 
 
-/*           signal travelling to spacecraft */
+/*           signal traveling to spacecraft */
 /*       *  -._.-._.-._.-._.-._.-._.-._.-._.->  * */
 
 /*       Goldstone (OBS=399001)            Spacecraft (TARG = -77) */
@@ -225,7 +223,7 @@
 /*     Suppose there is a transponder on board the spacecraft of */
 /*     the previous examples that transmits a signal back to the */
 /*     sender exactly 1 microsecond after a signal arrives at */
-/*     the spacecraft.  If we send a signal from Goldstone */
+/*     the spacecraft. If we send a signal from Goldstone */
 /*     to the spacecraft and wait to receive it at Canberra. */
 /*     What will be the epoch at which the return signal arrives */
 /*     in Canberra? ( The id-code for Canberra is 399002 ). */
@@ -255,30 +253,35 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.3, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.2, 22-SEP-2004 (EDW) */
 
-/*        Placed Copyright after Abstract. */
+/*        Placed Copyright after $Abstract. */
 
 /* -    SPICELIB Version 1.1.1, 18-NOV-1996 (WLT) */
 
-/*        Errors in the examples section were corrected. */
+/*        Errors in the $Examples section were corrected. */
 
 /* -    SPICELIB Version 1.1.0, 10-JUL-1996 (WLT) */
 
 /*        Added Copyright Notice to the header. */
 
 /* -    SPICELIB Version 1.0.0, 10-NOV-1995 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */

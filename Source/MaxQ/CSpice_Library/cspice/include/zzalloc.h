@@ -1,5 +1,7 @@
 /*
 
+-Header_File zzalloc.h ( CSPICE memory allocation prototypes and macros )
+
 -Abstract
 
    The memory allocation prototypes and macros for use in CSPICE.
@@ -29,6 +31,22 @@
    CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
+-Required_Reading
+
+   CSPICE
+
+-Keywords
+
+   MEMORY
+
+-Exceptions
+
+   None.
+
+-Files
+
+   None.
+
 -Particulars
 
    The routines maintain a count of the number of mallocs vs. free,
@@ -41,40 +59,67 @@
 
    Prototypes in this file:
 
-      alloc_SpiceBoolean_C_array
+      alloc_count
+      alloc_SpiceString_C_array
+      alloc_SpiceString_C_Copy_array
       alloc_SpiceDouble_C_array
       alloc_SpiceInt_C_array
-      alloc_SpiceMemory
+      alloc_SpiceBoolean_C_array
       alloc_SpiceString
-      alloc_SpiceString_C_Copy_array
-      alloc_SpiceString_C_array
       alloc_SpiceString_Pointer_array
-      alloc_count
-      free_SpiceMemory
       free_SpiceString_C_array
-      zzalloc_count
+      alloc_SpiceMemory
+      free_SpiceMemory
+
+   Macro definitions in this file:
+
+      ALLOC_CHECK
+      ALLOC_CHECK_INTRA
+
+-Examples
+
+   None.
+
+-Restrictions
+
+   None.
+
+-Literature_References
+
+   None.
+
+-Author_and_Institution
+
+   B.V. Semenov        (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   CSPICE 1.3.0 26-AUG-2016 (EDW)
+   -CSPICE Version 1.4.0, 27-JUL-2021 (EDW) (BVS)
+
+      Added macro ALLOC_CHECK_INTRA.
+
+      Added missing header sections.
+
+   -CSPICE Version 1.3.0, 26-AUG-2016 (EDW)
 
       Added routine alloc_SpiceBoolean_C_array.
 
-   CSPICE 1.0.3 02-MAY-2008 (EDW)
+   -CSPICE Version 1.0.3, 02-MAY-2008 (EDW)
 
       Added alloc_count prototype.
 
-   CSPICE 1.0.2 10-MAY-2007 (EDW)
+   -CSPICE Version 1.0.2, 10-MAY-2007 (EDW)
 
       Minor edits to clarify 'size' in alloc_SpiceMemory as
       size_t.
 
-   CSPICE 1.0.1 23-JUN-2005 (EDW)
+   -CSPICE Version 1.0.1, 23-JUN-2005 (EDW)
 
       Add prototype for alloc_SpiceString_Pointer_array, allocate
       an array of pointers to SpiceChar.
 
-   Icy 1.0.0 December 19, 2003 (EDW)
+   -CSPICE Version 1.0.0, 19-DEC-2003 (EDW)
 
       Initial release.
 
@@ -129,5 +174,19 @@
                 sigerr_c ( "SPICE(MALLOCCOUNT)"        );                  \
                 }
 
-#endif
 
+   /*
+   Simple macro to ensure an expected value alloc count at end of routine.
+   Note, the need to use this macro exists only in those routines
+   allocating/deallocating memory.
+   */
+#define ALLOC_CHECK_INTRA(n)  if (  alloc_count() != n )                   \
+                {                                                          \
+                setmsg_c ( "Malloc/Free count not expected value."         \
+                           " Malloc count = #1, expected count = #2.");    \
+                errint_c ( "#1", alloc_count()            );               \
+                errint_c ( "#2", n                       );                \
+                sigerr_c ( "SPICE(MALLOCCOUNT)"        );                  \
+                }
+
+#endif

@@ -90,9 +90,9 @@ static logical c_false = FALSE_;
 
 /* $ Keywords */
 
+/*     EPHEMERIS */
 /*     EVENT */
 /*     GEOMETRY */
-/*     EPHEMERIS */
 /*     SEARCH */
 /*     WINDOW */
 
@@ -400,10 +400,10 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LBCELL     P   SPICE Cell lower bound. */
-/*     CNVTOL     P   Convergence tolerance */
+/*     CNVTOL     P   Convergence tolerance. */
 /*     NWDIST     P   Number of workspace windows for distance search. */
 /*     TARGET     I   Name of the target body. */
 /*     ABCORR     I   Aberration correction flag. */
@@ -415,283 +415,289 @@ static logical c_false = FALSE_;
 /*     CNFINE     I   SPICE window to which the search is confined. */
 /*     MW         I   Workspace window size. */
 /*     NW         I   Workspace window count. */
-/*     WORK      I-O   Array of workspace windows. */
-/*     RESULT    I-O   SPICE window containing results. */
+/*     WORK       O   Array of workspace windows. */
+/*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
-/*     TARGET      is the name of a target body. Optionally, you may */
-/*                 supply the integer ID code for the object as an */
-/*                 integer string.  For example both 'MOON' and '301' */
-/*                 are legitimate strings that indicate the moon is the */
-/*                 target body. */
+/*     TARGET   is the name of a target body. Optionally, you may supply */
+/*              the integer ID code for the object as an integer string. */
+/*              For example both 'MOON' and '301' are legitimate strings */
+/*              that indicate the Moon is the target body. */
 
-/*                 The target and observer define a position vector which */
-/*                 points from the observer to the target; the length of */
-/*                 this vector is the "distance" that serves as the */
-/*                 subject of the search performed by this routine. */
+/*              The target and observer define a position vector which */
+/*              points from the observer to the target; the length of */
+/*              this vector is the "distance" that serves as the subject */
+/*              of the search performed by this routine. */
 
-/*                 Case and leading or trailing blanks are not */
-/*                 significant in the string TARGET. */
+/*              Case and leading or trailing blanks are not significant */
+/*              in the string TARGET. */
 
+/*     ABCORR   indicates the aberration corrections to be applied to the */
+/*              observer-target position vector to account for one-way */
+/*              light time and stellar aberration. */
 
-/*     ABCORR      indicates the aberration corrections to be applied to */
-/*                 the observer-target position vector to account for */
-/*                 one-way light time and stellar aberration. */
+/*              Any aberration correction accepted by the SPICE routine */
+/*              SPKEZR is accepted here. See the header of SPKEZR for a */
+/*              detailed description of the aberration correction */
+/*              options. For convenience, the options are listed below: */
 
-/*                 Any aberration correction accepted by the SPICE */
-/*                 routine SPKEZR is accepted here. See the header */
-/*                 of SPKEZR for a detailed description of the */
-/*                 aberration correction options. For convenience, */
-/*                 the options are listed below: */
+/*                 'NONE'     Apply no correction. */
 
-/*                    'NONE'     Apply no correction. */
+/*                 'LT'       "Reception" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
 
-/*                    'LT'       "Reception" case:  correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. */
+/*                 'LT+S'     "Reception" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation. */
 
-/*                    'LT+S'     "Reception" case:  correct for */
-/*                               one-way light time and stellar */
-/*                               aberration using a Newtonian */
-/*                               formulation. */
+/*                 'CN'       "Reception" case: converged */
+/*                            Newtonian light time correction. */
 
-/*                    'CN'       "Reception" case:  converged */
-/*                               Newtonian light time correction. */
+/*                 'CN+S'     "Reception" case: converged */
+/*                            Newtonian light time and stellar */
+/*                            aberration corrections. */
 
-/*                    'CN+S'     "Reception" case:  converged */
-/*                               Newtonian light time and stellar */
-/*                               aberration corrections. */
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. */
 
-/*                    'XLT'      "Transmission" case:  correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. */
+/*                 'XLT+S'    "Transmission" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation. */
 
-/*                    'XLT+S'    "Transmission" case:  correct for */
-/*                               one-way light time and stellar */
-/*                               aberration using a Newtonian */
-/*                               formulation. */
+/*                 'XCN'      "Transmission" case: converged */
+/*                            Newtonian light time correction. */
 
-/*                    'XCN'      "Transmission" case:  converged */
-/*                               Newtonian light time correction. */
+/*                 'XCN+S'    "Transmission" case: converged */
+/*                            Newtonian light time and stellar */
+/*                            aberration corrections. */
 
-/*                    'XCN+S'    "Transmission" case:  converged */
-/*                               Newtonian light time and stellar */
-/*                               aberration corrections. */
+/*              Case and leading or trailing blanks are not significant */
+/*              in the string ABCORR. */
 
-/*                 Case and leading or trailing blanks are not */
-/*                 significant in the string ABCORR. */
+/*     OBSRVR   is the name of an observing body. Optionally, you may */
+/*              supply the ID code of the object as an integer string. */
+/*              For example, both 'EARTH' and '399' are legitimate */
+/*              strings to supply to indicate the observer is Earth. */
 
+/*              Case and leading or trailing blanks are not significant */
+/*              in the string OBSRVR. */
 
-/*     OBSRVR      is the name of an observing body.  Optionally, you */
-/*                 may supply the ID code of the object as an integer */
-/*                 string. For example, both 'EARTH' and '399' are */
-/*                 legitimate strings to supply to indicate the */
-/*                 observer is Earth. */
+/*     RELATE   is a relational operator used to define a constraint on */
+/*              the observer-target distance. The result window found by */
+/*              this routine indicates the time intervals where the */
+/*              constraint is satisfied. */
 
-/*                 Case and leading or trailing blanks are not */
-/*                 significant in the string OBSRVR. */
+/*              Supported values of RELATE and corresponding meanings are */
+/*              shown below: */
 
+/*                 '>'        Distance is greater than the reference */
+/*                            value REFVAL. */
 
-/*     RELATE      is a relational operator used to define a constraint */
-/*                 on the observer-target distance. The result window */
-/*                 found by this routine indicates the time intervals */
-/*                 where the constraint is satisfied. Supported values */
-/*                 of RELATE and corresponding meanings are shown below: */
+/*                 '='        Distance is equal to the reference */
+/*                            value REFVAL. */
 
-/*                    '>'      Distance is greater than the reference */
-/*                             value REFVAL. */
+/*                 '<'        Distance is less than the reference */
+/*                            value REFVAL. */
 
-/*                    '='      Distance is equal to the reference */
-/*                             value REFVAL. */
+/*                 'ABSMAX'   Distance is at an absolute maximum. */
 
-/*                    '<'      Distance is less than the reference */
-/*                             value REFVAL. */
+/*                 'ABSMIN'   Distance is at an absolute  minimum. */
 
+/*                 'LOCMAX'   Distance is at a local maximum. */
 
-/*                   'ABSMAX'  Distance is at an absolute maximum. */
+/*                 'LOCMIN'   Distance is at a local minimum. */
 
-/*                   'ABSMIN'  Distance is at an absolute  minimum. */
+/*              The caller may indicate that the region of interest is */
+/*              the set of time intervals where the distance is within a */
+/*              specified offset relative to an absolute extremum. The */
+/*              argument ADJUST (described below) is used to specify this */
+/*              offset. */
 
-/*                   'LOCMAX'  Distance is at a local maximum. */
+/*              Local extrema are considered to exist only in the */
+/*              interiors of the intervals comprising the confinement */
+/*              window:  a local extremum cannot exist at a boundary */
+/*              point of the confinement window. */
 
-/*                   'LOCMIN'  Distance is at a local minimum. */
+/*              Case and leading or trailing blanks are not significant */
+/*              in the string RELATE. */
 
-/*                The caller may indicate that the region of interest is */
-/*                the set of time intervals where the distance is within */
-/*                a specified offset relative to an absolute extremum. */
-/*                The argument ADJUST (described below) is used to */
-/*                specify this offset. */
+/*     REFVAL   is the reference value used together with the argument */
+/*              RELATE to define an equality or inequality to be */
+/*              satisfied by the distance between the specified target */
+/*              and observer. See the discussion of RELATE above for */
+/*              further information. */
 
-/*                Local extrema are considered to exist only in the */
-/*                interiors of the intervals comprising the confinement */
-/*                window:  a local extremum cannot exist at a boundary */
-/*                point of the confinement window. */
+/*              The units of REFVAL are km. */
+
+/*     ADJUST   is a parameter used to modify searches for absolute */
+/*              extrema: when RELATE is set to 'ABSMAX' or 'ABSMIN' and */
+/*              ADJUST is set to a positive value, GFDIST will find times */
+/*              when the observer-target distance is within ADJUST km of */
+/*              the specified extreme value. */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string RELATE. */
+/*              If ADJUST is non-zero and a search for an absolute */
+/*              minimum AMIN is performed, the result window contains */
+/*              time intervals when the observer-target distance has */
+/*              values between AMIN and AMIN + ADJUST. */
 
+/*              If the search is for an absolute maximum AMAX, the */
+/*              corresponding range is  between AMAX - ADJUST and AMAX. */
 
-/*     REFVAL     is the reference value used together with the argument */
-/*                RELATE to define an equality or inequality to be */
-/*                satisfied by the distance between the specified target */
-/*                and observer. See the discussion of RELATE above for */
-/*                further information. */
+/*              ADJUST is not used for searches for local extrema, */
+/*              equality or inequality conditions. */
 
-/*                The units of REFVAL are km. */
+/*     STEP     is the step size to be used in the search. STEP must be */
+/*              shorter than any maximal time interval on which the */
+/*              specified distance function is monotone increasing or */
+/*              decreasing. That is, if the confinement window is */
+/*              partitioned into alternating intervals on which the */
+/*              distance function is either monotone increasing or */
+/*              decreasing, STEP must be shorter than any of these */
+/*              intervals. */
 
+/*              However, STEP must not be *too* short, or the search will */
+/*              take an unreasonable amount of time. */
 
-/*     ADJUST     is a parameter used to modify searches for absolute */
-/*                extrema: when RELATE is set to ABSMAX or ABSMIN and */
-/*                ADJUST is set to a positive value, GFDIST */
-/*                will find times when the observer-target distance is */
-/*                within ADJUST km of the specified extreme value. */
+/*              The choice of STEP affects the completeness but not the */
+/*              precision of solutions found by this routine; the */
+/*              precision is controlled by the convergence tolerance. See */
+/*              the discussion of the parameter CNVTOL for details. */
 
-/*                If ADJUST is non-zero and a search for an absolute */
-/*                minimum AMIN is performed, the result window contains */
-/*                time intervals when the observer-target distance has */
-/*                values between AMIN and AMIN + ADJUST. */
+/*              STEP has units of TDB seconds. */
 
-/*                If the search is for an absolute maximum AMAX, the */
-/*                corresponding range is  between AMAX - ADJUST and */
-/*                AMAX. */
+/*     CNFINE   is a SPICE window that confines the time period over */
+/*              which the specified search is conducted. CNFINE may */
+/*              consist of a single interval or a collection of */
+/*              intervals. */
 
-/*                ADJUST is not used for searches for local extrema, */
-/*                equality or inequality conditions. */
+/*              The endpoints of the time intervals comprising CNFINE are */
+/*              interpreted as seconds past J2000 TDB. */
 
+/*              See the $Examples section below for a code example that */
+/*              shows how to create a confinement window. */
 
-/*     STEP       is the step size to be used in the search. STEP must */
-/*                be shorter than any maximal time interval on which the */
-/*                specified distance function is monotone increasing or */
-/*                decreasing. That is, if the confinement window is */
-/*                partitioned into alternating intervals on which the */
-/*                distance function is either monotone increasing or */
-/*                decreasing, STEP must be shorter than any of these */
-/*                intervals. */
+/*              CNFINE must be initialized by the caller via the SPICELIB */
+/*              routine SSIZED. */
 
-/*                However, STEP must not be *too* short, or the search */
-/*                will take an unreasonable amount of time. */
+/*              In some cases the observer's state may be computed at */
+/*              times outside of CNFINE by as much as 2 seconds. See */
+/*              $Particulars for details. */
 
-/*                The choice of STEP affects the completeness but not */
-/*                the precision of solutions found by this routine; the */
-/*                precision is controlled by the convergence tolerance. */
-/*                See the discussion of the parameter CNVTOL for */
-/*                details. */
+/*     MW       is a parameter specifying the length of the SPICE windows */
+/*              in the workspace array WORK (see description below) used */
+/*              by this routine. */
 
-/*                STEP has units of TDB seconds. */
+/*              MW should be set to a number at least twice as large as */
+/*              the maximum number of intervals required by any workspace */
+/*              window. In many cases, it's not necessary to compute an */
+/*              accurate estimate of how many intervals are needed; */
+/*              rather, the user can pick a size considerably larger than */
+/*              what's really required. */
 
+/*              However, since excessively large arrays can prevent */
+/*              applications from compiling, linking, or running */
+/*              properly, sometimes MW must be set according to the */
+/*              actual workspace requirement. A rule of thumb for the */
+/*              number of intervals NINTVLS needed is */
 
-/*     CNFINE     is a SPICE window that confines the time period over */
-/*                which the specified search is conducted. CNFINE may */
-/*                consist of a single interval or a collection of */
-/*                intervals. */
+/*                 NINTVLS  =  2*N  +  ( M / STEP ) */
 
-/*                The endpoints of the time intervals comprising CNFINE */
-/*                are interpreted as seconds past J2000 TDB. */
+/*              where */
 
-/*                See the Examples section below for a code example */
-/*                that shows how to create a confinement window. */
+/*                 N     is the number of intervals in the confinement */
+/*                       window */
 
-/*                CNFINE must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
+/*                 M     is the measure of the confinement window, in */
+/*                       units of seconds */
 
+/*                 STEP  is the search step size in seconds */
 
-/*     MW         is a parameter specifying the length of the SPICE */
-/*                windows in the workspace array WORK (see description */
-/*                below) used by this routine. */
+/*              MW should then be set to */
 
-/*                MW should be set to a number at least twice as large */
-/*                as the maximum number of intervals required by any */
-/*                workspace window. In many cases, it's not necessary to */
-/*                compute an accurate estimate of how many intervals are */
-/*                needed; rather, the user can pick a size considerably */
-/*                larger than what's really required. */
+/*                 2 * NINTVLS */
 
-/*                However, since excessively large arrays can prevent */
-/*                applications from compiling, linking, or running */
-/*                properly, sometimes MW must be set according to */
-/*                the actual workspace requirement. A rule of thumb */
-/*                for the number of intervals NINTVLS needed is */
+/*     NW       is a parameter specifying the number of SPICE windows in */
+/*              the workspace array WORK (see description below) used by */
+/*              this routine. NW should be set to the parameter NWDIST; */
+/*              this parameter is declared in the include file gf.inc. */
+/*              (The reason this dimension is an input argument is that */
+/*              this allows run-time error checking to be performed.) */
 
-/*                    NINTVLS  =  2*N  +  ( M / STEP ) */
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
 
-/*                where */
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
 
-/*                    N     is the number of intervals in the confinement */
-/*                          window */
-
-/*                    M     is the measure of the confinement window, in */
-/*                          units of seconds */
-
-/*                    STEP  is the search step size in seconds */
-
-/*                MW should then be set to */
-
-/*                    2 * NINTVLS */
-
-
-/*     NW         is a parameter specifying the number of SPICE windows */
-/*                in the workspace array WORK (see description below) */
-/*                used by this routine. NW should be set to the */
-/*                parameter NWDIST; this parameter is declared in the */
-/*                include file gf.inc. (The reason this dimension is */
-/*                an input argument is that this allows run-time */
-/*                error checking to be performed.) */
-
-
-/*     WORK       is an array used to store workspace windows. This */
-/*                array should be declared by the caller as shown: */
-
-/*                   INCLUDE 'gf.inc' */
-/*                      ... */
-
-/*                   DOUBLE PRECISION    WORK ( LBCELL : MW, NWDIST ) */
-
-/*                where MW is a constant declared by the caller and */
-/*                NWDIST is a constant defined in the SPICELIB INCLUDE */
-/*                file gf.inc. See the discussion of MW above. */
-
-/*                WORK need not be initialized by the caller. */
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFDIST conducts its search. */
 
 /* $ Detailed_Output */
 
-/*     WORK       is the input workspace array, modified by this */
-/*                routine. The caller should re-initialize this array */
-/*                before attempting to use it for any other purpose. */
+/*     WORK     is an array used to store workspace windows. */
 
+/*              This array should be declared by the caller as shown: */
 
-/*     RESULT     is the window of intervals, contained within the */
-/*                confinement window CNFINE, on which the specified */
-/*                constraint is satisfied. */
+/*                 INCLUDE 'gf.inc' */
+/*                    ... */
 
-/*                The endpoints of the time intervals comprising RESULT */
-/*                are interpreted as seconds past J2000 TDB. */
+/*                 DOUBLE PRECISION    WORK ( LBCELL : MW, NWDIST ) */
 
-/*                If RESULT is non-empty on input, its contents */
-/*                will be discarded before GFDIST conducts its */
-/*                search. */
+/*              where MW is a constant declared by the caller and NWDIST */
+/*              is a constant defined in the SPICELIB INCLUDE file */
+/*              gf.inc. See the discussion of MW above. */
+
+/*              WORK need not be initialized by the caller. */
+
+/*              WORK is modified by this routine. The caller should */
+/*              re-initialize this array before attempting to use it for */
+/*              any other purpose. */
+
+/*     RESULT   is the SPICE window of intervals, contained within the */
+/*              confinement window CNFINE, on which the specified */
+/*              distance constraint is satisfied. */
+
+/*              The endpoints of the time intervals comprising RESULT */
+/*              are interpreted as seconds past J2000 TDB. */
+
+/*              If the search is for local extrema, or for absolute */
+/*              extrema with ADJUST set to zero, then normally each */
+/*              interval of RESULT will be a singleton: the left and */
+/*              right endpoints of each interval will be identical. */
+
+/*              If no times within the confinement window satisfy the */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL     is the lower bound for SPICE Cell arrays. */
+/*     LBCELL   is the lower bound for SPICE Cell arrays. */
 
-/*     CNVTOL     is the convergence tolerance used for finding */
-/*                endpoints of the intervals comprising the result */
-/*                window. CNVTOL is also used for finding intermediate */
-/*                results; in particular, CNVTOL is used for finding the */
-/*                windows on which the specified distance is increasing */
-/*                or decreasing. CNVTOL is used to determine when binary */
-/*                searches for roots should terminate: when a root is */
-/*                bracketed within an interval of length CNVTOL; the */
-/*                root is considered to have been found. */
+/*     CNVTOL   is the convergence tolerance used for finding */
+/*              endpoints of the intervals comprising the result */
+/*              window. CNVTOL is also used for finding intermediate */
+/*              results; in particular, CNVTOL is used for finding the */
+/*              windows on which the specified distance is increasing */
+/*              or decreasing. CNVTOL is used to determine when binary */
+/*              searches for roots should terminate: when a root is */
+/*              bracketed within an interval of length CNVTOL; the */
+/*              root is considered to have been found. */
 
-/*                The accuracy, as opposed to precision, of roots found */
-/*                by this routine depends on the accuracy of the input */
-/*                data. In most cases, the accuracy of solutions will be */
-/*                inferior to their precision. */
+/*              The accuracy, as opposed to precision, of roots found */
+/*              by this routine depends on the accuracy of the input */
+/*              data. In most cases, the accuracy of solutions will be */
+/*              inferior to their precision. */
 
-/*     NWDIST     is the number of workspace windows required by */
-/*                this routine. */
+/*     NWDIST   is the number of workspace windows required by */
+/*              this routine. */
 
 /*     See INCLUDE file gf.inc for declarations and descriptions of */
 /*     parameters used throughout the GF system. */
@@ -705,9 +711,9 @@ static logical c_false = FALSE_;
 /*         to run unacceptably slowly and in some cases, find spurious */
 /*         roots. */
 
-/*         This routine does not diagnose invalid step sizes, except */
-/*         that if the step size is non-positive, the error */
-/*         SPICE(INVALIDSTEP) is signaled. */
+/*         This routine does not diagnose invalid step sizes, except that */
+/*         if the step size is non-positive, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  Due to numerical errors, in particular, */
 
@@ -724,7 +730,7 @@ static logical c_false = FALSE_;
 /*         WNCOND can be used to contract the result window. */
 
 /*     3)  If an error (typically cell overflow) occurs while performing */
-/*         window arithmetic, the error will be diagnosed by a routine */
+/*         window arithmetic, the error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /*     4)  If the relational operator RELATE is not recognized, an */
@@ -733,7 +739,7 @@ static logical c_false = FALSE_;
 
 /*     5)  If the aberration correction specifier contains an */
 /*         unrecognized value, an error is signaled by a routine in the */
-/*         call tree of this routine */
+/*         call tree of this routine. */
 
 /*     6)  If ADJUST is negative, an error is signaled by a routine in */
 /*         the call tree of this routine. */
@@ -747,18 +753,18 @@ static logical c_false = FALSE_;
 /*         of this routine. */
 
 /*     9)  If the window size MW is less than 2, the error */
-/*         SPICE(INVALIDDIMENSION) will be signaled. */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
 
 /*     10) If the window count NW is less than NWDIST, the error */
-/*         SPICE(INVALIDDIMENSION) will be signaled. */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
 
-/*     11) If the output SPICE window RESULT has insufficient capacity */
+/*     11) If the result window has size less than 2, the error */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
+
+/*     12) If the output SPICE window RESULT has insufficient capacity */
 /*         to contain the number of intervals on which the specified */
-/*         distance condition is met, the error will be diagnosed */
-/*         by a routine in the call tree of this routine. If the result */
-/*         window has size less than 2, the error SPICE(INVALIDDIMENSION) */
-/*         will be signaled by this routine. */
-
+/*         distance condition is met, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -767,17 +773,22 @@ static logical c_false = FALSE_;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target and observer for the */
-/*          time period defined by the confinement window must be */
-/*          loaded. If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for target and observer for the */
+/*        time period defined by the confinement window must be */
+/*        loaded. If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - If non-inertial reference frames are used, then PCK */
-/*          files, frame kernels, C-kernels, and SCLK kernels may be */
-/*          needed. */
+/*     -  If non-inertial reference frames are used, then PCK */
+/*        files, frame kernels, C-kernels, and SCLK kernels may be */
+/*        needed. */
+
+/*     -  In some cases the observer's state may be computed at times */
+/*        outside of CNFINE by as much as 2 seconds; data required to */
+/*        compute this state must be provided by loaded kernels. See */
+/*        $Particulars for details. */
 
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
@@ -812,8 +823,9 @@ static logical c_false = FALSE_;
 /*     of the solution set for any inequality constraint is contained in */
 /*     the union of */
 
-/*        - the set of points where an equality constraint is met */
-/*        - the boundary points of the confinement window */
+/*     -  the set of points where an equality constraint is met */
+
+/*     -  the boundary points of the confinement window */
 
 /*     the solutions of both equality and inequality constraints can be */
 /*     found easily once the monotone windows have been found. */
@@ -911,9 +923,38 @@ static logical c_false = FALSE_;
 /*     slow search of interest must be performed. See the "CASCADE" */
 /*     example program in gf.req for a demonstration. */
 
+/*     Certain types of searches require the state of the observer, */
+/*     relative to the solar system barycenter, to be computed at times */
+/*     slightly outside the confinement window CNFINE. The time window */
+/*     that is actually used is the result of "expanding" CNFINE by a */
+/*     specified amount "T": each time interval of CNFINE is expanded by */
+/*     shifting the interval's left endpoint to the left and the right */
+/*     endpoint to the right by T seconds. Any overlapping intervals are */
+/*     merged. (The input argument CNFINE is not modified.) */
+
+/*     The window expansions listed below are additive: if both */
+/*     conditions apply, the window expansion amount is the sum of the */
+/*     individual amounts. */
+
+/*     -  If a search uses an equality constraint, the time window */
+/*        over which the state of the observer is computed is expanded */
+/*        by 1 second at both ends of all of the time intervals */
+/*        comprising the window over which the search is conducted. */
+
+/*     -  If a search uses stellar aberration corrections, the time */
+/*        window over which the state of the observer is computed is */
+/*        expanded as described above. */
+
+/*     When light time corrections are used, expansion of the search */
+/*     window also affects the set of times at which the light time- */
+/*     corrected state of the target is computed. */
+
+/*     In addition to the possible 2 second expansion of the search */
+/*     window that occurs when both an equality constraint and stellar */
+/*     aberration corrections are used, round-off error should be taken */
+/*     into account when the need for data availability is analyzed. */
 
 /* $ Examples */
-
 
 /*     The numerical results shown for these examples may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
@@ -940,7 +981,7 @@ static logical c_false = FALSE_;
 
 /*           KPL/MK */
 
-/*           File name: standard.tm */
+/*           File name: gfdist_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -973,154 +1014,178 @@ static logical c_false = FALSE_;
 /*           End of meta-kernel */
 
 
-
 /*        Example code begins here. */
 
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     Include GF parameter declarations: */
-/*     C */
-/*           INCLUDE 'gf.inc' */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      SPD */
-/*           DOUBLE PRECISION      VNORM */
-/*           INTEGER               WNCARD */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
-/*     C */
-/*     C     Use the parameter MAXWIN for both */
-/*     C     the result window size and the workspace */
-/*     C     size. */
-/*     C */
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 20000 ) */
-/*     C */
-/*     C     Length of output time string: */
-/*     C */
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 26 ) */
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(TIMLEN)    TIMSTR */
+/*              PROGRAM GFDIST_EX1 */
+/*              IMPLICIT NONE */
 
-/*           DOUBLE PRECISION      ADJUST */
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
-/*           DOUBLE PRECISION      DIST */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      ET1 */
-/*           DOUBLE PRECISION      FINISH */
-/*           DOUBLE PRECISION      LT */
-/*           DOUBLE PRECISION      POS    ( 3 ) */
-/*           DOUBLE PRECISION      REFVAL */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      START */
-/*           DOUBLE PRECISION      STEP */
-/*           DOUBLE PRECISION      WORK   ( LBCELL : MAXWIN, NWDIST ) */
+/*        C */
+/*        C     Include GF parameter declarations: */
+/*        C */
+/*              INCLUDE 'gf.inc' */
 
-/*           INTEGER               I */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      SPD */
+/*              DOUBLE PRECISION      VNORM */
+/*              INTEGER               WNCARD */
 
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ( 'standard.tm' ) */
-/*     C */
-/*     C     Initialize windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
-/*           CALL SSIZED ( 2,      CNFINE ) */
-/*     C */
-/*     C     Store the time bounds of our search interval in */
-/*     C     the confinement window. */
-/*     C */
-/*           CALL STR2ET ( '2007 JAN 1', ET0 ) */
-/*           CALL STR2ET ( '2007 APR 1', ET1 ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*           CALL WNINSD ( ET0, ET1, CNFINE ) */
-/*     C */
-/*     C     Search using a step size of 1 day (in units of */
-/*     C     seconds). The reference value is 450000 km. */
-/*     C     We're not using the adjustment feature, so */
-/*     C     we set ADJUST to zero. */
-/*     C */
-/*           STEP   = SPD() */
-/*           REFVAL = 4.D5 */
-/*           ADJUST = 0.D0 */
+/*        C */
+/*        C     Use the parameter MAXWIN for both */
+/*        C     the result window size and the workspace */
+/*        C     size. */
+/*        C */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 20000 ) */
 
-/*     C */
-/*     C     Perform the search. The set of times when the */
-/*     C     constraint is met will be stored in the SPICE */
-/*     C     window RESULT. */
-/*     C */
-/*           CALL GFDIST ( 'MOON', 'NONE', 'EARTH', '>', */
-/*          .              REFVAL, ADJUST, STEP,    CNFINE, */
-/*          .              MAXWIN, NWDIST, WORK,    RESULT ) */
-/*     C */
-/*     C     Display the results. */
-/*     C */
-/*           IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
-/*              WRITE (*, '(A)') 'Result window is empty.' */
-/*           ELSE */
-/*              DO I = 1, WNCARD(RESULT) */
-/*     C */
-/*     C           Fetch the endpoints of the Ith interval */
-/*     C           of the result window. */
-/*     C */
-/*                 CALL WNFETD ( RESULT, I, START, FINISH ) */
-/*     C */
-/*     C           Check the distance at the start and stop times. */
-/*     C */
-/*                 CALL SPKPOS ( 'MOON',  START, 'J2000', 'NONE', */
-/*          .                    'EARTH', POS,   LT              ) */
-/*                 DIST = VNORM(POS) */
+/*        C */
+/*        C     Length of output time string: */
+/*        C */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 26 ) */
 
-/*                 CALL TIMOUT ( START, 'YYYY-MON-DD HR:MN:SC.###', */
-/*          .                    TIMSTR                            ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(TIMLEN)    TIMSTR */
 
-/*                 WRITE (*, '(A,F16.9)' ) 'Start time, distance = '// */
-/*          .                              TIMSTR, DIST */
+/*              DOUBLE PRECISION      ADJUST */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
+/*              DOUBLE PRECISION      DIST */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      FINISH */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      REFVAL */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      START */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      WORK   ( LBCELL : MAXWIN, NWDIST ) */
 
-/*                 CALL SPKPOS ( 'MOON',  FINISH, 'J2000', 'NONE', */
-/*          .                    'EARTH', POS,     LT              ) */
-/*                 DIST = VNORM(POS) */
+/*              INTEGER               I */
 
-/*                 CALL TIMOUT ( FINISH, 'YYYY-MON-DD HR:MN:SC.###', */
-/*          .                    TIMSTR                            ) */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement, workspace and result windows CNFINE, */
+/*        C     WORK and RESULT are saved because this practice helps to */
+/*        C     prevent stack overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+/*              SAVE                  WORK */
 
-/*                 WRITE (*, '(A,F16.9)' ) 'Stop time,  distance = '// */
-/*          .                              TIMSTR, DIST */
-/*              END DO */
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfdist_ex1.tm' ) */
 
-/*           END IF */
-/*           END */
+/*        C */
+/*        C     Initialize windows. */
+/*        C */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+
+/*        C */
+/*        C     Store the time bounds of our search interval in */
+/*        C     the confinement window. */
+/*        C */
+/*              CALL STR2ET ( '2007 JAN 1', ET0 ) */
+/*              CALL STR2ET ( '2007 APR 1', ET1 ) */
+
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
+
+/*        C */
+/*        C     Search using a step size of 1 day (in units of */
+/*        C     seconds). The reference value is 450000 km. */
+/*        C     We're not using the adjustment feature, so */
+/*        C     we set ADJUST to zero. */
+/*        C */
+/*              STEP   = SPD() */
+/*              REFVAL = 4.D5 */
+/*              ADJUST = 0.D0 */
+
+/*        C */
+/*        C     Perform the search. The set of times when the */
+/*        C     constraint is met will be stored in the SPICE */
+/*        C     window RESULT. */
+/*        C */
+/*              CALL GFDIST ( 'MOON', 'NONE', 'EARTH', '>', */
+/*             .              REFVAL, ADJUST, STEP,    CNFINE, */
+/*             .              MAXWIN, NWDIST, WORK,    RESULT ) */
+
+/*        C */
+/*        C     Display the results. */
+/*        C */
+/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+
+/*                 WRITE (*, '(A)') 'Result window is empty.' */
+
+/*              ELSE */
+
+/*                 DO I = 1, WNCARD(RESULT) */
+
+/*        C */
+/*        C           Fetch the endpoints of the Ith interval */
+/*        C           of the result window. */
+/*        C */
+/*                    CALL WNFETD ( RESULT, I, START, FINISH ) */
+
+/*        C */
+/*        C           Check the distance at the start and stop times. */
+/*        C */
+/*                    CALL SPKPOS ( 'MOON',  START, 'J2000', 'NONE', */
+/*             .                    'EARTH', POS,   LT            ) */
+/*                    DIST = VNORM(POS) */
+
+/*                    CALL TIMOUT ( START, 'YYYY-MON-DD HR:MN:SC.###', */
+/*             .                    TIMSTR                            ) */
+
+/*                    WRITE (*, '(A,F14.7)' ) 'Start time, distance = '// */
+/*             .                              TIMSTR, DIST */
+
+/*                    CALL SPKPOS ( 'MOON',  FINISH, 'J2000', 'NONE', */
+/*             .                    'EARTH', POS,     LT            ) */
+/*                    DIST = VNORM(POS) */
+
+/*                    CALL TIMOUT ( FINISH, 'YYYY-MON-DD HR:MN:SC.###', */
+/*             .                    TIMSTR                            ) */
+
+/*                    WRITE (*, '(A,F14.7)' ) 'Stop time,  distance = '// */
+/*             .                              TIMSTR, DIST */
+/*                 END DO */
+
+/*              END IF */
+/*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
-/*        When this program was executed on a PC/Linux/g77 platform, the */
-/*        output was: */
+
+/*        Start time, distance = 2007-JAN-08 00:10:02.439  400000.0000000 */
+/*        Stop time,  distance = 2007-JAN-13 06:36:42.770  400000.0000000 */
+/*        Start time, distance = 2007-FEB-04 07:01:30.094  400000.0000000 */
+/*        Stop time,  distance = 2007-FEB-10 09:29:56.659  400000.0000000 */
+/*        Start time, distance = 2007-MAR-03 00:19:19.998  400000.0000000 */
+/*        Stop time,  distance = 2007-MAR-10 14:03:33.312  400000.0000000 */
+/*        Start time, distance = 2007-MAR-29 22:52:52.961  400000.0000000 */
+/*        Stop time,  distance = 2007-APR-01 00:00:00.000  404531.9552322 */
 
 
-/*    Start time, distance = 2007-JAN-08 00:10:02.439  399999.999999989 */
-/*    Stop time,  distance = 2007-JAN-13 06:36:42.770  400000.000000010 */
-/*    Start time, distance = 2007-FEB-04 07:01:30.094  399999.999999990 */
-/*    Stop time,  distance = 2007-FEB-10 09:29:56.659  399999.999999998 */
-/*    Start time, distance = 2007-MAR-03 00:19:19.998  400000.000000006 */
-/*    Stop time,  distance = 2007-MAR-10 14:03:33.312  400000.000000007 */
-/*    Start time, distance = 2007-MAR-29 22:52:52.961  399999.999999995 */
-/*    Stop time,  distance = 2007-APR-01 00:00:00.000  404531.955232216 */
-
-/*        Note that at the final solutions interval's stop time is not */
-/*        close to the reference value of 400000 km. This is because the */
-/*        interval's stop time was determined by the stop time of the */
-/*        confinement window. */
-
+/*        Note that the distance at the final solutions interval's stop */
+/*        time is not close to the reference value of 400000 km. This is */
+/*        because the interval's stop time was determined by the stop */
+/*        time of the confinement window. */
 
 
 /*     2) Extend the first example to demonstrate use of all supported */
@@ -1130,10 +1195,10 @@ static logical c_false = FALSE_;
 /*           Earth-Moon distance is < 400000 km */
 /*           Earth-Moon distance is > 400000 km */
 /*           Earth-Moon distance is at a local minimum */
-/*           Earth-Moon distance is at a absolute minimum */
+/*           Earth-Moon distance is at the absolute minimum */
 /*           Earth-Moon distance is > the absolute minimum + 100 km */
 /*           Earth-Moon distance is at a local maximum */
-/*           Earth-Moon distance is at a absolute maximum */
+/*           Earth-Moon distance is at the absolute maximum */
 /*           Earth-Moon distance is > the absolute maximum - 100 km */
 
 /*        To shorten the search time and output, use the */
@@ -1151,279 +1216,304 @@ static logical c_false = FALSE_;
 /*        Example code begins here. */
 
 
-/*           PROGRAM EX2 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     Include GF parameter declarations: */
-/*     C */
-/*           INCLUDE 'gf.inc' */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      SPD */
-/*           DOUBLE PRECISION      VNORM */
-/*           INTEGER               WNCARD */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
-/*     C */
-/*     C     Use the parameter MAXWIN for both */
-/*     C     the result window size and the workspace */
-/*     C     size. */
-/*     C */
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 20000 ) */
-/*     C */
-/*     C     Length of output time string: */
-/*     C */
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 26 ) */
+/*              PROGRAM GFDIST_EX2 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Number of relational operators: */
-/*     C */
-/*           INTEGER               NRELOP */
-/*           PARAMETER           ( NRELOP = 9 ) */
+/*        C */
+/*        C     Include GF parameter declarations: */
+/*        C */
+/*              INCLUDE 'gf.inc' */
 
-/*     C */
-/*     C     Operator name length: */
-/*     C */
-/*           INTEGER               OPNMLN */
-/*           PARAMETER           ( OPNMLN = 6 ) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      SPD */
+/*              DOUBLE PRECISION      VNORM */
+/*              INTEGER               WNCARD */
 
-/*     C */
-/*     C     Output line length: */
-/*     C */
-/*           INTEGER               LNSIZE */
-/*           PARAMETER           ( LNSIZE = 80 ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(OPNMLN)    RELATE ( NRELOP ) */
-/*           CHARACTER*(LNSIZE)    TEMPLT ( NRELOP ) */
-/*           CHARACTER*(TIMLEN)    TIMSTR */
-/*           CHARACTER*(LNSIZE)    TITLE */
+/*        C */
+/*        C     Use the parameter MAXWIN for both */
+/*        C     the result window size and the workspace */
+/*        C     size. */
+/*        C */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 20000 ) */
 
-/*           DOUBLE PRECISION      ADJUST ( NRELOP ) */
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
-/*           DOUBLE PRECISION      DIST */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      ET1 */
-/*           DOUBLE PRECISION      FINISH */
-/*           DOUBLE PRECISION      LT */
-/*           DOUBLE PRECISION      POS    ( 3 ) */
-/*           DOUBLE PRECISION      REFVAL */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      START */
-/*           DOUBLE PRECISION      STEP */
-/*           DOUBLE PRECISION      WORK   ( LBCELL : MAXWIN, NWDIST ) */
+/*        C */
+/*        C     Length of output time string: */
+/*        C */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 26 ) */
 
-/*           INTEGER               I */
-/*           INTEGER               J */
+/*        C */
+/*        C     Number of relational operators: */
+/*        C */
+/*              INTEGER               NRELOP */
+/*              PARAMETER           ( NRELOP = 9 ) */
 
-/*     C */
-/*     C     Saved variables */
-/*     C */
-/*           SAVE                  ADJUST */
-/*           SAVE                  RELATE */
-/*           SAVE                  TEMPLT */
+/*        C */
+/*        C     Operator name length: */
+/*        C */
+/*              INTEGER               OPNMLN */
+/*              PARAMETER           ( OPNMLN = 6 ) */
 
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*           DATA                  ADJUST / 0.D0, */
-/*          .                               0.D0, */
-/*          .                               0.D0, */
-/*          .                               0.D0, */
-/*          .                               0.D0, */
-/*          .                               100.D0, */
-/*          .                               0.D0, */
-/*          .                               0.D0, */
-/*          .                               100.D0 / */
+/*        C */
+/*        C     Output line length: */
+/*        C */
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
 
-/*           DATA                  RELATE / '=', */
-/*          .                               '<', */
-/*          .                               '>', */
-/*          .                               'LOCMIN', */
-/*          .                               'ABSMIN', */
-/*          .                               'ABSMIN', */
-/*          .                               'LOCMAX', */
-/*          .                               'ABSMAX', */
-/*          .                               'ABSMAX'  / */
+/*        C */
+/*        C     Output format */
+/*        C */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,F12.5)' ) */
 
-/*           DATA                  TEMPLT / */
-/*          .      'Condition: distance = # km', */
-/*          .      'Condition: distance < # km', */
-/*          .      'Condition: distance > # km', */
-/*          .      'Condition: distance is a local minimum', */
-/*          .      'Condition: distance is the absolute minimum', */
-/*          .      'Condition: distance < the absolute minimum + * km', */
-/*          .      'Condition: distance is a local maximum', */
-/*          .      'Condition: distance is the absolute maximum', */
-/*          .      'Condition: distance > the absolute maximum - * km' / */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(OPNMLN)    RELATE ( NRELOP ) */
+/*              CHARACTER*(LNSIZE)    TEMPLT ( NRELOP ) */
+/*              CHARACTER*(TIMLEN)    TIMSTR */
+/*              CHARACTER*(LNSIZE)    TITLE */
 
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ( 'standard.tm' ) */
-/*     C */
-/*     C     Initialize windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
-/*           CALL SSIZED ( 2,      CNFINE ) */
-/*     C */
-/*     C     Store the time bounds of our search interval in */
-/*     C     the confinement window. */
-/*     C */
-/*           CALL STR2ET ( '2007 JAN 15', ET0 ) */
-/*           CALL STR2ET ( '2007 MAR 15', ET1 ) */
+/*              DOUBLE PRECISION      ADJUST ( NRELOP ) */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
+/*              DOUBLE PRECISION      DIST */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      FINSH */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      POS    ( 3 ) */
+/*              DOUBLE PRECISION      REFVAL */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      START */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      WORK   ( LBCELL : MAXWIN, NWDIST ) */
 
-/*           CALL WNINSD ( ET0, ET1, CNFINE ) */
+/*              INTEGER               I */
+/*              INTEGER               J */
 
-/*     C */
-/*     C     Search using a step size of 1 day (in units of */
-/*     C     seconds). Use a reference value of 400000 km. */
-/*     C */
-/*           STEP   = SPD() */
-/*           REFVAL = 4.D5 */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*              SAVE                  ADJUST */
+/*              SAVE                  RELATE */
+/*              SAVE                  TEMPLT */
 
-/*           DO I = 1, NRELOP */
+/*        C */
+/*        C     The confinement, workspace and result windows CNFINE, */
+/*        C     WORK and RESULT are saved because this practice helps to */
+/*        C     prevent stack overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
+/*              SAVE                  WORK */
 
-/*              CALL GFDIST ( 'MOON', 'NONE',    'EARTH', RELATE(I), */
-/*          .                 REFVAL, ADJUST(I), STEP,    CNFINE, */
-/*          .                 MAXWIN, NWDIST,    WORK,    RESULT    ) */
-/*     C */
-/*     C        Display the results. */
-/*     C */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  ADJUST / 0.D0, */
+/*             .                               0.D0, */
+/*             .                               0.D0, */
+/*             .                               0.D0, */
+/*             .                               0.D0, */
+/*             .                               100.D0, */
+/*             .                               0.D0, */
+/*             .                               0.D0, */
+/*             .                               100.D0 / */
+
+/*              DATA                  RELATE / '=', */
+/*             .                               '<', */
+/*             .                               '>', */
+/*             .                               'LOCMIN', */
+/*             .                               'ABSMIN', */
+/*             .                               'ABSMIN', */
+/*             .                               'LOCMAX', */
+/*             .                               'ABSMAX', */
+/*             .                               'ABSMAX'  / */
+
+/*              DATA                  TEMPLT / */
+/*             .   'Condition: distance = # km', */
+/*             .   'Condition: distance < # km', */
+/*             .   'Condition: distance > # km', */
+/*             .   'Condition: distance is a local minimum', */
+/*             .   'Condition: distance is the absolute minimum', */
+/*             .   'Condition: distance < the absolute minimum + * km', */
+/*             .   'Condition: distance is a local maximum', */
+/*             .   'Condition: distance is the absolute maximum', */
+/*             .   'Condition: distance > the absolute maximum - * km' / */
+
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( 'gfdist_ex1.tm' ) */
+
+/*        C */
+/*        C     Initialize windows. */
+/*        C */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+
+/*        C */
+/*        C     Store the time bounds of our search interval in */
+/*        C     the confinement window. */
+/*        C */
+/*              CALL STR2ET ( '2007 JAN 15', ET0 ) */
+/*              CALL STR2ET ( '2007 MAR 15', ET1 ) */
+
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
+
+/*        C */
+/*        C     Search using a step size of 1 day (in units of */
+/*        C     seconds). Use a reference value of 400000 km. */
+/*        C */
+/*              STEP   = SPD() */
+/*              REFVAL = 4.D5 */
+
+/*              DO I = 1, NRELOP */
+
+/*                 CALL GFDIST ( 'MOON', 'NONE',    'EARTH', RELATE(I), */
+/*             .                 REFVAL, ADJUST(I), STEP,    CNFINE, */
+/*             .                 MAXWIN, NWDIST,    WORK,    RESULT    ) */
+
+/*        C */
+/*        C        Display the results. */
+/*        C */
+/*                 WRITE (*,*) ' ' */
+
+/*        C */
+/*        C        Substitute the reference and adjustment values, */
+/*        C        where applicable, into the title string: */
+/*        C */
+/*                 CALL REPMD ( TEMPLT(I), '#', REFVAL,    6, TITLE ) */
+/*                 CALL REPMD ( TITLE,     '*', ADJUST(I), 6, TITLE ) */
+
+/*                 WRITE (*, '(A)' ) TITLE */
+
+/*                 IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
+/*                    WRITE (*, '(A)' ) ' Result window is empty.' */
+/*                 ELSE */
+/*                    WRITE (*, '(A)' ) ' Result window:' */
+
+/*                    DO J = 1, WNCARD(RESULT) */
+
+/*        C */
+/*        C              Fetch the endpoints of the Jth interval */
+/*        C              of the result window. */
+/*        C */
+/*                       CALL WNFETD ( RESULT, J, START, FINSH ) */
+
+/*        C */
+/*        C              Check the distance at the start and stop times. */
+/*        C */
+/*                       CALL SPKPOS ( 'MOON',  START, 'J2000', 'NONE', */
+/*             .                       'EARTH', POS,   LT              ) */
+/*                       DIST = VNORM(POS) */
+
+/*                       CALL TIMOUT ( START, 'YYYY-MON-DD HR:MN:SC.###', */
+/*             .                       TIMSTR                           ) */
+
+/*                       WRITE (*, FMT1 ) '  Start time, distance = ' */
+/*             .         //               TIMSTR, DIST */
+
+/*                       CALL SPKPOS ( 'MOON',  FINSH, 'J2000', 'NONE', */
+/*             .                       'EARTH', POS,     LT            ) */
+/*                       DIST = VNORM(POS) */
+
+/*                       CALL TIMOUT ( FINSH, 'YYYY-MON-DD HR:MN:SC.###', */
+/*             .                       TIMSTR                           ) */
+
+/*                       WRITE (*, FMT1 ) '  Stop time,  distance = ' */
+/*             .         //               TIMSTR, DIST */
+/*                    END DO */
+
+/*                 END IF */
+
+/*              END DO */
+
 /*              WRITE (*,*) ' ' */
 
-/*     C */
-/*     C        Substitute the reference and adjustment values, */
-/*     C        where applicable, into the title string: */
-/*     C */
-/*              CALL REPMD ( TEMPLT(I), '#', REFVAL,    6, TITLE ) */
-/*              CALL REPMD ( TITLE,     '*', ADJUST(I), 6, TITLE ) */
-
-/*              WRITE (*, '(A)' ) TITLE */
-
-/*              IF ( WNCARD(RESULT) .EQ. 0 ) THEN */
-/*                 WRITE (*, '(A)' ) ' Result window is empty.' */
-/*              ELSE */
-/*                 WRITE (*, '(A)' ) ' Result window:' */
-
-/*                 DO J = 1, WNCARD(RESULT) */
-/*     C */
-/*     C              Fetch the endpoints of the Jth interval */
-/*     C              of the result window. */
-/*     C */
-/*                    CALL WNFETD ( RESULT, J, START, FINISH ) */
-/*     C */
-/*     C              Check the distance at the start and stop times. */
-/*     C */
-/*                    CALL SPKPOS ( 'MOON',  START, 'J2000', 'NONE', */
-/*          .                       'EARTH', POS,   LT              ) */
-/*                    DIST = VNORM(POS) */
-
-/*                    CALL TIMOUT ( START, 'YYYY-MON-DD HR:MN:SC.###', */
-/*          .                       TIMSTR                            ) */
-
-/*                    WRITE (*, '(A,F16.9)' ) '  Start time, distance = ' */
-/*          .         //                      TIMSTR, DIST */
-
-/*                    CALL SPKPOS ( 'MOON',  FINISH, 'J2000', 'NONE', */
-/*          .                       'EARTH', POS,     LT              ) */
-/*                    DIST = VNORM(POS) */
-
-/*                    CALL TIMOUT ( FINISH, 'YYYY-MON-DD HR:MN:SC.###', */
-/*          .                       TIMSTR                            ) */
-
-/*                    WRITE (*, '(A,F16.9)' ) '  Stop time,  distance = ' */
-/*          .         //                      TIMSTR, DIST */
-/*                 END DO */
-
-/*              END IF */
-
-/*           END DO */
-
-/*           WRITE (*,*) ' ' */
-
-/*           END */
+/*              END */
 
 
-/*        When this program was executed on a PC/Linux/g77 platform, the */
-/*        output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*    Condition: distance = 4.00000E+05 km */
-/*     Result window: */
-/*      Start time, distance = 2007-FEB-04 07:01:30.094  399999.999999998 */
-/*      Stop time,  distance = 2007-FEB-04 07:01:30.094  399999.999999998 */
-/*      Start time, distance = 2007-FEB-10 09:29:56.659  399999.999999989 */
-/*      Stop time,  distance = 2007-FEB-10 09:29:56.659  399999.999999989 */
-/*      Start time, distance = 2007-MAR-03 00:19:19.998  399999.999999994 */
-/*      Stop time,  distance = 2007-MAR-03 00:19:19.998  399999.999999994 */
-/*      Start time, distance = 2007-MAR-10 14:03:33.312  400000.000000000 */
-/*      Stop time,  distance = 2007-MAR-10 14:03:33.312  400000.000000000 */
+/*        Condition: distance = 4.00000E+05 km */
+/*         Result window: */
+/*          Start time, distance = 2007-FEB-04 07:01:30.094  400000.00000 */
+/*          Stop time,  distance = 2007-FEB-04 07:01:30.094  400000.00000 */
+/*          Start time, distance = 2007-FEB-10 09:29:56.659  400000.00000 */
+/*          Stop time,  distance = 2007-FEB-10 09:29:56.659  400000.00000 */
+/*          Start time, distance = 2007-MAR-03 00:19:19.998  400000.00000 */
+/*          Stop time,  distance = 2007-MAR-03 00:19:19.998  400000.00000 */
+/*          Start time, distance = 2007-MAR-10 14:03:33.312  400000.00000 */
+/*          Stop time,  distance = 2007-MAR-10 14:03:33.312  400000.00000 */
 
-/*    Condition: distance < 4.00000E+05 km */
-/*     Result window: */
-/*      Start time, distance = 2007-JAN-15 00:00:00.000  393018.609906208 */
-/*      Stop time,  distance = 2007-FEB-04 07:01:30.094  399999.999999990 */
-/*      Start time, distance = 2007-FEB-10 09:29:56.659  399999.999999998 */
-/*      Stop time,  distance = 2007-MAR-03 00:19:19.998  400000.000000006 */
-/*      Start time, distance = 2007-MAR-10 14:03:33.312  400000.000000010 */
-/*      Stop time,  distance = 2007-MAR-15 00:00:00.000  376255.453934464 */
+/*        Condition: distance < 4.00000E+05 km */
+/*         Result window: */
+/*          Start time, distance = 2007-JAN-15 00:00:00.000  393018.60991 */
+/*          Stop time,  distance = 2007-FEB-04 07:01:30.094  400000.00000 */
+/*          Start time, distance = 2007-FEB-10 09:29:56.659  400000.00000 */
+/*          Stop time,  distance = 2007-MAR-03 00:19:19.998  400000.00000 */
+/*          Start time, distance = 2007-MAR-10 14:03:33.312  400000.00000 */
+/*          Stop time,  distance = 2007-MAR-15 00:00:00.000  376255.45393 */
 
-/*    Condition: distance > 4.00000E+05 km */
-/*     Result window: */
-/*      Start time, distance = 2007-FEB-04 07:01:30.094  399999.999999990 */
-/*      Stop time,  distance = 2007-FEB-10 09:29:56.659  399999.999999998 */
-/*      Start time, distance = 2007-MAR-03 00:19:19.998  400000.000000006 */
-/*      Stop time,  distance = 2007-MAR-10 14:03:33.312  400000.000000010 */
+/*        Condition: distance > 4.00000E+05 km */
+/*         Result window: */
+/*          Start time, distance = 2007-FEB-04 07:01:30.094  400000.00000 */
+/*          Stop time,  distance = 2007-FEB-10 09:29:56.659  400000.00000 */
+/*          Start time, distance = 2007-MAR-03 00:19:19.998  400000.00000 */
+/*          Stop time,  distance = 2007-MAR-10 14:03:33.312  400000.00000 */
 
-/*    Condition: distance is a local minimum */
-/*     Result window: */
-/*      Start time, distance = 2007-JAN-22 12:30:49.458  366925.804109350 */
-/*      Stop time,  distance = 2007-JAN-22 12:30:49.458  366925.804109350 */
-/*      Start time, distance = 2007-FEB-19 09:36:29.968  361435.646812061 */
-/*      Stop time,  distance = 2007-FEB-19 09:36:29.968  361435.646812061 */
+/*        Condition: distance is a local minimum */
+/*         Result window: */
+/*          Start time, distance = 2007-JAN-22 12:30:49.458  366925.80411 */
+/*          Stop time,  distance = 2007-JAN-22 12:30:49.458  366925.80411 */
+/*          Start time, distance = 2007-FEB-19 09:36:29.968  361435.64681 */
+/*          Stop time,  distance = 2007-FEB-19 09:36:29.968  361435.64681 */
 
-/*    Condition: distance is the absolute minimum */
-/*     Result window: */
-/*      Start time, distance = 2007-FEB-19 09:36:29.968  361435.646812061 */
-/*      Stop time,  distance = 2007-FEB-19 09:36:29.968  361435.646812061 */
+/*        Condition: distance is the absolute minimum */
+/*         Result window: */
+/*          Start time, distance = 2007-FEB-19 09:36:29.968  361435.64681 */
+/*          Stop time,  distance = 2007-FEB-19 09:36:29.968  361435.64681 */
 
-/*    Condition: distance < the absolute minimum + 1.00000E+02 km */
-/*     Result window: */
-/*      Start time, distance = 2007-FEB-19 01:09:52.706  361535.646812062 */
-/*      Stop time,  distance = 2007-FEB-19 18:07:45.136  361535.646812061 */
+/*        Condition: distance < the absolute minimum + 1.00000E+02 km */
+/*         Result window: */
+/*          Start time, distance = 2007-FEB-19 01:09:52.706  361535.64681 */
+/*          Stop time,  distance = 2007-FEB-19 18:07:45.136  361535.64681 */
 
-/*    Condition: distance is a local maximum */
-/*     Result window: */
-/*      Start time, distance = 2007-FEB-07 12:38:29.870  404992.424288620 */
-/*      Stop time,  distance = 2007-FEB-07 12:38:29.870  404992.424288620 */
-/*      Start time, distance = 2007-MAR-07 03:37:02.122  405853.452130754 */
-/*      Stop time,  distance = 2007-MAR-07 03:37:02.122  405853.452130754 */
+/*        Condition: distance is a local maximum */
+/*         Result window: */
+/*          Start time, distance = 2007-FEB-07 12:38:29.870  404992.42429 */
+/*          Stop time,  distance = 2007-FEB-07 12:38:29.870  404992.42429 */
+/*          Start time, distance = 2007-MAR-07 03:37:02.122  405853.45213 */
+/*          Stop time,  distance = 2007-MAR-07 03:37:02.122  405853.45213 */
 
-/*    Condition: distance is the absolute maximum */
-/*     Result window: */
-/*      Start time, distance = 2007-MAR-07 03:37:02.122  405853.452130754 */
-/*      Stop time,  distance = 2007-MAR-07 03:37:02.122  405853.452130754 */
+/*        Condition: distance is the absolute maximum */
+/*         Result window: */
+/*          Start time, distance = 2007-MAR-07 03:37:02.122  405853.45213 */
+/*          Stop time,  distance = 2007-MAR-07 03:37:02.122  405853.45213 */
 
-/*    Condition: distance > the absolute maximum - 1.00000E+02 km */
-/*     Result window: */
-/*      Start time, distance = 2007-MAR-06 15:56:00.957  405753.452130753 */
-/*      Stop time,  distance = 2007-MAR-07 15:00:38.674  405753.452130753 */
+/*        Condition: distance > the absolute maximum - 1.00000E+02 km */
+/*         Result window: */
+/*          Start time, distance = 2007-MAR-06 15:56:00.957  405753.45213 */
+/*          Stop time,  distance = 2007-MAR-07 15:00:38.674  405753.45213 */
 
 
 /* $ Restrictions */
 
-/*     1) The kernel files to be used by this routine must be loaded */
-/*        (normally via the SPICELIB routine FURNSH) before this routine */
-/*        is called. */
+/*     1)  The kernel files to be used by this routine must be loaded */
+/*         (normally via the SPICELIB routine FURNSH) before this routine */
+/*         is called. */
 
 /* $ Literature_References */
 
@@ -1431,10 +1521,26 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Edited second example code and modified the output resolution */
+/*        for the distances in that example to fit in the $Examples */
+/*        section without modifications. Renamed example's meta-kernel. */
+/*        Added SAVE statements for CNFINE, WORK and RESULT variables in */
+/*        code examples. */
+
+/*        Updated description of WORK and RESULT arguments in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. */
+
+/*        Updated header to describe use of expanded confinement window. */
 
 /* -    SPICELIB Version 1.1.0, 05-SEP-2012 (EDW) */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            GCD ( Greatest Common Divisor ) */
+/* $Procedure GCD ( Greatest Common Divisor ) */
 integer gcd_(integer *a, integer *b)
 {
     /* System generated locals */
@@ -16,7 +16,7 @@ integer gcd_(integer *a, integer *b)
 
 /* $ Abstract */
 
-/*      Return the greatest common divisor of two integers. */
+/*     Return the greatest common divisor of two integers. */
 
 /* $ Disclaimer */
 
@@ -49,83 +49,91 @@ integer gcd_(integer *a, integer *b)
 
 /* $ Keywords */
 
-/*      MATH,  NUMBERS */
+/*     MATH */
+/*     NUMBERS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A          I   Any integer */
-/*      B          I   Any integer */
-/*      GCD        I   The greatest common divisor of A and B. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A          I   Any integer */
+/*     B          I   Any integer */
+
+/*     The function returns the greatest common divisor of A and B. */
 
 /* $ Detailed_Input */
 
-/*      A          An integer */
+/*     A        is any integer. */
 
-/*      B          An integer */
+/*     B        is any integer. */
 
 /* $ Detailed_Output */
 
-/*      GCD        The greatest common divisor of A and B. */
+/*     The function returns the greatest common divisor of A and B. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1) If both A and B are zero, we return 0 as the GCD. */
+/*     1)  If both A and B are zero, then GCD returns zero. */
 
-/*     2) If exactly one of A and B is zero, then the GCD is by */
-/*        definition the maximum of the absolute values of A and B. */
-
-/* $ Particulars */
-
-/*      This routine uses Euclid's Algorithm to find the greatest common */
-/*      divisor (GCD) of the integers A and B.  In other words the */
-/*      largest integer, G, such that A = k*G for some k and B = j*G for */
-/*      some G.  Note if either A or B is zero, then we return the */
-/*      maximum of the two integers ABS(A) and ABS(B).  If one is */
-/*      non-zero we have just what the definition says.  If both are zero */
-/*      the definition above does not give us a GCD, so we take the GCD */
-/*      of 0 and 0 to be 0. */
-
-
-/* $ Examples */
-
-/*      A      B            GCD */
-/*    -----  -----         ----- */
-/*      8      4             4 */
-/*     120    44             4 */
-/*     15    135            15 */
-/*    101     97             1 */
-/*    119    221            17 */
-/*    144     81             9 */
-/*      0    111           111 */
-/*      0      0             0 */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     2)  If exactly one of A and B is zero, then GCD is by definition */
+/*         the maximum of the absolute values of A and B. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
+/*     This routine uses Euclid's Algorithm to find the greatest common */
+/*     divisor (GCD) of the integers A and B. In other words the */
+/*     largest integer, G, such that A = k*G for some k and B = j*G for */
+/*     some G. Note if either A or B is zero, then we return the */
+/*     maximum of the two integers ABS(A) and ABS(B).  If one is */
+/*     non-zero we have just what the definition says. If both are zero */
+/*     the definition above does not give us a GCD, so we take the GCD */
+/*     of 0 and 0 to be 0. */
+
+/* $ Examples */
+
+/*     A      B            GCD */
+/*     -----  -----         ----- */
+/*       8      4             4 */
+/*      120    44             4 */
+/*      15    135            15 */
+/*     101     97             1 */
+/*     119    221            17 */
+/*     144     81             9 */
+/*       0    111           111 */
+/*       0      0             0 */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      The Art of Computer Programming Vol 1. "Fundamental Algorithms" */
-/*      by Donald Knuth */
+/*     [1]  D. Knuth, "The Art of Computer Programming Vol 1. -- */
+/*          Fundamental Algorithms," 2nd Ed., Addison-Wesley, 1973 */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -138,14 +146,6 @@ integer gcd_(integer *a, integer *b)
 /* $ Index_Entries */
 
 /*     greatest common divisor */
-
-/* -& */
-/* $ Revisions */
-
-/* -     Beta Version 1.0.1, 29-DEC-1988 (WLT) */
-
-/*      This revision simply cleared up questions regarding the input of */
-/*      zeros to the routine. */
 
 /* -& */
 

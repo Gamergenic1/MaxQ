@@ -34,7 +34,7 @@
 
 -Required_Reading
 
- None.
+   None.
 
 -Keywords
 
@@ -56,32 +56,38 @@
 
 -Brief_I/O
 
-   Variable  I/O  Description
+   VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-    v1,v2     I   Input vectors.
-    ndim      I   Dimension of v1 and v2.
+   v1,
+   v2         I   Input vectors.
+   ndim       I   Dimension of `v1' and `v2'.
+
+   The function returns the relative difference between two vectors
+   of general dimension.
 
 -Detailed_Input
 
-    v1, v2        are two vectors for which the relative difference
-                  is to be computed.
+   v1,
+   v2          are two vectors for which the relative difference is to
+               be computed.
 
-    ndim          is the dimension of v1 and v2.
+   ndim        is the dimension of `v1' and `v2'.
 
 -Detailed_Output
 
-    vrelg_c       is the relative difference between v1 and v2.
-                  It is defined as:
-                                              || v1 - v2 ||
-                            vrelg_c  =   ----------------------
-                                       max ( ||v1||, ||v2|| )
+   The function returns the relative difference between the two input
+   n-dimensional vectors `v1' and `v2'.
 
-                  where || x || indicates the euclidean norm of
-                  the vector x ( ||x|| = sqrt( x . x ) ).
+   It is defined as:
 
-                  vrelg_c assumes values in the range [0,2]. If both
-                  v1 and v2 are zero vectors then vrelg_c is defined
-                  to be zero.
+                        || v1 - v2 ||
+      vrelg_c   =   -------------------------
+                     maxd ( ||v1||, ||v2|| )
+
+   where ||x|| indicates the Euclidean norm of the vector `x'.
+
+   vrelg_c assumes values in the range [0,2]. If both `v1' and `v2' are
+   zero vectors then vrelg_c is defined to be zero.
 
 -Parameters
 
@@ -91,8 +97,8 @@
 
    Error free.
 
-   If both v1 and v2 are zero vectors then vrelg_c is defined to be
-   zero.
+   1)  If both `v1' and `v2' are zero vectors, then vrelg_c is defined to
+       be zero.
 
 -Files
 
@@ -191,7 +197,6 @@
                  ...
                }
 
-
 -Restrictions
 
    None.
@@ -202,17 +207,23 @@
 
 -Author_and_Institution
 
-   J.M. Lynch     (JPL)
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   J.M. Lynch          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.1.0, 28-AUG-2001 (NJB) 
-   
-      Include interface macro definition file SpiceZim.h. 
-      Made some minor updates and corrections in the code example.
-      
-   -CSPICE Version 1.0.0, 6-JUL-1999
+   -CSPICE Version 1.0.1, 09-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 28-AUG-2001 (NJB)
+
+       Include interface macro definition file SpiceZim.h.
+       Made some minor updates and corrections in the code example.
+
+   -CSPICE Version 1.0.0, 06-JUL-1999 (EDW) (JML)
 
 -Index_Entries
 

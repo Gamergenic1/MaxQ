@@ -38,11 +38,40 @@
 
 -Keywords
 
+   PRIVATE
    STRING
+   UTILITY
+
+-Brief_I/O
+
+   See functions below.
+
+-Detailed_Input
+
+   See functions below.
+
+-Detailed_Output
+
+   See functions below.
+
+-Parameters
+
+   See functions below.
+
+-Exceptions
+
+   See functions below.
+
+-Files
+
+   None.
 
 -Particulars
 
    Contains the following functions:
+
+       C_OptEmptyStr        ( Return pointer to non-empty input string or
+                              blank string if input string is empty )
 
        C2F_CreateStr        ( Create a Fortran string from C string )
 
@@ -53,7 +82,7 @@
                               C string array                          )
 
        C2F_MapFixStrArr     ( Create a Fortran string array from 2-d
-                              C string array, string length fixed by 
+                              C string array, string length fixed by
                               caller                                  )
 
        C2F_CreateStrArr     ( Create a Fortran string array from array
@@ -82,7 +111,7 @@
        F2C_CreateStrArr     ( Create an array of C strings from an
                               array of Fortran strings             )
 
-       F2C_CreateTrStrArr   ( Create an array of trimmed C strings from 
+       F2C_CreateTrStrArr   ( Create an array of trimmed C strings from
                               an array of Fortran strings              )
 
        F2C_StrCpy           ( Copy a Fortran string into a C string )
@@ -96,56 +125,64 @@
 
 -Restrictions
 
-   None.
+   See functions below.
 
--Exceptions
-
-   See function headers.
-
--Files
+-Literature_References
 
    None.
 
 -Author_and_Institution
 
-   N.J. Bachman       (JPL)
-   K.R. Gehringer     (JPL)
-   E.D. Wright        (JPL)
+   N.J. Bachman        (JPL)
+   K.R. Gehringer      (JPL)
+   J. Diaz del Rio     (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 6.0.0, 07-OCT-2021 (NJB) (JDR)
+
+       Added function C_OptEmptyStr. Made minimal updates to header.
+
+       Updated short error message for consistency within CSPICE wrapper
+       interface: CSPICE(MALLOCFAILURE) -> SPICE(MALLOCFAILED) in F_Alloc
+       routine.
+
+       Added initializers for local variables in function F_Strlen.
+       This is not a bug fix; it was done to pacify Valgrind.
+
    -CSPICE Version 5.0.0, 10-JUL-2002 (NJB)
 
-      Renamed file to zzfcstring.c.
+       Renamed file to zzfcstring.c.
 
-      Added routines C2F_MapStrArr and C2F_MapFixStrArr.  These are analogs
-      of C2F_CreateStrArr_Sig and C2F_CreateFixStrArr that operate
-      on a 2-dimensional character array containing null-terminated strings.
+       Added routines C2F_MapStrArr and C2F_MapFixStrArr. These are analogs
+       of C2F_CreateStrArr_Sig and C2F_CreateFixStrArr that operate
+       on a 2-dimensional character array containing null-terminated strings.
 
-      Fixed an error message in C2F_CreateStrArr_Sig; the long  
-      error message for a malloc failure specified an incorrect
-      number of bytes which the routine had attempted to allocate.
+       Fixed an error message in C2F_CreateStrArr_Sig; the long
+       error message for a malloc failure specified an incorrect
+       number of bytes which the routine had attempted to allocate.
 
    -CSPICE Version 4.0.0, 14-FEB-2000 (NJB)
 
-      Added routine C2F_CreateStrArr_Sig.  This is an error-signaling
-      version of C2F_CreateStrArr.
-      
-      Corrected various typos and formatting errors.
+       Added routine C2F_CreateStrArr_Sig. This is an error-signaling
+       version of C2F_CreateStrArr.
+
+       Corrected various typos and formatting errors.
 
    -CSPICE Version 3.0.0, 09-JUL-1999 (NJB)
 
-      Added routine F2C_ConvertTrStrArr.   
+       Added routine F2C_ConvertTrStrArr.
 
    -CSPICE Version 2.0.1, 09-FEB-1998 (EDW) (NJB)
 
-      Added routine F2C_ConvertStrArr.  Modified argument list of
-      F2C_ConvertStr to be consistent with the new routine.
+       Added routine F2C_ConvertStrArr. Modified argument list of
+       F2C_ConvertStr to be consistent with the new routine.
 
    -CSPICE Version 2.0.0, 03-JAN-1997 (NJB)
 
-      Added routine F2C_ConvertStr.  Adjusted indentation of comment
-      delimiters.
+       Added routine F2C_ConvertStr. Adjusted indentation of comment
+       delimiters.
 
    -CSPICE Version 1.0.0, 25-OCT-1997 (NJB) (KRG) (EDW)
 
@@ -160,6 +197,40 @@
    #include "SpiceUsr.h"
    #include "SpiceZst.h"
    #include "SpiceZmc.h"
+
+
+/*
+Function C_OptEmptyStr returns a pointer to a non-empty string, given a
+pointer to an optionally empty string.
+
+The function returns its input string pointer if that pointer refers to a
+non-empty string. If the input pointer refers to an empty string, the function
+returns a pointer to a static string consisting of one blank followed by a
+terminating null character.
+
+This function supports CSPICE wrappers that accept input string arguments
+that are allowed to be empty.
+
+This routine performs no error handling. The input pointer must be non-null.
+*/
+ConstSpiceChar *   C_OptEmptyStr( ConstSpiceChar   * cStr )
+{
+   /*
+   Local static constants
+   */
+   static ConstSpiceChar  * blankStr = " ";
+
+
+   if ( strlen(cStr) > 0 )
+   {
+      return cStr;
+   }
+   else
+   {
+      return blankStr;
+   }
+}
+
 
 
 SpiceStatus C2F_CreateStr ( ConstSpiceChar  *cStr,
@@ -333,9 +404,9 @@ void C2F_CreateStrArr_Sig ( SpiceInt           nStr,
    */
    SpiceInt     i;
    SpiceInt     maxLen;
-   
+
    SpiceStatus  status;
-   
+
 
    /*
    Create the Fortran string array using the non-signaling routine.
@@ -348,11 +419,11 @@ void C2F_CreateStrArr_Sig ( SpiceInt           nStr,
       Find the length of the longest C string in the input array.
       */
       maxLen = 0;
-      
+
       for ( i = 0;  i < nStr;  i++ )
       {
          maxLen =  MaxVal (  strlen( *(cStrArr+i) ),  maxLen );
-      }  
+      }
 
       chkin_c  ( "C2F_CreateStrArr_Sig"                           );
       setmsg_c ( "An attempt to create a temporary string array "
@@ -380,7 +451,7 @@ void C2F_CreateStrArr_Sig ( SpiceInt           nStr,
 
    NOTE:  This routine does something a bit unconventional regarding
    checking in and out:  it supports "delegated check-in".  The caller
-   passes in its name, and if an error is signaled, this routine 
+   passes in its name, and if an error is signaled, this routine
    performs a discovery style check-in on the caller's behalf before
    checking in itself.  After checking out, this routine checks out
    for the caller.
@@ -400,7 +471,7 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
    /*
    Local variables
    */
-   
+
    SpiceChar             * tempStrArr;
 
    SpiceInt                i;
@@ -447,7 +518,7 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
       chkout_c ( "C2F_MapStrArr"                                  );
 
       /*
-      Check out for the caller. 
+      Check out for the caller.
       */
       chkout_c ( caller );
       return;
@@ -463,9 +534,9 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
    {
       j      = i * cStrLen;
       k      = i * maxLen;
-      
-      status = C2F_StrCpy (  ( (SpiceChar *)cStrArr ) +  j, 
-                             maxLen, 
+
+      status = C2F_StrCpy (  ( (SpiceChar *)cStrArr ) +  j,
+                             maxLen,
                              tempStrArr + k                 );
 
       if ( status == SPICEFAILURE )
@@ -479,7 +550,7 @@ void C2F_MapStrArr ( ConstSpiceChar   * caller,
 
          chkin_c  ( "C2F_MapStrArr"                                  );
          setmsg_c ( "An attempt to copy a C string to a temporary "
-                    "string of length # failed.  This may be due " 
+                    "string of length # failed.  This may be due "
                     "to an unterminated input string."               );
          errint_c ( "#",  maxLen                                     );
          sigerr_c ( "SPICE(STRINGCOPYFAIL)"                          );
@@ -523,7 +594,7 @@ void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
    /*
    Local variables
    */
-   
+
    SpiceChar             * tempStrArr;
 
    SpiceInt                i;
@@ -573,9 +644,9 @@ void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
    {
       j      = i * cStrLen;
       k      = i * fLen;
-      
-      status = C2F_StrCpy (  ( (SpiceChar *)cStrArr ) +  j, 
-                             fLen, 
+
+      status = C2F_StrCpy (  ( (SpiceChar *)cStrArr ) +  j,
+                             fLen,
                              tempStrArr + k                 );
 
       if ( status == SPICEFAILURE )
@@ -589,7 +660,7 @@ void C2F_MapFixStrArr ( ConstSpiceChar   * caller,
 
          chkin_c  ( "C2F_MapFixStrArr"                                  );
          setmsg_c ( "An attempt to copy a C string to a temporary "
-                    "string of length # failed.  This may be due " 
+                    "string of length # failed.  This may be due "
                     "to an unterminated input string."                  );
          errint_c ( "#",  fLen                                          );
          sigerr_c ( "SPICE(STRINGCOPYFAIL)"                             );
@@ -624,18 +695,18 @@ void C2F_CreateFixStrArr ( SpiceInt           nStr,
    SpiceInt      i;
    SpiceInt      j;
    SpiceInt      fLen;
-   
+
    SpiceStatus   status;
-   
+
    SpiceChar   * tempStrArr;
 
    /*
    The input argument cStrDim is the declared string length of the input
-   C string array.  
+   C string array.
    */
-   
+
    fLen = cStrDim - 1;
-   
+
    /*
    Allocate the memory for the Fortran string array. It must be
    cStrDim characters wide and long enough to hold nStr Fortran strings.
@@ -654,7 +725,7 @@ void C2F_CreateFixStrArr ( SpiceInt           nStr,
       sigerr_c ( "SPICE(STRINGCREATEFAIL)"                         );
       chkout_c ( "C2F_CreateFixStrArr"                             );
       return;
-   }  
+   }
 
    /*
    Copy the C strings into the memory for the Fortran string array. The
@@ -669,23 +740,23 @@ void C2F_CreateFixStrArr ( SpiceInt           nStr,
       if ( status == SPICEFAILURE )
       {
          free ( tempStrArr );
-         
+
          *fStrArr = (SpiceChar *) NULL;
          fLen     = 0;
-         
+
          chkin_c  ( "C2F_CreateFixStrArr"                           );
          setmsg_c ( "An attempt to copy a string using C2F_StrCpy "
                     "failed."                                       );
          sigerr_c ( "SPICE(STRINGCOPYFAIL)"                         );
          chkout_c ( "C2F_CreateFixStrArr"                           );
          return;
-      }  
-   }  
+      }
+   }
 
    /*
    Set the output values.
    */
-   
+
    *fStrArr = tempStrArr;
    *fStrLen = fLen;
 
@@ -768,7 +839,7 @@ void      F_Alloc ( SpiceInt         fStrLen,
       chkin_c  ( "F_Alloc"                                        );
       setmsg_c ( "Attempt to allocate string of length # failed." );
       errint_c ( "#", fStrLen                                     );
-      sigerr_c ( "CSPICE(MALLOCFAILURE)"                          );
+      sigerr_c ( "SPICE(MALLOCFAILED)"                            );
       chkout_c ( "F_Alloc"                                        );
       return;
    }
@@ -1092,7 +1163,7 @@ void F2C_ConvertStr ( SpiceInt         CStrLen,
    This routine converts a Fortran string to a C string in place.
    A null terminator is placed after the last non-blank character
    in the Fortran string.  The input CStrLen indicates the number of
-   characters avaliable in the array pointing to by fStr.  The last
+   characters available in the array pointing to by fStr.  The last
    character is assumed not to contain data; it will be overwritten by
    a null terminator if the input string contains a non-blank character
    at position fStr+CStrLen-2.
@@ -1123,9 +1194,13 @@ void F2C_ConvertStr ( SpiceInt         CStrLen,
 SpiceInt F_StrLen ( SpiceInt       fStrLen,
                     ConstSpiceChar *fStr    )
 {
-   SpiceInt length;
-   SpiceInt nBlanks;
-   SpiceInt nChars;
+   /*
+   These initializations are performed to pacify Valgrind.
+   They're not needed by the algorithm below.
+   */
+   SpiceInt length  = 0;
+   SpiceInt nBlanks = 0;
+   SpiceInt nChars  = 0;
 
    /*
    We find the number of characters, excluding trailing blanks in
@@ -1238,8 +1313,8 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 
    cvals      on input, a character array containing n Fortran-style
               strings of length lenout-1, packed together contiguously
-              without null terminators.  
-              
+              without null terminators.
+
 -Detailed_Output
 
    cvals      on output, a character array containing n null-terminated
@@ -1261,13 +1336,13 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 -Particulars
 
    This routine is a private routine to the CSPICE library and should
-   not be called directly by any user.  It converts a single string into 
+   not be called directly by any user.  It converts a single string into
    an array of strings of equal, specified length, where each element of
    the array is a substring of the original string.
 
    The purpose of this routine is to convert Fortran-style string arrays
    to C-style arrays.
-   
+
 -Examples
 
    None.  Don't call this routine.  It is private for NAIF.
@@ -1405,21 +1480,21 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 
    cvals      on input, a character array containing n Fortran-style
               strings of length lenout-1, packed together contiguously
-              without null terminators.  
-              
+              without null terminators.
+
 -Detailed_Output
 
    cvals      on output, a character array containing n null-terminated
               C-style strings of length lenout, including the final
               nulls, packed together contiguously.  The caller should
               declare cvals
-              
+
                  SpiceChar cvals [n][lenout]
-                 
+
               Each string in the array cvals is "trimmed":  a null
               is placed after the last non-blank character in the
               corresponding input string.
-              
+
 
 -Parameters
 
@@ -1436,13 +1511,13 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 -Particulars
 
    This routine is a private routine to the CSPICE library and should
-   not be called directly by any user.  It converts a single string into 
+   not be called directly by any user.  It converts a single string into
    an array of strings of equal, specified length, where each element of
    the array is a substring of the original string.
 
    The purpose of this routine is to convert Fortran-style string arrays
    to C-style arrays.
-   
+
 -Examples
 
    None.  Don't call this routine.  It is private for NAIF.
@@ -1478,7 +1553,7 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
    SpiceInt                i;
    SpiceInt                npos;
 
-   
+
    /*
    Use the traditional converter to obtain a array of C-style strings,
    each having a null at index lenout-1.
@@ -1487,18 +1562,16 @@ SpiceInt F_StrLen ( SpiceInt       fStrLen,
 
 
    /*
-   Place a null after the last non-blank data character of each 
+   Place a null after the last non-blank data character of each
    string.
    */
 
    for ( i = 0; i < n; i++ )
    {
       strPtr = cvals + i*lenout;
-      
+
       npos = F_StrLen ( lenout-1, strPtr );
-      
+
       *( strPtr + npos ) = NULLCHAR;
    }
 }
-
-

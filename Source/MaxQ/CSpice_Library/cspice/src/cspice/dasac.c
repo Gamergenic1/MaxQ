@@ -9,7 +9,7 @@
 
 static logical c_false = FALSE_;
 
-/* $Procedure     DASAC ( DAS add comments ) */
+/* $Procedure DASAC ( DAS add comments ) */
 /* Subroutine */ int dasac_(integer *handle, integer *n, char *buffer, ftnlen 
 	buffer_len)
 {
@@ -95,22 +95,22 @@ static logical c_false = FALSE_;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      HANDLE    I    DAS handle of a file opened with write access. */
-/*      N         I    Number of comments to put into the comment area. */
-/*      BUFFER    I    Buffer of lines to be put into the comment area. */
+/*     HANDLE    I    DAS handle of a file opened with write access. */
+/*     N         I    Number of comments to put into the comment area. */
+/*     BUFFER    I    Buffer of lines to be put into the comment area. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE   The file handle of a binary DAS file which has been */
+/*     HANDLE   is the file handle of a binary DAS file which has been */
 /*              opened with write access. */
 
-/*     N        The number of comments in BUFFER that are to be */
+/*     N        is the number of comments in BUFFER that are to be */
 /*              added to the comment area of the binary DAS file */
 /*              attached to HANDLE. */
 
-/*     BUFFER   A buffer containing comments which are to be added */
+/*     BUFFER   is a buffer containing comments which are to be added */
 /*              to the comment area of the binary DAS file attached */
 /*              to HANDLE. */
 
@@ -124,20 +124,19 @@ static logical c_false = FALSE_;
 
 /* $ Exceptions */
 
-/*     1)   If the number of comments to be added is not positive, the */
-/*          error SPICE(INVALIDARGUMENT) will be signaled. */
+/*     1)  If the number of comments to be added is not positive, the */
+/*         error SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2)   If a non printing ASCII character is encountered in the */
-/*          comments, the error SPICE(ILLEGALCHARACTER) will be */
-/*          signaled. */
+/*     2)  If a non printing ASCII character is encountered in the */
+/*         comments, the error SPICE(ILLEGALCHARACTER) is signaled. */
 
-/*     3)   If the binary DAS file attached to HANDLE is not open with */
-/*          write access an error will be signaled by a routine called */
-/*          by this routine. */
+/*     3)  If the binary DAS file attached to HANDLE is not open with */
+/*         write access, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
 /* $ Files */
 
-/*     See argument HANDLE in $ Detailed_Input. */
+/*     See argument HANDLE in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -191,9 +190,9 @@ static logical c_false = FALSE_;
 
 /* $ Restrictions */
 
-/*     1) This routine uses constants that are specific to the ASCII */
-/*        character sequence. The results of using this routine with */
-/*        a different character sequence are unpredictable. */
+/*     1)  This routine uses constants that are specific to the ASCII */
+/*         character sequence. The results of using this routine with */
+/*         a different character sequence are unpredictable. */
 
 /* $ Literature_References */
 
@@ -201,34 +200,35 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.1.0, 05-FEB-2015 (NJB) */
+/* -    SPICELIB Version 1.2.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE standard. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section and fixed the first two entry */
+/*        version lines (Beta -> SPICELIB). */
+
+/* -    SPICELIB Version 1.1.0, 05-FEB-2015 (NJB) (KRG) */
 
 /*        Updated to use ZZDDHHLU. */
 
-/* -    Beta Version 1.0.1, 12-MAY-1994 (KRG) */
+/* -    SPICELIB Version 1.0.1, 12-MAY-1994 (KRG) */
 
-/*        Fixed a typo in the $ Particulars section. */
+/*        Fixed a typo in the $Particulars section. */
 
-/* -    Beta Version 1.0.0, 23-NOV-1992 (KRG) */
+/* -    SPICELIB Version 1.0.0, 23-NOV-1992 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      add comments to a binary das file */
-/*      append comments to a das file comment area */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 1.0.1, 12-MAY-1994 (KRG) */
-
-/*        Fixed a typo in the $ Particulars section. */
-
-/* -    Beta Version 1.0.0, 23-NOV-1992 (KRG) */
+/*     add comments to a binary DAS file */
+/*     append comments to a DAS file comment area */
 
 /* -& */
 

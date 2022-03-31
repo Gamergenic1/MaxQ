@@ -77,11 +77,11 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 
 /* $ Detailed_Input */
 
-/*     STATE      the state vector of a target body as seen from an */
-/*                observer. */
+/*     STATE    is the state vector of a target body as seen from an */
+/*              observer. */
 
-/*     BODYR      the radius of the target body observed from the */
-/*                position in STATE; the target body assumed as a sphere. */
+/*     BODYR    is the radius of the target body observed from the */
+/*              position in STATE; the target body assumed as a sphere. */
 
 /* $ Detailed_Output */
 
@@ -95,13 +95,14 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 
 /* $ Exceptions */
 
-/*     1) A negative value for BODYR causes SPICE(BADRADIUS) to signal. */
+/*     1)  If the radius of the body BODYR is less than zero, the error */
+/*         SPICE(BADRADIUS) is signaled. */
 
-/*     2) A position component of STATE equaling the zero vector */
-/*        causes SPICE(DEGENERATECASE) to signal. */
+/*     2)  If the position component of STATE equals the zero vector, the */
+/*         error SPICE(DEGENERATECASE) is signaled. */
 
-/*     3) A condition where the body radius exceeds the distance from */
-/*        the body to the observer causes SPICE(BADGEOMETRY) to signal. */
+/*     3)  If the body radius exceeds the distance from the body to the */
+/*         observer, the error SPICE(BADGEOMETRY) is signaled. */
 
 /* $ Files */
 
@@ -118,7 +119,7 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 /*     The expression */
 
 /*                     body_radius */
-/*        sin(ALPHA) = -----------                                  (1) */
+/*        sin(ALPHA) = -----------                                    (1) */
 /*                       range */
 
 /*     describes the half angle (ALPHA) of a spherical body, i.e. the */
@@ -128,125 +129,184 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 /*     Solve for ALPHA */
 
 /*                   -1  body_radius */
-/*        ALPHA = sin  ( ----------- )                              (2) */
+/*        ALPHA = sin  ( ----------- )                                (2) */
 /*                         range */
 
 /*     Take the derivative of ALPHA with respect to time */
 
-/*      d                   1                   d    body_radius */
-/*      --(ALPHA) =  --------------------- *    __ (----------- )   (3) */
-/*      dt           1 -   body_radius  2   1/2 dt    range */
-/*                (      [ ----------- ]   ) */
-/*                          range */
+/*        d                   1                   d    body_radius */
+/*        --(ALPHA) =  --------------------- *    __ (----------- )   (3) */
+/*        dt           1 -   body_radius  2   1/2 dt    range */
+/*                  (      [ ----------- ]   ) */
+/*                            range */
 
-/*      d              - body_radius             1      d */
-/*      --(ALPHA) =  --------------------- *   ------ * __(range)   (4) */
-/*      dt           1 -   body_radius  2  1/2      2   dt */
-/*                (      [ ----------- ]  )    range */
-/*                          range */
+/*        d              - body_radius             1      d */
+/*        --(ALPHA) =  --------------------- *   ------ * __(range)   (4) */
+/*        dt           1 -   body_radius  2  1/2      2   dt */
+/*                  (      [ ----------- ]  )    range */
+/*                            range */
 
-/*      With */
-/*                        _  _ */
-/*      d               < R, V >              - */
-/*      -- ( range )  = -------- ,  range = ||R||                   (5) */
-/*      dt                 - */
-/*                       ||R|| */
+/*     With */
+/*                          _  _ */
+/*        d               < R, V >              - */
+/*        -- ( range )  = -------- ,  range = ||R||                   (5) */
+/*        dt                 - */
+/*                         ||R|| */
 
 /*     Apply (5) to equation (4) */
-/*                                                        _  _ */
-/*      d              - body_radius             1      < R, V > */
-/*      --(ALPHA) =  --------------------- *   ------ *  --------   (6) */
-/*      dt           1 -   body_radius  2  1/2     2     range */
-/*                (      [ ----------- ]  )    range */
-/*                            range */
+/*                                                          _  _ */
+/*        d              - body_radius             1      < R, V > */
+/*        --(ALPHA) =  --------------------- *   ------ *  --------   (6) */
+/*        dt           1 -   body_radius  2  1/2     2     range */
+/*                  (      [ ----------- ]  )    range */
+/*                              range */
 
 /*     Carry range through the denominator gives */
 
-/*                                                _  _ */
-/*      d              - body_radius            < R, V > */
-/*      --(ALPHA) =  --------------------- *    --------            (7) */
-/*      dt                 2            2  1/2        2 */
-/*                   (range - body_radius )      range */
+/*                                                  _  _ */
+/*        d              - body_radius            < R, V > */
+/*        --(ALPHA) =  --------------------- *    --------            (7) */
+/*        dt                 2            2  1/2        2 */
+/*                     (range - body_radius )      range */
 
-/*      So since */
-/*                       -    -         _  _ */
-/*         ^  -       <  R,   V >     < R, V > */
-/*       < R, V >   =   ---        =  -------- */
-/*                       -              range */
-/*                     ||R|| */
+/*     So since */
+/*                        -    -         _  _ */
+/*          ^  -       <  R,   V >     < R, V > */
+/*        < R, V >   =   ---        =  -------- */
+/*                        -              range */
+/*                      ||R|| */
 
 /*                                                ^  _ */
-/*      d              - body_radius            < R, V > */
-/*      --(ALPHA) =  --------------------- *    --------            (8) */
-/*      dt                 2            2  1/2 */
-/*                   (range - body_radius )      range */
-
+/*        d              - body_radius            < R, V > */
+/*        --(ALPHA) =  --------------------- *    --------            (8) */
+/*        dt                 2            2  1/2 */
+/*                     (range - body_radius )      range */
 
 /* $ Examples */
 
-/*           PROGRAM DHFA_EX */
-/*           IMPLICIT              NONE */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*           INTEGER               DIM */
+/*     1) Compute the half angle derivative at the approximate time */
+/*        corresponding to a maximal angular separation between the */
+/*        Earth and Moon as seen from the Sun, and two weeks later. */
 
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      LT */
-/*           DOUBLE PRECISION      DHADT */
-/*           DOUBLE PRECISION      RAD   (3) */
-/*           DOUBLE PRECISION      STATE (6) */
+/*        The two derivate values shall have similar magnitudes but */
+/*        opposite signs. */
 
-/*           INTEGER               STRLEN */
-/*           PARAMETER           ( STRLEN = 64 ) */
-
-/*           CHARACTER*(STRLEN)    BEGSTR */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*           DOUBLE PRECISION      SPD */
-/*           DOUBLE PRECISION      DHFA */
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ('standard.tm') */
+/*           KPL/MK */
 
-/*     C */
-/*     C     An approximate time corresponding to a maximal angular */
-/*     C     separation between the earth and Moon as seen from the sun. */
-/*     C */
-/*           BEGSTR = '2007-DEC-17 04:04:46.935443 (TDB)' */
-/*           CALL STR2ET( BEGSTR, ET ) */
+/*           File name: dhfa_ex1.tm */
 
-/*           CALL BODVRD ('SUN', 'RADII', 3, DIM, RAD ) */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*           CALL SPKEZR ('MOON', ET, 'J2000', 'NONE', 'SUN', STATE, LT ) */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*     C */
-/*     C     The derivative of the half angle at ET should have a near-to */
-/*     C     maximal value as the Moon velocity vector points either */
-/*     C     towards the sun or away. */
-/*     C */
-/*           DHADT = DHFA( STATE, RAD(1) ) */
-/*           WRITE(*,*) 'Half angle derivative at begin time  : ', DHADT */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*     C */
-/*     C     Two weeks later the derivate should have a similar */
-/*     C     magnitude but the opposite sign. */
-/*     C */
-/*           ET = SPD() * 14.D0 + ET */
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00010.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0012.tls                  Leapseconds */
 
-/*           CALL SPKEZR ('MOON', ET, 'J2000', 'NONE', 'SUN', STATE, LT ) */
 
-/*           DHADT = DHFA( STATE, RAD(1) ) */
-/*           WRITE(*,*) 'Half angle derivative two weeks later: ', DHADT */
+/*           \begindata */
 
-/*           END */
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00010.tpc', */
+/*                                  'naif0012.tls'  ) */
 
-/*   The program compiled on OS X with g77 outputs (radians/sec): */
+/*           \begintext */
 
-/*     Half angle derivative at begin time  :  -2.53879935E-11 */
-/*     Half angle derivative two weeks later:   2.94362059E-11 */
+/*           End of meta-kernel */
 
-/*   As expected, the derivate values have similar magnitudes but */
-/*   opposite signs. */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DHFA_EX */
+/*              IMPLICIT              NONE */
+
+/*              INTEGER               DIM */
+
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      DHADT */
+/*              DOUBLE PRECISION      RAD   (3) */
+/*              DOUBLE PRECISION      STATE (6) */
+
+/*              INTEGER               STRLEN */
+/*              PARAMETER           ( STRLEN = 64 ) */
+
+/*              CHARACTER*(STRLEN)    BEGSTR */
+
+
+/*              DOUBLE PRECISION      SPD */
+/*              DOUBLE PRECISION      DHFA */
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ('dhfa_ex1.tm') */
+
+/*        C */
+/*        C     An approximate time corresponding to a maximal angular */
+/*        C     separation between the Earth and Moon as seen from the */
+/*        C     Sun. */
+/*        C */
+/*              BEGSTR = '2007-DEC-17 04:04:46.935443 (TDB)' */
+/*              CALL STR2ET( BEGSTR, ET ) */
+
+/*              CALL BODVRD ('SUN', 'RADII', 3, DIM, RAD ) */
+
+/*              CALL SPKEZR ('MOON', ET, 'J2000', 'NONE', 'SUN', */
+/*             .              STATE, LT                         ) */
+
+/*        C */
+/*        C     The derivative of the half angle at ET should have a */
+/*        C     near-to maximal value as the Moon velocity vector points */
+/*        C     either towards the Sun or away. */
+/*        C */
+/*              DHADT = DHFA( STATE, RAD(1) ) */
+/*              WRITE(*,*) 'Half angle derivative:' */
+/*              WRITE(*,*) '   at begin time  : ', DHADT */
+
+/*        C */
+/*        C     Two weeks later the derivate should have a similar */
+/*        C     magnitude but the opposite sign. */
+/*        C */
+/*              ET = SPD() * 14.D0 + ET */
+
+/*              CALL SPKEZR ('MOON', ET, 'J2000', 'NONE', 'SUN', */
+/*             .              STATE, LT                         ) */
+
+/*              DHADT = DHFA( STATE, RAD(1) ) */
+/*              WRITE(*,*) '   two weeks later: ', DHADT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Half angle derivative: */
+/*            at begin time  :   -2.5387993682459762E-011 */
+/*            two weeks later:    2.9436205837172777E-011 */
+
 
 /* $ Restrictions */
 
@@ -258,9 +318,17 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 
 /* $ Author_and_Institution */
 
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 23-JUN-2020 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added problem */
+/*        statement and meta-kernel to the example. Modified output to */
+/*        comply with maximum line length of header comments. */
 
 /* -    SPICELIB Version 1.0.1, 06-JUL-2009 (EDW) */
 
@@ -271,7 +339,7 @@ doublereal dhfa_(doublereal *state, doublereal *bodyr)
 /* -& */
 /* $ Index_Entries */
 
-/*   time derivative of half angle */
+/*     time derivative of half angle */
 
 /* -& */
 

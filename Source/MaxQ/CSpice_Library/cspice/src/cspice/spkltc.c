@@ -94,6 +94,7 @@ static doublereal c_b19 = -1.;
 
 /* $ Required_Reading */
 
+/*     FRAMES */
 /*     SPK */
 
 /* $ Keywords */
@@ -214,7 +215,7 @@ static doublereal c_b19 = -1.;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TARG       I   Target body. */
 /*     ET         I   Observer epoch. */
@@ -227,148 +228,148 @@ static doublereal c_b19 = -1.;
 
 /* $ Detailed_Input */
 
-/*     TARG        is the NAIF ID code for a target body.  The target */
-/*                 and observer define a state vector whose position */
-/*                 component points from the observer to the target. */
+/*     TARG     is the NAIF ID code for a target body. The target */
+/*              and observer define a state vector whose position */
+/*              component points from the observer to the target. */
 
-/*     ET          is the ephemeris time, expressed as seconds past */
-/*                 J2000 TDB, at which the state of the target body */
-/*                 relative to the observer is to be computed. ET */
-/*                 refers to time at the observer's location. */
+/*     ET       is the ephemeris time, expressed as seconds past */
+/*              J2000 TDB, at which the state of the target body */
+/*              relative to the observer is to be computed. ET */
+/*              refers to time at the observer's location. */
 
-/*     REF         is the inertial reference frame with respect to which */
-/*                 the input state STOBS and the output state STARG are */
-/*                 expressed. REF must be recognized by the SPICE */
-/*                 Toolkit. The acceptable frames are listed in the */
-/*                 Frames Required Reading, as well as in the SPICELIB */
-/*                 routine CHGIRF. */
+/*     REF      is the inertial reference frame with respect to which */
+/*              the input state STOBS and the output state STARG are */
+/*              expressed. REF must be recognized by the SPICE */
+/*              Toolkit. The acceptable frames are listed in the */
+/*              Frames Required Reading, as well as in the SPICELIB */
+/*              routine CHGIRF. */
 
-/*                 Case and blanks are not significant in the string */
-/*                 REF. */
-
-
-/*     ABCORR      indicates the aberration corrections to be applied to */
-/*                 the state of the target body to account for one-way */
-/*                 light time. See the discussion in the Particulars */
-/*                 section for recommendations on how to choose */
-/*                 aberration corrections. */
-
-/*                 If ABCORR includes the stellar aberration correction */
-/*                 symbol '+S', this flag is simply ignored. Aside from */
-/*                 the possible presence of this symbol, ABCORR may be */
-/*                 any of the following: */
-
-/*                    'NONE'     Apply no correction. Return the */
-/*                               geometric state of the target body */
-/*                               relative to the observer. */
-
-/*                 The following values of ABCORR apply to the */
-/*                 "reception" case in which photons depart from the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET-LT and *arrive* at the observer's location at ET: */
-
-/*                    'LT'       Correct for one-way light time (also */
-/*                               called "planetary aberration") using a */
-/*                               Newtonian formulation. This correction */
-/*                               yields the state of the target at the */
-/*                               moment it emitted photons arriving at */
-/*                               the observer at ET. */
-
-/*                               The light time correction involves */
-/*                               iterative solution of the light time */
-/*                               equation (see Particulars for details). */
-/*                               The solution invoked by the 'LT' option */
-/*                               uses one iteration. */
-
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equation, the 'CN' correction iterates */
-/*                               until the solution converges (three */
-/*                               iterations on all supported platforms). */
-/*                               Whether the 'CN+S' solution is */
-/*                               substantially more accurate than the */
-/*                               'LT' solution depends on the geometry */
-/*                               of the participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. See the Particulars section of */
-/*                               SPKEZR for a discussion of precision of */
-/*                               light time corrections. */
-
-/*                 The following values of ABCORR apply to the */
-/*                 "transmission" case in which photons *depart* from */
-/*                 the observer's location at ET and arrive at the */
-/*                 target's location at the light-time corrected epoch */
-/*                 ET+LT: */
-
-/*                    'XLT'      "Transmission" case:  correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. This correction yields the */
-/*                               state of the target at the moment it */
-/*                               receives photons emitted from the */
-/*                               observer's location at ET. */
-
-/*                    'XCN'      "Transmission" case:  converged */
-/*                               Newtonian light time correction. */
+/*              Case and blanks are not significant in the string */
+/*              REF. */
 
 
-/*                 Neither special nor general relativistic effects are */
-/*                 accounted for in the aberration corrections applied */
-/*                 by this routine. */
+/*     ABCORR   indicates the aberration corrections to be applied to */
+/*              the state of the target body to account for one-way */
+/*              light time. See the discussion in the $Particulars */
+/*              section for recommendations on how to choose */
+/*              aberration corrections. */
 
-/*                 Case and blanks are not significant in the string */
-/*                 ABCORR. */
+/*              If ABCORR includes the stellar aberration correction */
+/*              symbol '+S', this flag is simply ignored. Aside from */
+/*              the possible presence of this symbol, ABCORR may be */
+/*              any of the following: */
+
+/*                 'NONE'     Apply no correction. Return the */
+/*                            geometric state of the target body */
+/*                            relative to the observer. */
+
+/*              The following values of ABCORR apply to the */
+/*              "reception" case in which photons depart from the */
+/*              target's location at the light-time corrected epoch */
+/*              ET-LT and *arrive* at the observer's location at ET: */
+
+/*                 'LT'       Correct for one-way light time (also */
+/*                            called "planetary aberration") using a */
+/*                            Newtonian formulation. This correction */
+/*                            yields the state of the target at the */
+/*                            moment it emitted photons arriving at */
+/*                            the observer at ET. */
+
+/*                            The light time correction involves */
+/*                            iterative solution of the light time */
+/*                            equation (see $Particulars for details). */
+/*                            The solution invoked by the 'LT' option */
+/*                            uses one iteration. */
+
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equation, the 'CN' correction iterates */
+/*                            until the solution converges (three */
+/*                            iterations on all supported platforms). */
+/*                            Whether the 'CN+S' solution is */
+/*                            substantially more accurate than the */
+/*                            'LT' solution depends on the geometry */
+/*                            of the participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. See the $Particulars section of */
+/*                            SPKEZR for a discussion of precision of */
+/*                            light time corrections. */
+
+/*              The following values of ABCORR apply to the */
+/*              "transmission" case in which photons *depart* from */
+/*              the observer's location at ET and arrive at the */
+/*              target's location at the light-time corrected epoch */
+/*              ET+LT: */
+
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. This correction yields the */
+/*                            state of the target at the moment it */
+/*                            receives photons emitted from the */
+/*                            observer's location at ET. */
+
+/*                 'XCN'      "Transmission" case: converged */
+/*                            Newtonian light time correction. */
 
 
-/*     STOBS       is the geometric (uncorrected) state of the observer */
-/*                 relative to the solar system barycenter at epoch ET. */
-/*                 STOBS is a 6-vector: the first three components of */
-/*                 STOBS represent a Cartesian position vector; the last */
-/*                 three components represent the corresponding velocity */
-/*                 vector. STOBS is expressed relative to the inertial */
-/*                 reference frame designated by REF. */
+/*              Neither special nor general relativistic effects are */
+/*              accounted for in the aberration corrections applied */
+/*              by this routine. */
 
-/*                 Units are always km and km/sec. */
+/*              Case and blanks are not significant in the string */
+/*              ABCORR. */
+
+
+/*     STOBS    is the geometric (uncorrected) state of the observer */
+/*              relative to the solar system barycenter at epoch ET. */
+/*              STOBS is a 6-vector: the first three components of */
+/*              STOBS represent a Cartesian position vector; the last */
+/*              three components represent the corresponding velocity */
+/*              vector. STOBS is expressed relative to the inertial */
+/*              reference frame designated by REF. */
+
+/*              Units are always km and km/sec. */
 
 /* $ Detailed_Output */
 
-/*     STARG       is a Cartesian state vector representing the position */
-/*                 and velocity of the target body relative to the */
-/*                 specified observer. STARG is corrected for the */
-/*                 specified aberration, and is expressed with respect */
-/*                 to the specified inertial reference frame.  The first */
-/*                 three components of STARG represent the x-, y- and */
-/*                 z-components of the target's position; last three */
-/*                 components form the corresponding velocity vector. */
+/*     STARG    is a Cartesian state vector representing the position */
+/*              and velocity of the target body relative to the */
+/*              specified observer. STARG is corrected for the */
+/*              specified aberration, and is expressed with respect */
+/*              to the specified inertial reference frame. The first */
+/*              three components of STARG represent the x-, y- and */
+/*              z-components of the target's position; last three */
+/*              components form the corresponding velocity vector. */
 
-/*                 The position component of STARG points from the */
-/*                 observer's location at ET to the aberration-corrected */
-/*                 location of the target. Note that the sense of the */
-/*                 position vector is independent of the direction of */
-/*                 radiation travel implied by the aberration */
-/*                 correction. */
+/*              The position component of STARG points from the */
+/*              observer's location at ET to the aberration-corrected */
+/*              location of the target. Note that the sense of the */
+/*              position vector is independent of the direction of */
+/*              radiation travel implied by the aberration */
+/*              correction. */
 
-/*                 Units are always km and km/sec. */
+/*              Units are always km and km/sec. */
 
-/*     LT          is the one-way light time between the observer and */
-/*                 target in seconds.  If the target state is corrected */
-/*                 for light time, then LT is the one-way light time */
-/*                 between the observer and the light time-corrected */
-/*                 target location. */
+/*     LT       is the one-way light time between the observer and */
+/*              target in seconds. If the target state is corrected */
+/*              for light time, then LT is the one-way light time */
+/*              between the observer and the light time-corrected */
+/*              target location. */
 
-/*     DLT         is the derivative with respect to barycentric */
-/*                 dynamical time of the one way light time between */
-/*                 target and observer: */
+/*     DLT      is the derivative with respect to barycentric */
+/*              dynamical time of the one way light time between */
+/*              target and observer: */
 
-/*                    DLT = d(LT)/d(ET) */
+/*                 DLT = d(LT)/d(ET) */
 
-/*                 DLT can also be described as the rate of change of */
-/*                 one way light time. DLT is unitless, since LT and */
-/*                 ET both have units of TDB seconds. */
+/*              DLT can also be described as the rate of change of */
+/*              one way light time. DLT is unitless, since LT and */
+/*              ET both have units of TDB seconds. */
 
-/*                 If the observer and target are at the same position, */
-/*                 then DLT is set to zero. */
+/*              If the observer and target are at the same position, */
+/*              then DLT is set to zero. */
 
 /* $ Parameters */
 
@@ -376,36 +377,36 @@ static doublereal c_b19 = -1.;
 
 /* $ Exceptions */
 
-/*     1) For the convenience of the caller, the input aberration */
-/*        correction flag can call for stellar aberration correction via */
-/*        inclusion of the '+S' suffix. This portion of the aberration */
-/*        correction flag is ignored if present. */
+/*     1)  For the convenience of the caller, the input aberration */
+/*         correction flag can call for stellar aberration correction via */
+/*         inclusion of the '+S' suffix. This portion of the aberration */
+/*         correction flag is ignored if present. */
 
-/*     2) If the value of ABCORR is not recognized, the error */
-/*        is diagnosed by a routine in the call tree of this */
-/*        routine. */
+/*     2)  If the value of ABCORR is not recognized, an error */
+/*         is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     3) If the reference frame requested is not a recognized */
-/*        inertial reference frame, the error SPICE(BADFRAME) */
-/*        is signaled. */
+/*     3)  If the reference frame requested is not a recognized */
+/*         inertial reference frame, the error SPICE(BADFRAME) */
+/*         is signaled. */
 
-/*     4) If the state of the target relative to the solar system */
-/*        barycenter cannot be computed, the error will be diagnosed */
-/*        by routines in the call tree of this routine. */
+/*     4)  If the state of the target relative to the solar system */
+/*         barycenter cannot be computed, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     5) If the observer and target are at the same position, */
-/*        then DLT is set to zero. This situation could arise, */
-/*        for example, when the observer is Mars and the target */
-/*        is the Mars barycenter. */
+/*     5)  If the observer and target are at the same position, */
+/*         then DLT is set to zero. This situation could arise, */
+/*         for example, when the observer is Mars and the target */
+/*         is the Mars barycenter. */
 
-/*     6) If a division by zero error would occur in the computation */
-/*        of DLT, the error SPICE(DIVIDEBYZERO) is signaled. */
+/*     6)  If a division by zero error would occur in the computation */
+/*         of DLT, the error SPICE(DIVIDEBYZERO) is signaled. */
 
 /* $ Files */
 
 /*     This routine computes states using SPK files that have been */
 /*     loaded into the SPICE system, normally via the kernel loading */
-/*     interface routine FURNSH.  Application programs typically load */
+/*     interface routine FURNSH. Application programs typically load */
 /*     kernels once before this routine is called, for example during */
 /*     program initialization; kernels need not be loaded repeatedly. */
 /*     See the routine FURNSH and the SPK and KERNEL Required Reading */
@@ -436,194 +437,209 @@ static doublereal c_b19 = -1.;
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-/*    1) Look up a sequence of states of the Moon as seen from the */
-/*       Earth. Use light time corrections. Compute the first state for */
-/*       the epoch 2000 JAN 1 12:00:00 TDB; compute subsequent states at */
-/*       intervals of 1 hour. For each epoch, display the states, the */
-/*       one way light time between target and observer, and the rate of */
-/*       change of the one way light time. */
-
-/*       Use the following meta-kernel to specify the kernels to */
-/*       load: */
-
-/*          KPL/MK */
-
-/*          File name: spkltc.tm */
-
-/*          This meta-kernel is intended to support operation of SPICE */
-/*          example programs. The kernels shown here should not be */
-/*          assumed to contain adequate or correct versions of data */
-/*          required by SPICE-based user applications. */
-
-/*          In order for an application to use this meta-kernel, the */
-/*          kernels referenced here must be present in the user's */
-/*          current working directory. */
+/*     1) Look up a sequence of states of the Moon as seen from the */
+/*        Earth. Use light time corrections. Compute the first state for */
+/*        the epoch 2000 JAN 1 12:00:00 TDB; compute subsequent states at */
+/*        intervals of 1 hour. For each epoch, display the states, the */
+/*        one way light time between target and observer, and the rate of */
+/*        change of the one way light time. */
 
 
-/*          \begindata */
-
-/*             KERNELS_TO_LOAD = ( 'de421.bsp', */
-/*                                 'pck00010.tpc', */
-/*                                 'naif0010.tls'  ) */
-
-/*          \begintext */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*       The code example follows: */
+/*           KPL/MK */
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     Local constants */
-/*     C */
-/*     C     The meta-kernel name shown here refers to a file whose */
-/*     C     contents are those shown above. This file and the kernels */
-/*     C     it references must exist in your current working directory. */
-/*     C */
-/*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META   = 'spkltc.tm' ) */
-/*     C */
-/*     C     Use a time step of 1 hour; look up 5 states. */
-/*     C */
-/*           DOUBLE PRECISION      STEP */
-/*           PARAMETER           ( STEP   = 3600.0D0 ) */
+/*           File name: spkltc_ex1.tm */
 
-/*           INTEGER               MAXITR */
-/*           PARAMETER           ( MAXITR = 5 ) */
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           DOUBLE PRECISION      DLT */
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      LT */
-/*           DOUBLE PRECISION      STATE ( 6 ) */
-/*           DOUBLE PRECISION      STOBS ( 6 ) */
-/*           INTEGER               I */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*     C */
-/*     C     Load the SPK and LSK kernels via the meta-kernel. */
-/*     C */
-/*           CALL FURNSH ( META ) */
-/*     C */
-/*     C     Convert the start time to seconds past J2000 TDB. */
-/*     C */
-/*           CALL STR2ET ( '2000 JAN 1 12:00:00 TDB', ET0 ) */
-/*     C */
-/*     C     Step through a series of epochs, looking up a */
-/*     C     state vector at each one. */
-/*     C */
-/*           DO I = 1, MAXITR */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*              ET = ET0 + (I-1)*STEP */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*     C */
-/*     C        Look up a state vector at epoch ET using the */
-/*     C        following inputs: */
-/*     C */
-/*     C           Target:                 Moon (NAIF ID code 301) */
-/*     C           Reference frame:        J2000 */
-/*     C           Aberration correction:  Light time ('LT') */
-/*     C           Observer:               Earth (NAIF ID code 399) */
-/*     C */
-/*     C        Before we can execute this computation, we'll need the */
-/*     C        geometric state of the observer relative to the solar */
-/*     C        system barycenter at ET, expressed relative to the */
-/*     C        J2000 reference frame: */
-/*     C */
-/*              CALL SPKSSB ( 399, ET,    'J2000', STOBS ) */
-/*     C */
-/*     C        Now compute the desired state vector: */
-/*     C */
-/*              CALL SPKLTC ( 301,   ET,    'J2000', 'LT', */
-/*          .                 STOBS, STATE, LT,      DLT     ) */
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00010.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0010.tls                  Leapseconds */
 
-/*              WRITE (*,*) 'ET = ', ET */
-/*              WRITE (*,*) 'J2000 x-position (km):   ', STATE(1) */
-/*              WRITE (*,*) 'J2000 y-position (km):   ', STATE(2) */
-/*              WRITE (*,*) 'J2000 z-position (km):   ', STATE(3) */
-/*              WRITE (*,*) 'J2000 x-velocity (km/s): ', STATE(4) */
-/*              WRITE (*,*) 'J2000 y-velocity (km/s): ', STATE(5) */
-/*              WRITE (*,*) 'J2000 z-velocity (km/s): ', STATE(6) */
-/*              WRITE (*,*) 'One-way light time (s):  ', LT */
-/*              WRITE (*,*) 'Light time rate:         ', DLT */
-/*              WRITE (*,*) ' ' */
+/*           \begindata */
 
-/*           END DO */
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00010.tpc', */
+/*                                  'naif0010.tls'  ) */
 
-/*           END */
+/*           \begintext */
+
+/*           End of meta-kernel */
 
 
-/*     On a PC/Linux/gfortran platform, the following output was */
-/*     produced: */
+/*        Example code begins here. */
 
 
-/*        ET =    0.0000000000000000 */
-/*        J2000 x-position (km):     -291569.26541282982 */
-/*        J2000 y-position (km):     -266709.18647825718 */
-/*        J2000 z-position (km):     -76099.155118763447 */
-/*        J2000 x-velocity (km/s):   0.64353061322177041 */
-/*        J2000 y-velocity (km/s):  -0.66608181700820079 */
-/*        J2000 z-velocity (km/s):  -0.30132283179625752 */
-/*        One-way light time (s):     1.3423106103251679 */
-/*        Light time rate:           1.07316908698977495E-007 */
+/*              PROGRAM SPKLTC_EX1 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     Local constants */
+/*        C */
+/*        C     The meta-kernel name shown here refers to a file whose */
+/*        C     contents are those shown above. This file and the kernels */
+/*        C     it references must exist in your current working */
+/*        C     directory. */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'spkltc_ex1.tm' ) */
+/*        C */
+/*        C     Use a time step of 1 hour; look up 5 states. */
+/*        C */
+/*              DOUBLE PRECISION      STEP */
+/*              PARAMETER           ( STEP   = 3600.0D0 ) */
 
-/*        ET =    3600.0000000000000 */
-/*        J2000 x-position (km):     -289240.78128184378 */
-/*        J2000 y-position (km):     -269096.44087958336 */
-/*        J2000 z-position (km):     -77180.899725757539 */
-/*        J2000 x-velocity (km/s):   0.65006211520087476 */
-/*        J2000 y-velocity (km/s):  -0.66016273921695667 */
-/*        J2000 z-velocity (km/s):  -0.29964267390571342 */
-/*        One-way light time (s):     1.3426939548635302 */
-/*        Light time rate:           1.05652598952224259E-007 */
+/*              INTEGER               MAXITR */
+/*              PARAMETER           ( MAXITR = 5 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      DLT */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      STATE ( 6 ) */
+/*              DOUBLE PRECISION      STOBS ( 6 ) */
+/*              INTEGER               I */
 
-/*        ET =    7200.0000000000000 */
-/*        J2000 x-position (km):     -286888.88736709207 */
-/*        J2000 y-position (km):     -271462.30170547962 */
-/*        J2000 z-position (km):     -78256.555682137609 */
-/*        J2000 x-velocity (km/s):   0.65653599154284592 */
-/*        J2000 y-velocity (km/s):  -0.65419657680401588 */
-/*        J2000 z-velocity (km/s):  -0.29794027307420823 */
-/*        One-way light time (s):     1.3430713117337547 */
-/*        Light time rate:           1.03990456898758609E-007 */
+/*        C */
+/*        C     Load the SPK and LSK kernels via the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+/*        C */
+/*        C     Convert the start time to seconds past J2000 TDB. */
+/*        C */
+/*              CALL STR2ET ( '2000 JAN 1 12:00:00 TDB', ET0 ) */
+/*        C */
+/*        C     Step through a series of epochs, looking up a */
+/*        C     state vector at each one. */
+/*        C */
+/*              DO I = 1, MAXITR */
 
-/*        ET =    10800.000000000000 */
-/*        J2000 x-position (km):     -284513.79173691198 */
-/*        J2000 y-position (km):     -273806.60031034052 */
-/*        J2000 z-position (km):     -79326.043183274567 */
-/*        J2000 x-velocity (km/s):   0.66295190054599118 */
-/*        J2000 y-velocity (km/s):  -0.64818380709706158 */
-/*        J2000 z-velocity (km/s):  -0.29621577937090349 */
-/*        One-way light time (s):     1.3434426890693671 */
-/*        Light time rate:           1.02330665243423737E-007 */
+/*                 ET = ET0 + (I-1)*STEP */
 
-/*        ET =    14400.000000000000 */
-/*        J2000 x-position (km):     -282115.70368389413 */
-/*        J2000 y-position (km):     -276129.16976799071 */
-/*        J2000 z-position (km):     -80389.282965712249 */
-/*        J2000 x-velocity (km/s):   0.66930950377548726 */
-/*        J2000 y-velocity (km/s):  -0.64212490805688027 */
-/*        J2000 z-velocity (km/s):  -0.29446934336246899 */
-/*        One-way light time (s):     1.3438080956559786 */
-/*        Light time rate:           1.00673403630050830E-007 */
+/*        C */
+/*        C        Look up a state vector at epoch ET using the */
+/*        C        following inputs: */
+/*        C */
+/*        C           Target:                 Moon (NAIF ID code 301) */
+/*        C           Reference frame:        J2000 */
+/*        C           Aberration correction:  Light time ('LT') */
+/*        C           Observer:               Earth (NAIF ID code 399) */
+/*        C */
+/*        C        Before we can execute this computation, we'll need the */
+/*        C        geometric state of the observer relative to the solar */
+/*        C        system barycenter at ET, expressed relative to the */
+/*        C        J2000 reference frame: */
+/*        C */
+/*                 CALL SPKSSB ( 399, ET,    'J2000', STOBS ) */
+/*        C */
+/*        C        Now compute the desired state vector: */
+/*        C */
+/*                 CALL SPKLTC ( 301,   ET,    'J2000', 'LT', */
+/*             .                 STOBS, STATE, LT,      DLT     ) */
+
+/*                 WRITE (*,*) 'ET = ', ET */
+/*                 WRITE (*,*) 'J2000 x-position (km):   ', STATE(1) */
+/*                 WRITE (*,*) 'J2000 y-position (km):   ', STATE(2) */
+/*                 WRITE (*,*) 'J2000 z-position (km):   ', STATE(3) */
+/*                 WRITE (*,*) 'J2000 x-velocity (km/s): ', STATE(4) */
+/*                 WRITE (*,*) 'J2000 y-velocity (km/s): ', STATE(5) */
+/*                 WRITE (*,*) 'J2000 z-velocity (km/s): ', STATE(6) */
+/*                 WRITE (*,*) 'One-way light time (s):  ', LT */
+/*                 WRITE (*,*) 'Light time rate:         ', DLT */
+/*                 WRITE (*,*) ' ' */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         ET =    0.0000000000000000 */
+/*         J2000 x-position (km):     -291569.26516582817 */
+/*         J2000 y-position (km):     -266709.18671506643 */
+/*         J2000 z-position (km):     -76099.155290968716 */
+/*         J2000 x-velocity (km/s):   0.64353061395009092 */
+/*         J2000 y-velocity (km/s):  -0.66608181647356979 */
+/*         J2000 z-velocity (km/s):  -0.30132283137339932 */
+/*         One-way light time (s):     1.3423106103603615 */
+/*         Light time rate:            1.0731690854241060E-007 */
+
+/*         ET =    3600.0000000000000 */
+/*         J2000 x-position (km):     -289240.78103223071 */
+/*         J2000 y-position (km):     -269096.44111447036 */
+/*         J2000 z-position (km):     -77180.899896450341 */
+/*         J2000 x-velocity (km/s):   0.65006211592321250 */
+/*         J2000 y-velocity (km/s):  -0.66016273867753217 */
+/*         J2000 z-velocity (km/s):  -0.29964267347917639 */
+/*         One-way light time (s):     1.3426939548981949 */
+/*         Light time rate:            1.0565259879591478E-007 */
+
+/*         ET =    7200.0000000000000 */
+/*         J2000 x-position (km):     -286888.88711488992 */
+/*         J2000 y-position (km):     -271462.30193841457 */
+/*         J2000 z-position (km):     -78256.555851273239 */
+/*         J2000 x-velocity (km/s):   0.65653599225917958 */
+/*         J2000 y-velocity (km/s):  -0.65419657625983696 */
+/*         J2000 z-velocity (km/s):  -0.29794027264402967 */
+/*         One-way light time (s):     1.3430713117678452 */
+/*         Light time rate:            1.0399045674252711E-007 */
+
+/*         ET =    10800.000000000000 */
+/*         J2000 x-position (km):     -284513.79148214310 */
+/*         J2000 y-position (km):     -273806.60054129362 */
+/*         J2000 z-position (km):     -79326.043350853026 */
+/*         J2000 x-velocity (km/s):   0.66295190125626391 */
+/*         J2000 y-velocity (km/s):  -0.64818380654817442 */
+/*         J2000 z-velocity (km/s):  -0.29621577893712070 */
+/*         One-way light time (s):     1.3434426891028646 */
+/*         Light time rate:            1.0233066508729246E-007 */
+
+/*         ET =    14400.000000000000 */
+/*         J2000 x-position (km):     -282115.70342658088 */
+/*         J2000 y-position (km):     -276129.16999696195 */
+/*         J2000 z-position (km):     -80389.283131733537 */
+/*         J2000 x-velocity (km/s):   0.66930950447965998 */
+/*         J2000 y-velocity (km/s):  -0.64212490750332751 */
+/*         J2000 z-velocity (km/s):  -0.29446934292511795 */
+/*         One-way light time (s):     1.3438080956889309 */
+/*         Light time rate:            1.0067340347415892E-007 */
 
 
 /* $ Restrictions */
 
-/*     1) The routine SPKGEO should be used instead of this routine */
-/*        to compute geometric states. SPKGEO introduces less */
-/*        round-off error when the observer and target have common */
-/*        center that is closer to both objects than is the solar */
-/*        system barycenter. */
+/*     1)  The routine SPKGEO should be used instead of this routine */
+/*         to compute geometric states. SPKGEO introduces less */
+/*         round-off error when the observer and target have common */
+/*         center that is closer to both objects than is the solar */
+/*         system barycenter. */
 
-/*     2) The kernel files to be used by SPKLTC must be loaded */
-/*        (normally by the SPICELIB kernel loader FURNSH) before */
-/*        this routine is called. */
+/*     2)  The kernel files to be used by SPKLTC must be loaded */
+/*         (normally by the SPICELIB kernel loader FURNSH) before */
+/*         this routine is called. */
 
-/*     3) Unlike most other SPK state computation routines, this */
-/*        routine requires that the output state be relative to an */
-/*        inertial reference frame. */
+/*     3)  Unlike most other SPK state computation routines, this */
+/*         routine requires that the output state be relative to an */
+/*         inertial reference frame. */
 
 /* $ Literature_References */
 
@@ -631,9 +647,15 @@ static doublereal c_b19 = -1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 05-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standards. */
+/*        Added FRAMES to the list of $Required_Reading */
 
 /* -    SPICELIB Version 2.0.0, 04-JUL-2014 (NJB) */
 
@@ -656,13 +678,8 @@ static doublereal c_b19 = -1.;
 /* $ Index_Entries */
 
 /*     low-level light time correction */
-/*     light-time corrected state from spk file */
+/*     light-time corrected state from SPK file */
 /*     get light-time corrected state */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 

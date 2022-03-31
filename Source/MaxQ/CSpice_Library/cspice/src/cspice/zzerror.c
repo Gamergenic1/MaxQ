@@ -1,11 +1,11 @@
 /*
 
--Procedure zzerror ( Cat and return the long, short, and traceback 
+-Procedure zzerror ( Cat and return the long, short, and traceback
                      error strings)
 
 -Abstract
 
-   The default CSPICE behavior signals an exit on a CSPICE error. 
+   The default CSPICE behavior signals an exit on a CSPICE error.
    This action often conflicts with the error model used by other
    programming languages: IDL, Perl, MATLAB, etc. zzerrorinit
    and zzerror implement logic to permit easy use of another
@@ -13,8 +13,9 @@
 
    zzerror retrieves the long error message, the short error,
    message and the call trace back, assembling those components
-   into a single string for return to the caller. This call also
-   resets the failed_c() state.
+   into a single string, which also contains the CSPICE toolkit
+   version ID, for return to the caller. This call also resets the
+   failed_c() state.
 
 -Disclaimer
 
@@ -44,7 +45,7 @@
 -Required_Reading
 
    None.
-   
+
 -Keywords
 
    error
@@ -70,9 +71,9 @@ const char * zzerror( long cnt )
 
 -Brief_I/O
 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   cnt        I   Either a flag (less than 0) indicating a scalar or an 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   cnt        I   Either a flag (less than 0) indicating a scalar or an
                   array index.
 
    The function returns a string version of the SPICE error output.
@@ -87,16 +88,17 @@ const char * zzerror( long cnt )
 
    The function returns a pointer to a string (char *), the string
    containing the SPICE short and long error messages, plus
-   the full trace back. If the error signaled during a vectorized
-   operation, the error string includes the vector index at failure.
+   the full trace back and the CSPICE toolkit version ID. If the error
+   is signaled during a vectorized operation, the error string includes
+   the vector index at failure.
 
 -Parameters
 
-   MSG_LEN    one half the max length of the return string. The return 
+   MSG_LEN    one half the max length of the return string. The return
               string has dimension 2*MSG_LEN.
 
    TRC_LEN    the max length of a string returned from trcnam_.
-   
+
    MAXMOD     is the maximum storage depth for names in the
               traceback stack. Value copied from trcpkg.f.
 
@@ -113,10 +115,10 @@ const char * zzerror( long cnt )
 -Particulars
 
    All interface functions immediately check failed_c() after
-   calling CSPICE. When failed_c() returns SPICETRUE, 
+   calling CSPICE. When failed_c() returns SPICETRUE,
    the interface performs the appropriate action to return the
    error state to the interpreter.
-       
+
    Call after detecting a failed_c() event.
 
    The user should call zzerrorinit prior to a zzerror call.
@@ -126,35 +128,35 @@ const char * zzerror( long cnt )
    This routine makes a call to reset_c to reset the error
    system to an non-error state. The call causes the following:
 
-      failed_c returns `false' value until another error signal. 
+      failed_c returns SPICEFALSE value until another error signal.
 
-      return_c returns `false' value until another error signal. 
+      return_c returns SPICEFALSE value until another error signal.
 
-      getsms_ and getlms_ return blank strings. 
+      getsms_ and getlms_ return blank strings.
 
       The traceback routines return a traceback of the current
       active call chain, not the active call chain at the time
-      of the last error. 
+      of the last error.
 
 -Examples
 
    Expected use, check failed, return the error string:
-   
+
       /.
       Initialize the error system to RETURN/NULL
       ./
       zzerrorinit();
 
          ... CSPICE calls ...
-   
+
       /.
       Check for a failure, return the error string if
       failed_c returns true.
-      ./ 
+      ./
       if( failed_c() )
          {
          error_str = zzerror( index );
-         
+
          /.
          Return the error string traceback to
          the calling program.
@@ -163,28 +165,34 @@ const char * zzerror( long cnt )
          }
 
    Example of a string returned by zzerror:
-   
+
       In scalar context-
 
-      SPICE(NOLEAPSECONDS): [str2et_c->STR2ET->TTRANS] The variable 
-      that points to the leapseconds (DELTET/DELTA_AT) could not be 
-      located in the kernel pool.  It is likely that the leapseconds 
-      kernel has not been loaded via the routine FURNSH.
-      
+      cspice_str2et, 'Jan 1, 2049', et
+
+      SPICE(NOLEAPSECONDS): [str2et_c->STR2ET->TTRANS] The variable
+      that points to the leapseconds (DELTET/DELTA_AT) could not be
+      located in the kernel pool.  It is likely that the leapseconds
+      kernel has not been loaded via the routine FURNSH. (CSPICE_N0066)
+
+
       In a vector context-
 
+      cspice_furnsh, 'naif0012.tls'
+      cspice_furnsh, 'de405.bsp'
+
       cspice_str2et, 'Jan 1, 2049', et
-      et_vec = dindgen(5)*10000d + et
+      et_vec = dindgen(5000)*10000d + et
 
       cspice_spkezr, 'MOON', et_vec, 'J2000', 'NONE', 'EARTH', starg, ltime
 
       Creates the string
-      
+
       SPICE(SPKINSUFFDATA): [spkezr_c->SPKEZR->SPKEZ->SPKGEO]
       Insufficient ephemeris data has been loaded to compute the
       state of 301 (MOON) relative to 399 (EARTH) at the
       ephemeris epoch 2050 JAN 01 01:07:44.183. Failure at input
-      vector index 3154.
+      vector index 3154. (CSPICE_N0066)
 
 -Restrictions
 
@@ -196,26 +204,32 @@ const char * zzerror( long cnt )
    None.
 
 -Author_and_Institution
-   
-   E. D. Wright    (JPL)
+
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   CSPICE 1.1.1 08-MAR-2007 (EDW)
+   -CSPICE Version 2.0.0, 15-JAN-2021 (EDW) (JDR)
 
-      Corrected spelling mistake in error message string.
+       Return string now includes the Toolkit version ID as returned
+       by tkvrsn().
 
-   CSPICE 1.1.0 24-APR-2006 (EDW)
+   -CSPICE Version 1.1.1, 08-MAR-2007 (EDW)
 
-      Version 1.0.0 contained an extraneous chkin_c call which caused a
-      cascade of 'zzerror_c' strings prefixed to error strings. This call
-      bug was removed.
-      
-      Replaced LDPOOL reference in header docs with FURNSH.
+       Corrected spelling mistake in error message string.
 
-   CSPICE 1.0.0 17-OCT-2005 (EDW)
+   -CSPICE Version 1.1.0, 24-APR-2006 (EDW)
 
-      Initial release to CSPICE
+       Version 1.0.0 contained an extraneous chkin_c call which caused
+       a cascade of 'zzerror_c' strings prefixed to error strings. This
+       call bug was removed.
+
+       Replaced LDPOOL reference in header docs with FURNSH.
+
+   -CSPICE Version 1.0.0, 17-OCT-2005 (EDW)
+
+       Initial release to CSPICE
 
 -Index_Entries
 
@@ -269,14 +283,18 @@ const char * zzerror( long cnt )
    (void) trcdep_( &depth );
 
    /*
-   Check 'depth' as less-than or equal-to MAXMOD. Signal a 
+   Check 'depth' as less-than or equal-to MAXMOD. Signal a
    SPICE error if not confirmed.
    */
    if ( depth > MAXMOD )
       {
       reset_c();
 
-      sprintf(msg_short, depth_err, depth, MAXMOD );
+      sprintf( msg_short, depth_err, depth, MAXMOD );
+
+      sprintf( msg_short + strlen(msg_short),
+             " (%s)", tkvrsn_c("TOOLKIT") );
+
       return(msg_short);
       }
 
@@ -287,7 +305,7 @@ const char * zzerror( long cnt )
    */
    for ( i=1; i<= depth; i++)
       {
-      
+
       /*
       Retrieve the name (as a FORTRAN string) of the ith routine's name
       from the trace stack. No SPICE call name has a string length longer
@@ -295,15 +313,15 @@ const char * zzerror( long cnt )
       */
       (void) trcnam_( (integer *) &i, trname, (ftnlen) TRC_LEN );
 
-      /* 
+      /*
       The f2c code returns a FORTRAN type string, so null terminate
       the string for C.
       */
       F2C_ConvertStr( TRC_LEN, trname);
 
-      /* 
+      /*
       Create the trace list string by concatenation. Add '->' as a
-      marker between the routine names except on the first pass through 
+      marker between the routine names except on the first pass through
       the loop.
       */
       if ( i != 1 )
@@ -320,13 +338,13 @@ const char * zzerror( long cnt )
    */
    (void) getsms_(msg_short, (SpiceInt) sizeof msg_short);
 
-   /* 
+   /*
    Null terminate the FORTRAN 'msg_short' string for use in C routines.
    */
    F2C_ConvertStr( 2*MSG_LEN, msg_short);
 
    /*
-   Obtain the long message string, a brief description of the error. 
+   Obtain the long message string, a brief description of the error.
    */
    (void) getlms_(msg_long, (ftnlen) sizeof(msg_long));
 
@@ -344,18 +362,21 @@ const char * zzerror( long cnt )
    Combine the short, long and trace strings into a single string, then
    return the string.
    */
-   sprintf( msg_short + strlen(msg_short), 
+   sprintf( msg_short + strlen(msg_short),
             ": [%s] %s", trlist, msg_long );
 
    /*
-   Add the index value for errors from vectorized functions. Scalar 
+   Add the index value for errors from vectorized functions. Scalar
    functions set 'cnt' to anything less than zero (normally -1 or -2).
    */
    if ( cnt >= 0 )
       {
-      sprintf( msg_short + strlen(msg_short), 
+      sprintf( msg_short + strlen(msg_short),
                " Failure occurred at input vector index %ld.", cnt);
       }
+
+   sprintf( msg_short + strlen(msg_short),
+            " (%s)", tkvrsn_c("TOOLKIT") );
 
    return(msg_short);
    }

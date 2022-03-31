@@ -140,7 +140,7 @@
 /*               ... */
 
 /*   C */
-/*   C     Retrive the voxel grid geometry description. */
+/*   C     Retrieve the voxel grid geometry description. */
 /*   C */
 /*         CALL VOXDIM ( NVOX, VOXSIZ, VOXORI) */
 
@@ -159,11 +159,15 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachcman   (JPL) */
+/*     N.J. Bachman    (JPL) */
 /*     J.A. Bytof      (JPL) */
 /*     E.D. Wright     (JPL */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 1.0.0, 18-MAR-2016 (NJB) */
 
@@ -244,9 +248,9 @@
 /*        runtime performance. */
 
 	term = (xyz[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("xyz", 
-		i__1, "zzgetvox_", (ftnlen)249)] - voxori[(i__2 = i__ - 1) < 
+		i__1, "zzgetvox_", (ftnlen)253)] - voxori[(i__2 = i__ - 1) < 
 		3 && 0 <= i__2 ? i__2 : s_rnge("voxori", i__2, "zzgetvox_", (
-		ftnlen)249)]) / *voxsiz;
+		ftnlen)253)]) / *voxsiz;
 
 /*        Calculate the voxel index for each degree of freedom */
 /*        corresponding to the voxel coordinate. */
@@ -254,7 +258,7 @@
 /*        If the point is outside of the grid, return now. */
 
 	if (term < 0. || term > (doublereal) nvox[(i__1 = i__ - 1) < 3 && 0 <=
-		 i__1 ? i__1 : s_rnge("nvox", i__1, "zzgetvox_", (ftnlen)257)]
+		 i__1 ? i__1 : s_rnge("nvox", i__1, "zzgetvox_", (ftnlen)261)]
 		) {
 	    return 0;
 	}
@@ -266,9 +270,9 @@
 /*        Note that TERM is non-negative at this point. */
 
 	if ((integer) term < nvox[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : 
-		s_rnge("nvox", i__1, "zzgetvox_", (ftnlen)270)]) {
+		s_rnge("nvox", i__1, "zzgetvox_", (ftnlen)274)]) {
 	    voxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("voxcor",
-		     i__1, "zzgetvox_", (ftnlen)272)] = (integer) term + 1;
+		     i__1, "zzgetvox_", (ftnlen)276)] = (integer) term + 1;
 	} else {
 
 /*           TERM is NVOX(I), since the cases */
@@ -279,9 +283,9 @@
 /*           have been ruled out. */
 
 	    voxcor[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("voxcor",
-		     i__1, "zzgetvox_", (ftnlen)283)] = nvox[(i__2 = i__ - 1) 
+		     i__1, "zzgetvox_", (ftnlen)287)] = nvox[(i__2 = i__ - 1) 
 		    < 3 && 0 <= i__2 ? i__2 : s_rnge("nvox", i__2, "zzgetvox_"
-		    , (ftnlen)283)];
+		    , (ftnlen)287)];
 	}
     }
     *inbox = TRUE_;

@@ -3,10 +3,10 @@
 -Procedure spkssb_c ( S/P Kernel, solar system barycenter )
 
 -Abstract
- 
-   Return the state (position and velocity) of a target body 
-   relative to the solar system barycenter. 
- 
+
+   Return the state (position and velocity) of a target body
+   relative to the solar system barycenter.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   SPK 
- 
+
+   SPK
+
 -Keywords
- 
-   EPHEMERIS 
- 
+
+   EPHEMERIS
+
 */
 
    #include "SpiceUsr.h"
@@ -50,143 +50,251 @@
    void spkssb_c ( SpiceInt           targ,
                    SpiceDouble        et,
                    ConstSpiceChar   * ref,
-                   SpiceDouble        starg[6] ) 
+                   SpiceDouble        starg[6] )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   targ       I   Target body. 
-   et         I   Target epoch. 
-   ref        I   Target reference frame. 
-   starg      O   State of target. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   targ       I   Target body.
+   et         I   Target epoch.
+   ref        I   Target reference frame.
+   starg      O   State of target.
+
 -Detailed_Input
- 
-   targ        is the standard NAIF ID code for a target body. 
- 
+
+   targ        is the standard NAIF ID code for a target body.
+
    et          is the epoch (ephemeris time) at which the state of the
                target body is to be computed.
- 
-   ref         is the name of the reference frame to which the vectors
-               returned by the routine should be rotated. This may be
-               any frame supported by the CSPICE frame system,
-               including dynamic and other non-inertial frames.
+
+   ref         is the name of the reference frame relative to which the
+               output state vector should be expressed. This may be any
+               frame supported by the CSPICE frame system, including
+               dynamic and other non-inertial frames.
 
 -Detailed_Output
- 
-   starg       contains the position and velocity of the target body,
-               relative to the solar system barycenter, at epoch 'et'.
-               These vectors are rotated into the specified reference
-               frame. Units are always km and km/sec.
- 
+
+   starg       is a Cartesian state vector representing the position and
+               velocity of the target body, relative to the solar system
+               barycenter, at epoch `et'. This vector is rotated into the
+               specified reference frame. Units are always km and
+               km/sec.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If sufficient information has not been "loaded" via the 
-      routine spklef_c or the PCK kernel loaders, the problem will 
-      be diagnosed by a routine in the call tree of this routine. 
- 
-   2) The error SPICE(EMPTYSTRING) is signaled if the input
-      string 'ref' does not contain at least one character, since the
-      input string cannot be converted to a Fortran-style string
-      in this case.
-      
-   3) The error SPICE(NULLPOINTER) is signaled if the input string
-      pointer 'ref' is null.
+
+   1)  If sufficient information has not been "loaded" via the
+       routine furnsh_c, spklef_c or the PCK kernel loaders, an error is
+       signaled by a routine in the call tree of this routine.
+
+   2)  If the `ref' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   3)  If the `ref' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
 
 -Files
- 
-   See:  Restrictions. 
- 
+
+   See -Restrictions.
+
 -Particulars
- 
-   In order to compute the state of one body relative to another, 
-   the states of the two bodies must be known relative to a third 
-   body. One simple solution is to use the solar system barycenter 
-   as the third body. 
- 
-   Ephemeris data from more than one segment may be required 
-   to determine the state of a body relative to the barycenter. 
-   spkssb_c reads as many segments as necessary, from as many 
-   files as necessary, using files that have been loaded by 
-   previous calls to spklef_c (load ephemeris file). 
- 
+
+   In order to compute the state of one body relative to another,
+   the states of the two bodies must be known relative to a third
+   body. One simple solution is to use the solar system barycenter
+   as the third body.
+
+   Ephemeris data from more than one segment may be required
+   to determine the state of a body relative to the barycenter.
+   spkssb_c reads as many segments as necessary, from as many
+   files as necessary, using files that have been loaded by
+   previous calls to furnsh_c or spklef_c (load ephemeris file).
+
 -Examples
- 
-   In the following code fragment, spkssb_c is used to display 
-   the distance from Earth (Body 399) to Mars (body 499) at 
-   a series of epochs. 
- 
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) In the following example, spkssb_c is used to display
+      the distance from Earth (Body 399) to Mars (body 499) at
+      a given epoch.
+
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
+
+         KPL/MK
+
+         File name: spkssb_ex1.tm
+
+         This meta-kernel is intended to support operation of SPICE
+         example programs. The kernels shown here should not be
+         assumed to contain adequate or correct versions of data
+         required by SPICE-based user applications.
+
+         In order for an application to use this meta-kernel, the
+         kernels referenced here must be present in the user's
+         current working directory.
+
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de418.bsp                     Planetary ephemeris
+            naif0009.tls                  Leapseconds
+
+         \begindata
+
+            KERNELS_TO_LOAD = ( 'de418.bsp',
+                                'naif0009.tls'  )
+
+         \begintext
+
+         End of meta-kernel
+
+
+      Example code begins here.
+
+
+      /.
+         Program spkssb_ex1
+      ./
       #include <stdio.h>
       #include "SpiceUsr.h"
 
-
-      #define EARTH   399 
-      #define MARS    499 
-          . 
-          . 
-          . 
-      spklef_c ( "DE125.SPK", &handle ); 
-          . 
-          . 
-          . 
- 
-      while ( epoch <= end )
+      int main ()
       {
-         spkssb_c ( EARTH, epoch, "J2000", searth ); 
-         spkssb_c ( MARS,  epoch, "J2000", smars  );
- 
-         printf ( "%f   %22.15e\n", epoch, vdist_c( searth, smars )  ); 
- 
-         epoch += delta;
+
+         /.
+         Define parameters for a state lookup:
+
+         Return the state vector of Mars (499)
+         and Earth (399) with respect to the Solar System
+         Barycenter in the J2000 frame at epoch
+         July 4, 2003 11:00 AM PST.
+         ./
+         #define EARTH   399
+         #define EPOCH   "July 4, 2003 11:00 AM PST"
+         #define FRAME   "J2000"
+         #define MARS    499
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble             dist;
+         SpiceDouble             et;
+         SpiceDouble             searth[6];
+         SpiceDouble             smars [6];
+
+
+         /.
+         Load the required kernels.
+         ./
+         furnsh_c ( "spkssb_ex1.tm" );
+
+         /.
+         Convert the epoch to ephemeris time.
+         ./
+         str2et_c ( EPOCH, &et );
+
+         /.
+         Look-up the states for the defined parameters.
+         ./
+         spkssb_c ( EARTH, et, FRAME, searth );
+         spkssb_c ( MARS,  et, FRAME, smars  );
+
+         /.
+         What measure of distance separates the two bodies
+         at epoch.
+         ./
+         dist = vdist_c( searth, smars );
+
+         printf ( "The absolute distance (km)     : %23.10f\n", dist  );
+         printf ( "between Mars and Earth at epoch: %s\n",      EPOCH );
+
+         return ( 0 );
       }
-      
- 
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      The absolute distance (km)     :     80854819.7017317861
+      between Mars and Earth at epoch: July 4, 2003 11:00 AM PST
+
+
+      Note that the two spkssb_c calls could be replaced by
+
+         spkgeo_c ( EARTH, et, frame, MARS, state, lt );
+
+      or
+
+         spkezr_c ( "EARTH", et, frame, "NONE", "MARS", state, lt );
+
+      using the norm of the position components of the `state'
+      vector to compute the distance between the bodies.
+
 -Restrictions
- 
-   1) The ephemeris files to be used by spkssb_c must be loaded 
-      by spklef_c before spkssb_c is called. 
- 
+
+   1)  The ephemeris files to be used by spkssb_c must be loaded
+       by furnsh_c or spklef_c before spkssb_c is called.
+
 -Literature_References
- 
-   NAIF Document 168.0, "S- and P- Kernel (SPK) Specification and 
-   User's Guide" 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.3, 05-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Added example's meta-kernel and problem statement. Created complete code
+       example from existing code fragments.
+
+       Moved SPK required reading from -Literature_References to
+       -Required_Reading section. Added references to furnsh_c as valid
+       mechanism to load the SPK files used by this routine.
+
    -CSPICE Version 1.0.2, 20-NOV-2004 (NJB)
 
-      Updated description of input argument `ref' to indicate all
-      frames supported by CSPICE are allowed.
+       Updated description of input argument `ref' to indicate all
+       frames supported by CSPICE are allowed.
 
    -CSPICE Version 1.0.1, 14-OCT-2003 (EDW)
 
-      Various minor corrections to the header.
+       Various minor corrections to the header.
 
    -CSPICE Version 1.0.0, 23-JUN-1999 (NJB) (WLT) (IMU)
 
 -Index_Entries
- 
-   state relative to solar system barycenter 
- 
+
+   state relative to solar system barycenter
+
 -&
 */
 
 { /* Begin spkssb_c */
 
- 
+
 
    /*
    Participate in error tracing.

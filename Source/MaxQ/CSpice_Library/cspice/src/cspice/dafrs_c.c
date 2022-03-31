@@ -3,9 +3,9 @@
 -Procedure dafrs_c ( DAF, replace summary )
 
 -Abstract
- 
-   Change the summary for the current array in the current DAF. 
- 
+
+   Change the summary for the current array in the current DAF.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   DAF 
- 
+
+   DAF
+
 -Keywords
- 
-   FILES 
- 
+
+   FILES
+
 */
 
    #include "SpiceUsr.h"
@@ -48,91 +48,124 @@
    #undef   dafrs_c
 
 
-   void dafrs_c ( ConstSpiceDouble  * sum ) 
-
+   void dafrs_c ( ConstSpiceDouble  * sum )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   sum        I   New summary for current array. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   sum        I   New summary for current array.
+
 -Detailed_Input
- 
-   sum         is the new summary for the current array. This 
-               replaces the existing summary. However, the addresses 
-               (the final two integer components) of the original 
-               summary are not changed. 
- 
+
+   sum         is the new summary for the current array. This
+               replaces the existing summary. However, the addresses
+               (the final two integer components) of the original
+               summary are not changed.
+
 -Detailed_Output
- 
-   None. 
- 
+
+   None.
+
 -Parameters
- 
-   None. 
- 
--Files
- 
-   This routine operates on a DAF opened for write access.  A search
-   must be in progress at the time this routine is called; this 
-   routine replaces the descriptor of the current segment.
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If this routine is called when no search is in progress in the 
-       the current DAF, the error SPICE(DAFNOSEARCH) is signaled. 
- 
-   2)  If the DAF containing the `current' array has actually been 
-       closed, the error will be diagnosed by routines called by 
-       this routine. 
- 
-   3)  If the DAF containing the `current' array is not open for 
-       writing, the error will be diagnosed by routines called by 
-       this routine. 
- 
-   4)  If no array is current in the current DAF, the error 
-       SPICE(NOCURRENTARRAY) is signaled.  There is no current 
-       array when a search is started by dafbfs_c or dafbbs_c, but no 
-       calls to daffna_c or dafbna_ have been made yet, or whenever 
-       daffna_c or daffpa_c return the value SPICEFALSE in the `found' 
-       argument. 
- 
+
+   1)  If this routine is called when no search is in progress in the
+       current DAF, the error SPICE(DAFNOSEARCH) is signaled by a
+       routine in the call tree of this routine.
+
+   2)  If the DAF containing the "current" array has actually been
+       closed, an error is signaled by a routine in the call tree of
+       this routine.
+
+   3)  If the DAF containing the "current" array is not open for
+       writing, an error is signaled by a routine in the call tree of
+       this routine.
+
+   4)  If no array is current in the current DAF, the error
+       SPICE(NOCURRENTARRAY) is signaled by a routine in the call
+       tree of this routine. There is no current array when a search
+       is started by dafbfs_c or dafbbs_c, but no calls to daffna_c or
+       daffpa_c have been made yet, or whenever daffna_c or daffpa_c return
+       the value SPICEFALSE in the `found' argument.
+
+-Files
+
+   This routine operates on a DAF opened for write access. A search
+   must be in progress at the time this routine is called; this
+   routine replaces the descriptor of the current segment.
+
 -Particulars
- 
-   See SPICELIB umbrella routine DAFFA. 
- 
+
+   See SPICELIB umbrella routine DAFFA.
+
 -Examples
- 
-   1) Replace the body ID code -999 with -1999 in every descriptor
-      of an SPK file.
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Replace the body ID code 301 (Moon) with a test body ID,
+      e.g. -999, in every descriptor of an SPK file.
 
 
-      #include <SpiceUsr.h>
- 
-      int main ( int argc,  char **argv )
+      Example code begins here.
+
+
+      /.
+         Program dafrs_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main ( )
       {
+         /.
+         Local parameters.
+         ./
+         #define DSCSIZ          5
+         #define FILSIZ          256
+         #define MAXOBJ         1000
+
          #define ND              2
          #define NI              6
-         #define DSCSIZ          5
-         #define NEWCODE         ( -1999 )
-         #define OLDCODE         ( -999  )
+
+         #define NEWCODE         ( -999 )
+         #define OLDCODE         (  301 )
+
+         /.
+         Local variables.
+         ./
+         SPICEINT_CELL         ( ids,   MAXOBJ );
 
          SpiceBoolean            found;
 
-         SpiceInt                handle;
-         SpiceInt                ic      [ NI ];
+         SpiceChar               fname   [ FILSIZ ];
 
          SpiceDouble             dc      [ ND ];
          SpiceDouble             sum     [ DSCSIZ ];
 
+         SpiceInt                handle;
+         SpiceInt                i;
+         SpiceInt                ic      [ NI ];
+         SpiceInt                obj;
+
          /.
-         Open for writing the SPK file specified on the command line.
+         Get the SPK file name.
          ./
-         dafopw_c ( argv[1], &handle );
-      
+         prompt_c ( "Enter name of the SPK file > ", FILSIZ, fname );
+
+         /.
+         Open for writing the SPK file.
+         ./
+         dafopw_c ( fname, &handle );
+
          /.
          Search the file in forward order.
          ./
@@ -147,7 +180,7 @@
             ./
             dafgs_c ( sum  );
             dafus_c ( sum, ND, NI, dc, ic );
-          
+
             /.
             Replace ID codes if necessary.
             ./
@@ -167,7 +200,7 @@
             dafps_c ( ND, NI, dc, ic, sum );
 
             dafrs_c ( sum );
- 
+
             /.
             Find the next segment.
             ./
@@ -179,33 +212,63 @@
          ./
          dafcls_c ( handle );
 
+         /.
+         Find the set of objects in the SPK file.
+         ./
+         spkobj_c ( fname, &ids );
+
+         printf( "Objects in the DAF file:\n\n" );
+         for ( i = 0;  i < card_c( &ids );  i++  )
+         {
+            obj  =  SPICE_CELL_ELEM_I( &ids, i );
+
+            printf( "  %d", (int)obj );
+         }
+         printf( "\n" );
+
          return ( 0 );
       }
 
 
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, using the SPK file named de430.bsp, the output was:
+
+
+      Enter name of the SPK file > de430.bsp
+      Objects in the DAF file:
+
+        -999  1  2  3  4  5  6  7  8  9  10  199  299  399
+
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 02-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Extended
+       code example to generate outputs and provided example's solution.
+
+       Fixed typo in -Exceptions entry #3: daffpa_c is used to find the
+       previous array, not the non existing API dafbna_.
+
    -CSPICE Version 1.0.0, 23-NOV-2004 (NJB)
 
 -Index_Entries
- 
-   replace daf summary 
- 
+
+   replace DAF summary
+
 -&
 */
 
@@ -218,7 +281,7 @@
    chkin_c ( "dafrs_c" );
 
    /*
-   Not much to it. 
+   Not much to it.
    */
    dafrs_ ( (doublereal *) sum );
 

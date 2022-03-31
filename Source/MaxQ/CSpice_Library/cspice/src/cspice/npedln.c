@@ -10,7 +10,7 @@
 static doublereal c_b12 = 2.;
 static doublereal c_b26 = 0.;
 
-/* $Procedure    NPEDLN ( Nearest point on ellipsoid to line ) */
+/* $Procedure NPEDLN ( Nearest point on ellipsoid to line ) */
 /* Subroutine */ int npedln_(doublereal *a, doublereal *b, doublereal *c__, 
 	doublereal *linept, doublereal *linedr, doublereal *pnear, doublereal 
 	*dist)
@@ -103,7 +103,7 @@ static doublereal c_b26 = 0.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     A          I   Length of ellipsoid's semi-axis in the x direction */
 /*     B          I   Length of ellipsoid's semi-axis in the y direction */
@@ -112,79 +112,79 @@ static doublereal c_b26 = 0.;
 /*     LINEDR     I   Direction vector of line */
 /*     PNEAR      O   Nearest point on ellipsoid to line */
 /*     DIST       O   Distance of ellipsoid from line */
-/*     UBEL       P   Upper bound of array containing SPICELIB ellipse. */
-/*     UBPL       P   Upper bound of array containing SPICELIB plane. */
+/*     UBEL       P   Upper bound of array containing SPICE ellipse. */
+/*     UBPL       P   Upper bound of array containing SPICE plane. */
 
 /* $ Detailed_Input */
 
 /*     A, */
 /*     B, */
-/*     C              are the lengths of the semi-axes of a triaxial */
-/*                    ellipsoid which is centered at the origin and */
-/*                    oriented so that its axes lie on the x-, y- and */
-/*                    z- coordinate axes.  A, B, and C are the lengths of */
-/*                    the semi-axes that point in the x, y, and z */
-/*                    directions respectively. */
+/*     C        are the lengths of the semi-axes of a triaxial */
+/*              ellipsoid which is centered at the origin and */
+/*              oriented so that its axes lie on the x-, y- and */
+/*              z- coordinate axes.  A, B, and C are the lengths of */
+/*              the semi-axes that point in the x, y, and z */
+/*              directions respectively. */
 
 /*     LINEPT */
-/*     LINEDR         are, respectively, a point and a direction vector */
-/*                    that define a line.  The line is the set of vectors */
+/*     LINEDR   are, respectively, a point and a direction vector */
+/*              that define a line. The line is the set of vectors */
 
-/*                       LINEPT   +   t * LINEDR */
+/*                 LINEPT   +   t * LINEDR */
 
-/*                    where t is any real number. */
+/*              where t is any real number. */
 
 /* $ Detailed_Output */
 
-/*     PNEAR          is the point on the ellipsoid that is closest to */
-/*                    the line, if the line doesn't intersect the */
-/*                    ellipsoid. */
+/*     PNEAR    is the point on the ellipsoid that is closest to */
+/*              the line, if the line doesn't intersect the */
+/*              ellipsoid. */
 
-/*                    If the line intersects the ellipsoid, PNEAR will */
-/*                    be a point of intersection.  If LINEPT is outside */
-/*                    of the ellipsoid, PNEAR will be the closest point */
-/*                    of intersection.  If LINEPT is inside the */
-/*                    ellipsoid, PNEAR will not necessarily be the */
-/*                    closest point of intersection. */
+/*              If the line intersects the ellipsoid, PNEAR will */
+/*              be a point of intersection. If LINEPT is outside */
+/*              of the ellipsoid, PNEAR will be the closest point */
+/*              of intersection. If LINEPT is inside the */
+/*              ellipsoid, PNEAR will not necessarily be the */
+/*              closest point of intersection. */
 
 
-/*     DIST           is the distance of the line from the ellipsoid. */
-/*                    This is the minimum distance between any point on */
-/*                    the line and any point on the ellipsoid. */
+/*     DIST     is the distance of the line from the ellipsoid. */
+/*              This is the minimum distance between any point on */
+/*              the line and any point on the ellipsoid. */
 
-/*                    If the line intersects the ellipsoid, DIST is zero. */
+/*              If the line intersects the ellipsoid, DIST is zero. */
 
 /* $ Parameters */
 
-/*     UBEL           is the upper bound of the array used to contain */
-/*                    a SPICELIB ellipse.  See the ELLIPSES Required */
-/*                    Reading for details. */
+/*     UBEL     is the upper bound of the array used to contain */
+/*              a SPICE ellipse. See the ELLIPSES Required */
+/*              Reading for details. */
 
-/*     UBPL           is the upper bound of the array used to contain */
-/*                    a SPICELIB plane.  See the PLANES Required Reading */
-/*                    for details. */
+/*     UBPL     is the upper bound of the array used to contain */
+/*              a SPICE plane. See the PLANES Required Reading */
+/*              for details. */
 
 /* $ Exceptions */
 
-/*     If this routine detects an error, the output arguments NEARP and */
+/*     If this routine detects an error, the output arguments PNEAR and */
 /*     DIST are not modified. */
 
 /*     1)  If the length of any semi-axis of the ellipsoid is */
-/*         non-positive, the error SPICE(INVALIDAXISLENGTH) is signalled. */
+/*         non-positive, the error SPICE(INVALIDAXISLENGTH) is signaled. */
 
 /*     2)  If the line's direction vector is the zero vector, the error */
-/*         SPICE(ZEROVECTOR) is signalled. */
+/*         SPICE(ZEROVECTOR) is signaled. */
 
 /*     3)  If the length of any semi-axis of the ellipsoid is zero after */
 /*         the semi-axis lengths are scaled by the reciprocal of the */
 /*         magnitude of the longest semi-axis and then squared, the error */
-/*         SPICE(DEGENERATECASE) is signalled. */
+/*         SPICE(DEGENERATECASE) is signaled. */
 
 /*     4)  If the input ellipsoid is extremely flat or needle-shaped */
 /*         and has its shortest axis close to perpendicular to the input */
 /*         line, numerical problems could cause this routine's algorithm */
-/*         to fail, in which case the error SPICE(DEGENERATECASE) is */
-/*         signalled. */
+/*         to fail, in which case, the error SPICE(DEGENERATECASE) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -194,8 +194,8 @@ static doublereal c_b26 = 0.;
 
 /*     For any ellipsoid and line, if the line does not intersect the */
 /*     ellipsoid, there is a unique point on the ellipsoid that is */
-/*     closest to the line.  Therefore, the distance DIST between */
-/*     ellipsoid and line is well-defined.  The unique line segment of */
+/*     closest to the line. Therefore, the distance DIST between */
+/*     ellipsoid and line is well-defined. The unique line segment of */
 /*     length DIST that connects the line and ellipsoid is normal to */
 /*     both of these objects at its endpoints. */
 
@@ -205,8 +205,8 @@ static doublereal c_b26 = 0.;
 /* $ Examples */
 
 /*     1)   We can find the distance between an instrument optic axis ray */
-/*          and the surface of a body modelled as a tri-axial ellipsoid */
-/*          using this routine.  If the instrument position and pointing */
+/*          and the surface of a body modeled as a tri-axial ellipsoid */
+/*          using this routine. If the instrument position and pointing */
 /*          unit vector in body-fixed coordinates are */
 
 /*             LINEPT = ( 1.0D6,  2.0D6,  3.0D6 ) */
@@ -247,17 +247,17 @@ static doublereal c_b26 = 0.;
 /*          on the line containing an instrument boresight ray is on */
 /*          the boresight ray itself; the point may lie on the ray */
 /*          having the same vertex as the boresight ray and pointing in */
-/*          the opposite direction.  To rule out this possibility, we */
+/*          the opposite direction. To rule out this possibility, we */
 /*          can make the following test: */
 
 /*             C */
 /*             C     Find the difference vector between the closest point */
-/*             C     on the ellpsoid to the line containing the boresight */
-/*             C     ray and the boresight ray's vertex.  Find the */
-/*             C     angular separation between this difference vector */
-/*             C     and the boresight ray.  If the angular separation */
-/*             C     does not exceed pi/2, we have the nominal geometry. */
-/*             C     Otherwise, we have an error. */
+/*             C     on the ellipsoid to the line containing the */
+/*             C     boresight ray and the boresight ray's vertex. Find */
+/*             C     the angular separation between this difference */
+/*             C     vector and the boresight ray. If the angular */
+/*             C     separation does not exceed pi/2, we have the nominal */
+/*             C     geometry. Otherwise, we have an error. */
 /*             C */
 /*                   CALL  VSUB ( PNEAR,  LINEPT,  DIFF ) */
 /*                   SEP = VSEP ( DIFF,   LINEDR        ) */
@@ -282,14 +282,23 @@ static doublereal c_b26 = 0.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Corrected */
+/*        argument name in $Exceptions section. */
 
 /* -    SPICELIB Version 1.3.0, 15-NOV-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSCL calls.  Changed exponents to DOUBLE PRECISION type */
+/*        in VSCL calls. Changed exponents to DOUBLE PRECISION type */
 /*        in the test for underflow of squared, scaled axis lengths. */
 
 /* -    SPICELIB Version 1.2.1, 06-DEC-2002 (NJB) */
@@ -299,8 +308,8 @@ static doublereal c_b26 = 0.;
 
 /* -    SPICELIB Version 1.2.0, 25-NOV-1992 (NJB) */
 
-/*        Bug fix:  in the intercept case, PNEAR is now properly */
-/*        re-scaled prior to output.  Also, an error in the $Examples */
+/*        Bug fix: in the intercept case, PNEAR is now properly */
+/*        re-scaled prior to output. Also, an error in the $Examples */
 /*        section was corrected. */
 
 /* -    SPICELIB Version 1.1.1, 10-MAR-1992 (WLT) */
@@ -325,19 +334,13 @@ static doublereal c_b26 = 0.;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 1.3.0, 15-NOV-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VSCL calls.  Changed exponents to DOUBLE PRECISION type */
-/*        in the test for underflow of squared, scaled axis lengths. */
-
 /* -    SPICELIB Version 1.2.0, 25-NOV-1992 (NJB) */
 
-/*        Bug fix:  in the intercept case, PNEAR is now properly */
-/*        re-scaled prior to output.  Formerly, it was returned without */
+/*        Bug fix: in the intercept case, PNEAR is now properly */
+/*        re-scaled prior to output. Formerly, it was returned without */
 /*        having been re-scaled. */
 
-/*        Also, an error in the $Examples section was corrected:  the */
+/*        Also, an error in the $Examples section was corrected: the */
 /*        line */
 
 /*           CALL  VSUB ( LINEPT,  PNEAR,  DIFF ) */
@@ -355,8 +358,8 @@ static doublereal c_b26 = 0.;
 /* -    SPICELIB Version 1.1.0, 04-DEC-1990 (NJB) */
 
 /*        Error message and description changed for non-positive */
-/*        axis length error.  The former message and description did */
-/*        not match, and the description was incorrect:  it described */
+/*        axis length error. The former message and description did */
+/*        not match, and the description was incorrect: it described */
 /*        `zero-length', rather than `non-positive' axes as invalid. */
 
 /* -& */
@@ -515,10 +518,10 @@ static doublereal c_b26 = 0.;
     surfpt_(sclpt, oppdir, &scla, &sclb, &sclc, &pt[3], &found[1]);
     for (i__ = 1; i__ <= 2; ++i__) {
 	if (found[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : s_rnge("found", 
-		i__1, "npedln_", (ftnlen)527)]) {
+		i__1, "npedln_", (ftnlen)530)]) {
 	    *dist = 0.;
 	    vscl_(&scale, &pt[(i__1 = i__ * 3 - 3) < 6 && 0 <= i__1 ? i__1 : 
-		    s_rnge("pt", i__1, "npedln_", (ftnlen)531)], pnear);
+		    s_rnge("pt", i__1, "npedln_", (ftnlen)534)], pnear);
 	    chkout_("NPEDLN", (ftnlen)6);
 	    return 0;
 	}

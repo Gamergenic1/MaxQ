@@ -14,7 +14,19 @@ static integer c__83 = 83;
 /* $Procedure      ZZEKTRIT ( EK tree, initialize ) */
 /* Subroutine */ int zzektrit_(integer *handle, integer *tree)
 {
-    integer base, page[256];
+    /* Initialized data */
+
+    static integer page[256] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+	    0,0,0 };
+
+    integer base;
     extern /* Subroutine */ int zzekpgal_(integer *, integer *, integer *, 
 	    integer *), zzekpgwi_(integer *, integer *, integer *);
     integer p;
@@ -502,6 +514,11 @@ static integer c__83 = 83;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 09-OCT-2021 (NJB) */
+
+/*        Now PAGE is saved and initialized. This is not a bug fix; */
+/*        it was done to pacify Valgrind. */
+
 /* -    Beta Version 1.0.0, 20-OCT-1995 (NJB) */
 
 /* -& */
@@ -512,13 +529,18 @@ static integer c__83 = 83;
 /*     Local variables */
 
 
+/*     Saved variables */
+
+
+/*     Initial values */
+
+
 /*     Standard SPICE error handling. */
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("ZZEKTRIT", (ftnlen)8);
     }
+    chkin_("ZZEKTRIT", (ftnlen)8);
 
 /*     Start out by allocating a DAS integer page.  We'll write the root */
 /*     node out to this page. */

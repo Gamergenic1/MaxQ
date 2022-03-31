@@ -501,7 +501,7 @@
 /*     SENSE          is an integer code giving the ordering sense to */
 /*                    use with the specified column.  The possible values */
 /*                    of SENSE are EQASND, which indicates that the */
-/*                    order sense is acscending, and EQDSND, which */
+/*                    order sense is ascending, and EQDSND, which */
 /*                    indicates that the order sense is descending. */
 /*                    `Ascending order' means that the order relation */
 /*                    defined by the indicated column orders rows */
@@ -517,17 +517,16 @@
 /* $ Exceptions */
 
 /*     1)  If the input query is not initialized, the error will be */
-/*         diagnosed by routines called by this routine.  The outputs */
+/*         diagnosed by routines called by this routine. The outputs */
 /*         will not be modified. */
 
 /*     2)  If the input query has not been parsed, the error */
-/*         SPICE(UNPARSEDQUERY) will be signalled.  The outputs */
+/*         SPICE(UNPARSEDQUERY) will be signaled. The outputs */
 /*         will not be modified. */
 
 /*     3)  If the index N is less than 1 or greater than the number of */
 /*         columns in the ORDER BY clause, the error SPICE(INVALIDINDEX) */
-/*         will be signalled.  The outputs */
-/*         will not be modified. */
+/*         will be signaled. The outputs will not be modified. */
 
 /* $ Files */
 
@@ -559,6 +558,10 @@
 /*     N.J. Bachman       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 01-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 17-OCT-1995 (NJB) */
 

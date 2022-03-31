@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      DAFDC ( DAF delete comments ) */
+/* $Procedure DAFDC ( DAF delete comments ) */
 /* Subroutine */ int dafdc_(integer *handle)
 {
     integer free;
@@ -61,15 +61,15 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of a binary DAF opened for writing. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE    The handle of a binary DAF that is to have its entire */
-/*               comment area deleted. The DAF must have been opened */
-/*               with write access. */
+/*     HANDLE   is the handle of a binary DAF that is to have its entire */
+/*              comment area deleted. The DAF must have been opened */
+/*              with write access. */
 
 /* $ Detailed_Output */
 
@@ -81,13 +81,13 @@
 
 /* $ Exceptions */
 
-/*     1)   If the binary DAF attached to HANDLE is not open with write */
-/*          access, an error will be signalled by a routine called by */
-/*          this routine. */
+/*     1)  If the binary DAF attached to HANDLE is not open with write */
+/*         access, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
-/*     See argument HANDLE in $ Detailed_Input. */
+/*     See argument HANDLE in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -110,17 +110,149 @@
 
 /* $ Examples */
 
-/*     Let */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*           HANDLE   be the handle of a DAF which has been opened */
-/*                    with write access. */
+/*     1) Delete the entire comment area of a DAF file. Note that this */
+/*        action should only be performed if fresh new comments are to */
+/*        be placed within the DAF file. */
 
-/*     The call */
+/*        Use the SPK kernel below as input DAF file for the program. */
 
-/*           CALL DAFDC ( HANDLE ) */
+/*           earthstns_itrf93_201023.bsp */
 
-/*     deletes the entire comment area of the binary DAF attached to */
-/*     HANDLE. */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DAFDC_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               RTRIM */
+
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         KERNEL */
+/*              PARAMETER           ( KERNEL = */
+/*             .                         'earthstns_itrf93_201023.bsp' ) */
+
+/*              INTEGER               BUFFSZ */
+/*              PARAMETER           ( BUFFSZ = 10 ) */
+
+/*              INTEGER               LINLEN */
+/*              PARAMETER           ( LINLEN = 1000 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(LINLEN)    BUFFER ( BUFFSZ ) */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               I */
+/*              INTEGER               N */
+
+/*              LOGICAL               DONE */
+
+/*        C */
+/*        C     Open a DAF for write. Return a HANDLE referring to the */
+/*        C     file. */
+/*        C */
+/*              CALL DAFOPW ( KERNEL, HANDLE ) */
+
+/*        C */
+/*        C     Print the first 10 lines of comments from the DAF file. */
+/*        C */
+/*              WRITE(*,'(A)') 'Comment area of input DAF file ' */
+/*             .            // '(max. 10 lines): ' */
+/*              WRITE(*,'(A)') '---------------------------------------' */
+/*             .            // '-----------------------' */
+
+/*              CALL DAFEC  ( HANDLE, BUFFSZ, N, BUFFER, DONE ) */
+
+/*              DO I = 1, N */
+
+/*                 WRITE (*,*) BUFFER(I)(:RTRIM(BUFFER(I))) */
+
+/*              END DO */
+
+/*              WRITE(*,'(A)') '---------------------------------------' */
+/*             .            // '-----------------------' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Deleting entire comment area...' */
+
+/*        C */
+/*        C     Delete all the comments from the DAF file. */
+/*        C */
+/*              CALL DAFDC ( HANDLE ) */
+
+/*        C */
+/*        C     Close the DAF file and re-open it for read */
+/*        C     access to work around the DAFEC restriction */
+/*        C     on comments not to be modified while they are */
+/*        C     being extracted. */
+/*        C */
+/*              CALL DAFCLS( HANDLE  ) */
+
+/*              CALL DAFOPR( KERNEL, HANDLE  ) */
+
+/*        C */
+/*        C     Check if the comments have indeed been deleted. */
+/*        C */
+/*              CALL DAFEC  ( HANDLE, BUFFSZ, N, BUFFER, DONE ) */
+
+/*              IF ( DONE .AND. N .EQ. 0 ) THEN */
+
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) '   Successful operation.' */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) ' ' */
+/*                 WRITE(*,*) '   Operation failed.' */
+
+/*              END IF */
+
+/*        C */
+/*        C     Safely close the DAF. */
+/*        C */
+/*              CALL DAFCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Comment area of input DAF file (max. 10 lines): */
+/*        -------------------------------------------------------------- */
+
+/*            SPK for DSN Station Locations */
+/*            ========================================================*** */
+
+/*            Original file name:                   earthstns_itrf93_2*** */
+/*            Creation date:                        2020 October 28 12:30 */
+/*            Created by:                           Nat Bachman  (NAIF*** */
+
+
+/*            Introduction */
+/*        -------------------------------------------------------------- */
+
+/*         Deleting entire comment area... */
+
+/*            Successful operation. */
+
+
+/*        Warning: incomplete output. 3 lines extended past the right */
+/*        margin of the header and have been truncated. These lines are */
+/*        marked by "***" at the end of each line. */
+
 
 /* $ Restrictions */
 
@@ -132,16 +264,24 @@
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.0, 23-SEP-1994 (KRG) */
+/* -    SPICELIB Version 1.1.0, 25-NOV-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
+
+/* -    SPICELIB Version 1.0.0, 23-SEP-1994 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      delete DAF comment area */
+/*     delete DAF comment area */
 
 /* -& */
 

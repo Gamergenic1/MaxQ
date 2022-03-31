@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 static integer c__0 = 0;
 
-/* $Procedure      QUOTE ( Enclose in quotes ) */
+/* $Procedure QUOTE ( Enclose in quotes ) */
 /* Subroutine */ int quote_(char *in, char *left, char *right, char *out, 
 	ftnlen in_len, ftnlen left_len, ftnlen right_len, ftnlen out_len)
 {
@@ -31,8 +31,8 @@ static integer c__0 = 0;
 
 /* $ Abstract */
 
-/*      Enclose (quote) the non-blank part of a character string */
-/*      between delimiting symbols. */
+/*     Enclose (quote) the non-blank part of a character string */
+/*     between delimiting symbols. */
 
 /* $ Disclaimer */
 
@@ -65,97 +65,105 @@ static integer c__0 = 0;
 
 /* $ Keywords */
 
-/*      CHARACTER,  PARSING */
+/*     CHARACTER */
+/*     PARSING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      IN         I   Input string. */
-/*      LEFT       I   Left delimiter. */
-/*      RIGHT      I   Right delimiter. */
-/*      OUT        O   Output (quoted) string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     IN         I   Input string. */
+/*     LEFT       I   Left delimiter. */
+/*     RIGHT      I   Right delimiter. */
+/*     OUT        O   Output (quoted) string. */
 
 /* $ Detailed_Input */
 
-/*      IN          is the input string to be quoted. */
+/*     IN       is the input string to be quoted. */
 
-/*      LEFT, */
-/*      RIGHT       are the left and right delimiters to be used in */
-/*                  quoting the input string. These may be the same */
-/*                  character (apostrophe, vertical bar), complementary */
-/*                  characters (left and right parentheses, brackets, */
-/*                  or braces), or two totally unrelated characters. */
+/*     LEFT, */
+/*     RIGHT    are the left and right delimiters to be used in */
+/*              quoting the input string. These may be the same */
+/*              character (apostrophe, vertical bar), complementary */
+/*              characters (left and right parentheses, brackets, */
+/*              or braces), or two totally unrelated characters. */
 
 /* $ Detailed_Output */
 
-/*      OUT         is the output string. This is the non-blank part */
-/*                  of the input string delimited by LEFT and RIGHT. */
-/*                  If the output string is not large enough to contain */
-/*                  the quoted string, it is truncated on the right. */
-/*                  (The right delimiter would be lost in this case.) */
+/*     OUT      is the output string. This is the non-blank part */
+/*              of the input string delimited by LEFT and RIGHT. */
+/*              If the output string is not large enough to contain */
+/*              the quoted string, it is truncated on the right. */
+/*              (The right delimiter would be lost in this case.) */
 
-/*                  If the input string is blank, the output string is */
-/*                  a single quoted blank. */
+/*              If the input string is blank, the output string is */
+/*              a single quoted blank. */
 
-/*                  OUT may overwrite IN. */
+/*              OUT may overwrite IN. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The first character of the output string is the left delimiter, */
-/*      LEFT. This is followed immediately by the non-blank part of the */
-/*      input string, which is in turn followed by the right delimiter, */
-/*      RIGHT. */
-
-/*      If the input string is blank (has no non-blank characters), */
-/*      a single quoted blank is returned. */
-
-/* $ Examples */
-
-/*      Let */
-/*            IN    = '    This string has leading and trailing blanks  ' */
-/*            LEFT  = '(' */
-/*            RIGHT = ')' */
-
-/*      Then */
-/*            OUT   = '(This string has leading and trailing blanks)    ' */
-
-/*      Or, let IN = '         '. Then OUT = '( )'. */
-
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      I.M. Underwood  (JPL) */
+/*     The first character of the output string is the left delimiter, */
+/*     LEFT. This is followed immediately by the non-blank part of the */
+/*     input string, which is in turn followed by the right delimiter, */
+/*     RIGHT. */
+
+/*     If the input string is blank (has no non-blank characters), */
+/*     a single quoted blank is returned. */
+
+/* $ Examples */
+
+/*     Let */
+/*           IN    = '    This string has leading and trailing blanks  ' */
+/*           LEFT  = '(' */
+/*           RIGHT = ')' */
+
+/*     Then */
+/*           OUT   = '(This string has leading and trailing blanks)    ' */
+
+/*     Or, let IN = '         '. Then OUT = '( )'. */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

@@ -44,11 +44,11 @@
 
 /* $ Required_Reading */
 
-/*     naif_ids.req */
+/*     NAIF_IDS */
 
 /* $ Keywords */
 
-/*     Body mappings. */
+/*     BODY MAPPINGS */
 
 /* $ Declarations */
 /* $ Abstract */
@@ -119,7 +119,7 @@
 
 /* $ Version */
 
-/* -    SPICELIB Version 2.0.0, 04-APR-2017 (BVS)(EDW) */
+/* -    SPICELIB Version 2.0.0, 10-DEC-2021 (BVS)(EDW) */
 
 /*        Increased NROOM to 14983. Added a comment note explaining */
 /*        NROOM and MAXE */
@@ -158,11 +158,11 @@
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     BLTCOD     O  List of default integer ID codes */
-/*     BLTNAM     O  List of default names */
-/*     NPERM      P  Number of name/ID mappings */
+/*     BLTCOD     O   List of default integer ID codes. */
+/*     BLTNAM     O   List of default names. */
+/*     NPERM      P   Number of name/ID mappings. */
 
 /* $ Detailed_Input */
 
@@ -170,15 +170,15 @@
 
 /* $ Detailed_Output */
 
-/*     BLTCOD     The array of NPERM elements listing the body ID codes. */
+/*     BLTCOD   The array of NPERM elements listing the body ID codes. */
 
-/*     BLTNAM     The array of NPERM elements listing the body names */
-/*                corresponding to the ID entry in BLTCOD */
+/*     BLTNAM   The array of NPERM elements listing the body names */
+/*              corresponding to the ID entry in BLTCOD */
 
 /* $ Parameters */
 
-/*     NPERM      The length of both BLTCOD, BLTNAM */
-/*                (read from zzbodtrn.inc). */
+/*     NPERM    The length of both BLTCOD, BLTNAM */
+/*              (read from zzbodtrn.inc). */
 
 /* $ Exceptions */
 
@@ -215,11 +215,114 @@
 
 /* $ Author_and_Institution */
 
-/*     E.D. Wright, 04-APR-2017 (JPL) */
+/*     E.D. Wright, 10-DEC-2021 (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB 1.0.9 04-APR-2017 (EDW) */
+/* -    SPICELIB Version 1.0.10, 10-DEC-2021 (EDW) (JDR) (BVS) */
+
+/*        Added: */
+
+/*             -652   MERCURY TRANSFER MODULE */
+/*             -652   MTM */
+/*             -652   BEPICOLOMBO MTM */
+/*             -255   PSYC */
+/*             -243   VIPER */
+/*             -242   LUNAR TRAILBLAZER */
+/*             -240   SMART LANDER FOR INVESTIGATING MOON */
+/*             -240   SLIM */
+/*             -239   MARTIAN MOONS EXPLORATION */
+/*             -239   MMX */
+/*             -210   LICIA */
+/*             -210   LICIACUBE */
+/*             -197   EXOMARS_LARA */
+/*             -197   LARA */
+/*             -174   EXM RSP RM */
+/*             -174   EXM ROVER */
+/*             -174   EXOMARS ROVER */
+/*             -173   EXM RSP SP */
+/*             -173   EXM SURFACE PLATFORM */
+/*             -173   EXOMARS SP */
+/*             -172   EXM RSP SCC */
+/*             -172   EXM SPACECRAFT COMPOSITE */
+/*             -172   EXOMARS SCC */
+/*             -168   PERSEVERANCE */
+/*             -168   MARS 2020 */
+/*             -168   MARS2020 */
+/*             -168   M2020 */
+/*             -164   LUNAR FLASHLIGHT */
+/*             -156   ADITYA */
+/*             -156   ADIT */
+/*             -155   KPLO */
+/*             -155   KOREAN PATHFINDER LUNAR ORBITER */
+/*             -153   CH2L */
+/*             -153   CHANDRAYAAN-2 LANDER */
+/*             -148   DFLY */
+/*             -148   DRAGONFLY */
+/*             -135   DART */
+/*             -135   DOUBLE ASTEROID REDIRECTION TEST */
+/*             -119   MARS_ORBITER_MISSION_2 */
+/*             -119   MOM2 */
+/*              -96   PARKER SOLAR PROBE */
+/*              -72   JNSB */
+/*              -72   JANUS_B */
+/*              -57   LUNAR ICECUBE */
+/*              -45   JNSA */
+/*              -45   JANUS_A */
+/*              -43   IMAP */
+/*              -39   LUNAR POLAR HYDROGEN MAPPER */
+/*              -39   LUNAH-MAP */
+/*              -37   HYB2 */
+/*              -37   HAYABUSA 2 */
+/*              -37   HAYABUSA2 */
+/*              -33   NEOS */
+/*              -33   NEO SURVEYOR */
+/*           399035   DSS-35 */
+/*           399036   DSS-36 */
+/*           399056   DSS-56 */
+/*           399069   DSS-69 */
+/*          2000052   52_EUROPA */
+/*          2000052   52 EUROPA */
+/*          2162173   RYUGU */
+/*          2486958   ARROKOTH */
+/*         20000617   PATROCLUS_BARYCENTER */
+/*         20000617   PATROCLUS BARYCENTER */
+/*         20003548   EURYBATES_BARYCENTER */
+/*         20003548   EURYBATES BARYCENTER */
+/*         20011351   LEUCUS */
+/*         20015094   POLYMELE */
+/*         20021900   ORUS */
+/*         20052246   DONALDJOHANSON */
+/*         20065803   DIDYMOS_BARYCENTER */
+/*         20065803   DIDYMOS BARYCENTER */
+/*        120000617   MENOETIUS */
+/*        120003548   QUETA */
+/*        120065803   DIMORPHOS */
+/*        920000617   PATROCLUS */
+/*        920003548   EURYBATES */
+/*        920065803   DIDYMOS */
+
+/*        Modified assignments */
+
+/*             -152   CH2O */
+/*             -152   CHANDRAYAAN-2 ORBITER */
+
+/*        Removed assignments */
+
+/*             -164   YOHKOH */
+/*             -164   SOLAR-A */
+/*             -135   DRTS-W */
+/*              -69   PSYC */
+/*              -54   ASTEROID RETRIEVAL MISSION */
+/*              -54   ARM */
+
+/*        Reimplemented spelling change: */
+
+/*           MAGACLITE to MEGACLITE */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.9, 04-APR-2017 (EDW) */
 
 /*        Added information stating the frames subsystem performs */
 /*        frame ID-name mappings and the DSK subsystem performs */
@@ -228,7 +331,7 @@
 /*        Edited body/ID assignment format to indicate whitespace */
 /*        between 'NAME' and Comments. */
 
-/*     Added: */
+/*        Added: */
 
 /*             -302   HELIOS 2 */
 /*             -301   HELIOS 1 */
@@ -259,13 +362,13 @@
 /*          2000016   PSYCHE */
 /*          2101955   BENNU */
 
-/*     Removed assignments: */
+/*        Removed assignments: */
 
 /*             -159   EUROPA ORBITER */
 /*              -69   MPO */
 /*              -69   MERCURY PLANETARY ORBITER */
 
-/*     Modified assignments */
+/*        Modified assignments */
 
 /*             -121   MERCURY PLANETARY ORBITER */
 /*             -121   MPO */
@@ -274,15 +377,15 @@
 /*              -68   MMO */
 /*              -68   BEPICOLOMBO MMO */
 
-/* -    SPICELIB 1.0.8 06-MAY-2014 (EDW) */
+/* -    SPICELIB Version 1.0.8, 06-MAY-2014 (EDW) */
 
-/*         Edited text comments in Asteroids section and Comets section. */
+/*        Edited text comments in Asteroids section and Comets section. */
 
-/*         Eliminated "PI" IAU Number from "CHARON" description. */
+/*        Eliminated "PI" IAU Number from "CHARON" description. */
 
-/*         HYROKKIN (644) spelling corrected to HYRROKKIN. */
+/*        HYROKKIN (644) spelling corrected to HYRROKKIN. */
 
-/*     Added: */
+/*        Added: */
 
 /*             -750   SPRINT-AS */
 /*             -189   NSYT */
@@ -318,18 +421,18 @@
 /*          2000002   PALLAS */
 /*          2000511   DAVIDA */
 
-/*     Removed assignments: */
+/*        Removed assignments: */
 
 /*             -486   HERSCHEL */
 /*             -489   PLANCK */
 /*             -187   SOLAR PROBE */
 
-/* -    SPICELIB 1.0.7 20-MAY-2010 (EDW) */
+/* -    SPICELIB Version 1.0.7, 20-MAY-2010 (EDW) */
 
 /*        Edit to vehicle ID list to correct -76 not in proper */
 /*        numerical (descending) order. */
 
-/*     Added: */
+/*        Added: */
 
 /*               -5   AKATSUKI */
 /*               -5   VCO */
@@ -349,9 +452,9 @@
 /*          2000021   LUTETIA */
 /*          2004179   TOUTATIS */
 
-/* -    SPICELIB 1.0.6 08-APR-2009 (EDW) */
+/* -    SPICELIB Version 1.0.6, 08-APR-2009 (EDW) */
 
-/*     Added: */
+/*        Added: */
 
 /*               -5   PLC */
 /*               -5   PLANET-C */
@@ -363,9 +466,9 @@
 /*             -140   EPOCH */
 /*             -140   DIXI */
 
-/* -    SPICELIB 1.0.5 09-JAN-2008 (EDW) */
+/* -    SPICELIB Version 1.0.5, 09-JAN-2008 (EDW) */
 
-/*     Added: */
+/*        Added: */
 
 /*              -18   LCROSS */
 /*              -29   NEXT */
@@ -398,8 +501,8 @@
 /*              812   LAOMEDEIA */
 /*              813   NESO */
 
-/*     NAIF modified the Jovian system listing to conform to the */
-/*     current (as of this date) name/body mapping. */
+/*        NAIF modified the Jovian system listing to conform to the */
+/*        current (as of this date) name/body mapping. */
 
 /*              540   MNEME */
 /*              541   AOEDE */
@@ -412,7 +515,7 @@
 /*              548   CYLLENE */
 /*              549   KORE */
 
-/*     Removed assignments: */
+/*        Removed assignments: */
 
 /*             -172   SPACETECH-3 COMBINER */
 /*             -174   PLUTO-KUIPER EXPRESS */
@@ -442,35 +545,35 @@
 /*              718   1986U10 */
 /*              901   1978P1 */
 
-/*     Spelling correction: */
+/*        Spelling correction: */
 
-/*        MAGACLITE to MEGACLITE */
+/*           MAGACLITE to MEGACLITE */
 
-/*     Rename: */
+/*        Rename: */
 
-/*        ERRIAPO to ERRIAPUS */
-/*        STV-1 to STV51 */
-/*        STV-2 to STV52 */
-/*        STV-3 to STV53 */
+/*           ERRIAPO to ERRIAPUS */
+/*           STV-1 to STV51 */
+/*           STV-2 to STV52 */
+/*           STV-3 to STV53 */
 
 
-/* -    SPICELIB 1.0.4 01-NOV-2006 (EDW) */
+/* -    SPICELIB Version 1.0.4, 01-NOV-2006 (EDW) */
 
-/*     NAIF removed several provisional name/ID mappings from */
-/*     the Jovian system listing: */
+/*        NAIF removed several provisional name/ID mappings from */
+/*        the Jovian system listing: */
 
-/*     539         'HEGEMONE'              JXXXIX */
-/*     540         'MNEME'                 JXL */
-/*     541         'AOEDE'                 JXLI */
-/*     542         'THELXINOE'             JXLII */
-/*     543         'ARCHE'                 JXLIII */
-/*     544         'KALLICHORE'            JXLIV */
-/*     545         'HELIKE'                JXLV */
-/*     546         'CARPO'                 JXLVI */
-/*     547         'EUKELADE'              JXLVII */
-/*     548         'CYLLENE'               JXLVIII */
+/*           539         'HEGEMONE'              JXXXIX */
+/*           540         'MNEME'                 JXL */
+/*           541         'AOEDE'                 JXLI */
+/*           542         'THELXINOE'             JXLII */
+/*           543         'ARCHE'                 JXLIII */
+/*           544         'KALLICHORE'            JXLIV */
+/*           545         'HELIKE'                JXLV */
+/*           546         'CARPO'                 JXLVI */
+/*           547         'EUKELADE'              JXLVII */
+/*           548         'CYLLENE'               JXLVIII */
 
-/*     The current mapping set for the range 539-561: */
+/*        The current mapping set for the range 539-561: */
 
 /*              540   ARCHE */
 /*              541   EUKELADE */
@@ -482,10 +585,10 @@
 /*              560   CARPO */
 /*              561   MNEME */
 
-/*     The new mapping leaves the IDs 539, 542-545, 549, 550, 552, */
-/*     554-559 unassigned. */
+/*        The new mapping leaves the IDs 539, 542-545, 549, 550, 552, */
+/*        554-559 unassigned. */
 
-/*     Added: */
+/*        Added: */
 
 /*              635   DAPHNIS */
 /*              722   FRANCISCO */
@@ -506,13 +609,13 @@
 /*             -85    LUNAR RECON ORBITER */
 /*             -85    LUNAR RECONNAISSANCE ORBITER */
 
-/*     Spelling correction */
+/*        Spelling correction */
 
 /*              632   METHODE to METHONE */
 
-/* -    SPICELIB 1.0.3 14-NOV-2005 (EDW) */
+/* -    SPICELIB Version 1.0.3, 14-NOV-2005 (EDW) */
 
-/*     Added: */
+/*        Added: */
 
 /*              539   HEGEMONE */
 /*              540   MNEME */
@@ -536,15 +639,18 @@
 /*                    SELENE VRAD Satellite, SELENE Vstar */
 /*           399064   DSS-64 */
 
-/*      Change in spelling: */
+/*        Change in spelling: */
 
 /*              623   SUTTUNG to SUTTUNGR */
 /*              627   SKADI   to SKATHI */
 /*              630   THRYM   to THRYMR */
 
-/* -    SPICELIB 1.0.2 20-DEC-2004 (EDW) */
+/* -    SPICELIB Version 1.0.2, 20-DEC-2004 (EDW) */
 
-/*     Added: */
+/*        Edited parse code to correctly process embedded */
+/*        parentheses in a body name. */
+
+/*        Added: */
 
 /*           Due to the previous definition of Parkes with DSS-05, */
 /*           the Parkes ID remains 399005. */
@@ -562,15 +668,15 @@
 /*            -238    SMART-1, S1, SM1, SMART1 */
 /*            -130    HAYABUSA */
 
-/* -    SPICELIB 1.0.1 19-DEC-2003 (EDW) */
+/* -    SPICELIB Version 1.0.1, 19-DEC-2003 (EDW) */
 
-/*     Added: */
+/*        Added: */
 /*              -79   SPITZER */
 /*          2000216   KLEOPATRA */
 
-/* -    SPICELIB 1.0.0 27-JUL-2003 (EDW) */
+/* -    SPICELIB Version 1.0.0, 27-JUL-2003 (EDW) */
 
-/*     Added: */
+/*        Added: */
 /*              -47   GNS */
 /*              -74   MRO */
 /*              -74   MARS RECON ORBITER */
@@ -617,7 +723,7 @@
 /*          2000001   CERES */
 /*          2000004   VESTA */
 
-/*     Renamed: */
+/*        Renamed: */
 
 /*              -25   LPM to */
 /*              -25   LP */
@@ -631,7 +737,7 @@
 /*             -205   STARLIGHT COLLECTOR to */
 /*             -205   SPACETECH-3 COLLECTOR */
 
-/*      Removed: */
+/*        Removed: */
 /*             -172   SLCOMB */
 
 
@@ -749,7 +855,7 @@
     bltcod[50] = 518;
     s_copy(bltnam + 1800, "THEMISTO", (ftnlen)36, (ftnlen)8);
     bltcod[51] = 519;
-    s_copy(bltnam + 1836, "MAGACLITE", (ftnlen)36, (ftnlen)9);
+    s_copy(bltnam + 1836, "MEGACLITE", (ftnlen)36, (ftnlen)9);
     bltcod[52] = 520;
     s_copy(bltnam + 1872, "TAYGETE", (ftnlen)36, (ftnlen)7);
     bltcod[53] = 521;
@@ -1105,803 +1211,952 @@
     s_copy(bltnam + 8172, "VG2", (ftnlen)36, (ftnlen)3);
     bltcod[228] = -32;
     s_copy(bltnam + 8208, "VOYAGER 2", (ftnlen)36, (ftnlen)9);
-    bltcod[229] = -40;
-    s_copy(bltnam + 8244, "CLEMENTINE", (ftnlen)36, (ftnlen)10);
-    bltcod[230] = -41;
-    s_copy(bltnam + 8280, "MEX", (ftnlen)36, (ftnlen)3);
-    bltcod[231] = -41;
-    s_copy(bltnam + 8316, "MARS EXPRESS", (ftnlen)36, (ftnlen)12);
-    bltcod[232] = -44;
-    s_copy(bltnam + 8352, "BEAGLE2", (ftnlen)36, (ftnlen)7);
-    bltcod[233] = -44;
-    s_copy(bltnam + 8388, "BEAGLE 2", (ftnlen)36, (ftnlen)8);
-    bltcod[234] = -46;
-    s_copy(bltnam + 8424, "MS-T5", (ftnlen)36, (ftnlen)5);
-    bltcod[235] = -46;
-    s_copy(bltnam + 8460, "SAKIGAKE", (ftnlen)36, (ftnlen)8);
-    bltcod[236] = -47;
-    s_copy(bltnam + 8496, "PLANET-A", (ftnlen)36, (ftnlen)8);
-    bltcod[237] = -47;
-    s_copy(bltnam + 8532, "SUISEI", (ftnlen)36, (ftnlen)6);
-    bltcod[238] = -47;
-    s_copy(bltnam + 8568, "GNS", (ftnlen)36, (ftnlen)3);
-    bltcod[239] = -47;
-    s_copy(bltnam + 8604, "GENESIS", (ftnlen)36, (ftnlen)7);
-    bltcod[240] = -48;
-    s_copy(bltnam + 8640, "HUBBLE SPACE TELESCOPE", (ftnlen)36, (ftnlen)22);
-    bltcod[241] = -48;
-    s_copy(bltnam + 8676, "HST", (ftnlen)36, (ftnlen)3);
-    bltcod[242] = -49;
-    s_copy(bltnam + 8712, "LUCY", (ftnlen)36, (ftnlen)4);
-    bltcod[243] = -53;
-    s_copy(bltnam + 8748, "MARS PATHFINDER", (ftnlen)36, (ftnlen)15);
-    bltcod[244] = -53;
-    s_copy(bltnam + 8784, "MPF", (ftnlen)36, (ftnlen)3);
-    bltcod[245] = -53;
-    s_copy(bltnam + 8820, "MARS ODYSSEY", (ftnlen)36, (ftnlen)12);
-    bltcod[246] = -53;
-    s_copy(bltnam + 8856, "MARS SURVEYOR 01 ORBITER", (ftnlen)36, (ftnlen)24);
-    bltcod[247] = -54;
-    s_copy(bltnam + 8892, "ARM", (ftnlen)36, (ftnlen)3);
-    bltcod[248] = -54;
-    s_copy(bltnam + 8928, "ASTEROID RETRIEVAL MISSION", (ftnlen)36, (ftnlen)
-	    26);
-    bltcod[249] = -55;
-    s_copy(bltnam + 8964, "ULYSSES", (ftnlen)36, (ftnlen)7);
-    bltcod[250] = -58;
-    s_copy(bltnam + 9000, "VSOP", (ftnlen)36, (ftnlen)4);
-    bltcod[251] = -58;
-    s_copy(bltnam + 9036, "HALCA", (ftnlen)36, (ftnlen)5);
-    bltcod[252] = -59;
-    s_copy(bltnam + 9072, "RADIOASTRON", (ftnlen)36, (ftnlen)11);
-    bltcod[253] = -61;
-    s_copy(bltnam + 9108, "JUNO", (ftnlen)36, (ftnlen)4);
-    bltcod[254] = -62;
-    s_copy(bltnam + 9144, "EMM", (ftnlen)36, (ftnlen)3);
-    bltcod[255] = -62;
-    s_copy(bltnam + 9180, "EMIRATES MARS MISSION", (ftnlen)36, (ftnlen)21);
-    bltcod[256] = -64;
-    s_copy(bltnam + 9216, "ORX", (ftnlen)36, (ftnlen)3);
-    bltcod[257] = -64;
-    s_copy(bltnam + 9252, "OSIRIS-REX", (ftnlen)36, (ftnlen)10);
-    bltcod[258] = -65;
-    s_copy(bltnam + 9288, "MCOA", (ftnlen)36, (ftnlen)4);
-    bltcod[259] = -65;
-    s_copy(bltnam + 9324, "MARCO-A", (ftnlen)36, (ftnlen)7);
-    bltcod[260] = -66;
-    s_copy(bltnam + 9360, "VEGA 1", (ftnlen)36, (ftnlen)6);
-    bltcod[261] = -66;
-    s_copy(bltnam + 9396, "MCOB", (ftnlen)36, (ftnlen)4);
-    bltcod[262] = -66;
-    s_copy(bltnam + 9432, "MARCO-B", (ftnlen)36, (ftnlen)7);
-    bltcod[263] = -67;
-    s_copy(bltnam + 9468, "VEGA 2", (ftnlen)36, (ftnlen)6);
-    bltcod[264] = -68;
-    s_copy(bltnam + 9504, "MERCURY MAGNETOSPHERIC ORBITER", (ftnlen)36, (
-	    ftnlen)30);
-    bltcod[265] = -68;
-    s_copy(bltnam + 9540, "MMO", (ftnlen)36, (ftnlen)3);
-    bltcod[266] = -68;
-    s_copy(bltnam + 9576, "BEPICOLOMBO MMO", (ftnlen)36, (ftnlen)15);
-    bltcod[267] = -69;
-    s_copy(bltnam + 9612, "PSYC", (ftnlen)36, (ftnlen)4);
-    bltcod[268] = -70;
-    s_copy(bltnam + 9648, "DEEP IMPACT IMPACTOR SPACECRAFT", (ftnlen)36, (
-	    ftnlen)31);
-    bltcod[269] = -74;
-    s_copy(bltnam + 9684, "MRO", (ftnlen)36, (ftnlen)3);
-    bltcod[270] = -74;
-    s_copy(bltnam + 9720, "MARS RECON ORBITER", (ftnlen)36, (ftnlen)18);
-    bltcod[271] = -76;
-    s_copy(bltnam + 9756, "CURIOSITY", (ftnlen)36, (ftnlen)9);
-    bltcod[272] = -76;
-    s_copy(bltnam + 9792, "MSL", (ftnlen)36, (ftnlen)3);
-    bltcod[273] = -76;
-    s_copy(bltnam + 9828, "MARS SCIENCE LABORATORY", (ftnlen)36, (ftnlen)23);
-    bltcod[274] = -77;
-    s_copy(bltnam + 9864, "GLL", (ftnlen)36, (ftnlen)3);
-    bltcod[275] = -77;
-    s_copy(bltnam + 9900, "GALILEO ORBITER", (ftnlen)36, (ftnlen)15);
-    bltcod[276] = -78;
-    s_copy(bltnam + 9936, "GIOTTO", (ftnlen)36, (ftnlen)6);
-    bltcod[277] = -79;
-    s_copy(bltnam + 9972, "SPITZER", (ftnlen)36, (ftnlen)7);
-    bltcod[278] = -79;
-    s_copy(bltnam + 10008, "SPACE INFRARED TELESCOPE FACILITY", (ftnlen)36, (
-	    ftnlen)33);
-    bltcod[279] = -79;
-    s_copy(bltnam + 10044, "SIRTF", (ftnlen)36, (ftnlen)5);
-    bltcod[280] = -81;
-    s_copy(bltnam + 10080, "CASSINI ITL", (ftnlen)36, (ftnlen)11);
-    bltcod[281] = -82;
-    s_copy(bltnam + 10116, "CAS", (ftnlen)36, (ftnlen)3);
-    bltcod[282] = -82;
-    s_copy(bltnam + 10152, "CASSINI", (ftnlen)36, (ftnlen)7);
-    bltcod[283] = -84;
-    s_copy(bltnam + 10188, "PHOENIX", (ftnlen)36, (ftnlen)7);
-    bltcod[284] = -85;
-    s_copy(bltnam + 10224, "LRO", (ftnlen)36, (ftnlen)3);
-    bltcod[285] = -85;
-    s_copy(bltnam + 10260, "LUNAR RECON ORBITER", (ftnlen)36, (ftnlen)19);
-    bltcod[286] = -85;
-    s_copy(bltnam + 10296, "LUNAR RECONNAISSANCE ORBITER", (ftnlen)36, (
-	    ftnlen)28);
-    bltcod[287] = -86;
-    s_copy(bltnam + 10332, "CH1", (ftnlen)36, (ftnlen)3);
-    bltcod[288] = -86;
-    s_copy(bltnam + 10368, "CHANDRAYAAN-1", (ftnlen)36, (ftnlen)13);
-    bltcod[289] = -90;
-    s_copy(bltnam + 10404, "CASSINI SIMULATION", (ftnlen)36, (ftnlen)18);
-    bltcod[290] = -93;
-    s_copy(bltnam + 10440, "NEAR EARTH ASTEROID RENDEZVOUS", (ftnlen)36, (
-	    ftnlen)30);
-    bltcod[291] = -93;
-    s_copy(bltnam + 10476, "NEAR", (ftnlen)36, (ftnlen)4);
-    bltcod[292] = -94;
-    s_copy(bltnam + 10512, "MO", (ftnlen)36, (ftnlen)2);
-    bltcod[293] = -94;
-    s_copy(bltnam + 10548, "MARS OBSERVER", (ftnlen)36, (ftnlen)13);
-    bltcod[294] = -94;
-    s_copy(bltnam + 10584, "MGS", (ftnlen)36, (ftnlen)3);
-    bltcod[295] = -94;
-    s_copy(bltnam + 10620, "MARS GLOBAL SURVEYOR", (ftnlen)36, (ftnlen)20);
-    bltcod[296] = -95;
-    s_copy(bltnam + 10656, "MGS SIMULATION", (ftnlen)36, (ftnlen)14);
-    bltcod[297] = -96;
-    s_copy(bltnam + 10692, "SPP", (ftnlen)36, (ftnlen)3);
-    bltcod[298] = -96;
-    s_copy(bltnam + 10728, "SOLAR PROBE PLUS", (ftnlen)36, (ftnlen)16);
-    bltcod[299] = -97;
-    s_copy(bltnam + 10764, "TOPEX/POSEIDON", (ftnlen)36, (ftnlen)14);
-    bltcod[300] = -98;
-    s_copy(bltnam + 10800, "NEW HORIZONS", (ftnlen)36, (ftnlen)12);
-    bltcod[301] = -107;
-    s_copy(bltnam + 10836, "TROPICAL RAINFALL MEASURING MISSION", (ftnlen)36, 
-	    (ftnlen)35);
-    bltcod[302] = -107;
-    s_copy(bltnam + 10872, "TRMM", (ftnlen)36, (ftnlen)4);
-    bltcod[303] = -112;
-    s_copy(bltnam + 10908, "ICE", (ftnlen)36, (ftnlen)3);
-    bltcod[304] = -116;
-    s_copy(bltnam + 10944, "MARS POLAR LANDER", (ftnlen)36, (ftnlen)17);
-    bltcod[305] = -116;
-    s_copy(bltnam + 10980, "MPL", (ftnlen)36, (ftnlen)3);
-    bltcod[306] = -117;
-    s_copy(bltnam + 11016, "EDL DEMONSTRATOR MODULE", (ftnlen)36, (ftnlen)23);
-    bltcod[307] = -117;
-    s_copy(bltnam + 11052, "EDM", (ftnlen)36, (ftnlen)3);
-    bltcod[308] = -117;
-    s_copy(bltnam + 11088, "EXOMARS 2016 EDM", (ftnlen)36, (ftnlen)16);
-    bltcod[309] = -121;
-    s_copy(bltnam + 11124, "MERCURY PLANETARY ORBITER", (ftnlen)36, (ftnlen)
-	    25);
-    bltcod[310] = -121;
-    s_copy(bltnam + 11160, "MPO", (ftnlen)36, (ftnlen)3);
-    bltcod[311] = -121;
-    s_copy(bltnam + 11196, "BEPICOLOMBO MPO", (ftnlen)36, (ftnlen)15);
-    bltcod[312] = -127;
-    s_copy(bltnam + 11232, "MARS CLIMATE ORBITER", (ftnlen)36, (ftnlen)20);
-    bltcod[313] = -127;
-    s_copy(bltnam + 11268, "MCO", (ftnlen)36, (ftnlen)3);
-    bltcod[314] = -130;
-    s_copy(bltnam + 11304, "MUSES-C", (ftnlen)36, (ftnlen)7);
-    bltcod[315] = -130;
-    s_copy(bltnam + 11340, "HAYABUSA", (ftnlen)36, (ftnlen)8);
-    bltcod[316] = -131;
-    s_copy(bltnam + 11376, "SELENE", (ftnlen)36, (ftnlen)6);
-    bltcod[317] = -131;
-    s_copy(bltnam + 11412, "KAGUYA", (ftnlen)36, (ftnlen)6);
-    bltcod[318] = -135;
-    s_copy(bltnam + 11448, "DRTS-W", (ftnlen)36, (ftnlen)6);
-    bltcod[319] = -140;
-    s_copy(bltnam + 11484, "EPOCH", (ftnlen)36, (ftnlen)5);
-    bltcod[320] = -140;
-    s_copy(bltnam + 11520, "DIXI", (ftnlen)36, (ftnlen)4);
-    bltcod[321] = -140;
-    s_copy(bltnam + 11556, "EPOXI", (ftnlen)36, (ftnlen)5);
-    bltcod[322] = -140;
-    s_copy(bltnam + 11592, "DEEP IMPACT FLYBY SPACECRAFT", (ftnlen)36, (
-	    ftnlen)28);
-    bltcod[323] = -142;
-    s_copy(bltnam + 11628, "TERRA", (ftnlen)36, (ftnlen)5);
-    bltcod[324] = -142;
-    s_copy(bltnam + 11664, "EOS-AM1", (ftnlen)36, (ftnlen)7);
-    bltcod[325] = -143;
-    s_copy(bltnam + 11700, "TRACE GAS ORBITER", (ftnlen)36, (ftnlen)17);
-    bltcod[326] = -143;
-    s_copy(bltnam + 11736, "TGO", (ftnlen)36, (ftnlen)3);
-    bltcod[327] = -143;
-    s_copy(bltnam + 11772, "EXOMARS 2016 TGO", (ftnlen)36, (ftnlen)16);
-    bltcod[328] = -144;
-    s_copy(bltnam + 11808, "SOLO", (ftnlen)36, (ftnlen)4);
-    bltcod[329] = -144;
-    s_copy(bltnam + 11844, "SOLAR ORBITER", (ftnlen)36, (ftnlen)13);
-    bltcod[330] = -146;
-    s_copy(bltnam + 11880, "LUNAR-A", (ftnlen)36, (ftnlen)7);
-    bltcod[331] = -150;
-    s_copy(bltnam + 11916, "CASSINI PROBE", (ftnlen)36, (ftnlen)13);
-    bltcod[332] = -150;
-    s_copy(bltnam + 11952, "HUYGENS PROBE", (ftnlen)36, (ftnlen)13);
-    bltcod[333] = -150;
-    s_copy(bltnam + 11988, "CASP", (ftnlen)36, (ftnlen)4);
-    bltcod[334] = -151;
-    s_copy(bltnam + 12024, "AXAF", (ftnlen)36, (ftnlen)4);
-    bltcod[335] = -151;
-    s_copy(bltnam + 12060, "CHANDRA", (ftnlen)36, (ftnlen)7);
-    bltcod[336] = -152;
-    s_copy(bltnam + 12096, "CH2", (ftnlen)36, (ftnlen)3);
-    bltcod[337] = -152;
-    s_copy(bltnam + 12132, "CHANDRAYAAN-2", (ftnlen)36, (ftnlen)13);
-    bltcod[338] = -154;
-    s_copy(bltnam + 12168, "AQUA", (ftnlen)36, (ftnlen)4);
-    bltcod[339] = -159;
-    s_copy(bltnam + 12204, "EURC", (ftnlen)36, (ftnlen)4);
-    bltcod[340] = -159;
-    s_copy(bltnam + 12240, "EUROPA CLIPPER", (ftnlen)36, (ftnlen)14);
-    bltcod[341] = -164;
-    s_copy(bltnam + 12276, "YOHKOH", (ftnlen)36, (ftnlen)6);
-    bltcod[342] = -164;
-    s_copy(bltnam + 12312, "SOLAR-A", (ftnlen)36, (ftnlen)7);
-    bltcod[343] = -165;
-    s_copy(bltnam + 12348, "MAP", (ftnlen)36, (ftnlen)3);
-    bltcod[344] = -166;
-    s_copy(bltnam + 12384, "IMAGE", (ftnlen)36, (ftnlen)5);
-    bltcod[345] = -170;
-    s_copy(bltnam + 12420, "JWST", (ftnlen)36, (ftnlen)4);
-    bltcod[346] = -170;
-    s_copy(bltnam + 12456, "JAMES WEBB SPACE TELESCOPE", (ftnlen)36, (ftnlen)
-	    26);
-    bltcod[347] = -177;
-    s_copy(bltnam + 12492, "GRAIL-A", (ftnlen)36, (ftnlen)7);
-    bltcod[348] = -178;
-    s_copy(bltnam + 12528, "PLANET-B", (ftnlen)36, (ftnlen)8);
-    bltcod[349] = -178;
-    s_copy(bltnam + 12564, "NOZOMI", (ftnlen)36, (ftnlen)6);
-    bltcod[350] = -181;
-    s_copy(bltnam + 12600, "GRAIL-B", (ftnlen)36, (ftnlen)7);
-    bltcod[351] = -183;
-    s_copy(bltnam + 12636, "CLUSTER 1", (ftnlen)36, (ftnlen)9);
-    bltcod[352] = -185;
-    s_copy(bltnam + 12672, "CLUSTER 2", (ftnlen)36, (ftnlen)9);
-    bltcod[353] = -188;
-    s_copy(bltnam + 12708, "MUSES-B", (ftnlen)36, (ftnlen)7);
-    bltcod[354] = -189;
-    s_copy(bltnam + 12744, "NSYT", (ftnlen)36, (ftnlen)4);
-    bltcod[355] = -189;
-    s_copy(bltnam + 12780, "INSIGHT", (ftnlen)36, (ftnlen)7);
-    bltcod[356] = -190;
-    s_copy(bltnam + 12816, "SIM", (ftnlen)36, (ftnlen)3);
-    bltcod[357] = -194;
-    s_copy(bltnam + 12852, "CLUSTER 3", (ftnlen)36, (ftnlen)9);
-    bltcod[358] = -196;
-    s_copy(bltnam + 12888, "CLUSTER 4", (ftnlen)36, (ftnlen)9);
-    bltcod[359] = -198;
-    s_copy(bltnam + 12924, "INTEGRAL", (ftnlen)36, (ftnlen)8);
-    bltcod[360] = -198;
-    s_copy(bltnam + 12960, "NASA-ISRO SAR MISSION", (ftnlen)36, (ftnlen)21);
-    bltcod[361] = -198;
-    s_copy(bltnam + 12996, "NISAR", (ftnlen)36, (ftnlen)5);
-    bltcod[362] = -200;
-    s_copy(bltnam + 13032, "CONTOUR", (ftnlen)36, (ftnlen)7);
-    bltcod[363] = -202;
-    s_copy(bltnam + 13068, "MAVEN", (ftnlen)36, (ftnlen)5);
-    bltcod[364] = -203;
-    s_copy(bltnam + 13104, "DAWN", (ftnlen)36, (ftnlen)4);
-    bltcod[365] = -205;
-    s_copy(bltnam + 13140, "SOIL MOISTURE ACTIVE AND PASSIVE", (ftnlen)36, (
-	    ftnlen)32);
-    bltcod[366] = -205;
-    s_copy(bltnam + 13176, "SMAP", (ftnlen)36, (ftnlen)4);
-    bltcod[367] = -212;
-    s_copy(bltnam + 13212, "STV51", (ftnlen)36, (ftnlen)5);
-    bltcod[368] = -213;
-    s_copy(bltnam + 13248, "STV52", (ftnlen)36, (ftnlen)5);
-    bltcod[369] = -214;
-    s_copy(bltnam + 13284, "STV53", (ftnlen)36, (ftnlen)5);
-    bltcod[370] = -226;
-    s_copy(bltnam + 13320, "ROSETTA", (ftnlen)36, (ftnlen)7);
-    bltcod[371] = -227;
-    s_copy(bltnam + 13356, "KEPLER", (ftnlen)36, (ftnlen)6);
-    bltcod[372] = -228;
-    s_copy(bltnam + 13392, "GLL PROBE", (ftnlen)36, (ftnlen)9);
-    bltcod[373] = -228;
-    s_copy(bltnam + 13428, "GALILEO PROBE", (ftnlen)36, (ftnlen)13);
-    bltcod[374] = -234;
-    s_copy(bltnam + 13464, "STEREO AHEAD", (ftnlen)36, (ftnlen)12);
-    bltcod[375] = -235;
-    s_copy(bltnam + 13500, "STEREO BEHIND", (ftnlen)36, (ftnlen)13);
-    bltcod[376] = -236;
-    s_copy(bltnam + 13536, "MESSENGER", (ftnlen)36, (ftnlen)9);
-    bltcod[377] = -238;
-    s_copy(bltnam + 13572, "SMART1", (ftnlen)36, (ftnlen)6);
-    bltcod[378] = -238;
-    s_copy(bltnam + 13608, "SM1", (ftnlen)36, (ftnlen)3);
-    bltcod[379] = -238;
-    s_copy(bltnam + 13644, "S1", (ftnlen)36, (ftnlen)2);
-    bltcod[380] = -238;
-    s_copy(bltnam + 13680, "SMART-1", (ftnlen)36, (ftnlen)7);
-    bltcod[381] = -248;
-    s_copy(bltnam + 13716, "VEX", (ftnlen)36, (ftnlen)3);
-    bltcod[382] = -248;
-    s_copy(bltnam + 13752, "VENUS EXPRESS", (ftnlen)36, (ftnlen)13);
-    bltcod[383] = -253;
-    s_copy(bltnam + 13788, "OPPORTUNITY", (ftnlen)36, (ftnlen)11);
-    bltcod[384] = -253;
-    s_copy(bltnam + 13824, "MER-1", (ftnlen)36, (ftnlen)5);
-    bltcod[385] = -254;
-    s_copy(bltnam + 13860, "SPIRIT", (ftnlen)36, (ftnlen)6);
-    bltcod[386] = -254;
-    s_copy(bltnam + 13896, "MER-2", (ftnlen)36, (ftnlen)5);
-    bltcod[387] = -301;
-    s_copy(bltnam + 13932, "HELIOS 1", (ftnlen)36, (ftnlen)8);
-    bltcod[388] = -302;
-    s_copy(bltnam + 13968, "HELIOS 2", (ftnlen)36, (ftnlen)8);
-    bltcod[389] = -362;
-    s_copy(bltnam + 14004, "RADIATION BELT STORM PROBE A", (ftnlen)36, (
-	    ftnlen)28);
-    bltcod[390] = -362;
-    s_copy(bltnam + 14040, "RBSP_A", (ftnlen)36, (ftnlen)6);
-    bltcod[391] = -363;
-    s_copy(bltnam + 14076, "RADIATION BELT STORM PROBE B", (ftnlen)36, (
-	    ftnlen)28);
-    bltcod[392] = -363;
-    s_copy(bltnam + 14112, "RBSP_B", (ftnlen)36, (ftnlen)6);
-    bltcod[393] = -500;
-    s_copy(bltnam + 14148, "RSAT", (ftnlen)36, (ftnlen)4);
-    bltcod[394] = -500;
-    s_copy(bltnam + 14184, "SELENE Relay Satellite", (ftnlen)36, (ftnlen)22);
-    bltcod[395] = -500;
-    s_copy(bltnam + 14220, "SELENE Rstar", (ftnlen)36, (ftnlen)12);
-    bltcod[396] = -500;
-    s_copy(bltnam + 14256, "Rstar", (ftnlen)36, (ftnlen)5);
-    bltcod[397] = -502;
-    s_copy(bltnam + 14292, "VSAT", (ftnlen)36, (ftnlen)4);
-    bltcod[398] = -502;
-    s_copy(bltnam + 14328, "SELENE VLBI Radio Satellite", (ftnlen)36, (ftnlen)
+    bltcod[229] = -33;
+    s_copy(bltnam + 8244, "NEOS", (ftnlen)36, (ftnlen)4);
+    bltcod[230] = -33;
+    s_copy(bltnam + 8280, "NEO SURVEYOR", (ftnlen)36, (ftnlen)12);
+    bltcod[231] = -37;
+    s_copy(bltnam + 8316, "HYB2", (ftnlen)36, (ftnlen)4);
+    bltcod[232] = -37;
+    s_copy(bltnam + 8352, "HAYABUSA 2", (ftnlen)36, (ftnlen)10);
+    bltcod[233] = -37;
+    s_copy(bltnam + 8388, "HAYABUSA2", (ftnlen)36, (ftnlen)9);
+    bltcod[234] = -39;
+    s_copy(bltnam + 8424, "LUNAR POLAR HYDROGEN MAPPER", (ftnlen)36, (ftnlen)
 	    27);
-    bltcod[399] = -502;
-    s_copy(bltnam + 14364, "SELENE VRAD Satellite", (ftnlen)36, (ftnlen)21);
-    bltcod[400] = -502;
-    s_copy(bltnam + 14400, "SELENE Vstar", (ftnlen)36, (ftnlen)12);
-    bltcod[401] = -502;
-    s_copy(bltnam + 14436, "Vstar", (ftnlen)36, (ftnlen)5);
-    bltcod[402] = -550;
-    s_copy(bltnam + 14472, "MARS-96", (ftnlen)36, (ftnlen)7);
-    bltcod[403] = -550;
-    s_copy(bltnam + 14508, "M96", (ftnlen)36, (ftnlen)3);
-    bltcod[404] = -550;
-    s_copy(bltnam + 14544, "MARS 96", (ftnlen)36, (ftnlen)7);
-    bltcod[405] = -550;
-    s_copy(bltnam + 14580, "MARS96", (ftnlen)36, (ftnlen)6);
-    bltcod[406] = -750;
-    s_copy(bltnam + 14616, "SPRINT-A", (ftnlen)36, (ftnlen)8);
-    bltcod[407] = 50000001;
-    s_copy(bltnam + 14652, "SHOEMAKER-LEVY 9-W", (ftnlen)36, (ftnlen)18);
-    bltcod[408] = 50000002;
-    s_copy(bltnam + 14688, "SHOEMAKER-LEVY 9-V", (ftnlen)36, (ftnlen)18);
-    bltcod[409] = 50000003;
-    s_copy(bltnam + 14724, "SHOEMAKER-LEVY 9-U", (ftnlen)36, (ftnlen)18);
-    bltcod[410] = 50000004;
-    s_copy(bltnam + 14760, "SHOEMAKER-LEVY 9-T", (ftnlen)36, (ftnlen)18);
-    bltcod[411] = 50000005;
-    s_copy(bltnam + 14796, "SHOEMAKER-LEVY 9-S", (ftnlen)36, (ftnlen)18);
-    bltcod[412] = 50000006;
-    s_copy(bltnam + 14832, "SHOEMAKER-LEVY 9-R", (ftnlen)36, (ftnlen)18);
-    bltcod[413] = 50000007;
-    s_copy(bltnam + 14868, "SHOEMAKER-LEVY 9-Q", (ftnlen)36, (ftnlen)18);
-    bltcod[414] = 50000008;
-    s_copy(bltnam + 14904, "SHOEMAKER-LEVY 9-P", (ftnlen)36, (ftnlen)18);
-    bltcod[415] = 50000009;
-    s_copy(bltnam + 14940, "SHOEMAKER-LEVY 9-N", (ftnlen)36, (ftnlen)18);
-    bltcod[416] = 50000010;
-    s_copy(bltnam + 14976, "SHOEMAKER-LEVY 9-M", (ftnlen)36, (ftnlen)18);
-    bltcod[417] = 50000011;
-    s_copy(bltnam + 15012, "SHOEMAKER-LEVY 9-L", (ftnlen)36, (ftnlen)18);
-    bltcod[418] = 50000012;
-    s_copy(bltnam + 15048, "SHOEMAKER-LEVY 9-K", (ftnlen)36, (ftnlen)18);
-    bltcod[419] = 50000013;
-    s_copy(bltnam + 15084, "SHOEMAKER-LEVY 9-J", (ftnlen)36, (ftnlen)18);
-    bltcod[420] = 50000014;
-    s_copy(bltnam + 15120, "SHOEMAKER-LEVY 9-H", (ftnlen)36, (ftnlen)18);
-    bltcod[421] = 50000015;
-    s_copy(bltnam + 15156, "SHOEMAKER-LEVY 9-G", (ftnlen)36, (ftnlen)18);
-    bltcod[422] = 50000016;
-    s_copy(bltnam + 15192, "SHOEMAKER-LEVY 9-F", (ftnlen)36, (ftnlen)18);
-    bltcod[423] = 50000017;
-    s_copy(bltnam + 15228, "SHOEMAKER-LEVY 9-E", (ftnlen)36, (ftnlen)18);
-    bltcod[424] = 50000018;
-    s_copy(bltnam + 15264, "SHOEMAKER-LEVY 9-D", (ftnlen)36, (ftnlen)18);
-    bltcod[425] = 50000019;
-    s_copy(bltnam + 15300, "SHOEMAKER-LEVY 9-C", (ftnlen)36, (ftnlen)18);
-    bltcod[426] = 50000020;
-    s_copy(bltnam + 15336, "SHOEMAKER-LEVY 9-B", (ftnlen)36, (ftnlen)18);
-    bltcod[427] = 50000021;
-    s_copy(bltnam + 15372, "SHOEMAKER-LEVY 9-A", (ftnlen)36, (ftnlen)18);
-    bltcod[428] = 50000022;
-    s_copy(bltnam + 15408, "SHOEMAKER-LEVY 9-Q1", (ftnlen)36, (ftnlen)19);
-    bltcod[429] = 50000023;
-    s_copy(bltnam + 15444, "SHOEMAKER-LEVY 9-P2", (ftnlen)36, (ftnlen)19);
-    bltcod[430] = 1000001;
-    s_copy(bltnam + 15480, "AREND", (ftnlen)36, (ftnlen)5);
-    bltcod[431] = 1000002;
-    s_copy(bltnam + 15516, "AREND-RIGAUX", (ftnlen)36, (ftnlen)12);
-    bltcod[432] = 1000003;
-    s_copy(bltnam + 15552, "ASHBROOK-JACKSON", (ftnlen)36, (ftnlen)16);
-    bltcod[433] = 1000004;
-    s_copy(bltnam + 15588, "BOETHIN", (ftnlen)36, (ftnlen)7);
-    bltcod[434] = 1000005;
-    s_copy(bltnam + 15624, "BORRELLY", (ftnlen)36, (ftnlen)8);
-    bltcod[435] = 1000006;
-    s_copy(bltnam + 15660, "BOWELL-SKIFF", (ftnlen)36, (ftnlen)12);
-    bltcod[436] = 1000007;
-    s_copy(bltnam + 15696, "BRADFIELD", (ftnlen)36, (ftnlen)9);
-    bltcod[437] = 1000008;
-    s_copy(bltnam + 15732, "BROOKS 2", (ftnlen)36, (ftnlen)8);
-    bltcod[438] = 1000009;
-    s_copy(bltnam + 15768, "BRORSEN-METCALF", (ftnlen)36, (ftnlen)15);
-    bltcod[439] = 1000010;
-    s_copy(bltnam + 15804, "BUS", (ftnlen)36, (ftnlen)3);
-    bltcod[440] = 1000011;
-    s_copy(bltnam + 15840, "CHERNYKH", (ftnlen)36, (ftnlen)8);
-    bltcod[441] = 1000012;
-    s_copy(bltnam + 15876, "67P/CHURYUMOV-GERASIMENKO (1969 R1)", (ftnlen)36, 
+    bltcod[235] = -39;
+    s_copy(bltnam + 8460, "LUNAH-MAP", (ftnlen)36, (ftnlen)9);
+    bltcod[236] = -40;
+    s_copy(bltnam + 8496, "CLEMENTINE", (ftnlen)36, (ftnlen)10);
+    bltcod[237] = -41;
+    s_copy(bltnam + 8532, "MEX", (ftnlen)36, (ftnlen)3);
+    bltcod[238] = -41;
+    s_copy(bltnam + 8568, "MARS EXPRESS", (ftnlen)36, (ftnlen)12);
+    bltcod[239] = -43;
+    s_copy(bltnam + 8604, "IMAP", (ftnlen)36, (ftnlen)4);
+    bltcod[240] = -44;
+    s_copy(bltnam + 8640, "BEAGLE2", (ftnlen)36, (ftnlen)7);
+    bltcod[241] = -44;
+    s_copy(bltnam + 8676, "BEAGLE 2", (ftnlen)36, (ftnlen)8);
+    bltcod[242] = -45;
+    s_copy(bltnam + 8712, "JNSA", (ftnlen)36, (ftnlen)4);
+    bltcod[243] = -45;
+    s_copy(bltnam + 8748, "JANUS_A", (ftnlen)36, (ftnlen)7);
+    bltcod[244] = -46;
+    s_copy(bltnam + 8784, "MS-T5", (ftnlen)36, (ftnlen)5);
+    bltcod[245] = -46;
+    s_copy(bltnam + 8820, "SAKIGAKE", (ftnlen)36, (ftnlen)8);
+    bltcod[246] = -47;
+    s_copy(bltnam + 8856, "PLANET-A", (ftnlen)36, (ftnlen)8);
+    bltcod[247] = -47;
+    s_copy(bltnam + 8892, "SUISEI", (ftnlen)36, (ftnlen)6);
+    bltcod[248] = -47;
+    s_copy(bltnam + 8928, "GNS", (ftnlen)36, (ftnlen)3);
+    bltcod[249] = -47;
+    s_copy(bltnam + 8964, "GENESIS", (ftnlen)36, (ftnlen)7);
+    bltcod[250] = -48;
+    s_copy(bltnam + 9000, "HUBBLE SPACE TELESCOPE", (ftnlen)36, (ftnlen)22);
+    bltcod[251] = -48;
+    s_copy(bltnam + 9036, "HST", (ftnlen)36, (ftnlen)3);
+    bltcod[252] = -49;
+    s_copy(bltnam + 9072, "LUCY", (ftnlen)36, (ftnlen)4);
+    bltcod[253] = -53;
+    s_copy(bltnam + 9108, "MARS PATHFINDER", (ftnlen)36, (ftnlen)15);
+    bltcod[254] = -53;
+    s_copy(bltnam + 9144, "MPF", (ftnlen)36, (ftnlen)3);
+    bltcod[255] = -53;
+    s_copy(bltnam + 9180, "MARS ODYSSEY", (ftnlen)36, (ftnlen)12);
+    bltcod[256] = -53;
+    s_copy(bltnam + 9216, "MARS SURVEYOR 01 ORBITER", (ftnlen)36, (ftnlen)24);
+    bltcod[257] = -55;
+    s_copy(bltnam + 9252, "ULYSSES", (ftnlen)36, (ftnlen)7);
+    bltcod[258] = -57;
+    s_copy(bltnam + 9288, "LUNAR ICECUBE", (ftnlen)36, (ftnlen)13);
+    bltcod[259] = -58;
+    s_copy(bltnam + 9324, "VSOP", (ftnlen)36, (ftnlen)4);
+    bltcod[260] = -58;
+    s_copy(bltnam + 9360, "HALCA", (ftnlen)36, (ftnlen)5);
+    bltcod[261] = -59;
+    s_copy(bltnam + 9396, "RADIOASTRON", (ftnlen)36, (ftnlen)11);
+    bltcod[262] = -61;
+    s_copy(bltnam + 9432, "JUNO", (ftnlen)36, (ftnlen)4);
+    bltcod[263] = -62;
+    s_copy(bltnam + 9468, "EMM", (ftnlen)36, (ftnlen)3);
+    bltcod[264] = -62;
+    s_copy(bltnam + 9504, "EMIRATES MARS MISSION", (ftnlen)36, (ftnlen)21);
+    bltcod[265] = -64;
+    s_copy(bltnam + 9540, "ORX", (ftnlen)36, (ftnlen)3);
+    bltcod[266] = -64;
+    s_copy(bltnam + 9576, "OSIRIS-REX", (ftnlen)36, (ftnlen)10);
+    bltcod[267] = -65;
+    s_copy(bltnam + 9612, "MCOA", (ftnlen)36, (ftnlen)4);
+    bltcod[268] = -65;
+    s_copy(bltnam + 9648, "MARCO-A", (ftnlen)36, (ftnlen)7);
+    bltcod[269] = -66;
+    s_copy(bltnam + 9684, "VEGA 1", (ftnlen)36, (ftnlen)6);
+    bltcod[270] = -66;
+    s_copy(bltnam + 9720, "MCOB", (ftnlen)36, (ftnlen)4);
+    bltcod[271] = -66;
+    s_copy(bltnam + 9756, "MARCO-B", (ftnlen)36, (ftnlen)7);
+    bltcod[272] = -67;
+    s_copy(bltnam + 9792, "VEGA 2", (ftnlen)36, (ftnlen)6);
+    bltcod[273] = -68;
+    s_copy(bltnam + 9828, "MERCURY MAGNETOSPHERIC ORBITER", (ftnlen)36, (
+	    ftnlen)30);
+    bltcod[274] = -68;
+    s_copy(bltnam + 9864, "MMO", (ftnlen)36, (ftnlen)3);
+    bltcod[275] = -68;
+    s_copy(bltnam + 9900, "BEPICOLOMBO MMO", (ftnlen)36, (ftnlen)15);
+    bltcod[276] = -70;
+    s_copy(bltnam + 9936, "DEEP IMPACT IMPACTOR SPACECRAFT", (ftnlen)36, (
+	    ftnlen)31);
+    bltcod[277] = -72;
+    s_copy(bltnam + 9972, "JNSB", (ftnlen)36, (ftnlen)4);
+    bltcod[278] = -72;
+    s_copy(bltnam + 10008, "JANUS_B", (ftnlen)36, (ftnlen)7);
+    bltcod[279] = -74;
+    s_copy(bltnam + 10044, "MRO", (ftnlen)36, (ftnlen)3);
+    bltcod[280] = -74;
+    s_copy(bltnam + 10080, "MARS RECON ORBITER", (ftnlen)36, (ftnlen)18);
+    bltcod[281] = -76;
+    s_copy(bltnam + 10116, "CURIOSITY", (ftnlen)36, (ftnlen)9);
+    bltcod[282] = -76;
+    s_copy(bltnam + 10152, "MSL", (ftnlen)36, (ftnlen)3);
+    bltcod[283] = -76;
+    s_copy(bltnam + 10188, "MARS SCIENCE LABORATORY", (ftnlen)36, (ftnlen)23);
+    bltcod[284] = -77;
+    s_copy(bltnam + 10224, "GLL", (ftnlen)36, (ftnlen)3);
+    bltcod[285] = -77;
+    s_copy(bltnam + 10260, "GALILEO ORBITER", (ftnlen)36, (ftnlen)15);
+    bltcod[286] = -78;
+    s_copy(bltnam + 10296, "GIOTTO", (ftnlen)36, (ftnlen)6);
+    bltcod[287] = -79;
+    s_copy(bltnam + 10332, "SPITZER", (ftnlen)36, (ftnlen)7);
+    bltcod[288] = -79;
+    s_copy(bltnam + 10368, "SPACE INFRARED TELESCOPE FACILITY", (ftnlen)36, (
+	    ftnlen)33);
+    bltcod[289] = -79;
+    s_copy(bltnam + 10404, "SIRTF", (ftnlen)36, (ftnlen)5);
+    bltcod[290] = -81;
+    s_copy(bltnam + 10440, "CASSINI ITL", (ftnlen)36, (ftnlen)11);
+    bltcod[291] = -82;
+    s_copy(bltnam + 10476, "CAS", (ftnlen)36, (ftnlen)3);
+    bltcod[292] = -82;
+    s_copy(bltnam + 10512, "CASSINI", (ftnlen)36, (ftnlen)7);
+    bltcod[293] = -84;
+    s_copy(bltnam + 10548, "PHOENIX", (ftnlen)36, (ftnlen)7);
+    bltcod[294] = -85;
+    s_copy(bltnam + 10584, "LRO", (ftnlen)36, (ftnlen)3);
+    bltcod[295] = -85;
+    s_copy(bltnam + 10620, "LUNAR RECON ORBITER", (ftnlen)36, (ftnlen)19);
+    bltcod[296] = -85;
+    s_copy(bltnam + 10656, "LUNAR RECONNAISSANCE ORBITER", (ftnlen)36, (
+	    ftnlen)28);
+    bltcod[297] = -86;
+    s_copy(bltnam + 10692, "CH1", (ftnlen)36, (ftnlen)3);
+    bltcod[298] = -86;
+    s_copy(bltnam + 10728, "CHANDRAYAAN-1", (ftnlen)36, (ftnlen)13);
+    bltcod[299] = -90;
+    s_copy(bltnam + 10764, "CASSINI SIMULATION", (ftnlen)36, (ftnlen)18);
+    bltcod[300] = -93;
+    s_copy(bltnam + 10800, "NEAR EARTH ASTEROID RENDEZVOUS", (ftnlen)36, (
+	    ftnlen)30);
+    bltcod[301] = -93;
+    s_copy(bltnam + 10836, "NEAR", (ftnlen)36, (ftnlen)4);
+    bltcod[302] = -94;
+    s_copy(bltnam + 10872, "MO", (ftnlen)36, (ftnlen)2);
+    bltcod[303] = -94;
+    s_copy(bltnam + 10908, "MARS OBSERVER", (ftnlen)36, (ftnlen)13);
+    bltcod[304] = -94;
+    s_copy(bltnam + 10944, "MGS", (ftnlen)36, (ftnlen)3);
+    bltcod[305] = -94;
+    s_copy(bltnam + 10980, "MARS GLOBAL SURVEYOR", (ftnlen)36, (ftnlen)20);
+    bltcod[306] = -95;
+    s_copy(bltnam + 11016, "MGS SIMULATION", (ftnlen)36, (ftnlen)14);
+    bltcod[307] = -96;
+    s_copy(bltnam + 11052, "PARKER SOLAR PROBE", (ftnlen)36, (ftnlen)18);
+    bltcod[308] = -96;
+    s_copy(bltnam + 11088, "SPP", (ftnlen)36, (ftnlen)3);
+    bltcod[309] = -96;
+    s_copy(bltnam + 11124, "SOLAR PROBE PLUS", (ftnlen)36, (ftnlen)16);
+    bltcod[310] = -97;
+    s_copy(bltnam + 11160, "TOPEX/POSEIDON", (ftnlen)36, (ftnlen)14);
+    bltcod[311] = -98;
+    s_copy(bltnam + 11196, "NEW HORIZONS", (ftnlen)36, (ftnlen)12);
+    bltcod[312] = -107;
+    s_copy(bltnam + 11232, "TROPICAL RAINFALL MEASURING MISSION", (ftnlen)36, 
 	    (ftnlen)35);
-    bltcod[442] = 1000012;
-    s_copy(bltnam + 15912, "CHURYUMOV-GERASIMENKO", (ftnlen)36, (ftnlen)21);
-    bltcod[443] = 1000013;
-    s_copy(bltnam + 15948, "CIFFREO", (ftnlen)36, (ftnlen)7);
-    bltcod[444] = 1000014;
-    s_copy(bltnam + 15984, "CLARK", (ftnlen)36, (ftnlen)5);
-    bltcod[445] = 1000015;
-    s_copy(bltnam + 16020, "COMAS SOLA", (ftnlen)36, (ftnlen)10);
-    bltcod[446] = 1000016;
-    s_copy(bltnam + 16056, "CROMMELIN", (ftnlen)36, (ftnlen)9);
-    bltcod[447] = 1000017;
-    s_copy(bltnam + 16092, "D'ARREST", (ftnlen)36, (ftnlen)8);
-    bltcod[448] = 1000018;
-    s_copy(bltnam + 16128, "DANIEL", (ftnlen)36, (ftnlen)6);
-    bltcod[449] = 1000019;
-    s_copy(bltnam + 16164, "DE VICO-SWIFT", (ftnlen)36, (ftnlen)13);
-    bltcod[450] = 1000020;
-    s_copy(bltnam + 16200, "DENNING-FUJIKAWA", (ftnlen)36, (ftnlen)16);
-    bltcod[451] = 1000021;
-    s_copy(bltnam + 16236, "DU TOIT 1", (ftnlen)36, (ftnlen)9);
-    bltcod[452] = 1000022;
-    s_copy(bltnam + 16272, "DU TOIT-HARTLEY", (ftnlen)36, (ftnlen)15);
-    bltcod[453] = 1000023;
-    s_copy(bltnam + 16308, "DUTOIT-NEUJMIN-DELPORTE", (ftnlen)36, (ftnlen)23);
-    bltcod[454] = 1000024;
-    s_copy(bltnam + 16344, "DUBIAGO", (ftnlen)36, (ftnlen)7);
-    bltcod[455] = 1000025;
-    s_copy(bltnam + 16380, "ENCKE", (ftnlen)36, (ftnlen)5);
-    bltcod[456] = 1000026;
-    s_copy(bltnam + 16416, "FAYE", (ftnlen)36, (ftnlen)4);
-    bltcod[457] = 1000027;
-    s_copy(bltnam + 16452, "FINLAY", (ftnlen)36, (ftnlen)6);
-    bltcod[458] = 1000028;
-    s_copy(bltnam + 16488, "FORBES", (ftnlen)36, (ftnlen)6);
-    bltcod[459] = 1000029;
-    s_copy(bltnam + 16524, "GEHRELS 1", (ftnlen)36, (ftnlen)9);
-    bltcod[460] = 1000030;
-    s_copy(bltnam + 16560, "GEHRELS 2", (ftnlen)36, (ftnlen)9);
-    bltcod[461] = 1000031;
-    s_copy(bltnam + 16596, "GEHRELS 3", (ftnlen)36, (ftnlen)9);
-    bltcod[462] = 1000032;
-    s_copy(bltnam + 16632, "GIACOBINI-ZINNER", (ftnlen)36, (ftnlen)16);
-    bltcod[463] = 1000033;
-    s_copy(bltnam + 16668, "GICLAS", (ftnlen)36, (ftnlen)6);
-    bltcod[464] = 1000034;
-    s_copy(bltnam + 16704, "GRIGG-SKJELLERUP", (ftnlen)36, (ftnlen)16);
-    bltcod[465] = 1000035;
-    s_copy(bltnam + 16740, "GUNN", (ftnlen)36, (ftnlen)4);
-    bltcod[466] = 1000036;
-    s_copy(bltnam + 16776, "HALLEY", (ftnlen)36, (ftnlen)6);
-    bltcod[467] = 1000037;
-    s_copy(bltnam + 16812, "HANEDA-CAMPOS", (ftnlen)36, (ftnlen)13);
-    bltcod[468] = 1000038;
-    s_copy(bltnam + 16848, "HARRINGTON", (ftnlen)36, (ftnlen)10);
-    bltcod[469] = 1000039;
-    s_copy(bltnam + 16884, "HARRINGTON-ABELL", (ftnlen)36, (ftnlen)16);
-    bltcod[470] = 1000040;
-    s_copy(bltnam + 16920, "HARTLEY 1", (ftnlen)36, (ftnlen)9);
-    bltcod[471] = 1000041;
-    s_copy(bltnam + 16956, "HARTLEY 2", (ftnlen)36, (ftnlen)9);
-    bltcod[472] = 1000042;
-    s_copy(bltnam + 16992, "HARTLEY-IRAS", (ftnlen)36, (ftnlen)12);
-    bltcod[473] = 1000043;
-    s_copy(bltnam + 17028, "HERSCHEL-RIGOLLET", (ftnlen)36, (ftnlen)17);
-    bltcod[474] = 1000044;
-    s_copy(bltnam + 17064, "HOLMES", (ftnlen)36, (ftnlen)6);
-    bltcod[475] = 1000045;
-    s_copy(bltnam + 17100, "HONDA-MRKOS-PAJDUSAKOVA", (ftnlen)36, (ftnlen)23);
-    bltcod[476] = 1000046;
-    s_copy(bltnam + 17136, "HOWELL", (ftnlen)36, (ftnlen)6);
-    bltcod[477] = 1000047;
-    s_copy(bltnam + 17172, "IRAS", (ftnlen)36, (ftnlen)4);
-    bltcod[478] = 1000048;
-    s_copy(bltnam + 17208, "JACKSON-NEUJMIN", (ftnlen)36, (ftnlen)15);
-    bltcod[479] = 1000049;
-    s_copy(bltnam + 17244, "JOHNSON", (ftnlen)36, (ftnlen)7);
-    bltcod[480] = 1000050;
-    s_copy(bltnam + 17280, "KEARNS-KWEE", (ftnlen)36, (ftnlen)11);
-    bltcod[481] = 1000051;
-    s_copy(bltnam + 17316, "KLEMOLA", (ftnlen)36, (ftnlen)7);
-    bltcod[482] = 1000052;
-    s_copy(bltnam + 17352, "KOHOUTEK", (ftnlen)36, (ftnlen)8);
-    bltcod[483] = 1000053;
-    s_copy(bltnam + 17388, "KOJIMA", (ftnlen)36, (ftnlen)6);
-    bltcod[484] = 1000054;
-    s_copy(bltnam + 17424, "KOPFF", (ftnlen)36, (ftnlen)5);
-    bltcod[485] = 1000055;
-    s_copy(bltnam + 17460, "KOWAL 1", (ftnlen)36, (ftnlen)7);
-    bltcod[486] = 1000056;
-    s_copy(bltnam + 17496, "KOWAL 2", (ftnlen)36, (ftnlen)7);
-    bltcod[487] = 1000057;
-    s_copy(bltnam + 17532, "KOWAL-MRKOS", (ftnlen)36, (ftnlen)11);
-    bltcod[488] = 1000058;
-    s_copy(bltnam + 17568, "KOWAL-VAVROVA", (ftnlen)36, (ftnlen)13);
-    bltcod[489] = 1000059;
-    s_copy(bltnam + 17604, "LONGMORE", (ftnlen)36, (ftnlen)8);
-    bltcod[490] = 1000060;
-    s_copy(bltnam + 17640, "LOVAS 1", (ftnlen)36, (ftnlen)7);
-    bltcod[491] = 1000061;
-    s_copy(bltnam + 17676, "MACHHOLZ", (ftnlen)36, (ftnlen)8);
-    bltcod[492] = 1000062;
-    s_copy(bltnam + 17712, "MAURY", (ftnlen)36, (ftnlen)5);
-    bltcod[493] = 1000063;
-    s_copy(bltnam + 17748, "NEUJMIN 1", (ftnlen)36, (ftnlen)9);
-    bltcod[494] = 1000064;
-    s_copy(bltnam + 17784, "NEUJMIN 2", (ftnlen)36, (ftnlen)9);
-    bltcod[495] = 1000065;
-    s_copy(bltnam + 17820, "NEUJMIN 3", (ftnlen)36, (ftnlen)9);
-    bltcod[496] = 1000066;
-    s_copy(bltnam + 17856, "OLBERS", (ftnlen)36, (ftnlen)6);
-    bltcod[497] = 1000067;
-    s_copy(bltnam + 17892, "PETERS-HARTLEY", (ftnlen)36, (ftnlen)14);
-    bltcod[498] = 1000068;
-    s_copy(bltnam + 17928, "PONS-BROOKS", (ftnlen)36, (ftnlen)11);
-    bltcod[499] = 1000069;
-    s_copy(bltnam + 17964, "PONS-WINNECKE", (ftnlen)36, (ftnlen)13);
-    bltcod[500] = 1000070;
-    s_copy(bltnam + 18000, "REINMUTH 1", (ftnlen)36, (ftnlen)10);
-    bltcod[501] = 1000071;
-    s_copy(bltnam + 18036, "REINMUTH 2", (ftnlen)36, (ftnlen)10);
-    bltcod[502] = 1000072;
-    s_copy(bltnam + 18072, "RUSSELL 1", (ftnlen)36, (ftnlen)9);
-    bltcod[503] = 1000073;
-    s_copy(bltnam + 18108, "RUSSELL 2", (ftnlen)36, (ftnlen)9);
-    bltcod[504] = 1000074;
-    s_copy(bltnam + 18144, "RUSSELL 3", (ftnlen)36, (ftnlen)9);
-    bltcod[505] = 1000075;
-    s_copy(bltnam + 18180, "RUSSELL 4", (ftnlen)36, (ftnlen)9);
-    bltcod[506] = 1000076;
-    s_copy(bltnam + 18216, "SANGUIN", (ftnlen)36, (ftnlen)7);
-    bltcod[507] = 1000077;
-    s_copy(bltnam + 18252, "SCHAUMASSE", (ftnlen)36, (ftnlen)10);
-    bltcod[508] = 1000078;
-    s_copy(bltnam + 18288, "SCHUSTER", (ftnlen)36, (ftnlen)8);
-    bltcod[509] = 1000079;
-    s_copy(bltnam + 18324, "SCHWASSMANN-WACHMANN 1", (ftnlen)36, (ftnlen)22);
-    bltcod[510] = 1000080;
-    s_copy(bltnam + 18360, "SCHWASSMANN-WACHMANN 2", (ftnlen)36, (ftnlen)22);
-    bltcod[511] = 1000081;
-    s_copy(bltnam + 18396, "SCHWASSMANN-WACHMANN 3", (ftnlen)36, (ftnlen)22);
-    bltcod[512] = 1000082;
-    s_copy(bltnam + 18432, "SHAJN-SCHALDACH", (ftnlen)36, (ftnlen)15);
-    bltcod[513] = 1000083;
-    s_copy(bltnam + 18468, "SHOEMAKER 1", (ftnlen)36, (ftnlen)11);
-    bltcod[514] = 1000084;
-    s_copy(bltnam + 18504, "SHOEMAKER 2", (ftnlen)36, (ftnlen)11);
-    bltcod[515] = 1000085;
-    s_copy(bltnam + 18540, "SHOEMAKER 3", (ftnlen)36, (ftnlen)11);
-    bltcod[516] = 1000086;
-    s_copy(bltnam + 18576, "SINGER-BREWSTER", (ftnlen)36, (ftnlen)15);
-    bltcod[517] = 1000087;
-    s_copy(bltnam + 18612, "SLAUGHTER-BURNHAM", (ftnlen)36, (ftnlen)17);
-    bltcod[518] = 1000088;
-    s_copy(bltnam + 18648, "SMIRNOVA-CHERNYKH", (ftnlen)36, (ftnlen)17);
-    bltcod[519] = 1000089;
-    s_copy(bltnam + 18684, "STEPHAN-OTERMA", (ftnlen)36, (ftnlen)14);
-    bltcod[520] = 1000090;
-    s_copy(bltnam + 18720, "SWIFT-GEHRELS", (ftnlen)36, (ftnlen)13);
-    bltcod[521] = 1000091;
-    s_copy(bltnam + 18756, "TAKAMIZAWA", (ftnlen)36, (ftnlen)10);
-    bltcod[522] = 1000092;
-    s_copy(bltnam + 18792, "TAYLOR", (ftnlen)36, (ftnlen)6);
-    bltcod[523] = 1000093;
-    s_copy(bltnam + 18828, "TEMPEL_1", (ftnlen)36, (ftnlen)8);
-    bltcod[524] = 1000093;
-    s_copy(bltnam + 18864, "TEMPEL 1", (ftnlen)36, (ftnlen)8);
-    bltcod[525] = 1000094;
-    s_copy(bltnam + 18900, "TEMPEL 2", (ftnlen)36, (ftnlen)8);
-    bltcod[526] = 1000095;
-    s_copy(bltnam + 18936, "TEMPEL-TUTTLE", (ftnlen)36, (ftnlen)13);
-    bltcod[527] = 1000096;
-    s_copy(bltnam + 18972, "TRITTON", (ftnlen)36, (ftnlen)7);
-    bltcod[528] = 1000097;
-    s_copy(bltnam + 19008, "TSUCHINSHAN 1", (ftnlen)36, (ftnlen)13);
-    bltcod[529] = 1000098;
-    s_copy(bltnam + 19044, "TSUCHINSHAN 2", (ftnlen)36, (ftnlen)13);
-    bltcod[530] = 1000099;
-    s_copy(bltnam + 19080, "TUTTLE", (ftnlen)36, (ftnlen)6);
-    bltcod[531] = 1000100;
-    s_copy(bltnam + 19116, "TUTTLE-GIACOBINI-KRESAK", (ftnlen)36, (ftnlen)23);
-    bltcod[532] = 1000101;
-    s_copy(bltnam + 19152, "VAISALA 1", (ftnlen)36, (ftnlen)9);
-    bltcod[533] = 1000102;
-    s_copy(bltnam + 19188, "VAN BIESBROECK", (ftnlen)36, (ftnlen)14);
-    bltcod[534] = 1000103;
-    s_copy(bltnam + 19224, "VAN HOUTEN", (ftnlen)36, (ftnlen)10);
-    bltcod[535] = 1000104;
-    s_copy(bltnam + 19260, "WEST-KOHOUTEK-IKEMURA", (ftnlen)36, (ftnlen)21);
-    bltcod[536] = 1000105;
-    s_copy(bltnam + 19296, "WHIPPLE", (ftnlen)36, (ftnlen)7);
-    bltcod[537] = 1000106;
-    s_copy(bltnam + 19332, "WILD 1", (ftnlen)36, (ftnlen)6);
-    bltcod[538] = 1000107;
-    s_copy(bltnam + 19368, "WILD 2", (ftnlen)36, (ftnlen)6);
-    bltcod[539] = 1000108;
-    s_copy(bltnam + 19404, "WILD 3", (ftnlen)36, (ftnlen)6);
-    bltcod[540] = 1000109;
-    s_copy(bltnam + 19440, "WIRTANEN", (ftnlen)36, (ftnlen)8);
-    bltcod[541] = 1000110;
-    s_copy(bltnam + 19476, "WOLF", (ftnlen)36, (ftnlen)4);
-    bltcod[542] = 1000111;
-    s_copy(bltnam + 19512, "WOLF-HARRINGTON", (ftnlen)36, (ftnlen)15);
-    bltcod[543] = 1000112;
-    s_copy(bltnam + 19548, "LOVAS 2", (ftnlen)36, (ftnlen)7);
-    bltcod[544] = 1000113;
-    s_copy(bltnam + 19584, "URATA-NIIJIMA", (ftnlen)36, (ftnlen)13);
-    bltcod[545] = 1000114;
-    s_copy(bltnam + 19620, "WISEMAN-SKIFF", (ftnlen)36, (ftnlen)13);
-    bltcod[546] = 1000115;
-    s_copy(bltnam + 19656, "HELIN", (ftnlen)36, (ftnlen)5);
-    bltcod[547] = 1000116;
-    s_copy(bltnam + 19692, "MUELLER", (ftnlen)36, (ftnlen)7);
-    bltcod[548] = 1000117;
-    s_copy(bltnam + 19728, "SHOEMAKER-HOLT 1", (ftnlen)36, (ftnlen)16);
-    bltcod[549] = 1000118;
-    s_copy(bltnam + 19764, "HELIN-ROMAN-CROCKETT", (ftnlen)36, (ftnlen)20);
-    bltcod[550] = 1000119;
-    s_copy(bltnam + 19800, "HARTLEY 3", (ftnlen)36, (ftnlen)9);
-    bltcod[551] = 1000120;
-    s_copy(bltnam + 19836, "PARKER-HARTLEY", (ftnlen)36, (ftnlen)14);
-    bltcod[552] = 1000121;
-    s_copy(bltnam + 19872, "HELIN-ROMAN-ALU 1", (ftnlen)36, (ftnlen)17);
-    bltcod[553] = 1000122;
-    s_copy(bltnam + 19908, "WILD 4", (ftnlen)36, (ftnlen)6);
-    bltcod[554] = 1000123;
-    s_copy(bltnam + 19944, "MUELLER 2", (ftnlen)36, (ftnlen)9);
-    bltcod[555] = 1000124;
-    s_copy(bltnam + 19980, "MUELLER 3", (ftnlen)36, (ftnlen)9);
-    bltcod[556] = 1000125;
-    s_copy(bltnam + 20016, "SHOEMAKER-LEVY 1", (ftnlen)36, (ftnlen)16);
-    bltcod[557] = 1000126;
-    s_copy(bltnam + 20052, "SHOEMAKER-LEVY 2", (ftnlen)36, (ftnlen)16);
-    bltcod[558] = 1000127;
-    s_copy(bltnam + 20088, "HOLT-OLMSTEAD", (ftnlen)36, (ftnlen)13);
-    bltcod[559] = 1000128;
-    s_copy(bltnam + 20124, "METCALF-BREWINGTON", (ftnlen)36, (ftnlen)18);
-    bltcod[560] = 1000129;
-    s_copy(bltnam + 20160, "LEVY", (ftnlen)36, (ftnlen)4);
-    bltcod[561] = 1000130;
-    s_copy(bltnam + 20196, "SHOEMAKER-LEVY 9", (ftnlen)36, (ftnlen)16);
-    bltcod[562] = 1000131;
-    s_copy(bltnam + 20232, "HYAKUTAKE", (ftnlen)36, (ftnlen)9);
-    bltcod[563] = 1000132;
-    s_copy(bltnam + 20268, "HALE-BOPP", (ftnlen)36, (ftnlen)9);
-    bltcod[564] = 1003228;
-    s_copy(bltnam + 20304, "C/2013 A1", (ftnlen)36, (ftnlen)9);
-    bltcod[565] = 1003228;
-    s_copy(bltnam + 20340, "SIDING SPRING", (ftnlen)36, (ftnlen)13);
-    bltcod[566] = 9511010;
-    s_copy(bltnam + 20376, "GASPRA", (ftnlen)36, (ftnlen)6);
-    bltcod[567] = 2431010;
-    s_copy(bltnam + 20412, "IDA", (ftnlen)36, (ftnlen)3);
-    bltcod[568] = 2431011;
-    s_copy(bltnam + 20448, "DACTYL", (ftnlen)36, (ftnlen)6);
-    bltcod[569] = 2000001;
-    s_copy(bltnam + 20484, "CERES", (ftnlen)36, (ftnlen)5);
-    bltcod[570] = 2000002;
-    s_copy(bltnam + 20520, "PALLAS", (ftnlen)36, (ftnlen)6);
-    bltcod[571] = 2000004;
-    s_copy(bltnam + 20556, "VESTA", (ftnlen)36, (ftnlen)5);
-    bltcod[572] = 2000016;
-    s_copy(bltnam + 20592, "PSYCHE", (ftnlen)36, (ftnlen)6);
-    bltcod[573] = 2000021;
-    s_copy(bltnam + 20628, "LUTETIA", (ftnlen)36, (ftnlen)7);
-    bltcod[574] = 2000216;
-    s_copy(bltnam + 20664, "KLEOPATRA", (ftnlen)36, (ftnlen)9);
-    bltcod[575] = 2000433;
-    s_copy(bltnam + 20700, "EROS", (ftnlen)36, (ftnlen)4);
-    bltcod[576] = 2000511;
-    s_copy(bltnam + 20736, "DAVIDA", (ftnlen)36, (ftnlen)6);
-    bltcod[577] = 2000253;
-    s_copy(bltnam + 20772, "MATHILDE", (ftnlen)36, (ftnlen)8);
-    bltcod[578] = 2002867;
-    s_copy(bltnam + 20808, "STEINS", (ftnlen)36, (ftnlen)6);
-    bltcod[579] = 2009969;
-    s_copy(bltnam + 20844, "1992KD", (ftnlen)36, (ftnlen)6);
-    bltcod[580] = 2009969;
-    s_copy(bltnam + 20880, "BRAILLE", (ftnlen)36, (ftnlen)7);
-    bltcod[581] = 2004015;
-    s_copy(bltnam + 20916, "WILSON-HARRINGTON", (ftnlen)36, (ftnlen)17);
-    bltcod[582] = 2004179;
-    s_copy(bltnam + 20952, "TOUTATIS", (ftnlen)36, (ftnlen)8);
-    bltcod[583] = 2025143;
-    s_copy(bltnam + 20988, "ITOKAWA", (ftnlen)36, (ftnlen)7);
-    bltcod[584] = 2101955;
-    s_copy(bltnam + 21024, "BENNU", (ftnlen)36, (ftnlen)5);
-    bltcod[585] = 398989;
-    s_copy(bltnam + 21060, "NOTO", (ftnlen)36, (ftnlen)4);
-    bltcod[586] = 398990;
-    s_copy(bltnam + 21096, "NEW NORCIA", (ftnlen)36, (ftnlen)10);
-    bltcod[587] = 399001;
-    s_copy(bltnam + 21132, "GOLDSTONE", (ftnlen)36, (ftnlen)9);
-    bltcod[588] = 399002;
-    s_copy(bltnam + 21168, "CANBERRA", (ftnlen)36, (ftnlen)8);
-    bltcod[589] = 399003;
-    s_copy(bltnam + 21204, "MADRID", (ftnlen)36, (ftnlen)6);
-    bltcod[590] = 399004;
-    s_copy(bltnam + 21240, "USUDA", (ftnlen)36, (ftnlen)5);
-    bltcod[591] = 399005;
-    s_copy(bltnam + 21276, "DSS-05", (ftnlen)36, (ftnlen)6);
-    bltcod[592] = 399005;
-    s_copy(bltnam + 21312, "PARKES", (ftnlen)36, (ftnlen)6);
-    bltcod[593] = 399012;
-    s_copy(bltnam + 21348, "DSS-12", (ftnlen)36, (ftnlen)6);
-    bltcod[594] = 399013;
-    s_copy(bltnam + 21384, "DSS-13", (ftnlen)36, (ftnlen)6);
-    bltcod[595] = 399014;
-    s_copy(bltnam + 21420, "DSS-14", (ftnlen)36, (ftnlen)6);
-    bltcod[596] = 399015;
-    s_copy(bltnam + 21456, "DSS-15", (ftnlen)36, (ftnlen)6);
-    bltcod[597] = 399016;
-    s_copy(bltnam + 21492, "DSS-16", (ftnlen)36, (ftnlen)6);
-    bltcod[598] = 399017;
-    s_copy(bltnam + 21528, "DSS-17", (ftnlen)36, (ftnlen)6);
-    bltcod[599] = 399023;
-    s_copy(bltnam + 21564, "DSS-23", (ftnlen)36, (ftnlen)6);
-    bltcod[600] = 399024;
-    s_copy(bltnam + 21600, "DSS-24", (ftnlen)36, (ftnlen)6);
-    bltcod[601] = 399025;
-    s_copy(bltnam + 21636, "DSS-25", (ftnlen)36, (ftnlen)6);
-    bltcod[602] = 399026;
-    s_copy(bltnam + 21672, "DSS-26", (ftnlen)36, (ftnlen)6);
-    bltcod[603] = 399027;
-    s_copy(bltnam + 21708, "DSS-27", (ftnlen)36, (ftnlen)6);
-    bltcod[604] = 399028;
-    s_copy(bltnam + 21744, "DSS-28", (ftnlen)36, (ftnlen)6);
-    bltcod[605] = 399033;
-    s_copy(bltnam + 21780, "DSS-33", (ftnlen)36, (ftnlen)6);
-    bltcod[606] = 399034;
-    s_copy(bltnam + 21816, "DSS-34", (ftnlen)36, (ftnlen)6);
-    bltcod[607] = 399042;
-    s_copy(bltnam + 21852, "DSS-42", (ftnlen)36, (ftnlen)6);
-    bltcod[608] = 399043;
-    s_copy(bltnam + 21888, "DSS-43", (ftnlen)36, (ftnlen)6);
-    bltcod[609] = 399045;
-    s_copy(bltnam + 21924, "DSS-45", (ftnlen)36, (ftnlen)6);
-    bltcod[610] = 399046;
-    s_copy(bltnam + 21960, "DSS-46", (ftnlen)36, (ftnlen)6);
-    bltcod[611] = 399049;
-    s_copy(bltnam + 21996, "DSS-49", (ftnlen)36, (ftnlen)6);
-    bltcod[612] = 399053;
-    s_copy(bltnam + 22032, "DSS-53", (ftnlen)36, (ftnlen)6);
-    bltcod[613] = 399054;
-    s_copy(bltnam + 22068, "DSS-54", (ftnlen)36, (ftnlen)6);
-    bltcod[614] = 399055;
-    s_copy(bltnam + 22104, "DSS-55", (ftnlen)36, (ftnlen)6);
-    bltcod[615] = 399061;
-    s_copy(bltnam + 22140, "DSS-61", (ftnlen)36, (ftnlen)6);
-    bltcod[616] = 399063;
-    s_copy(bltnam + 22176, "DSS-63", (ftnlen)36, (ftnlen)6);
-    bltcod[617] = 399064;
-    s_copy(bltnam + 22212, "DSS-64", (ftnlen)36, (ftnlen)6);
-    bltcod[618] = 399065;
-    s_copy(bltnam + 22248, "DSS-65", (ftnlen)36, (ftnlen)6);
-    bltcod[619] = 399066;
-    s_copy(bltnam + 22284, "DSS-66", (ftnlen)36, (ftnlen)6);
+    bltcod[313] = -107;
+    s_copy(bltnam + 11268, "TRMM", (ftnlen)36, (ftnlen)4);
+    bltcod[314] = -112;
+    s_copy(bltnam + 11304, "ICE", (ftnlen)36, (ftnlen)3);
+    bltcod[315] = -116;
+    s_copy(bltnam + 11340, "MARS POLAR LANDER", (ftnlen)36, (ftnlen)17);
+    bltcod[316] = -116;
+    s_copy(bltnam + 11376, "MPL", (ftnlen)36, (ftnlen)3);
+    bltcod[317] = -117;
+    s_copy(bltnam + 11412, "EDL DEMONSTRATOR MODULE", (ftnlen)36, (ftnlen)23);
+    bltcod[318] = -117;
+    s_copy(bltnam + 11448, "EDM", (ftnlen)36, (ftnlen)3);
+    bltcod[319] = -117;
+    s_copy(bltnam + 11484, "EXOMARS 2016 EDM", (ftnlen)36, (ftnlen)16);
+    bltcod[320] = -119;
+    s_copy(bltnam + 11520, "MARS_ORBITER_MISSION_2", (ftnlen)36, (ftnlen)22);
+    bltcod[321] = -119;
+    s_copy(bltnam + 11556, "MOM2", (ftnlen)36, (ftnlen)4);
+    bltcod[322] = -121;
+    s_copy(bltnam + 11592, "MERCURY PLANETARY ORBITER", (ftnlen)36, (ftnlen)
+	    25);
+    bltcod[323] = -121;
+    s_copy(bltnam + 11628, "MPO", (ftnlen)36, (ftnlen)3);
+    bltcod[324] = -121;
+    s_copy(bltnam + 11664, "BEPICOLOMBO MPO", (ftnlen)36, (ftnlen)15);
+    bltcod[325] = -127;
+    s_copy(bltnam + 11700, "MARS CLIMATE ORBITER", (ftnlen)36, (ftnlen)20);
+    bltcod[326] = -127;
+    s_copy(bltnam + 11736, "MCO", (ftnlen)36, (ftnlen)3);
+    bltcod[327] = -130;
+    s_copy(bltnam + 11772, "MUSES-C", (ftnlen)36, (ftnlen)7);
+    bltcod[328] = -130;
+    s_copy(bltnam + 11808, "HAYABUSA", (ftnlen)36, (ftnlen)8);
+    bltcod[329] = -131;
+    s_copy(bltnam + 11844, "SELENE", (ftnlen)36, (ftnlen)6);
+    bltcod[330] = -131;
+    s_copy(bltnam + 11880, "KAGUYA", (ftnlen)36, (ftnlen)6);
+    bltcod[331] = -135;
+    s_copy(bltnam + 11916, "DART", (ftnlen)36, (ftnlen)4);
+    bltcod[332] = -135;
+    s_copy(bltnam + 11952, "DOUBLE ASTEROID REDIRECTION TEST", (ftnlen)36, (
+	    ftnlen)32);
+    bltcod[333] = -140;
+    s_copy(bltnam + 11988, "EPOCH", (ftnlen)36, (ftnlen)5);
+    bltcod[334] = -140;
+    s_copy(bltnam + 12024, "DIXI", (ftnlen)36, (ftnlen)4);
+    bltcod[335] = -140;
+    s_copy(bltnam + 12060, "EPOXI", (ftnlen)36, (ftnlen)5);
+    bltcod[336] = -140;
+    s_copy(bltnam + 12096, "DEEP IMPACT FLYBY SPACECRAFT", (ftnlen)36, (
+	    ftnlen)28);
+    bltcod[337] = -142;
+    s_copy(bltnam + 12132, "TERRA", (ftnlen)36, (ftnlen)5);
+    bltcod[338] = -142;
+    s_copy(bltnam + 12168, "EOS-AM1", (ftnlen)36, (ftnlen)7);
+    bltcod[339] = -143;
+    s_copy(bltnam + 12204, "TRACE GAS ORBITER", (ftnlen)36, (ftnlen)17);
+    bltcod[340] = -143;
+    s_copy(bltnam + 12240, "TGO", (ftnlen)36, (ftnlen)3);
+    bltcod[341] = -143;
+    s_copy(bltnam + 12276, "EXOMARS 2016 TGO", (ftnlen)36, (ftnlen)16);
+    bltcod[342] = -144;
+    s_copy(bltnam + 12312, "SOLO", (ftnlen)36, (ftnlen)4);
+    bltcod[343] = -144;
+    s_copy(bltnam + 12348, "SOLAR ORBITER", (ftnlen)36, (ftnlen)13);
+    bltcod[344] = -146;
+    s_copy(bltnam + 12384, "LUNAR-A", (ftnlen)36, (ftnlen)7);
+    bltcod[345] = -148;
+    s_copy(bltnam + 12420, "DFLY", (ftnlen)36, (ftnlen)4);
+    bltcod[346] = -148;
+    s_copy(bltnam + 12456, "DRAGONFLY", (ftnlen)36, (ftnlen)9);
+    bltcod[347] = -150;
+    s_copy(bltnam + 12492, "CASSINI PROBE", (ftnlen)36, (ftnlen)13);
+    bltcod[348] = -150;
+    s_copy(bltnam + 12528, "HUYGENS PROBE", (ftnlen)36, (ftnlen)13);
+    bltcod[349] = -150;
+    s_copy(bltnam + 12564, "CASP", (ftnlen)36, (ftnlen)4);
+    bltcod[350] = -151;
+    s_copy(bltnam + 12600, "AXAF", (ftnlen)36, (ftnlen)4);
+    bltcod[351] = -151;
+    s_copy(bltnam + 12636, "CHANDRA", (ftnlen)36, (ftnlen)7);
+    bltcod[352] = -152;
+    s_copy(bltnam + 12672, "CH2O", (ftnlen)36, (ftnlen)4);
+    bltcod[353] = -152;
+    s_copy(bltnam + 12708, "CHANDRAYAAN-2 ORBITER", (ftnlen)36, (ftnlen)21);
+    bltcod[354] = -153;
+    s_copy(bltnam + 12744, "CH2L", (ftnlen)36, (ftnlen)4);
+    bltcod[355] = -153;
+    s_copy(bltnam + 12780, "CHANDRAYAAN-2 LANDER", (ftnlen)36, (ftnlen)20);
+    bltcod[356] = -154;
+    s_copy(bltnam + 12816, "AQUA", (ftnlen)36, (ftnlen)4);
+    bltcod[357] = -155;
+    s_copy(bltnam + 12852, "KPLO", (ftnlen)36, (ftnlen)4);
+    bltcod[358] = -155;
+    s_copy(bltnam + 12888, "KOREAN PATHFINDER LUNAR ORBITER", (ftnlen)36, (
+	    ftnlen)31);
+    bltcod[359] = -156;
+    s_copy(bltnam + 12924, "ADITYA", (ftnlen)36, (ftnlen)6);
+    bltcod[360] = -156;
+    s_copy(bltnam + 12960, "ADIT", (ftnlen)36, (ftnlen)4);
+    bltcod[361] = -159;
+    s_copy(bltnam + 12996, "EURC", (ftnlen)36, (ftnlen)4);
+    bltcod[362] = -159;
+    s_copy(bltnam + 13032, "EUROPA CLIPPER", (ftnlen)36, (ftnlen)14);
+    bltcod[363] = -164;
+    s_copy(bltnam + 13068, "LUNAR FLASHLIGHT", (ftnlen)36, (ftnlen)16);
+    bltcod[364] = -165;
+    s_copy(bltnam + 13104, "MAP", (ftnlen)36, (ftnlen)3);
+    bltcod[365] = -166;
+    s_copy(bltnam + 13140, "IMAGE", (ftnlen)36, (ftnlen)5);
+    bltcod[366] = -168;
+    s_copy(bltnam + 13176, "PERSEVERANCE", (ftnlen)36, (ftnlen)12);
+    bltcod[367] = -168;
+    s_copy(bltnam + 13212, "MARS 2020", (ftnlen)36, (ftnlen)9);
+    bltcod[368] = -168;
+    s_copy(bltnam + 13248, "MARS2020", (ftnlen)36, (ftnlen)8);
+    bltcod[369] = -168;
+    s_copy(bltnam + 13284, "M2020", (ftnlen)36, (ftnlen)5);
+    bltcod[370] = -170;
+    s_copy(bltnam + 13320, "JWST", (ftnlen)36, (ftnlen)4);
+    bltcod[371] = -170;
+    s_copy(bltnam + 13356, "JAMES WEBB SPACE TELESCOPE", (ftnlen)36, (ftnlen)
+	    26);
+    bltcod[372] = -172;
+    s_copy(bltnam + 13392, "EXM RSP SCC", (ftnlen)36, (ftnlen)11);
+    bltcod[373] = -172;
+    s_copy(bltnam + 13428, "EXM SPACECRAFT COMPOSITE", (ftnlen)36, (ftnlen)24)
+	    ;
+    bltcod[374] = -172;
+    s_copy(bltnam + 13464, "EXOMARS SCC", (ftnlen)36, (ftnlen)11);
+    bltcod[375] = -173;
+    s_copy(bltnam + 13500, "EXM RSP SP", (ftnlen)36, (ftnlen)10);
+    bltcod[376] = -173;
+    s_copy(bltnam + 13536, "EXM SURFACE PLATFORM", (ftnlen)36, (ftnlen)20);
+    bltcod[377] = -173;
+    s_copy(bltnam + 13572, "EXOMARS SP", (ftnlen)36, (ftnlen)10);
+    bltcod[378] = -174;
+    s_copy(bltnam + 13608, "EXM RSP RM", (ftnlen)36, (ftnlen)10);
+    bltcod[379] = -174;
+    s_copy(bltnam + 13644, "EXM ROVER", (ftnlen)36, (ftnlen)9);
+    bltcod[380] = -174;
+    s_copy(bltnam + 13680, "EXOMARS ROVER", (ftnlen)36, (ftnlen)13);
+    bltcod[381] = -177;
+    s_copy(bltnam + 13716, "GRAIL-A", (ftnlen)36, (ftnlen)7);
+    bltcod[382] = -178;
+    s_copy(bltnam + 13752, "PLANET-B", (ftnlen)36, (ftnlen)8);
+    bltcod[383] = -178;
+    s_copy(bltnam + 13788, "NOZOMI", (ftnlen)36, (ftnlen)6);
+    bltcod[384] = -181;
+    s_copy(bltnam + 13824, "GRAIL-B", (ftnlen)36, (ftnlen)7);
+    bltcod[385] = -183;
+    s_copy(bltnam + 13860, "CLUSTER 1", (ftnlen)36, (ftnlen)9);
+    bltcod[386] = -185;
+    s_copy(bltnam + 13896, "CLUSTER 2", (ftnlen)36, (ftnlen)9);
+    bltcod[387] = -188;
+    s_copy(bltnam + 13932, "MUSES-B", (ftnlen)36, (ftnlen)7);
+    bltcod[388] = -189;
+    s_copy(bltnam + 13968, "NSYT", (ftnlen)36, (ftnlen)4);
+    bltcod[389] = -189;
+    s_copy(bltnam + 14004, "INSIGHT", (ftnlen)36, (ftnlen)7);
+    bltcod[390] = -190;
+    s_copy(bltnam + 14040, "SIM", (ftnlen)36, (ftnlen)3);
+    bltcod[391] = -194;
+    s_copy(bltnam + 14076, "CLUSTER 3", (ftnlen)36, (ftnlen)9);
+    bltcod[392] = -196;
+    s_copy(bltnam + 14112, "CLUSTER 4", (ftnlen)36, (ftnlen)9);
+    bltcod[393] = -197;
+    s_copy(bltnam + 14148, "EXOMARS_LARA", (ftnlen)36, (ftnlen)12);
+    bltcod[394] = -197;
+    s_copy(bltnam + 14184, "LARA", (ftnlen)36, (ftnlen)4);
+    bltcod[395] = -198;
+    s_copy(bltnam + 14220, "INTEGRAL", (ftnlen)36, (ftnlen)8);
+    bltcod[396] = -198;
+    s_copy(bltnam + 14256, "NASA-ISRO SAR MISSION", (ftnlen)36, (ftnlen)21);
+    bltcod[397] = -198;
+    s_copy(bltnam + 14292, "NISAR", (ftnlen)36, (ftnlen)5);
+    bltcod[398] = -200;
+    s_copy(bltnam + 14328, "CONTOUR", (ftnlen)36, (ftnlen)7);
+    bltcod[399] = -202;
+    s_copy(bltnam + 14364, "MAVEN", (ftnlen)36, (ftnlen)5);
+    bltcod[400] = -203;
+    s_copy(bltnam + 14400, "DAWN", (ftnlen)36, (ftnlen)4);
+    bltcod[401] = -205;
+    s_copy(bltnam + 14436, "SOIL MOISTURE ACTIVE AND PASSIVE", (ftnlen)36, (
+	    ftnlen)32);
+    bltcod[402] = -205;
+    s_copy(bltnam + 14472, "SMAP", (ftnlen)36, (ftnlen)4);
+    bltcod[403] = -210;
+    s_copy(bltnam + 14508, "LICIA", (ftnlen)36, (ftnlen)5);
+    bltcod[404] = -210;
+    s_copy(bltnam + 14544, "LICIACUBE", (ftnlen)36, (ftnlen)9);
+    bltcod[405] = -212;
+    s_copy(bltnam + 14580, "STV51", (ftnlen)36, (ftnlen)5);
+    bltcod[406] = -213;
+    s_copy(bltnam + 14616, "STV52", (ftnlen)36, (ftnlen)5);
+    bltcod[407] = -214;
+    s_copy(bltnam + 14652, "STV53", (ftnlen)36, (ftnlen)5);
+    bltcod[408] = -226;
+    s_copy(bltnam + 14688, "ROSETTA", (ftnlen)36, (ftnlen)7);
+    bltcod[409] = -227;
+    s_copy(bltnam + 14724, "KEPLER", (ftnlen)36, (ftnlen)6);
+    bltcod[410] = -228;
+    s_copy(bltnam + 14760, "GLL PROBE", (ftnlen)36, (ftnlen)9);
+    bltcod[411] = -228;
+    s_copy(bltnam + 14796, "GALILEO PROBE", (ftnlen)36, (ftnlen)13);
+    bltcod[412] = -234;
+    s_copy(bltnam + 14832, "STEREO AHEAD", (ftnlen)36, (ftnlen)12);
+    bltcod[413] = -235;
+    s_copy(bltnam + 14868, "STEREO BEHIND", (ftnlen)36, (ftnlen)13);
+    bltcod[414] = -236;
+    s_copy(bltnam + 14904, "MESSENGER", (ftnlen)36, (ftnlen)9);
+    bltcod[415] = -238;
+    s_copy(bltnam + 14940, "SMART1", (ftnlen)36, (ftnlen)6);
+    bltcod[416] = -238;
+    s_copy(bltnam + 14976, "SM1", (ftnlen)36, (ftnlen)3);
+    bltcod[417] = -238;
+    s_copy(bltnam + 15012, "S1", (ftnlen)36, (ftnlen)2);
+    bltcod[418] = -238;
+    s_copy(bltnam + 15048, "SMART-1", (ftnlen)36, (ftnlen)7);
+    bltcod[419] = -239;
+    s_copy(bltnam + 15084, "MARTIAN MOONS EXPLORATION", (ftnlen)36, (ftnlen)
+	    25);
+    bltcod[420] = -239;
+    s_copy(bltnam + 15120, "MMX", (ftnlen)36, (ftnlen)3);
+    bltcod[421] = -240;
+    s_copy(bltnam + 15156, "SMART LANDER FOR INVESTIGATING MOON", (ftnlen)36, 
+	    (ftnlen)35);
+    bltcod[422] = -240;
+    s_copy(bltnam + 15192, "SLIM", (ftnlen)36, (ftnlen)4);
+    bltcod[423] = -242;
+    s_copy(bltnam + 15228, "LUNAR TRAILBLAZER", (ftnlen)36, (ftnlen)17);
+    bltcod[424] = -243;
+    s_copy(bltnam + 15264, "VIPER", (ftnlen)36, (ftnlen)5);
+    bltcod[425] = -248;
+    s_copy(bltnam + 15300, "VEX", (ftnlen)36, (ftnlen)3);
+    bltcod[426] = -248;
+    s_copy(bltnam + 15336, "VENUS EXPRESS", (ftnlen)36, (ftnlen)13);
+    bltcod[427] = -253;
+    s_copy(bltnam + 15372, "OPPORTUNITY", (ftnlen)36, (ftnlen)11);
+    bltcod[428] = -253;
+    s_copy(bltnam + 15408, "MER-1", (ftnlen)36, (ftnlen)5);
+    bltcod[429] = -254;
+    s_copy(bltnam + 15444, "SPIRIT", (ftnlen)36, (ftnlen)6);
+    bltcod[430] = -254;
+    s_copy(bltnam + 15480, "MER-2", (ftnlen)36, (ftnlen)5);
+    bltcod[431] = -255;
+    s_copy(bltnam + 15516, "PSYC", (ftnlen)36, (ftnlen)4);
+    bltcod[432] = -301;
+    s_copy(bltnam + 15552, "HELIOS 1", (ftnlen)36, (ftnlen)8);
+    bltcod[433] = -302;
+    s_copy(bltnam + 15588, "HELIOS 2", (ftnlen)36, (ftnlen)8);
+    bltcod[434] = -362;
+    s_copy(bltnam + 15624, "RADIATION BELT STORM PROBE A", (ftnlen)36, (
+	    ftnlen)28);
+    bltcod[435] = -362;
+    s_copy(bltnam + 15660, "RBSP_A", (ftnlen)36, (ftnlen)6);
+    bltcod[436] = -363;
+    s_copy(bltnam + 15696, "RADIATION BELT STORM PROBE B", (ftnlen)36, (
+	    ftnlen)28);
+    bltcod[437] = -363;
+    s_copy(bltnam + 15732, "RBSP_B", (ftnlen)36, (ftnlen)6);
+    bltcod[438] = -500;
+    s_copy(bltnam + 15768, "RSAT", (ftnlen)36, (ftnlen)4);
+    bltcod[439] = -500;
+    s_copy(bltnam + 15804, "SELENE Relay Satellite", (ftnlen)36, (ftnlen)22);
+    bltcod[440] = -500;
+    s_copy(bltnam + 15840, "SELENE Rstar", (ftnlen)36, (ftnlen)12);
+    bltcod[441] = -500;
+    s_copy(bltnam + 15876, "Rstar", (ftnlen)36, (ftnlen)5);
+    bltcod[442] = -502;
+    s_copy(bltnam + 15912, "VSAT", (ftnlen)36, (ftnlen)4);
+    bltcod[443] = -502;
+    s_copy(bltnam + 15948, "SELENE VLBI Radio Satellite", (ftnlen)36, (ftnlen)
+	    27);
+    bltcod[444] = -502;
+    s_copy(bltnam + 15984, "SELENE VRAD Satellite", (ftnlen)36, (ftnlen)21);
+    bltcod[445] = -502;
+    s_copy(bltnam + 16020, "SELENE Vstar", (ftnlen)36, (ftnlen)12);
+    bltcod[446] = -502;
+    s_copy(bltnam + 16056, "Vstar", (ftnlen)36, (ftnlen)5);
+    bltcod[447] = -550;
+    s_copy(bltnam + 16092, "MARS-96", (ftnlen)36, (ftnlen)7);
+    bltcod[448] = -550;
+    s_copy(bltnam + 16128, "M96", (ftnlen)36, (ftnlen)3);
+    bltcod[449] = -550;
+    s_copy(bltnam + 16164, "MARS 96", (ftnlen)36, (ftnlen)7);
+    bltcod[450] = -550;
+    s_copy(bltnam + 16200, "MARS96", (ftnlen)36, (ftnlen)6);
+    bltcod[451] = -652;
+    s_copy(bltnam + 16236, "MERCURY TRANSFER MODULE", (ftnlen)36, (ftnlen)23);
+    bltcod[452] = -652;
+    s_copy(bltnam + 16272, "MTM", (ftnlen)36, (ftnlen)3);
+    bltcod[453] = -652;
+    s_copy(bltnam + 16308, "BEPICOLOMBO MTM", (ftnlen)36, (ftnlen)15);
+    bltcod[454] = -750;
+    s_copy(bltnam + 16344, "SPRINT-A", (ftnlen)36, (ftnlen)8);
+    bltcod[455] = 50000001;
+    s_copy(bltnam + 16380, "SHOEMAKER-LEVY 9-W", (ftnlen)36, (ftnlen)18);
+    bltcod[456] = 50000002;
+    s_copy(bltnam + 16416, "SHOEMAKER-LEVY 9-V", (ftnlen)36, (ftnlen)18);
+    bltcod[457] = 50000003;
+    s_copy(bltnam + 16452, "SHOEMAKER-LEVY 9-U", (ftnlen)36, (ftnlen)18);
+    bltcod[458] = 50000004;
+    s_copy(bltnam + 16488, "SHOEMAKER-LEVY 9-T", (ftnlen)36, (ftnlen)18);
+    bltcod[459] = 50000005;
+    s_copy(bltnam + 16524, "SHOEMAKER-LEVY 9-S", (ftnlen)36, (ftnlen)18);
+    bltcod[460] = 50000006;
+    s_copy(bltnam + 16560, "SHOEMAKER-LEVY 9-R", (ftnlen)36, (ftnlen)18);
+    bltcod[461] = 50000007;
+    s_copy(bltnam + 16596, "SHOEMAKER-LEVY 9-Q", (ftnlen)36, (ftnlen)18);
+    bltcod[462] = 50000008;
+    s_copy(bltnam + 16632, "SHOEMAKER-LEVY 9-P", (ftnlen)36, (ftnlen)18);
+    bltcod[463] = 50000009;
+    s_copy(bltnam + 16668, "SHOEMAKER-LEVY 9-N", (ftnlen)36, (ftnlen)18);
+    bltcod[464] = 50000010;
+    s_copy(bltnam + 16704, "SHOEMAKER-LEVY 9-M", (ftnlen)36, (ftnlen)18);
+    bltcod[465] = 50000011;
+    s_copy(bltnam + 16740, "SHOEMAKER-LEVY 9-L", (ftnlen)36, (ftnlen)18);
+    bltcod[466] = 50000012;
+    s_copy(bltnam + 16776, "SHOEMAKER-LEVY 9-K", (ftnlen)36, (ftnlen)18);
+    bltcod[467] = 50000013;
+    s_copy(bltnam + 16812, "SHOEMAKER-LEVY 9-J", (ftnlen)36, (ftnlen)18);
+    bltcod[468] = 50000014;
+    s_copy(bltnam + 16848, "SHOEMAKER-LEVY 9-H", (ftnlen)36, (ftnlen)18);
+    bltcod[469] = 50000015;
+    s_copy(bltnam + 16884, "SHOEMAKER-LEVY 9-G", (ftnlen)36, (ftnlen)18);
+    bltcod[470] = 50000016;
+    s_copy(bltnam + 16920, "SHOEMAKER-LEVY 9-F", (ftnlen)36, (ftnlen)18);
+    bltcod[471] = 50000017;
+    s_copy(bltnam + 16956, "SHOEMAKER-LEVY 9-E", (ftnlen)36, (ftnlen)18);
+    bltcod[472] = 50000018;
+    s_copy(bltnam + 16992, "SHOEMAKER-LEVY 9-D", (ftnlen)36, (ftnlen)18);
+    bltcod[473] = 50000019;
+    s_copy(bltnam + 17028, "SHOEMAKER-LEVY 9-C", (ftnlen)36, (ftnlen)18);
+    bltcod[474] = 50000020;
+    s_copy(bltnam + 17064, "SHOEMAKER-LEVY 9-B", (ftnlen)36, (ftnlen)18);
+    bltcod[475] = 50000021;
+    s_copy(bltnam + 17100, "SHOEMAKER-LEVY 9-A", (ftnlen)36, (ftnlen)18);
+    bltcod[476] = 50000022;
+    s_copy(bltnam + 17136, "SHOEMAKER-LEVY 9-Q1", (ftnlen)36, (ftnlen)19);
+    bltcod[477] = 50000023;
+    s_copy(bltnam + 17172, "SHOEMAKER-LEVY 9-P2", (ftnlen)36, (ftnlen)19);
+    bltcod[478] = 1000001;
+    s_copy(bltnam + 17208, "AREND", (ftnlen)36, (ftnlen)5);
+    bltcod[479] = 1000002;
+    s_copy(bltnam + 17244, "AREND-RIGAUX", (ftnlen)36, (ftnlen)12);
+    bltcod[480] = 1000003;
+    s_copy(bltnam + 17280, "ASHBROOK-JACKSON", (ftnlen)36, (ftnlen)16);
+    bltcod[481] = 1000004;
+    s_copy(bltnam + 17316, "BOETHIN", (ftnlen)36, (ftnlen)7);
+    bltcod[482] = 1000005;
+    s_copy(bltnam + 17352, "BORRELLY", (ftnlen)36, (ftnlen)8);
+    bltcod[483] = 1000006;
+    s_copy(bltnam + 17388, "BOWELL-SKIFF", (ftnlen)36, (ftnlen)12);
+    bltcod[484] = 1000007;
+    s_copy(bltnam + 17424, "BRADFIELD", (ftnlen)36, (ftnlen)9);
+    bltcod[485] = 1000008;
+    s_copy(bltnam + 17460, "BROOKS 2", (ftnlen)36, (ftnlen)8);
+    bltcod[486] = 1000009;
+    s_copy(bltnam + 17496, "BRORSEN-METCALF", (ftnlen)36, (ftnlen)15);
+    bltcod[487] = 1000010;
+    s_copy(bltnam + 17532, "BUS", (ftnlen)36, (ftnlen)3);
+    bltcod[488] = 1000011;
+    s_copy(bltnam + 17568, "CHERNYKH", (ftnlen)36, (ftnlen)8);
+    bltcod[489] = 1000012;
+    s_copy(bltnam + 17604, "67P/CHURYUMOV-GERASIMENKO (1969 R1)", (ftnlen)36, 
+	    (ftnlen)35);
+    bltcod[490] = 1000012;
+    s_copy(bltnam + 17640, "CHURYUMOV-GERASIMENKO", (ftnlen)36, (ftnlen)21);
+    bltcod[491] = 1000013;
+    s_copy(bltnam + 17676, "CIFFREO", (ftnlen)36, (ftnlen)7);
+    bltcod[492] = 1000014;
+    s_copy(bltnam + 17712, "CLARK", (ftnlen)36, (ftnlen)5);
+    bltcod[493] = 1000015;
+    s_copy(bltnam + 17748, "COMAS SOLA", (ftnlen)36, (ftnlen)10);
+    bltcod[494] = 1000016;
+    s_copy(bltnam + 17784, "CROMMELIN", (ftnlen)36, (ftnlen)9);
+    bltcod[495] = 1000017;
+    s_copy(bltnam + 17820, "D'ARREST", (ftnlen)36, (ftnlen)8);
+    bltcod[496] = 1000018;
+    s_copy(bltnam + 17856, "DANIEL", (ftnlen)36, (ftnlen)6);
+    bltcod[497] = 1000019;
+    s_copy(bltnam + 17892, "DE VICO-SWIFT", (ftnlen)36, (ftnlen)13);
+    bltcod[498] = 1000020;
+    s_copy(bltnam + 17928, "DENNING-FUJIKAWA", (ftnlen)36, (ftnlen)16);
+    bltcod[499] = 1000021;
+    s_copy(bltnam + 17964, "DU TOIT 1", (ftnlen)36, (ftnlen)9);
+    bltcod[500] = 1000022;
+    s_copy(bltnam + 18000, "DU TOIT-HARTLEY", (ftnlen)36, (ftnlen)15);
+    bltcod[501] = 1000023;
+    s_copy(bltnam + 18036, "DUTOIT-NEUJMIN-DELPORTE", (ftnlen)36, (ftnlen)23);
+    bltcod[502] = 1000024;
+    s_copy(bltnam + 18072, "DUBIAGO", (ftnlen)36, (ftnlen)7);
+    bltcod[503] = 1000025;
+    s_copy(bltnam + 18108, "ENCKE", (ftnlen)36, (ftnlen)5);
+    bltcod[504] = 1000026;
+    s_copy(bltnam + 18144, "FAYE", (ftnlen)36, (ftnlen)4);
+    bltcod[505] = 1000027;
+    s_copy(bltnam + 18180, "FINLAY", (ftnlen)36, (ftnlen)6);
+    bltcod[506] = 1000028;
+    s_copy(bltnam + 18216, "FORBES", (ftnlen)36, (ftnlen)6);
+    bltcod[507] = 1000029;
+    s_copy(bltnam + 18252, "GEHRELS 1", (ftnlen)36, (ftnlen)9);
+    bltcod[508] = 1000030;
+    s_copy(bltnam + 18288, "GEHRELS 2", (ftnlen)36, (ftnlen)9);
+    bltcod[509] = 1000031;
+    s_copy(bltnam + 18324, "GEHRELS 3", (ftnlen)36, (ftnlen)9);
+    bltcod[510] = 1000032;
+    s_copy(bltnam + 18360, "GIACOBINI-ZINNER", (ftnlen)36, (ftnlen)16);
+    bltcod[511] = 1000033;
+    s_copy(bltnam + 18396, "GICLAS", (ftnlen)36, (ftnlen)6);
+    bltcod[512] = 1000034;
+    s_copy(bltnam + 18432, "GRIGG-SKJELLERUP", (ftnlen)36, (ftnlen)16);
+    bltcod[513] = 1000035;
+    s_copy(bltnam + 18468, "GUNN", (ftnlen)36, (ftnlen)4);
+    bltcod[514] = 1000036;
+    s_copy(bltnam + 18504, "HALLEY", (ftnlen)36, (ftnlen)6);
+    bltcod[515] = 1000037;
+    s_copy(bltnam + 18540, "HANEDA-CAMPOS", (ftnlen)36, (ftnlen)13);
+    bltcod[516] = 1000038;
+    s_copy(bltnam + 18576, "HARRINGTON", (ftnlen)36, (ftnlen)10);
+    bltcod[517] = 1000039;
+    s_copy(bltnam + 18612, "HARRINGTON-ABELL", (ftnlen)36, (ftnlen)16);
+    bltcod[518] = 1000040;
+    s_copy(bltnam + 18648, "HARTLEY 1", (ftnlen)36, (ftnlen)9);
+    bltcod[519] = 1000041;
+    s_copy(bltnam + 18684, "HARTLEY 2", (ftnlen)36, (ftnlen)9);
+    bltcod[520] = 1000042;
+    s_copy(bltnam + 18720, "HARTLEY-IRAS", (ftnlen)36, (ftnlen)12);
+    bltcod[521] = 1000043;
+    s_copy(bltnam + 18756, "HERSCHEL-RIGOLLET", (ftnlen)36, (ftnlen)17);
+    bltcod[522] = 1000044;
+    s_copy(bltnam + 18792, "HOLMES", (ftnlen)36, (ftnlen)6);
+    bltcod[523] = 1000045;
+    s_copy(bltnam + 18828, "HONDA-MRKOS-PAJDUSAKOVA", (ftnlen)36, (ftnlen)23);
+    bltcod[524] = 1000046;
+    s_copy(bltnam + 18864, "HOWELL", (ftnlen)36, (ftnlen)6);
+    bltcod[525] = 1000047;
+    s_copy(bltnam + 18900, "IRAS", (ftnlen)36, (ftnlen)4);
+    bltcod[526] = 1000048;
+    s_copy(bltnam + 18936, "JACKSON-NEUJMIN", (ftnlen)36, (ftnlen)15);
+    bltcod[527] = 1000049;
+    s_copy(bltnam + 18972, "JOHNSON", (ftnlen)36, (ftnlen)7);
+    bltcod[528] = 1000050;
+    s_copy(bltnam + 19008, "KEARNS-KWEE", (ftnlen)36, (ftnlen)11);
+    bltcod[529] = 1000051;
+    s_copy(bltnam + 19044, "KLEMOLA", (ftnlen)36, (ftnlen)7);
+    bltcod[530] = 1000052;
+    s_copy(bltnam + 19080, "KOHOUTEK", (ftnlen)36, (ftnlen)8);
+    bltcod[531] = 1000053;
+    s_copy(bltnam + 19116, "KOJIMA", (ftnlen)36, (ftnlen)6);
+    bltcod[532] = 1000054;
+    s_copy(bltnam + 19152, "KOPFF", (ftnlen)36, (ftnlen)5);
+    bltcod[533] = 1000055;
+    s_copy(bltnam + 19188, "KOWAL 1", (ftnlen)36, (ftnlen)7);
+    bltcod[534] = 1000056;
+    s_copy(bltnam + 19224, "KOWAL 2", (ftnlen)36, (ftnlen)7);
+    bltcod[535] = 1000057;
+    s_copy(bltnam + 19260, "KOWAL-MRKOS", (ftnlen)36, (ftnlen)11);
+    bltcod[536] = 1000058;
+    s_copy(bltnam + 19296, "KOWAL-VAVROVA", (ftnlen)36, (ftnlen)13);
+    bltcod[537] = 1000059;
+    s_copy(bltnam + 19332, "LONGMORE", (ftnlen)36, (ftnlen)8);
+    bltcod[538] = 1000060;
+    s_copy(bltnam + 19368, "LOVAS 1", (ftnlen)36, (ftnlen)7);
+    bltcod[539] = 1000061;
+    s_copy(bltnam + 19404, "MACHHOLZ", (ftnlen)36, (ftnlen)8);
+    bltcod[540] = 1000062;
+    s_copy(bltnam + 19440, "MAURY", (ftnlen)36, (ftnlen)5);
+    bltcod[541] = 1000063;
+    s_copy(bltnam + 19476, "NEUJMIN 1", (ftnlen)36, (ftnlen)9);
+    bltcod[542] = 1000064;
+    s_copy(bltnam + 19512, "NEUJMIN 2", (ftnlen)36, (ftnlen)9);
+    bltcod[543] = 1000065;
+    s_copy(bltnam + 19548, "NEUJMIN 3", (ftnlen)36, (ftnlen)9);
+    bltcod[544] = 1000066;
+    s_copy(bltnam + 19584, "OLBERS", (ftnlen)36, (ftnlen)6);
+    bltcod[545] = 1000067;
+    s_copy(bltnam + 19620, "PETERS-HARTLEY", (ftnlen)36, (ftnlen)14);
+    bltcod[546] = 1000068;
+    s_copy(bltnam + 19656, "PONS-BROOKS", (ftnlen)36, (ftnlen)11);
+    bltcod[547] = 1000069;
+    s_copy(bltnam + 19692, "PONS-WINNECKE", (ftnlen)36, (ftnlen)13);
+    bltcod[548] = 1000070;
+    s_copy(bltnam + 19728, "REINMUTH 1", (ftnlen)36, (ftnlen)10);
+    bltcod[549] = 1000071;
+    s_copy(bltnam + 19764, "REINMUTH 2", (ftnlen)36, (ftnlen)10);
+    bltcod[550] = 1000072;
+    s_copy(bltnam + 19800, "RUSSELL 1", (ftnlen)36, (ftnlen)9);
+    bltcod[551] = 1000073;
+    s_copy(bltnam + 19836, "RUSSELL 2", (ftnlen)36, (ftnlen)9);
+    bltcod[552] = 1000074;
+    s_copy(bltnam + 19872, "RUSSELL 3", (ftnlen)36, (ftnlen)9);
+    bltcod[553] = 1000075;
+    s_copy(bltnam + 19908, "RUSSELL 4", (ftnlen)36, (ftnlen)9);
+    bltcod[554] = 1000076;
+    s_copy(bltnam + 19944, "SANGUIN", (ftnlen)36, (ftnlen)7);
+    bltcod[555] = 1000077;
+    s_copy(bltnam + 19980, "SCHAUMASSE", (ftnlen)36, (ftnlen)10);
+    bltcod[556] = 1000078;
+    s_copy(bltnam + 20016, "SCHUSTER", (ftnlen)36, (ftnlen)8);
+    bltcod[557] = 1000079;
+    s_copy(bltnam + 20052, "SCHWASSMANN-WACHMANN 1", (ftnlen)36, (ftnlen)22);
+    bltcod[558] = 1000080;
+    s_copy(bltnam + 20088, "SCHWASSMANN-WACHMANN 2", (ftnlen)36, (ftnlen)22);
+    bltcod[559] = 1000081;
+    s_copy(bltnam + 20124, "SCHWASSMANN-WACHMANN 3", (ftnlen)36, (ftnlen)22);
+    bltcod[560] = 1000082;
+    s_copy(bltnam + 20160, "SHAJN-SCHALDACH", (ftnlen)36, (ftnlen)15);
+    bltcod[561] = 1000083;
+    s_copy(bltnam + 20196, "SHOEMAKER 1", (ftnlen)36, (ftnlen)11);
+    bltcod[562] = 1000084;
+    s_copy(bltnam + 20232, "SHOEMAKER 2", (ftnlen)36, (ftnlen)11);
+    bltcod[563] = 1000085;
+    s_copy(bltnam + 20268, "SHOEMAKER 3", (ftnlen)36, (ftnlen)11);
+    bltcod[564] = 1000086;
+    s_copy(bltnam + 20304, "SINGER-BREWSTER", (ftnlen)36, (ftnlen)15);
+    bltcod[565] = 1000087;
+    s_copy(bltnam + 20340, "SLAUGHTER-BURNHAM", (ftnlen)36, (ftnlen)17);
+    bltcod[566] = 1000088;
+    s_copy(bltnam + 20376, "SMIRNOVA-CHERNYKH", (ftnlen)36, (ftnlen)17);
+    bltcod[567] = 1000089;
+    s_copy(bltnam + 20412, "STEPHAN-OTERMA", (ftnlen)36, (ftnlen)14);
+    bltcod[568] = 1000090;
+    s_copy(bltnam + 20448, "SWIFT-GEHRELS", (ftnlen)36, (ftnlen)13);
+    bltcod[569] = 1000091;
+    s_copy(bltnam + 20484, "TAKAMIZAWA", (ftnlen)36, (ftnlen)10);
+    bltcod[570] = 1000092;
+    s_copy(bltnam + 20520, "TAYLOR", (ftnlen)36, (ftnlen)6);
+    bltcod[571] = 1000093;
+    s_copy(bltnam + 20556, "TEMPEL_1", (ftnlen)36, (ftnlen)8);
+    bltcod[572] = 1000093;
+    s_copy(bltnam + 20592, "TEMPEL 1", (ftnlen)36, (ftnlen)8);
+    bltcod[573] = 1000094;
+    s_copy(bltnam + 20628, "TEMPEL 2", (ftnlen)36, (ftnlen)8);
+    bltcod[574] = 1000095;
+    s_copy(bltnam + 20664, "TEMPEL-TUTTLE", (ftnlen)36, (ftnlen)13);
+    bltcod[575] = 1000096;
+    s_copy(bltnam + 20700, "TRITTON", (ftnlen)36, (ftnlen)7);
+    bltcod[576] = 1000097;
+    s_copy(bltnam + 20736, "TSUCHINSHAN 1", (ftnlen)36, (ftnlen)13);
+    bltcod[577] = 1000098;
+    s_copy(bltnam + 20772, "TSUCHINSHAN 2", (ftnlen)36, (ftnlen)13);
+    bltcod[578] = 1000099;
+    s_copy(bltnam + 20808, "TUTTLE", (ftnlen)36, (ftnlen)6);
+    bltcod[579] = 1000100;
+    s_copy(bltnam + 20844, "TUTTLE-GIACOBINI-KRESAK", (ftnlen)36, (ftnlen)23);
+    bltcod[580] = 1000101;
+    s_copy(bltnam + 20880, "VAISALA 1", (ftnlen)36, (ftnlen)9);
+    bltcod[581] = 1000102;
+    s_copy(bltnam + 20916, "VAN BIESBROECK", (ftnlen)36, (ftnlen)14);
+    bltcod[582] = 1000103;
+    s_copy(bltnam + 20952, "VAN HOUTEN", (ftnlen)36, (ftnlen)10);
+    bltcod[583] = 1000104;
+    s_copy(bltnam + 20988, "WEST-KOHOUTEK-IKEMURA", (ftnlen)36, (ftnlen)21);
+    bltcod[584] = 1000105;
+    s_copy(bltnam + 21024, "WHIPPLE", (ftnlen)36, (ftnlen)7);
+    bltcod[585] = 1000106;
+    s_copy(bltnam + 21060, "WILD 1", (ftnlen)36, (ftnlen)6);
+    bltcod[586] = 1000107;
+    s_copy(bltnam + 21096, "WILD 2", (ftnlen)36, (ftnlen)6);
+    bltcod[587] = 1000108;
+    s_copy(bltnam + 21132, "WILD 3", (ftnlen)36, (ftnlen)6);
+    bltcod[588] = 1000109;
+    s_copy(bltnam + 21168, "WIRTANEN", (ftnlen)36, (ftnlen)8);
+    bltcod[589] = 1000110;
+    s_copy(bltnam + 21204, "WOLF", (ftnlen)36, (ftnlen)4);
+    bltcod[590] = 1000111;
+    s_copy(bltnam + 21240, "WOLF-HARRINGTON", (ftnlen)36, (ftnlen)15);
+    bltcod[591] = 1000112;
+    s_copy(bltnam + 21276, "LOVAS 2", (ftnlen)36, (ftnlen)7);
+    bltcod[592] = 1000113;
+    s_copy(bltnam + 21312, "URATA-NIIJIMA", (ftnlen)36, (ftnlen)13);
+    bltcod[593] = 1000114;
+    s_copy(bltnam + 21348, "WISEMAN-SKIFF", (ftnlen)36, (ftnlen)13);
+    bltcod[594] = 1000115;
+    s_copy(bltnam + 21384, "HELIN", (ftnlen)36, (ftnlen)5);
+    bltcod[595] = 1000116;
+    s_copy(bltnam + 21420, "MUELLER", (ftnlen)36, (ftnlen)7);
+    bltcod[596] = 1000117;
+    s_copy(bltnam + 21456, "SHOEMAKER-HOLT 1", (ftnlen)36, (ftnlen)16);
+    bltcod[597] = 1000118;
+    s_copy(bltnam + 21492, "HELIN-ROMAN-CROCKETT", (ftnlen)36, (ftnlen)20);
+    bltcod[598] = 1000119;
+    s_copy(bltnam + 21528, "HARTLEY 3", (ftnlen)36, (ftnlen)9);
+    bltcod[599] = 1000120;
+    s_copy(bltnam + 21564, "PARKER-HARTLEY", (ftnlen)36, (ftnlen)14);
+    bltcod[600] = 1000121;
+    s_copy(bltnam + 21600, "HELIN-ROMAN-ALU 1", (ftnlen)36, (ftnlen)17);
+    bltcod[601] = 1000122;
+    s_copy(bltnam + 21636, "WILD 4", (ftnlen)36, (ftnlen)6);
+    bltcod[602] = 1000123;
+    s_copy(bltnam + 21672, "MUELLER 2", (ftnlen)36, (ftnlen)9);
+    bltcod[603] = 1000124;
+    s_copy(bltnam + 21708, "MUELLER 3", (ftnlen)36, (ftnlen)9);
+    bltcod[604] = 1000125;
+    s_copy(bltnam + 21744, "SHOEMAKER-LEVY 1", (ftnlen)36, (ftnlen)16);
+    bltcod[605] = 1000126;
+    s_copy(bltnam + 21780, "SHOEMAKER-LEVY 2", (ftnlen)36, (ftnlen)16);
+    bltcod[606] = 1000127;
+    s_copy(bltnam + 21816, "HOLT-OLMSTEAD", (ftnlen)36, (ftnlen)13);
+    bltcod[607] = 1000128;
+    s_copy(bltnam + 21852, "METCALF-BREWINGTON", (ftnlen)36, (ftnlen)18);
+    bltcod[608] = 1000129;
+    s_copy(bltnam + 21888, "LEVY", (ftnlen)36, (ftnlen)4);
+    bltcod[609] = 1000130;
+    s_copy(bltnam + 21924, "SHOEMAKER-LEVY 9", (ftnlen)36, (ftnlen)16);
+    bltcod[610] = 1000131;
+    s_copy(bltnam + 21960, "HYAKUTAKE", (ftnlen)36, (ftnlen)9);
+    bltcod[611] = 1000132;
+    s_copy(bltnam + 21996, "HALE-BOPP", (ftnlen)36, (ftnlen)9);
+    bltcod[612] = 1003228;
+    s_copy(bltnam + 22032, "C/2013 A1", (ftnlen)36, (ftnlen)9);
+    bltcod[613] = 1003228;
+    s_copy(bltnam + 22068, "SIDING SPRING", (ftnlen)36, (ftnlen)13);
+    bltcod[614] = 2000001;
+    s_copy(bltnam + 22104, "CERES", (ftnlen)36, (ftnlen)5);
+    bltcod[615] = 2000002;
+    s_copy(bltnam + 22140, "PALLAS", (ftnlen)36, (ftnlen)6);
+    bltcod[616] = 2000004;
+    s_copy(bltnam + 22176, "VESTA", (ftnlen)36, (ftnlen)5);
+    bltcod[617] = 2000016;
+    s_copy(bltnam + 22212, "PSYCHE", (ftnlen)36, (ftnlen)6);
+    bltcod[618] = 2000021;
+    s_copy(bltnam + 22248, "LUTETIA", (ftnlen)36, (ftnlen)7);
+    bltcod[619] = 2000052;
+    s_copy(bltnam + 22284, "52_EUROPA", (ftnlen)36, (ftnlen)9);
+    bltcod[620] = 2000052;
+    s_copy(bltnam + 22320, "52 EUROPA", (ftnlen)36, (ftnlen)9);
+    bltcod[621] = 2000216;
+    s_copy(bltnam + 22356, "KLEOPATRA", (ftnlen)36, (ftnlen)9);
+    bltcod[622] = 2000253;
+    s_copy(bltnam + 22392, "MATHILDE", (ftnlen)36, (ftnlen)8);
+    bltcod[623] = 2000433;
+    s_copy(bltnam + 22428, "EROS", (ftnlen)36, (ftnlen)4);
+    bltcod[624] = 2000511;
+    s_copy(bltnam + 22464, "DAVIDA", (ftnlen)36, (ftnlen)6);
+    bltcod[625] = 2002867;
+    s_copy(bltnam + 22500, "STEINS", (ftnlen)36, (ftnlen)6);
+    bltcod[626] = 2004015;
+    s_copy(bltnam + 22536, "WILSON-HARRINGTON", (ftnlen)36, (ftnlen)17);
+    bltcod[627] = 2004179;
+    s_copy(bltnam + 22572, "TOUTATIS", (ftnlen)36, (ftnlen)8);
+    bltcod[628] = 2009969;
+    s_copy(bltnam + 22608, "1992KD", (ftnlen)36, (ftnlen)6);
+    bltcod[629] = 2009969;
+    s_copy(bltnam + 22644, "BRAILLE", (ftnlen)36, (ftnlen)7);
+    bltcod[630] = 2025143;
+    s_copy(bltnam + 22680, "ITOKAWA", (ftnlen)36, (ftnlen)7);
+    bltcod[631] = 2101955;
+    s_copy(bltnam + 22716, "BENNU", (ftnlen)36, (ftnlen)5);
+    bltcod[632] = 2162173;
+    s_copy(bltnam + 22752, "RYUGU", (ftnlen)36, (ftnlen)5);
+    bltcod[633] = 2431010;
+    s_copy(bltnam + 22788, "IDA", (ftnlen)36, (ftnlen)3);
+    bltcod[634] = 2431011;
+    s_copy(bltnam + 22824, "DACTYL", (ftnlen)36, (ftnlen)6);
+    bltcod[635] = 2486958;
+    s_copy(bltnam + 22860, "ARROKOTH", (ftnlen)36, (ftnlen)8);
+    bltcod[636] = 9511010;
+    s_copy(bltnam + 22896, "GASPRA", (ftnlen)36, (ftnlen)6);
+    bltcod[637] = 20000617;
+    s_copy(bltnam + 22932, "PATROCLUS_BARYCENTER", (ftnlen)36, (ftnlen)20);
+    bltcod[638] = 20000617;
+    s_copy(bltnam + 22968, "PATROCLUS BARYCENTER", (ftnlen)36, (ftnlen)20);
+    bltcod[639] = 20003548;
+    s_copy(bltnam + 23004, "EURYBATES_BARYCENTER", (ftnlen)36, (ftnlen)20);
+    bltcod[640] = 20003548;
+    s_copy(bltnam + 23040, "EURYBATES BARYCENTER", (ftnlen)36, (ftnlen)20);
+    bltcod[641] = 20011351;
+    s_copy(bltnam + 23076, "LEUCUS", (ftnlen)36, (ftnlen)6);
+    bltcod[642] = 20015094;
+    s_copy(bltnam + 23112, "POLYMELE", (ftnlen)36, (ftnlen)8);
+    bltcod[643] = 20021900;
+    s_copy(bltnam + 23148, "ORUS", (ftnlen)36, (ftnlen)4);
+    bltcod[644] = 20052246;
+    s_copy(bltnam + 23184, "DONALDJOHANSON", (ftnlen)36, (ftnlen)14);
+    bltcod[645] = 20065803;
+    s_copy(bltnam + 23220, "DIDYMOS_BARYCENTER", (ftnlen)36, (ftnlen)18);
+    bltcod[646] = 20065803;
+    s_copy(bltnam + 23256, "DIDYMOS BARYCENTER", (ftnlen)36, (ftnlen)18);
+    bltcod[647] = 120000617;
+    s_copy(bltnam + 23292, "MENOETIUS", (ftnlen)36, (ftnlen)9);
+    bltcod[648] = 120003548;
+    s_copy(bltnam + 23328, "QUETA", (ftnlen)36, (ftnlen)5);
+    bltcod[649] = 120065803;
+    s_copy(bltnam + 23364, "DIMORPHOS", (ftnlen)36, (ftnlen)9);
+    bltcod[650] = 920000617;
+    s_copy(bltnam + 23400, "PATROCLUS", (ftnlen)36, (ftnlen)9);
+    bltcod[651] = 920003548;
+    s_copy(bltnam + 23436, "EURYBATES", (ftnlen)36, (ftnlen)9);
+    bltcod[652] = 920065803;
+    s_copy(bltnam + 23472, "DIDYMOS", (ftnlen)36, (ftnlen)7);
+    bltcod[653] = 398989;
+    s_copy(bltnam + 23508, "NOTO", (ftnlen)36, (ftnlen)4);
+    bltcod[654] = 398990;
+    s_copy(bltnam + 23544, "NEW NORCIA", (ftnlen)36, (ftnlen)10);
+    bltcod[655] = 399001;
+    s_copy(bltnam + 23580, "GOLDSTONE", (ftnlen)36, (ftnlen)9);
+    bltcod[656] = 399002;
+    s_copy(bltnam + 23616, "CANBERRA", (ftnlen)36, (ftnlen)8);
+    bltcod[657] = 399003;
+    s_copy(bltnam + 23652, "MADRID", (ftnlen)36, (ftnlen)6);
+    bltcod[658] = 399004;
+    s_copy(bltnam + 23688, "USUDA", (ftnlen)36, (ftnlen)5);
+    bltcod[659] = 399005;
+    s_copy(bltnam + 23724, "DSS-05", (ftnlen)36, (ftnlen)6);
+    bltcod[660] = 399005;
+    s_copy(bltnam + 23760, "PARKES", (ftnlen)36, (ftnlen)6);
+    bltcod[661] = 399012;
+    s_copy(bltnam + 23796, "DSS-12", (ftnlen)36, (ftnlen)6);
+    bltcod[662] = 399013;
+    s_copy(bltnam + 23832, "DSS-13", (ftnlen)36, (ftnlen)6);
+    bltcod[663] = 399014;
+    s_copy(bltnam + 23868, "DSS-14", (ftnlen)36, (ftnlen)6);
+    bltcod[664] = 399015;
+    s_copy(bltnam + 23904, "DSS-15", (ftnlen)36, (ftnlen)6);
+    bltcod[665] = 399016;
+    s_copy(bltnam + 23940, "DSS-16", (ftnlen)36, (ftnlen)6);
+    bltcod[666] = 399017;
+    s_copy(bltnam + 23976, "DSS-17", (ftnlen)36, (ftnlen)6);
+    bltcod[667] = 399023;
+    s_copy(bltnam + 24012, "DSS-23", (ftnlen)36, (ftnlen)6);
+    bltcod[668] = 399024;
+    s_copy(bltnam + 24048, "DSS-24", (ftnlen)36, (ftnlen)6);
+    bltcod[669] = 399025;
+    s_copy(bltnam + 24084, "DSS-25", (ftnlen)36, (ftnlen)6);
+    bltcod[670] = 399026;
+    s_copy(bltnam + 24120, "DSS-26", (ftnlen)36, (ftnlen)6);
+    bltcod[671] = 399027;
+    s_copy(bltnam + 24156, "DSS-27", (ftnlen)36, (ftnlen)6);
+    bltcod[672] = 399028;
+    s_copy(bltnam + 24192, "DSS-28", (ftnlen)36, (ftnlen)6);
+    bltcod[673] = 399033;
+    s_copy(bltnam + 24228, "DSS-33", (ftnlen)36, (ftnlen)6);
+    bltcod[674] = 399034;
+    s_copy(bltnam + 24264, "DSS-34", (ftnlen)36, (ftnlen)6);
+    bltcod[675] = 399035;
+    s_copy(bltnam + 24300, "DSS-35", (ftnlen)36, (ftnlen)6);
+    bltcod[676] = 399036;
+    s_copy(bltnam + 24336, "DSS-36", (ftnlen)36, (ftnlen)6);
+    bltcod[677] = 399042;
+    s_copy(bltnam + 24372, "DSS-42", (ftnlen)36, (ftnlen)6);
+    bltcod[678] = 399043;
+    s_copy(bltnam + 24408, "DSS-43", (ftnlen)36, (ftnlen)6);
+    bltcod[679] = 399045;
+    s_copy(bltnam + 24444, "DSS-45", (ftnlen)36, (ftnlen)6);
+    bltcod[680] = 399046;
+    s_copy(bltnam + 24480, "DSS-46", (ftnlen)36, (ftnlen)6);
+    bltcod[681] = 399049;
+    s_copy(bltnam + 24516, "DSS-49", (ftnlen)36, (ftnlen)6);
+    bltcod[682] = 399053;
+    s_copy(bltnam + 24552, "DSS-53", (ftnlen)36, (ftnlen)6);
+    bltcod[683] = 399054;
+    s_copy(bltnam + 24588, "DSS-54", (ftnlen)36, (ftnlen)6);
+    bltcod[684] = 399055;
+    s_copy(bltnam + 24624, "DSS-55", (ftnlen)36, (ftnlen)6);
+    bltcod[685] = 399056;
+    s_copy(bltnam + 24660, "DSS-56", (ftnlen)36, (ftnlen)6);
+    bltcod[686] = 399061;
+    s_copy(bltnam + 24696, "DSS-61", (ftnlen)36, (ftnlen)6);
+    bltcod[687] = 399063;
+    s_copy(bltnam + 24732, "DSS-63", (ftnlen)36, (ftnlen)6);
+    bltcod[688] = 399064;
+    s_copy(bltnam + 24768, "DSS-64", (ftnlen)36, (ftnlen)6);
+    bltcod[689] = 399065;
+    s_copy(bltnam + 24804, "DSS-65", (ftnlen)36, (ftnlen)6);
+    bltcod[690] = 399066;
+    s_copy(bltnam + 24840, "DSS-66", (ftnlen)36, (ftnlen)6);
+    bltcod[691] = 399069;
+    s_copy(bltnam + 24876, "DSS-69", (ftnlen)36, (ftnlen)6);
     return 0;
 } /* zzidmap_ */
 

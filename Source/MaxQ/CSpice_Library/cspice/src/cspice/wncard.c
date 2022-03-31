@@ -68,7 +68,7 @@ integer wncard_(doublereal *window)
 
 /* $ Detailed_Input */
 
-/*      WINDOW      is a window containing zero or more intervals. */
+/*     WINDOW   is a window containing zero or more intervals. */
 
 /* $ Detailed_Output */
 
@@ -77,12 +77,12 @@ integer wncard_(doublereal *window)
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the number of elements in WINDOW is not even */
-/*        the error SPICE(INVALIDSIZE) signals. */
+/*     1)  If the number of elements in WINDOW is not even, */
+/*         the error SPICE(INVALIDSIZE) is signaled. */
 
 /* $ Files */
 
@@ -97,49 +97,86 @@ integer wncard_(doublereal *window)
 
 /* $ Examples */
 
-/*      INTEGER               LBCELL */
-/*      PARAMETER           ( LBCELL = -5 ) */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
 
-/*      INTEGER               WNSIZE */
-/*      PARAMETER           ( WNSIZE = 10 ) */
+/*     1) The following code example demonstrates how to insert an */
+/*        interval into an existing double precision SPICE window, and */
+/*        how to loop over all its intervals to extract their left and */
+/*        right points. */
 
-/*      DOUBLE PRECISION      WINDOW      ( LBCELL:WNSIZE ) */
-/*      DOUBLE PRECISION      LEFT */
-/*      DOUBLE PRECISION      RIGHT */
 
-/*      INTEGER               WNCARD */
-/*      INTEGER               I */
+/*        Example code begins here. */
 
-/*      Validate the window with size WNSIZE and zero elements. */
 
-/*      CALL WNVALD( WNSIZE, 0, WINDOW ) */
+/*              PROGRAM WNCARD_EX1 */
+/*              IMPLICIT NONE */
 
-/*      Insert the intervals */
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER               WNCARD */
 
-/*         [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*      into WINDOW. */
+/*              INTEGER               WNSIZE */
+/*              PARAMETER           ( WNSIZE = 10 ) */
 
-/*      CALL WNINSD(  1.D0,  3.D0, WINDOW ) */
-/*      CALL WNINSD(  7.D0, 11.D0, WINDOW ) */
-/*      CALL WNINSD( 23.D0, 27.D0, WINDOW ) */
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              DOUBLE PRECISION      WINDOW      ( LBCELL:WNSIZE ) */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RIGHT */
 
-/*      Loop over the number of intervals in WINDOW, output */
-/*      the LEFT and RIGHT endpoints for each interval. */
+/*              INTEGER               I */
 
-/*      DO I=1, WNCARD(WINDOW) */
+/*        C */
+/*        C     Validate the window with size WNSIZE and zero elements. */
+/*        C */
+/*              CALL WNVALD( WNSIZE, 0, WINDOW ) */
 
-/*         CALL WNFETD( WINDOW, I, LEFT, RIGHT ) */
+/*        C */
+/*        C     Insert the intervals */
+/*        C */
+/*        C        [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
+/*        C */
+/*        C     into WINDOW. */
+/*        C */
+/*              CALL WNINSD(  1.D0,  3.D0, WINDOW ) */
+/*              CALL WNINSD(  7.D0, 11.D0, WINDOW ) */
+/*              CALL WNINSD( 23.D0, 27.D0, WINDOW ) */
 
-/*         WRITE(*,*) 'Interval', I, ' [', LEFT, RIGHT, ']' */
+/*        C */
+/*        C     Loop over the number of intervals in WINDOW, output */
+/*        C     the LEFT and RIGHT endpoints for each interval. */
+/*        C */
+/*              DO I=1, WNCARD(WINDOW) */
 
-/*      END DO */
+/*                 CALL WNFETD( WINDOW, I, LEFT, RIGHT ) */
 
-/*   The code outputs: */
+/*                 WRITE(*,'(A,I2,2(A,F8.3),A)') 'Interval', I, */
+/*             .                  ' [', LEFT,',',  RIGHT, ']' */
 
-/*      Interval 1 [  1.    3.] */
-/*      Interval 2 [  7.   11.] */
-/*      Interval 3 [  23.  27.] */
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Interval 1 [   1.000,   3.000] */
+/*        Interval 2 [   7.000,  11.000] */
+/*        Interval 3 [  23.000,  27.000] */
+
 
 /* $ Restrictions */
 
@@ -151,13 +188,25 @@ integer wncard_(doublereal *window)
 
 /* $ Author_and_Institution */
 
-/*     E.D. Wright    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated to remove unnecessary lines of code in the */
+/*        Standard SPICE error handling CHKIN statements. */
+
+/*        Edited the header to comply to NAIF standard. Created complete */
+/*        code example from code fragment and added example's problem */
+/*        statement. */
+
 /* -    SPICELIB Version 1.0.1, 24-APR-2010 (EDW) */
 
-/*       Minor edit to code comments eliminating typo. */
+/*        Minor edit to code comments eliminating typo. */
 
 /* -    SPICELIB Version 1.0.0, 10-AUG-2007 (EDW) */
 
@@ -170,12 +219,14 @@ integer wncard_(doublereal *window)
 
 /*     SPICELIB functions */
 
+
+/*     Standard SPICE error handling. */
+
     if (return_()) {
 	ret_val = 0;
 	return ret_val;
-    } else {
-	chkin_("WNCARD", (ftnlen)6);
     }
+    chkin_("WNCARD", (ftnlen)6);
     ret_val = cardd_(window);
 
 /*     Confirm the cardinality as an even integer. */

@@ -29,9 +29,9 @@
 
 /* $ Abstract */
 
-/*     Evaluate a Lagrange interpolating polynomial for a specified */
-/*     set of coordinate pairs, at a specified abscissa value. */
-/*     Return the value of both polynomial and derivative. */
+/*     Evaluate a Lagrange interpolating polynomial, for a specified */
+/*     set of coordinate pairs, at a specified abscissa value. Return */
+/*     both the value of the polynomial and its derivative. */
 
 /* $ Disclaimer */
 
@@ -70,7 +70,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     N          I   Number of points defining the polynomial. */
 /*     XVALS      I   Abscissa values. */
@@ -82,38 +82,35 @@
 
 /* $ Detailed_Input */
 
-/*     N              is the number of points defining the polynomial. */
-/*                    The arrays XVALS and YVALS contain N elements. */
-
+/*     N        is the number of points defining the polynomial. */
+/*              The arrays XVALS and YVALS contain N elements. */
 
 /*     XVALS, */
-/*     YVALS          are arrays of abscissa and ordinate values that */
-/*                    together define N ordered pairs.  The set of points */
+/*     YVALS    are arrays of abscissa and ordinate values that */
+/*              together define N ordered pairs. The set of points */
 
-/*                       ( XVALS(I), YVALS(I) ) */
+/*                 ( XVALS(I), YVALS(I) ) */
 
-/*                    define the Lagrange polynomial used for */
-/*                    interpolation.  The elements of XVALS must be */
-/*                    distinct and in increasing order. */
+/*              define the Lagrange polynomial used for */
+/*              interpolation. The elements of XVALS must be */
+/*              distinct and in increasing order. */
 
+/*     WORK     is an N * 2 work space array, where N is the same */
+/*              dimension as that of XVALS and YVALS. It is used */
+/*              by this routine as a scratch area to hold */
+/*              intermediate results. */
 
-/*     WORK           is an N x 2 work space array, where N is the same */
-/*                    dimension as that of XVALS and YVALS.  It is used */
-/*                    by this routine as a scratch area to hold */
-/*                    intermediate results. */
-
-
-/*     X              is the abscissa value at which the interpolating */
-/*                    polynomial is to be evaluated. */
+/*     X        is the abscissa value at which the interpolating */
+/*              polynomial is to be evaluated. */
 
 /* $ Detailed_Output */
 
-/*     P              is the value at X of the unique polynomial of */
-/*                    degree N-1 that fits the points in the plane */
-/*                    defined by XVALS and YVALS. */
+/*     P        is the value at X of the unique polynomial of */
+/*              degree N-1 that fits the points in the plane */
+/*              defined by XVALS and YVALS. */
 
-/*     DP             is the derivative at X of the interpolating */
-/*                    polynomial described above. */
+/*     DP       is the derivative at X of the interpolating */
+/*              polynomial described above. */
 
 /* $ Parameters */
 
@@ -121,8 +118,8 @@
 
 /* $ Exceptions */
 
-/*     1)  If any two elements of the array XVALS are equal the error */
-/*         SPICE(DIVIDEBYZERO) will be signaled. */
+/*     1)  If any two elements of the array XVALS are equal, the error */
+/*         SPICE(DIVIDEBYZERO) is signaled. */
 
 /*     2)  If N is less than 1, the error SPICE(INVALIDSIZE) is */
 /*         signaled. */
@@ -138,18 +135,18 @@
 
 /*     Given a set of N distinct abscissa values and corresponding */
 /*     ordinate values, there is a unique polynomial of degree N-1, often */
-/*     called the `Lagrange polynomial', that fits the graph defined by */
-/*     these values.  The Lagrange polynomial can be used to interpolate */
+/*     called the "Lagrange polynomial", that fits the graph defined by */
+/*     these values. The Lagrange polynomial can be used to interpolate */
 /*     the value of a function at a specified point, given a discrete */
 /*     set of values of the function. */
 
 /*     Users of this routine must choose the number of points to use */
-/*     in their interpolation method.  The authors of Reference [1] have */
+/*     in their interpolation method. The authors of Reference [1] have */
 /*     this to say on the topic: */
 
 /*        Unless there is solid evidence that the interpolating function */
-/*        is close in form to the true function f, it is a good idea to */
-/*        be cautious about high-order interpolation.  We */
+/*        is close in form to the true function F, it is a good idea to */
+/*        be cautious about high-order interpolation. We */
 /*        enthusiastically endorse interpolations with 3 or 4 points, we */
 /*        are perhaps tolerant of 5 or 6; but we rarely go higher than */
 /*        that unless there is quite rigorous monitoring of estimated */
@@ -160,69 +157,76 @@
 
 /*        ...the dangers of extrapolation cannot be overemphasized: */
 /*        An interpolating function, which is perforce an extrapolating */
-/*        function, will typically go berserk when the argument x is */
+/*        function, will typically go berserk when the argument X is */
 /*        outside the range of tabulated values by more than the typical */
 /*        spacing of tabulated points. */
 
 /* $ Examples */
 
-/*     1)  Fit a cubic polynomial through the points */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*             ( -1, -2 ) */
-/*             (  0, -7 ) */
-/*             (  1, -8 ) */
-/*             (  3, 26 ) */
+/*     1) Fit a cubic polynomial through the points */
 
-/*         and evaluate this polynomial at x = 2. */
+/*            ( -1, -2 ) */
+/*            (  0, -7 ) */
+/*            (  1, -8 ) */
+/*            (  3, 26 ) */
 
+/*        and evaluate this polynomial at X = 2. */
 
-/*            PROGRAM TEST_LGRIND */
-
-/*            DOUBLE PRECISION      P */
-/*            DOUBLE PRECISION      DP */
-/*            DOUBLE PRECISION      XVALS (4) */
-/*            DOUBLE PRECISION      YVALS (4) */
-/*            DOUBLE PRECISION      WORK  (4,2) */
-/*            INTEGER               N */
-
-/*            N         =   4 */
-
-/*            XVALS(1)  =  -1 */
-/*            XVALS(2)  =   0 */
-/*            XVALS(3)  =   1 */
-/*            XVALS(4)  =   3 */
-
-/*            YVALS(1)  =  -2 */
-/*            YVALS(2)  =  -7 */
-/*            YVALS(3)  =  -8 */
-/*            YVALS(4)  =  26 */
-
-/*            CALL LGRIND ( N, XVALS, YVALS, WORK, 2.D0, P, DP ) */
-
-/*            WRITE (*,*) 'P, DP = ', P, DP */
-/*            END */
-
-
-/*        The returned value of P should be 1.D0, since the */
+/*        The returned value of P should be 1.0, since the */
 /*        unique cubic polynomial that fits these points is */
 
-/*                       3       2 */
-/*           f(x)   =   x   +  2x  - 4x  - 7 */
+/*                       3      2 */
+/*           F(X)   =   X  + 2*X  - 4*X - 7 */
 
-
-/*        The returned value of DP should be 1.6D1, since the */
+/*        The returned value of DP should be 16.0, since the */
 /*        derivative of f(x) is */
 
-/*             '         2 */
-/*           f (x)  =  3x   +  4x  - 4 */
+/*            '           2 */
+/*           F (X)  =  3*X  + 4*X - 4 */
 
 
-/*        We also could have invoked LGRIND with the reference */
+/*        Example code begins here. */
 
-/*           CALL LGRIND ( N, XVALS, YVALS, YVALS, 2.D0, P, DP ) */
 
-/*        if we wished to; in this case YVALS would have been */
-/*        modified on output. */
+/*              PROGRAM LGRIND_EX1 */
+/*              IMPLICIT NONE */
+
+/*              DOUBLE PRECISION      P */
+/*              DOUBLE PRECISION      DP */
+/*              DOUBLE PRECISION      XVALS (4) */
+/*              DOUBLE PRECISION      YVALS (4) */
+/*              DOUBLE PRECISION      WORK  (4,2) */
+/*              INTEGER               N */
+
+/*              N         =   4 */
+
+/*              XVALS(1)  =  -1 */
+/*              XVALS(2)  =   0 */
+/*              XVALS(3)  =   1 */
+/*              XVALS(4)  =   3 */
+
+/*              YVALS(1)  =  -2 */
+/*              YVALS(2)  =  -7 */
+/*              YVALS(3)  =  -8 */
+/*              YVALS(4)  =  26 */
+
+/*              CALL LGRIND ( N, XVALS, YVALS, WORK, 2.D0, P, DP ) */
+
+/*              WRITE (*,*) 'P, DP = ', P, DP */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         P, DP =    1.0000000000000000        16.000000000000000 */
 
 
 /* $ Restrictions */
@@ -231,15 +235,23 @@
 
 /* $ Literature_References */
 
-/*     [1]  "Numerical Recipes---The Art of Scientific Computing" by */
-/*           William H. Press, Brian P. Flannery, Saul A. Teukolsky, */
-/*           William T. Vetterling (see sections 3.0 and 3.1). */
+/*     [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling, */
+/*          "Numerical Recipes -- The Art of Scientific Computing," */
+/*          chapters 3.0 and 3.1, Cambridge University Press, 1986. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Updated the header to comply with NAIF standard. Added */
+/*        "IMPLICIT NONE" to code example. */
 
 /* -    SPICELIB Version 1.0.1, 10-JAN-2014 (NJB) */
 
@@ -383,12 +395,12 @@
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	work[(i__2 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "lgrind_", (ftnlen)381)] = 
+		i__2 ? i__2 : s_rnge("work", i__2, "lgrind_", (ftnlen)396)] = 
 		yvals[(i__3 = i__ - 1) < yvals_dim1 && 0 <= i__3 ? i__3 : 
-		s_rnge("yvals", i__3, "lgrind_", (ftnlen)381)];
+		s_rnge("yvals", i__3, "lgrind_", (ftnlen)396)];
 	work[(i__2 = i__ + (work_dim1 << 1) - work_offset) < work_dim1 << 1 &&
 		 0 <= i__2 ? i__2 : s_rnge("work", i__2, "lgrind_", (ftnlen)
-		382)] = 0.;
+		397)] = 0.;
     }
 
 /*     Compute columns 2 through N of the table.  Note that DENOM must */
@@ -399,9 +411,9 @@
 	i__2 = *n - j;
 	for (i__ = 1; i__ <= i__2; ++i__) {
 	    denom = xvals[(i__3 = i__ - 1) < xvals_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("xvals", i__3, "lgrind_", (ftnlen)394)] - xvals[(
+		    s_rnge("xvals", i__3, "lgrind_", (ftnlen)409)] - xvals[(
 		    i__4 = i__ + j - 1) < xvals_dim1 && 0 <= i__4 ? i__4 : 
-		    s_rnge("xvals", i__4, "lgrind_", (ftnlen)394)];
+		    s_rnge("xvals", i__4, "lgrind_", (ftnlen)409)];
 	    if (denom == 0.) {
 		chkin_("LGRIND", (ftnlen)6);
 		setmsg_("XVALS(#) = XVALS(#) = #", (ftnlen)23);
@@ -409,16 +421,16 @@
 		i__3 = i__ + j;
 		errint_("#", &i__3, (ftnlen)1);
 		errdp_("#", &xvals[(i__3 = i__ - 1) < xvals_dim1 && 0 <= i__3 
-			? i__3 : s_rnge("xvals", i__3, "lgrind_", (ftnlen)402)
+			? i__3 : s_rnge("xvals", i__3, "lgrind_", (ftnlen)417)
 			], (ftnlen)1);
 		sigerr_("SPICE(DIVIDEBYZERO)", (ftnlen)19);
 		chkout_("LGRIND", (ftnlen)6);
 		return 0;
 	    }
 	    c1 = *x - xvals[(i__3 = i__ + j - 1) < xvals_dim1 && 0 <= i__3 ? 
-		    i__3 : s_rnge("xvals", i__3, "lgrind_", (ftnlen)409)];
+		    i__3 : s_rnge("xvals", i__3, "lgrind_", (ftnlen)424)];
 	    c2 = xvals[(i__3 = i__ - 1) < xvals_dim1 && 0 <= i__3 ? i__3 : 
-		    s_rnge("xvals", i__3, "lgrind_", (ftnlen)410)] - *x;
+		    s_rnge("xvals", i__3, "lgrind_", (ftnlen)425)] - *x;
 
 /*           Use the chain rule to compute the derivatives.  Do this */
 /*           before computing the function value, because the latter */
@@ -426,27 +438,27 @@
 
 	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
 		    1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "lgrind_", (
-		    ftnlen)417)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
+		    ftnlen)432)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
 		    - work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		    s_rnge("work", i__4, "lgrind_", (ftnlen)417)] + c2 * work[
+		    s_rnge("work", i__4, "lgrind_", (ftnlen)432)] + c2 * work[
 		    (i__5 = i__ + 1 + (work_dim1 << 1) - work_offset) < 
 		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
-		    "lgrind_", (ftnlen)417)] + (work[(i__6 = i__ + work_dim1 
+		    "lgrind_", (ftnlen)432)] + (work[(i__6 = i__ + work_dim1 
 		    - work_offset) < work_dim1 << 1 && 0 <= i__6 ? i__6 : 
-		    s_rnge("work", i__6, "lgrind_", (ftnlen)417)] - work[(
+		    s_rnge("work", i__6, "lgrind_", (ftnlen)432)] - work[(
 		    i__7 = i__ + 1 + work_dim1 - work_offset) < work_dim1 << 
 		    1 && 0 <= i__7 ? i__7 : s_rnge("work", i__7, "lgrind_", (
-		    ftnlen)417)])) / denom;
+		    ftnlen)432)])) / denom;
 
 /*           Compute the Ith entry in the Jth column. */
 
 	    work[(i__3 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
 		    <= i__3 ? i__3 : s_rnge("work", i__3, "lgrind_", (ftnlen)
-		    423)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
+		    438)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
 		    < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge("work", 
-		    i__4, "lgrind_", (ftnlen)423)] + c2 * work[(i__5 = i__ + 
+		    i__4, "lgrind_", (ftnlen)438)] + c2 * work[(i__5 = i__ + 
 		    1 + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		    i__5 ? i__5 : s_rnge("work", i__5, "lgrind_", (ftnlen)423)
+		    i__5 ? i__5 : s_rnge("work", i__5, "lgrind_", (ftnlen)438)
 		    ]) / denom;
 	}
     }
@@ -454,9 +466,9 @@
 /*     Our results are sitting in WORK(1,1) and WORK(1,2) at this point. */
 
     *p = work[(i__1 = work_dim1 + 1 - work_offset) < work_dim1 << 1 && 0 <= 
-	    i__1 ? i__1 : s_rnge("work", i__1, "lgrind_", (ftnlen)432)];
+	    i__1 ? i__1 : s_rnge("work", i__1, "lgrind_", (ftnlen)447)];
     *dp = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < work_dim1 << 1 &&
-	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "lgrind_", (ftnlen)433)];
+	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "lgrind_", (ftnlen)448)];
     return 0;
 } /* lgrind_ */
 

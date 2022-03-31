@@ -11,10 +11,10 @@ static integer c__27 = 27;
 static integer c__12 = 12;
 static integer c__1 = 1;
 
-/* $Procedure      SPKW12 ( SPK, write segment, type 12 ) */
+/* $Procedure SPKW12 ( SPK, write segment, type 12 ) */
 /* Subroutine */ int spkw12_(integer *handle, integer *body, integer *center, 
 	char *frame, doublereal *first, doublereal *last, char *segid, 
-	integer *degree, integer *n, doublereal *states, doublereal *epoch1, 
+	integer *degree, integer *n, doublereal *states, doublereal *begtim, 
 	doublereal *step, ftnlen frame_len, ftnlen segid_len)
 {
     /* System generated locals */
@@ -185,7 +185,7 @@ static integer c__1 = 1;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     MAXDEG     P   Maximum degree of interpolating polynomials. */
 /*     TOLSCL     P   Scale factor used to compute time bound tolerance. */
@@ -199,59 +199,59 @@ static integer c__1 = 1;
 /*     DEGREE     I   Degree of interpolating polynomials. */
 /*     N          I   Number of states. */
 /*     STATES     I   Array of states. */
-/*     EPOCH1     I   Epoch of first state in STATES array. */
+/*     BEGTIM     I   Epoch of first state in STATES array. */
 /*     STEP       I   Time step separating epochs of states. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the file handle of an SPK file that has been */
-/*                    opened for writing. */
+/*     HANDLE   is the file handle of an SPK file that has been */
+/*              opened for writing. */
 
-/*     BODY           is the NAIF integer code for an ephemeris object */
-/*                    whose state relative to another body is described */
-/*                    by the segment to be created. */
+/*     BODY     is the NAIF integer code for an ephemeris object */
+/*              whose state relative to another body is described */
+/*              by the segment to be created. */
 
-/*     CENTER         is the NAIF integer code for the center of motion */
-/*                    of the object identified by BODY. */
+/*     CENTER   is the NAIF integer code for the center of motion */
+/*              of the object identified by BODY. */
 
-/*     FRAME          is the NAIF name for a reference frame */
-/*                    relative to which the state information for BODY */
-/*                    is specified. */
+/*     FRAME    is the NAIF name for a reference frame */
+/*              relative to which the state information for BODY */
+/*              is specified. */
 
 /*     FIRST, */
-/*     LAST           are, respectively, the start and stop times of */
-/*                    the time interval over which the segment defines */
-/*                    the state of BODY. */
+/*     LAST     are, respectively, the start and stop times of */
+/*              the time interval over which the segment defines */
+/*              the state of BODY. */
 
-/*     SEGID          is the segment identifier.  An SPK segment */
-/*                    identifier may contain up to 40 characters. */
+/*     SEGID    is the segment identifier. An SPK segment */
+/*              identifier may contain up to 40 characters. */
 
-/*     DEGREE         is the degree of the Lagrange polynomials used to */
-/*                    interpolate the states.  All components of the */
-/*                    state vectors are interpolated by polynomials of */
-/*                    fixed degree. */
+/*     DEGREE   is the degree of the Lagrange polynomials used to */
+/*              interpolate the states. All components of the */
+/*              state vectors are interpolated by polynomials of */
+/*              fixed degree. */
 
-/*     N              is the number of states in the input state vector */
-/*                    array. */
+/*     N        is the number of states in the input state vector */
+/*              array. */
 
-/*     STATES         contains a time-ordered array of geometric states */
-/*                    ( x, y, z, dx/dt, dy/dt, dz/dt, in kilometers and */
-/*                    kilometers per second ) of BODY relative to CENTER, */
-/*                    specified relative to FRAME. */
+/*     STATES   contains a time-ordered array of geometric states */
+/*              ( x, y, z, dx/dt, dy/dt, dz/dt, in kilometers and */
+/*              kilometers per second ) of BODY relative to CENTER, */
+/*              specified relative to FRAME. */
 
-/*     EPOCH1         is the epoch corresponding to the first state in */
-/*                    the state array.  Because extra states are needed */
-/*                    at the beginning and end of the segment in order */
-/*                    for the interpolation method to work, EPOCH1 will */
-/*                    normally precede FIRST. */
+/*     BEGTIM   is the epoch corresponding to the first state in */
+/*              the state array. Because extra states are needed */
+/*              at the beginning and end of the segment in order */
+/*              for the interpolation method to work, BEGTIM will */
+/*              normally precede FIRST. */
 
-/*     STEP           is the time step separating the epochs of adjacent */
-/*                    states in the input state array.  STEP is specified */
-/*                    in seconds. */
+/*     STEP     is the time step separating the epochs of adjacent */
+/*              states in the input state array. STEP is specified */
+/*              in seconds. */
 
 /* $ Detailed_Output */
 
-/*     None.  See $Particulars for a description of the effect of this */
+/*     None. See $Particulars for a description of the effect of this */
 /*     routine. */
 
 /* $ Parameters */
@@ -260,31 +260,31 @@ static integer c__1 = 1;
 /*     parameters described below. */
 
 
-/*     TOLSCL         is a tolerance scale factor (also called a */
-/*                    "relative tolerance") used for time coverage */
-/*                    bound checking. TOLSCL is unitless. TOLSCL */
-/*                    produces a tolerance value via the formula */
+/*     TOLSCL   is a tolerance scale factor (also called a */
+/*              "relative tolerance") used for time coverage */
+/*              bound checking. TOLSCL is unitless. TOLSCL */
+/*              produces a tolerance value via the formula */
 
-/*                       TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) ) */
+/*                 TOL = TOLSCL * MAX( ABS(FIRST), ABS(LAST) ) */
 
-/*                    where FIRST and LAST are the coverage time bounds */
-/*                    of a type 12 segment, expressed as seconds past */
-/*                    J2000 TDB. */
+/*              where FIRST and LAST are the coverage time bounds */
+/*              of a type 12 segment, expressed as seconds past */
+/*              J2000 TDB. */
 
-/*                    The resulting parameter TOL is used as a tolerance */
-/*                    for comparing the input segment descriptor time */
-/*                    bounds to the first and last epoch covered by the */
-/*                    sequence of time intervals defined by the inputs */
-/*                    to SPKW12: */
+/*              The resulting parameter TOL is used as a tolerance */
+/*              for comparing the input segment descriptor time */
+/*              bounds to the first and last epoch covered by the */
+/*              sequence of time intervals defined by the inputs */
+/*              to SPKW12: */
 
-/*                       EPOCH1 */
-/*                       STEP */
-/*                       N */
+/*                 BEGTIM */
+/*                 STEP */
+/*                 N */
 
 
-/*     MAXDEG         is the maximum degree of Hermite polynomials that */
-/*                    can be used to interpolate states from the segment */
-/*                    written by this routine. */
+/*     MAXDEG   is the maximum degree of Hermite polynomials that */
+/*              can be used to interpolate states from the segment */
+/*              written by this routine. */
 
 /* $ Exceptions */
 
@@ -307,23 +307,23 @@ static integer c__1 = 1;
 /*         signaled. */
 
 /*     6)  If the number of states N is not at least (DEGREE+1)/2, the */
-/*         error SPICE(TOOFEWSTATES) will be signaled. */
+/*         error SPICE(TOOFEWSTATES) is signaled. */
 
-/*     7)  If FIRST is greater than LAST then the error */
-/*         SPICE(BADDESCRTIMES) will be signaled. */
+/*     7)  If FIRST is greater than LAST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
-/*     8)  If STEP is non-positive, the error SPICE(INVALIDSTEPSIZE) will */
-/*         be signaled. */
+/*     8)  If STEP is non-positive, the error SPICE(INVALIDSTEPSIZE) is */
+/*         signaled. */
 
-/*     9)  If the first epoch EPOCH1 is greater than FIRST, the error */
-/*         SPICE(BADDESCRTIMES) will be signaled. */
+/*     9)  If the first epoch BEGTIM is greater than FIRST, the error */
+/*         SPICE(BADDESCRTIMES) is signaled. */
 
-/*    10)  If the start time of the first record exceeds the descriptor */
+/*     10) If the start time of the first record exceeds the descriptor */
 /*         begin time by more than a computed tolerance, or if the end */
 /*         time of the last record precedes the descriptor end time by */
 /*         more than a computed tolerance, the error SPICE(COVERAGEGAP) */
-/*         is signaled. See the Parameters section above for a */
-/*         description of the tolerance. */
+/*         is signaled. See the $Parameters section for a description of */
+/*         the tolerance. */
 
 /* $ Files */
 
@@ -339,24 +339,121 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     Suppose that you have states and are prepared to produce */
-/*     a segment of type 12 in an SPK file. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     The following code fragment could be used to add the new segment */
-/*     to a previously opened SPK file attached to HANDLE. The file must */
-/*     have been opened with write access. */
+/*     1) This example demonstrates how to create an SPK type 12 kernel */
+/*        containing only one segment, given an evenly-spaced */
+/*        time-ordered set of discrete states. */
 
-/*            C */
-/*            C     Create a segment identifier. */
-/*            C */
-/*                  SEGID = 'MY_SAMPLE_SPK_TYPE_12_SEGMENT' */
 
-/*            C */
-/*            C     Write the segment. */
-/*            C */
-/*                  CALL SPKW12 (  HANDLE,  BODY,    CENTER,  FRAME, */
-/*                .                FIRST,   LAST,    SEGID,   DEGREE, */
-/*                .                N,       STATES,  EPOCH1,  STEP     ) */
+/*        Example code begins here. */
+
+
+/*              PROGRAM SPKW12_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 40 ) */
+
+/*        C */
+/*        C     Define the segment identifier parameters. */
+/*        C */
+/*              CHARACTER*(*)         SPK12 */
+/*              PARAMETER           ( SPK12 = 'spkw12_ex1.bsp' ) */
+
+/*              CHARACTER*(*)         REF */
+/*              PARAMETER           ( REF    = 'J2000'          ) */
+
+/*              INTEGER               BODY */
+/*              PARAMETER           ( BODY   = 3  ) */
+
+/*              INTEGER               CENTER */
+/*              PARAMETER           ( CENTER = 10 ) */
+
+/*              INTEGER               DEGREE */
+/*              PARAMETER           ( DEGREE = 3  ) */
+
+/*              INTEGER               NSTATS */
+/*              PARAMETER           ( NSTATS = 9  ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(NAMLEN)    IFNAME */
+/*              CHARACTER*(NAMLEN)    SEGID */
+
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      LAST */
+/*              DOUBLE PRECISION      STATES ( 6, NSTATS ) */
+/*              DOUBLE PRECISION      STEP */
+
+/*              INTEGER               HANDLE */
+/*              INTEGER               NCOMCH */
+
+/*        C */
+/*        C     Define the states and epochs. */
+/*        C */
+/*              DATA                  STATES / */
+/*             .       101.D0, 201.D0, 301.D0, 401.D0, 501.D0, 601.D0, */
+/*             .       102.D0, 202.D0, 302.D0, 402.D0, 502.D0, 602.D0, */
+/*             .       103.D0, 203.D0, 303.D0, 403.D0, 503.D0, 603.D0, */
+/*             .       104.D0, 204.D0, 304.D0, 404.D0, 504.D0, 604.D0, */
+/*             .       105.D0, 205.D0, 305.D0, 405.D0, 505.D0, 605.D0, */
+/*             .       106.D0, 206.D0, 306.D0, 406.D0, 506.D0, 606.D0, */
+/*             .       107.D0, 207.D0, 307.D0, 407.D0, 507.D0, 607.D0, */
+/*             .       108.D0, 208.D0, 308.D0, 408.D0, 508.D0, 608.D0, */
+/*             .       109.D0, 209.D0, 309.D0, 409.D0, 509.D0, 609.D0 / */
+
+/*        C */
+/*        C     Set the start and end times of interval covered by */
+/*        C     segment, and the time step. */
+/*        C */
+/*              FIRST  = 100.D0 */
+/*              LAST   = 900.D0 */
+/*              STEP   = 100.D0 */
+
+/*        C */
+/*        C     NCOMCH is the number of characters to reserve for the */
+/*        C     kernel's comment area. This example doesn't write */
+/*        C     comments, so set to zero. */
+/*        C */
+/*              NCOMCH = 0 */
+
+/*        C */
+/*        C     Internal file name and segment ID. */
+/*        C */
+/*              IFNAME = 'Type 12 SPK internal file name.' */
+/*              SEGID  = 'SPK type 12 test segment' */
+
+/*        C */
+/*        C     Open a new SPK file. */
+/*        C */
+/*              CALL SPKOPN( SPK12, IFNAME, NCOMCH, HANDLE ) */
+
+/*        C */
+/*        C     Write the segment. */
+/*        C */
+/*              CALL SPKW12 (  HANDLE, BODY,   CENTER, REF, */
+/*             .               FIRST,  LAST,   SEGID,  DEGREE, */
+/*             .               NSTATS, STATES, FIRST,  STEP   ) */
+
+/*        C */
+/*        C     Close the SPK file. */
+/*        C */
+/*              CALL SPKCLS ( HANDLE ) */
+
+/*              END */
+
+
+/*        When this program is executed, no output is presented on */
+/*        screen. After run completion, a new SPK type 12 exists in */
+/*        the output directory. */
 
 /* $ Restrictions */
 
@@ -368,17 +465,26 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 03-JUN-2021 (JDR) */
+
+/*        Changed the input argument name EPOCH1 to BEGTIM for */
+/*        consistency with other routines. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        complete example code from existing fragment. */
 
 /* -    SPICELIB Version 2.0.0, 18-JAN-2013 (NJB) */
 
 /*        Relaxed test on relationship between the time bounds of the */
-/*        input record set (determined by EPOCH1, STEP, and N) and the */
+/*        input record set (determined by BEGTIM, STEP, and N) and the */
 /*        descriptor bounds FIRST and LAST. Now the descriptor bounds */
 /*        may extend beyond the time bounds of the record set by a ratio */
-/*        computed using the parameter TOLSCL (see Parameters above for */
+/*        computed using the parameter TOLSCL (see $Parameters above for */
 /*        details). MAXDEG was increased to 27. */
 
 /*        Corrected long error message for even degree case. */
@@ -388,7 +494,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     write spk type_12 ephemeris data segment */
+/*     write SPK type_12 ephemeris data segment */
 
 /* -& */
 
@@ -532,17 +638,17 @@ static integer c__1 = 1;
 /* Computing MAX */
     d__1 = abs(*first), d__2 = abs(*last);
     tol = max(d__1,d__2) * 1e-13;
-    if (*first < *epoch1 - tol) {
+    if (*first < *begtim - tol) {
 	setmsg_("The segment descriptor start time # is too much less than t"
 		"he beginning time of the  segment data # (in seconds past J2"
 		"000: #). The difference is # seconds; the  tolerance is # se"
 		"conds.", (ftnlen)185);
 	etcal_(first, etstr, (ftnlen)40);
 	errch_("#", etstr, (ftnlen)1, (ftnlen)40);
-	etcal_(epoch1, etstr, (ftnlen)40);
+	etcal_(begtim, etstr, (ftnlen)40);
 	errch_("#", etstr, (ftnlen)1, (ftnlen)40);
 	errdp_("#", first, (ftnlen)1);
-	d__1 = *epoch1 - *first;
+	d__1 = *begtim - *first;
 	errdp_("#", &d__1, (ftnlen)1);
 	errdp_("#", &tol, (ftnlen)1);
 	sigerr_("SPICE(COVERAGEGAP)", (ftnlen)18);
@@ -553,7 +659,7 @@ static integer c__1 = 1;
 /*     The end time of the final record must be greater than or */
 /*     equal to the end time of the segment. */
 
-    ltime = *epoch1 + (*n - 1) * *step;
+    ltime = *begtim + (*n - 1) * *step;
     if (*last > ltime + tol) {
 	setmsg_("The segment descriptor end time # is too much greater than "
 		"the end time of the segment data # (in seconds past J2000: #"
@@ -613,7 +719,7 @@ static integer c__1 = 1;
 
     i__1 = *n * 6;
     dafada_(states, &i__1);
-    dafada_(epoch1, &c__1);
+    dafada_(begtim, &c__1);
     dafada_(step, &c__1);
     d__1 = (doublereal) (winsiz - 1);
     dafada_(&d__1, &c__1);

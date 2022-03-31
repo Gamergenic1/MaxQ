@@ -21,7 +21,7 @@ static integer c__7 = 7;
 static doublereal c_b188 = 3600.;
 static doublereal c_b189 = 60.;
 
-/* $Procedure      TTRANS ( Time transformation ) */
+/* $Procedure TTRANS ( Time transformation ) */
 /* Subroutine */ int ttrans_(char *from, char *to, doublereal *tvec, ftnlen 
 	from_len, ftnlen to_len)
 {
@@ -42,7 +42,6 @@ static doublereal c_b189 = 60.;
     /* Builtin functions */
     integer s_rnge(char *, integer, char *, integer);
     /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
-    double d_int(doublereal *);
 
     /* Local variables */
     static doublereal jd1101;
@@ -214,295 +213,296 @@ static doublereal c_b189 = 60.;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     MXCOMP     P    maximum number of components allowed for TVEC. */
 /*     TO         I    description of a time vector. */
 /*     FROM       I    description of a time vector. */
-/*     TVEC      I/O   time vector representing an epoch. */
+/*     TVEC      I-O   time vector representing an epoch. */
 
 /* $ Detailed_Input */
 
-/*     TVEC       is called a time vector.  It is an array of double */
-/*                precision numbers that represent some epoch.  To */
-/*                determine its meaning you must examine the string */
-/*                FROM.  Note that the number of significant entries */
-/*                in TVEC is implied by FROM. */
+/*     TVEC     is called a time vector. It is an array of double */
+/*              precision numbers that represent some epoch. To */
+/*              determine its meaning you must examine the string */
+/*              FROM. Note that the number of significant entries */
+/*              in TVEC is implied by FROM. */
 
-/*     FROM       is a string used to describe the type of time vector */
-/*     TO         TVEC.  FROM is the type of the input vector TVEC */
-/*                TO is the type of the output TVEC */
+/*     FROM, */
+/*     TO       are two strings used to describe the type of time vector */
+/*              TVEC. FROM is the type of the input vector TVEC and */
+/*              TO is the type of the output TVEC */
 
-/*                The interpretation of TVEC  is as follows: */
+/*              The interpretation of TVEC  is as follows: */
 
-/*                TYPE      Interpretation of TVEC */
-/*                ------    ------------------------------------------- */
-/*                YMD(F)  - year, month, day,   hour, minutes, seconds */
-/*                YD(F)   - year,  day-of-year, hour, minutes, seconds */
-/*                YD.D(F) - year, number of days past beginning of year */
-/*                DAYSEC  - calendar days past 1 jan 1 AD, */
-/*                          seconds past beg day */
-/*                DP2000  - calendar days past 1 jan 2000, */
-/*                          seconds past beg day */
-/*                JDUTC   - julian date UTC. */
-/*                FORMAL  - seconds in the formal calendar since J2000. */
-/*                YWD(F)  - year, week, day, hour, minutes, seconds */
-/*                YMWD(F) - year, month, week, day, hour, minutes, */
-/*                          seconds */
-/*                TAI     - atomic seconds past Atomic J2000. */
-/*                TDT     - Terrestrial Dynamical Time */
-/*                TDB     - Barycentric Dynamical Time */
-/*                JED     - Julian Ephemeris Date (based on TDB) */
-/*                ET      - Ephemeris time (same as TDB) */
-/*                JDTDB   - Julian Date based on TDB (same as JED) */
-/*                JDTDT   - Julian Date based on TDT */
+/*                 TYPE      Interpretation of TVEC */
+/*                 ------    ------------------------------------------- */
+/*                 YMD(F)  - year, month, day,   hour, minutes, seconds */
+/*                 YD(F)   - year,  day-of-year, hour, minutes, seconds */
+/*                 YD.D(F) - year, number of days past beginning of year */
+/*                 DAYSEC  - calendar days past 1 jan 1 AD, */
+/*                           seconds past beg day */
+/*                 DP2000  - calendar days past 1 jan 2000, */
+/*                           seconds past beg day */
+/*                 JDUTC   - julian date UTC. */
+/*                 FORMAL  - seconds in the formal calendar since J2000. */
+/*                 YWD(F)  - year, week, day, hour, minutes, seconds */
+/*                 YMWD(F) - year, month, week, day, hour, minutes, */
+/*                           seconds */
+/*                 TAI     - atomic seconds past Atomic J2000. */
+/*                 TDT     - Terrestrial Dynamical Time */
+/*                 TDB     - Barycentric Dynamical Time */
+/*                 JED     - Julian Ephemeris Date (based on TDB) */
+/*                 ET      - Ephemeris time (same as TDB) */
+/*                 JDTDB   - Julian Date based on TDB (same as JED) */
+/*                 JDTDT   - Julian Date based on TDT */
 
-/*                The number of components of TVEC implied by TYPE is */
-/*                as follows: */
+/*              The number of components of TVEC implied by TYPE is */
+/*              as follows: */
 
-/*                   YMD     - 6 */
-/*                   YD      - 5 */
-/*                   JDUTC   - 1 */
-/*                   FORMAL  - 1 */
-/*                   YD.D    - 2 */
-/*                   DAYSEC  - 2 */
-/*                   DP2000  - 2 */
-/*                   YWD     - 6 */
-/*                   YMWD    - 7 */
-/*                   TAI     - 1 */
-/*                   TDT     - 1 */
-/*                   TDB     - 1 */
-/*                   JED     - 1 */
-/*                   ET      - 1 */
-/*                   JDTDB   - 1 */
-/*                   JDTDT   - 1 */
-
-
-/*                For all types, only the last component of the */
-/*                time vector may be non-integer.  If other components */
-/*                have fractional parts only their truncated integer */
-/*                components will be recognized. */
-
-/*                YMD and YD */
-
-/*                   These types are assumed to be different */
-/*                   representations on UTC time markers.  Thus */
-/*                   the hour, minutes and seconds portions all */
-/*                   represent time elapsed */
-/*                   since the beginning of a day.  As such the */
-/*                   seconds portion of HMS may range up to (but */
-/*                   not include) 61 on days when positive leap */
-/*                   seconds occur and may range up to (but not */
-/*                   include) 59 on days during which negative */
-/*                   leapseconds occur. */
-
-/*                YD.D type. */
-
-/*                   Y is the calendar year used in civil time keeping */
-/*                   D is the day of the calendar year --- for any time */
-/*                     during the first of January, the integer portion */
-/*                     of the day will be 1. */
-
-/*                     The fractional portion is the fractional part of */
-/*                     the specific day.  Thus the amount of time */
-/*                     specified by the fractional portion of the day */
-/*                     depends upon whether or not the day has a leap */
-/*                     second.  ".D" can be computed from the formula */
-
-/*                           number of seconds past beginning of day */
-/*                     .D = --------------------------------------- */
-/*                              number of UTC seconds in the day. */
-
-/*                FORMAL type. */
-
-/*                   The FORMAL type for TVEC gives the number of */
-/*                   seconds past the epoch J2000 (noon Jan 1 2000) */
-/*                   on the formal calendar (no leap seconds --- */
-/*                   all days contain 86400 seconds)  The formal clock */
-/*                   is simply held still for one second during */
-/*                   positive leap seconds.  Times during leap seconds */
-/*                   cannot be represented in this system. */
-
-/*                   This system is converted internally to a */
-/*                   calendar days past epoch and seconds */
-/*                   past beginning of day form.  For this reason, */
-/*                   times that occur during a positive leap second */
-/*                   can never be represented.  Moreover, if a negative */
-/*                   leapsecond occurs, times that occur during the */
-/*                   ``missing'' leapsecond will simply be placed */
-/*                   at the beginning of the next day.  Thus two */
-/*                   different FORMAL times can represent the */
-/*                   same time around a negative leap second. */
-
-/*                   FORMAL time is equivalent to somewhat parochial */
-/*                   ``UTC seconds past J2000'' that is produced */
-/*                   by the SPICE routine TPARSE. */
-
-/*                JDUTC type. */
-
-/*                   This system is similar to the FORMAL system */
-/*                   described above.  All days are assumed to have */
-/*                   86400 seconds.  All numbers of the form */
-
-/*                      integer + 0.5 */
-
-/*                   fall at the beginning of calendar UTC days. */
-
-/*                   There is no way to represent times during a */
-/*                   positive leapsecond. Times during missing */
-/*                   negative leap seconds are represented in two ways. */
-
-/*                DAYSEC type. */
-
-/*                   This time vector has the form of calendar */
-/*                   days since January 1, of the year 1 A.D. */
-/*                   and number of seconds past the beginning of the */
-/*                   calendar day. */
-/*                   (January 2 of the year 1 A.D. is 1 calendar */
-/*                   day past January 1, 1 A.D.) */
-
-/*                DP2000 type. */
-
-/*                   This time vector has the same form as DAYSEC */
-/*                   time vectors.  The only difference is that */
-/*                   the reference epoch is JAN 1, 2000. */
-
-/*                YWD and YMWD types. */
-
-/*                   These time vectors are used to specify a time */
-/*                   that are most conveniently expressed by phrases */
-/*                   such as ``the third Monday of every month'' or */
-/*                   ``Beginning with the second Wednesday of the new */
-/*                     year and every 4th Wednesday thereafter.'' */
-
-/*                   The hours, minutes and seconds components of */
-/*                   these time vectors are the */
-/*                   same as for the Year-Month-Day and Year-Day UTC */
-/*                   time vectors. */
-
-/*                   The Y component refers to the calendar year, and */
-/*                   in the YMWD vector, the M component refers to */
-/*                   the calendar month. */
-
-/*                   The W component refers to the week of the */
-/*                   Year (YWD) or Month (YMWD).  The first week */
-/*                   begins on the first day of the year or the first */
-/*                   day of the month.  The D component is the day of the */
-/*                   week with 1 corresponding to Sunday, 2 to Monday, */
-/*                   and so on with 7 corresponding to Saturday. */
-
-/*                   Thus the YMWD time vector */
-
-/*                      1991 */
-/*                        11 */
-/*                         3 */
-/*                         5 */
-/*                        12 */
-/*                         0 */
-/*                         0 */
-
-/*                   refers to 12:00:00 on the third Thursday of */
-/*                   November of 1991. */
-
-/*                   The YWD time vector */
-
-/*                      1997 */
-/*                        11 */
-/*                         4 */
-/*                        13 */
-/*                         5 */
-/*                        11 */
-
-/*                   refers to 12:05:11 on the eleventh Wednesday */
-/*                   of 1997. */
-
-/*                Formal Calendar Time Vectors */
-/*                ============================ */
-/*                The types YMDF, YDF, YD.D(F), YWDF, YMWDF are similar */
-/*                to the corresponding base types: YMD, YD, YD.D, YWD */
-/*                and YMWD.  However, these types represent formal */
-/*                time vectors.  Each day contains exactly 86400 seconds. */
-/*                The difference between formal and non-formal systems */
-/*                can only be seen during a positive leapsecond or */
-/*                during the second following a negative leapsecond. */
-
-/*                Epochs during a positive leapsecond on input are */
-/*                placed in the first second of the next day.  Epochs */
-/*                during a positive leapsecond on output are held */
-/*                at 00:00:00 of the next day. */
-
-/*                Epochs during the first second following a negative */
-/*                leapsecond are counted as belonging to the previous */
-/*                day if both the input and output types are formal */
-/*                types. */
+/*                 YMD     - 6 */
+/*                 YD      - 5 */
+/*                 JDUTC   - 1 */
+/*                 FORMAL  - 1 */
+/*                 YD.D    - 2 */
+/*                 DAYSEC  - 2 */
+/*                 DP2000  - 2 */
+/*                 YWD     - 6 */
+/*                 YMWD    - 7 */
+/*                 TAI     - 1 */
+/*                 TDT     - 1 */
+/*                 TDB     - 1 */
+/*                 JED     - 1 */
+/*                 ET      - 1 */
+/*                 JDTDB   - 1 */
+/*                 JDTDT   - 1 */
 
 
-/*                Calendars */
-/*                ===================== */
-/*                In all time vectors for which a year is specified, */
-/*                the year is assumed to belong to the Gregorian */
-/*                Calendar---every 4th year is a leapyear except */
-/*                for centuries (such as 1900) that are not divisible */
-/*                by 400.  This calendar is formally extended */
-/*                indefinitely backward and forward in time. */
+/*              For all types, only the last component of the */
+/*              time vector may be non-integer. If other components */
+/*              have fractional parts only their truncated integer */
+/*              components will be recognized. */
 
-/*                Note that the Gregorian Calendar did not */
-/*                formally exist prior to October 15, 1582. Prior to */
-/*                that time the Julian Calendar was used (in the */
-/*                Julian Calendar every 4th year is a leapyear, including */
-/*                all centuries). */
+/*              YMD and YD */
 
-/*                If you have epochs relative to the Julian calendar, */
-/*                the SPICE routine JUL2GR is available for converting */
-/*                to the formal Gregorian Calendar. */
+/*                 These types are assumed to be different */
+/*                 representations on UTC time markers. Thus */
+/*                 the hour, minutes and seconds portions all */
+/*                 represent time elapsed */
+/*                 since the beginning of a day. As such the */
+/*                 seconds portion of HMS may range up to (but */
+/*                 not include) 61 on days when positive leap */
+/*                 seconds occur and may range up to (but not */
+/*                 include) 59 on days during which negative */
+/*                 leapseconds occur. */
+
+/*              YD.D type. */
+
+/*                 Y is the calendar year used in civil time keeping */
+/*                 D is the day of the calendar year --- for any time */
+/*                   during the first of January, the integer portion */
+/*                   of the day will be 1. */
+
+/*                   The fractional portion is the fractional part of */
+/*                   the specific day. Thus the amount of time */
+/*                   specified by the fractional portion of the day */
+/*                   depends upon whether or not the day has a leap */
+/*                   second.  ".D" can be computed from the formula */
+
+/*                         number of seconds past beginning of day */
+/*                   .D = --------------------------------------- */
+/*                            number of UTC seconds in the day. */
+
+/*              FORMAL type. */
+
+/*                 The FORMAL type for TVEC gives the number of */
+/*                 seconds past the epoch J2000 (noon Jan 1 2000) */
+/*                 on the formal calendar (no leap seconds --- */
+/*                 all days contain 86400 seconds)  The formal clock */
+/*                 is simply held still for one second during */
+/*                 positive leap seconds. Times during leap seconds */
+/*                 cannot be represented in this system. */
+
+/*                 This system is converted internally to a */
+/*                 calendar days past epoch and seconds */
+/*                 past beginning of day form. For this reason, */
+/*                 times that occur during a positive leap second */
+/*                 can never be represented. Moreover, if a negative */
+/*                 leapsecond occurs, times that occur during the */
+/*                 ``missing'' leapsecond will simply be placed */
+/*                 at the beginning of the next day. Thus two */
+/*                 different FORMAL times can represent the */
+/*                 same time around a negative leap second. */
+
+/*                 FORMAL time is equivalent to somewhat parochial */
+/*                 ``UTC seconds past J2000'' that is produced */
+/*                 by the SPICE routine TPARSE. */
+
+/*              JDUTC type. */
+
+/*                 This system is similar to the FORMAL system */
+/*                 described above. All days are assumed to have */
+/*                 86400 seconds. All numbers of the form */
+
+/*                    integer + 0.5 */
+
+/*                 fall at the beginning of calendar UTC days. */
+
+/*                 There is no way to represent times during a */
+/*                 positive leapsecond. Times during missing */
+/*                 negative leap seconds are represented in two ways. */
+
+/*              DAYSEC type. */
+
+/*                 This time vector has the form of calendar */
+/*                 days since January 1, of the year 1 A.D. */
+/*                 and number of seconds past the beginning of the */
+/*                 calendar day. */
+/*                 (January 2 of the year 1 A.D. is 1 calendar */
+/*                 day past January 1, 1 A.D.) */
+
+/*              DP2000 type. */
+
+/*                 This time vector has the same form as DAYSEC */
+/*                 time vectors. The only difference is that */
+/*                 the reference epoch is JAN 1, 2000. */
+
+/*              YWD and YMWD types. */
+
+/*                 These time vectors are used to specify a time */
+/*                 that are most conveniently expressed by phrases */
+/*                 such as "the third Monday of every month" or */
+/*                 "Beginning with the second Wednesday of the new */
+/*                 year and every 4th Wednesday thereafter." */
+
+/*                 The hours, minutes and seconds components of */
+/*                 these time vectors are the */
+/*                 same as for the Year-Month-Day and Year-Day UTC */
+/*                 time vectors. */
+
+/*                 The Y component refers to the calendar year, and */
+/*                 in the YMWD vector, the M component refers to */
+/*                 the calendar month. */
+
+/*                 The W component refers to the week of the */
+/*                 Year (YWD) or Month (YMWD).  The first week */
+/*                 begins on the first day of the year or the first */
+/*                 day of the month. The D component is the day of the */
+/*                 week with 1 corresponding to Sunday, 2 to Monday, */
+/*                 and so on with 7 corresponding to Saturday. */
+
+/*                 Thus the YMWD time vector */
+
+/*                    1991 */
+/*                      11 */
+/*                       3 */
+/*                       5 */
+/*                      12 */
+/*                       0 */
+/*                       0 */
+
+/*                 refers to 12:00:00 on the third Thursday of */
+/*                 November of 1991. */
+
+/*                 The YWD time vector */
+
+/*                    1997 */
+/*                      11 */
+/*                       4 */
+/*                      13 */
+/*                       5 */
+/*                      11 */
+
+/*                 refers to 12:05:11 on the eleventh Wednesday */
+/*                 of 1997. */
+
+/*              Formal Calendar Time Vectors */
+/*              ============================ */
+/*              The types YMDF, YDF, YD.D(F), YWDF, YMWDF are similar */
+/*              to the corresponding base types: YMD, YD, YD.D, YWD */
+/*              and YMWD. However, these types represent formal */
+/*              time vectors. Each day contains exactly 86400 seconds. */
+/*              The difference between formal and non-formal systems */
+/*              can only be seen during a positive leapsecond or */
+/*              during the second following a negative leapsecond. */
+
+/*              Epochs during a positive leapsecond on input are */
+/*              placed in the first second of the next day. Epochs */
+/*              during a positive leapsecond on output are held */
+/*              at 00:00:00 of the next day. */
+
+/*              Epochs during the first second following a negative */
+/*              leapsecond are counted as belonging to the previous */
+/*              day if both the input and output types are formal */
+/*              types. */
 
 
-/*                Epochs Prior to 1972 */
-/*                ===================== */
-/*                UTC as it exists today, was adopted in 1972.  For */
-/*                epochs prior to 1972, it is assumed that the difference */
-/*                between TAI and UTC is a constant value. */
+/*              Calendars */
+/*              ===================== */
+/*              In all time vectors for which a year is specified, */
+/*              the year is assumed to belong to the Gregorian */
+/*              Calendar---every 4th year is a leapyear except */
+/*              for centuries (such as 1900) that are not divisible */
+/*              by 400. This calendar is formally extended */
+/*              indefinitely backward and forward in time. */
 
-/*                Years prior to 1 A.D. */
-/*                ===================== */
-/*                A year belonging to the B.C. era,  may be */
-/*                represented by subtracting the year from 1. */
-/*                Thus to specify 27 B.C (Gregorian) set the */
-/*                year component of the time vector to -26. */
+/*              Note that the Gregorian Calendar did not */
+/*              formally exist prior to October 15, 1582. Prior to */
+/*              that time the Julian Calendar was used (in the */
+/*              Julian Calendar every 4th year is a leapyear, including */
+/*              all centuries). */
+
+/*              If you have epochs relative to the Julian calendar, */
+/*              the SPICE routine JUL2GR is available for converting */
+/*              to the formal Gregorian Calendar. */
 
 
-/*                Notes: */
-/*                ====== */
-/*                The FORMAL and JDUTC types should not be used */
-/*                for times near a leap second.  However, for times */
-/*                removed from leap seconds they pose no problems. */
+/*              Epochs Prior to 1972 */
+/*              ===================== */
+/*              UTC as it exists today, was adopted in 1972. For */
+/*              epochs prior to 1972, it is assumed that the difference */
+/*              between TAI and UTC is a constant value. */
 
-/*                The DAYSEC and DP2000 are useful for representing */
-/*                times that are given in atomic seconds past some */
-/*                reference epoch other than J2000. */
+/*              Years prior to 1 A.D. */
+/*              ===================== */
+/*              A year belonging to the B.C. era,  may be */
+/*              represented by subtracting the year from 1. */
+/*              Thus to specify 27 B.C (Gregorian) set the */
+/*              year component of the time vector to -26. */
+
+
+/*              Notes: */
+/*              ====== */
+/*              The FORMAL and JDUTC types should not be used */
+/*              for times near a leap second. However, for times */
+/*              removed from leap seconds they pose no problems. */
+
+/*              The DAYSEC and DP2000 are useful for representing */
+/*              times that are given in atomic seconds past some */
+/*              reference epoch other than J2000. */
 
 /* $ Detailed_Output */
 
-/*     TVEC       is the time vector corresponding to the input */
-/*                time vector but with components consistent with */
-/*                the type specified by input variable TO. */
+/*     TVEC     is the time vector corresponding to the input */
+/*              time vector but with components consistent with */
+/*              the type specified by input variable TO. */
 
 /* $ Parameters */
 
-/*     MXCOMP     is the maximum number of components that can appear in */
-/*                TVEC. */
+/*     MXCOMP   is the maximum number of components that can appear in */
+/*              TVEC. */
 
 /* $ Exceptions */
 
-/*     1) If the type of either FROM or TO is not recognized the */
-/*        error 'SPICE(UNKNONWNTIMESYSTEM)' is signalled. */
+/*     1)  If the type of either FROM or TO is not recognized, the */
+/*         error SPICE(UNKNONWNTIMESYSTEM) is signaled. */
 
-/*     2) If a leapseconds kernel has not been loaded prior a call */
-/*        to TTRANS the error  'SPICE(NOLEAPSECONDS)' is signalled. */
+/*     2)  If a leapseconds kernel has not been loaded prior a call */
+/*         to TTRANS, the error  SPICE(NOLEAPSECONDS) is signaled. */
 
-/*     3) If epochs associated with leapseconds in the leapseconds */
-/*        kernel are not in increasing order, the error */
-/*        'SPICE(BADLEAPSECONDS)' is signalled. */
+/*     3)  If epochs associated with leapseconds in the leapseconds */
+/*         kernel are not in increasing order, the error */
+/*         SPICE(BADLEAPSECONDS) is signaled. */
 
 /* $ Files */
 
@@ -511,20 +511,20 @@ static doublereal c_b189 = 60.;
 /* $ Particulars */
 
 /*     This routine is the fundamental translator between various */
-/*     representations of time in the SPICE system.  However, it */
+/*     representations of time in the SPICE system. However, it */
 /*     is intended to be a mid-level routine that few user's should */
 /*     have need of calling. */
 
 /*     In addition to translating between time systems, this routine */
 /*     can be used to normalize the components of a time string */
 /*     so that they are in the normal range for a particular */
-/*     representation.  This allows you to easily do arithmetic */
+/*     representation. This allows you to easily do arithmetic */
 /*     with epochs. */
 
 /* $ Examples */
 
 /*     Suppose you need to convert a time expressed as seconds */
-/*     past J2000 (TDB) to Pacific Daylight time.  The following */
+/*     past J2000 (TDB) to Pacific Daylight time. The following */
 /*     example shows how you might use TTRANS to accomplish this */
 /*     task. */
 
@@ -533,7 +533,7 @@ static doublereal c_b189 = 60.;
 /*      CALL TTRANS ( 'TDB', 'YMD', TVEC ) */
 
 /*      The seconds component of PDT is the same as the seconds */
-/*      component of UTC.  We save and add the UTC-PDT offset */
+/*      component of UTC. We save and add the UTC-PDT offset */
 /*      to the hours and minutes component of the time vector. */
 
 /*      SECNDS  = TVEC(6) */
@@ -559,11 +559,24 @@ static doublereal c_b189 = 60.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.6.0, 05-SEP-2021 (EDW) (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Removed INT casts in HMSSEC calls. The casts prevent */
+/*        correct calculation of TDB time for non integer hour */
+/*        and minute values in time strings from STR2ET. */
+
+/*        Removed reference to FURNSH from the "LSK variable */
+/*        not present" long error message. */
 
 /* -    SPICELIB Version 1.5.0, 09-SEP-2013 (BVS) */
 
@@ -583,19 +596,19 @@ static doublereal c_b189 = 60.;
 /* -    SPICELIB Version 1.2.0, 24-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
-/*        in RMAIND and RMAINI calls.  Changed reference to LDPOOL to */
+/*        in RMAIND and RMAINI calls. Changed reference to LDPOOL to */
 /*        reference to FURNSH in an error message. */
 
-/* -    SPICELIB Version 1.1.0, 9-JUN-1999 (WLT) */
+/* -    SPICELIB Version 1.1.0, 09-JUN-1999 (WLT) */
 
 /*        The routine was modified so that uniform time system */
 /*        transformations (see UNITIM) are handled without */
-/*        performing intermediate computations.  This gives a slight */
+/*        performing intermediate computations. This gives a slight */
 /*        improvement in the accuracy of some computations. */
 
 /*        In addition, two unused variables were removed. */
 
-/* -    Spicelib Version 1.0.0, 17-SEP-1996 (WLT) */
+/* -    SPICELIB Version 1.0.0, 17-SEP-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -609,7 +622,7 @@ static doublereal c_b189 = 60.;
 /* -    SPICELIB Version 1.2.0, 24-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
-/*        in RMAIND and RMAINI calls.  Changed reference to LDPOOL to */
+/*        in RMAIND and RMAINI calls. Changed reference to LDPOOL to */
 /*        reference to FURNSH in an error message. */
 
 /* -& */
@@ -699,7 +712,7 @@ static doublereal c_b189 = 60.;
 /*     Initial values */
 
 
-/*     Definitions of statment functions. */
+/*     Definitions of statement functions. */
 
 /*     The number of days elapsed since Jan 1, of year 1 A.D. to */
 /*     Jan 1 of YEAR is given by: */
@@ -750,8 +763,8 @@ static doublereal c_b189 = 60.;
 	dn2000 = (c__2000 - 1) * 365 + (c__2000 - 1) / 4 - (c__2000 - 1) / 
 		100 + (c__2000 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
-		946)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "ttrans_", (ftnlen)946)] * (max(i__3,
+		963)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
+		s_rnge("extra", i__2, "ttrans_", (ftnlen)963)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1;
 /* Computing MAX */
 	i__3 = 0, i__4 = abs(c__1991) / c__4 * c__4 + 1 - abs(c__1991);
@@ -762,8 +775,8 @@ static doublereal c_b189 = 60.;
 	sunday = (c__1991 - 1) * 365 + (c__1991 - 1) / 4 - (c__1991 - 1) / 
 		100 + (c__1991 - 1) / 400 + (dpjan0[(i__1 = c__1 - 1) < 12 && 
 		0 <= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
-		947)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "ttrans_", (ftnlen)947)] * (max(i__3,
+		964)] + extra[(i__2 = c__1 - 1) < 12 && 0 <= i__2 ? i__2 : 
+		s_rnge("extra", i__2, "ttrans_", (ftnlen)964)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__6) - 1;
 	jd1101 = j2000_() - (doublereal) dn2000 - .5;
 
@@ -927,8 +940,8 @@ static doublereal c_b189 = 60.;
 	    nodata = TRUE_;
 	    setmsg_("The variable that points to the leapseconds (DELTET/DEL"
 		    "TA_AT) could not be located in the kernel pool.  It is l"
-		    "ikely that the leapseconds kernel has not been loaded vi"
-		    "a the routine FURNSH.", (ftnlen)188);
+		    "ikely that the leapseconds kernel has not been loaded.", (
+		    ftnlen)165);
 	    sigerr_("SPICE(NOLEAPSECONDS)", (ftnlen)20);
 	    chkout_("TTRANS", (ftnlen)6);
 	    return 0;
@@ -971,19 +984,19 @@ static doublereal c_b189 = 60.;
 	    offset = i__;
 	    refptr = i__ + 1;
 	    dt = taitab[(i__2 = offset - 1) < 280 && 0 <= i__2 ? i__2 : 
-		    s_rnge("taitab", i__2, "ttrans_", (ftnlen)1199)];
+		    s_rnge("taitab", i__2, "ttrans_", (ftnlen)1216)];
 	    formal = taitab[(i__2 = refptr - 1) < 280 && 0 <= i__2 ? i__2 : 
-		    s_rnge("taitab", i__2, "ttrans_", (ftnlen)1200)];
+		    s_rnge("taitab", i__2, "ttrans_", (ftnlen)1217)];
 	    taitab[(i__2 = offset - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "taitab", i__2, "ttrans_", (ftnlen)1201)] = formal - 
+		    "taitab", i__2, "ttrans_", (ftnlen)1218)] = formal - 
 		    secspd + lastdt;
 	    taitab[(i__2 = refptr - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "taitab", i__2, "ttrans_", (ftnlen)1202)] = formal + dt;
+		    "taitab", i__2, "ttrans_", (ftnlen)1219)] = formal + dt;
 	    daynum = (integer) ((formal + halfd) / secspd) + dn2000;
 	    daytab[(i__2 = offset - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "daytab", i__2, "ttrans_", (ftnlen)1207)] = daynum - 1;
+		    "daytab", i__2, "ttrans_", (ftnlen)1224)] = daynum - 1;
 	    daytab[(i__2 = refptr - 1) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "daytab", i__2, "ttrans_", (ftnlen)1208)] = daynum;
+		    "daytab", i__2, "ttrans_", (ftnlen)1225)] = daynum;
 	    lastdt = dt;
 	}
 
@@ -994,9 +1007,9 @@ static doublereal c_b189 = 60.;
 	for (i__ = 2; i__ <= i__1; ++i__) {
 	    nodata = TRUE_;
 	    if (taitab[(i__2 = i__ - 2) < 280 && 0 <= i__2 ? i__2 : s_rnge(
-		    "taitab", i__2, "ttrans_", (ftnlen)1222)] >= taitab[(i__3 
+		    "taitab", i__2, "ttrans_", (ftnlen)1239)] >= taitab[(i__3 
 		    = i__ - 1) < 280 && 0 <= i__3 ? i__3 : s_rnge("taitab", 
-		    i__3, "ttrans_", (ftnlen)1222)]) {
+		    i__3, "ttrans_", (ftnlen)1239)]) {
 		setmsg_("Either the leapsecond epochs taken from the kernel "
 			"pool are not properly ordered or the UTC - TAI offse"
 			"ts are completely out of range. ", (ftnlen)135);
@@ -1123,13 +1136,14 @@ static doublereal c_b189 = 60.;
 	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
 	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1361)] + 
+		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1378)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1361)] * (max(i__3,i__4) - 
+		"extra", i__2, "ttrans_", (ftnlen)1378)] * (max(i__3,i__4) - 
 		max(i__5,i__6) + max(i__7,i__8)) + day) - 1 + doffst;
-	d__1 = d_int(&tvec[3]);
-	d__2 = d_int(&tvec[4]);
-	secs = d__1 * 3600. + d__2 * 60. + tvec[5];
+
+/*        Calculate seconds from midnight, 00:00:00. */
+
+	secs = tvec[3] * 3600. + tvec[4] * 60. + tvec[5];
     } else if (pfrom == 12 || pfrom == 15) {
 	year = (integer) tvec[0];
 	day = (integer) tvec[1];
@@ -1152,13 +1166,14 @@ static doublereal c_b189 = 60.;
 	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
 	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1388)] + 
+		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1408)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1388)] * (max(i__3,i__4) - 
+		"extra", i__2, "ttrans_", (ftnlen)1408)] * (max(i__3,i__4) - 
 		max(i__5,i__6) + max(i__7,i__8)) + day) - 1 + doffst;
-	d__1 = d_int(&tvec[2]);
-	d__2 = d_int(&tvec[3]);
-	secs = d__1 * 3600. + d__2 * 60. + tvec[4];
+
+/*        Calculate seconds from midnight, 00:00:00. */
+
+	secs = tvec[2] * 3600. + tvec[3] * 60. + tvec[4];
     } else if (pfrom == 13 || pfrom == 14) {
 	year = (integer) tvec[0];
 	day = (integer) tvec[1];
@@ -1182,9 +1197,9 @@ static doublereal c_b189 = 60.;
 	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
 	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1416)] + 
+		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1439)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1416)] * (max(i__3,i__4) - 
+		"extra", i__2, "ttrans_", (ftnlen)1439)] * (max(i__3,i__4) - 
 		max(i__5,i__6) + max(i__7,i__8)) + day) - 1 + doffst;
 
 /*        Normally the length of a day is 86400 seconds, but this day */
@@ -1198,9 +1213,9 @@ static doublereal c_b189 = 60.;
 	    dayptr = lstlei_(&daynum, &nref, daytab);
 	    if (odd_(&dayptr)) {
 		daylen = taitab[(i__1 = dayptr) < 280 && 0 <= i__1 ? i__1 : 
-			s_rnge("taitab", i__1, "ttrans_", (ftnlen)1431)] - 
+			s_rnge("taitab", i__1, "ttrans_", (ftnlen)1454)] - 
 			taitab[(i__2 = dayptr - 1) < 280 && 0 <= i__2 ? i__2 :
-			 s_rnge("taitab", i__2, "ttrans_", (ftnlen)1431)];
+			 s_rnge("taitab", i__2, "ttrans_", (ftnlen)1454)];
 	    }
 	    secs = frac * daylen;
 	}
@@ -1251,9 +1266,9 @@ static doublereal c_b189 = 60.;
 	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
 	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1504)] + 
+		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1527)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1504)] * (max(i__3,i__4) - 
+		"extra", i__2, "ttrans_", (ftnlen)1527)] * (max(i__3,i__4) - 
 		max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1 + doffst;
 	i__1 = daynum - sunday;
 	rmaini_(&i__1, &c__7, &qint, &dpsun);
@@ -1261,9 +1276,10 @@ static doublereal c_b189 = 60.;
 	i__1 = wkday - fyrday;
 	rmaini_(&i__1, &c__7, &qint, &offset);
 	daynum = daynum + week * 7 + offset;
-	d__1 = d_int(&tvec[3]);
-	d__2 = d_int(&tvec[4]);
-	secs = d__1 * 3600. + d__2 * 60. + tvec[5];
+
+/*        Calculate seconds from midnight, 00:00:00. */
+
+	secs = tvec[3] * 3600. + tvec[4] * 60. + tvec[5];
     } else if (pfrom == 18 || pfrom == 19) {
 	year = (integer) tvec[0];
 	month = (integer) tvec[1];
@@ -1287,9 +1303,9 @@ static doublereal c_b189 = 60.;
 	i__7 = 0, i__8 = abs(year) / c__400 * c__400 + 1 - abs(year);
 	daynum = (year - 1) * 365 + (year - 1) / 4 - (year - 1) / 100 + (year 
 		- 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? 
-		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1541)] + 
+		i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1566)] + 
 		extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : s_rnge(
-		"extra", i__2, "ttrans_", (ftnlen)1541)] * (max(i__3,i__4) - 
+		"extra", i__2, "ttrans_", (ftnlen)1566)] * (max(i__3,i__4) - 
 		max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1 + doffst;
 	i__1 = daynum - sunday;
 	rmaini_(&i__1, &c__7, &qint, &dpsun);
@@ -1297,6 +1313,9 @@ static doublereal c_b189 = 60.;
 	i__1 = day - fmday;
 	rmaini_(&i__1, &c__7, &qint, &offset);
 	daynum = daynum + week * 7 + offset;
+
+/*        Calculate seconds from midnight, 00:00:00. */
+
 	secs = tvec[4] * 3600. + tvec[5] * 60. + tvec[6];
 
 /*     If we get to this point the type must be one of the continuous */
@@ -1328,9 +1347,9 @@ static doublereal c_b189 = 60.;
 
 	if (odd_(&taiptr)) {
 	    daynum = daytab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 : 
-		    s_rnge("daytab", i__1, "ttrans_", (ftnlen)1589)];
+		    s_rnge("daytab", i__1, "ttrans_", (ftnlen)1618)];
 	    secs = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-		    : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1590)];
+		    : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1619)];
 
 /*        ...Otherwise, all days since the reference TAI time have */
 /*        the same number of seconds (SECSPD).  (This statement applies */
@@ -1346,15 +1365,15 @@ static doublereal c_b189 = 60.;
 
 	    taiptr = max(taiptr,1);
 	    d__1 = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-		    : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1609)];
+		    : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1638)];
 	    rmaind_(&d__1, &secspd, &daydp, &secs);
 	    daynum = (integer) daydp + daytab[(i__1 = taiptr - 1) < 280 && 0 
 		    <= i__1 ? i__1 : s_rnge("daytab", i__1, "ttrans_", (
-		    ftnlen)1612)];
+		    ftnlen)1641)];
 	}
     }
     if (forml[(i__1 = pfrom - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("forml", 
-	    i__1, "ttrans_", (ftnlen)1619)]) {
+	    i__1, "ttrans_", (ftnlen)1648)]) {
 	rmaind_(&secs, &secspd, &daydp, &tsecs);
 	daynum += (integer) daydp;
 	secs = tsecs;
@@ -1366,9 +1385,9 @@ static doublereal c_b189 = 60.;
 /*     time system or not. */
 
     if (forml[(i__1 = pto - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("forml", 
-	    i__1, "ttrans_", (ftnlen)1634)] && forml[(i__2 = pfrom - 1) < 21 
+	    i__1, "ttrans_", (ftnlen)1663)] && forml[(i__2 = pfrom - 1) < 21 
 	    && 0 <= i__2 ? i__2 : s_rnge("forml", i__2, "ttrans_", (ftnlen)
-	    1634)]) {
+	    1663)]) {
 
 /*        We don't have to do anything here. */
 
@@ -1382,25 +1401,25 @@ static doublereal c_b189 = 60.;
 	    dayptr = max(i__1,i__2);
 	    secs += (doublereal) (daynum - daytab[(i__1 = dayptr - 1) < 280 &&
 		     0 <= i__1 ? i__1 : s_rnge("daytab", i__1, "ttrans_", (
-		    ftnlen)1647)]) * secspd;
+		    ftnlen)1676)]) * secspd;
 	    tai = taitab[(i__1 = dayptr - 1) < 280 && 0 <= i__1 ? i__1 : 
-		    s_rnge("taitab", i__1, "ttrans_", (ftnlen)1649)] + secs;
+		    s_rnge("taitab", i__1, "ttrans_", (ftnlen)1678)] + secs;
 
 /*           ...then back to DAYNUM and SECS */
 
 	    taiptr = lstled_(&tai, &nref, taitab);
 	    if (odd_(&taiptr)) {
 		daynum = daytab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-			: s_rnge("daytab", i__1, "ttrans_", (ftnlen)1658)];
+			: s_rnge("daytab", i__1, "ttrans_", (ftnlen)1687)];
 		secs = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? 
-			i__1 : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1659)
+			i__1 : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1688)
 			];
 	    } else {
 		taiptr = max(1,taiptr);
 		daynum = daytab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? i__1 
-			: s_rnge("daytab", i__1, "ttrans_", (ftnlen)1665)];
+			: s_rnge("daytab", i__1, "ttrans_", (ftnlen)1694)];
 		d__1 = tai - taitab[(i__1 = taiptr - 1) < 280 && 0 <= i__1 ? 
-			i__1 : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1667)
+			i__1 : s_rnge("taitab", i__1, "ttrans_", (ftnlen)1696)
 			];
 		rmaind_(&d__1, &secspd, &daydp, &secs);
 		daynum += (integer) daydp;
@@ -1422,7 +1441,7 @@ static doublereal c_b189 = 60.;
 /*     increment the day number by one and set SECS to zero. */
 
     if (forml[(i__1 = pto - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("forml", 
-	    i__1, "ttrans_", (ftnlen)1690)] && secs > secspd) {
+	    i__1, "ttrans_", (ftnlen)1719)] && secs > secspd) {
 	++daynum;
 	secs = 0.;
     }
@@ -1435,7 +1454,7 @@ static doublereal c_b189 = 60.;
 /*     it all out at the appropriate time later on. */
 
     if (needy[(i__1 = pto - 1) < 21 && 0 <= i__1 ? i__1 : s_rnge("needy", 
-	    i__1, "ttrans_", (ftnlen)1702)]) {
+	    i__1, "ttrans_", (ftnlen)1731)]) {
 	yr400 = daynum / 146097;
 	rem = daynum - yr400 * 146097;
 
@@ -1469,11 +1488,11 @@ static doublereal c_b189 = 60.;
 	if (max(i__1,i__2) - max(i__3,i__4) + max(i__5,i__6) == 0) {
 	    month = lstlti_(&dofyr, &c__12, dpjan0);
 	    day = dofyr - dpjan0[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 :
-		     s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1730)];
+		     s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)1759)];
 	} else {
 	    month = lstlti_(&dofyr, &c__12, dpbegl);
 	    day = dofyr - dpbegl[(i__1 = month - 1) < 12 && 0 <= i__1 ? i__1 :
-		     s_rnge("dpbegl", i__1, "ttrans_", (ftnlen)1733)];
+		     s_rnge("dpbegl", i__1, "ttrans_", (ftnlen)1762)];
 	}
 
 /*        We only want to convert that portion of seconds less than */
@@ -1512,9 +1531,9 @@ static doublereal c_b189 = 60.;
 	    daylen = secspd;
 	    if (odd_(&dayptr)) {
 		daylen = taitab[(i__1 = dayptr) < 280 && 0 <= i__1 ? i__1 : 
-			s_rnge("taitab", i__1, "ttrans_", (ftnlen)1782)] - 
+			s_rnge("taitab", i__1, "ttrans_", (ftnlen)1811)] - 
 			taitab[(i__2 = dayptr - 1) < 280 && 0 <= i__2 ? i__2 :
-			 s_rnge("taitab", i__2, "ttrans_", (ftnlen)1782)];
+			 s_rnge("taitab", i__2, "ttrans_", (ftnlen)1811)];
 	    }
 	    tvec[1] = (doublereal) dofyr + secs / daylen;
 	} else {
@@ -1571,8 +1590,8 @@ static doublereal c_b189 = 60.;
 	week = (daynum - ((year - 1) * 365 + (year - 1) / 4 - (year - 1) / 
 		100 + (year - 1) / 400 + (dpjan0[(i__1 = month - 1) < 12 && 0 
 		<= i__1 ? i__1 : s_rnge("dpjan0", i__1, "ttrans_", (ftnlen)
-		1851)] + extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : 
-		s_rnge("extra", i__2, "ttrans_", (ftnlen)1851)] * (max(i__3,
+		1880)] + extra[(i__2 = month - 1) < 12 && 0 <= i__2 ? i__2 : 
+		s_rnge("extra", i__2, "ttrans_", (ftnlen)1880)] * (max(i__3,
 		i__4) - max(i__5,i__6) + max(i__7,i__8)) + c__1) - 1) - 
 		doffst) / 7 + 1;
 	i__1 = daynum - sunday;
@@ -1598,9 +1617,9 @@ static doublereal c_b189 = 60.;
 	dayptr = max(i__1,i__2);
 	secs += (doublereal) (daynum - daytab[(i__1 = dayptr - 1) < 280 && 0 
 		<= i__1 ? i__1 : s_rnge("daytab", i__1, "ttrans_", (ftnlen)
-		1873)]) * secspd;
+		1902)]) * secspd;
 	tai = taitab[(i__1 = dayptr - 1) < 280 && 0 <= i__1 ? i__1 : s_rnge(
-		"taitab", i__1, "ttrans_", (ftnlen)1875)] + secs;
+		"taitab", i__1, "ttrans_", (ftnlen)1904)] + secs;
 	tvec[0] = unitim_(&tai, "TAI", myto, (ftnlen)3, (ftnlen)32);
     }
 

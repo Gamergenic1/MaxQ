@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CMPRSS ( Compress a character string ) */
+/* $Procedure CMPRSS ( Compress a character string ) */
 /* Subroutine */ int cmprss_(char *delim, integer *n, char *input, char *
 	output, ftnlen delim_len, ftnlen input_len, ftnlen output_len)
 {
@@ -21,9 +21,9 @@
 
 /* $ Abstract */
 
-/*      Compress a character string by removing occurrences of */
-/*      more than N consecutive occurrences of a specified */
-/*      character. */
+/*     Compress a character string by removing occurrences of */
+/*     more than N consecutive occurrences of a specified */
+/*     character. */
 
 /* $ Disclaimer */
 
@@ -56,92 +56,107 @@
 
 /* $ Keywords */
 
-/*      ASCII,  CHARACTER,  STRING */
+/*     ASCII */
+/*     CHARACTER */
+/*     STRING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      DELIM      I      Delimiter to be compressed. */
-/*      N          I      Maximum consecutive occurrences of DELIM. */
-/*      INPUT      I      Input string. */
-/*      OUTPUT     O      Compressed string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     DELIM      I   Delimiter to be compressed. */
+/*     N          I   Maximum consecutive occurrences of DELIM. */
+/*     INPUT      I   Input string. */
+/*     OUTPUT     O   Compressed string. */
 
 /* $ Detailed_Input */
 
-/*      DELIM       is the delimiter to be compressed out of the string. */
-/*                  This may be any ASCII character. */
+/*     DELIM    is the delimiter to be compressed out of the string. */
+/*              This may be any ASCII character. */
 
-/*      N           is the maximum number of consecutive occurrences */
-/*                  of DELIM that will be allowed to remain in the */
-/*                  output string. */
+/*     N        is the maximum number of consecutive occurrences */
+/*              of DELIM that will be allowed to remain in the */
+/*              output string. */
 
-/*      INPUT       is the input string. */
+/*     INPUT    is the input string. */
 
 /* $ Detailed_Output */
 
-/*      OUTPUT      is the output string. This is the input string */
-/*                  with all occurrences of more than N consecutive */
-/*                  delimiters removed. */
+/*     OUTPUT   is the output string. This is the input string */
+/*              with all occurrences of more than N consecutive */
+/*              delimiters removed. */
 
-/*                  If OUTPUT is not large enough to hold the */
-/*                  compressed string, it is truncated on the right. */
+/*              If OUTPUT is not large enough to hold the */
+/*              compressed string, it is truncated on the right. */
 
-/*                  OUTPUT may overwrite INPUT. */
+/*              OUTPUT may overwrite INPUT. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      Occurrences of more than N consecutive delimiters are removed */
-/*      from the input string as it is copied to the output string. */
-/*      If the output string is not large enough to hold the compressed */
-/*      string, it is truncated on the right. */
-
-/* $ Examples */
-
-/*      Let DELIM = '.', and N = 2. Then */
-
-/*         'ABC...DE.F...',           becomes   'ABC..DE.F..' */
-/*         ' ...........'                       ' ..' */
-/*         '.. ..AB....CD'                      '.. ..AB..CD' */
-
-/*      Let DELIM = ' ', and N = 0. Then */
-
-/*         ' DISK:[USER.  SUB  ]'     becomes   'DISK:[USER.SUB]' */
-
-/* $ Restrictions */
-
-/*      None. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
+
+/*     1)  If the output string length is too short to contain the result */
+/*         of compressing the input string, the result is truncated on */
+/*         the right. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     Occurrences of more than N consecutive delimiters are removed */
+/*     from the input string as it is copied to the output string. */
+/*     If the output string is not large enough to hold the compressed */
+/*     string, it is truncated on the right. */
+
+/* $ Examples */
+
+/*     Let DELIM = '.', and N = 2. Then */
+
+/*        'ABC...DE.F...',           becomes   'ABC..DE.F..' */
+/*        ' ...........'                       ' ..' */
+/*        '.. ..AB....CD'                      '.. ..AB..CD' */
+
+/*     Let DELIM = ' ', and N = 0. Then */
+
+/*        ' DISK:[USER.  SUB  ]'     becomes   'DISK:[USER.SUB]' */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 09-JUL-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added $Exceptions entry #1. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

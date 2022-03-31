@@ -113,13 +113,18 @@
 
 -Author_and_Institution
 
-   E.D. Wright     (JPL)
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW)
+   -CSPICE Version 1.0.1, 02-JUN-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT) (IMU)
 
 -Index_Entries
 

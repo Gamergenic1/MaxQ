@@ -7,9 +7,9 @@
 
 /* Table of constant values */
 
-static integer c__127 = 127;
+static integer c__145 = 145;
 
-/* $Procedure      ZZFDAT ( Initialize built-in frame names and ID codes ) */
+/* $Procedure ZZFDAT ( Initialize built-in frame names and ID codes ) */
 /* Subroutine */ int zzfdat_(integer *ncount, integer *maxbfr, char *name__, 
 	integer *idcode, integer *center, integer *type__, integer *typid, 
 	integer *centrd, integer *bnmlst, integer *bnmpol, char *bnmnms, 
@@ -36,12 +36,12 @@ static integer c__127 = 127;
 /* $ Abstract */
 
 /*     SPICE Private routine intended solely for the support of SPICE */
-/*     routines.  Users should not call this routine directly due */
+/*     routines. Users should not call this routine directly due */
 /*     to the volatile nature of this routine. */
 
-/*     This routine initializes the table of built-in frame names and */
-/*     their ID codes and hashes and order arrays providing efficient */
-/*     access to these tables. */
+/*     Initialize the table of built-in frame names and their ID codes */
+/*     and hashes and order arrays providing efficient access to these */
+/*     tables. */
 
 /* $ Disclaimer */
 
@@ -80,8 +80,8 @@ static integer c__127 = 127;
 /* $ Abstract */
 
 /*     The parameters below form an enumerated list of the recognized */
-/*     frame types.  They are: INERTL, PCK, CK, TK, DYN.  The meanings */
-/*     are outlined below. */
+/*     frame types. They are: INERTL, PCK, CK, TK, DYN, SWTCH, and ALL. */
+/*     The meanings are outlined below. */
 
 /* $ Disclaimer */
 
@@ -131,6 +131,11 @@ static integer c__127 = 127;
 /*                 definition depends on parameters supplied via a */
 /*                 frame kernel. */
 
+/*     SWTCH       is a "switch" frame. These frames have orientation */
+/*                 defined by their alignment with base frames selected */
+/*                 from a prioritized list. The base frames optionally */
+/*                 have associated time intervals of applicability. */
+
 /*     ALL         indicates any of the above classes. This parameter */
 /*                 is used in APIs that fetch information about frames */
 /*                 of a specified class. */
@@ -139,6 +144,7 @@ static integer c__127 = 127;
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman    (JPL) */
+/*     B.V. Semenov    (JPL) */
 /*     W.L. Taber      (JPL) */
 
 /* $ Literature_References */
@@ -146,6 +152,11 @@ static integer c__127 = 127;
 /*     None. */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.0, 08-OCT-2020 (NJB) (BVS) */
+
+/*       The parameter SWTCH was added to support the switch */
+/*       frame class. */
 
 /* -    SPICELIB Version 4.0.0, 08-MAY-2012 (NJB) */
 
@@ -296,17 +307,41 @@ static integer c__127 = 127;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.7.0, 26-AUG-2021 (BVS) */
+
+/*        Increased the number of non-inertial frames from 106 to 124 */
+/*        in order to accommodate the following PCK based frames: */
+
+/*           IAU_52_EUROPA */
+/*           IAU_NIX */
+/*           IAU_HYDRA */
+/*           IAU_RYUGU */
+/*           IAU_ARROKOTH */
+/*           IAU_DIDYMOS_BARYCENTER */
+/*           IAU_DIDYMOS */
+/*           IAU_DIMORPHOS */
+/*           IAU_DONALDJOHANSON */
+/*           IAU_EURYBATES */
+/*           IAU_EURYBATES_BARYCENTER */
+/*           IAU_QUETA */
+/*           IAU_POLYMELE */
+/*           IAU_LEUCUS */
+/*           IAU_ORUS */
+/*           IAU_PATROCLUS_BARYCENTER */
+/*           IAU_PATROCLUS */
+/*           IAU_MENOETIUS */
+
 /* -    SPICELIB Version 1.6.0, 30-OCT-2014 (BVS) */
 
 /*        Increased the number of non-inertial frames from 105 to 106 */
-/*        in order to accomodate the following PCK based frame: */
+/*        in order to accommodate the following PCK based frame: */
 
 /*           IAU_BENNU */
 
 /* -    SPICELIB Version 1.5.0, 11-OCT-2011 (BVS) */
 
 /*        Increased the number of non-inertial frames from 100 to 105 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CERES */
 /*           IAU_PALLAS */
@@ -317,7 +352,7 @@ static integer c__127 = 127;
 /* -    SPICELIB Version 1.4.0, 11-MAY-2010 (BVS) */
 
 /*        Increased the number of non-inertial frames from 96 to 100 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_BORRELLY */
 /*           IAU_TEMPEL_1 */
@@ -327,7 +362,7 @@ static integer c__127 = 127;
 /* -    SPICELIB Version 1.3.0, 12-DEC-2002 (BVS) */
 
 /*        Increased the number of non-inertial frames from 85 to 96 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_CALLIRRHOE */
 /*           IAU_THEMISTO */
@@ -344,7 +379,7 @@ static integer c__127 = 127;
 /* -    SPICELIB Version 1.2.0, 02-AUG-2002 (FST) */
 
 /*        Increased the number of non-inertial frames from 81 to 85 */
-/*        in order to accomodate the following PCK based frames: */
+/*        in order to accommodate the following PCK based frames: */
 
 /*           IAU_PAN */
 /*           IAU_GASPRA */
@@ -354,7 +389,7 @@ static integer c__127 = 127;
 /* -    SPICELIB Version 1.1.0, 20-FEB-1997 (WLT) */
 
 /*        Increased the number of non-inertial frames from 79 to 81 */
-/*        in order to accomodate the following earth rotation */
+/*        in order to accommodate the following earth rotation */
 /*        models: */
 
 /*           ITRF93 */
@@ -386,76 +421,76 @@ static integer c__127 = 127;
 
 /* $ Detailed_Input */
 
-/*     NCOUNT      is the number of names that the calling routine */
-/*                 expects to receive. It should have the value of */
-/*                 NNAMES which is given below for NNAMES.  If this is */
-/*                 not the case then the error 'SPICE(VERSIONMISMATCH1)' */
-/*                 is signaled. */
+/*     NCOUNT   is the number of names that the calling routine */
+/*              expects to receive. It should have the value of */
+/*              NNAMES which is given below for NNAMES. If this is */
+/*              not the case then the error SPICE(VERSIONMISMATCH1) */
+/*              is signaled. */
 
-/*     MAXBFR      is the build-in frame hash size. It should have a */
-/*                 value greater than or equal to the value of NNAMES. */
-/*                 If this is not the case then the error */
-/*                 'SPICE(VERSIONMISMATCH2)' is signaled. */
+/*     MAXBFR   is the build-in frame hash size. It should have a */
+/*              value greater than or equal to the value of NNAMES. */
+/*              If this is not the case then the error */
+/*              SPICE(VERSIONMISMATCH2) is signaled. */
 
-/*                 If everything has been properly called, compiled and */
-/*                 linked these errors should never be signaled. If */
-/*                 either is signaled, it indicates that either a */
-/*                 calling sequence, or version mismatch has occurred. */
+/*              If everything has been properly called, compiled and */
+/*              linked these errors should never be signaled. If */
+/*              either is signaled, it indicates that either a */
+/*              calling sequence, or version mismatch has occurred. */
 
 /* $ Detailed_Output */
 
 /*     The six arrays described below (NAME...CORDER) should be declared */
 /*     with the same dimensions --- NCOUNT. */
 
-/*     NAME        is an array of the official SPICE names for the */
-/*                 recognized frames (both inertial and non-inertial) */
+/*     NAME     is an array of the official SPICE names for the */
+/*              recognized frames (both inertial and non-inertial) */
 
-/*     IDCODE      is an array parallel to NAME of SPICE ID codes for */
-/*                 the various frames. */
+/*     IDCODE   is an array parallel to NAME of SPICE ID codes for */
+/*              the various frames. */
 
-/*     CENTER      is an array parallel to NAME of body ID codes for */
-/*                 the centers of frames. */
+/*     CENTER   is an array parallel to NAME of body ID codes for */
+/*              the centers of frames. */
 
-/*     TYPE        is an array parallel to NAME of inertial frame types */
-/*                 for the various frames.  These include INERTL, PCK, */
-/*                 CK, etc. */
+/*     TYPE     is an array parallel to NAME of inertial frame types */
+/*              for the various frames. These include INERTL, PCK, */
+/*              CK, etc. */
 
-/*     TYPID       is an array parallel to NAME of the ID code for the */
-/*                 frame within the TYPE of the frame.  Once the class */
-/*                 of the frame has been identified by TYPE, TYPID is */
-/*                 used to access the information specific about this */
-/*                 frame. */
+/*     TYPID    is an array parallel to NAME of the ID code for the */
+/*              frame within the TYPE of the frame. Once the class */
+/*              of the frame has been identified by TYPE, TYPID is */
+/*              used to access the information specific about this */
+/*              frame. */
 
-/*     CENTRD      is an order vector for the array CENTER.  The value */
-/*                 CENTER(CORDER(I)) is the I'th IDCODE when ordered */
-/*                 from smallest to largest. */
+/*     CENTRD   is an order vector for the array CENTER. The value */
+/*              CENTER(CORDER(I)) is the I'th IDCODE when ordered */
+/*              from smallest to largest. */
 
 /*     The eight hash array below (BMM*, BID*) should be declared with */
 /*     the same upper dimensions --- MAXBFR. */
 
-/*     BNMLST */
-/*     BNMPOL */
-/*     BNMNMS      are the frame name-based hash head node pointer, node */
-/*                 collision, and item lists. Together they return the */
-/*                 index of the element in the BNMIDX index storage */
-/*                 array corresponding to a given built-in frame name. */
+/*     BNMLST, */
+/*     BNMPOL, */
+/*     BNMNMS   are the frame name-based hash head node pointer, node */
+/*              collision, and item lists. Together they return the */
+/*              index of the element in the BNMIDX index storage */
+/*              array corresponding to a given built-in frame name. */
 
-/*     BNMIDX      is the frame name-based hash index storage array */
-/*                 containing at the index determined by the hash for a */
-/*                 given name the index corresponding to the same name */
-/*                 in the NAME, IDCODE, CENTER, TYPE, and TYPID arrays. */
+/*     BNMIDX   is the frame name-based hash index storage array */
+/*              containing at the index determined by the hash for a */
+/*              given name the index corresponding to the same name */
+/*              in the NAME, IDCODE, CENTER, TYPE, and TYPID arrays. */
 
-/*     BIDLST */
-/*     BIDPOL */
-/*     BIDIDS      are the frame ID-based hash head node pointer, node */
-/*                 collision, and item lists. Together they return the */
-/*                 index of the element in the BNMIDX index storage */
-/*                 array corresponding to a given built-in frame ID. */
+/*     BIDLST, */
+/*     BIDPOL, */
+/*     BIDIDS   are the frame ID-based hash head node pointer, node */
+/*              collision, and item lists. Together they return the */
+/*              index of the element in the BNMIDX index storage */
+/*              array corresponding to a given built-in frame ID. */
 
-/*     BIDIDX      is the frame ID-based hash index storage array */
-/*                 containing at the index determined by the hash for a */
-/*                 given ID the index corresponding to the same ID */
-/*                 in the NAME, IDCODE, CENTER, TYPE, and TYPID arrays. */
+/*     BIDIDX   is the frame ID-based hash index storage array */
+/*              containing at the index determined by the hash for a */
+/*              given ID the index corresponding to the same ID */
+/*              in the NAME, IDCODE, CENTER, TYPE, and TYPID arrays. */
 
 /* $ Parameters */
 
@@ -463,18 +498,18 @@ static integer c__127 = 127;
 
 /* $ Exceptions */
 
-/*     1) If the input number of frames NCOUNT is not equal to the */
-/*        number of frames determined from include files, the error */
-/*        'SPICE(BUG)' will be signaled. */
-
-/*     2) If the input hash size MAXBFR is not greater or equal to the */
-/*        number of frames determined from include files, the error */
-/*        'SPICE(BUG2)' will be signaled. */
-
 /*     If everything has been properly called, compiled and linked these */
 /*     errors should never be signaled. If either is signaled, it */
 /*     indicates that either a calling sequence, or version mismatch has */
 /*     occurred. */
+
+/*     1)  If the input number of frames NCOUNT is not equal to the */
+/*         number of frames determined from include files, the error */
+/*         SPICE(BUG) is signaled. */
+
+/*     2)  If the input hash size MAXBFR is not greater or equal to the */
+/*         number of frames determined from include files, the error */
+/*         SPICE(BUG2) is signaled. */
 
 /* $ Files */
 
@@ -520,12 +555,43 @@ static integer c__127 = 127;
 
 /* $ Author_and_Institution */
 
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     F.S. Turner     (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.2.0, 07-SEP-2021 (BVS) (JDR) */
+
+/*        Added the following PCK frames: */
+
+/*           IAU_52_EUROPA */
+/*           IAU_NIX */
+/*           IAU_HYDRA */
+/*           IAU_RYUGU */
+/*           IAU_ARROKOTH */
+/*           IAU_DIDYMOS_BARYCENTER */
+/*           IAU_DIDYMOS */
+/*           IAU_DIMORPHOS */
+/*           IAU_DONALDJOHANSON */
+/*           IAU_EURYBATES */
+/*           IAU_EURYBATES_BARYCENTER */
+/*           IAU_QUETA */
+/*           IAU_POLYMELE */
+/*           IAU_LEUCUS */
+/*           IAU_ORUS */
+/*           IAU_PATROCLUS_BARYCENTER */
+/*           IAU_PATROCLUS */
+/*           IAU_MENOETIUS */
+
+/*        Corrected frame name spelling: */
+
+/*           IAU_MAGACLITE -> IAU_MEGACLITE */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Index_Entries. */
 
 /* -    SPICELIB Version 5.1.0, 30-OCT-2014 (BVS) */
 
@@ -598,7 +664,7 @@ static integer c__127 = 127;
 
 /* -    SPICELIB Version 3.0.0, 02-JUN-1997 (WLT) */
 
-/*        The calling sequence changed.  ZZFDAT now also returns */
+/*        The calling sequence changed. ZZFDAT now also returns */
 /*        an order vector for the CENTERs of the frames. */
 
 /* -    SPICELIB Version 2.0.0, 03-APR-1997 (WLT) */
@@ -612,6 +678,11 @@ static integer c__127 = 127;
 /*        NNINRT are included instead of being declared locally. */
 
 /* -    SPICELIB Version 1.0.0, 19-SEP-1995 (WLT) */
+
+/* -& */
+/* $ Index_Entries */
+
+/*     initialize built-in frame names and ID codes */
 
 /* -& */
 
@@ -666,7 +737,7 @@ static integer c__127 = 127;
 
 /*     Perform the consistency checks first. */
 
-    if (*ncount != 127) {
+    if (*ncount != 145) {
 	chkin_("ZZFDAT", (ftnlen)6);
 	setmsg_("There is an inconsistency between the version of the routin"
 		"e calling ZZFDAT and the current version of ZZFDAT. Check to"
@@ -676,7 +747,7 @@ static integer c__127 = 127;
 	chkout_("ZZFDAT", (ftnlen)6);
 	return 0;
     }
-    if (*maxbfr < 127) {
+    if (*maxbfr < 145) {
 	chkin_("ZZFDAT", (ftnlen)6);
 	setmsg_("There is an inconsistency between the version of the routin"
 		"e calling ZZFDAT and the current version of ZZFDAT. Check to"
@@ -1165,7 +1236,7 @@ static integer c__127 = 127;
     center[107] = 518;
     typid[107] = 518;
     type__[107] = 2;
-    s_copy(name__ + name_len * 108, "IAU_MAGACLITE", name_len, (ftnlen)13);
+    s_copy(name__ + name_len * 108, "IAU_MEGACLITE", name_len, (ftnlen)13);
     idcode[108] = 10088;
     center[108] = 519;
     typid[108] = 519;
@@ -1272,21 +1343,119 @@ static integer c__127 = 127;
     typid[126] = 2101955;
     type__[126] = 2;
 
+/*     Frames for asteroid 52 Europa, Nix, Hydra, and Hayabusa 2, */
+/*     New Horizons, DART, and Lucy mission targets. */
+
+    s_copy(name__ + name_len * 127, "IAU_52_EUROPA", name_len, (ftnlen)13);
+    idcode[127] = 10107;
+    center[127] = 2000052;
+    typid[127] = 2000052;
+    type__[127] = 2;
+    s_copy(name__ + (name_len << 7), "IAU_NIX", name_len, (ftnlen)7);
+    idcode[128] = 10108;
+    center[128] = 902;
+    typid[128] = 902;
+    type__[128] = 2;
+    s_copy(name__ + name_len * 129, "IAU_HYDRA", name_len, (ftnlen)9);
+    idcode[129] = 10109;
+    center[129] = 903;
+    typid[129] = 903;
+    type__[129] = 2;
+    s_copy(name__ + name_len * 130, "IAU_RYUGU", name_len, (ftnlen)9);
+    idcode[130] = 10110;
+    center[130] = 2162173;
+    typid[130] = 2162173;
+    type__[130] = 2;
+    s_copy(name__ + name_len * 131, "IAU_ARROKOTH", name_len, (ftnlen)12);
+    idcode[131] = 10111;
+    center[131] = 2486958;
+    typid[131] = 2486958;
+    type__[131] = 2;
+    s_copy(name__ + name_len * 132, "IAU_DIDYMOS_BARYCENTER", name_len, (
+	    ftnlen)22);
+    idcode[132] = 10112;
+    center[132] = 20065803;
+    typid[132] = 20065803;
+    type__[132] = 2;
+    s_copy(name__ + name_len * 133, "IAU_DIDYMOS", name_len, (ftnlen)11);
+    idcode[133] = 10113;
+    center[133] = 920065803;
+    typid[133] = 920065803;
+    type__[133] = 2;
+    s_copy(name__ + name_len * 134, "IAU_DIMORPHOS", name_len, (ftnlen)13);
+    idcode[134] = 10114;
+    center[134] = 120065803;
+    typid[134] = 120065803;
+    type__[134] = 2;
+    s_copy(name__ + name_len * 135, "IAU_DONALDJOHANSON", name_len, (ftnlen)
+	    18);
+    idcode[135] = 10115;
+    center[135] = 20052246;
+    typid[135] = 20052246;
+    type__[135] = 2;
+    s_copy(name__ + name_len * 136, "IAU_EURYBATES", name_len, (ftnlen)13);
+    idcode[136] = 10116;
+    center[136] = 920003548;
+    typid[136] = 920003548;
+    type__[136] = 2;
+    s_copy(name__ + name_len * 137, "IAU_EURYBATES_BARYCENTER", name_len, (
+	    ftnlen)24);
+    idcode[137] = 10117;
+    center[137] = 20003548;
+    typid[137] = 20003548;
+    type__[137] = 2;
+    s_copy(name__ + name_len * 138, "IAU_QUETA", name_len, (ftnlen)9);
+    idcode[138] = 10118;
+    center[138] = 120003548;
+    typid[138] = 120003548;
+    type__[138] = 2;
+    s_copy(name__ + name_len * 139, "IAU_POLYMELE", name_len, (ftnlen)12);
+    idcode[139] = 10119;
+    center[139] = 20015094;
+    typid[139] = 20015094;
+    type__[139] = 2;
+    s_copy(name__ + name_len * 140, "IAU_LEUCUS", name_len, (ftnlen)10);
+    idcode[140] = 10120;
+    center[140] = 20011351;
+    typid[140] = 20011351;
+    type__[140] = 2;
+    s_copy(name__ + name_len * 141, "IAU_ORUS", name_len, (ftnlen)8);
+    idcode[141] = 10121;
+    center[141] = 20021900;
+    typid[141] = 20021900;
+    type__[141] = 2;
+    s_copy(name__ + name_len * 142, "IAU_PATROCLUS_BARYCENTER", name_len, (
+	    ftnlen)24);
+    idcode[142] = 10122;
+    center[142] = 20000617;
+    typid[142] = 20000617;
+    type__[142] = 2;
+    s_copy(name__ + name_len * 143, "IAU_PATROCLUS", name_len, (ftnlen)13);
+    idcode[143] = 10123;
+    center[143] = 920000617;
+    typid[143] = 920000617;
+    type__[143] = 2;
+    s_copy(name__ + name_len * 144, "IAU_MENOETIUS", name_len, (ftnlen)13);
+    idcode[144] = 10124;
+    center[144] = 120000617;
+    typid[144] = 120000617;
+    type__[144] = 2;
+
 /*     Below is a template to use for adding another non-inertial */
 /*     frame. Copy it, fill in the new values and then leave */
 /*     a new template for the next person who needs to modify this */
 /*     routine. */
 
-/*     NAME   ( NINERT + 107 ) =  name */
-/*     IDCODE ( NINERT + 107 ) =  10107 */
-/*     CENTER ( NINERT + 107 ) =  center */
-/*     TYPID  ( NINERT + 107 ) =  type ID code */
-/*     TYPE   ( NINERT + 107 ) =  type (INERTL, PCK, etc. ) */
+/*     NAME   ( NINERT + 125 ) =  name */
+/*     IDCODE ( NINERT + 125 ) =  10125 */
+/*     CENTER ( NINERT + 125 ) =  center */
+/*     TYPID  ( NINERT + 125 ) =  type ID code */
+/*     TYPE   ( NINERT + 125 ) =  type (INERTL, PCK, etc. ) */
 
 
 /*     Generate order vector for centers (used by CIDFRM). */
 
-    orderi_(center, &c__127, centrd);
+    orderi_(center, &c__145, centrd);
 
 /*     Initialize build-in frame name- and ID-based hashes. */
 
@@ -1296,7 +1465,7 @@ static integer c__127 = 127;
 /*     Register all built-in frames in the frame name- and ID-based */
 /*     hashes. */
 
-    for (i__ = 1; i__ <= 127; ++i__) {
+    for (i__ = 1; i__ <= 145; ++i__) {
 	zzhscadd_(bnmlst, bnmpol, bnmnms, name__ + (i__ - 1) * name_len, &
 		item, &new__, bnmnms_len, name_len);
 	bnmidx[item - 1] = i__;

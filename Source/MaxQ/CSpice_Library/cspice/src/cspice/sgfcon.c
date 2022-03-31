@@ -10,7 +10,7 @@
 static integer c__1 = 1;
 static integer c__2 = 2;
 
-/* $Procedure      SGFCON ( Generic Segments: Fetch constants ) */
+/* $Procedure SGFCON ( Generic Segments: Fetch constants ) */
 /* Subroutine */ int sgfcon_(integer *handle, doublereal *descr, integer *
 	first, integer *last, doublereal *values)
 {
@@ -27,10 +27,9 @@ static integer c__2 = 2;
 
 /* $ Abstract */
 
-/*     Given the descriptor for a generic segment in a DAF file */
-/*     associated with HANDLE, fetch from the constants partition */
-/*     of the segment the double precision numbers from FIRST to */
-/*     LAST. */
+/*     Fetch from the constants partition of a generic segment the */
+/*     double precision numbers from FIRST to LAST. The segment is */
+/*     identified by a DAF file handle and segment descriptor. */
 
 /* $ Disclaimer */
 
@@ -59,7 +58,7 @@ static integer c__2 = 2;
 
 /* $ Required_Reading */
 
-/*     DAF Required Reading. */
+/*     DAF */
 
 /* $ Keywords */
 
@@ -78,44 +77,43 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of a DAF opened for reading that */
-/*                contains the segment described by DESCR. */
+/*     HANDLE   is the handle of a DAF opened for reading that */
+/*              contains the segment described by DESCR. */
 
-/*     DESCR      is the descriptor of the segment with the desired */
-/*                constant values. This must be the descriptor for a */
-/*                generic segment in the DAF associated with HANDLE. */
+/*     DESCR    is the descriptor of the segment with the desired */
+/*              constant values. This must be the descriptor for a */
+/*              generic segment in the DAF associated with HANDLE. */
 
-/*     FIRST      is the index of the first value to fetch from the */
-/*                constants section of the generic segment associated */
-/*                with HANDLE and DESCR. */
+/*     FIRST    is the index of the first value to fetch from the */
+/*              constants section of the generic segment associated */
+/*              with HANDLE and DESCR. */
 
-/*     LAST       is the index of the last value to fetch from the */
-/*                constants section of the generic segment associated */
-/*                with HANDLE and DESCR. */
+/*     LAST     is the index of the last value to fetch from the */
+/*              constants section of the generic segment associated */
+/*              with HANDLE and DESCR. */
 
 /* $ Detailed_Output */
 
-/*     VALUES      is the array of constant values obtained from the */
-/*                 constants section of the generic segment associated */
-/*                 with HANDLE and DESCR. */
+/*     VALUES   is the array of constant values obtained from the */
+/*              constants section of the generic segment associated */
+/*              with HANDLE and DESCR. */
 
 /* $ Parameters */
 
 /*     This subroutine makes use of parameters defined in the file */
 /*     'sgparam.inc'. */
 
+/* $ Exceptions */
+
+/*     1)  If FIRST is less than 1 or LAST is greater than the number of */
+/*         constants, the error SPICE(REQUESTOUTOFBOUNDS) is signaled. */
+
+/*     2)  If LAST is less than FIRST, the error SPICE(REQUESTOUTOFORDER) */
+/*         is signaled. */
+
 /* $ Files */
 
 /*     See the description of HANDLE above. */
-
-/* $ Exceptions */
-
-/*     1) The error SPICE(REQUESTOUTOFBOUNDS) will be signalled */
-/*        if FIRST is less than 1 or LAST is greater than the */
-/*        number of constants. */
-
-/*     2) The error SPICE(REQUESTOUTOFORDER) will be signalled */
-/*        if LAST is less than FIRST. */
 
 /* $ Particulars */
 
@@ -146,19 +144,25 @@ static integer c__2 = 2;
 
 /* $ Restrictions */
 
-/*     The segment described by DESCR must be a generic segment, */
-/*     otherwise the results of this routine are not predictable. */
-
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer  (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     1)  The segment described by DESCR must be a generic segment, */
+/*         otherwise the results of this routine are not predictable. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 07-SEP-2001 (EDW) */
 
@@ -173,7 +177,7 @@ static integer c__2 = 2;
 
 /* -& */
 
-/*     Spicelib Functions */
+/*     SPICELIB Functions */
 
 
 /*     Local Parameters */

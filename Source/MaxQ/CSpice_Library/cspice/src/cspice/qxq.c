@@ -68,42 +68,42 @@ static doublereal c_b2 = 1.;
 
 /* $ Detailed_Input */
 
-/*     Q1             is a 4-vector representing a SPICE-style */
-/*                    quaternion. See the discussion of quaternion */
-/*                    styles in Particulars below. */
+/*     Q1       is a 4-vector representing a SPICE-style */
+/*              quaternion. See the discussion of quaternion */
+/*              styles in $Particulars below. */
 
-/*                    Note that multiple styles of quaternions */
-/*                    are in use.  This routine will not work properly */
-/*                    if the input quaternions do not conform to */
-/*                    the SPICE convention.  See the Particulars */
-/*                    section for details. */
+/*              Note that multiple styles of quaternions */
+/*              are in use. This routine will not work properly */
+/*              if the input quaternions do not conform to */
+/*              the SPICE convention. See the $Particulars */
+/*              section for details. */
 
-/*     Q2             is a second SPICE-style quaternion. */
+/*     Q2       is a second SPICE-style quaternion. */
 
 /* $ Detailed_Output */
 
-/*     QOUT           is 4-vector representing the quaternion product */
+/*     QOUT     is 4-vector representing the quaternion product */
 
-/*                       Q1 * Q2 */
+/*                 Q1 * Q2 */
 
-/*                    Representing Q(i) as the sums of scalar (real) */
-/*                    part s(i) and vector (imaginary) part v(i) */
-/*                    respectively, */
+/*              Representing Q(i) as the sums of scalar (real) */
+/*              part s(i) and vector (imaginary) part v(i) */
+/*              respectively, */
 
-/*                       Q1 = s1 + v1 */
-/*                       Q2 = s2 + v2 */
+/*                 Q1 = s1 + v1 */
+/*                 Q2 = s2 + v2 */
 
-/*                    QOUT has scalar part s3 defined by */
+/*              QOUT has scalar part s3 defined by */
 
-/*                       s3 = s1 * s2 - <v1, v2> */
+/*                 s3 = s1 * s2 - <v1, v2> */
 
-/*                    and vector part v3 defined by */
+/*              and vector part v3 defined by */
 
-/*                       v3 = s1 * v2  +  s2 * v1  +  v1 x v2 */
+/*                 v3 = s1 * v2  +  s2 * v1  +  v1 x v2 */
 
-/*                    where the notation < , > denotes the inner */
-/*                    product operator and x indicates the cross */
-/*                    product operator. */
+/*              where the notation < , > denotes the inner */
+/*              product operator and x indicates the cross */
+/*              product operator. */
 
 /* $ Parameters */
 
@@ -119,7 +119,6 @@ static doublereal c_b2 = 1.;
 
 /* $ Particulars */
 
-
 /*     Quaternion Styles */
 /*     ----------------- */
 
@@ -127,12 +126,12 @@ static doublereal c_b2 = 1.;
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -252,7 +251,7 @@ static doublereal c_b2 = 1.;
 /*                   +-             -+ */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -317,81 +316,240 @@ static doublereal c_b2 = 1.;
 
 /*        M1*M2 */
 
-
 /* $ Examples */
 
-/*     1)  Let QID, QI, QJ, QK be the "basis" quaternions */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*            QID  =  ( 1, 0, 0, 0 ) */
-/*            QI   =  ( 0, 1, 0, 0 ) */
-/*            QJ   =  ( 0, 0, 1, 0 ) */
-/*            QK   =  ( 0, 0, 0, 1 ) */
+/*     1) Given the "basis" quaternions: */
 
-/*         respectively.  Then the calls */
+/*           QID:  ( 1.0, 0.0, 0.0, 0.0 ) */
+/*           QI :  ( 0.0, 1.0, 0.0, 0.0 ) */
+/*           QJ :  ( 0.0, 0.0, 1.0, 0.0 ) */
+/*           QK :  ( 0.0, 0.0, 0.0, 1.0 ) */
 
-/*            CALL QXQ ( QI, QJ, IXJ ) */
-/*            CALL QXQ ( QJ, QK, JXK ) */
-/*            CALL QXQ ( QK, QI, KXI ) */
+/*        the following quaternion products give these results: */
 
-/*         produce the results */
+/*            Product       Expected result */
+/*           -----------   ---------------------- */
+/*            QI  * QJ     ( 0.0, 0.0, 0.0, 1.0 ) */
+/*            QJ  * QK     ( 0.0, 1.0, 0.0, 0.0 ) */
+/*            QK  * QI     ( 0.0, 0.0, 1.0, 0.0 ) */
+/*            QI  * QI     (-1.0, 0.0, 0.0, 0.0 ) */
+/*            QJ  * QJ     (-1.0, 0.0, 0.0, 0.0 ) */
+/*            QK  * QK     (-1.0, 0.0, 0.0, 0.0 ) */
+/*            QID * QI     ( 0.0, 1.0, 0.0, 0.0 ) */
+/*            QI  * QID    ( 0.0, 1.0, 0.0, 0.0 ) */
+/*            QID * QJ     ( 0.0, 0.0, 1.0, 0.0 ) */
 
-/*            IXJ = QK */
-/*            JXK = QI */
-/*            KXI = QJ */
-
-/*         All of the calls */
-
-/*            CALL QXQ ( QI, QI, QOUT ) */
-/*            CALL QXQ ( QJ, QJ, QOUT ) */
-/*            CALL QXQ ( QK, QK, QOUT ) */
-
-/*         produce the result */
-
-/*            QOUT  =  -QID */
-
-/*         For any quaternion Q, the calls */
-
-/*            CALL QXQ ( QID, Q,   QOUT ) */
-/*            CALL QXQ ( Q,   QID, QOUT ) */
-
-/*         produce the result */
-
-/*            QOUT  =  Q */
+/*        The following code example uses QXQ to produce these results. */
 
 
-
-/*     2)  Composition of rotations:  let CMAT1 and CMAT2 be two */
-/*         C-matrices (which are rotation matrices).  Then the */
-/*         following code fragment computes the product CMAT1 * CMAT2: */
+/*        Example code begins here. */
 
 
-/*            C */
-/*            C     Convert the C-matrices to quaternions. */
-/*            C */
-/*                  CALL M2Q ( CMAT1, Q1 ) */
-/*                  CALL M2Q ( CMAT2, Q2 ) */
+/*              PROGRAM QXQ_EX1 */
+/*              IMPLICIT NONE */
 
-/*            C */
-/*            C     Find the product. */
-/*            C */
-/*                  CALL QXQ ( Q1, Q2, QOUT ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      QID    ( 0 : 3 ) */
+/*              DOUBLE PRECISION      QI     ( 0 : 3 ) */
+/*              DOUBLE PRECISION      QJ     ( 0 : 3 ) */
+/*              DOUBLE PRECISION      QK     ( 0 : 3 ) */
+/*              DOUBLE PRECISION      QOUT   ( 0 : 3 ) */
 
-/*            C */
-/*            C     Convert the result to a C-matrix. */
-/*            C */
-/*                  CALL Q2M ( QOUT, CMAT3 ) */
+/*        C */
+/*        C     Let QID, QI, QJ, QK be the "basis" */
+/*        C     quaternions. */
+/*        C */
+/*              DATA                  QID  / 1.D0,  0.D0,  0.D0,  0.D0 / */
+/*              DATA                  QI   / 0.D0,  1.D0,  0.D0,  0.D0 / */
+/*              DATA                  QJ   / 0.D0,  0.D0,  1.D0,  0.D0 / */
+/*              DATA                  QK   / 0.D0,  0.D0,  0.D0,  1.D0 / */
 
-/*            C */
-/*            C     Multiply CMAT1 and CMAT2 directly. */
-/*            C */
-/*                  CALL MXM ( CMAT1, CMAT2, CMAT4 ) */
+/*        C */
+/*        C     Compute: */
+/*        C */
+/*        C        QI x QJ = QK */
+/*        C        QJ x QK = QI */
+/*        C        QK x QI = QJ */
+/*        C */
+/*              CALL QXQ ( QI, QJ, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QI x QJ  =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '     QK  =', QK */
+/*              WRITE(*,*) ' ' */
 
-/*            C */
-/*            C     Compare the results.  The difference DIFF of */
-/*            C     CMAT3 and CMAT4 should be close to the zero */
-/*            C     matrix. */
-/*            C */
-/*                  CALL VSUBG ( 9, CMAT3, CMAT4, DIFF ) */
+/*              CALL QXQ ( QJ, QK, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QJ x QK  =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '     QI  =', QI */
+/*              WRITE(*,*) ' ' */
+
+/*              CALL QXQ ( QK, QI, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QK x QI  =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '     QJ  =', QJ */
+/*              WRITE(*,*) ' ' */
+
+/*        C */
+/*        C     Compute: */
+/*        C */
+/*        C        QI x QI  ==  -QID */
+/*        C        QJ x QJ  ==  -QID */
+/*        C        QK x QK  ==  -QID */
+/*        C */
+/*              CALL QXQ ( QI, QI, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QI x QI  =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '     QID =', QID */
+/*              WRITE(*,*) ' ' */
+
+/*              CALL QXQ ( QJ, QJ, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QJ x QJ  =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '     QID =', QID */
+/*              WRITE(*,*) ' ' */
+
+/*              CALL QXQ ( QK, QK, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QK x QK  =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '     QID =', QID */
+/*              WRITE(*,*) ' ' */
+
+/*        C */
+/*        C     Compute: */
+/*        C */
+/*        C        QID x QI  = QI */
+/*        C        QI  x QID = QI */
+/*        C        QID x QJ  = QJ */
+/*        C */
+/*              CALL QXQ ( QID, QI, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QID x QI =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '      QI =', QI */
+/*              WRITE(*,*) ' ' */
+
+/*              CALL QXQ ( QI, QID, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QI x QID =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '      QI =', QI */
+/*              WRITE(*,*) ' ' */
+
+/*              CALL QXQ ( QID, QJ, QOUT ) */
+/*              WRITE(*,'(A,4F8.2)') 'QID x QJ =', QOUT */
+/*              WRITE(*,'(A,4F8.2)') '      QJ =', QJ */
+/*              WRITE(*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        QI x QJ  =    0.00    0.00    0.00    1.00 */
+/*             QK  =    0.00    0.00    0.00    1.00 */
+
+/*        QJ x QK  =    0.00    1.00    0.00    0.00 */
+/*             QI  =    0.00    1.00    0.00    0.00 */
+
+/*        QK x QI  =    0.00    0.00    1.00    0.00 */
+/*             QJ  =    0.00    0.00    1.00    0.00 */
+
+/*        QI x QI  =   -1.00    0.00    0.00    0.00 */
+/*             QID =    1.00    0.00    0.00    0.00 */
+
+/*        QJ x QJ  =   -1.00    0.00    0.00    0.00 */
+/*             QID =    1.00    0.00    0.00    0.00 */
+
+/*        QK x QK  =   -1.00    0.00    0.00    0.00 */
+/*             QID =    1.00    0.00    0.00    0.00 */
+
+/*        QID x QI =    0.00    1.00    0.00    0.00 */
+/*              QI =    0.00    1.00    0.00    0.00 */
+
+/*        QI x QID =    0.00    1.00    0.00    0.00 */
+/*              QI =    0.00    1.00    0.00    0.00 */
+
+/*        QID x QJ =    0.00    0.00    1.00    0.00 */
+/*              QJ =    0.00    0.00    1.00    0.00 */
+
+
+/*     2) Compute the composition of two rotation matrices by */
+/*        converting them to quaternions and computing their */
+/*        product, and by directly multiplying the matrices. */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM QXQ_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              DOUBLE PRECISION      CMAT1  ( 3,  3 ) */
+/*              DOUBLE PRECISION      CMAT2  ( 3,  3 ) */
+/*              DOUBLE PRECISION      CMOUT  ( 3,  3 ) */
+/*              DOUBLE PRECISION      Q1     ( 0 : 3 ) */
+/*              DOUBLE PRECISION      Q2     ( 0 : 3 ) */
+/*              DOUBLE PRECISION      QOUT   ( 0 : 3 ) */
+
+/*              INTEGER               I */
+
+/*              DATA                  CMAT1  /  1.D0,  0.D0,  0.D0, */
+/*             .                                0.D0, -1.D0,  0.D0, */
+/*             .                                0.D0,  0.D0, -1.D0  / */
+
+/*              DATA                  CMAT2  /  0.D0,  1.D0,  0.D0, */
+/*             .                                1.D0,  0.D0,  0.D0, */
+/*             .                                0.D0,  0.D0, -1.D0  / */
+
+
+/*        C */
+/*        C     Convert the C-matrices to quaternions. */
+/*        C */
+/*              CALL M2Q ( CMAT1, Q1 ) */
+/*              CALL M2Q ( CMAT2, Q2 ) */
+
+/*        C */
+/*        C     Find the product. */
+/*        C */
+/*              CALL QXQ ( Q1, Q2, QOUT ) */
+
+/*        C */
+/*        C     Convert the result to a C-matrix. */
+/*        C */
+/*              CALL Q2M ( QOUT, CMOUT ) */
+
+/*              WRITE(*,'(A)') 'Using quaternion product:' */
+/*              WRITE(*,'(3F10.4)') (CMOUT(1,I), I = 1, 3) */
+/*              WRITE(*,'(3F10.4)') (CMOUT(2,I), I = 1, 3) */
+/*              WRITE(*,'(3F10.4)') (CMOUT(3,I), I = 1, 3) */
+
+/*        C */
+/*        C     Multiply CMAT1 and CMAT2 directly. */
+/*        C */
+/*              CALL MXM ( CMAT1, CMAT2, CMOUT ) */
+
+/*              WRITE(*,'(A)') 'Using matrix product:' */
+/*              WRITE(*,'(3F10.4)') (CMOUT(1,I), I = 1, 3) */
+/*              WRITE(*,'(3F10.4)') (CMOUT(2,I), I = 1, 3) */
+/*              WRITE(*,'(3F10.4)') (CMOUT(3,I), I = 1, 3) */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        Using quaternion product: */
+/*            0.0000    1.0000    0.0000 */
+/*           -1.0000    0.0000    0.0000 */
+/*            0.0000    0.0000    1.0000 */
+/*        Using matrix product: */
+/*            0.0000    1.0000    0.0000 */
+/*           -1.0000    0.0000    0.0000 */
+/*            0.0000    0.0000    1.0000 */
+
 
 /* $ Restrictions */
 
@@ -403,9 +561,16 @@ static doublereal c_b2 = 1.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.2, 06-JUL-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Created complete code examples from existing example and */
+/*        code fragments. */
 
 /* -    SPICELIB Version 1.0.1, 26-FEB-2008 (NJB) */
 
@@ -419,6 +584,7 @@ static doublereal c_b2 = 1.;
 
 /*     quaternion times quaternion */
 /*     multiply quaternion by quaternion */
+
 /* -& */
 
 /*     SPICELIB functions */

@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYDUPC ( Create a duplicate of a symbol ) */
+/* $Procedure SYDUPC ( Create a duplicate of a symbol ) */
 /* Subroutine */ int sydupc_(char *name__, char *copy, char *tabsym, integer *
 	tabptr, char *tabval, ftnlen name_len, ftnlen copy_len, ftnlen 
 	tabsym_len, ftnlen tabval_len)
@@ -94,59 +94,60 @@ static integer c__1 = 1;
 /*     COPY       I   Name of the new symbol. */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
-
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol to be duplicated. The */
-/*                components associated with NAME will be given to the */
-/*                new symbol COPY. If NAME is not in the symbol table, */
-/*                no duplicate symbol can be made. */
+/*     NAME     is the name of the symbol to be duplicated. */
 
-/*     COPY       is the name of the new symbol. If a symbol with the */
-/*                name COPY already exists in the symbol table, its */
-/*                components are replaced by the components of NAME. */
+/*              The components associated with NAME will be given to the */
+/*              new symbol COPY. If NAME is not in the symbol table, no */
+/*              duplicate symbol can be made. */
+
+/*     COPY     is the name of the new symbol. If a symbol with the name */
+/*              COPY already exists in the symbol table, its components */
+/*              are replaced by the components of NAME. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
+/*     TABVAL   are the components of a character symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      are the components of a character symbol table. */
-/*                 On output, the symbol table contains a new symbol COPY */
-/*                 whose components are the same as the components of */
-/*                 NAME. */
+/*     TABVAL   are the components of a character symbol table. */
+
+/*              On output, the symbol table contains a new symbol COPY */
+/*              whose components are the same as the components of NAME. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the symbol NAME is not in the symbol table, the error */
+/*         SPICE(NOSUCHSYMBOL) is signaled. */
+
+/*     2)  If duplication of the symbol causes an overflow in the */
+/*         name table, the error SPICE(NAMETABLEFULL) is signaled. */
+
+/*     3)  If duplication of the symbol causes an overflow in the */
+/*         pointer table, the error SPICE(POINTERTABLEFULL) is signaled. */
+
+/*     4)  If duplication of the symbol causes an overflow in the */
+/*         value table, the error SPICE(VALUETABLEFULL) is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the symbol NAME is not in the symbol table, the error */
-/*        SPICE(NOSUCHSYMBOL) is signalled. */
-
-/*     2) If duplication of the symbol causes an overflow in the */
-/*        name table, the error SPICE(NAMETABLEFULL) is signalled. */
-
-/*     3) If duplication of the symbol causes an overflow in the */
-/*        pointer table, the error SPICE(POINTERTABLEFULL) is signalled. */
-
-/*     4) If duplication of the symbol causes an overflow in the */
-/*        value table, the error SPICE(VALUETABLEFULL) is signalled. */
 
 /* $ Particulars */
 
 /*     If the symbol NAME is not in the symbol table, no duplicate symbol */
 /*     can be made. */
+
 /*     If the symbol COPY is already in the symbol table, its components */
 /*     are replaced by the components of NAME. */
 
@@ -162,7 +163,7 @@ static integer c__1 = 1;
 
 /*     The code, */
 
-/*     CALL SYDUPC ( 'FERMI', 'HAHN', TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYDUPC ( 'FERMI', 'HAHN', TABSYM, TABPTR, TABVAL ) */
 
 /*     produces the symbol table: */
 
@@ -175,7 +176,7 @@ static integer c__1 = 1;
 
 /*     The code, */
 
-/*     CALL SYDUPC ( 'STRASSMAN', 'HAHN', TABSYM, TABPTR, TABVAL ) */
+/*        CALL SYDUPC ( 'STRASSMAN', 'HAHN', TABSYM, TABPTR, TABVAL ) */
 
 /*     produces the error SPICE(NOSUCHSYMBOL) because the symbol */
 /*     "STRASSMAN" is not in the symbol table. */
@@ -190,17 +191,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

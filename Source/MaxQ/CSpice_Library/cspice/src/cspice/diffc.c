@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      DIFFC ( Difference of two character sets ) */
+/* $Procedure DIFFC ( Difference of two character sets ) */
 /* Subroutine */ int diffc_(char *a, char *b, char *c__, ftnlen a_len, ftnlen 
 	b_len, ftnlen c_len)
 {
@@ -34,7 +34,7 @@
 
 /* $ Abstract */
 
-/*      Take the difference of two character sets to form a third set. */
+/*     Take the difference of two character sets to form a third set. */
 
 /* $ Disclaimer */
 
@@ -63,118 +63,125 @@
 
 /* $ Required_Reading */
 
-/*      SETS */
+/*     SETS */
 
 /* $ Keywords */
 
-/*      CELLS, SETS */
+/*     CELLS */
+/*     SETS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A          I   First input set. */
-/*      B          I   Second input set. */
-/*      C          O   Difference of A and B. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A          I   First input set. */
+/*     B          I   Second input set. */
+/*     C          O   Difference of A and B. */
 
 /* $ Detailed_Input */
 
+/*     A        is a set. */
 
-/*      A           is a set. */
 
-
-/*      B           is a set, distinct from A. */
+/*     B        is a set, distinct from A. */
 
 /* $ Detailed_Output */
 
-/*      C           is a set, distinct from sets A and B, which */
-/*                  contains the difference of A and B (that is, */
-/*                  all of the elements which are in A, but NOT */
-/*                  in B). */
+/*     C        is a set, distinct from sets A and B, which */
+/*              contains the difference of A and B (that is, */
+/*              all of the elements which are in A, but NOT */
+/*              in B). */
 
-/*                  If the size (maximum cardinality) of C is smaller */
-/*                  than the cardinality of the difference of A and B, */
-/*                  then only as many items as will fit in C are */
-/*                  included, and an error is returned. */
+/*              If the size (maximum cardinality) of C is smaller */
+/*              than the cardinality of the difference of A and B, */
+/*              then only as many items as will fit in C are */
+/*              included, and an error is returned. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      The DIFFERENCE of two sets contains every element which is */
-/*      in the first set, but NOT in the second. */
-
-/*            {a,b}      difference  {c,d}     =  {a,b} */
-/*            {a,b,c}                {b,c,d}      {a} */
-/*            {a,b,c,d}              {}           {a,b,c,d} */
-/*            {}                     {a,b,c,d}    {} */
-/*            {}                     {}           {} */
-
-/*      The following call */
-
-/*            CALL DIFFC  ( PLANETS, ASTEROIDS, RESULT ) */
-
-/*      places the difference of the character sets PLANETS and */
-/*      ASTEROIDS into the character set RESULT. */
-
-/*      The output set must be distinct from both of the input sets. */
-/*      For example, the following calls are invalid. */
-
-/*            CALL DIFFI  ( CURRENT,     NEW, CURRENT ) */
-/*            CALL DIFFI  (     NEW, CURRENT, CURRENT ) */
-
-/*      In each of the examples above, whether or not the subroutine */
-/*      signals an error, the results will almost certainly be wrong. */
-/*      Nearly the same effect can be achieved, however, by placing the */
-/*      result into a temporary set, which is immediately copied back */
-/*      into one of the input sets, as shown below. */
-
-/*            CALL DIFFI  ( CURRENT, NEW,  TEMP ) */
-/*            CALL COPYI  ( TEMP,    NEW        ) */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      1) If the difference of the two sets causes an excess of */
-/*         elements, the error SPICE(SETEXCESS) is signalled. */
+/*     1)  If the difference of the two sets causes an excess of */
+/*         elements, the error SPICE(SETEXCESS) is signaled. */
 
-/*      2) If length of the elements of the output set is less than */
+/*     2)  If length of the elements of the output set is less than */
 /*         the length of the elements of the FIRST input set, the */
-/*         error SPICE(ELEMENTSTOOSHORT) is signalled. */
+/*         error SPICE(ELEMENTSTOOSHORT) is signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     None. */
+
+/* $ Examples */
+
+/*     The DIFFERENCE of two sets contains every element which is */
+/*     in the first set, but NOT in the second. */
+
+/*           {a,b}      difference  {c,d}     =  {a,b} */
+/*           {a,b,c}                {b,c,d}      {a} */
+/*           {a,b,c,d}              {}           {a,b,c,d} */
+/*           {}                     {a,b,c,d}    {} */
+/*           {}                     {}           {} */
+
+/*     The following call */
+
+/*           CALL DIFFC  ( PLANETS, ASTEROIDS, RESULT ) */
+
+/*     places the difference of the character sets PLANETS and */
+/*     ASTEROIDS into the character set RESULT. */
+
+/*     The output set must be distinct from both of the input sets. */
+/*     For example, the following calls are invalid. */
+
+/*           CALL DIFFI  ( CURRENT,     NEW, CURRENT ) */
+/*           CALL DIFFI  (     NEW, CURRENT, CURRENT ) */
+
+/*     In each of the examples above, whether or not the subroutine */
+/*     signals an error, the results will almost certainly be wrong. */
+/*     Nearly the same effect can be achieved, however, by placing the */
+/*     result into a temporary set, which is immediately copied back */
+/*     into one of the input sets, as shown below. */
+
+/*           CALL DIFFI  ( CURRENT, NEW,  TEMP ) */
+/*           CALL COPYI  ( TEMP,    NEW        ) */
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      C.A. Curzon     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -186,17 +193,18 @@
 
 /* -    Beta Version 2.0.0, 21-DEC-1988 (NJB) */
 
-/*        Error signalled if output set elements are not long enough. */
+/*        Error signaled if output set elements are not long enough. */
 /*        Length must be at least max of lengths of input elements. */
-/*        Also, calling protocol for EXCESS has been changed.  Call to */
+/*        Also, calling protocol for EXCESS has been changed. Call to */
 /*        SETMSG removed. */
 
 /*        Also, in the overflow case, the number of excess elements was */
-/*        computed incorrectly; this has been fixed.  The problem was */
+/*        computed incorrectly; this has been fixed. The problem was */
 /*        that OVER was incremented in all cases of the overflow IF */
 /*        block, rather than only in the cases where the cardinality of */
 /*        the output cell would have been incremented if there were */
 /*        enough room. */
+
 /* -& */
 
 /*     SPICELIB functions */

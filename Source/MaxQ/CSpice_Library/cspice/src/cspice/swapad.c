@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SWAPAD ( Swap elements within a DP array ) */
+/* $Procedure SWAPAD ( Swap elements within a DP array ) */
 /* Subroutine */ int swapad_(integer *n, integer *locn, integer *m, integer *
 	locm, doublereal *array)
 {
@@ -73,26 +73,26 @@
 /*     LOCN       I   Location of the first group. */
 /*     M          I   Number of elements in the second group. */
 /*     LOCM       I   Location of the second group. */
-/*     ARRAY     I/O  The array. */
+/*     ARRAY     I-O  The array. */
 
 /* $ Detailed_Input */
 
 /*     N, */
-/*     LOCN        define the first group of elements to be exchanged: */
-/*                 ARRAY(LOCN) through ARRAY(LOCN+N-1). */
+/*     LOCN     define the first group of elements to be exchanged: */
+/*              ARRAY(LOCN) through ARRAY(LOCN+N-1). */
 
 /*     M, */
-/*     LOCM        define the second group of elements to be exchanged: */
-/*                 ARRAY(LOCM) through ARRAY(LOCM+M-1). These must be */
-/*                 distinct from the first group. */
+/*     LOCM     define the second group of elements to be exchanged: */
+/*              ARRAY(LOCM) through ARRAY(LOCM+M-1). These must be */
+/*              distinct from the first group. */
 
-/*     ARRAY       on input contains both groups of elements in their */
-/*                 original locations. */
+/*     ARRAY    on input contains both groups of elements in their */
+/*              original locations. */
 
 /* $ Detailed_Output */
 
-/*     ARRAY       on output contains the input array with the indicated */
-/*                 groups of elements exchanged. */
+/*     ARRAY    on output contains the input array with the indicated */
+/*              groups of elements exchanged. */
 
 /* $ Parameters */
 
@@ -100,14 +100,14 @@
 
 /* $ Exceptions */
 
-/*     1) If the elements to be swapped are not distinct, the error */
-/*        SPICE(NOTDISTINCT) is signalled. */
+/*     1)  If the elements to be swapped are not distinct, the error */
+/*         SPICE(NOTDISTINCT) is signaled. */
 
-/*     2) If LOCN or LOCM is less than one, the error */
-/*        SPICE(INVALIDINDEX) is signalled. */
+/*     2)  If LOCN or LOCM is less than one, the error */
+/*         SPICE(INVALIDINDEX) is signaled. */
 
-/*     3) If the number of elements to be swapped is less than zero, */
-/*        the error SPICE(INVALIDARGUMENT) is signalled. */
+/*     3)  If the number of elements to be swapped is less than zero, */
+/*         the error SPICE(INVALIDARGUMENT) is signaled. */
 
 /* $ Files */
 
@@ -206,11 +206,20 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.1, 18-MAY-2010 (BVS) */
 
@@ -226,7 +235,7 @@
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -241,7 +250,7 @@
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in CYCLAD call. */
 
-/* -    Beta Version 2.0.0, 3-JAN-1989 (HAN) */
+/* -    Beta Version 2.0.0, 03-JAN-1989 (HAN) */
 
 /*        The "Particulars" section stated that by setting N [M] */
 /*        to zero, the second [first] group is removed from its current */
@@ -251,7 +260,7 @@
 
 /*        New checks for locations were added. LOCN and LOCM must be */
 /*        greater than one, not zero as specified before. If they are */
-/*        not, and error is signalled. */
+/*        not, and error is signaled. */
 
 /*        More examples were added to the "Examples" section, and */
 /*        the long error messages were revised. */

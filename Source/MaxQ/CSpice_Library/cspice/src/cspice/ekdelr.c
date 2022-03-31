@@ -9,7 +9,7 @@
 
 static integer c__3 = 3;
 
-/* $Procedure      EKDELR ( EK, delete record from segment ) */
+/* $Procedure EKDELR ( EK, delete record from segment ) */
 /* Subroutine */ int ekdelr_(integer *handle, integer *segno, integer *recno)
 {
     /* System generated locals */
@@ -449,7 +449,7 @@ static integer c__3 = 3;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     SEGNO      I   Segment number. */
@@ -457,19 +457,19 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is a file handle of an EK open for write access. */
+/*     HANDLE   is a file handle of an EK open for write access. */
 
-/*     SEGNO          is the number of the segment from which to */
-/*                    delete the specified record. */
+/*     SEGNO    is the number of the segment from which to */
+/*              delete the specified record. */
 
-/*     RECNO          is the index of the record to delete.  RECNO must */
-/*                    be in the range 1 : NREC, where NREC is the */
-/*                    number of records in the segment prior to the */
-/*                    insertion. */
+/*     RECNO    is the index of the record to delete. RECNO must */
+/*              be in the range 1 : NREC, where NREC is the */
+/*              number of records in the segment prior to the */
+/*              insertion. */
 
 /* $ Detailed_Output */
 
-/*     None.  See the $Particulars section for a description of the */
+/*     None. See the $Particulars section for a description of the */
 /*     effect of this routine. */
 
 /* $ Parameters */
@@ -478,39 +478,39 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1)  If HANDLE is invalid, the error will be diagnosed by routines */
-/*         called by this routine.  The file will not be modified. */
+/*     1)  If HANDLE is invalid, an error is signaled by a routine in the */
+/*         call tree of this routine. The file will not be modified. */
 
 /*     2)  If SEGNO is out of range, the error SPICE(INVALIDINDEX) */
-/*         will be signalled.  The file will not be modified. */
+/*         is signaled. The file will not be modified. */
 
 /*     3)  If RECNO is out of range, the error SPICE(INVALIDINDEX) */
-/*         will be signalled.  The file will not be modified. */
+/*         is signaled. The file will not be modified. */
 
 /*     4)  If an I/O error occurs while reading or writing the indicated */
-/*         file, the error will be diagnosed by routines called by this */
-/*         routine.  The file may be corrupted. */
+/*         file, the error is signaled by a routine in the call tree of */
+/*         this routine. The file may be corrupted. */
 
 /* $ Files */
 
-/*     See the EK Required Reading for a discussion of the EK file */
+/*     See the EK Required Reading ek.req for a discussion of the EK file */
 /*     format. */
 
 /* $ Particulars */
 
-/*     This routine operates by side effects:  it deletes a record */
-/*     from an EK segment.  Deleting a record implies: */
+/*     This routine operates by side effects: it deletes a record */
+/*     from an EK segment. Deleting a record implies: */
 
 /*        1) All column entries in the record are deleted. */
 
 /*        2) Link counts are decremented for data pages containing */
-/*           column entries in the record to be deleted.  Pages whose */
+/*           column entries in the record to be deleted. Pages whose */
 /*           link counts drop to zero are freed. */
 
 /*        3) All column indexes are updated for the parent segment. */
 
 /*        4) The link count is decremented for the page containing the */
-/*           record pointer structure of the record to be deleted.  If */
+/*           record pointer structure of the record to be deleted. If */
 /*           the link count drops to zero, the page is freed. */
 
 /*        5) The pointer to the deleted record is deleted from the */
@@ -563,11 +563,18 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
 
-/* -    Beta Version 1.0.0, 19-DEC-1995 (NJB) */
+/* -    SPICELIB Version 1.1.0, 26-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 19-DEC-1995 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

@@ -415,227 +415,238 @@ static logical c_false = FALSE_;
 /*     OBSRVR     I   Name of the observing body. */
 /*     STEP       I   Step size in seconds for finding FOV events. */
 /*     CNFINE     I   SPICE window to which the search is restricted. */
-/*     RESULT     O   SPICE window containing results. */
-
+/*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
-/*     INST       indicates the name of an instrument, such as a */
-/*                spacecraft-mounted framing camera, the field of view */
-/*                (FOV) of which is to be used for a target intersection */
-/*                search: times when the specified target intersects the */
-/*                region of space corresponding to the FOV are sought. */
+/*     INST     indicates the name of an instrument, such as a */
+/*              spacecraft-mounted framing camera, the field of view */
+/*              (FOV) of which is to be used for a target intersection */
+/*              search: times when the specified target intersects the */
+/*              region of space corresponding to the FOV are sought. */
 
-/*                The position of the instrument designated by INST is */
-/*                considered to coincide with that of the ephemeris */
-/*                object designated by the input argument OBSRVR (see */
-/*                description below). */
+/*              The position of the instrument designated by INST is */
+/*              considered to coincide with that of the ephemeris */
+/*              object designated by the input argument OBSRVR (see */
+/*              description below). */
 
-/*                INST must have a corresponding NAIF ID and a frame */
-/*                defined, as is normally done in a frame kernel. It */
-/*                must also have an associated reference frame and a FOV */
-/*                shape, boresight and boundary vertices (or reference */
-/*                vector and reference angles) defined, as is usually */
-/*                done in an instrument kernel. */
+/*              INST must have a corresponding NAIF ID and a frame */
+/*              defined, as is normally done in a frame kernel. It */
+/*              must also have an associated reference frame and a FOV */
+/*              shape, boresight and boundary vertices (or reference */
+/*              vector and reference angles) defined, as is usually */
+/*              done in an instrument kernel. */
 
-/*                See the header of the SPICELIB routine GETFOV for a */
-/*                description of the required parameters associated with */
-/*                an instrument. */
+/*              See the header of the SPICELIB routine GETFOV for a */
+/*              description of the required parameters associated with */
+/*              an instrument. */
 
+/*     TARGET   is the name of the target body, the appearances of */
+/*              which in the specified instrument's field of view are */
+/*              sought. The body must be an ephemeris object. */
 
-/*     TARGET     is the name of the target body, the appearances of */
-/*                which in the specified instrument's field of view are */
-/*                sought. The body must be an ephemeris object. */
+/*              Optionally, you may supply the integer NAIF ID code */
+/*              for the body as a string. For example both 'MOON' and */
+/*              '301' are legitimate strings that designate the Moon. */
 
-/*                Optionally, you may supply the integer NAIF ID code */
-/*                for the body as a string. For example both 'MOON' and */
-/*                '301' are legitimate strings that designate the Moon. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string TARGET. */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string TARGET. */
+/*     TSHAPE   is a string indicating the geometric model used to */
+/*              represent the shape of the target body. The supported */
+/*              options are: */
 
+/*                 'ELLIPSOID'     Use a triaxial ellipsoid model, */
+/*                                 with radius values provided via the */
+/*                                 kernel pool. A kernel variable */
+/*                                 having a name of the form */
 
-/*     TSHAPE     is a string indicating the geometric model used to */
-/*                represent the shape of the target body. The supported */
-/*                options are: */
+/*                                    BODYnnn_RADII */
 
-/*                   'ELLIPSOID'     Use a triaxial ellipsoid model, */
-/*                                   with radius values provided via the */
-/*                                   kernel pool. A kernel variable */
-/*                                   having a name of the form */
+/*                                 where nnn represents the NAIF */
+/*                                 integer code associated with the */
+/*                                 body, must be present in the kernel */
+/*                                 pool. This variable must be */
+/*                                 associated with three numeric */
+/*                                 values giving the lengths of the */
+/*                                 ellipsoid's X, Y, and Z semi-axes. */
 
-/*                                      'BODYnnn_RADII' */
+/*                 'POINT'         Treat the body as a single point. */
 
-/*                                   where nnn represents the NAIF */
-/*                                   integer code associated with the */
-/*                                   body, must be present in the kernel */
-/*                                   pool. This variable must be */
-/*                                   associated with three numeric */
-/*                                   values giving the lengths of the */
-/*                                   ellipsoid's X, Y, and Z semi-axes. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string TSHAPE. */
 
-/*                   'POINT'         Treat the body as a single point. */
+/*     TFRAME   is the name of the body-fixed, body-centered reference */
+/*              frame associated with the target body. Examples of */
+/*              such names are 'IAU_SATURN' (for Saturn) and 'ITRF93' */
+/*              (for the Earth). */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string TSHAPE. */
+/*              If the target body is modeled as a point, TFRAME */
+/*              is ignored and should be left blank. */
 
+/*              Case and leading or trailing blanks bracketing a */
+/*              non-blank frame name are not significant in the string */
+/*              TFRAME. */
 
-/*     TFRAME     is the name of the body-fixed, body-centered reference */
-/*                frame associated with the target body. Examples of */
-/*                such names are 'IAU_SATURN' (for Saturn) and 'ITRF93' */
-/*                (for the Earth). */
+/*     ABCORR   indicates the aberration corrections to be applied */
+/*              when computing the target's position and orientation. */
 
-/*                If the target body is modeled as a point, TFRAME */
-/*                is ignored and should be left blank. */
+/*              For remote sensing applications, where the apparent */
+/*              position and orientation of the target seen by the */
+/*              observer are desired, normally either of the */
+/*              corrections */
 
-/*                Case and leading or trailing blanks bracketing a */
-/*                non-blank frame name are not significant in the string */
-/*                TFRAME. */
+/*                 'LT+S' */
+/*                 'CN+S' */
 
+/*              should be used. These and the other supported options */
+/*              are described below. */
 
-/*     ABCORR     indicates the aberration corrections to be applied */
-/*                when computing the target's position and orientation. */
+/*              Supported aberration correction options for */
+/*              observation (the case where radiation is received by */
+/*              observer at ET) are: */
 
-/*                For remote sensing applications, where the apparent */
-/*                position and orientation of the target seen by the */
-/*                observer are desired, normally either of the */
-/*                corrections */
+/*                 'NONE'         No correction. */
 
-/*                   'LT+S' */
-/*                   'CN+S' */
+/*                 'LT'           Light time only */
 
-/*                should be used. These and the other supported options */
-/*                are described below. */
+/*                 'LT+S'         Light time and stellar aberration. */
 
-/*                Supported aberration correction options for */
-/*                observation (the case where radiation is received by */
-/*                observer at ET) are: */
+/*                 'CN'           Converged Newtonian (CN) light time. */
 
-/*                   'NONE'         No correction. */
-/*                   'LT'           Light time only */
-/*                   'LT+S'         Light time and stellar aberration. */
-/*                   'CN'           Converged Newtonian (CN) light time. */
-/*                   'CN+S'         CN light time and stellar aberration. */
+/*                 'CN+S'         CN light time and stellar aberration. */
 
-/*                Supported aberration correction options for */
-/*                transmission (the case where radiation is emitted from */
-/*                observer at ET) are: */
+/*              Supported aberration correction options for */
+/*              transmission (the case where radiation is emitted from */
+/*              observer at ET) are: */
 
-/*                   'XLT'          Light time only. */
-/*                   'XLT+S'        Light time and stellar aberration. */
-/*                   'XCN'          Converged Newtonian (CN) light time. */
-/*                   'XCN+S'        CN light time and stellar aberration. */
+/*                 'XLT'          Light time only. */
 
-/*                For detailed information, see the GF Required Reading, */
-/*                gf.req. */
+/*                 'XLT+S'        Light time and stellar aberration. */
 
-/*                Case, leading and trailing blanks are not significant */
-/*                in the string ABCORR. */
+/*                 'XCN'          Converged Newtonian (CN) light time. */
 
+/*                 'XCN+S'        CN light time and stellar aberration. */
 
-/*     OBSRVR     is the name of the body from which the target is */
-/*                observed. The instrument designated by INST is treated */
-/*                as if it were co-located with the observer. */
+/*              For detailed information, see the GF Required Reading, */
+/*              gf.req. */
 
-/*                Optionally, you may supply the integer NAIF ID code */
-/*                for the body as a string. */
+/*              Case, leading and trailing blanks are not significant */
+/*              in the string ABCORR. */
 
-/*                Case and leading or trailing blanks are not */
-/*                significant in the string OBSRVR. */
+/*     OBSRVR   is the name of the body from which the target is */
+/*              observed. The instrument designated by INST is treated */
+/*              as if it were co-located with the observer. */
 
+/*              Optionally, you may supply the integer NAIF ID code */
+/*              for the body as a string. */
 
-/*     STEP       is the step size to be used in the search. STEP must */
-/*                be shorter than any interval, within the confinement */
-/*                window, over which the specified condition is met. In */
-/*                other words, STEP must be shorter than the shortest */
-/*                visibility event that the user wishes to detect. STEP */
-/*                also must be shorter than the minimum duration */
-/*                separating any two visibility events. However, STEP */
-/*                must not be *too* short, or the search will take an */
-/*                unreasonable amount of time. */
+/*              Case and leading or trailing blanks are not */
+/*              significant in the string OBSRVR. */
 
-/*                The choice of STEP affects the completeness but not */
-/*                the precision of solutions found by this routine; the */
-/*                precision is controlled by the convergence tolerance. */
-/*                See the discussion of the parameter CNVTOL for */
-/*                details. */
+/*     STEP     is the step size to be used in the search. STEP must */
+/*              be shorter than any interval, within the confinement */
+/*              window, over which the specified condition is met. In */
+/*              other words, STEP must be shorter than the shortest */
+/*              visibility event that the user wishes to detect. STEP */
+/*              also must be shorter than the minimum duration */
+/*              separating any two visibility events. However, STEP */
+/*              must not be *too* short, or the search will take an */
+/*              unreasonable amount of time. */
 
-/*                STEP has units of seconds. */
+/*              The choice of STEP affects the completeness but not */
+/*              the precision of solutions found by this routine; the */
+/*              precision is controlled by the convergence tolerance. */
+/*              See the discussion of the parameter CNVTOL for */
+/*              details. */
 
+/*              STEP has units of seconds. */
 
-/*     CNFINE     is a SPICE window that confines the time period over */
-/*                which the specified search is conducted. CNFINE may */
-/*                consist of a single interval or a collection of */
-/*                intervals. */
+/*     CNFINE   is a SPICE window that confines the time period over */
+/*              which the specified search is conducted. CNFINE may */
+/*              consist of a single interval or a collection of */
+/*              intervals. */
 
-/*                The endpoints of the time intervals comprising CNFINE */
-/*                are interpreted as seconds past J2000 TDB. */
+/*              The endpoints of the time intervals comprising CNFINE */
+/*              are interpreted as seconds past J2000 TDB. */
 
-/*                See the Examples section below for a code example */
-/*                that shows how to create a confinement window. */
+/*              See the $Examples section below for a code example */
+/*              that shows how to create a confinement window. */
 
-/*                CNFINE must be initialized by the caller via the */
-/*                SPICELIB routine SSIZED. */
+/*              CNFINE must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
+
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFTFOV conducts its search. */
 
 /* $ Detailed_Output */
 
-/*     RESULT     is a SPICE window representing the set of time */
-/*                intervals, within the confinement period, when the */
-/*                target body is visible; that is, when the target body */
-/*                intersects the space bounded by the specified */
-/*                instrument's field of view. */
+/*     RESULT   is a SPICE window representing the set of time intervals, */
+/*              within the confinement period, when the target body is */
+/*              visible; that is, when the target body intersects the */
+/*              space bounded by the specified instrument's field of */
+/*              view. */
 
-/*                The endpoints of the time intervals comprising RESULT */
-/*                are interpreted as seconds past J2000 TDB. */
+/*              The endpoints of the time intervals comprising RESULT are */
+/*              interpreted as seconds past J2000 TDB. */
 
-/*                If RESULT is non-empty on input, its contents */
-/*                will be discarded before GFTFOV conducts its */
-/*                search. */
+/*              If no times within the confinement window satisfy the */
+/*              search criteria, RESULT will be returned with a */
+/*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL     is the lower bound for SPICE cell arrays. */
+/*     LBCELL   is the lower bound for SPICE cell arrays. */
 
-/*     CNVTOL     is the convergence tolerance used for finding */
-/*                endpoints of the intervals comprising the result */
-/*                window. CNVTOL is used to determine when binary */
-/*                searches for roots should terminate: when a root is */
-/*                bracketed within an interval of length CNVTOL, the */
-/*                root is considered to have been found. */
+/*     CNVTOL   is the convergence tolerance used for finding */
+/*              endpoints of the intervals comprising the result */
+/*              window. CNVTOL is used to determine when binary */
+/*              searches for roots should terminate: when a root is */
+/*              bracketed within an interval of length CNVTOL, the */
+/*              root is considered to have been found. */
 
-/*                The accuracy, as opposed to precision, of roots found */
-/*                by this routine depends on the accuracy of the input */
-/*                data. In most cases, the accuracy of solutions will be */
-/*                inferior to their precision. */
+/*              The accuracy, as opposed to precision, of roots found */
+/*              by this routine depends on the accuracy of the input */
+/*              data. In most cases, the accuracy of solutions will be */
+/*              inferior to their precision. */
 
-/*     MAXVRT     is the maximum number of vertices that may be used */
-/*                to define the boundary of the specified instrument's */
-/*                field of view. */
+/*     MAXVRT   is the maximum number of vertices that may be used */
+/*              to define the boundary of the specified instrument's */
+/*              field of view. */
 
-/*     MARGIN     is a small positive number used to constrain the */
-/*                orientation of the boundary vectors of polygonal */
-/*                FOVs. Such FOVs must satisfy the following constraints: */
+/*     MARGIN   is a small positive number used to constrain the */
+/*              orientation of the boundary vectors of polygonal */
+/*              FOVs. Such FOVs must satisfy the following constraints: */
 
-/*                   1)  The boundary vectors must be contained within */
-/*                       a right circular cone of angular radius less */
-/*                       than than (pi/2) - MARGIN radians; in other */
-/*                       words, there must be a vector A such that all */
-/*                       boundary vectors have angular separation from */
-/*                       A of less than (pi/2)-MARGIN radians. */
+/*                 1)  The boundary vectors must be contained within */
+/*                     a right circular cone of angular radius less */
+/*                     than than (pi/2) - MARGIN radians; in other */
+/*                     words, there must be a vector A such that all */
+/*                     boundary vectors have angular separation from */
+/*                     A of less than (pi/2)-MARGIN radians. */
 
-/*                   2)  There must be a pair of boundary vectors U, V */
-/*                       such that all other boundary vectors lie in */
-/*                       the same half space bounded by the plane */
-/*                       containing U and V. Furthermore, all other */
-/*                       boundary vectors must have orthogonal */
-/*                       projections onto a specific plane normal to */
-/*                       this plane (the normal plane contains the angle */
-/*                       bisector defined by U and V) such that the */
-/*                       projections have angular separation of at least */
-/*                       2*MARGIN radians from the plane spanned by U */
-/*                       and V. */
+/*                 2)  There must be a pair of boundary vectors U, V */
+/*                     such that all other boundary vectors lie in */
+/*                     the same half space bounded by the plane */
+/*                     containing U and V. Furthermore, all other */
+/*                     boundary vectors must have orthogonal */
+/*                     projections onto a specific plane normal to */
+/*                     this plane (the normal plane contains the angle */
+/*                     bisector defined by U and V) such that the */
+/*                     projections have angular separation of at least */
+/*                     2*MARGIN radians from the plane spanned by U */
+/*                     and V. */
 
-/*                 MARGIN is currently set to 1.D-12. */
+/*               MARGIN is currently set to 1.D-12. */
 
 
 /*     See INCLUDE file gf.inc for declarations and descriptions of */
@@ -650,9 +661,9 @@ static logical c_false = FALSE_;
 /*         to run unacceptably slowly and in some cases, find spurious */
 /*         roots. */
 
-/*         This routine does not diagnose invalid step sizes, except */
-/*         that if the step size is non-positive, the error */
-/*         SPICE(INVALIDSTEPSIZE) will be signaled. */
+/*         This routine does not diagnose invalid step sizes, except that */
+/*         if the step size is non-positive, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  Due to numerical errors, in particular, */
 
@@ -669,11 +680,11 @@ static logical c_false = FALSE_;
 /*         WNCOND can be used to contract the result window. */
 
 /*     3)  If the name of either the target or observer cannot be */
-/*         translated to a NAIF ID code, the error will be diagnosed by */
+/*         translated to a NAIF ID code, an error is signaled by */
 /*         a routine in the call tree of this routine. */
 
 /*     4)  If the specified aberration correction is an unrecognized */
-/*         value, the error will be diagnosed and signaled by a routine */
+/*         value, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
 /*     5)  If the radii of a target body modeled as an ellipsoid cannot */
@@ -683,59 +694,60 @@ static logical c_false = FALSE_;
 /*            'BODYnnn_RADII' */
 
 /*         where nnn represents the NAIF integer code associated with */
-/*         the body, the error will be diagnosed by a routine in the */
+/*         the body, an error is signaled by a routine in the */
 /*         call tree of this routine. */
 
-/*     6)  If the target body coincides with the observer body OBSRVR, */
-/*         the error will be diagnosed by a routine in the call tree of */
-/*         this routine. */
+/*     6)  If the target body coincides with the observer body OBSRVR, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     7)  If the body model specifier TSHAPE is invalid, the error will */
-/*         be diagnosed either here or by a routine in the call tree of */
-/*         this routine. */
+/*     7)  If the body model specifier TSHAPE is invalid, an error is */
+/*         signaled by either this routine or a routine in the call tree */
+/*         of this routine. */
 
 /*     8)  If a target body-fixed reference frame associated with a */
-/*         non-point target is not recognized, the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*         non-point target is not recognized, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
-/*     9)  If a target body-fixed reference frame is not centered at */
-/*         the corresponding target body,  the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*     9)  If a target body-fixed reference frame is not centered at the */
+/*         corresponding target body, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /*     10) If the instrument name INST does not have corresponding NAIF */
-/*         ID code, the error will be diagnosed by a routine in the call */
+/*         ID code, an error is signaled by a routine in the call */
 /*         tree of this routine. */
 
 /*     11) If the FOV parameters of the instrument are not present in */
-/*         the kernel pool, the error will be be diagnosed by routines */
+/*         the kernel pool, an error is signaled by a routine */
 /*         in the call tree of this routine. */
 
-/*     12) If the FOV boundary has more than MAXVRT vertices, the error */
-/*         will be be diagnosed by routines in the call tree of this */
+/*     12) If the FOV boundary has more than MAXVRT vertices, an error */
+/*         is signaled by a routine in the call tree of this */
 /*         routine. */
 
 /*     13) If the instrument FOV is polygonal, and this routine cannot */
 /*         find a ray R emanating from the FOV vertex such that maximum */
 /*         angular separation of R and any FOV boundary vector is within */
-/*         the limit (pi/2)-MARGIN radians, the error will be diagnosed */
+/*         the limit (pi/2)-MARGIN radians, an error is signaled */
 /*         by a routine in the call tree of this routine. If the FOV */
 /*         is any other shape, the same error check will be applied with */
 /*         the instrument boresight vector serving the role of R. */
 
 /*     14) If the loaded kernels provide insufficient data to compute a */
-/*         requested state vector, the error will be diagnosed by a */
+/*         requested state vector, an error is signaled by a */
 /*         routine in the call tree of this routine. */
 
 /*     15) If an error occurs while reading an SPK or other kernel file, */
-/*         the error will be diagnosed by a routine in the call tree */
+/*         the error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*     16) If the output SPICE window RESULT has insufficient capacity */
+/*     16) If the output SPICE window RESULT has size less than 2, the */
+/*         error SPICE(WINDOWTOOSMALL) is signaled. */
+
+/*     17) If the output SPICE window RESULT has insufficient capacity */
 /*         to contain the number of intervals on which the specified */
-/*         visibility condition is met, the error will be diagnosed */
-/*         by a routine in the call tree of this routine. If the result */
-/*         window has size less than 2, the error SPICE(WINDOWTOOSMALL) */
-/*         will be signaled by this routine. */
+/*         visibility condition is met, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -744,53 +756,53 @@ static logical c_false = FALSE_;
 
 /*     The following data are required: */
 
-/*        - SPK data:  ephemeris data for target and observer that */
-/*          describes the ephemeris of these objects for the period */
-/*          defined by the confinement window, 'CNFINE' must be */
-/*          loaded.  If aberration corrections are used, the states of */
-/*          target and observer relative to the solar system barycenter */
-/*          must be calculable from the available ephemeris data. */
-/*          Typically ephemeris data are made available by loading one */
-/*          or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for target and observer that */
+/*        describes the ephemeris of these objects for the period */
+/*        defined by the confinement window, CNFINE must be */
+/*        loaded. If aberration corrections are used, the states of */
+/*        target and observer relative to the solar system barycenter */
+/*        must be calculable from the available ephemeris data. */
+/*        Typically ephemeris data are made available by loading one */
+/*        or more SPK files via FURNSH. */
 
-/*        - Frame data:  if a frame definition is required to convert */
-/*          the observer and target states to the body-fixed frame of */
-/*          the target, that definition must be available in the kernel */
-/*          pool. Typically the definitions of frames not already */
-/*          built-in to SPICE are supplied by loading a frame kernel. */
+/*     -  Frame data: if a frame definition is required to convert */
+/*        the observer and target states to the body-fixed frame of */
+/*        the target, that definition must be available in the kernel */
+/*        pool. Typically the definitions of frames not already */
+/*        built-in to SPICE are supplied by loading a frame kernel. */
 
-/*          Data defining the reference frame associated with the */
-/*          instrument designated by INST must be available in the */
-/*          kernel pool. Additionally the name INST must be associated */
-/*          with an ID code. Normally these data are  made available by */
-/*          loading a frame kernel via FURNSH. */
+/*        Data defining the reference frame associated with the */
+/*        instrument designated by INST must be available in the */
+/*        kernel pool. Additionally the name INST must be associated */
+/*        with an ID code. Normally these data are  made available by */
+/*        loading a frame kernel via FURNSH. */
 
-/*        - IK data: the kernel pool must contain data such that */
-/*          the SPICELIB routine GETFOV may be called to obtain */
-/*          parameters for INST. Normally such data are provided by */
-/*          an IK via FURNSH. */
+/*     -  IK data: the kernel pool must contain data such that */
+/*        the SPICELIB routine GETFOV may be called to obtain */
+/*        parameters for INST. Normally such data are provided by */
+/*        an IK via FURNSH. */
 
 /*     The following data may be required: */
 
-/*        - PCK data: bodies modeled as triaxial ellipsoids must have */
-/*          orientation data provided by variables in the kernel pool. */
-/*          Typically these data are made available by loading a text */
-/*          PCK file via FURNSH. */
+/*     -  PCK data: bodies modeled as triaxial ellipsoids must have */
+/*        orientation data provided by variables in the kernel pool. */
+/*        Typically these data are made available by loading a text */
+/*        PCK file via FURNSH. */
 
-/*          Bodies modeled as triaxial ellipsoids must have semi-axis */
-/*          lengths provided by variables in the kernel pool. Typically */
-/*          these data are made available by loading a text PCK file via */
-/*          FURNSH. */
+/*        Bodies modeled as triaxial ellipsoids must have semi-axis */
+/*        lengths provided by variables in the kernel pool. Typically */
+/*        these data are made available by loading a text PCK file via */
+/*        FURNSH. */
 
-/*        - CK data: if the instrument frame is fixed to a spacecraft, */
-/*          at least one CK file will be needed to permit transformation */
-/*          of vectors between that frame and both J2000 and the target */
-/*          body-fixed frame. */
+/*     -  CK data: if the instrument frame is fixed to a spacecraft, */
+/*        at least one CK file will be needed to permit transformation */
+/*        of vectors between that frame and both J2000 and the target */
+/*        body-fixed frame. */
 
-/*        - SCLK data:  if a CK file is needed, an associated SCLK */
-/*          kernel is required to enable conversion between encoded SCLK */
-/*          (used to time-tag CK data) and barycentric dynamical time */
-/*          (TDB). */
+/*     -  SCLK data: if a CK file is needed, an associated SCLK */
+/*        kernel is required to enable conversion between encoded SCLK */
+/*        (used to time-tag CK data) and barycentric dynamical time */
+/*        (TDB). */
 
 /*     Kernel data are normally loaded once per program run, NOT every */
 /*     time this routine is called. */
@@ -905,11 +917,10 @@ static logical c_false = FALSE_;
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
-
 
 /*     1) Search for times when Saturn's satellite Phoebe is within */
 /*        the FOV of the Cassini narrow angle camera (CASSINI_ISS_NAC). */
@@ -940,199 +951,213 @@ static logical c_false = FALSE_;
 /*           The names and contents of the kernels referenced */
 /*           by this meta-kernel are as follows: */
 
-/*              File name                     Contents */
-/*              ---------                     -------- */
-/*              naif0009.tls                  Leapseconds */
-/*              cpck05Mar2004.tpc             Satellite orientation and */
-/*                                            radii */
-/*              981005_PLTEPH-DE405S.bsp      Planetary ephemeris */
-/*              020514_SE_SAT105.bsp          Satellite ephemeris */
-/*              030201AP_SK_SM546_T45.bsp     Spacecraft ephemeris */
-/*              cas_v37.tf                    Cassini FK */
-/*              04135_04171pc_psiv2.bc        Cassini bus CK */
-/*              cas00084.tsc                  Cassini SCLK kernel */
-/*              cas_iss_v09.ti                Cassini IK */
+/*              File name                       Contents */
+/*              -----------------------------   ---------------------- */
+/*              naif0012.tls                    Leapseconds */
+/*              pck00010.tpc                    Satellite orientation */
+/*                                              and radii */
+/*              041014R_SCPSE_01066_04199.bsp   CASSINI, planetary and */
+/*                                              Saturn satellite */
+/*                                              ephemeris */
+/*              cas_v40.tf                      Cassini FK */
+/*              04161_04164ra.bc                Cassini bus CK */
+/*              cas00071.tsc                    Cassini SCLK kernel */
+/*              cas_iss_v10.ti                  Cassini IK */
 
 
 /*           \begindata */
 
-/*              KERNELS_TO_LOAD = ( 'naif0009.tls', */
-/*                                  'cpck05Mar2004.tpc', */
-/*                                  '981005_PLTEPH-DE405S.bsp', */
-/*                                  '020514_SE_SAT105.bsp', */
-/*                                  '030201AP_SK_SM546_T45.bsp', */
-/*                                  'cas_v37.tf', */
-/*                                  '04135_04171pc_psiv2.bc', */
-/*                                  'cas00084.tsc', */
-/*                                  'cas_iss_v09.ti'            ) */
+/*              KERNELS_TO_LOAD = ( 'naif0012.tls', */
+/*                                  'pck00010.tpc', */
+/*                                  '041014R_SCPSE_01066_04199.bsp', */
+/*                                  'cas_v40.tf', */
+/*                                  '04161_04164ra.bc', */
+/*                                  'cas00071.tsc', */
+/*                                  'cas_iss_v10.ti'            ) */
 /*           \begintext */
 
+/*           End of meta-kernel */
 
 
 /*        Example code begins here. */
 
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           INTEGER               WNCARD */
+/*              PROGRAM GFTFOV_EX1 */
+/*              IMPLICIT NONE */
 
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META   = 'gftfov_ex1.tm' ) */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              INTEGER               WNCARD */
 
-/*           CHARACTER*(*)         TIMFMT */
-/*           PARAMETER           ( TIMFMT = */
-/*          .      'YYYY-MON-DD HR:MN:SC.######::TDB (TDB)' ) */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'gftfov_ex1.tm' ) */
 
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
+/*              CHARACTER*(*)         TIMFMT */
+/*              PARAMETER           ( TIMFMT = */
+/*             .      'YYYY-MON-DD HR:MN:SC.######::TDB' ) */
 
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 10000 ) */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*           INTEGER               CORLEN */
-/*           PARAMETER           ( CORLEN = 10 ) */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 10000 ) */
 
-/*           INTEGER               BDNMLN */
-/*           PARAMETER           ( BDNMLN = 36 ) */
+/*              INTEGER               CORLEN */
+/*              PARAMETER           ( CORLEN = 10 ) */
 
-/*           INTEGER               FRNMLN */
-/*           PARAMETER           ( FRNMLN = 32 ) */
+/*              INTEGER               BDNMLN */
+/*              PARAMETER           ( BDNMLN = 36 ) */
 
-/*           INTEGER               SHPLEN */
-/*           PARAMETER           ( SHPLEN = 25 ) */
+/*              INTEGER               FRNMLN */
+/*              PARAMETER           ( FRNMLN = 32 ) */
 
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 35 ) */
+/*              INTEGER               SHPLEN */
+/*              PARAMETER           ( SHPLEN = 25 ) */
 
-/*           INTEGER               LNSIZE */
-/*           PARAMETER           ( LNSIZE = 80 ) */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 35 ) */
 
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(CORLEN)    ABCORR */
-/*           CHARACTER*(BDNMLN)    INST */
-/*           CHARACTER*(LNSIZE)    LINE */
-/*           CHARACTER*(BDNMLN)    OBSRVR */
-/*           CHARACTER*(BDNMLN)    TARGET */
-/*           CHARACTER*(FRNMLN)    TFRAME */
-/*           CHARACTER*(TIMLEN)    TIMSTR ( 2 ) */
-/*           CHARACTER*(SHPLEN)    TSHAPE */
+/*              INTEGER               LNSIZE */
+/*              PARAMETER           ( LNSIZE = 80 ) */
 
-/*           DOUBLE PRECISION      CNFINE ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      ENDPT  ( 2 ) */
-/*           DOUBLE PRECISION      ET0 */
-/*           DOUBLE PRECISION      ET1 */
-/*           DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
-/*           DOUBLE PRECISION      STEPSZ */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CORLEN)    ABCORR */
+/*              CHARACTER*(BDNMLN)    INST */
+/*              CHARACTER*(LNSIZE)    LINE */
+/*              CHARACTER*(BDNMLN)    OBSRVR */
+/*              CHARACTER*(BDNMLN)    TARGET */
+/*              CHARACTER*(FRNMLN)    TFRAME */
+/*              CHARACTER*(TIMLEN)    TIMSTR ( 2 ) */
+/*              CHARACTER*(SHPLEN)    TSHAPE */
 
-/*           INTEGER               I */
-/*           INTEGER               J */
-/*           INTEGER               N */
+/*              DOUBLE PRECISION      CNFINE ( LBCELL : 2 ) */
+/*              DOUBLE PRECISION      ENDPT  ( 2 ) */
+/*              DOUBLE PRECISION      ET0 */
+/*              DOUBLE PRECISION      ET1 */
+/*              DOUBLE PRECISION      RESULT ( LBCELL : MAXWIN ) */
+/*              DOUBLE PRECISION      STEPSZ */
 
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ( META ) */
+/*              INTEGER               I */
+/*              INTEGER               J */
+/*              INTEGER               N */
 
-/*     C */
-/*     C     Initialize windows. */
-/*     C */
-/*           CALL SSIZED ( MAXWIN, CNFINE ) */
-/*           CALL SSIZED ( MAXWIN, RESULT ) */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement and result windows CNFINE and RESULT are */
+/*        C     saved because this practice helps to prevent stack */
+/*        C     overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT */
 
-/*     C */
-/*     C     Insert search time interval bounds into the */
-/*     C     confinement window. */
-/*     C */
-/*           CALL STR2ET ( '2004 JUN 11 06:30:00 TDB', ET0 ) */
-/*           CALL STR2ET ( '2004 JUN 11 12:00:00 TDB', ET1 ) */
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ( META ) */
 
-/*           CALL WNINSD ( ET0, ET1, CNFINE ) */
+/*        C */
+/*        C     Initialize windows. */
+/*        C */
+/*              CALL SSIZED ( 2,      CNFINE ) */
+/*              CALL SSIZED ( MAXWIN, RESULT ) */
 
-/*     C */
-/*     C     Initialize inputs for the search. */
-/*     C */
-/*           INST   = 'CASSINI_ISS_NAC' */
-/*           TARGET = 'PHOEBE' */
-/*           TSHAPE = 'ELLIPSOID' */
-/*           TFRAME = 'IAU_PHOEBE' */
-/*           ABCORR = 'LT+S' */
-/*           OBSRVR = 'CASSINI' */
-/*           STEPSZ = 10.D0 */
+/*        C */
+/*        C     Insert search time interval bounds into the */
+/*        C     confinement window. */
+/*        C */
+/*              CALL STR2ET ( '2004 JUN 11 06:30:00 TDB', ET0 ) */
+/*              CALL STR2ET ( '2004 JUN 11 12:00:00 TDB', ET1 ) */
 
-/*           WRITE (*,*) ' ' */
-/*           WRITE (*,*) 'Instrument: '//INST */
-/*           WRITE (*,*) 'Target:     '//TARGET */
-/*           WRITE (*,*) ' ' */
-/*     C */
-/*     C     Perform the search. */
-/*     C */
-/*           CALL GFTFOV ( INST,   TARGET, TSHAPE, TFRAME, */
-/*          .              ABCORR, OBSRVR, STEPSZ, CNFINE, RESULT ) */
+/*              CALL WNINSD ( ET0, ET1, CNFINE ) */
 
-/*           N = WNCARD( RESULT ) */
+/*        C */
+/*        C     Initialize inputs for the search. */
+/*        C */
+/*              INST   = 'CASSINI_ISS_NAC' */
+/*              TARGET = 'PHOEBE' */
+/*              TSHAPE = 'ELLIPSOID' */
+/*              TFRAME = 'IAU_PHOEBE' */
+/*              ABCORR = 'LT+S' */
+/*              OBSRVR = 'CASSINI' */
+/*              STEPSZ = 10.D0 */
 
-/*           IF ( N .EQ. 0 ) THEN */
+/*              WRITE (*,*) ' ' */
+/*              WRITE (*,*) 'Instrument: '//INST */
+/*              WRITE (*,*) 'Target:     '//TARGET */
+/*              WRITE (*,*) ' ' */
 
-/*              WRITE (*,*) 'No FOV intersection found.' */
+/*        C */
+/*        C     Perform the search. */
+/*        C */
+/*              CALL GFTFOV ( INST,   TARGET, TSHAPE, TFRAME, */
+/*             .              ABCORR, OBSRVR, STEPSZ, CNFINE, RESULT ) */
 
-/*           ELSE */
+/*              N = WNCARD( RESULT ) */
 
-/*           WRITE (*,*) ' Visibility start time              Stop time' */
+/*              IF ( N .EQ. 0 ) THEN */
 
-/*              DO I = 1, N */
+/*                 WRITE (*,*) 'No FOV intersection found.' */
 
-/*                 CALL WNFETD ( RESULT, I, ENDPT(1), ENDPT(2) ) */
+/*              ELSE */
 
-/*                 DO J = 1, 2 */
-/*                    CALL TIMOUT ( ENDPT(J), TIMFMT, TIMSTR(J) ) */
+/*                 WRITE (*, '(A)' ) '  Visibility start time (TDB)' */
+/*             .    //               '           Stop time (TDB)' */
+/*                 WRITE (*, '(A)' ) '  ---------------------------' */
+/*             .    //               '     ---------------------------' */
+
+/*                 DO I = 1, N */
+
+/*                    CALL WNFETD ( RESULT, I, ENDPT(1), ENDPT(2) ) */
+
+/*                    DO J = 1, 2 */
+/*                       CALL TIMOUT ( ENDPT(J), TIMFMT, TIMSTR(J) ) */
+/*                    END DO */
+
+/*                    LINE( :3) = ' ' */
+/*                    LINE(2: ) = TIMSTR(1) */
+/*                    LINE(34:) = TIMSTR(2) */
+
+/*                    WRITE (*,*) LINE */
+
 /*                 END DO */
 
-/*                 LINE( :3) = ' ' */
-/*                 LINE(2: ) = TIMSTR(1) */
-/*                 LINE(37:) = TIMSTR(2) */
+/*              END IF */
 
-/*                 WRITE (*,*) LINE */
-
-/*              END DO */
-
-/*           END IF */
-
-/*           WRITE (*,*) ' ' */
-/*           END */
+/*              WRITE (*,*) ' ' */
+/*              END */
 
 
-/*        When this program was executed on a PC/Linux/g77 platform, the */
-/*        output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
-/*  Instrument: CASSINI_ISS_NAC */
-/*  Target:     PHOEBE */
+/*         Instrument: CASSINI_ISS_NAC */
+/*         Target:     PHOEBE */
 
-/*   Visibility start time              Stop time */
-/*   2004-JUN-11 07:35:49.958590 (TDB)  2004-JUN-11 08:48:27.485965 (TDB) */
-/*   2004-JUN-11 09:03:19.767799 (TDB)  2004-JUN-11 09:35:27.634790 (TDB) */
-/*   2004-JUN-11 09:50:19.585474 (TDB)  2004-JUN-11 10:22:27.854253 (TDB) */
-/*   2004-JUN-11 10:37:19.332696 (TDB)  2004-JUN-11 11:09:28.116016 (TDB) */
-/*   2004-JUN-11 11:24:19.049485 (TDB)  2004-JUN-11 11:56:28.380304 (TDB) */
-
+/*          Visibility start time (TDB)           Stop time (TDB) */
+/*          ---------------------------     --------------------------- */
+/*          2004-JUN-11 07:35:27.066980     2004-JUN-11 08:48:03.954696 */
+/*          2004-JUN-11 09:02:56.580045     2004-JUN-11 09:35:04.038509 */
+/*          2004-JUN-11 09:49:56.476397     2004-JUN-11 10:22:04.242879 */
+/*          2004-JUN-11 10:36:56.283772     2004-JUN-11 11:09:04.397165 */
+/*          2004-JUN-11 11:23:56.020645     2004-JUN-11 11:56:04.733535 */
 
 
 /* $ Restrictions */
 
-/*     1) The reference frame associated with INST must be */
-/*        centered at the observer or must be inertial. No check is done */
-/*        to ensure this. */
+/*     1)  The reference frame associated with INST must be */
+/*         centered at the observer or must be inertial. No check is done */
+/*         to ensure this. */
 
-/*     2) The kernel files to be used by GFTFOV must be loaded (normally */
-/*        via the SPICELIB routine FURNSH) before GFTFOV is called. */
+/*     2)  The kernel files to be used by GFTFOV must be loaded (normally */
+/*         via the SPICELIB routine FURNSH) before GFTFOV is called. */
 
 /* $ Literature_References */
 
@@ -1140,13 +1165,26 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman  (JPL) */
-/*     L.S. Elson    (JPL) */
-/*     E.D. Wright   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     L.S. Elson         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.1.0  28-FEB-2012 (EDW) */
+/* -    SPICELIB Version 1.1.1, 06-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Modified code example's output to comply with maximum line */
+/*        length of header comments. Updated Example's kernels set to use */
+/*        PDS archived data. Added SAVE statements for CNFINE and RESULT */
+/*        variables in code example. */
+
+/*        Updated description of RESULT argument in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. */
+
+/* -    SPICELIB Version 1.1.0, 28-FEB-2012 (EDW) */
 
 /*        Implemented use of ZZHOLDD to allow user to alter convergence */
 /*        tolerance. */
@@ -1154,17 +1192,12 @@ static logical c_false = FALSE_;
 /*        Removed the STEP > 0 error check. The GFSSTP call includes */
 /*        the check. */
 
-/* -    SPICELIB Version 1.0.0  15-APR-2009 (NJB) (LSE) (EDW) */
+/* -    SPICELIB Version 1.0.0, 15-APR-2009 (NJB) (LSE) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     GF target in instrument FOV search */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 

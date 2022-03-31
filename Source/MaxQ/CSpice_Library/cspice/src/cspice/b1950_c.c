@@ -1,6 +1,6 @@
 /*
 
--Procedure  b1950_c ( Besselian Date 1950.0 )
+-Procedure b1950_c ( Besselian Date 1950.0 )
 
 -Abstract
 
@@ -75,25 +75,138 @@
 
 -Particulars
 
-   Lieske [1] defines a mapping from Julian Ephemeris Date 
+   Lieske [1] defines a mapping from Julian Ephemeris Date
    to Besselian:
 
       BE = 1900. + (JED - 2415020.31352)/365.242198781
 
    The inverse mapping being:
 
-      JED = (BE - 1900.)*365.242198781 + 2415020.31352
+      JED = (BE - 1900.) * 365.242198781 + 2415020.31352
 
 -Examples
 
-   The following code fragment illustrates the use of b1950_c.
+   The numerical results shown for these examples may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-        /.
-        Convert Julian Date to UTC seconds past the reference
-        epoch (b1950_c).
-        ./
+   1) Display the double precision value for the Julian Date
+      corresponding to the Besselian date 1950.0.
 
-        spref = ( jd - b1950_c() ) * spd_c();
+      Example code begins here.
+
+
+      /.
+         Program b1950_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Display the B1950 date in 16.8 floating point format
+         ./
+         printf ( "B1950 date: %16.8f\n", b1950_c() );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      B1950 date: 2433282.42345905
+
+
+   2) Convert an input time in UTC format to TDB seconds past the
+      following reference epochs:
+
+         - Besselian date 1900 and 1950; and
+
+         - Julian date 1900, 1950, 2000 and 2100.
+
+      Use the LSK kernel below to load the leap seconds and time
+      constants required for the conversions.
+
+         naif0012.tls
+
+
+      Example code begins here.
+
+
+      /.
+         Program b1950_ex2
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+         /.
+         Local constants.
+         ./
+         #define        UTCSTR        "1991-NOV-26"
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble             et;
+         SpiceDouble             jed;
+
+         /.
+         Load the LSK file.
+         ./
+         furnsh_c ( "naif0012.tls" );
+
+         /.
+         Convert input UTC string to Ephemeris Time.
+         ./
+         str2et_c ( UTCSTR, &et );
+         printf ( "Input ephemeris time  : %20.3f\n\n", et );
+
+         /.
+         Convert the Ephemeris Time to Julian ephemeris date, i.e.
+         Julian date relative to TDB time scale.
+         ./
+         jed = unitim_c ( et, "ET", "JED" );
+
+         /.
+         Convert Julian Date to TDB seconds past the reference epochs
+         and output the results.
+         ./
+         printf ( "TDB seconds past B1900: %20.3f\n",
+                  ( jed - b1900_c() ) * spd_c()     );
+         printf ( "TDB seconds past B1950: %20.3f\n",
+                  ( jed - b1950_c() ) * spd_c()     );
+         printf ( "TDB seconds past J1900: %20.3f\n",
+                  ( jed - j1900_c() ) * spd_c()     );
+         printf ( "TDB seconds past J1950: %20.3f\n",
+                  ( jed - j1950_c() ) * spd_c()     );
+         printf ( "TDB seconds past J2000: %20.3f\n",
+                  ( jed - j2000_c() ) * spd_c()     );
+         printf ( "TDB seconds past J2100: %20.3f\n",
+                  ( jed - j2100_c() ) * spd_c()     );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Input ephemeris time  :       -255614341.817
+
+      TDB seconds past B1900:       2900118570.055
+      TDB seconds past B1950:       1322272271.321
+      TDB seconds past J1900:       2900145658.183
+      TDB seconds past J1950:       1322265658.183
+      TDB seconds past J2000:       -255614341.817
+      TDB seconds past J2100:      -3411374341.817
+
 
 -Restrictions
 
@@ -101,42 +214,49 @@
 
 -Literature_References
 
-   [1] Jay Lieske, ``Precession Matrix Based on IAU (1976)
-       System of Astronomical Constants,'' Astron. Astrophys.
-       73, 282-284 (1979).
+   [1]  J. Lieske, "Precession Matrix Based on IAU (1976) System of
+        Astronomical Constants," Astron. Astrophys. 73, 282-284,
+        1979.
 
 -Author_and_Institution
 
-   W.L. Taber      (JPL)
-   I.M. Underwood  (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 2.0.1, 06-JUL-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added
+       complete code examples.
+
    -CSPICE Version 2.0.0, 01-SEP-2005 (EDW)
 
-      This routine now returns the value reported in the Lieske
-      paper:
-         
-         2433282.42345905
-      
-      The same value returned by the FORTRAN SPICELIB routine 
-      B1950.
-      
-      This routine previously returned the value reported in the
-      "Explanatory Supplement to the Astronomical Almanac", 1992, 
-      page 699:
-      
-         2433282.423
-         
-      The ESAA value describing a truncation of the Lieske value.
-      The difference between the two values expressed as seconds 
-      yields approximately 39.662 seconds.
+       This routine now returns the value reported in the Lieske
+       paper:
+
+          2433282.42345905
+
+       The same value returned by the FORTRAN SPICELIB routine
+       B1950.
+
+       This routine previously returned the value reported in the
+       "Explanatory Supplement to the Astronomical Almanac", 1992,
+       page 699:
+
+          2433282.423
+
+       The ESAA value describing a truncation of the Lieske value.
+       The difference between the two values expressed as seconds
+       yields approximately 39.662 seconds.
 
    -CSPICE Version 1.0.1, 08-FEB-1998 (EDW)
 
        Corrected and clarified header entries.
 
-   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW)
+   -CSPICE Version 1.0.0, 25-OCT-1997 (EDW) (WLT) (IMU)
 
 -Index_Entries
 

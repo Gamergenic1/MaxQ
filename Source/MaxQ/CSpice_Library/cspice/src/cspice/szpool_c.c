@@ -3,9 +3,9 @@
 -Procedure szpool_c (Get size limitations of the kernel pool)
 
 -Abstract
- 
-   Return the kernel pool size limitations. 
- 
+
+   Return the kernel pool size limitations.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,14 +32,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   KERNEL 
- 
+
+   KERNEL
+
 -Keywords
- 
-   CONSTANTS 
-   FILES 
- 
+
+   CONSTANTS
+   FILES
+
 */
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
@@ -47,150 +47,186 @@
 
    void szpool_c ( ConstSpiceChar * name,
                    SpiceInt       * n,
-                   SpiceBoolean   * found ) 
+                   SpiceBoolean   * found )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   name       I   Name of the parameter to be returned. 
-   n          O   Value of parameter specified by name. 
-   found      O   SPICETRUE if name is recognized. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   name       I   Name of the parameter to be returned.
+   n          O   Value of parameter specified by name.
+   found      O   SPICETRUE if name is recognized.
+
 -Detailed_Input
- 
-   name       is the name of a kernel pool size parameter. 
-              The following parameters may be specified: 
- 
-              MAXVAR      is the maximum number of variables that the
-                          kernel pool may contain at any one time.
-                          MAXVAR should be a prime number.
 
-              MAXLEN      is the maximum length of the variable names
-                          that can be stored in the kernel pool.
- 
-              MAXVAL      is the maximum number of distinct values that
-                          may belong to the variables in the kernel
-                          pool.  Each variable must have at least one
-                          value, and may have any number, so long as
-                          the total number does not exceed MAXVAL.
-                          MAXVAL must be at least as large as MAXVAR.
- 
-              MXNOTE      is the maximum number of distinct
-                          variable-agents pairs that can be maintained
-                          by the kernel pool.  (A variable is "paired"
-                          with an agent, if that agent is to be
-                          notified whenever the variable is updated.)
+   name        is the name of a kernel pool size parameter.
+               The following parameters may be specified.
 
-              MAXAGT      is the maximum number of agents that can be
-                          kept on the distribution list for
-                          notification of updates to kernel variables.
- 
-              MAXCHR      is the maximum number of characters that can
-                          be stored in a component of a string valued
-                          kernel variable.
- 
-              MAXLIN      is the maximum number of character strings
-                          that can be stored as data for kernel pool
-                          variables.
- 
-              Note that the case of name is insignificant.  Embedded
-              blanks are also ignored.
- 
+                  "MAXVAR"    is the maximum number of variables that
+                              the kernel pool may contain at any one
+                              time. MAXVAR should be a prime number.
+
+                  "MAXLEN"    is the maximum length of the variable
+                              names that can be stored in the kernel
+                              pool.
+
+                  "MAXVAL"    is the maximum number of distinct values
+                              that may belong to the variables in the
+                              kernel pool. Each variable must have at
+                              least one value, and may have any number,
+                              so long as the total number does not
+                              exceed MAXVAL. MAXVAL must be at least as
+                              large as MAXVAR.
+
+                  "MXNOTE"    is the maximum number of distinct
+                              variable-agents pairs that can be
+                              maintained by the kernel pool. (A variable
+                              is "paired" with an agent, if that agent
+                              is to be notified whenever the variable is
+                              updated.)
+
+                  "MAXAGT"    is the maximum number of agents that can
+                              be kept on the distribution list for
+                              notification of updates to kernel
+                              variables.
+
+                  "MAXCHR"    is the maximum number of characters that
+                              can be stored in a component of a string
+                              valued kernel variable.
+
+                  "MAXLIN"    is the maximum number of character strings
+                              that can be stored as data for kernel pool
+                              variables.
+
+               Note that the case of `name' is insignificant.
+
 -Detailed_Output
- 
-   n          is the value of the parameter specified by name.  If 
-              name is not one of the items specified above, n will 
-              be returned with the value 0. 
- 
-   found      is SPICETRUE if the parameter is recognized and
-              SPICEFALSE if it is not. 
- 
+
+   n           is the value of the parameter specified by `name'. If
+               `name' is not one of the items specified above, `n' will
+               be returned with the value 0.
+
+   found       is SPICETRUE if the parameter is recognized SPICEFALSE if it
+               is not.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If the specified parameter is not recognized, the value of
-      n will be set to zero and found will be set to SPICEFALSE. 
- 
+
+   1)  If the specified parameter is not recognized, the value of `n'
+       returned will be zero and `found' will be set to SPICEFALSE.
+
+   2)  If the `name' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   3)  If the `name' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
+
    This routine provides a programmatic interface to the parameters
-   used to define the capacity limits of kernel pool.  It is not 
-   anticipated that most kernel pool users will need to use this 
-   routine. 
- 
+   used to define the capacity limits of kernel pool. It is not
+   anticipated that most kernel pool users will need to use this
+   routine.
+
 -Examples
- 
 
-   1)  The following code fragment demonstrates how to determine the
-       size of a kernel reader parameter.
-       
-    
-       #include <stdio.h>
-       #include "SpiceUsr.h"
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-       void main () {
- 
-          /.
-          Local Variables
-          ./
-          ConstSpiceChar    * varname = "MAXLEN";
-
-          SpiceBoolean        found;
-
-          SpiceInt            n;
+   1) The following code example demonstrates how to determine the
+      size of a kernel reader parameter.
 
 
-          /.
-          Make the call to retrieve the value of MAXLEN
-          ./
-          szpool_c ( varname, &n, &found );
- 
-          /.
-          If MAXLEN parameter was found, print it out
-          ./
-          if ( found ) {
-             printf ( "Kernel parameter found.\n" );
-             printf ( "value:\t%s = %d\n", varname, n );
-          }
-       }
+      Example code begins here.
+
+
+      /.
+         Program szpool_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main ()
+      {
+
+         /.
+         Local Variables
+         ./
+         ConstSpiceChar    * varname = "MAXLEN";
+
+         SpiceBoolean        found;
+
+         SpiceInt            n;
+
+
+         /.
+         Make the call to retrieve the value of MAXLEN
+         ./
+         szpool_c ( varname, &n, &found );
+
+         /.
+         If MAXLEN parameter was found, print it out
+         ./
+         if ( found ) {
+            printf ( "Kernel parameter found.\n" );
+            printf ( "value:   %s = %d\n", varname, n );
+         }
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Kernel parameter found.
+      value:   MAXLEN = 32
+
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman (JPL)
-   W.L. Taber   (JPL) 
-   H.W. Taylor  (ACT)
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.W. Taylor         (ACT)
+
 -Version
- 
-   -CSPICE Version 2.1.0, 02-SEP-1999 (NJB)  
-   
-      Local type logical variable now used for found flag used in
-      interface of szpool_.
-            
+
+   -CSPICE Version 2.1.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added example's
+       solution.
+
+   -CSPICE Version 2.1.0, 02-SEP-1999 (NJB)
+
+       Local type logical variable now used for found flag used in
+       interface of szpool_.
+
    -CSPICE Version 1.0.0, 23-MAR-1999 (HWT)
 
 -Index_Entries
- 
-   return a kernel pool definition parameter 
- 
+
+   return a kernel pool definition parameter
+
 -&
 */
 
@@ -200,8 +236,8 @@
    Local variables
    */
    logical                 fnd;
-   
-   
+
+
    /*
    Participate in error tracing.
    */
@@ -227,10 +263,10 @@
    /*
    Assign the SpiceBoolean found flag.
    */
-   
+
    *found = fnd;
-   
-   
+
+
 
    chkout_c ( "szpool_c" );
 

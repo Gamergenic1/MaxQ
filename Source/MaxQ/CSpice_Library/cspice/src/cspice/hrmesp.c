@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure HRMESP ( Hermite polynomial interpolation, equal spacing  ) */
+/* $Procedure HRMESP ( Hermite polynomial interpolation, equal spacing ) */
 /* Subroutine */ int hrmesp_(integer *n, doublereal *first, doublereal *step, 
 	doublereal *yvals, doublereal *x, doublereal *work, doublereal *f, 
 	doublereal *df)
@@ -32,9 +32,9 @@
 
 /* $ Abstract */
 
-/*     Evaluate, at a specified point, an Hermite interpolating */
-/*     polynomial for a specified set of coordinate pairs whose */
-/*     abscissas are equally spaced. */
+/*     Evaluate, at a specified point, a Hermite interpolating polynomial */
+/*     for a specified set of equally spaced abscissa values and */
+/*     corresponding pairs of function and function derivative values. */
 
 /* $ Disclaimer */
 
@@ -73,7 +73,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     N          I   Number of points defining the polynomial. */
 /*     FIRST      I   First abscissa value. */
@@ -86,46 +86,44 @@
 
 /* $ Detailed_Input */
 
-/*     N              is the number of points defining the polynomial. */
-/*                    The array YVALS contains 2*N elements. */
+/*     N        is the number of points defining the polynomial. */
+/*              The array YVALS contains 2*N elements. */
 
 /*     FIRST, */
-/*     STEP           are, respectively, a starting abscissa value and a */
-/*                    step size that define the set of abscissa values */
+/*     STEP     are, respectively, a starting abscissa value and a */
+/*              step size that define the set of abscissa values */
 
-/*                       FIRST   +   (I-1) * STEP,     I = 1, ..., N */
+/*                 FIRST   +   (I-1) * STEP,     I = 1, ..., N */
 
-/*                    STEP must be non-zero. */
+/*              STEP must be non-zero. */
 
+/*     YVALS    is an array of length 2*N containing ordinate and */
+/*              derivative values for each point in the domain */
+/*              defined by FIRST, STEP, and N. The elements */
 
-/*     YVALS          is an array of length 2*N containing ordinate and */
-/*                    derivative values for each point in the domain */
-/*                    defined by FIRST, STEP, and N.  The elements */
+/*                 YVALS( 2*I - 1 ) */
+/*                 YVALS( 2*I     ) */
 
-/*                       YVALS( 2*I - 1 ) */
-/*                       YVALS( 2*I     ) */
+/*              give the value and first derivative of the output */
+/*              polynomial at the abscissa value */
 
-/*                    give the value and first derivative of the output */
-/*                    polynomial at the abscissa value */
+/*                 FIRST   +   (I-1) * STEP */
 
-/*                       FIRST   +   I * STEP */
+/*              where I ranges from 1 to N. */
 
-/*                    where I ranges from 1 to N. */
-
-
-/*     WORK           is a work space array.  It is used by this routine */
-/*                    as a scratch area to hold intermediate results. */
+/*     WORK     is a work space array. It is used by this routine */
+/*              as a scratch area to hold intermediate results. */
 
 
-/*     X              is the abscissa value at which the interpolating */
-/*                    polynomial and its derivative are to be evaluated. */
+/*     X        is the abscissa value at which the interpolating */
+/*              polynomial and its derivative are to be evaluated. */
 
 /* $ Detailed_Output */
 
 /*     F, */
-/*     DF             are the value and derivative at X of the unique */
-/*                    polynomial of degree 2N-1 that fits the points and */
-/*                    derivatives defined by FIRST, STEP, and YVALS. */
+/*     DF       are the value and derivative at X of the unique */
+/*              polynomial of degree 2*N-1 that fits the points and */
+/*              derivatives defined by FIRST, STEP, and YVALS. */
 
 /* $ Parameters */
 
@@ -133,7 +131,7 @@
 
 /* $ Exceptions */
 
-/*     1)  If STEP is zero, the error SPICE(INVALIDSTEPSIZE) will be */
+/*     1)  If STEP is zero, the error SPICE(INVALIDSTEPSIZE) is */
 /*         signaled. */
 
 /*     2)  If N is less than 1, the error SPICE(INVALIDSIZE) is */
@@ -149,12 +147,12 @@
 /* $ Particulars */
 
 /*     Users of this routine must choose the number of points to use */
-/*     in their interpolation method.  The authors of Reference [1] have */
+/*     in their interpolation method. The authors of Reference [1] have */
 /*     this to say on the topic: */
 
 /*        Unless there is solid evidence that the interpolating function */
 /*        is close in form to the true function f, it is a good idea to */
-/*        be cautious about high-order interpolation.  We */
+/*        be cautious about high-order interpolation. We */
 /*        enthusiastically endorse interpolations with 3 or 4 points, we */
 /*        are perhaps tolerant of 5 or 6; but we rarely go higher than */
 /*        that unless there is quite rigorous monitoring of estimated */
@@ -171,56 +169,72 @@
 
 /* $ Examples */
 
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     1)  Fit a 7th degree polynomial through the points ( x, y, y' ) */
+/*     1) Fit a 7th degree polynomial through the points ( x, y, y' ) */
 
-/*             ( -1,      6,       3 ) */
-/*             (  1,      8,      11 ) */
-/*             (  3,   2210,    5115 ) */
-/*             (  5,  78180,  109395 ) */
+/*           ( -1,      6,       3 ) */
+/*           (  1,      8,      11 ) */
+/*           (  3,   2210,    5115 ) */
+/*           (  5,  78180,  109395 ) */
 
-/*         and evaluate this polynomial at x = 2. */
+/*        and evaluate this polynomial at x = 2. */
 
-
-/*            PROGRAM TEST_HRMINT */
-
-/*            DOUBLE PRECISION      ANSWER */
-/*            DOUBLE PRECISION      DERIV */
-/*            DOUBLE PRECISION      FIRST */
-/*            DOUBLE PRECISION      STEP */
-/*            DOUBLE PRECISION      YVALS (8) */
-/*            DOUBLE PRECISION      WORK  (8,2) */
-/*            INTEGER               N */
-
-
-/*            N         =       4 */
-
-/*            YVALS(1)  =       6.D0 */
-/*            YVALS(2)  =       3.D0 */
-/*            YVALS(3)  =       8.D0 */
-/*            YVALS(4)  =      11.D0 */
-/*            YVALS(5)  =    2210.D0 */
-/*            YVALS(6)  =    5115.D0 */
-/*            YVALS(7)  =   78180.D0 */
-/*            YVALS(8)  =  109395.D0 */
-
-/*            FIRST     =  -1.D0 */
-/*            STEP      =   2.D0 */
-
-/*            CALL HRMESP ( N,    FIRST, STEP,   YVALS, */
-/*           .              2.D0, WORK,  ANSWER, DERIV ) */
-
-/*            WRITE (*,*) 'ANSWER = ', ANSWER */
-/*            WRITE (*,*) 'DERIV  = ', DERIV */
-/*            END */
-
-
-/*        The returned value of ANSWER should be 141.D0, and the returned */
-/*        derivative value should be 456.D0, since the unique 7th degree */
-/*        polynomial that fits these constraints is */
+/*        The returned value of ANSWER should be 141.D0, and the */
+/*        returned derivative value should be 456.D0, since the unique */
+/*        7th degree polynomial that fits these constraints is */
 
 /*                     7       2 */
 /*           f(x)  =  x   +  2x  + 5 */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM HRMESP_EX1 */
+/*              IMPLICIT NONE */
+
+/*              DOUBLE PRECISION      ANSWER */
+/*              DOUBLE PRECISION      DERIV */
+/*              DOUBLE PRECISION      FIRST */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      YVALS (8) */
+/*              DOUBLE PRECISION      WORK  (8,2) */
+/*              INTEGER               N */
+
+
+/*              N         =       4 */
+
+/*              YVALS(1)  =       6.D0 */
+/*              YVALS(2)  =       3.D0 */
+/*              YVALS(3)  =       8.D0 */
+/*              YVALS(4)  =      11.D0 */
+/*              YVALS(5)  =    2210.D0 */
+/*              YVALS(6)  =    5115.D0 */
+/*              YVALS(7)  =   78180.D0 */
+/*              YVALS(8)  =  109395.D0 */
+
+/*              FIRST     =  -1.D0 */
+/*              STEP      =   2.D0 */
+
+/*              CALL HRMESP ( N,    FIRST, STEP,   YVALS, */
+/*             .              2.D0, WORK,  ANSWER, DERIV ) */
+
+/*              WRITE (*,*) 'ANSWER = ', ANSWER */
+/*              WRITE (*,*) 'DERIV  = ', DERIV */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         ANSWER =    141.00000000000000 */
+/*         DERIV  =    456.00000000000000 */
+
 
 /* $ Restrictions */
 
@@ -228,18 +242,28 @@
 
 /* $ Literature_References */
 
-/*     [1]  "Numerical Recipes---The Art of Scientific Computing" by */
-/*           William H. Press, Brian P. Flannery, Saul A. Teukolsky, */
-/*           William T. Vetterling (see sections 3.0 and 3.1). */
+/*     [1]  W. Press, B. Flannery, S. Teukolsky and W. Vetterling, */
+/*          "Numerical Recipes -- The Art of Scientific Computing," */
+/*          chapters 3.0 and 3.1, Cambridge University Press, 1986. */
 
-/*     [2]  "Elementary Numerical Analysis---An Algorithmic Approach" */
-/*           by S. D. Conte and Carl de Boor.  See p. 64. */
+/*     [2]  S. Conte and C. de Boor, "Elementary Numerical Analysis -- An */
+/*          Algorithmic Approach," 3rd Edition, p 64, McGraw-Hill, 1980. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.2, 01-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. Added code */
+/*        example's solution. */
+
+/*        Fixed formula in the description of YVALS argument in */
+/*        $Detailed_Input. */
 
 /* -    SPICELIB Version 1.2.1, 28-JAN-2014 (NJB) */
 
@@ -322,16 +346,16 @@
     i__1 = (*n << 1) - 1;
     for (i__ = 1; i__ <= i__1; i__ += 2) {
 	work[(i__2 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)331)] = 
+		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)355)] = 
 		yvals[(i__3 = i__ - 1) < yvals_dim1 && 0 <= i__3 ? i__3 : 
-		s_rnge("yvals", i__3, "hrmesp_", (ftnlen)331)];
+		s_rnge("yvals", i__3, "hrmesp_", (ftnlen)355)];
     }
     i__1 = *n << 1;
     for (i__ = 2; i__ <= i__1; i__ += 2) {
 	work[(i__2 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)335)] = 
+		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)359)] = 
 		yvals[(i__3 = i__ - 1) < yvals_dim1 && 0 <= i__3 ? i__3 : 
-		s_rnge("yvals", i__3, "hrmesp_", (ftnlen)335)] * *step;
+		s_rnge("yvals", i__3, "hrmesp_", (ftnlen)359)] * *step;
     }
 
 /*     Compute the second column of the interpolation table: this */
@@ -360,9 +384,9 @@
 	next = this__ + 1;
 	work[(i__2 = prev + (work_dim1 << 1) - work_offset) < work_dim1 << 1 
 		&& 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
-		366)] = work[(i__3 = this__ + work_dim1 - work_offset) < 
+		390)] = work[(i__3 = this__ + work_dim1 - work_offset) < 
 		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmesp_", (ftnlen)366)];
+		"hrmesp_", (ftnlen)390)];
 
 /*        The even-indexed interpolated derivatives are the slopes of */
 /*        the linear interpolating polynomials for adjacent input */
@@ -370,11 +394,11 @@
 
 	work[(i__2 = this__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
 		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
-		ftnlen)373)] = work[(i__3 = next + work_dim1 - work_offset) < 
+		ftnlen)397)] = work[(i__3 = next + work_dim1 - work_offset) < 
 		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmesp_", (ftnlen)373)] - work[(i__4 = prev + work_dim1 - 
+		"hrmesp_", (ftnlen)397)] - work[(i__4 = prev + work_dim1 - 
 		work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmesp_", (ftnlen)373)];
+		"work", i__4, "hrmesp_", (ftnlen)397)];
 
 /*        The first column of WORK contains interpolated function values. */
 /*        The odd-indexed entries are the linear Taylor polynomials, */
@@ -382,18 +406,18 @@
 
 	temp = work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 
 		1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (
-		ftnlen)380)] * (newx - (doublereal) i__) + work[(i__3 = prev 
+		ftnlen)404)] * (newx - (doublereal) i__) + work[(i__3 = prev 
 		+ work_dim1 - work_offset) < work_dim1 << 1 && 0 <= i__3 ? 
-		i__3 : s_rnge("work", i__3, "hrmesp_", (ftnlen)380)];
+		i__3 : s_rnge("work", i__3, "hrmesp_", (ftnlen)404)];
 	work[(i__2 = this__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
-		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)383)]
+		<= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)407)]
 		 = c1 * work[(i__3 = prev + work_dim1 - work_offset) < 
 		work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, 
-		"hrmesp_", (ftnlen)383)] + c2 * work[(i__4 = next + work_dim1 
+		"hrmesp_", (ftnlen)407)] + c2 * work[(i__4 = next + work_dim1 
 		- work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge(
-		"work", i__4, "hrmesp_", (ftnlen)383)];
+		"work", i__4, "hrmesp_", (ftnlen)407)];
 	work[(i__2 = prev + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)386)] = 
+		i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)410)] = 
 		temp;
     }
 
@@ -402,16 +426,16 @@
 
     work[(i__1 = (*n << 1) - 1 + (work_dim1 << 1) - work_offset) < work_dim1 
 	    << 1 && 0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (
-	    ftnlen)394)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) <
+	    ftnlen)418)] = work[(i__2 = (*n << 1) + work_dim1 - work_offset) <
 	     work_dim1 << 1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrme"
-	    "sp_", (ftnlen)394)];
+	    "sp_", (ftnlen)418)];
     work[(i__1 = (*n << 1) - 1 + work_dim1 - work_offset) < work_dim1 << 1 && 
-	    0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)395)] =
+	    0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)419)] =
 	     work[(i__2 = (*n << 1) + work_dim1 - work_offset) < work_dim1 << 
 	    1 && 0 <= i__2 ? i__2 : s_rnge("work", i__2, "hrmesp_", (ftnlen)
-	    395)] * (newx - *n) + work[(i__3 = (*n << 1) - 1 + work_dim1 - 
+	    419)] * (newx - *n) + work[(i__3 = (*n << 1) - 1 + work_dim1 - 
 	    work_offset) < work_dim1 << 1 && 0 <= i__3 ? i__3 : s_rnge("work",
-	     i__3, "hrmesp_", (ftnlen)395)];
+	     i__3, "hrmesp_", (ftnlen)419)];
 
 /*     Compute columns 3 through 2*N of the table. */
 
@@ -421,7 +445,7 @@
 	for (i__ = 1; i__ <= i__2; ++i__) {
 
 /*           In the theoretical construction of the interpolation table, */
-/*           there are 2*N abscissa values, since each input abcissa */
+/*           there are 2*N abscissa values, since each input abscissa */
 /*           value occurs with multiplicity two. In this theoretical */
 /*           construction, the Jth column of the interpolation table */
 /*           contains results of evaluating interpolants that span J+1 */
@@ -447,28 +471,28 @@
 
 	    work[(i__3 = i__ + (work_dim1 << 1) - work_offset) < work_dim1 << 
 		    1 && 0 <= i__3 ? i__3 : s_rnge("work", i__3, "hrmesp_", (
-		    ftnlen)433)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
+		    ftnlen)457)] = (c1 * work[(i__4 = i__ + (work_dim1 << 1) 
 		    - work_offset) < work_dim1 << 1 && 0 <= i__4 ? i__4 : 
-		    s_rnge("work", i__4, "hrmesp_", (ftnlen)433)] + c2 * work[
+		    s_rnge("work", i__4, "hrmesp_", (ftnlen)457)] + c2 * work[
 		    (i__5 = i__ + 1 + (work_dim1 << 1) - work_offset) < 
 		    work_dim1 << 1 && 0 <= i__5 ? i__5 : s_rnge("work", i__5, 
-		    "hrmesp_", (ftnlen)433)] + (work[(i__6 = i__ + 1 + 
+		    "hrmesp_", (ftnlen)457)] + (work[(i__6 = i__ + 1 + 
 		    work_dim1 - work_offset) < work_dim1 << 1 && 0 <= i__6 ? 
-		    i__6 : s_rnge("work", i__6, "hrmesp_", (ftnlen)433)] - 
+		    i__6 : s_rnge("work", i__6, "hrmesp_", (ftnlen)457)] - 
 		    work[(i__7 = i__ + work_dim1 - work_offset) < work_dim1 <<
 		     1 && 0 <= i__7 ? i__7 : s_rnge("work", i__7, "hrmesp_", (
-		    ftnlen)433)])) / denom;
+		    ftnlen)457)])) / denom;
 
 /*           Compute the interpolated function value at NEWX for the Ith */
 /*           interpolant. */
 
 	    work[(i__3 = i__ + work_dim1 - work_offset) < work_dim1 << 1 && 0 
 		    <= i__3 ? i__3 : s_rnge("work", i__3, "hrmesp_", (ftnlen)
-		    440)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
+		    464)] = (c1 * work[(i__4 = i__ + work_dim1 - work_offset) 
 		    < work_dim1 << 1 && 0 <= i__4 ? i__4 : s_rnge("work", 
-		    i__4, "hrmesp_", (ftnlen)440)] + c2 * work[(i__5 = i__ + 
+		    i__4, "hrmesp_", (ftnlen)464)] + c2 * work[(i__5 = i__ + 
 		    1 + work_dim1 - work_offset) < work_dim1 << 1 && 0 <= 
-		    i__5 ? i__5 : s_rnge("work", i__5, "hrmesp_", (ftnlen)440)
+		    i__5 ? i__5 : s_rnge("work", i__5, "hrmesp_", (ftnlen)464)
 		    ]) / denom;
 	}
     }
@@ -479,9 +503,9 @@
 /*     checked that STEP is non-zero. */
 
     *f = work[(i__1 = work_dim1 + 1 - work_offset) < work_dim1 << 1 && 0 <= 
-	    i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)452)];
+	    i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)476)];
     *df = work[(i__1 = (work_dim1 << 1) + 1 - work_offset) < work_dim1 << 1 &&
-	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)453)] 
+	     0 <= i__1 ? i__1 : s_rnge("work", i__1, "hrmesp_", (ftnlen)477)] 
 	    / *step;
     return 0;
 } /* hrmesp_ */

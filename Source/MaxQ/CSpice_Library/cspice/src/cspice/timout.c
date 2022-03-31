@@ -11,11 +11,11 @@ static integer c__100 = 100;
 static integer c__0 = 0;
 static integer c__1 = 1;
 static integer c__14 = 14;
-static doublereal c_b274 = 0.;
-static doublereal c_b275 = 1.;
-static doublereal c_b338 = 100.;
+static doublereal c_b279 = 0.;
+static doublereal c_b280 = 1.;
+static doublereal c_b343 = 100.;
 
-/* $Procedure      TIMOUT ( Time Output ) */
+/* $Procedure TIMOUT ( Time Output ) */
 /* Subroutine */ int timout_(doublereal *et, char *pictur, char *output, 
 	ftnlen pictur_len, ftnlen output_len)
 {
@@ -48,11 +48,11 @@ static doublereal c_b338 = 100.;
     extern /* Subroutine */ int scan_(char *, char *, integer *, integer *, 
 	    integer *, integer *, integer *, integer *, integer *, integer *, 
 	    ftnlen, ftnlen);
-    static logical have[51];
+    static logical have[52];
     static doublereal moff;
     static integer jday, gday;
     static doublereal incr;
-    static integer last, dump[10];
+    static integer last, dump[11];
     static doublereal myet;
     static integer part, type__;
     static doublereal tvec[8];
@@ -64,11 +64,11 @@ static doublereal c_b338 = 100.;
     static logical doera;
     extern /* Subroutine */ int chkin_(char *, ftnlen), ucase_(char *, char *,
 	     ftnlen, ftnlen);
-    static integer appnd, ident[100], class__[43], gyear;
+    static integer appnd, ident[100], class__[44], gyear;
     static doublereal tempd;
     static integer jyear;
     static doublereal value;
-    static char marks[8*42];
+    static char marks[8*43];
     extern /* Subroutine */ int dpfmt_(doublereal *, char *, char *, ftnlen, 
 	    ftnlen);
     static integer width, ndump;
@@ -87,25 +87,23 @@ static doublereal c_b338 = 100.;
     static logical go2jul;
     extern /* Subroutine */ int gr2jul_(integer *, integer *, integer *, 
 	    integer *), jul2gr_(integer *, integer *, integer *, integer *);
-    static integer id[51];
+    static integer id[52];
     static logical ok;
     extern integer bsrchc_(char *, integer *, char *, ftnlen, ftnlen);
     static logical making;
+    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
     extern /* Subroutine */ int timdef_(char *, char *, char *, ftnlen, 
 	    ftnlen, ftnlen);
-    extern doublereal brcktd_(doublereal *, doublereal *, doublereal *);
-    extern /* Subroutine */ int rmaind_(doublereal *, doublereal *, 
-	    doublereal *, doublereal *);
     extern integer brckti_(integer *, integer *, integer *), isrchi_(integer *
 	    , integer *, integer *);
-    static integer length[51];
+    static integer length[52];
     static doublereal factor;
-    static integer mrklen[42];
+    static integer mrklen[43];
     static doublereal intmed;
     static integer nmarks;
-    static char orignl[32*51];
+    static char orignl[32*52];
     static integer caltyp, timfmt;
-    static doublereal values[51];
+    static doublereal values[52];
     static integer compnt[16]	/* was [8][2] */;
     static char ymdfmt[8];
     extern doublereal unitim_(doublereal *, char *, char *, ftnlen, ftnlen);
@@ -123,11 +121,12 @@ static doublereal c_b338 = 100.;
 	    *, ftnlen), prefix_(char *, integer *, char *, ftnlen, ftnlen), 
 	    scanrj_(integer *, integer *, integer *, integer *, integer *, 
 	    integer *), ttrans_(char *, char *, doublereal *, ftnlen, ftnlen),
-	     chkout_(char *, ftnlen);
+	     rmaind_(doublereal *, doublereal *, doublereal *, doublereal *), 
+	    chkout_(char *, ftnlen);
     extern doublereal j2000_(void);
     static integer beg[100];
     static char cal[16];
-    static doublereal pad[51];
+    static doublereal pad[52];
     static integer end[100];
     extern doublereal j1950_(void), spd_(void);
     static char fmt[32], zon[32];
@@ -136,9 +135,9 @@ static doublereal c_b338 = 100.;
 
 /* $ Abstract */
 
-/*     This routine converts an input epoch represented in TDB seconds */
-/*     past the TDB epoch of J2000 to a character string formatted to */
-/*     the specifications of a user's format picture. */
+/*     Convert an input epoch represented in TDB seconds past the TDB */
+/*     epoch of J2000 to a character string formatted to the */
+/*     specifications of a user's format picture. */
 
 /* $ Disclaimer */
 
@@ -176,41 +175,42 @@ static doublereal c_b338 = 100.;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     ET         I   An epoch in seconds past the ephemeris epoch J2000 */
+/*     ET         I   Epoch in seconds past the ephemeris epoch J2000. */
 /*     PICTUR     I   A format specification for the output string. */
-/*     STRING     O   A string representation of the input epoch. */
+/*     OUTPUT     O   A string representation of the input epoch. */
 
 /* $ Detailed_Input */
 
-/*     ET         a double precision representation of time in seconds */
-/*                past the ephemeris epoch J2000. */
+/*     ET       is a double precision representation of time in seconds */
+/*              past the ephemeris epoch J2000. */
 
-/*     PICTUR     is a string that specifies how the output should be */
-/*                presented.  The string is made up of various markers */
-/*                that stand for various components associated with */
-/*                a time. */
+/*     PICTUR   is a string that specifies how the output should be */
+/*              presented. The string is made up of various markers */
+/*              that stand for various components associated with */
+/*              a time. */
 
-/*                There are five types of markers that may appear in a */
-/*                format picture.  String Markers, Numeric Markers, */
-/*                Meta markers, Modifier Markers and Literal Markers. */
+/*              There are five types of markers that may appear in a */
+/*              format picture. These are String Markers, Numeric */
+/*              Markers, Meta markers, Modifier Markers and Literal */
+/*              Markers. */
 
-/*                The PICTUR string is examined and the various markers */
-/*                are identified. The output time string is constructed */
-/*                by replacing each of the identified markers with */
-/*                an appropriate time component. */
+/*              The PICTUR string is examined and the various markers */
+/*              are identified. The output time string is constructed */
+/*              by replacing each of the identified markers with */
+/*              an appropriate time component. */
 
-/*                The various markers and their meanings are discussed */
-/*                in the Particulars section below. */
+/*              The various markers and their meanings are discussed */
+/*              in the $Particulars section below. */
 
-/*                Note that leading and trailing blanks in PICTUR are */
-/*                ignored. */
-
+/*              Note that leading and trailing blanks in PICTUR are */
+/*              ignored. */
 
 /* $ Detailed_Output */
 
-/*     OUTPUT     is a string matching the format of the input string. */
+/*     OUTPUT   is a time string equivalent to the input epoch ET, */
+/*              matching the format specified by PICTUR. */
 
 /* $ Parameters */
 
@@ -218,11 +218,23 @@ static doublereal c_b338 = 100.;
 
 /* $ Exceptions */
 
-/*     No exceptions are detected by this routine.  However, the user's */
-/*     processing environment must be properly initialized by loading */
-/*     a leapseconds kernel via the routine FURNSH before calling this */
-/*     routine.  If a leapsecond kernel has not been loaded, an error */
-/*     will be signalled by a routines called by TIMOUT. */
+/*     1)  A leapseconds kernel must be loaded via the routine FURNSH */
+/*         before calling this routine. If a leapsecond kernel has not */
+/*         been loaded, an error is signaled by a routine in the call */
+/*         tree of this routine. */
+
+/*     2)  If PICTUR contains the numeric marker 'YYYY' and the */
+/*         magnitude of year is too large to be displayed as a four-digit */
+/*         integer, TIMOUT will replace it by '****'. */
+
+/*     3)  If the requested precision is higher than 12 decimal places, */
+/*         TIMOUT will truncate the decimal part down to 12, and OUTPUT */
+/*         will have all the remaining digits in the decimal part set to */
+/*         zero. */
+
+/*     4)  Double colon (::), when is not part of one of the supported */
+/*         markers, has no effect and will be presented as is on the */
+/*         output string. */
 
 /* $ Files */
 
@@ -230,7 +242,6 @@ static doublereal c_b338 = 100.;
 /*     prior to calling TIMOUT. */
 
 /* $ Particulars */
-
 
 /*     A format picture is simply a string of letters that lets */
 /*     TIMOUT know where various components of a time representation */
@@ -256,8 +267,8 @@ static doublereal c_b338 = 100.;
 /*     another colon, and seconds truncated to 4 decimal places and */
 /*     having a two digit integer part (rounding can be commanded; see */
 /*     the discussion of truncation and rounding below). This is */
-/*     followed by a space and the string (TDB). The special marker */
-/*     `::TDB' in the time picture is an ``invisible'' marker. It is */
+/*     followed by a space and the string '(TDB)'. The special marker */
+/*     '::TDB' in the time picture is an ``invisible'' marker. It is */
 /*     used to specify the time system that should be used in creating */
 /*     the time string (in this case Barycentric Dynamical Time). */
 
@@ -276,10 +287,10 @@ static doublereal c_b338 = 100.;
 /*       '.####' */
 /*       '::TDB' */
 
-/*     The unrecognized parts are called literal markers.  They are */
+/*     The unrecognized parts are called literal markers. They are */
 /*     copied exactly as they appear in PICTUR into the output string. */
 /*     The recognized parts of the picture are replaced by a */
-/*     component of time or, as in the case of `::TDB' are used */
+/*     component of time or, as in the case of '::TDB' are used */
 /*     as instructions about the overall properties of the time */
 /*     string. */
 
@@ -290,8 +301,8 @@ static doublereal c_b338 = 100.;
 /*     -----------  --------  ----------------------------------------- */
 /*     '.##...'     modifier  represents a numeric component that */
 /*                            immediately precedes this in a decimal */
-/*                            format.  Number of decimal places */
-/*                            equals the number of '#'  characters */
+/*                            format. Number of decimal places */
+/*                            equals the number of '#' characters */
 /*     '::GCAL'     meta      dates are reported in Gregorian calendar */
 /*     '::JCAL'     meta      dates are reported in Julian calendar */
 /*     '::MCAL'     meta      dates after 15 October, 1582 are reported */
@@ -303,7 +314,9 @@ static doublereal c_b338 = 100.;
 
 /*     '::TDB'      meta      all components should be TDB */
 
-/*     '::TDT'      meta      all components should be TDT */
+/*     '::TDT'      meta      all components should be TT (TDT) */
+
+/*     '::TT'       meta      all components should be TT (TDT) */
 
 /*     '::TRNC'     meta      truncate all output components (default) */
 /*     '::UTC'      meta      all components should be UTC (default) */
@@ -311,24 +324,24 @@ static doublereal c_b338 = 100.;
 /*                            and +m (minutes) so as to allow time zones. */
 /*     '::UTC-h:m'  meta      all components in UTC offset by -h (hours) */
 /*                            and -m (minutes) so as to allow time zones. */
-/*     'AMPM'       string    String (either 'A.M.'  or 'P.M.') */
+/*     'AMPM'       string    String (either 'A.M.' or 'P.M.') */
 /*                            indicating whether hours are before */
 /*                            or after noon. */
-/*     'ampm'       string    String (either 'a.m.'  or 'p.m.') */
+/*     'ampm'       string    String (either 'a.m.' or 'p.m.') */
 /*                            indicating whether hours are before */
 /*                            or after noon. */
 /*     'AP'         numeric   AM/PM equivalents of the hour component */
 /*                            of a time. */
 /*     'DD'         numeric   Day of month */
 /*     'DOY'        numeric   Day of year */
-/*     'ERA'        string    String (either 'B.C.'  or 'A.D.') giving */
+/*     'ERA'        string    String (either 'B.C.' or 'A.D.') giving */
 /*                            era associated with an epoch. */
 /*     '?ERA?'      string    String: either ' B.C. ' or ' A.D. ' if the */
-/*                            year is before 1000 A.D.  otherwise a */
+/*                            year is before 1000 A.D. otherwise a */
 /*                            blank: ' '. */
-/*     'era'        string    String (either 'b.c.'  or 'a.d.') giving */
+/*     'era'        string    String (either 'b.c.' or 'a.d.') giving */
 /*                            era associated with an epoch. */
-/*     '?era?'        string   String: either ' b.c. ' or ' a.d. ' if the */
+/*     '?era?'      string    String: either ' b.c. ' or ' a.d. ' if the */
 /*                            year is before 1000 A.D. otherwise a */
 /*                            blank: ' '. */
 /*     'HR'         numeric   hour component of time */
@@ -374,7 +387,7 @@ static doublereal c_b338 = 100.;
 /*     Meta Markers */
 
 /*        Meta markers (listed under the class ``meta'' in the */
-/*        table above) are used to indicate `global' properties of */
+/*        table above) are used to indicate "global" properties of */
 /*        your time string. You may specify time scale and how */
 /*        rounding should be performed on the components of time */
 /*        in your output string. Meta markers may be placed anywhere */
@@ -382,7 +395,7 @@ static doublereal c_b338 = 100.;
 /*        of characters in output time strings. Also there are no */
 /*        restrictions on how many meta markers you may place in */
 /*        the format picture. However, if you supply conflicting */
-/*        `meta' markers (for example ::TDT and ::TDB) in your */
+/*        `meta' markers (for example '::TDT' and '::TDB') in your */
 /*        picture the first marker listed (in left to right order) */
 /*        overrules the conflicting marker that appears later in */
 /*        the picture. */
@@ -393,7 +406,7 @@ static doublereal c_b338 = 100.;
 /*        zone through the use of a Meta Marker, TIMOUT uses the */
 /*        values returned by the SPICE routine TIMDEF. The default */
 /*        time system, calendar returned by TIMDEF are UTC and */
-/*        the Gregorian calendar.  The default time zone returned */
+/*        the Gregorian calendar. The default time zone returned */
 /*        by TIMDEF is a blank indicating that no time zone offset */
 /*        should be used. */
 
@@ -444,20 +457,20 @@ static doublereal c_b338 = 100.;
 /*     Time Systems */
 
 /*        TIMOUT can produce output strings for epochs relative to */
-/*        any of the three systems UTC, TDT, or TDB.  If you do not */
+/*        any of the systems UTC, TT or TDT, or TDB. If you do not */
 /*        explicitly specify a time system, TIMOUT will produce strings */
 /*        relative to the time system returned by the SPICE routine */
-/*        TIMDEF.  Unless you call TIMDEF and change it, the default time */
-/*        system is UTC.  However, by using one of the Meta Markers */
-/*        ::UTC, ::TDT, or ::TDB you may specify that TIMOUT produce */
-/*        time strings relative to the UTC, TDT, or TDB system */
-/*        respectively. */
+/*        TIMDEF. Unless you call TIMDEF and change it, the default time */
+/*        system is UTC. However, by using one of the Meta Markers */
+/*        ::UTC, ::TT, ::TDT, or ::TDB you may specify that TIMOUT */
+/*        produce time strings relative to the UTC, TT or TDT, or TDB */
+/*        system respectively. */
 
 /*     Time Zones */
 
 /*        The meta markers ::UTC+h:m  and ::UTC-h:m  allow you to */
 /*        offset UTC times so that you may represent times in a time */
-/*        zone other than GMT.  For example you can output times in */
+/*        zone other than GMT. For example you can output times in */
 /*        Pacific Standard time by placing the meta-marker ::UTC-8 in */
 /*        your format picture. */
 
@@ -492,13 +505,13 @@ static doublereal c_b338 = 100.;
 /*        are subtracted. */
 
 /*        The unsigned part of the hours component can be no more than */
-/*        12.  The unsigned part of the minutes component can be no */
+/*        12. The unsigned part of the minutes component can be no */
 /*        more than 59. */
 
 /*     Calendars */
 
 /*        The calendar currently used by western countries is the */
-/*        Gregorian calendar.  This calendar begins on Oct 15, 1582. */
+/*        Gregorian calendar. This calendar begins on Oct 15, 1582. */
 /*        Prior to Gregorian calendar the Julian calendar was used. The */
 /*        last Julian calendar date prior to the beginning of the */
 /*        Gregorian calendar is Oct 5, 1582. */
@@ -510,7 +523,7 @@ static doublereal c_b338 = 100.;
 
 /*        By default TIMOUT uses the default calendar returned by */
 /*        TIMDEF. Under most circumstances this will be the Gregorian */
-/*        calendar (::GCAL).  However you may specify that TIMOUT use a */
+/*        calendar (::GCAL). However you may specify that TIMOUT use a */
 /*        specific calendar through use of one of the calendar Meta */
 /*        Markers. You may specify that TIMOUT use the Julian calendar */
 /*        (::JCAL), the Gregorian calendar (::GCAL)  or a mixture of */
@@ -530,24 +543,25 @@ static doublereal c_b338 = 100.;
 
 /*        There is an alternative means for getting a format picture. */
 /*        The routine TPICTR constructs format pictures from a sample */
-/*        time string.  For example, suppose you would like your time */
+/*        time string. For example, suppose you would like your time */
 /*        strings to look like the basic pattern of the string below. */
 
-/*        'Fri Jul 26 12:22:09 PDT 1996' */
+/*           'Fri Jul 26 12:22:09 PDT 1996' */
 
 /*        You can call TPICTR with this string, and it will create the */
 /*        appropriate PICTUR for use with TIMOUT. */
 
-/*        CALL TPICTR ( 'Fri Jul 26 12:22:09 PDT 1996', PICTUR, OK ) */
+/*           CALL TPICTR ( 'Fri Jul 26 12:22:09 PDT 1996', */
+/*          .              PICTUR, OK, ERRMSG             ) */
 
 /*        The result will be: */
 
-/*        'Wkd Mon DD HR:MN:SC (PDT) ::UTC-7' */
+/*           'Wkd Mon DD HR:MN:SC (PDT) ::UTC-7' */
 
 /*        Note: not every date that you can read is interpretable by */
-/*        TPICTR.  For example, you might be able to understand that */
-/*        19960212121116 is Feb 2 1996, 12:11:16.  However, TPICTR */
-/*        cannot recognize this string.  Thus it is important to check */
+/*        TPICTR. For example, you might be able to understand that */
+/*        19960212121116 is Feb 2 1996, 12:11:16. However, TPICTR */
+/*        cannot recognize this string. Thus it is important to check */
 /*        the logical output OK to make sure that TPICTR was able to */
 /*        understand the time picture you provided. */
 
@@ -558,58 +572,171 @@ static doublereal c_b338 = 100.;
 
 /* $ Examples */
 
-/*     Example 1. */
-/*     ---------- */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as input, */
+/*     the compiler and supporting libraries, and the machine specific */
+/*     arithmetic implementation. */
 
-/*     Suppose you need to create time strings similar to the */
-/*     default time string produced by the UNIX utility "date" */
-/*     (for example a string of the form "Thu Aug 01 09:47:16 PDT 1996") */
+/*     1) Given a sample with the format of the UNIX date string */
+/*        local to California, create a SPICE time picture for use */
+/*        in TIMOUT. */
 
-/*     Make the following string assignment. */
+/*        Using that SPICE time picture, convert a series of ephemeris */
+/*        times to that picture format. */
 
-/*       PICTUR = 'Wkd Mon DD HH:MN:SC PDT YYYY ::UTC-7' */
+/*        Use the LSK kernel below to load the leap seconds and time */
+/*        constants required for the conversions. */
 
-/*    (Note the meta marker ::UTC-7 is used to adjust the output */
-/*     time system from UTC to PDT.  Also note that the substring PDT */
-/*     is a literal marker.  Without it, the time system would not */
-/*     appear in the output time string. */
-
-/*     Now for each time ET for which an output time string is required */
-/*     make the call to TIMOUT below, and write the time string. */
-
-/*        CALL TIMOUT ( ET, PICTUR, STRING ) */
-/*        WRITE (*,*) STRING */
-
-/*     Alternatively, you can let the routine TPICTR create the TIMOUT */
-/*     time picture for you. */
-
-/*       CALL TPICTR ( 'Thu Aug 01 09:47:16 PDT 1996', PICTUR, OK ) */
-
-/*       IF ( OK ) THEN */
-
-/*          CALL TIMOUT ( ET, PICTUR, STRING ) */
-/*          WRITE (*,*) STRING */
-
-/*       END IF */
+/*           naif0012.tls */
 
 
-/*     Example 2. */
-/*     ---------- */
+/*        Example code begins here. */
 
-/*     Suppose you want to output a string that contains both the */
-/*     calendar representations of the date as well as the Julian */
-/*     date (for example a string of the form: */
-/*     "Thu Aug 01 09:47:16 PDT 1996 (2450297.1994 JDUTC)" ) */
 
-/*     Make the following assignment. */
+/*              PROGRAM TIMOUT_EX1 */
+/*              IMPLICIT NONE */
 
-/*       PICTUR = 'Wkd Mon DD HR:MN ::UTC-7 YYYY (JULIAND.#### JDUTC)' */
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               ERRLEN */
+/*              PARAMETER           ( ERRLEN  = 400 ) */
 
-/*     Now for each time ET for which an output time string is required */
-/*     make the call to TIMOUT below, and write the time string. */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN  = 64  ) */
 
-/*        CALL TIMOUT ( ET, PICTUR, STRING ) */
-/*        WRITE (*,*) STRING */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(ERRLEN)    ERR */
+/*              CHARACTER*(TIMLEN)    PICTUR */
+/*              CHARACTER*(TIMLEN)    SAMPLE */
+/*              CHARACTER*(TIMLEN)    TIMSTR */
+/*              CHARACTER*(TIMLEN)    UTCSTR */
+
+/*              DOUBLE PRECISION      ET */
+
+/*              LOGICAL               OK */
+
+/*        C */
+/*        C     Load LSK file. */
+/*        C */
+/*              CALL FURNSH ( 'naif0012.tls' ) */
+
+/*        C */
+/*        C     Create the required time picture. */
+/*        C */
+/*              SAMPLE = 'Thu Oct 01 11:11:11 PDT 1111' */
+
+/*              CALL TPICTR ( SAMPLE, PICTUR, OK, ERR ) */
+
+/*              IF ( .NOT. OK ) THEN */
+
+/*                 WRITE(*,*) 'Invalid time picture.' */
+/*                 WRITE(*,*) ERR */
+
+/*              ELSE */
+
+/*        C */
+/*        C        Convert the input UTC time to ephemeris time. */
+/*        C */
+/*                 UTCSTR = '26 Nov 2018  23:23:00 UTC' */
+/*                 CALL STR2ET ( UTCSTR, ET ) */
+
+/*        C */
+/*        C         Now convert ET to the desired output format. */
+/*        C */
+/*                  CALL TIMOUT ( ET, PICTUR, TIMSTR ) */
+/*                  WRITE (*,*) 'Sample format: ', SAMPLE */
+/*                  WRITE (*,*) 'Time picture : ', PICTUR */
+/*                  WRITE (*,*) */
+/*                  WRITE (*,*) 'Input UTC    : ', UTCSTR */
+/*                  WRITE (*,*) 'Output       : ', TIMSTR */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Sample format: Thu Oct 01 11:11:11 PDT 1111 */
+/*         Time picture : Wkd Mon DD HR:MN:SC PDT YYYY ::UTC-7 */
+
+/*         Input UTC    : 26 Nov 2018  23:23:00 UTC */
+/*         Output       : Mon Nov 26 16:23:00 PDT 2018 */
+
+
+/*     2) Convert a UTC time to a string that contains both the */
+/*        calendar representations of the date as well as the Julian */
+/*        date; for example a string of the form: */
+
+/*           "Thu Aug 01 09:47:16 PDT 1996 (2450297.1994 JDUTC)" */
+
+/*        Use the LSK kernel below to load the leap seconds and time */
+/*        constants required for the conversions. */
+
+/*           naif0012.tls */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM TIMOUT_EX2 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN  = 80 ) */
+
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(TIMLEN)    PICTUR */
+/*              CHARACTER*(TIMLEN)    TIMSTR */
+/*              CHARACTER*(TIMLEN)    UTCSTR */
+
+/*              DOUBLE PRECISION      ET */
+
+/*        C */
+/*        C     Load LSK file. */
+/*        C */
+/*              CALL FURNSH ( 'naif0012.tls' ) */
+
+/*        C */
+/*        C     Convert the input UTC time to ephemeris time. */
+/*        C */
+/*              UTCSTR = '26 Nov 2018  16:23:00 UTC' */
+/*              CALL STR2ET ( UTCSTR, ET ) */
+
+/*        C */
+/*        C     Create the required time picture. This could be done */
+/*        C     using TPICTR. */
+/*        C */
+/*              PICTUR = 'Wkd Mon DD HR:MN ::UTC-7 YYYY ' */
+/*             .      // '(JULIAND.#### JDUTC)' */
+
+/*        C */
+/*        C      Now convert ET to the desired output format. */
+/*        C */
+/*               CALL TIMOUT ( ET, PICTUR, TIMSTR ) */
+/*               WRITE (*,*) 'Input UTC: ', UTCSTR */
+/*               WRITE (*,*) 'Output   : ', TIMSTR */
+
+/*               END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Input UTC: 26 Nov 2018  16:23:00 UTC */
+/*         Output   : Mon Nov 26 09:23  2018 (2458449.1826 JDUTC) */
+
 
 /* $ Restrictions */
 
@@ -621,12 +748,36 @@ static doublereal c_b338 = 100.;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     M.J. Spencer       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 3.3.1, 31-Jan-2017 (NJB) */
+/* -    SPICELIB Version 3.4.0, 07-AUG-2021 (EDW) (JDR) (NJB) */
+
+/*        Corrected typo preventing correct calculation of decimal */
+/*        values for HR.###... and MN.###... markers with ::UTC+N:M */
+/*        and ::UTC-N:M meta tags. */
+
+/*        Added "::TT" as a time system meta marker equivalent-to/ */
+/*        alias-for "::TDT". No change to functionality. */
+
+/*        Corrected OUTPUT argument name in $Brief_I/O section (it was */
+/*        STRING) and improved its description in $Detailed_Output. */
+/*        Fixed call to TPICTR in $Particulars. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary entries in $Revisions section. Converted the */
+/*        existing code fragments into complete examples and added */
+/*        references to required LSKs. */
+
+/*        Updated $Exceptions section, rewording the existing entry */
+/*        and adding three additional cases. */
+
+/* -    SPICELIB Version 3.3.1, 31-JAN-2017 (NJB) */
 
 /*        Updated header comments to draw attention to the fact that */
 /*        rounding can be commanded. */
@@ -634,25 +785,25 @@ static doublereal c_b338 = 100.;
 /* -    SPICELIB Version 3.3.0, 23-OCT-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
-/*        in RMAIND call.  Replaced header references to LDPOOL with */
+/*        in RMAIND call. Replaced header references to LDPOOL with */
 /*        references to FURNSH. */
 
-/* -    Spicelib Version 3.2.0, 09-APR-2002 (WLT) */
+/* -    SPICELIB Version 3.2.0, 09-APR-2002 (WLT) */
 
 /*        Added code to bracket the fractional part of a time component */
 /*        so that it cannot become negative due to inability to invert */
-/*        arthmetic operations with double precision arithmetic. */
+/*        arithmetic operations with double precision arithmetic. */
 
-/* -    Spicelib Version 3.1.0, 21-JUN-2001 (WLT) */
+/* -    SPICELIB Version 3.1.0, 21-JUN-2001 (WLT) */
 
 /*        Added the format picture components ?ERA? and ?era? which */
 /*        vanish for years after 999 A.D. */
 
-/* -    Spicelib Version 3.0.2, 10-APR-2000 (WLT) */
+/* -    SPICELIB Version 3.0.2, 10-APR-2000 (WLT) */
 
 /*        Declared SCAN to be external. */
 
-/* -    Spicelib Version 3.0.1, 22-JUN-1998 (WLT) */
+/* -    SPICELIB Version 3.0.1, 22-JUN-1998 (WLT) */
 
 /*        A number of typographical and grammatical errors */
 /*        were corrected in the header. */
@@ -665,15 +816,15 @@ static doublereal c_b338 = 100.;
 /*        In addition, the default time system, calendar and time zone */
 /*        are obtained from TIMDEF. */
 
-/* -    SPICELIB Version 2.0.0, 1-APR-1997  (WLT) */
+/* -    SPICELIB Version 2.0.0, 01-APR-1997 (WLT) */
 
 /*        In the event that the format picture requested 'YR' as */
 /*        the first component of a time string, the previous edition */
 /*        of this routine used the year value corresponding to the */
 /*        last call to this routine (or whatever happened to be in */
-/*        memory on the first call).  This error has been corrected. */
+/*        memory on the first call). This error has been corrected. */
 
-/* -    SPICELIB Version 1.0.0, 26-JUL-1996 (WLT) */
+/* -    SPICELIB Version 1.0.0, 26-JUL-1996 (WLT) (MJS) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -683,44 +834,24 @@ static doublereal c_b338 = 100.;
 /* -& */
 /* $ Revisions */
 
-/* -    SPICELIB Version 3.3.0, 23-OCT-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in RMAIND call.  Replaced header references to LDPOOL with */
-/*        references to FURNSH. */
-
-/* -    Spicelib Version 3.1.0, 21-JUN-2001 (WLT) */
-
-/*        Added the format picture components ?ERA? and ?era? which */
-/*        vanish for years after 999 A.D. */
-
-/* -    Spicelib Version 3.0.2, 10-APR-2000 (WLT) */
-
-/*        Declared SCAN to be external. */
-
-/* -    Spicelib Version 3.0.1, 22-JUN-1998 (WLT) */
-
-/*        A number of typographical and grammatical errors */
-/*        were corrected in the header. */
-
 /* -    SPICELIB Version 3.0.0, 30-DEC-1997 (WLT) */
 
 /*        The previous version of this routine did not output */
 /*        fractional components for epochs prior to 1 A.D. */
 
 /*        This error was due to overuse of the original year */
-/*        component returned from TTRANS.  The original year */
+/*        component returned from TTRANS. The original year */
 /*        component is now saved for use in computing the fractional */
-/*        component.  The modified year (used in printing B.C. epochs) */
+/*        component. The modified year (used in printing B.C. epochs) */
 /*        is stored in a separate variable. */
 
-/* -    SPICELIB Version 2.0.0, 1-APR-1997  (WLT) */
+/* -    SPICELIB Version 2.0.0, 01-APR-1997 (WLT) */
 
 /*        In the event that the format picture requested 'YR' as */
 /*        the first component of a time string, the previous edition */
 /*        of this routine used the year value corresponding to the */
 /*        last call to this routine (or whatever happened to be in */
-/*        memory on the first call).  This error has been corrected. */
+/*        memory on the first call). This error has been corrected. */
 
 
 /*        The error was fixed by recoding the following IF THEN statement */
@@ -758,7 +889,6 @@ static doublereal c_b338 = 100.;
 /*        Integer argument to BRCKTD changed from 0 to 0.0D0. */
 
 /* -& */
-
 
 /*     SPICELIB functions */
 
@@ -808,7 +938,7 @@ static doublereal c_b338 = 100.;
 /*     The integers below are used to mark substring boundaries. */
 
 
-/*     Times come in three flavors: TDT, TDB, UTC.  The one for used */
+/*     Times come in three flavors: TT or TDT, TDB, UTC.  The one used */
 /*     on this particular invocation of TIMOUT is stored in TIMTYP. */
 /*     The routine TTRANS needs to have input and output time vector */
 /*     types.  The one used based upon the input PICTUR is stored */
@@ -876,23 +1006,24 @@ static doublereal c_b338 = 100.;
 	s_copy(marks + 184, "::UTC", (ftnlen)8, (ftnlen)5);
 	s_copy(marks + 192, "::TDB", (ftnlen)8, (ftnlen)5);
 	s_copy(marks + 200, "::TDT", (ftnlen)8, (ftnlen)5);
-	s_copy(marks + 208, "SP2000", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 216, "SP1950", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 224, "::RND", (ftnlen)8, (ftnlen)5);
-	s_copy(marks + 232, "::TRNC", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 240, "ERA", (ftnlen)8, (ftnlen)3);
-	s_copy(marks + 248, "era", (ftnlen)8, (ftnlen)3);
-	s_copy(marks + 256, "AMPM", (ftnlen)8, (ftnlen)4);
-	s_copy(marks + 264, "ampm", (ftnlen)8, (ftnlen)4);
-	s_copy(marks + 272, "::UTC+", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 280, "::UTC-", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 288, "::JCAL", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 296, "::GCAL", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 304, "::MCAL", (ftnlen)8, (ftnlen)6);
-	s_copy(marks + 312, "AP", (ftnlen)8, (ftnlen)2);
-	s_copy(marks + 320, "?ERA?", (ftnlen)8, (ftnlen)5);
-	s_copy(marks + 328, "?era?", (ftnlen)8, (ftnlen)5);
-	nmarks = 42;
+	s_copy(marks + 208, "::TT", (ftnlen)8, (ftnlen)4);
+	s_copy(marks + 216, "SP2000", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 224, "SP1950", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 232, "::RND", (ftnlen)8, (ftnlen)5);
+	s_copy(marks + 240, "::TRNC", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 248, "ERA", (ftnlen)8, (ftnlen)3);
+	s_copy(marks + 256, "era", (ftnlen)8, (ftnlen)3);
+	s_copy(marks + 264, "AMPM", (ftnlen)8, (ftnlen)4);
+	s_copy(marks + 272, "ampm", (ftnlen)8, (ftnlen)4);
+	s_copy(marks + 280, "::UTC+", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 288, "::UTC-", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 296, "::JCAL", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 304, "::GCAL", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 312, "::MCAL", (ftnlen)8, (ftnlen)6);
+	s_copy(marks + 320, "AP", (ftnlen)8, (ftnlen)2);
+	s_copy(marks + 328, "?ERA?", (ftnlen)8, (ftnlen)5);
+	s_copy(marks + 336, "?era?", (ftnlen)8, (ftnlen)5);
+	nmarks = 43;
 	scanpr_(&nmarks, marks, mrklen, pntrs, (ftnlen)8);
 
 /*        Now that we've prepared our recognized substrings and */
@@ -927,111 +1058,114 @@ static doublereal c_b338 = 100.;
 	id[25] = bsrchc_("::UTC", &nmarks, marks, (ftnlen)5, (ftnlen)8);
 	id[26] = bsrchc_("::TDB", &nmarks, marks, (ftnlen)5, (ftnlen)8);
 	id[27] = bsrchc_("::TDT", &nmarks, marks, (ftnlen)5, (ftnlen)8);
-	id[28] = bsrchc_("SP2000", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[29] = bsrchc_("SP1950", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[30] = bsrchc_("::RND", &nmarks, marks, (ftnlen)5, (ftnlen)8);
-	id[31] = bsrchc_("::TRNC", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[32] = bsrchc_("ERA", &nmarks, marks, (ftnlen)3, (ftnlen)8);
-	id[33] = bsrchc_("era", &nmarks, marks, (ftnlen)3, (ftnlen)8);
-	id[34] = bsrchc_("?ERA?", &nmarks, marks, (ftnlen)5, (ftnlen)8);
-	id[35] = bsrchc_("?era?", &nmarks, marks, (ftnlen)5, (ftnlen)8);
-	id[36] = bsrchc_("AMPM", &nmarks, marks, (ftnlen)4, (ftnlen)8);
-	id[37] = bsrchc_("ampm", &nmarks, marks, (ftnlen)4, (ftnlen)8);
-	id[38] = bsrchc_("::UTC+", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[39] = bsrchc_("::UTC-", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[40] = bsrchc_("::JCAL", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[41] = bsrchc_("::GCAL", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[42] = bsrchc_("::MCAL", &nmarks, marks, (ftnlen)6, (ftnlen)8);
-	id[45] = bsrchc_("AP", &nmarks, marks, (ftnlen)2, (ftnlen)8);
-	class__[(i__1 = id[1]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1174)] = 2;
-	class__[(i__1 = id[2]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1175)] = 3;
-	class__[(i__1 = id[3]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1176)] = 4;
-	class__[(i__1 = id[4]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1177)] = 47;
-	class__[(i__1 = id[5]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1178)] = 47;
-	class__[(i__1 = id[6]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1179)] = 47;
-	class__[(i__1 = id[7]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1180)] = 47;
-	class__[(i__1 = id[8]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1181)] = 47;
-	class__[(i__1 = id[9]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1182)] = 47;
-	class__[(i__1 = id[10]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1183)] = 11;
-	class__[(i__1 = id[11]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1184)] = 12;
-	class__[(i__1 = id[12]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1185)] = 48;
-	class__[(i__1 = id[13]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1186)] = 48;
-	class__[(i__1 = id[14]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1187)] = 48;
-	class__[(i__1 = id[15]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1188)] = 48;
-	class__[(i__1 = id[16]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1189)] = 48;
-	class__[(i__1 = id[17]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1190)] = 48;
-	class__[(i__1 = id[18]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1191)] = 19;
-	class__[(i__1 = id[19]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1192)] = 20;
-	class__[(i__1 = id[20]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1193)] = 21;
-	class__[(i__1 = id[21]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1194)] = 22;
-	class__[(i__1 = id[22]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1195)] = 23;
-	class__[(i__1 = id[23]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1196)] = 24;
-	class__[(i__1 = id[24]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1197)] = 25;
-	class__[(i__1 = id[25]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1198)] = 44;
-	class__[(i__1 = id[26]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1199)] = 44;
-	class__[(i__1 = id[27]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1200)] = 44;
-	class__[(i__1 = id[28]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1201)] = 29;
-	class__[(i__1 = id[29]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1202)] = 30;
-	class__[(i__1 = id[30]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1203)] = 31;
-	class__[(i__1 = id[31]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1204)] = 32;
-	class__[(i__1 = id[32]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1205)] = 49;
-	class__[(i__1 = id[33]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1206)] = 49;
-	class__[(i__1 = id[34]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1207)] = 49;
-	class__[(i__1 = id[35]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1208)] = 49;
-	class__[(i__1 = id[36]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1209)] = 50;
-	class__[(i__1 = id[37]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1210)] = 50;
-	class__[(i__1 = id[38]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1211)] = 44;
-	class__[(i__1 = id[39]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1212)] = 44;
-	class__[(i__1 = id[40]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1213)] = 45;
-	class__[(i__1 = id[41]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1214)] = 45;
-	class__[(i__1 = id[42]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1215)] = 45;
-	class__[(i__1 = id[45]) < 43 && 0 <= i__1 ? i__1 : s_rnge("class", 
-		i__1, "timout_", (ftnlen)1216)] = 46;
-	for (i__ = 1; i__ <= 51; ++i__) {
-	    pad[(i__1 = i__ - 1) < 51 && 0 <= i__1 ? i__1 : s_rnge("pad", 
-		    i__1, "timout_", (ftnlen)1219)] = 0.;
+	id[28] = bsrchc_("::TT", &nmarks, marks, (ftnlen)4, (ftnlen)8);
+	id[29] = bsrchc_("SP2000", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[30] = bsrchc_("SP1950", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[31] = bsrchc_("::RND", &nmarks, marks, (ftnlen)5, (ftnlen)8);
+	id[32] = bsrchc_("::TRNC", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[33] = bsrchc_("ERA", &nmarks, marks, (ftnlen)3, (ftnlen)8);
+	id[34] = bsrchc_("era", &nmarks, marks, (ftnlen)3, (ftnlen)8);
+	id[35] = bsrchc_("?ERA?", &nmarks, marks, (ftnlen)5, (ftnlen)8);
+	id[36] = bsrchc_("?era?", &nmarks, marks, (ftnlen)5, (ftnlen)8);
+	id[37] = bsrchc_("AMPM", &nmarks, marks, (ftnlen)4, (ftnlen)8);
+	id[38] = bsrchc_("ampm", &nmarks, marks, (ftnlen)4, (ftnlen)8);
+	id[39] = bsrchc_("::UTC+", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[40] = bsrchc_("::UTC-", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[41] = bsrchc_("::JCAL", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[42] = bsrchc_("::GCAL", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[43] = bsrchc_("::MCAL", &nmarks, marks, (ftnlen)6, (ftnlen)8);
+	id[46] = bsrchc_("AP", &nmarks, marks, (ftnlen)2, (ftnlen)8);
+	class__[(i__1 = id[1]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1307)] = 2;
+	class__[(i__1 = id[2]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1308)] = 3;
+	class__[(i__1 = id[3]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1309)] = 4;
+	class__[(i__1 = id[4]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1310)] = 48;
+	class__[(i__1 = id[5]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1311)] = 48;
+	class__[(i__1 = id[6]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1312)] = 48;
+	class__[(i__1 = id[7]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1313)] = 48;
+	class__[(i__1 = id[8]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1314)] = 48;
+	class__[(i__1 = id[9]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1315)] = 48;
+	class__[(i__1 = id[10]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1316)] = 11;
+	class__[(i__1 = id[11]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1317)] = 12;
+	class__[(i__1 = id[12]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1318)] = 49;
+	class__[(i__1 = id[13]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1319)] = 49;
+	class__[(i__1 = id[14]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1320)] = 49;
+	class__[(i__1 = id[15]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1321)] = 49;
+	class__[(i__1 = id[16]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1322)] = 49;
+	class__[(i__1 = id[17]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1323)] = 49;
+	class__[(i__1 = id[18]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1324)] = 19;
+	class__[(i__1 = id[19]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1325)] = 20;
+	class__[(i__1 = id[20]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1326)] = 21;
+	class__[(i__1 = id[21]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1327)] = 22;
+	class__[(i__1 = id[22]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1328)] = 23;
+	class__[(i__1 = id[23]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1329)] = 24;
+	class__[(i__1 = id[24]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1330)] = 25;
+	class__[(i__1 = id[25]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1331)] = 45;
+	class__[(i__1 = id[26]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1332)] = 45;
+	class__[(i__1 = id[27]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1333)] = 45;
+	class__[(i__1 = id[28]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1334)] = 45;
+	class__[(i__1 = id[29]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1335)] = 30;
+	class__[(i__1 = id[30]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1336)] = 31;
+	class__[(i__1 = id[31]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1337)] = 32;
+	class__[(i__1 = id[32]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1338)] = 33;
+	class__[(i__1 = id[33]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1339)] = 50;
+	class__[(i__1 = id[34]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1340)] = 50;
+	class__[(i__1 = id[35]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1341)] = 50;
+	class__[(i__1 = id[36]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1342)] = 50;
+	class__[(i__1 = id[37]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1343)] = 51;
+	class__[(i__1 = id[38]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1344)] = 51;
+	class__[(i__1 = id[39]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1345)] = 45;
+	class__[(i__1 = id[40]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1346)] = 45;
+	class__[(i__1 = id[41]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1347)] = 46;
+	class__[(i__1 = id[42]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1348)] = 46;
+	class__[(i__1 = id[43]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1349)] = 46;
+	class__[(i__1 = id[46]) < 44 && 0 <= i__1 ? i__1 : s_rnge("class", 
+		i__1, "timout_", (ftnlen)1350)] = 47;
+	for (i__ = 1; i__ <= 52; ++i__) {
+	    pad[(i__1 = i__ - 1) < 52 && 0 <= i__1 ? i__1 : s_rnge("pad", 
+		    i__1, "timout_", (ftnlen)1353)] = 0.;
 	}
 	pad[21] = .5;
 	pad[19] = pad[21] * 60.;
@@ -1039,13 +1173,13 @@ static doublereal c_b338 = 100.;
 	pad[18] = pad[20] * 24.;
 	pad[10] = pad[18] * 30.;
 	pad[11] = pad[18];
-	pad[46] = pad[10];
+	pad[47] = pad[10];
 	pad[2] = pad[18] * 365.;
 	pad[3] = pad[18] * 365.;
 	pad[24] = pad[18];
-	pad[28] = pad[21];
 	pad[29] = pad[21];
-	pad[45] = pad[20];
+	pad[30] = pad[21];
+	pad[46] = pad[20];
 
 /*        After we've made the initial scan for tokens and determined */
 /*        the time system requested, we will want to get rid of the */
@@ -1053,15 +1187,16 @@ static doublereal c_b338 = 100.;
 
 	dump[0] = id[25];
 	dump[1] = id[27];
-	dump[2] = id[26];
-	dump[3] = id[30];
+	dump[2] = id[28];
+	dump[3] = id[26];
 	dump[4] = id[31];
-	dump[5] = id[39];
-	dump[6] = id[38];
-	dump[7] = id[40];
+	dump[5] = id[32];
+	dump[6] = id[40];
+	dump[7] = id[39];
 	dump[8] = id[41];
 	dump[9] = id[42];
-	ndump = 10;
+	dump[10] = id[43];
+	ndump = 11;
 
 /*        Set up the default formats for the various time components */
 
@@ -1077,22 +1212,22 @@ static doublereal c_b338 = 100.;
 	length[10] = 2;
 	s_copy(orignl + 640, "0H", (ftnlen)32, (ftnlen)2);
 	length[20] = 2;
-	s_copy(orignl + 1440, "0H", (ftnlen)32, (ftnlen)2);
-	length[45] = 2;
+	s_copy(orignl + 1472, "0H", (ftnlen)32, (ftnlen)2);
+	length[46] = 2;
 	s_copy(orignl + 608, "0M", (ftnlen)32, (ftnlen)2);
 	length[19] = 2;
 	s_copy(orignl + 672, "0S", (ftnlen)32, (ftnlen)2);
 	length[21] = 2;
 	s_copy(orignl + 768, "XXXXXXX", (ftnlen)32, (ftnlen)7);
 	length[24] = 7;
-	s_copy(orignl + 896, "XXXXXXXXXXX", (ftnlen)32, (ftnlen)11);
-	length[28] = 11;
 	s_copy(orignl + 928, "XXXXXXXXXXX", (ftnlen)32, (ftnlen)11);
 	length[29] = 11;
+	s_copy(orignl + 960, "XXXXXXXXXXX", (ftnlen)32, (ftnlen)11);
+	length[30] = 11;
 
 /*        Finally set up the component pointers... */
 
-	compnt[0] = 51;
+	compnt[0] = 52;
 	compnt[1] = 11;
 	compnt[2] = 19;
 	compnt[3] = 21;
@@ -1121,7 +1256,7 @@ static doublereal c_b338 = 100.;
 	    end, e, (ftnlen)8);
 
 /*     Locate the time system that will be used.  This must */
-/*     be one of the following: UTC, TDB, TDT */
+/*     be one of the following: UTC, TDB, TT, TDT */
 
     unknwn = TRUE_;
     go2jul = FALSE_;
@@ -1137,10 +1272,11 @@ static doublereal c_b338 = 100.;
 	timtyp = id[25];
     } else if (s_cmp(tsys, "TDB", (ftnlen)16, (ftnlen)3) == 0) {
 	timtyp = id[26];
-    } else if (s_cmp(tsys, "TDT", (ftnlen)16, (ftnlen)3) == 0) {
+    } else if (s_cmp(tsys, "TDT", (ftnlen)16, (ftnlen)3) == 0 || s_cmp(tsys, 
+	    "TT", (ftnlen)16, (ftnlen)2) == 0) {
 	timtyp = id[27];
     } else {
-	timtyp = id[38];
+	timtyp = id[39];
 	timdef_("GET", "ZONE", zon, (ftnlen)3, (ftnlen)4, (ftnlen)32);
 	prefix_("::", &c__0, zon, (ftnlen)2, (ftnlen)32);
 	zzutcpm_(zon, &c__1, &hoff, &moff, &last, &ok, (ftnlen)32);
@@ -1149,7 +1285,7 @@ static doublereal c_b338 = 100.;
 /*        The routine TIMDEF uses ZZUTCPM to determine whether */
 /*        or not a time zone is legitimate before it stores it */
 /*        to be "GOTTEN."  As a result the value of OK should */
-/*        always be TRUE.  However, just in case TIMDEF should */
+/*        always be .TRUE.  However, just in case TIMDEF should */
 /*        someday use something other that ZZUTCPM for checking */
 /*        we put in the unneeded check below. */
 
@@ -1159,27 +1295,27 @@ static doublereal c_b338 = 100.;
     }
     while(unknwn && i__ <= ntokns) {
 	if (class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 :
-		 s_rnge("ident", i__1, "timout_", (ftnlen)1378)]) < 43 && 0 <=
-		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1378)]
-		 == 44) {
+		 s_rnge("ident", i__1, "timout_", (ftnlen)1513)]) < 44 && 0 <=
+		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1513)]
+		 == 45) {
 	    timtyp = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ident", i__1, "timout_", (ftnlen)1379)];
+		    s_rnge("ident", i__1, "timout_", (ftnlen)1514)];
 	    unknwn = FALSE_;
 	    dozone = FALSE_;
 	    if (ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-		    "ident", i__1, "timout_", (ftnlen)1383)] == id[38] || 
+		    "ident", i__1, "timout_", (ftnlen)1518)] == id[39] || 
 		    ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-		    "ident", i__2, "timout_", (ftnlen)1383)] == id[39]) {
+		    "ident", i__2, "timout_", (ftnlen)1518)] == id[40]) {
 
 /*              We've got a time zone specification. Parse it and */
 /*              store the offsets from UTC. */
 
 		zzutcpm_(mystr, &beg[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? 
-			i__1 : s_rnge("beg", i__1, "timout_", (ftnlen)1390)], 
+			i__1 : s_rnge("beg", i__1, "timout_", (ftnlen)1525)], 
 			&hoff, &moff, &last, &ok, (ftnlen)256);
 		if (ok) {
 		    dozone = TRUE_;
-		    timtyp = id[38];
+		    timtyp = id[39];
 
 /*                 If we ran all the way up to the end of the next */
 /*                 token, we simply reset the identity of the next */
@@ -1191,19 +1327,19 @@ static doublereal c_b338 = 100.;
 /*                 format string. */
 
 		    if (last == end[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("end", i__1, "timout_", (ftnlen)1407)]) {
+			    s_rnge("end", i__1, "timout_", (ftnlen)1542)]) {
 			ident[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-				"ident", i__1, "timout_", (ftnlen)1408)] = 
+				"ident", i__1, "timout_", (ftnlen)1543)] = 
 				ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
 				i__2 : s_rnge("ident", i__2, "timout_", (
-				ftnlen)1408)];
+				ftnlen)1543)];
 			++i__;
 		    } else {
 			end[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-				s_rnge("end", i__1, "timout_", (ftnlen)1411)] 
+				s_rnge("end", i__1, "timout_", (ftnlen)1546)] 
 				= last;
 			beg[(i__1 = i__) < 100 && 0 <= i__1 ? i__1 : s_rnge(
-				"beg", i__1, "timout_", (ftnlen)1412)] = last 
+				"beg", i__1, "timout_", (ftnlen)1547)] = last 
 				+ 1;
 		    }
 		}
@@ -1222,19 +1358,19 @@ static doublereal c_b338 = 100.;
 
     timdef_("GET", "CALENDAR", cal, (ftnlen)3, (ftnlen)8, (ftnlen)16);
     if (s_cmp(cal, "GREGORIAN", (ftnlen)16, (ftnlen)9) == 0) {
-	caltyp = id[41];
-    } else if (s_cmp(cal, "JULIAN", (ftnlen)16, (ftnlen)6) == 0) {
-	caltyp = id[40];
-    } else {
 	caltyp = id[42];
+    } else if (s_cmp(cal, "JULIAN", (ftnlen)16, (ftnlen)6) == 0) {
+	caltyp = id[41];
+    } else {
+	caltyp = id[43];
     }
     while(unknwn && i__ <= ntokns) {
 	if (class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 :
-		 s_rnge("ident", i__1, "timout_", (ftnlen)1448)]) < 43 && 0 <=
-		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1448)]
-		 == 45) {
+		 s_rnge("ident", i__1, "timout_", (ftnlen)1583)]) < 44 && 0 <=
+		 i__2 ? i__2 : s_rnge("class", i__2, "timout_", (ftnlen)1583)]
+		 == 46) {
 	    caltyp = ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-		    s_rnge("ident", i__1, "timout_", (ftnlen)1449)];
+		    s_rnge("ident", i__1, "timout_", (ftnlen)1584)];
 	    unknwn = FALSE_;
 	}
 	++i__;
@@ -1243,13 +1379,13 @@ static doublereal c_b338 = 100.;
 /*     Next determine whether or not we shall be performing rounding */
 /*     on output. */
 
-    pumpup = isrchi_(&id[30], &ntokns, ident) != 0;
+    pumpup = isrchi_(&id[31], &ntokns, ident) != 0;
 
 /*     Determine if we have an Era specification */
 
-    doera = isrchi_(&id[33], &ntokns, ident) != 0 || isrchi_(&id[32], &ntokns,
-	     ident) != 0 || isrchi_(&id[34], &ntokns, ident) != 0 || isrchi_(&
-	    id[35], &ntokns, ident) != 0;
+    doera = isrchi_(&id[34], &ntokns, ident) != 0 || isrchi_(&id[33], &ntokns,
+	     ident) != 0 || isrchi_(&id[35], &ntokns, ident) != 0 || isrchi_(&
+	    id[36], &ntokns, ident) != 0;
 
 /*     Until we've examined the year, we assume that the era is not */
 /*     supposed to vanish. */
@@ -1278,10 +1414,10 @@ static doublereal c_b338 = 100.;
 	while(i__ <= ntokns) {
 	    type__ = class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= 
 		    i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (ftnlen)
-		    1503)]) < 43 && 0 <= i__2 ? i__2 : s_rnge("class", i__2, 
-		    "timout_", (ftnlen)1503)];
-	    if (type__ == 2 || type__ == 23 || type__ == 24 || type__ == 50 ||
-		     type__ == 49 || type__ == 47 || type__ == 48) {
+		    1638)]) < 44 && 0 <= i__2 ? i__2 : s_rnge("class", i__2, 
+		    "timout_", (ftnlen)1638)];
+	    if (type__ == 2 || type__ == 23 || type__ == 24 || type__ == 51 ||
+		     type__ == 50 || type__ == 48 || type__ == 49) {
 
 /*              Don't do anything, just go on to the next token. */
 
@@ -1291,8 +1427,8 @@ static doublereal c_b338 = 100.;
 /*              Look up the amount we should pad our time by. */
 
 		factor = 1.;
-		incr = pad[(i__1 = type__ - 1) < 51 && 0 <= i__1 ? i__1 : 
-			s_rnge("pad", i__1, "timout_", (ftnlen)1524)];
+		incr = pad[(i__1 = type__ - 1) < 52 && 0 <= i__1 ? i__1 : 
+			s_rnge("pad", i__1, "timout_", (ftnlen)1659)];
 
 /*              Examine the next token.  If it's not a decimal point */
 /*              and marker, we have the least significant part of */
@@ -1301,8 +1437,8 @@ static doublereal c_b338 = 100.;
 		++i__;
 		type__ = class__[(i__2 = ident[(i__1 = i__ - 1) < 100 && 0 <= 
 			i__1 ? i__1 : s_rnge("ident", i__1, "timout_", (
-			ftnlen)1532)]) < 43 && 0 <= i__2 ? i__2 : s_rnge(
-			"class", i__2, "timout_", (ftnlen)1532)];
+			ftnlen)1667)]) < 44 && 0 <= i__2 ? i__2 : s_rnge(
+			"class", i__2, "timout_", (ftnlen)1667)];
 		if (type__ == 23) {
 		    factor *= .1;
 		    ++i__;
@@ -1311,7 +1447,7 @@ static doublereal c_b338 = 100.;
 /*                 holders */
 
 		    while(ident[(i__1 = i__ - 1) < 100 && 0 <= i__1 ? i__1 : 
-			    s_rnge("ident", i__1, "timout_", (ftnlen)1543)] ==
+			    s_rnge("ident", i__1, "timout_", (ftnlen)1678)] ==
 			     id[23]) {
 			factor *= .1;
 			++i__;
@@ -1334,9 +1470,9 @@ static doublereal c_b338 = 100.;
 /*     Right now we don't have any components of the time format */
 /*     and we don't need any of them so far. */
 
-    for (part = 1; part <= 51; ++part) {
-	have[(i__1 = part - 1) < 51 && 0 <= i__1 ? i__1 : s_rnge("have", i__1,
-		 "timout_", (ftnlen)1573)] = FALSE_;
+    for (part = 1; part <= 52; ++part) {
+	have[(i__1 = part - 1) < 52 && 0 <= i__1 ? i__1 : s_rnge("have", i__1,
+		 "timout_", (ftnlen)1708)] = FALSE_;
     }
 
 /*     Set up the input time format and the output time format that will */
@@ -1348,8 +1484,8 @@ static doublereal c_b338 = 100.;
 /*     the dynamical time systems we will call the input time a formal */
 /*     time in seconds past a formal calendar epoch of J2000.  If on the */
 /*     other hand we are going to construct a UTC based string, we will */
-/*     convert our ET to an earth based epoch (TDT) and use this as our */
-/*     base input system. */
+/*     convert our ET to an earth based epoch (TT, TDT) and use this as */
+/*     our base input system. */
 
 
     myet = *et;
@@ -1359,25 +1495,25 @@ static doublereal c_b338 = 100.;
 /*        compute them now. */
 
 	myet += timpad;
-	values[28] = myet;
+	values[29] = myet;
 	values[24] = unitim_(&myet, "TDB", "JDTDB", (ftnlen)3, (ftnlen)5);
-	values[29] = values[28] + spd_() * (j2000_() - j1950_());
+	values[30] = values[29] + spd_() * (j2000_() - j1950_());
 	s_copy(bastyp, "FORMAL", (ftnlen)16, (ftnlen)6);
 	s_copy(ymdfmt, "YMDF", (ftnlen)8, (ftnlen)4);
 	s_copy(ywfmt, "YMWDF", (ftnlen)8, (ftnlen)5);
-	have[28] = TRUE_;
 	have[29] = TRUE_;
+	have[30] = TRUE_;
 	have[24] = TRUE_;
-    } else if (timtyp == id[27]) {
+    } else if (timtyp == id[27] || timtyp == id[28]) {
 	myet = unitim_(&myet, "TDB", "TDT", (ftnlen)3, (ftnlen)3) + timpad;
-	values[28] = myet;
+	values[29] = myet;
 	values[24] = unitim_(&myet, "TDT", "JDTDT", (ftnlen)3, (ftnlen)5);
-	values[29] = values[28] + spd_() * (j2000_() - j1950_());
+	values[30] = values[29] + spd_() * (j2000_() - j1950_());
 	s_copy(bastyp, "FORMAL", (ftnlen)16, (ftnlen)6);
 	s_copy(ymdfmt, "YMDF", (ftnlen)8, (ftnlen)4);
 	s_copy(ywfmt, "YMWDF", (ftnlen)8, (ftnlen)5);
-	have[28] = TRUE_;
 	have[29] = TRUE_;
+	have[30] = TRUE_;
 	have[24] = TRUE_;
     } else {
 
@@ -1404,9 +1540,9 @@ static doublereal c_b338 = 100.;
     i__1 = ntokns;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	type__ = class__[(i__3 = ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-		i__2 : s_rnge("ident", i__2, "timout_", (ftnlen)1654)]) < 43 
+		i__2 : s_rnge("ident", i__2, "timout_", (ftnlen)1790)]) < 44 
 		&& 0 <= i__3 ? i__3 : s_rnge("class", i__3, "timout_", (
-		ftnlen)1654)];
+		ftnlen)1790)];
 	tvec[0] = myet;
 
 /*        If the next marker is not one we use as a place holder */
@@ -1425,8 +1561,8 @@ static doublereal c_b338 = 100.;
 /*              We are going to truncate the number to the number of */
 /*              places requested NOT round. */
 
-		i__3 = width - length[(i__2 = numtyp - 1) < 51 && 0 <= i__2 ? 
-			i__2 : s_rnge("length", i__2, "timout_", (ftnlen)1676)
+		i__3 = width - length[(i__2 = numtyp - 1) < 52 && 0 <= i__2 ? 
+			i__2 : s_rnge("length", i__2, "timout_", (ftnlen)1812)
 			] - 1;
 		trncat = brckti_(&i__3, &c__0, &c__14);
 		frac = value - d_int(&value);
@@ -1435,11 +1571,11 @@ static doublereal c_b338 = 100.;
 		    frac += 1.;
 		}
 		d__1 = frac * power[(i__2 = trncat) < 15 && 0 <= i__2 ? i__2 :
-			 s_rnge("power", i__2, "timout_", (ftnlen)1684)];
+			 s_rnge("power", i__2, "timout_", (ftnlen)1820)];
 		intmed = (d_int(&d__1) - .125) / power[(i__3 = trncat) < 15 &&
 			 0 <= i__3 ? i__3 : s_rnge("power", i__3, "timout_", (
-			ftnlen)1684)];
-		frac = brcktd_(&intmed, &c_b274, &c_b275);
+			ftnlen)1820)];
+		frac = brcktd_(&intmed, &c_b279, &c_b280);
 		value = d_int(&value) + frac;
 		dpfmt_(&value, fmt, substr, (ftnlen)32, (ftnlen)256);
 		s_copy(string + (appnd - 1), substr, 256 - (appnd - 1), (
@@ -1457,14 +1593,14 @@ static doublereal c_b338 = 100.;
 
 	if (type__ == 2) {
 	    i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-		    "beg", i__3, "timout_", (ftnlen)1711)] - 1;
+		    "beg", i__3, "timout_", (ftnlen)1847)] - 1;
 	    s_copy(string + (appnd - 1), mystr + i__2, 256 - (appnd - 1), end[
 		    (i__4 = i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end",
-		     i__4, "timout_", (ftnlen)1711)] - i__2);
+		     i__4, "timout_", (ftnlen)1847)] - i__2);
 	    appnd = appnd - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-		    s_rnge("beg", i__2, "timout_", (ftnlen)1712)] + end[(i__3 
+		    s_rnge("beg", i__2, "timout_", (ftnlen)1848)] + end[(i__3 
 		    = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge("end", i__3,
-		     "timout_", (ftnlen)1712)] + 1;
+		     "timout_", (ftnlen)1848)] + 1;
 
 /*        If the token is a place holder, we either just append it */
 /*        or tack it on to a format string we are creating.. */
@@ -1473,28 +1609,28 @@ static doublereal c_b338 = 100.;
 	    if (making) {
 		b = width + 1;
 		e = b - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1723)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1859)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1723)];
+			"end", i__3, "timout_", (ftnlen)1859)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1724)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1860)] - 1;
 		s_copy(fmt + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 = 
 			i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1724)] - i__2);
+			i__4, "timout_", (ftnlen)1860)] - i__2);
 		width = width - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1725)] 
+			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1861)] 
 			+ end[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("end", i__3, "timout_", (ftnlen)1725)] + 1;
+			s_rnge("end", i__3, "timout_", (ftnlen)1861)] + 1;
 	    } else {
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1727)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1863)] - 1;
 		s_copy(string + (appnd - 1), mystr + i__2, (ftnlen)1, end[(
 			i__4 = i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge(
-			"end", i__4, "timout_", (ftnlen)1727)] - i__2);
+			"end", i__4, "timout_", (ftnlen)1863)] - i__2);
 		appnd = appnd - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? 
-			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1728)] 
+			i__2 : s_rnge("beg", i__2, "timout_", (ftnlen)1864)] 
 			+ end[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("end", i__3, "timout_", (ftnlen)1728)] + 1;
+			s_rnge("end", i__3, "timout_", (ftnlen)1864)] + 1;
 	    }
 
 /*        If the token is the decimal point plus place holder */
@@ -1506,40 +1642,40 @@ static doublereal c_b338 = 100.;
 	    if (! making) {
 		b = appnd;
 		e = appnd - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1742)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1878)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1742)];
+			"end", i__3, "timout_", (ftnlen)1878)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1743)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1879)] - 1;
 		s_copy(string + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 
 			= i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1743)] - i__2);
+			i__4, "timout_", (ftnlen)1879)] - i__2);
 		appnd = e + 1;
 		have[22] = FALSE_;
 	    } else if (timfmt == 2) {
 		b = width + 1;
 		e = b - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1750)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1886)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1750)];
+			"end", i__3, "timout_", (ftnlen)1886)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1751)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1887)] - 1;
 		s_copy(fmt + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 = 
 			i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1751)] - i__2);
+			i__4, "timout_", (ftnlen)1887)] - i__2);
 		width = e;
 		have[22] = TRUE_;
 	    } else {
 		b = width + 1;
 		e = b - beg[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("beg", i__2, "timout_", (ftnlen)1758)] + end[(
+			s_rnge("beg", i__2, "timout_", (ftnlen)1894)] + end[(
 			i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : s_rnge(
-			"end", i__3, "timout_", (ftnlen)1758)];
+			"end", i__3, "timout_", (ftnlen)1894)];
 		i__2 = beg[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("beg", i__3, "timout_", (ftnlen)1759)] - 1;
+			s_rnge("beg", i__3, "timout_", (ftnlen)1895)] - 1;
 		s_copy(fmt + (b - 1), mystr + i__2, e - (b - 1), end[(i__4 = 
 			i__ - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("end", 
-			i__4, "timout_", (ftnlen)1759)] - i__2);
+			i__4, "timout_", (ftnlen)1895)] - i__2);
 		width = e;
 		have[22] = TRUE_;
 
@@ -1578,7 +1714,7 @@ static doublereal c_b338 = 100.;
 		d__1 = 1., d__2 = ntvec[0] - ptvec[0];
 		delta = max(d__1,d__2);
 		d__1 = (myet - ptvec[0]) / delta;
-		frac = brcktd_(&c_b274, &c_b275, &d__1);
+		frac = brcktd_(&c_b279, &c_b280, &d__1);
 		value += frac;
 	    }
 	} else {
@@ -1592,21 +1728,21 @@ static doublereal c_b338 = 100.;
 
 	    making = TRUE_;
 	    have[22] = FALSE_;
-	    s_copy(fmt, orignl + (((i__2 = type__ - 1) < 51 && 0 <= i__2 ? 
-		    i__2 : s_rnge("orignl", i__2, "timout_", (ftnlen)1816)) <<
+	    s_copy(fmt, orignl + (((i__2 = type__ - 1) < 52 && 0 <= i__2 ? 
+		    i__2 : s_rnge("orignl", i__2, "timout_", (ftnlen)1952)) <<
 		     5), (ftnlen)32, (ftnlen)32);
-	    width = length[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? i__2 : 
-		    s_rnge("length", i__2, "timout_", (ftnlen)1817)];
+	    width = length[(i__2 = type__ - 1) < 52 && 0 <= i__2 ? i__2 : 
+		    s_rnge("length", i__2, "timout_", (ftnlen)1953)];
 	    numtyp = type__;
-	    if (! have[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? i__2 : s_rnge(
-		    "have", i__2, "timout_", (ftnlen)1820)]) {
+	    if (! have[(i__2 = type__ - 1) < 52 && 0 <= i__2 ? i__2 : s_rnge(
+		    "have", i__2, "timout_", (ftnlen)1956)]) {
 		tvec[0] = myet;
 
 /*              Most components are handled in the next block. */
 
 		if (type__ == 3 || type__ == 4 || type__ == 11 || type__ == 
-			47 || type__ == 19 || type__ == 12 || type__ == 50 || 
-			type__ == 21 || type__ == 49 || type__ == 46 || 
+			48 || type__ == 19 || type__ == 12 || type__ == 51 || 
+			type__ == 21 || type__ == 50 || type__ == 47 || 
 			type__ == 20 || type__ == 22) {
 		    ttrans_(bastyp, ymdfmt, tvec, (ftnlen)16, (ftnlen)8);
 
@@ -1619,7 +1755,7 @@ static doublereal c_b338 = 100.;
 /*                 If we need to deal with time zones, this is */
 /*                 the time to do it. */
 
-		    if (timtyp == id[38]) {
+		    if (timtyp == id[39]) {
 			tvec[3] += hoff;
 			tvec[4] += moff;
 			tvec[5] = 0.;
@@ -1632,11 +1768,11 @@ static doublereal c_b338 = 100.;
 		    values[20] = tvec[3];
 		    values[19] = tvec[4];
 		    if (values[20] == 0.) {
-			values[45] = 12.;
+			values[46] = 12.;
 		    } else if (values[20] > 12.) {
-			values[45] = values[20] - 12.;
+			values[46] = values[20] - 12.;
 		    } else {
-			values[45] = values[20];
+			values[46] = values[20];
 		    }
 
 /*                 Finally, if we need to change the calendar to */
@@ -1650,19 +1786,19 @@ static doublereal c_b338 = 100.;
 		    gmonth = jmonth;
 		    gday = jday;
 		    jul2gr_(&gyear, &gmonth, &gday, &gdoy);
-		    if (caltyp == id[41]) {
+		    if (caltyp == id[42]) {
 			values[2] = (doublereal) gyear;
 			values[10] = (doublereal) gmonth;
 			values[18] = (doublereal) gday;
 			values[11] = (doublereal) gdoy;
 			go2jul = FALSE_;
-		    } else if (caltyp == id[40]) {
+		    } else if (caltyp == id[41]) {
 			values[2] = (doublereal) jyear;
 			values[10] = (doublereal) jmonth;
 			values[18] = (doublereal) jday;
 			values[11] = (doublereal) jdoy;
 			go2jul = TRUE_;
-		    } else if (caltyp == id[42]) {
+		    } else if (caltyp == id[43]) {
 			if (gyear < 1582) {
 			    go2jul = TRUE_;
 			} else if (gyear > 1582) {
@@ -1697,48 +1833,48 @@ static doublereal c_b338 = 100.;
 /*                 it can be used when determining rounding of */
 /*                 other components. */
 
-		    values[50] = values[2];
+		    values[51] = values[2];
 		    if (doera) {
 			if (values[2] < 1.) {
 			    values[2] = 1. - values[2];
-			    values[48] = 1.;
+			    values[49] = 1.;
 			} else {
-			    values[48] = 2.;
+			    values[49] = 2.;
 			}
 			vanish = values[2] >= 1e3;
 		    }
 
 /*                 Fetch the last two digits of the year. */
 
-		    rmaind_(&values[2], &c_b338, &x, &tempd);
+		    rmaind_(&values[2], &c_b343, &x, &tempd);
 		    values[3] = tempd;
 		    have[2] = TRUE_;
 		    have[3] = TRUE_;
 		    have[11] = TRUE_;
 		    have[10] = TRUE_;
-		    have[46] = TRUE_;
+		    have[47] = TRUE_;
 		    have[18] = TRUE_;
 		    have[20] = TRUE_;
 		    have[19] = TRUE_;
 		    have[21] = TRUE_;
-		    have[45] = TRUE_;
-		    have[48] = TRUE_;
-		} else if (type__ == 48) {
+		    have[46] = TRUE_;
+		    have[49] = TRUE_;
+		} else if (type__ == 49) {
 		    tvec[0] = myet;
 		    ttrans_(bastyp, ywfmt, tvec, (ftnlen)16, (ftnlen)8);
 
-/*                 If we need to deal with time zones, this is */
+/*                 Weekday. If we need to deal with time zones, this is */
 /*                 the time to do it. */
 
-		    if (timtyp == id[38]) {
+		    if (timtyp == id[39]) {
 			tvec[4] += hoff;
 			tvec[5] += moff;
 			tvec[6] = 0.;
 			ttrans_("YMWDF", "YMWDF", tvec, (ftnlen)5, (ftnlen)5);
 		    }
-		    values[47] = tvec[3];
-		    have[47] = TRUE_;
-		} else if (type__ == 30 || type__ == 29) {
+		    values[48] = tvec[3];
+		    have[48] = TRUE_;
+		} else if (type__ == 31 || type__ == 30) {
 
 /*                 The only way to get here is if the output time */
 /*                 type is UTC or a time zone (otherwise we'd */
@@ -1746,10 +1882,10 @@ static doublereal c_b338 = 100.;
 
 		    tvec[0] = myet;
 		    ttrans_(bastyp, "FORMAL", tvec, (ftnlen)16, (ftnlen)6);
-		    values[28] = tvec[0];
-		    values[29] = values[28] + spd_() * (j2000_() - j1950_());
-		    have[28] = TRUE_;
+		    values[29] = tvec[0];
+		    values[30] = values[29] + spd_() * (j2000_() - j1950_());
 		    have[29] = TRUE_;
+		    have[30] = TRUE_;
 		} else if (type__ == 25) {
 
 /*                 The same tale can be told here as in the last */
@@ -1771,13 +1907,13 @@ static doublereal c_b338 = 100.;
 /*           We need to treat character months, weekdays, eras, a.m.'s */
 /*           and p.m.'s specially. */
 
-	    if (type__ == 47) {
+	    if (type__ == 48) {
 		indx = i_dnnt(&values[10]);
 		s_copy(mymon, months + ((i__2 = indx - 1) < 12 && 0 <= i__2 ? 
-			i__2 : s_rnge("months", i__2, "timout_", (ftnlen)2060)
+			i__2 : s_rnge("months", i__2, "timout_", (ftnlen)2195)
 			) * 9, (ftnlen)9, (ftnlen)9);
 		montyp = ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2061)];
+			s_rnge("ident", i__2, "timout_", (ftnlen)2196)];
 
 /*              There is no ELSE case in the block below because all of */
 /*              the possible MONTYP values are checked explicitly. */
@@ -1795,27 +1931,27 @@ static doublereal c_b338 = 100.;
 		    mylen = 3;
 		} else if (montyp == id[8]) {
 		    mylen = mlen[(i__2 = indx - 1) < 12 && 0 <= i__2 ? i__2 : 
-			    s_rnge("mlen", i__2, "timout_", (ftnlen)2079)];
+			    s_rnge("mlen", i__2, "timout_", (ftnlen)2214)];
 		} else if (montyp == id[7]) {
 		    ucase_(mymon, mymon, (ftnlen)9, (ftnlen)9);
 		    mylen = mlen[(i__2 = indx - 1) < 12 && 0 <= i__2 ? i__2 : 
-			    s_rnge("mlen", i__2, "timout_", (ftnlen)2082)];
+			    s_rnge("mlen", i__2, "timout_", (ftnlen)2217)];
 		} else if (montyp == id[9]) {
 		    lcase_(mymon, mymon, (ftnlen)9, (ftnlen)9);
 		    mylen = mlen[(i__2 = indx - 1) < 12 && 0 <= i__2 ? i__2 : 
-			    s_rnge("mlen", i__2, "timout_", (ftnlen)2085)];
+			    s_rnge("mlen", i__2, "timout_", (ftnlen)2220)];
 		}
 		s_copy(string + (appnd - 1), mymon, 256 - (appnd - 1), (
 			ftnlen)9);
 		appnd += mylen;
 		making = FALSE_;
-	    } else if (type__ == 48) {
-		indx = i_dnnt(&values[47]);
+	    } else if (type__ == 49) {
+		indx = i_dnnt(&values[48]);
 		s_copy(mywkd, wkdays + ((i__2 = indx - 1) < 7 && 0 <= i__2 ? 
-			i__2 : s_rnge("wkdays", i__2, "timout_", (ftnlen)2095)
+			i__2 : s_rnge("wkdays", i__2, "timout_", (ftnlen)2230)
 			) * 9, (ftnlen)9, (ftnlen)9);
 		wktyp = ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2096)];
+			s_rnge("ident", i__2, "timout_", (ftnlen)2231)];
 
 /*              There is no ELSE case in the block below because all of */
 /*              the possible WKTYP values are checked explicitly. */
@@ -1833,40 +1969,40 @@ static doublereal c_b338 = 100.;
 		    mylen = 3;
 		} else if (wktyp == id[16]) {
 		    mylen = wklen[(i__2 = indx - 1) < 7 && 0 <= i__2 ? i__2 : 
-			    s_rnge("wklen", i__2, "timout_", (ftnlen)2114)];
+			    s_rnge("wklen", i__2, "timout_", (ftnlen)2249)];
 		} else if (wktyp == id[15]) {
 		    ucase_(mywkd, mywkd, (ftnlen)9, (ftnlen)9);
 		    mylen = wklen[(i__2 = indx - 1) < 7 && 0 <= i__2 ? i__2 : 
-			    s_rnge("wklen", i__2, "timout_", (ftnlen)2117)];
+			    s_rnge("wklen", i__2, "timout_", (ftnlen)2252)];
 		} else if (wktyp == id[17]) {
 		    lcase_(mywkd, mywkd, (ftnlen)9, (ftnlen)9);
 		    mylen = wklen[(i__2 = indx - 1) < 7 && 0 <= i__2 ? i__2 : 
-			    s_rnge("wklen", i__2, "timout_", (ftnlen)2120)];
+			    s_rnge("wklen", i__2, "timout_", (ftnlen)2255)];
 		}
 		s_copy(string + (appnd - 1), mywkd, 256 - (appnd - 1), (
 			ftnlen)9);
 		appnd += mylen;
 		making = FALSE_;
-	    } else if (type__ == 49) {
-		if (values[48] == 2. && (ident[(i__2 = i__ - 1) < 100 && 0 <= 
+	    } else if (type__ == 50) {
+		if (values[49] == 2. && (ident[(i__2 = i__ - 1) < 100 && 0 <= 
 			i__2 ? i__2 : s_rnge("ident", i__2, "timout_", (
-			ftnlen)2130)] == id[32] || ident[(i__3 = i__ - 1) < 
+			ftnlen)2265)] == id[33] || ident[(i__3 = i__ - 1) < 
 			100 && 0 <= i__3 ? i__3 : s_rnge("ident", i__3, "tim"
-			"out_", (ftnlen)2130)] == id[34])) {
+			"out_", (ftnlen)2265)] == id[35])) {
 		    s_copy(string + (appnd - 1), " A.D.", 256 - (appnd - 1), (
 			    ftnlen)5);
-		} else if (values[48] == 2. && (ident[(i__2 = i__ - 1) < 100 
+		} else if (values[49] == 2. && (ident[(i__2 = i__ - 1) < 100 
 			&& 0 <= i__2 ? i__2 : s_rnge("ident", i__2, "timout_",
-			 (ftnlen)2136)] == id[33] || ident[(i__3 = i__ - 1) < 
+			 (ftnlen)2271)] == id[34] || ident[(i__3 = i__ - 1) < 
 			100 && 0 <= i__3 ? i__3 : s_rnge("ident", i__3, "tim"
-			"out_", (ftnlen)2136)] == id[35])) {
+			"out_", (ftnlen)2271)] == id[36])) {
 		    s_copy(string + (appnd - 1), " a.d.", 256 - (appnd - 1), (
 			    ftnlen)5);
-		} else if (values[48] == 1. && (ident[(i__2 = i__ - 1) < 100 
+		} else if (values[49] == 1. && (ident[(i__2 = i__ - 1) < 100 
 			&& 0 <= i__2 ? i__2 : s_rnge("ident", i__2, "timout_",
-			 (ftnlen)2141)] == id[32] || ident[(i__3 = i__ - 1) < 
+			 (ftnlen)2276)] == id[33] || ident[(i__3 = i__ - 1) < 
 			100 && 0 <= i__3 ? i__3 : s_rnge("ident", i__3, "tim"
-			"out_", (ftnlen)2141)] == id[34])) {
+			"out_", (ftnlen)2276)] == id[35])) {
 		    s_copy(string + (appnd - 1), " B.C.", 256 - (appnd - 1), (
 			    ftnlen)5);
 		} else {
@@ -1880,10 +2016,10 @@ static doublereal c_b338 = 100.;
 /*              increment the place holder. */
 
 		if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ident", i__2, "timout_", (ftnlen)2158)] == id[34] || 
+			"ident", i__2, "timout_", (ftnlen)2293)] == id[35] || 
 			ident[(i__3 = i__ - 1) < 100 && 0 <= i__3 ? i__3 : 
-			s_rnge("ident", i__3, "timout_", (ftnlen)2158)] == id[
-			35]) {
+			s_rnge("ident", i__3, "timout_", (ftnlen)2293)] == id[
+			36]) {
 		    if (vanish) {
 			s_copy(string + (appnd - 1), " ", 256 - (appnd - 1), (
 				ftnlen)1);
@@ -1897,20 +2033,20 @@ static doublereal c_b338 = 100.;
 		    appnd += 4;
 		}
 		making = FALSE_;
-	    } else if (type__ == 50) {
+	    } else if (type__ == 51) {
 		if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge(
-			"ident", i__2, "timout_", (ftnlen)2178)] == id[36] && 
+			"ident", i__2, "timout_", (ftnlen)2313)] == id[37] && 
 			values[20] >= 12.) {
 		    s_copy(string + (appnd - 1), "P.M.", 256 - (appnd - 1), (
 			    ftnlen)4);
 		} else if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2183)] == id[
-			36] && values[20] < 12.) {
+			s_rnge("ident", i__2, "timout_", (ftnlen)2318)] == id[
+			37] && values[20] < 12.) {
 		    s_copy(string + (appnd - 1), "A.M.", 256 - (appnd - 1), (
 			    ftnlen)4);
 		} else if (ident[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : 
-			s_rnge("ident", i__2, "timout_", (ftnlen)2188)] == id[
-			37] && values[20] >= 12.) {
+			s_rnge("ident", i__2, "timout_", (ftnlen)2323)] == id[
+			38] && values[20] >= 12.) {
 		    s_copy(string + (appnd - 1), "p.m.", 256 - (appnd - 1), (
 			    ftnlen)4);
 		} else {
@@ -1920,8 +2056,8 @@ static doublereal c_b338 = 100.;
 		appnd += 4;
 		making = FALSE_;
 	    } else {
-		value = values[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? i__2 : 
-			s_rnge("values", i__2, "timout_", (ftnlen)2204)];
+		value = values[(i__2 = type__ - 1) < 52 && 0 <= i__2 ? i__2 : 
+			s_rnge("values", i__2, "timout_", (ftnlen)2339)];
 	    }
 
 /*           If we are now creating a format string, we should */
@@ -1936,8 +2072,8 @@ static doublereal c_b338 = 100.;
 /*              is used by the single numeric types, JD, SP2000, */
 /*              and SP1950. */
 
-		values[0] = values[(i__2 = type__ - 1) < 51 && 0 <= i__2 ? 
-			i__2 : s_rnge("values", i__2, "timout_", (ftnlen)2222)
+		values[0] = values[(i__2 = type__ - 1) < 52 && 0 <= i__2 ? 
+			i__2 : s_rnge("values", i__2, "timout_", (ftnlen)2357)
 			];
 
 /*              Here's how this works:  We will copy all of */
@@ -1958,9 +2094,9 @@ static doublereal c_b338 = 100.;
 
 		for (j = 1; j <= 7; ++j) {
 		    ptvec[(i__2 = j - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(
-			    "ptvec", i__2, "timout_", (ftnlen)2242)] = 0.;
+			    "ptvec", i__2, "timout_", (ftnlen)2377)] = 0.;
 		    ntvec[(i__2 = j - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(
-			    "ntvec", i__2, "timout_", (ftnlen)2243)] = 0.;
+			    "ntvec", i__2, "timout_", (ftnlen)2378)] = 0.;
 		}
 		if (type__ == 3 || type__ == 4) {
 		    stopat = 1;
@@ -1977,7 +2113,7 @@ static doublereal c_b338 = 100.;
 		    timfmt = 1;
 		    s_copy(intyp, ymdfmt, (ftnlen)16, (ftnlen)8);
 		    incr = 1.;
-		} else if (type__ == 21 || type__ == 46) {
+		} else if (type__ == 21 || type__ == 47) {
 
 /*                 Note that in this case (and the next 2) that if we */
 /*                 an HOUR component, we had to get it either from */
@@ -2003,11 +2139,11 @@ static doublereal c_b338 = 100.;
 		    stopat = 1;
 		    timfmt = 2;
 		    incr = 0.;
-		    if (timtyp == id[27]) {
+		    if (timtyp == id[27] || timtyp == id[28]) {
 			s_copy(intyp, "JDTDT", (ftnlen)16, (ftnlen)5);
 		    } else if (timtyp == id[26]) {
 			s_copy(intyp, "JDTDB", (ftnlen)16, (ftnlen)5);
-		    } else if (timtyp == id[25] || timtyp == id[38]) {
+		    } else if (timtyp == id[25] || timtyp == id[39]) {
 			s_copy(intyp, "JDUTC", (ftnlen)16, (ftnlen)5);
 		    }
 		} else {
@@ -2027,21 +2163,21 @@ static doublereal c_b338 = 100.;
 		i__2 = stopat;
 		for (j = 1; j <= i__2; ++j) {
 		    ptvec[(i__3 = j - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge(
-			    "ptvec", i__3, "timout_", (ftnlen)2333)] = values[
+			    "ptvec", i__3, "timout_", (ftnlen)2469)] = values[
 			    (i__5 = compnt[(i__4 = j + (timfmt << 3) - 9) < 
 			    16 && 0 <= i__4 ? i__4 : s_rnge("compnt", i__4, 
-			    "timout_", (ftnlen)2333)] - 1) < 51 && 0 <= i__5 ?
+			    "timout_", (ftnlen)2469)] - 1) < 52 && 0 <= i__5 ?
 			     i__5 : s_rnge("values", i__5, "timout_", (ftnlen)
-			    2333)];
+			    2469)];
 		    ntvec[(i__3 = j - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge(
-			    "ntvec", i__3, "timout_", (ftnlen)2334)] = ptvec[(
+			    "ntvec", i__3, "timout_", (ftnlen)2470)] = ptvec[(
 			    i__4 = j - 1) < 8 && 0 <= i__4 ? i__4 : s_rnge(
-			    "ptvec", i__4, "timout_", (ftnlen)2334)];
+			    "ptvec", i__4, "timout_", (ftnlen)2470)];
 		}
 		ntvec[(i__2 = stopat - 1) < 8 && 0 <= i__2 ? i__2 : s_rnge(
-			"ntvec", i__2, "timout_", (ftnlen)2337)] = ntvec[(
+			"ntvec", i__2, "timout_", (ftnlen)2473)] = ntvec[(
 			i__3 = stopat - 1) < 8 && 0 <= i__3 ? i__3 : s_rnge(
-			"ntvec", i__3, "timout_", (ftnlen)2337)] + incr;
+			"ntvec", i__3, "timout_", (ftnlen)2473)] + incr;
 
 /*              If the type is a year or month, then we need to set */
 /*              the month to 1, so that we will be working with */
@@ -2077,9 +2213,12 @@ static doublereal c_b338 = 100.;
 		    ntvec[1] = (doublereal) jmonth;
 		    ntvec[2] = (doublereal) jday;
 		}
+
+/*              Handle the +/- time zone shifts. */
+
 		if (dozone && timfmt != 2) {
 		    ptvec[3] -= hoff;
-		    ntvec[3] = ntvec[4] - hoff;
+		    ntvec[3] -= hoff;
 		    ptvec[4] -= moff;
 		    ntvec[4] -= moff;
 		    ptvec[5] = 0.;

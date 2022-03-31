@@ -1,11 +1,11 @@
 /*
 
--Procedure vperp_c ( Perpendicular component of a 3-vector)
+-Procedure vperp_c ( Perpendicular component of a 3-vector )
 
 -Abstract
 
    Find the component of a vector that is perpendicular to a second
-   vector.  All vectors are 3-dimensional.
+   vector. All vectors are 3-dimensional.
 
 -Disclaimer
 
@@ -50,34 +50,34 @@
    void vperp_c ( ConstSpiceDouble   a[3],
                   ConstSpiceDouble   b[3],
                   SpiceDouble        p[3] )
+
 /*
 
 -Brief_I/O
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-    a         I    The vector whose orthogonal component is sought.
-    b         I    The vector used as the orthogonal reference.
-    p         O    The component of a orthogonal to b.
+   a          I   The vector whose orthogonal component is sought.
+   b          I   The vector used as the orthogonal reference.
+   p          O   The component of `a' orthogonal to `b'.
 
 -Detailed_Input
 
-   a     is a double precision, 3-dimensional vector.  It the vector
-         whose component orthogonal to b is sought. (There is a
-         unique decomposition of a into a sum v + p, where v is
-         parallel to b and p is orthogonal to b.  We want the
-         component p.)
+   a           is a double precision, 3-dimensional vector. It the
+               vector whose component orthogonal to `b' is sought. (There
+               is a unique decomposition of `a' into a sum v + p, where `v'
+               is parallel to `b' and `p' is orthogonal to `b'. We want the
+               component `p'.)
 
-   b     is a double precision, 3-dimensional vector.  This
-         vector is the vector used as a reference for the
-         decomposition of a.
-
+   b           is a double precision, 3-dimensional vector. This
+               vector is the vector used as a reference for the
+               decomposition of `a'.
 
 -Detailed_Output
 
-   p     is a double precision, 3-dimensional vector containing
-         the component of a that is orthogonal to b.
-         p may overwrite either a or b.
+   p           is a double precision, 3-dimensional vector containing
+               the component of `a' that is orthogonal to `b'.
+               `p' may overwrite either `a' or `b'.
 
 -Parameters
 
@@ -93,23 +93,23 @@
 
 -Particulars
 
-   Given and non-zero vector b and a vector a, there is a unique
-   decomposition of a as a sum v + p such that p is orthogonal
-   to b and v is parallel to b.  This routine finds the vector p.
+   Given and non-zero vector `b' and a vector `a', there is a unique
+   decomposition of `a' as a sum v + p such that `p' is orthogonal
+   to `b' and `v' is parallel to `b'. This routine finds the vector `p'.
 
-   If b is a zero vector, p will be identical to a.
+   If `b' is a zero vector, `p' will be identical to `a'.
 
 -Examples
 
    The following table gives sample inputs and results from calling
    vperp_c.
 
-   a                  b                 p
-   ------------------------------------------
-   (6, 6, 6)      ( 2, 0, 0)        (0, 6, 6)
-   (6, 6, 6)      (-3, 0, 0)        (0, 6, 6)
-   (6, 6, 0)      ( 0, 7, 0)        (6, 0, 0)
-   (6, 0, 0)      ( 0, 0, 9)        (6, 0, 0)
+      a                  b                 p
+      ------------------------------------------
+      (6, 6, 6)      ( 2, 0, 0)        (0, 6, 6)
+      (6, 6, 6)      (-3, 0, 0)        (0, 6, 6)
+      (6, 6, 0)      ( 0, 7, 0)        (6, 0, 0)
+      (6, 0, 0)      ( 0, 0, 9)        (6, 0, 0)
 
 -Restrictions
 
@@ -117,27 +117,35 @@
 
 -Literature_References
 
-   REFERENCE: Any reasonable calculus text (for example Thomas)
+   [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry,"
+        7th Edition, Addison Wesley, 1988.
 
 -Author_and_Institution
 
-   W.L. Taber      (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   E.D. Wright         (JPL)
 
 -Version
 
+   -CSPICE Version 1.2.2, 13-APR-2021 (JDR)
+
+       Updated the header to comply with NAIF standard.
+
    -CSPICE Version 1.2.1, 24-APR-2010 (EDW)
 
-      Minor edit to code comments eliminating typo.
+       Minor edit to code comments eliminating typo.
 
    -CSPICE Version 1.2.0, 22-OCT-1998 (NJB)
 
-      Made input vectors const.
+       Made input vectors const.
 
-   -CSPICE Version 1.1.0, 06-MAR-1998   (EDW)
+   -CSPICE Version 1.1.0, 06-MAR-1998 (EDW)
 
-      Removed non printing character.
+       Removed non printing character.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WLT)
 
 -Index_Entries
 

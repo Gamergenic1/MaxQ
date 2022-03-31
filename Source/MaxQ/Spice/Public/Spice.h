@@ -218,6 +218,49 @@ public:
         FSRotationMatrix& r
     );
 
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Time",
+        meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            Keywords = "FRAMES, PCK, SPK, TIME",
+            ShortToolTip = "AZ/EL, constant position observer state",
+            ToolTip = "Return the azimuth/elevation coordinates of a specified target relative to an observer"
+            ))
+    static void azlcpo(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSDimensionlessStateVector& azlsta,
+        FSEphemerisPeriod& lt,
+        const FSEphemerisTime& et,
+        const FSDistanceVector& obspos,
+        const FString& obsctr = FString("EARTH"),
+        const FString& obsref = FString("IAU_EARTH"),
+        const FString& target = FString("SUN"),
+        UPARAM(meta = (DisplayName = "azimuth is counter-clockwise")) bool azccw = true,
+        UPARAM(meta = (DisplayName = "elevation increases with positive Z")) bool elplsz = true,
+        ES_AberrationCorrectionWithTransmissions abcorr = ES_AberrationCorrectionWithTransmissions::None,
+        ES_LocalZenithMethod method = ES_LocalZenithMethod::ELLIPSOID
+    );
+
+
+    UFUNCTION(
+        BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES",
+            ShortToolTip = "AZ/EL to rectangular coordinates",
+            ToolTip = "Convert from range, azimuth and elevation of a point to rectangular coordinates"
+            ))
+    static void azlrec(
+        FSDistanceVector& rectan,
+        const FSDistance& range,
+        const FSAngle& az,
+        const FSAngle& el,
+        UPARAM(meta = (DisplayName = "azimuth is counter-clockwise")) bool azccw = true,
+        UPARAM(meta = (DisplayName = "elevation increases with positive Z")) bool elplsz = true
+    );
+
     /// <summary>Body name to ID code translation</summary>
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Kernel",
@@ -510,6 +553,45 @@ public:
         TArray<FSWindowSegment>& coverage,
         ES_CoverageLevel level = ES_CoverageLevel::Interval,
         ES_TimeSystem    timsys = ES_TimeSystem::SCLK
+    );
+
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|CK",
+        meta = (
+            Keywords = "POINTING",
+            ExpandEnumAsExecs = "found",
+            ShortToolTip = "CK frame, find position rotation",
+            ToolTip = "Find the position rotation matrix from a C-kernel (CK) frame with the specified frame class ID(CK ID) to the base frame of the highest priority CK segment containing orientation data for this CK"
+            ))
+    static void ckfrot(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        ES_FoundCode& found,
+        FSRotationMatrix& rotationMatrix,
+        int& ref,
+        int inst,
+        const FSEphemerisTime& et
+    );
+
+
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|CK",
+        meta = (
+            Keywords = "POINTING",
+            ExpandEnumAsExecs = "found",
+            ShortToolTip = "CK frame, find state transformation",
+            ToolTip = "Find the state transformation matrix from a C-kernel (CK) frame with the specified frame class ID(CK ID) to the base frame of the highest priority CK segment containing orientation and angular velocity"
+            ))
+    static void ckfxfm(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        ES_FoundCode& found,
+        FSStateTransform& xform,
+        int& ref,
+        int inst,
+        const FSEphemerisTime& et
     );
 
 
@@ -840,10 +922,10 @@ public:
             ShortToolTip = "Cylindrical to latitudinal",
             ToolTip = "Convert from cylindrical to latitudinal coordinates"
             ))
-        static void cyllat(
-            const FSCylindricalVector& cylvec,
-            FSLatitudinalVector& latvec
-        );
+    static void cyllat(
+        const FSCylindricalVector& cylvec,
+        FSLatitudinalVector& latvec
+    );
 
     /// <summary>Take a measurement X, the units associated with X, and units to which X should be converted; return Y-- -the value of the measurement in the output units.  Google cspice+convrt for units</summary>
     /// <param name="x">[in] Number representing a measurement in some units</param>
@@ -1667,9 +1749,30 @@ public:
         int         frstyr = 1957
     );
 
+
     UFUNCTION(BlueprintCallable,
         Category = "Spice|Api|Ephemeris",
         meta = (
+            ExpandEnumAsExecs = "ResultCode",
+            Keywords = "EPHEMERIS",
+            ShortToolTip = "Evaluate \"two - line\" element data",
+            ToolTip = "Evaluate NORAD two-line element data for earth orbiting spacecraft"
+            ))
+    static void evsgp4(
+        ES_ResultCode& ResultCode,
+        FString& ErrorMessage,
+        FSStateVector& state,
+        const FSEphemerisTime& et,
+        const FSTLEGeophysicalConstants& geophs,
+        const FSTwoLineElements& elems
+    );
+
+    [[deprecated("Use evsgp4()")]]
+    UFUNCTION(BlueprintCallable,
+        Category = "Spice|Api|Ephemeris",
+        meta = (
+            DeprecatedFunction,
+            DeprecationMessage = "Use evsgp4",
             ExpandEnumAsExecs = "ResultCode",
             Keywords = "EPHEMERIS",
             ToolTip = "Get state from TLE"
@@ -2321,6 +2424,19 @@ public:
         FString& ErrorMessage,
         const FSRotationMatrix& m,
         FSRotationMatrix& mit
+    );
+
+    UFUNCTION(
+        BlueprintPure,
+        Category = "Spice|Api|Matrix",
+        meta = (
+            Keywords = "MATRIX",
+            ShortToolTip = "Inverse of state transformation matrix",
+            ToolTip = "Return the inverse of a state transformation matrix"
+            ))
+    static void invstm(
+        const FSStateTransform& xform,
+        FSStateTransform& inverseXform
     );
 
     UFUNCTION(BlueprintPure,
@@ -3572,6 +3688,23 @@ public:
         const FSRotationMatrix& matrix,
         FSDimensionlessVector& axis,
         FSAngle& angle
+    );
+
+
+    UFUNCTION(BlueprintPure,
+        Category = "Spice|Api|Coordinates",
+        meta = (
+            Keywords = "CONVERSION, COORDINATES",
+            ShortToolTip = "Rectangular coordinates to AZ/EL",
+            ToolTip = "Convert rectangular coordinates of a point to range, azimuth and elevation."
+            ))
+    static void recazl(
+        FSDistance& range,
+        FSAngle& az,
+        FSAngle& el,
+        const FSDistanceVector& rectan,
+        UPARAM(meta = (DisplayName = "azimuth is counter-clockwise")) bool azccw = true,
+        UPARAM(meta = (DisplayName = "elevation increases with positive Z")) bool elplsz = true
     );
 
     UFUNCTION(BlueprintPure,

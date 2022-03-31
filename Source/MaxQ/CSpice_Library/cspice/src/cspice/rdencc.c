@@ -10,7 +10,7 @@
 static integer c__9 = 9;
 static integer c__1 = 1;
 
-/* $Procedure  RDENCC  ( Read encoded characters from a text file ) */
+/* $Procedure RDENCC  ( Read encoded characters from a text file ) */
 /* Subroutine */ int rdencc_(integer *unit, integer *n, char *data, ftnlen 
 	data_len)
 {
@@ -89,45 +89,44 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      UNIT      I    Fortran unit number of input text file. */
-/*      N         I    Number of characters to be read and decoded. */
-/*      DATA      O    List of decoded characters to be returned. */
+/*     UNIT       I   Fortran unit number of input text file. */
+/*     N          I   Number of characters to be read and decoded. */
+/*     DATA       O   List of decoded characters to be returned. */
 
 /* $ Detailed_Input */
 
-/*     UNIT     The Fortran unit number for a previously opened text */
+/*     UNIT     is the Fortran unit number for a previously opened text */
 /*              file. All reading will begin at the CURRENT POSITION */
 /*              in the text file. */
 
-/*     N        The number of characters to be read from the text file */
+/*     N        is the number of characters to be read from the text file */
 /*              attached to UNIT. */
 
 /* $ Detailed_Output */
 
-/*     DATA     List of characters which were read from the text file */
-/*              attached to UNIT and decoded. */
+/*     DATA     is the list of characters which were read from the text */
+/*              file attached to UNIT and decoded. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1)   If N, the number of data items, is not positive, the error */
-/*          SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If N, the number of data items, is not positive, the error */
+/*         SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2)   If an error occurs while reading from the text file */
-/*          attached to UNIT, the error SPICE(FILEREADFAILED) will */
-/*          be signalled. */
+/*     2)  If an error occurs while reading from the text file */
+/*         attached to UNIT, the error SPICE(FILEREADFAILED) is signaled. */
 
-/*     3)   If an error occurs while decoding a character, the error */
-/*          SPICE(DECODINGERROR) will be signalled. */
+/*     3)  If an error occurs while decoding a character, the error */
+/*         SPICE(DECODINGERROR) is signaled. */
 
 /* $ Files */
 
-/*     See the description of UNIT in Detailed_Input. */
+/*     See the description of UNIT in $Detailed_Input. */
 
 /* $ Particulars */
 
@@ -313,16 +312,23 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 20-OCT-1992 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*      read encoded characters from a text file */
+/*     read encoded characters from a text file */
 
 /* -& */
 

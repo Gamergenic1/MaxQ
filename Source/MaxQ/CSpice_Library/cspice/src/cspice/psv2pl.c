@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PSV2PL ( Point and spanning vectors to plane ) */
+/* $Procedure PSV2PL ( Point and spanning vectors to plane ) */
 /* Subroutine */ int psv2pl_(doublereal *point, doublereal *span1, doublereal 
 	*span2, doublereal *plane)
 {
@@ -22,7 +22,7 @@
 
 /* $ Abstract */
 
-/*     Make a SPICELIB plane from a point and two spanning vectors. */
+/*     Make a SPICE plane from a point and two spanning vectors. */
 
 /* $ Disclaimer */
 
@@ -62,7 +62,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     POINT, */
 /*     SPAN1, */
@@ -73,21 +73,20 @@
 
 /*     POINT, */
 /*     SPAN1, */
-/*     SPAN2          are, respectively, a point and two spanning vectors */
-/*                    that define a geometric plane in three-dimensional */
-/*                    space. The plane is the set of vectors */
+/*     SPAN2    are, respectively, a point and two spanning vectors that */
+/*              define a geometric plane in three-dimensional space. The */
+/*              plane is the set of vectors */
 
-/*                       POINT   +   s * SPAN1   +   t * SPAN2 */
+/*                 POINT   +   s * SPAN1   +   t * SPAN2 */
 
-/*                    where s and t are real numbers.  The spanning */
-/*                    vectors SPAN1 and SPAN2 must be linearly */
-/*                    independent, but they need not be orthogonal or */
-/*                    unitized. */
+/*              where `s' and `t' are real numbers. The spanning vectors */
+/*              SPAN1 and SPAN2 must be linearly independent, but they */
+/*              need not be orthogonal or unitized. */
 
 /* $ Detailed_Output */
 
-/*     PLANE          is a SPICELIB plane that represents the geometric */
-/*                    plane defined by POINT, SPAN1, and SPAN2. */
+/*     PLANE    is a SPICE plane that represents the geometric plane */
+/*              defined by POINT, SPAN1, and SPAN2. */
 
 /* $ Parameters */
 
@@ -95,9 +94,9 @@
 
 /* $ Exceptions */
 
-/*     1)  If SPAN1 and SPAN2 are linearly dependent, then the vectors */
-/*         POINT, SPAN1, and SPAN2 do not define a plane.  The error */
-/*         SPICE(DEGENERATECASE) is signalled. */
+/*     1)  If SPAN1 and SPAN2 are linearly dependent, i.e. the vectors */
+/*         POINT, SPAN1, and SPAN2 do not define a plane, the error */
+/*         SPICE(DEGENERATECASE) is signaled. */
 
 /* $ Files */
 
@@ -106,17 +105,17 @@
 /* $ Particulars */
 
 /*     SPICELIB geometry routines that deal with planes use the `plane' */
-/*     data type to represent input and output planes.  This data type */
+/*     data type to represent input and output planes. This data type */
 /*     makes the subroutine interfaces simpler and more uniform. */
 
-/*     The SPICELIB routines that produce SPICELIB planes from data that */
+/*     The SPICELIB routines that produce SPICE planes from data that */
 /*     define a plane are: */
 
 /*        NVC2PL ( Normal vector and constant to plane ) */
 /*        NVP2PL ( Normal vector and point to plane    ) */
 /*        PSV2PL ( Point and spanning vectors to plane ) */
 
-/*     The SPICELIB routines that convert SPICELIB planes to data that */
+/*     The SPICELIB routines that convert SPICE planes to data that */
 /*     define a plane are: */
 
 /*        PL2NVC ( Plane to normal vector and constant ) */
@@ -130,7 +129,7 @@
 /* $ Examples */
 
 /*     1)  Project a vector V orthogonally onto a plane defined by */
-/*         POINT, SPAN1, and SPAN2.  PROJ is the projection we want; it */
+/*         POINT, SPAN1, and SPAN2. PROJ is the projection we want; it */
 /*         is the closest vector in the plane to V. */
 
 /*            CALL PSV2PL ( POINT,   SPAN1,   SPAN2,   PLANE ) */
@@ -139,13 +138,13 @@
 
 /*     2)  Find the plane determined by a spacecraft's position vector */
 /*         relative to a central body and the spacecraft's velocity */
-/*         vector.  We assume that all vectors are given in the same */
+/*         vector. We assume that all vectors are given in the same */
 /*         coordinate system. */
 
 /*            C */
 /*            C     POS is the spacecraft's position, relative to */
-/*            C     the central body.  VEL is the spacecraft's velocity */
-/*            C     vector.  POS is a point (vector, if you like) in */
+/*            C     the central body. VEL is the spacecraft's velocity */
+/*            C     vector. POS is a point (vector, if you like) in */
 /*            C     the orbit plane, and it is also one of the spanning */
 /*            C     vectors of the plane. */
 /*            C */
@@ -157,13 +156,22 @@
 
 /* $ Literature_References */
 
-/*     [1] `Calculus and Analytic Geometry', Thomas and Finney. */
+/*     [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry," */
+/*          7th Edition, Addison Wesley, 1988. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.1.0, 31-AUG-2005 (NJB) */
 
@@ -183,14 +191,6 @@
 /*     point and spanning vectors to plane */
 
 /* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 31-AUG-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VMINUS call. */
-
-/* -& */
 
 /*     SPICELIB functions */
 
@@ -198,13 +198,13 @@
 /*     Local parameters */
 
 
-/*     The contents of SPICELIB planes are as follows: */
+/*     The contents of SPICE planes are as follows: */
 
 /*        Elements NMLPOS through NMLPOS + 2 contain a unit normal */
 /*        vector for the plane. */
 
 /*        Element CONPOS contains a constant for the plane;  every point */
-/*        X in the plane satisifies */
+/*        X in the plane satisfies */
 
 /*           < X, PLANE(NMLPOS) >  =  PLANE(CONPOS). */
 

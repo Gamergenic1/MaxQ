@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      STMP03 ( Stumpff functions 0 through 3 ) */
+/* $Procedure STMP03 ( Stumpff functions 0 through 3 ) */
 /* Subroutine */ int stmp03_(doublereal *x, doublereal *c0, doublereal *c1, 
 	doublereal *c2, doublereal *c3)
 {
@@ -74,7 +74,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     X          I   Argument to each Stumpff function C_0 to C_3. */
 /*     C0         O   Value of C_0(X) */
@@ -85,78 +85,79 @@
 
 /* $ Detailed_Input */
 
-/*     X          is the argument to use in each of the Stumpff functions */
-/*                C_0, C_1, C_2, and C_3. */
+/*     X        is the argument to use in each of the Stumpff functions */
+/*              C_0, C_1, C_2, and C_3. */
 
 /* $ Detailed_Output */
 
-/*     C0         are the values of the Stumpff functions */
-/*     C1         C_0(X), C_1(X), C_2(X), and C_3(X). */
-/*     C2 */
-/*     C3 */
+/*     C0, */
+/*     C1, */
+/*     C2, */
+/*     C3       are the values of the Stumpff functions C_0(X), C_1(X), */
+/*              C_2(X), and C_3(X). */
 
 /* $ Parameters */
 
-/*     TRUNC     The Maclaurin series for C_3 and C_2 respectively are: */
+/*     TRUNC    is the Maclaurin series for C_3 and C_2 respectively are: */
 
-/*                                      2     3                 k */
-/*                         1     X     X     X              (-X) */
+/*                                     2     3                 k */
+/*                        1     X     X     X              (-X) */
 /*              C_3(X) =  --- - --- + --- - --- + . . . + ----------. . . */
-/*                         3!    5!    7!    9!           (3 + 2*K)! */
+/*                        3!    5!    7!    9!           (3 + 2*K)! */
 
-/*               and */
+/*              and */
 
-/*                                      2     3                 k */
-/*                         1     X     X     X              (-X) */
+/*                                     2     3                 k */
+/*                        1     X     X     X              (-X) */
 /*              C_2(X) =  --- - --- + --- - --- + . . . + ----------. . . */
-/*                         2!    4!    6!    8!           (2 + 2*K)! */
+/*                        2!    4!    6!    8!           (2 + 2*K)! */
 
-/*               These series are used in the evaluation of C_3 and C_2. */
-/*               Thus, it is necessary to make a decision about where to */
-/*               truncate the series in our evaluation of C_3 and C_2. */
+/*              These series are used in the evaluation of C_3 and C_2. */
+/*              Thus, it is necessary to make a decision about where to */
+/*              truncate the series in our evaluation of C_3 and C_2. */
 
-/*               TRUNC is used to tell this routine where to truncate */
-/*               the Maclaurin series for C_3 and C_2. */
+/*              TRUNC is used to tell this routine where to truncate */
+/*              the Maclaurin series for C_3 and C_2. */
 
-/*               The value of TRUNC for your machine  is the smallest */
-/*               integer such that */
+/*              The value of TRUNC for your machine  is the smallest */
+/*              integer such that */
 
-/*                                 1 */
-/*                   1.0D0  +  ----------        =  1.0D0 */
-/*                             (2*TRUNC)! */
+/*                                1 */
+/*                  1.0D0  +  ----------        =  1.0D0 */
+/*                            (2*TRUNC)! */
 
-/*               The following program will (if compiled and linked) */
-/*               will produce the values of TRUNC for your machine. */
+/*              The following program will (if compiled and linked) */
+/*              will produce the values of TRUNC for your machine. */
 
-/*               INTEGER               TRUNC */
+/*              INTEGER               TRUNC */
 
-/*               DOUBLE PRECISION      DENOM */
-/*               DOUBLE PRECISION      FACTR */
+/*              DOUBLE PRECISION      DENOM */
+/*              DOUBLE PRECISION      FACTR */
 
-/*               DOUBLE PRECISION      X */
+/*              DOUBLE PRECISION      X */
 
-/*               DENOM = 2.0D0 */
-/*               FACTR = 2.0D0 */
-/*               TRUNC = 1 */
+/*              DENOM = 2.0D0 */
+/*              FACTR = 2.0D0 */
+/*              TRUNC = 1 */
 
-/*               X      = 1.0D0 / DENOM */
+/*              X      = 1.0D0 / DENOM */
 
-/*               DO WHILE ( 1.0D0 + X .GT. 1.0D0 ) */
-/*                  DENOM = DENOM * (2.0D0+FACTR) * (1.0D0+FACTR) */
-/*                  FACTR = FACTR +  2.0D0 */
-/*                  TRUNC = TRUNC +  1 */
-/*                  X     = 1.0D0 /  DENOM */
-/*               END DO */
+/*              DO WHILE ( 1.0D0 + X .GT. 1.0D0 ) */
+/*                 DENOM = DENOM * (2.0D0+FACTR) * (1.0D0+FACTR) */
+/*                 FACTR = FACTR +  2.0D0 */
+/*                 TRUNC = TRUNC +  1 */
+/*                 X     = 1.0D0 /  DENOM */
+/*              END DO */
 
-/*               WRITE (*,*) 'The value of TRUNC is: ', TRUNC */
+/*              WRITE (*,*) 'The value of TRUNC is: ', TRUNC */
 
-/*               END */
+/*              END */
 
 /* $ Exceptions */
 
 /*     1)  If the input value of X is not in the domain of values */
 /*         for which the Stumpff functions can be computed, the error */
-/*         SPICE(VALUEOUTOFRANGE) is signalled. */
+/*         SPICE(VALUEOUTOFRANGE) is signaled. */
 
 /*         The range of valid inputs is from  -[ln(2) + ln(DPMAX)]**2 */
 /*         to DPMAX. */
@@ -181,93 +182,102 @@
 
 /*     These series converge for all real values of X. */
 
-
 /* $ Examples */
 
-/*      For positive X, */
+/*     For positive X, */
 
-/*         C_0(X)   =  COS ( DSQRT(X) ) */
-
-
-/*                     SIN ( DSQRT(X) ) */
-/*         C_1(X)   =  --------------- */
-/*                           DSQRT(X) */
+/*        C_0(X)   =  COS ( DSQRT(X) ) */
 
 
-/*                     1 - COS ( DSQRT(X) ) */
-/*         C_2(X)   = --------------------- */
-/*                            X */
+/*                    SIN ( DSQRT(X) ) */
+/*        C_1(X)   =  --------------- */
+/*                          DSQRT(X) */
+
+
+/*                    1 - COS ( DSQRT(X) ) */
+/*        C_2(X)   = --------------------- */
+/*                           X */
 
 
 
-/*                     1  -  SIN ( DSQRT(X) ) / DSQRT(X) */
-/*         C_3(X)   =  ---------------------------------- */
-/*                               X */
+/*                    1  -  SIN ( DSQRT(X) ) / DSQRT(X) */
+/*        C_3(X)   =  ---------------------------------- */
+/*                              X */
 
-/*      Thus the following block of code can be used to check this */
-/*      routine for reasonableness: */
+/*     Thus the following block of code can be used to check this */
+/*     routine for reasonableness: */
 
-/*      INTEGER               I */
+/*     INTEGER               I */
 
-/*      DOUBLE PRECISION      X */
-/*      DOUBLE PRECISION      ROOTX */
+/*     DOUBLE PRECISION      X */
+/*     DOUBLE PRECISION      ROOTX */
 
-/*      DOUBLE PRECISION      TC0 */
-/*      DOUBLE PRECISION      TC1 */
-/*      DOUBLE PRECISION      TC2 */
-/*      DOUBLE PRECISION      TC3 */
+/*     DOUBLE PRECISION      TC0 */
+/*     DOUBLE PRECISION      TC1 */
+/*     DOUBLE PRECISION      TC2 */
+/*     DOUBLE PRECISION      TC3 */
 
-/*      DOUBLE PRECISION      C0 */
-/*      DOUBLE PRECISION      C1 */
-/*      DOUBLE PRECISION      C2 */
-/*      DOUBLE PRECISION      C3 */
+/*     DOUBLE PRECISION      C0 */
+/*     DOUBLE PRECISION      C1 */
+/*     DOUBLE PRECISION      C2 */
+/*     DOUBLE PRECISION      C3 */
 
-/*      DO I = 1, 10 */
+/*     DO I = 1, 10 */
 
-/*         X     = DBLE (I) */
-/*         ROOTX = DSQRT(X) */
+/*        X     = DBLE (I) */
+/*        ROOTX = DSQRT(X) */
 
-/*         TC0   = COS ( ROOTX ) */
-/*         TC1   = SIN ( ROOTX ) / ROOTX */
+/*        TC0   = COS ( ROOTX ) */
+/*        TC1   = SIN ( ROOTX ) / ROOTX */
 
-/*         TC2   = ( 1.0D0 - COS( ROOTX )         ) / X */
-/*         TC3   = ( 1.0D0 - SIN( ROOTX ) / ROOTX ) / X */
+/*        TC2   = ( 1.0D0 - COS( ROOTX )         ) / X */
+/*        TC3   = ( 1.0D0 - SIN( ROOTX ) / ROOTX ) / X */
 
-/*         CALL STMP03 ( X, C0, C1, C2, C3 ) */
+/*        CALL STMP03 ( X, C0, C1, C2, C3 ) */
 
-/*         WRITE (*,*) */
-/*         WRITE (*,*) 'Expected - Computed for X = ', X */
-/*         WRITE (*,*) */
-/*         WRITE (*,*) 'Delta C0 :', TC0 - C0 */
-/*         WRITE (*,*) 'Delta C1 :', TC1 - C1 */
-/*         WRITE (*,*) 'Delta C2 :', TC2 - C2 */
-/*         WRITE (*,*) 'Delta C3 :', TC3 - C3 */
+/*        WRITE (*,*) */
+/*        WRITE (*,*) 'Expected - Computed for X = ', X */
+/*        WRITE (*,*) */
+/*        WRITE (*,*) 'Delta C0 :', TC0 - C0 */
+/*        WRITE (*,*) 'Delta C1 :', TC1 - C1 */
+/*        WRITE (*,*) 'Delta C2 :', TC2 - C2 */
+/*        WRITE (*,*) 'Delta C3 :', TC3 - C3 */
 
-/*      END DO */
+/*     END DO */
 
-/*      END */
+/*     END */
 
-/*      You should expect all of the differences to be on the order of */
-/*      the precision of the machine on which this program is executed. */
+/*     You should expect all of the differences to be on the order of */
+/*     the precision of the machine on which this program is executed. */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*     [1] `Fundamentals of Celestial Mechanics', Second Edition */
-/*         by J.M.A. Danby;  Willman-Bell, Inc., P.O. Box 35025 */
-/*         Richmond Virginia;  pp 168-180 */
+/*     [1]  J. Danby, "Fundamentals of Celestial Mechanics," 2nd Edition, */
+/*          pp.345-347, Willman-Bell, 1989. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     H.A. Neilan    (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.29.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 3.28.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.27.0, 08-APR-2014 (NJB) */
 
@@ -296,7 +306,7 @@
 
 /* -    SPICELIB Version 3.21.0, 09-APR-2012 (WLT) */
 
-/*        Code was updated to correct execessive round-off */
+/*        Code was updated to correct excessive round-off */
 /*        errors in the case where |X| > 1. */
 
 /* -    SPICELIB Version 3.20.0, 13-MAY-2010 (BVS) */
@@ -386,23 +396,23 @@
 /* -    SPICELIB Version 3.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 3.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -412,9 +422,9 @@
 
 /* -    SPICELIB Version 2.0.0, 11-NOV-1993 (HAN) */
 
-/*       The file was modified to include values for other platforms. */
-/*       Also, the file was formatted for use by the program that */
-/*       creates the environment specific source files. */
+/*        The file was modified to include values for other platforms. */
+/*        Also, the file was formatted for use by the program that */
+/*        creates the environment specific source files. */
 
 /* -    SPICELIB Version 1.0.0, 17-FEB-1992 (WLT) */
 
@@ -449,9 +459,9 @@
 
 /* -    SPICELIB Version 2.0.0, 11-NOV-1993 (HAN) */
 
-/*       The file was modified to include values for other platforms. */
-/*       Also, the file was formatted for use by the program that */
-/*       creates the environment specific source files. */
+/*        The file was modified to include values for other platforms. */
+/*        Also, the file was formatted for use by the program that */
+/*        creates the environment specific source files. */
 
 /* -& */
 
@@ -565,7 +575,7 @@
 	first = FALSE_;
 	for (i__ = 1; i__ <= 18; ++i__) {
 	    pairs[(i__1 = i__ - 1) < 18 && 0 <= i__1 ? i__1 : s_rnge("pairs", 
-		    i__1, "stmp03_", (ftnlen)589)] = 1. / ((doublereal) i__ * 
+		    i__1, "stmp03_", (ftnlen)604)] = 1. / ((doublereal) i__ * 
 		    (doublereal) (i__ + 1));
 	}
 	y = log(2.) + log(dpmax_());
@@ -696,7 +706,7 @@
     *c3 = 1.;
     for (i__ = 18; i__ >= 4; i__ += -2) {
 	*c3 = 1. - *x * pairs[(i__1 = i__ - 1) < 18 && 0 <= i__1 ? i__1 : 
-		s_rnge("pairs", i__1, "stmp03_", (ftnlen)733)] * *c3;
+		s_rnge("pairs", i__1, "stmp03_", (ftnlen)748)] * *c3;
     }
     *c3 = pairs[1] * *c3;
 
@@ -724,7 +734,7 @@
     *c2 = 1.;
     for (i__ = 17; i__ >= 3; i__ += -2) {
 	*c2 = 1. - *x * pairs[(i__1 = i__ - 1) < 18 && 0 <= i__1 ? i__1 : 
-		s_rnge("pairs", i__1, "stmp03_", (ftnlen)764)] * *c2;
+		s_rnge("pairs", i__1, "stmp03_", (ftnlen)779)] * *c2;
     }
     *c2 = pairs[0] * *c2;
 

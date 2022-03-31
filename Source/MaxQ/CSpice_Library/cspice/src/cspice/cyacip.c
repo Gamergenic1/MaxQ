@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CYACIP ( Cycle the elements of a character array ) */
+/* $Procedure CYACIP ( Cycle the elements of a character array ) */
 /* Subroutine */ int cyacip_(integer *nelt, char *dir, integer *ncycle, char *
 	array, ftnlen dir_len, ftnlen array_len)
 {
@@ -79,23 +79,22 @@
 
 /* $ Detailed_Input */
 
-/*     NELT        is the number of elements in the input array. */
+/*     NELT     is the number of elements in the input array. */
 
-/*     DIR         is the direction in which the elements in the */
-/*                 array are to be cycled. */
+/*     DIR      is the direction in which the elements in the */
+/*              array are to be cycled. */
 
-/*                    'F' or 'f'  to cycle forward. */
-/*                    'B' or 'b'  to cycle backward. */
+/*                 'F' or 'f'  to cycle forward. */
+/*                 'B' or 'b'  to cycle backward. */
 
-/*     NCYCLE      is the number of times the elements in the array */
-/*                 are to be cycled. */
+/*     NCYCLE   is the number of times the elements in the array */
+/*              are to be cycled. */
 
-/*     ARRAY       is the array to be cycled. */
-
+/*     ARRAY    is the array to be cycled. */
 
 /* $ Detailed_Output */
 
-/*     ARRAY       is the input array after it has been cycled. */
+/*     ARRAY    is the input array after it has been cycled. */
 
 /* $ Parameters */
 
@@ -103,13 +102,13 @@
 
 /* $ Exceptions */
 
-/*     1) If the value of DIR is not recognized, the error */
-/*        SPICE(INVALIDDIRECTION) is signaled. */
+/*     1)  If the value of DIR is not recognized, the error */
+/*         SPICE(INVALIDDIRECTION) is signaled. */
 
-/*     2) If NELT is less than 1, the output array is not modified. */
+/*     2)  If NELT is less than 1, the output array is not modified. */
 
-/*     3) If NCYCLE is negative, the array is cycled NCYCLE times in */
-/*        the opposite direction of DIR. */
+/*     3)  If NCYCLE is negative, the array is cycled NCYCLE times in */
+/*         the opposite direction of DIR. */
 
 /* $ Files */
 
@@ -155,18 +154,25 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 09-SEP-2005 (NJB) (HAN) (WLT) (IMU) */
 

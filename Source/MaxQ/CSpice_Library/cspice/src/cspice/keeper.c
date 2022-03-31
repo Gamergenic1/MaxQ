@@ -14,9 +14,9 @@ static integer c__1 = 1;
 
 /* $Procedure KEEPER ( Keeps track of SPICE kernels ) */
 /* Subroutine */ int keeper_0_(int n__, integer *which, char *kind, char *
-	file, integer *count, char *filtyp, integer *handle, char *source, 
+	file, integer *count, char *filtyp, integer *handle, char *srcfil, 
 	logical *found, ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, 
-	ftnlen source_len)
+	ftnlen srcfil_len)
 {
     /* Initialized data */
 
@@ -79,14 +79,16 @@ static integer c__1 = 1;
     integer npaths;
     extern /* Subroutine */ int sigerr_(char *, ftnlen), chkout_(char *, 
 	    ftnlen);
-    integer cursrc, npvals;
+    integer cursrc;
+    logical didtxt;
+    integer npvals;
     char symbol[80];
-    logical didtxt, dotext;
+    logical dotext;
     extern /* Subroutine */ int setmsg_(char *, ftnlen);
     extern logical return_(void);
     extern /* Subroutine */ int cvpool_(char *, logical *, ftnlen), errint_(
-	    char *, integer *, ftnlen), swpool_(char *, integer *, char *, 
-	    ftnlen, ftnlen), dtpool_(char *, logical *, integer *, char *, 
+	    char *, integer *, ftnlen), dtpool_(char *, logical *, integer *, 
+	    char *, ftnlen, ftnlen), swpool_(char *, integer *, char *, 
 	    ftnlen, ftnlen), stpool_(char *, integer *, char *, char *, 
 	    integer *, logical *, ftnlen, ftnlen, ftnlen), sepool_(char *, 
 	    integer *, char *, char *, integer *, integer *, logical *, 
@@ -147,18 +149,18 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  ENTRY POINT */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
+/*     WHICH      I   KDATA */
 /*     KIND       I   KTOTAL, KDATA */
-/*     FILE      I/O  FURNSH, KDATA,  UNLOAD, KINFO */
-/*     FILTYP    I/O  KTOTAL, KDATA,  KINFO */
+/*     FILE      I-O  FURNSH, KDATA, UNLOAD, KINFO */
 /*     COUNT      O   KTOTAL */
-/*     HANDLE     O   KDATA,  KINFO */
-/*     SOURCE     O   KDATA.  KINFO */
-/*     FOUND      O   KDATA.  KINFO */
+/*     FILTYP    I-O  KTOTAL, KDATA, KINFO */
+/*     HANDLE     O   KDATA, KINFO */
+/*     SRCFIL     O   KDATA, KINFO */
+/*     FOUND      O   KDATA, KINFO */
 /*     FILSIZ     P   Maximum file name length. */
-/*     MAXFIL     P   Is the maximum number of files that can be loaded. */
-
+/*     MAXFIL     P   Maximum number of files that can be loaded. */
 
 /* $ Detailed_Input */
 
@@ -170,46 +172,46 @@ static integer c__1 = 1;
 
 /* $ Parameters */
 
-/*     FILSIZ    is the maximum file name length that can be */
-/*               accommodated by this set of routines. */
+/*     FILSIZ   is the maximum file name length that can be */
+/*              accommodated by this set of routines. */
 
 
-/*     MAXFIL    is the number of entries that can be stored in KEEPER's */
-/*               kernel database. In this version of the toolkit MAXFIL */
-/*               is set to 5300. Each time a kernel is loaded via */
-/*               FURNSH, a database entry is created for that kernel. */
-/*               If a meta-kernel is loaded, a database entry is created */
-/*               for the meta-kernel itself and for all files referenced */
-/*               in the meta-kernel's KERNELS_TO_LOAD specification. */
-/*               Unloading a kernel or meta-kernel deletes database */
-/*               entries created when the file was loaded. */
+/*     MAXFIL   is the number of entries that can be stored in KEEPER's */
+/*              kernel database. In this version of the toolkit MAXFIL */
+/*              is set to 5300. Each time a kernel is loaded via */
+/*              FURNSH, a database entry is created for that kernel. */
+/*              If a meta-kernel is loaded, a database entry is created */
+/*              for the meta-kernel itself and for all files referenced */
+/*              in the meta-kernel's KERNELS_TO_LOAD specification. */
+/*              Unloading a kernel or meta-kernel deletes database */
+/*              entries created when the file was loaded. */
 
-/*               The parameter MAXFIL is an upper bound on number of */
-/*               SPICE kernels that can be loaded at any time via the */
-/*               KEEPER interface, but the number of kernels that can be */
-/*               loaded may be smaller, since re-loading a loaded kernel */
-/*               or meta-kernel results in creation of additional */
-/*               database entries. */
+/*              The parameter MAXFIL is an upper bound on number of */
+/*              SPICE kernels that can be loaded at any time via the */
+/*              KEEPER interface, but the number of kernels that can be */
+/*              loaded may be smaller, since re-loading a loaded kernel */
+/*              or meta-kernel results in creation of additional */
+/*              database entries. */
 
-/*               Kernels loaded into the KEEPER system are subject to */
-/*               constraints imposed by lower-level subsystems. The */
-/*               binary kernel systems (SPK, CK, binary PCK, and EK) */
-/*               have their own limits on the maximum number of kernels */
-/*               that may be loaded. */
+/*              Kernels loaded into the KEEPER system are subject to */
+/*              constraints imposed by lower-level subsystems. The */
+/*              binary kernel systems (SPK, CK, binary PCK, and EK) */
+/*              have their own limits on the maximum number of kernels */
+/*              that may be loaded. */
 
-/*               The total number of DAF-based files (this set includes */
-/*               SPKs, CKs, and binary PCKs) and DAS-based files (this */
-/*               set includes EKs and DSKs) that may be loaded at any */
-/*               time may not exceed 5000.  This limit applies whether */
-/*               the files are loaded via FURNSH or lower-level loaders */
-/*               such as SPKLEF or DAFOPR.  File access performance */
-/*               normally will degrade as the number of loaded kernels */
-/*               increases. */
+/*              The total number of DAF-based files (this set includes */
+/*              SPKs, CKs, and binary PCKs) and DAS-based files (this */
+/*              set includes EKs and DSKs) that may be loaded at any */
+/*              time may not exceed 5000. This limit applies whether */
+/*              the files are loaded via FURNSH or lower-level loaders */
+/*              such as SPKLEF or DAFOPR. File access performance */
+/*              normally will degrade as the number of loaded kernels */
+/*              increases. */
 
 /* $ Exceptions */
 
-/*     1) If the main routine KEEPER is called, the error */
-/*       'SPICE(BOGUSENTRY)' will be signaled. */
+/*     1)  If the main routine KEEPER is called, the error */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
@@ -219,14 +221,14 @@ static integer c__1 = 1;
 
 /*     This routine serves as an umbrella for a collection of */
 /*     entry points that unify the task of loading, tracking, */
-/*     and unloading SPICE kernels.  A description of each entry */
+/*     and unloading SPICE kernels. A description of each entry */
 /*     point is given below: */
 
-/*     FURNSH    Furnish a kernel to a program.  This entry point */
+/*     FURNSH    Furnish a kernel to a program. This entry point */
 /*               provides a single interface for loading kernels into */
-/*               your application program.  All SPICE kernels (Text */
+/*               your application program. All SPICE kernels (Text */
 /*               kernels, SPK, CK, Binary PCK, and EK) can be loaded */
-/*               through this entry point.  In addition, special text */
+/*               through this entry point. In addition, special text */
 /*               kernels, called meta-Text kernels, that contain a list */
 /*               of other kernels to load can be processed by FURNSH. */
 
@@ -257,58 +259,284 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     The code fragment below illustrates the use of the various entry */
-/*     points of KEEPER.  The details of creating meta-text kernels are */
-/*     not discussed here, but are spelled out in the entry point */
-/*     FURNSH. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Load a meta-kernel with a PCK, an LSK and an SPK, and */
+/*        separately, a text kernel and a binary PCK. Loop over the */
+/*        loaded kernels, outputting file information for each of */
+/*        them. */
+
+/*        Then unload the text kernels, check that they have been */
+/*        unloaded, and finally unload all remaining kernels */
+/*        and clear the kernel pool using KCLEAR. */
 
 
-/*     Load several kernels into the program. */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*     CALL FURNSH ( 'myspk.bsp'    ) */
-/*     CALL FURNSH ( 'myck.bc'      ) */
-/*     CALL FURNSH ( 'leapsecs.ker' ) */
-/*     CALL FURNSH ( 'sclk.tsc'     ) */
-/*     CALL FURNSH ( 'metatext.ker' ) */
+/*           KPL/MK */
 
-/*     See how many kernels have been loaded. */
+/*           File name: keeper_ex1.tm */
 
-/*     CALL KTOTAL ( 'ALL', COUNT ) */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*     WRITE (*,*) 'The total number of kernels is: ', COUNT */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*     Summarize the kernels and types. */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*     DO WHICH = 1, COUNT */
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00009.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0012.tls                  Leapseconds */
 
-/*        CALL KDATA( WHICH, 'ALL', FILE, FILTYP, SOURCE, HANDLE, FOUND ) */
+/*           \begindata */
 
-/*        IF ( .NOT. FOUND ) THEN */
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls', */
+/*                                  'pck00009.tpc' ) */
 
-/*           WRITE (*,*) 'This is NOT supposed to happen.  Call NAIF' */
-/*           WRITE (*,*) 'and let them know of this problem.' */
+/*           \begintext */
 
-/*        ELSE */
-
-/*           WRITE (*,*) */
-/*           WRITE (*,*) 'File  : ', FILE */
-/*           WRITE (*,*) 'Type  : ', FILTYP */
-/*           WRITE (*,*) 'Handle: ', HANDLE */
-
-/*           IF ( SOURCE .NE. ' ' ) THEN */
-/*              WRITE (*,*) 'This file was loaded via meta-text kernel:' */
-/*              WRITE (*,*) SOURCE */
-/*           END IF */
-
-/*        END IF */
-
-/*     END DO */
+/*           End of meta-kernel */
 
 
-/*     Unload the first kernel we loaded. */
+/*        Use the PCK kernel below as the binary PCK required for the */
+/*        example. */
 
-/*     CALL UNLOAD ( 'myspk.bsp' ) */
+/*           earth_latest_high_prec.bpc */
+
+
+/*        Use the FK kernel below as the text kernel required for the */
+/*        example. */
+
+/*           RSSD0002.TF */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM KEEPER_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER               FNAMLN */
+/*              PARAMETER           ( FNAMLN = 256 ) */
+
+/*              INTEGER               FTYPLN */
+/*              PARAMETER           ( FTYPLN = 33 ) */
+
+/*              INTEGER               SRCLEN */
+/*              PARAMETER           ( SRCLEN = 256 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FNAMLN)    FILE */
+/*              CHARACTER*(FTYPLN)    FILTYP */
+/*              CHARACTER*(SRCLEN)    SRCFIL */
+
+/*              INTEGER               COUNT */
+/*              INTEGER               HANDLE */
+/*              INTEGER               WHICH */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load several kernel files. */
+/*        C */
+/*              CALL FURNSH ( 'keeper_ex1.tm'              ) */
+/*              CALL FURNSH ( 'RSSD0002.TF'                ) */
+/*              CALL FURNSH ( 'earth_latest_high_prec.bpc' ) */
+
+/*        C */
+/*        C     Count the number of loaded kernel files. */
+/*        C */
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'final FURNSH: ', COUNT */
+/*              WRITE(*,*) ' ' */
+
+/*        C */
+/*        C     Retrieve the data for all the loaded kernels and */
+/*        C     test an index for which there should be no kernel. */
+/*        C */
+/*              WRITE(*,'(A)') 'Overview of loaded kernels, by index:' */
+/*              WRITE(*,*) ' ' */
+
+/*              DO WHICH= 1, COUNT + 1 */
+
+/*                 CALL KDATA ( WHICH, 'ALL',   FILE, FILTYP, */
+/*             .                SRCFIL, HANDLE, FOUND        ) */
+
+/*                 IF ( FOUND ) THEN */
+
+/*                    WRITE(*,*) '  Index : ', WHICH */
+/*                    WRITE(*,*) '  File  : ', FILE */
+/*                    WRITE(*,*) '  Type  : ', FILTYP */
+/*                    WRITE(*,*) '  Source: ', SRCFIL */
+/*                    WRITE(*,*) '  Handle: ', HANDLE */
+/*                    WRITE(*,*) ' ' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) '  No kernel found with index: ', WHICH */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*        C */
+/*        C     Unload the text kernels. */
+/*        C */
+/*              CALL KTOTAL ( 'TEXT', COUNT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A,I2,A)') 'Unloading', COUNT, */
+/*             .                    ' text kernels...' */
+/*              WRITE(*,*) ' ' */
+
+/*              DO WHILE ( COUNT .NE. 0 ) */
+
+/*                 CALL KDATA (      1, 'TEXT',  FILE, FILTYP, */
+/*             .                SRCFIL, HANDLE, FOUND        ) */
+
+/*        C */
+/*        C        If the kernel is found in the pool, unload it. */
+/*        C */
+/*                 IF ( FOUND ) THEN */
+
+/*                    CALL UNLOAD ( FILE ) */
+
+/*        C */
+/*        C           Check if the file has been unloaded. */
+/*        C */
+/*                    CALL KINFO ( FILE, FILTYP, SRCFIL, HANDLE, FOUND ) */
+
+/*                    IF ( FOUND ) THEN */
+
+/*                       WRITE(*,'(A)') '  Error unloading ' // FILE */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A)') '  Success unloading ' // FILE */
+
+/*                    END IF */
+
+/*        C */
+/*        C        Something is not working. Inform NAIF. */
+/*        C */
+/*                 ELSE */
+
+/*                    WRITE(*,*) ' ERROR: No kernel found with index: ', */
+/*             .                 WHICH */
+
+/*                 END IF */
+
+/*        C */
+/*        C        Check if we have more text kernels to unload from */
+/*        C        the kernel pool. Note that unloading a text kernel */
+/*        C        or meta-kernel implies that the kernel pool is */
+/*        C        cleared, and any kernel(s) that were not to be */
+/*        C        unloaded are re-loaded. Therefore the COUNT value */
+/*        C        changes, and the indexing of the files within the */
+/*        C        kernel pool too. */
+/*        C */
+/*                 CALL KTOTAL ( 'TEXT', COUNT ) */
+
+/*              END DO */
+
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'UNLOAD calls: ', COUNT */
+
+/*        C */
+/*        C     Clear the KEEPER system, retrieve the number of loaded */
+/*        C     after the clear. */
+/*        C */
+/*              CALL KCLEAR() */
+
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'KCLEAR      : ', COUNT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        The total number of kernels after final FURNSH:  6 */
+
+/*        Overview of loaded kernels, by index: */
+
+/*           Index :            1 */
+/*           File  : keeper_ex1.tm */
+/*           Type  : META */
+/*           Source: */
+/*           Handle:            0 */
+
+/*           Index :            2 */
+/*           File  : de421.bsp */
+/*           Type  : SPK */
+/*           Source: keeper_ex1.tm */
+/*           Handle:            1 */
+
+/*           Index :            3 */
+/*           File  : naif0012.tls */
+/*           Type  : TEXT */
+/*           Source: keeper_ex1.tm */
+/*           Handle:            0 */
+
+/*           Index :            4 */
+/*           File  : pck00009.tpc */
+/*           Type  : TEXT */
+/*           Source: keeper_ex1.tm */
+/*           Handle:            0 */
+
+/*           Index :            5 */
+/*           File  : RSSD0002.TF */
+/*           Type  : TEXT */
+/*           Source: */
+/*           Handle:            0 */
+
+/*           Index :            6 */
+/*           File  : earth_latest_high_prec.bpc */
+/*           Type  : PCK */
+/*           Source: */
+/*           Handle:            2 */
+
+/*           No kernel found with index:            7 */
+
+/*        Unloading 3 text kernels... */
+
+/*          Success unloading naif0012.tls */
+/*          Success unloading pck00009.tpc */
+/*          Success unloading RSSD0002.TF */
+
+/*        The total number of kernels after UNLOAD calls:  3 */
+
+/*        The total number of kernels after KCLEAR      :  0 */
+
 
 /* $ Restrictions */
 
@@ -320,13 +548,30 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.1.0, 29-DEC-2021 (JDR) (NJB) */
+
+/*        Changed argument name SOURCE to SRCFIL for consistency with */
+/*        other routines. */
+
+/*        Updated KEEPER umbrella routine and all entry points' headers */
+/*        to comply with NAIF standard. */
+
+/*        Updated description of input argument KIND in headers of entry */
+/*        points KDATA and KTOTAL. Updated $Brief_I/O table to include */
+/*        WHICH short description and sort arguments in the order they */
+/*        are declared. */
+
+/*        Added a restriction about specifying kernels using relative */
+/*        paths to the FURNSH entry point header $Restrictions section. */
 
 /* -    SPICELIB Version 5.0.0, 01-FEB-2017 (NJB) (BVS) */
 
@@ -338,7 +583,7 @@ static integer c__1 = 1;
 
 /*        Updated description of MAXFIL in the header. */
 
-/*        Updated the Author_and_Institution section. */
+/*        Updated the $Author_and_Institution section. */
 
 /* -    SPICELIB Version 4.1.0, 01-JUL-2014 (NJB) (BVS) */
 
@@ -347,16 +592,16 @@ static integer c__1 = 1;
 /*        of the effects of failure during text kernel or meta-kernel */
 /*        loading. */
 
-/*     Last update was 12-APR-2012 (BVS) */
+/*        Last update was 12-APR-2012 (BVS) */
 
-/*        Increased FTSIZE (from 1000 to 5000). */
+/*           Increased FTSIZE (from 1000 to 5000). */
 
-/*        Changed to use SEPOOL instead of STPOOL to reduce loading time */
-/*        for large meta-kernels due to n^2 delay in STPOOL. */
+/*           Changed to use SEPOOL instead of STPOOL to reduce loading */
+/*           time for large meta-kernels due to n^2 delay in STPOOL. */
 
 /* -    SPICELIB Version 4.0.2, 13-APR-2011 (EDW) */
 
-/*        Trivial edit to KCLEAR Restrictions, replaced P*POOL with */
+/*        Trivial edit to KCLEAR $Restrictions, replaced P*POOL with */
 /*        PXPOOL. The "*" character causes the HTML documentation */
 /*        script to create a link for the "POOL" substring. */
 
@@ -380,20 +625,20 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 3.0.0, 15-NOV-2006 (NJB) */
 
-/*        Added entry point KCLEAR. Bug fix:  meta-kernel unloading bug */
+/*        Added entry point KCLEAR. Bug fix: meta-kernel unloading bug */
 /*        in UNLOAD was corrected. Some header updates were made. */
 
 /* -    SPICELIB Version 2.0.2, 29-JUL-2003 (NJB) (CHA) */
 
 /*        Only the header of the entry point FURNSH was modified. */
-/*        Numerous updates were made to improve clarity.  Some */
+/*        Numerous updates were made to improve clarity. Some */
 /*        corrections were made. */
 
-/* -    SPICELIB VERSION 2.0.1, 06-DEC-2002 (NJB) */
+/* -    SPICELIB Version 2.0.1, 06-DEC-2002 (NJB) */
 
 /*        Typo in header example was corrected. */
 
-/* -    SPICELIB VERSION 2.0.0, 07-JAN-2002 (WLT) */
+/* -    SPICELIB Version 2.0.0, 07-JAN-2002 (WLT) */
 
 /*        Added a call to CVPOOL in FURNSH so that watches that are */
 /*        triggered are triggered by loading Meta-kernels and not by */
@@ -410,13 +655,12 @@ static integer c__1 = 1;
 
 /* -    SPICELIB Version 1.0.1, 16-DEC-1999 (NJB) */
 
-/*        Documentation fix:  corrected second code example in the */
-/*        header of the entry point FURNSH.  The example previously used */
+/*        Documentation fix: corrected second code example in the */
+/*        header of the entry point FURNSH. The example previously used */
 /*        the kernel variable PATH_NAMES; that name has been replaced */
 /*        with the correct name PATH_VALUES. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -440,7 +684,7 @@ static integer c__1 = 1;
 
 
 /*     The source of each file specified will be stored in the integer */
-/*     array SOURCE.  If the file is loaded directly, its source */
+/*     array SRCFIL.  If the file is loaded directly, its source */
 /*     will be zero.  If it is loaded as the result of meta-information */
 /*     in a text kernel, the index of the source file in FILES will */
 /*     be stored in SRCES. */
@@ -470,7 +714,7 @@ static integer c__1 = 1;
     sigerr_("SPICE(BOGUSENTRY)", (ftnlen)17);
     chkout_("KEEPER", (ftnlen)6);
     return 0;
-/* $Procedure      FURNSH ( Furnish a program with SPICE kernels ) */
+/* $Procedure FURNSH ( Furnish a program with SPICE kernels ) */
 
 L_furnsh:
 /* $ Abstract */
@@ -504,15 +748,18 @@ L_furnsh:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     KERNEL */
 
 /* $ Keywords */
 
-/*      UTILITY */
+/*     UTILITY */
 
 /* $ Declarations */
 
 /*     CHARACTER*(*)         FILE */
+
+/*     INTEGER               FILSIZ */
+/*     PARAMETER           ( FILSIZ = 255 ) */
 
 /* $ Brief_I/O */
 
@@ -523,78 +770,78 @@ L_furnsh:
 
 /* $ Detailed_Input */
 
-/*     FILE       is a SPICE kernel file.  The file may be either binary */
-/*                or text. If the file is a binary SPICE kernel it will */
-/*                be loaded into the appropriate SPICE subsystem.  If */
-/*                FILE is a SPICE text kernel it will be loaded into the */
-/*                kernel pool. If FILE is a SPICE meta-kernel containing */
-/*                initialization instructions (through use of the */
-/*                correct kernel pool variables), the files specified in */
-/*                those variables will be loaded into the appropriate */
-/*                SPICE subsystem. */
+/*     FILE     is a SPICE kernel file. The file may be either binary */
+/*              or text. If the file is a binary SPICE kernel it will */
+/*              be loaded into the appropriate SPICE subsystem. If */
+/*              FILE is a SPICE text kernel it will be loaded into the */
+/*              kernel pool. If FILE is a SPICE meta-kernel containing */
+/*              initialization instructions (through use of the */
+/*              correct kernel pool variables), the files specified in */
+/*              those variables will be loaded into the appropriate */
+/*              SPICE subsystem. */
 
-/*                The SPICE text kernel format supports association of */
-/*                names and data values using a "keyword = value" */
-/*                format. The keyword-value pairs thus defined are */
-/*                called "kernel variables." */
+/*              The SPICE text kernel format supports association of */
+/*              names and data values using a "keyword = value" */
+/*              format. The keyword-value pairs thus defined are */
+/*              called "kernel variables." */
 
-/*                While any information can be placed in a text kernel */
-/*                file, the following string valued kernel variables are */
-/*                recognized by SPICE as meta-kernel keywords: */
+/*              While any information can be placed in a text kernel */
+/*              file, the following string valued kernel variables are */
+/*              recognized by SPICE as meta-kernel keywords: */
 
-/*                     KERNELS_TO_LOAD */
-/*                     PATH_SYMBOLS */
-/*                     PATH_VALUES */
+/*                   KERNELS_TO_LOAD */
+/*                   PATH_SYMBOLS */
+/*                   PATH_VALUES */
 
-/*                Each kernel variable is discussed below. */
+/*              Each kernel variable is discussed below. */
 
-/*                KERNELS_TO_LOAD   is a list of SPICE kernels to be */
-/*                                  loaded into a program.  If file */
-/*                                  names do not fit within the kernel */
-/*                                  pool 80 character limit, they may be */
-/*                                  continued to subsequent array */
-/*                                  elements by placing the continuation */
-/*                                  character ('+') at the end of an */
-/*                                  element and then placing the */
-/*                                  remainder of the file name in the */
-/*                                  next array element.  (See the */
-/*                                  examples below for an illustration */
-/*                                  of this technique or consult the */
-/*                                  routine STPOOL for further details.) */
+/*              KERNELS_TO_LOAD   is a list of SPICE kernels to be */
+/*                                loaded into a program. If file */
+/*                                names do not fit within the kernel */
+/*                                pool 80 character limit, they may be */
+/*                                continued to subsequent array */
+/*                                elements by placing the continuation */
+/*                                character ('+') at the end of an */
+/*                                element and then placing the */
+/*                                remainder of the file name in the */
+/*                                next array element. (See the */
+/*                                examples below for an illustration */
+/*                                of this technique or consult the */
+/*                                routine STPOOL for further details.) */
 
-/*                                  You may use one or more PATH_SYMBOL */
-/*                                  assignments (see below) to specify */
-/*                                  strings to be substituted for some */
-/*                                  part of a file name. */
+/*                                You may use one or more PATH_SYMBOL */
+/*                                assignments (see below) to specify */
+/*                                strings to be substituted for some */
+/*                                part of a file name. */
 
-/*                PATH_SYMBOLS      is a list of strings (without */
-/*                                  embedded blanks) which if */
-/*                                  encountered following the '$' */
-/*                                  character will be replaced with the */
-/*                                  corresponding PATH_VALUES string. */
-/*                                  Note that PATH_SYMBOLS are */
-/*                                  interpreted only in values */
-/*                                  associated with the KERNELS_TO_LOAD */
-/*                                  variable. There must be a one-to-one */
-/*                                  correspondence between the values */
-/*                                  supplied for PATH_SYMBOLS and */
-/*                                  PATH_VALUES. For the purpose of */
-/*                                  determining this correspondence, any */
-/*                                  path value that is continued over */
-/*                                  multiple array elements counts as a */
-/*                                  single value. */
+/*              PATH_SYMBOLS      is a list of strings (without */
+/*                                embedded blanks) which if */
+/*                                encountered following the '$' */
+/*                                character will be replaced with the */
+/*                                corresponding PATH_VALUES string. */
+/*                                Note that PATH_SYMBOLS are */
+/*                                interpreted only in values */
+/*                                associated with the KERNELS_TO_LOAD */
+/*                                variable. There must be a one-to-one */
+/*                                correspondence between the values */
+/*                                supplied for PATH_SYMBOLS and */
+/*                                PATH_VALUES. For the purpose of */
+/*                                determining this correspondence, any */
+/*                                path value that is continued over */
+/*                                multiple array elements counts as a */
+/*                                single value. */
 
-/*                PATH_VALUES       is a list of expansions to use when */
-/*                                  PATH_SYMBOLS are encountered. If */
-/*                                  path values do not fit within the */
-/*                                  kernel pool 80 character limit, they */
-/*                                  may be continued in the same way as */
-/*                                  file names (see the KERNELS_TO_LOAD */
-/*                                  description above). */
+/*              PATH_VALUES       is a list of expansions to use when */
+/*                                PATH_SYMBOLS are encountered. If */
+/*                                path values do not fit within the */
+/*                                kernel pool 80 character limit, they */
+/*                                may be continued in the same way as */
+/*                                file names (see the KERNELS_TO_LOAD */
+/*                                description above). */
 
 /*               These kernel pool variables persist within the kernel */
 /*               pool only until all kernels associated with the */
-/*               variable KERNELS_TO_LOAD have been loaded.  Once all */
+/*               variable KERNELS_TO_LOAD have been loaded. Once all */
 /*               specified kernels have been loaded, the variables */
 /*               KERNELS_TO_LOAD, PATH_SYMBOLS and PATH_VALUES are */
 /*               removed from the kernel pool. */
@@ -606,136 +853,140 @@ L_furnsh:
 
 /* $ Parameters */
 
-/*     FILSIZ    is the maximum file name length that can be */
-/*               accommodated by this routine. */
+/*     FILSIZ   is the maximum file name length that can be accommodated */
+/*              by the kernel pool. */
 
-/*     MAXFIL    is the number of entries that can be stored in KEEPER's */
-/*               kernel database. In this version of the toolkit MAXFIL */
-/*               is set to 5300. Each time a kernel is loaded via */
-/*               FURNSH, a database entry is created for that kernel. */
-/*               If a meta-kernel is loaded, a database entry is created */
-/*               for the meta-kernel itself and for all files referenced */
-/*               in the meta-kernel's KERNELS_TO_LOAD specification. */
-/*               Unloading a kernel or meta-kernel deletes database */
-/*               entries created when the file was loaded. */
+/*     MAXFIL   is the number of entries that can be stored in KEEPER's */
+/*              kernel database. In this version of the toolkit MAXFIL */
+/*              is set to 5300. Each time a kernel is loaded via */
+/*              FURNSH, a database entry is created for that kernel. */
+/*              If a meta-kernel is loaded, a database entry is created */
+/*              for the meta-kernel itself and for all files referenced */
+/*              in the meta-kernel's KERNELS_TO_LOAD specification. */
+/*              Unloading a kernel or meta-kernel deletes database */
+/*              entries created when the file was loaded. */
 
-/*               The parameter MAXFIL is an upper bound on number of */
-/*               SPICE kernels that can be loaded at any time via the */
-/*               KEEPER interface, but the number of kernels that can be */
-/*               loaded may be smaller, since re-loading a loaded kernel */
-/*               or meta-kernel results in creation of additional */
-/*               database entries. */
+/*              The parameter MAXFIL is an upper bound on number of */
+/*              SPICE kernels that can be loaded at any time via the */
+/*              KEEPER interface, but the number of kernels that can be */
+/*              loaded may be smaller, since re-loading a loaded kernel */
+/*              or meta-kernel results in creation of additional */
+/*              database entries. */
 
-/*               Kernels loaded into the KEEPER system are subject to */
-/*               constraints imposed by lower-level subsystems. The */
-/*               binary kernel systems (SPK, CK, binary PCK, and EK) */
-/*               have their own limits on the maximum number of kernels */
-/*               that may be loaded. */
+/*              Kernels loaded into the KEEPER system are subject to */
+/*              constraints imposed by lower-level subsystems. The */
+/*              binary kernel systems (SPK, CK, binary PCK, and EK) */
+/*              have their own limits on the maximum number of kernels */
+/*              that may be loaded. */
 
-/*               The total number of DAF-based files (this set includes */
-/*               SPKs, CKs, and binary PCKs) and DAS-based files (this */
-/*               set includes EKs and DSKs) that may be loaded at any */
-/*               time may not exceed 5000.  This limit applies whether */
-/*               the files are loaded via FURNSH or lower-level loaders */
-/*               such as SPKLEF or DAFOPR.  File access performance */
-/*               normally will degrade as the number of loaded kernels */
-/*               increases. */
+/*              The total number of DAF-based files (this set includes */
+/*              SPKs, CKs, and binary PCKs) and DAS-based files (this */
+/*              set includes EKs and DSKs) that may be loaded at any */
+/*              time may not exceed 5000. This limit applies whether */
+/*              the files are loaded via FURNSH or lower-level loaders */
+/*              such as SPKLEF or DAFOPR. File access performance */
+/*              normally will degrade as the number of loaded kernels */
+/*              increases. */
 
 /* $ Exceptions */
 
-/*     1) If a problem is encountered while trying to load FILE, */
-/*        it will be diagnosed by a routine in the call tree of this */
-/*        routine. */
+/*     1)  If a problem is encountered while trying to load FILE, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If the input FILE is a meta-kernel and some file in the */
-/*        KERNELS_TO_LOAD assignment cannot be found, or if an error */
-/*        occurs while trying to load a file specified by this */
-/*        assignment, the error will be diagnosed by a routine in the */
-/*        call tree of this routine, and this routine will return. Any */
-/*        files loaded prior to encountering the missing file will */
-/*        remain loaded. */
+/*     2)  If the input FILE is a meta-kernel and some file in the */
+/*         KERNELS_TO_LOAD assignment cannot be found, or if an error */
+/*         occurs while trying to load a file specified by this */
+/*         assignment, the error is signaled by a routine in the call */
+/*         tree of this routine, and this routine will return. Any files */
+/*         loaded prior to encountering the failure, including those */
+/*         referenced by the KERNELS_TO_LOAD assignment, will remain */
+/*         loaded. */
 
-/*     3) If an attempt to load a text kernel fails while the kernel is */
-/*        being parsed, any kernel variable assignments made before */
-/*        the failure occurred will be retained in the kernel pool. */
+/*     3)  If an attempt to load a text kernel fails while the kernel is */
+/*         being parsed, any kernel variable assignments made before */
+/*         the failure occurred will be retained in the kernel pool. */
 
-/*     4) If a PATH_SYMBOLS assignment is specified without a */
-/*        corresponding PATH_VALUES assignment, the error */
-/*        SPICE(NOPATHVALUE) will be signaled. */
+/*     4)  If a PATH_SYMBOLS assignment is specified without a */
+/*         corresponding PATH_VALUES assignment, the error */
+/*         SPICE(NOPATHVALUE) is signaled. */
 
-/*     5) If a meta-text kernel is supplied to FURNSH that contains */
-/*        instructions specifying that another meta-text kernel be */
-/*        loaded, the error SPICE(RECURSIVELOADING) will be signaled. */
+/*     5)  If a meta-text kernel is supplied to FURNSH that contains */
+/*         instructions specifying that another meta-text kernel be */
+/*         loaded, the error SPICE(RECURSIVELOADING) is signaled. */
 
-/*     6) If the input file name has non-blank length exceeding FILSIZ */
-/*        characters, the error SPICE(FILENAMETOOLONG) is signaled. */
+/*     6)  If the input file name has non-blank length exceeding FILSIZ */
+/*         characters, the error SPICE(FILENAMETOOLONG) is signaled. */
 
-/*     7) If the input file is a meta-kernel and some file in the */
-/*        KERNELS_TO_LOAD assignment has name length exceeding FILSIZ */
-/*        characters, the error SPICE(FILENAMETOOLONG) is signaled. */
+/*     7)  If the input file is a meta-kernel and some file in the */
+/*         KERNELS_TO_LOAD assignment has name length exceeding FILSIZ */
+/*         characters, the error SPICE(FILENAMETOOLONG) is signaled. */
 
-/*     8) If the input file is a meta-kernel and some value in the */
-/*        PATH_VALUES assignment has length exceeding FILSIZ */
-/*        characters, the error SPICE(PATHTOOLONG) is signaled. */
+/*     8)  If the input file is a meta-kernel and some value in the */
+/*         PATH_VALUES assignment has length exceeding FILSIZ */
+/*         characters, the error SPICE(PATHTOOLONG) is signaled. */
 
-/*     9) If the input file is a meta-kernel and some file in the */
-/*        KERNELS_TO_LOAD assignment has, after symbol substitution, */
-/*        combined name and path length exceeding FILSIZ characters, the */
-/*        error SPICE(FILENAMETOOLONG) is signaled. */
+/*     9)  If the input file is a meta-kernel and some file in the */
+/*         KERNELS_TO_LOAD assignment has, after symbol substitution, */
+/*         combined name and path length exceeding FILSIZ characters, */
+/*         the error SPICE(FILENAMETOOLONG) is signaled. */
 
-/*    10) The error 'SPICE(BADVARNAME)' signals from a routine in the */
-/*        call tree of FURNSH if a kernel pool variable name length */
-/*        exceeds MAXLEN characters (defined in pool.f). */
-
+/*     10) If a kernel pool variable name length exceeds its maximum */
+/*         allowed length (see Kernel Required Reading, kernel.req), an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /* $ Files */
 
 /*     The input FILE is examined and loaded into the appropriate SPICE */
-/*     subsystem.  If the file is a meta-kernel, any kernels specified */
+/*     subsystem. If the file is a meta-kernel, any kernels specified */
 /*     by the KERNELS_TO_LOAD keyword (and if present, the PATH_SYMBOLS */
 /*     and PATH_VALUES keywords) are loaded as well. */
 
 /* $ Particulars */
 
 /*     This routine provides a uniform interface to the SPICE kernel */
-/*     loading systems.  It allows you to easily assemble a list of */
+/*     loading systems. It allows you to easily assemble a list of */
 /*     SPICE kernels required by your application and to modify that set */
 /*     without modifying the source code of programs that make use of */
 /*     these kernels. */
 
 /* $ Examples */
 
-/*     Example 1 */
-/*     --------- */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Load the leapseconds kernel naif0007.tls and the planetary */
-/*     ephemeris SPK file de405s.bsp. */
+/*     1) Load the leapseconds kernel naif0007.tls and the planetary */
+/*        ephemeris SPK file de405s.bsp. */
 
-/*        CALL FURNSH ( 'naif0007.tls' ) */
-/*        CALL FURNSH ( 'de405s.bsp'   ) */
+/*           CALL FURNSH ( 'naif0007.tls' ) */
+/*           CALL FURNSH ( 'de405s.bsp'   ) */
 
 
-/*     Example 2 */
-/*     --------- */
+/*     2) This example illustrates how you could create a meta-kernel */
+/*        file for a program that requires several text and binary */
+/*        kernels. */
 
-/*     This example illustrates how you could create a meta-kernel file */
-/*     for a program that requires several text and binary kernels. */
+/*        First create a list of the kernels you need in a text file as */
+/*        shown below. */
 
-/*     First create a list of the kernels you need in a text file as */
-/*     shown below. */
 
-/*        \begintext */
+/*           KPL/MK */
+
+/*           File name: furnsh_ex2.tm */
 
 /*           Here are the SPICE kernels required for my application */
 /*           program. */
 
-/*           Note that kernels are loaded in the order listed. Thus we */
-/*           need to list the highest priority kernel last. */
+/*           Note that kernels are loaded in the order listed. Thus */
+/*           we need to list the highest priority kernel last. */
 
 
-/*        \begindata */
+/*           \begindata */
 
-/*        KERNELS_TO_LOAD = ( */
+/*           KERNELS_TO_LOAD = ( */
 
 /*              '/home/mydir/kernels/spk/lowest_priority.bsp', */
 /*              '/home/mydir/kernels/spk/next_priority.bsp', */
@@ -747,40 +998,44 @@ L_furnsh:
 /*              '/home/mydir/kernels/text/sclk.tsc', */
 /*              '/home/mydir/kernels/ck/c-kernel.bc' ) */
 
+/*           \begintext */
 
-/*     Note that the file name */
-
-/*        /home/mydir/kernels/custom/kernel_data/constants.ker */
-
-/*     is continued across several lines in the right hand side of the */
-/*     assignment of the kernel variable KERNELS_TO_LOAD. */
-
-/*     Once you've created your list of kernels, call FURNSH near the */
-/*     beginning of your application program to load the meta-kernel */
-/*     automatically at program start up. */
-
-/*        CALL FURNSH ( 'myfile.txt' ) */
-
-/*     This will cause each of the kernels listed in your meta-kernel */
-/*     to be loaded. */
+/*           End of meta-kernel */
 
 
-/*     Example 3 */
-/*     --------- */
+/*        Note that the file name */
 
-/*     This example illustrates how you can simplify the previous */
-/*     kernel list by using PATH_SYMBOLS. */
+/*           /home/mydir/kernels/custom/kernel_data/constants.ker */
+
+/*        is continued across several lines in the right hand side of */
+/*        the assignment of the kernel variable KERNELS_TO_LOAD. */
+
+/*        Once you've created your list of kernels, call FURNSH near the */
+/*        beginning of your application program to load the meta-kernel */
+/*        automatically at program start up. */
+
+/*           CALL FURNSH ( 'furnsh_ex2.tm' ) */
+
+/*        This will cause each of the kernels listed in your meta-kernel */
+/*        to be loaded. */
 
 
-/*        \begintext */
+/*     3) This example illustrates how you can simplify the previous */
+/*        kernel list by using PATH_SYMBOLS. */
+
+
+/*           KPL/MK */
+
+/*           File name: furnsh_ex3.tm */
 
 /*           Here are the SPICE kernels required for my application */
 /*           program. */
 
+
 /*           We are going to let A substitute for the directory that */
 /*           contains SPK files; B substitute for the directory that */
 /*           contains C-kernels; and C substitute for the directory that */
-/*           contains text kernels.  And we'll let D substitute for */
+/*           contains text kernels. And we'll let D substitute for */
 /*           a "custom" directory that contains a special planetary */
 /*           constants kernel made just for our mission. */
 
@@ -788,35 +1043,39 @@ L_furnsh:
 /*           PATH_SYMBOLS must be listed in the same order. */
 
 
-/*        \begindata */
+/*           \begindata */
 
-/*        PATH_VALUES  = ( '/home/mydir/kernels/spk', */
-/*                         '/home/mydir/kernels/ck', */
-/*                         '/home/mydir/kernels/text', */
-/*                         '/home/mydir/kernels/custom/kernel_data' ) */
+/*           PATH_VALUES  = ( '/home/mydir/kernels/spk', */
+/*                            '/home/mydir/kernels/ck', */
+/*                            '/home/mydir/kernels/text', */
+/*                            '/home/mydir/kernels/custom/kernel_data' ) */
 
-/*        PATH_SYMBOLS = ( 'A', */
-/*                         'B', */
-/*                         'C', */
-/*                         'D'  ) */
+/*           PATH_SYMBOLS = ( 'A', */
+/*                            'B', */
+/*                            'C', */
+/*                            'D'  ) */
 
-/*        KERNELS_TO_LOAD = (  '$A/lowest_priority.bsp', */
-/*                             '$A/next_priority.bsp', */
-/*                             '$A/highest_priority.bsp', */
-/*                             '$C/leapsecond.ker', */
-/*                             '$D/constants.ker', */
-/*                             '$C/sclk.tsc', */
-/*                             '$B/c-kernel.bc'         ) */
+/*           KERNELS_TO_LOAD = (  '$A/lowest_priority.bsp', */
+/*                                '$A/next_priority.bsp', */
+/*                                '$A/highest_priority.bsp', */
+/*                                '$C/leapsecond.ker', */
+/*                                '$D/constants.ker', */
+/*                                '$C/sclk.tsc', */
+/*                                '$B/c-kernel.bc'         ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
 
 
-/*     Example 4 */
-/*     --------- */
+/*     4) This example illustrates continuation of path values. The */
+/*        meta-kernel shown here is a modified version of that from */
+/*        example 3. */
 
-/*     This example illustrates continuation of path values. The */
-/*     meta-kernel shown here is a modified version of that from */
-/*     example 3. */
 
-/*        \begintext */
+/*           KPL/MK */
+
+/*           File name: furnsh_ex4.tm */
 
 /*           Here are the SPICE kernels required for my application */
 /*           program. */
@@ -824,7 +1083,7 @@ L_furnsh:
 /*           We are going to let A substitute for the directory that */
 /*           contains SPK files; B substitute for the directory that */
 /*           contains C-kernels; and C substitute for the directory that */
-/*           contains text kernels.  And we'll let D substitute for */
+/*           contains text kernels. And we'll let D substitute for */
 /*           a "custom" directory that contains a special planetary */
 /*           constants kernel made just for our mission. */
 
@@ -834,38 +1093,164 @@ L_furnsh:
 /*           The values for path symbols A and D are continued over */
 /*           multiple lines. */
 
-/*        \begindata */
+/*           \begindata */
 
-/*        PATH_VALUES  = ( '/very_long_top_level_path_name/mydir/+', */
-/*                         'kernels/spk', */
-/*                         '/home/mydir/kernels/ck', */
-/*                         '/home/mydir/kernels/text', */
-/*                         '/very_long_top_level_path_name+', */
-/*                         '/mydir/kernels/custom+', */
-/*                         '/kernel_data'                ) */
+/*           PATH_VALUES  = ( '/very_long_top_level_path_name/mydir/+', */
+/*                            'kernels/spk', */
+/*                            '/home/mydir/kernels/ck', */
+/*                            '/home/mydir/kernels/text', */
+/*                            '/very_long_top_level_path_name+', */
+/*                            '/mydir/kernels/custom+', */
+/*                            '/kernel_data'                ) */
 
-/*        PATH_SYMBOLS = ( 'A', */
-/*                         'B', */
-/*                         'C', */
-/*                         'D'  ) */
+/*           PATH_SYMBOLS = ( 'A', */
+/*                            'B', */
+/*                            'C', */
+/*                            'D'  ) */
 
-/*        KERNELS_TO_LOAD = (  '$A/lowest_priority.bsp', */
-/*                             '$A/next_priority.bsp', */
-/*                             '$A/highest_priority.bsp', */
-/*                             '$C/leapsecond.ker', */
-/*                             '$D/constants.ker', */
-/*                             '$C/sclk.tsc', */
-/*                             '$B/c-kernel.bc'         ) */
+/*           KERNELS_TO_LOAD = (  '$A/lowest_priority.bsp', */
+/*                                '$A/next_priority.bsp', */
+/*                                '$A/highest_priority.bsp', */
+/*                                '$C/leapsecond.ker', */
+/*                                '$D/constants.ker', */
+/*                                '$C/sclk.tsc', */
+/*                                '$B/c-kernel.bc'         ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*     5) Load a meta-kernel containing three kernels, and separately, */
+/*        a text kernel and a binary PCK. Count the number of loaded */
+/*        files before and after calling KCLEAR. */
+
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: furnsh_ex5.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00009.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0012.tls                  Leapseconds */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls', */
+/*                                  'pck00009.tpc' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Use the PCK kernel below as the binary PCK required for the */
+/*        example. */
+
+/*           earth_latest_high_prec.bpc */
+
+
+/*        Use the FK kernel below as the text kernel required for the */
+/*        example. */
+
+/*           RSSD0002.TF */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM FURNSH_EX5 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               COUNT */
+
+/*        C */
+/*        C     Load several kernel files. */
+/*        C */
+/*              CALL FURNSH ( 'furnsh_ex5.tm'              ) */
+/*              CALL FURNSH ( 'RSSD0002.TF'                ) */
+/*              CALL FURNSH ( 'earth_latest_high_prec.bpc' ) */
+
+/*        C */
+/*        C     Count the number of loaded kernel files. */
+/*        C */
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'final FURNSH: ', COUNT */
+
+/*        C */
+/*        C     Clear the KEEPER system, retrieve the number of loaded */
+/*        C     after the clear. */
+/*        C */
+/*              CALL KCLEAR() */
+
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'KCLEAR      : ', COUNT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        The total number of kernels after final FURNSH:  6 */
+/*        The total number of kernels after KCLEAR      :  0 */
+
 
 /* $ Restrictions */
 
-/*     1) A meta-kernel cannot reference another meta-kernel. */
+/*     1)  A meta-kernel cannot reference another meta-kernel. */
 
-/*     2) Failure during an attempt to load a text kernel or a */
-/*        meta-kernel can result in a subset of the intended kernel */
-/*        variables being set or a subset of the intended files */
-/*        being loaded. FURNSH does not "clean up" so as to undo the */
-/*        effects of a failed load operation. */
+/*     2)  Failure during an attempt to load a text kernel or a */
+/*         meta-kernel can result in a subset of the intended kernel */
+/*         variables being set or a subset of the intended files */
+/*         being loaded. FURNSH does not "clean up" so as to undo the */
+/*         effects of a failed load operation. */
+
+/*     3)  When a kernel is specified with a relative path, this path */
+/*         should be valid at the time when FURNSH is called and stay */
+/*         valid for the rest of the application run. This is required */
+/*         because SPICE stores kernel names as provided by the caller */
+/*         and uses them to open and close binary kernels as needed */
+/*         by the DAF/DAS handle manager subsystem (behind the scenes, */
+/*         to allow reading many more binary kernels than available */
+/*         logical units), and to automatically reload into the POOL */
+/*         the rest of text kernels that should stay loaded when a */
+/*         particular text kernel is unloaded. */
+
+/*         Changing the working directory from within an application */
+/*         during an application run after calling FURNSH to load */
+/*         kernels specified using relative paths is likely to */
+/*         invalidate stored paths and prevent open/close and unload */
+/*         operations mentioned above. A simple workaround when this */
+/*         is needed is to specify kernels using absolute paths. */
 
 /* $ Literature_References */
 
@@ -873,13 +1258,26 @@ L_furnsh:
 
 /* $ Author_and_Institution */
 
-/*     C.H. Acton      (JPL) */
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     C.H. Acton         (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.1, 08-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Created complete code example from existing code fragments. */
+
+/*        Added KERNEL to $Required_Reading section. */
+
+/*        Added FILSIZ to the $Declarations section. */
+
+/*        Added a restriction about specifying kernels using relative */
+/*        paths to the $Restrictions section. */
 
 /* -    SPICELIB Version 5.0.0, 01-FEB-2017 (NJB) (BVS) */
 
@@ -887,7 +1285,7 @@ L_furnsh:
 
 /*        Updated description of MAXFIL in the header. */
 
-/*        Updated the Author_and_Institution section. */
+/*        Updated the $Author_and_Institution section. */
 
 /* -    SPICELIB Version 4.1.0, 01-JUL-2014 (NJB) (BVS) */
 
@@ -919,10 +1317,10 @@ L_furnsh:
 
 /* -    SPICELIB Version 2.0.1, 29-JUL-2003 (NJB) (CHA) */
 
-/*        Numerous updates to improve clarity.  Some corrections were */
+/*        Numerous updates to improve clarity. Some corrections were */
 /*        made. */
 
-/* -    SPICELIB VERSION 2.0.0, 23-AUG-2001 (WLT) */
+/* -    SPICELIB Version 2.0.0, 23-AUG-2001 (WLT) */
 
 /*        Added a call to CVPOOL in FURNSH so that watches that are */
 /*        triggered are triggered by loading Meta-kernels and not by */
@@ -935,13 +1333,12 @@ L_furnsh:
 
 /* -    SPICELIB Version 1.0.1, 16-DEC-1999 (NJB) */
 
-/*        Documentation fix:  corrected second code example in the */
-/*        header of this entry point.  The example previously used the */
+/*        Documentation fix: corrected second code example in the */
+/*        header of this entry point. The example previously used the */
 /*        kernel variable PATH_NAMES; that name has been replaced with */
 /*        the correct name PATH_VALUES. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -1014,15 +1411,15 @@ L_furnsh:
     ++loaded;
     cursrc = loaded;
     s_copy(files + ((i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-	    "files", i__1, "keeper_", (ftnlen)1069)) * 255, file, (ftnlen)255,
+	    "files", i__1, "keeper_", (ftnlen)1469)) * 255, file, (ftnlen)255,
 	     file_len);
     s_copy(types + (((i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-	    "types", i__1, "keeper_", (ftnlen)1070)) << 3), thstyp, (ftnlen)8,
+	    "types", i__1, "keeper_", (ftnlen)1470)) << 3), thstyp, (ftnlen)8,
 	     (ftnlen)8);
     handls[(i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge("handls", 
-	    i__1, "keeper_", (ftnlen)1071)] = myhand;
+	    i__1, "keeper_", (ftnlen)1471)] = myhand;
     srces[(i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge("srces", 
-	    i__1, "keeper_", (ftnlen)1072)] = 0;
+	    i__1, "keeper_", (ftnlen)1472)] = 0;
     cvpool_("FURNSH", &update, (ftnlen)6);
     if (! update) {
 
@@ -1088,7 +1485,7 @@ L_furnsh:
 /*     it as such and then process its contents. */
 
     s_copy(types + (((i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-	    "types", i__1, "keeper_", (ftnlen)1155)) << 3), "META", (ftnlen)8,
+	    "types", i__1, "keeper_", (ftnlen)1555)) << 3), "META", (ftnlen)8,
 	     (ftnlen)4);
 
 /*     Now load all kernels specified in the KERNELS_TO_LOAD variable. */
@@ -1235,7 +1632,7 @@ L_furnsh:
 		for (i__ = 1; i__ <= 3; ++i__) {
 		    dvpool_(known + (((i__1 = i__ - 1) < 3 && 0 <= i__1 ? 
 			    i__1 : s_rnge("known", i__1, "keeper_", (ftnlen)
-			    1322)) << 5), (ftnlen)32);
+			    1722)) << 5), (ftnlen)32);
 		}
 
 /*              Take care of any watcher activation caused by the */
@@ -1262,15 +1659,15 @@ L_furnsh:
 
 	++loaded;
 	s_copy(files + ((i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		s_rnge("files", i__1, "keeper_", (ftnlen)1354)) * 255, fil2ld,
+		s_rnge("files", i__1, "keeper_", (ftnlen)1754)) * 255, fil2ld,
 		 (ftnlen)255, (ftnlen)255);
 	s_copy(types + (((i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		s_rnge("types", i__1, "keeper_", (ftnlen)1355)) << 3), thstyp,
+		s_rnge("types", i__1, "keeper_", (ftnlen)1755)) << 3), thstyp,
 		 (ftnlen)8, (ftnlen)8);
 	handls[(i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge("hand"
-		"ls", i__1, "keeper_", (ftnlen)1356)] = myhand;
+		"ls", i__1, "keeper_", (ftnlen)1756)] = myhand;
 	srces[(i__1 = loaded - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge("srces",
-		 i__1, "keeper_", (ftnlen)1357)] = cursrc;
+		 i__1, "keeper_", (ftnlen)1757)] = cursrc;
 
 /*        Get the name of the next file to load. */
 
@@ -1284,18 +1681,18 @@ L_furnsh:
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	dvpool_(known + (((i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"known", i__1, "keeper_", (ftnlen)1374)) << 5), (ftnlen)32);
+		"known", i__1, "keeper_", (ftnlen)1774)) << 5), (ftnlen)32);
     }
     cvpool_("FURNSH", &update, (ftnlen)6);
     chkout_("FURNSH", (ftnlen)6);
     return 0;
-/* $Procedure      KTOTAL ( Kernel Totals ) */
+/* $Procedure KTOTAL ( Kernel Totals ) */
 
 L_ktotal:
 /* $ Abstract */
 
-/*     Return the number of kernels that are currently loaded */
-/*     via the KEEPER interface and that are of a specified type. */
+/*     Return the number of kernels of a specified type that are */
+/*     currently loaded via the FURNSH interface. */
 
 /* $ Disclaimer */
 
@@ -1324,7 +1721,7 @@ L_ktotal:
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     KERNEL */
 
 /* $ Keywords */
 
@@ -1344,34 +1741,43 @@ L_ktotal:
 
 /* $ Detailed_Input */
 
-/*     KIND       is a list of types of kernels to count when */
-/*                computing loaded kernels.  KIND should consist */
-/*                of a list of words of kernels to examine.  Recognized */
-/*                types are */
+/*     KIND     is a list of types of kernels to count when computing */
+/*              loaded kernels. KIND should consist of a list of words of */
+/*              kernels to examine. Recognized types are */
 
-/*                   SPK  --- all SPK files are counted in the total. */
-/*                   CK   --- all CK files are counted in the total. */
-/*                   PCK  --- all binary PCK files are counted in the */
-/*                            total. */
-/*                   DSK  --- all DSK files are counted in the total. */
-/*                   EK   --- all EK files are counted in the total. */
-/*                   TEXT --- all text kernels that are not meta-text */
-/*                            kernels are included in the total. */
-/*                   META --- all meta-text kernels are counted in the */
-/*                            total. */
-/*                   ALL  --- every type of kernel is counted in the */
-/*                            total. */
+/*                 SPK  --- All SPK files are counted in the total. */
+/*                 CK   --- All CK files are counted in the total. */
+/*                 PCK  --- All binary PCK files are counted in the */
+/*                          total. */
+/*                 DSK  --- All DSK files are counted in the total. */
+/*                 EK   --- All EK files are counted in the total. */
+/*                 TEXT --- All text kernels that are not meta-text */
+/*                          kernels are included in the total. */
+/*                 META --- All meta-text kernels are counted in the */
+/*                          total. */
+/*                 ALL  --- Every type of kernel is counted in the */
+/*                          total. */
 
-/*                 KIND is case insensitive.  If a word appears in KIND */
-/*                 that is not one of those listed above it is ignored. */
+/*              KIND is case insensitive. If a word appears in KIND */
+/*              that is not one of those listed above, it is ignored. */
 
-/*                 See the Examples section for illustrations of the */
-/*                 use of KIND. */
+/*              When KIND consists of multiple words, the words must */
+/*              be separated by blanks. Examples of valid lists are the */
+/*              strings */
+
+/*                 'SPK CK TEXT' */
+/*                 'SPK CK text' */
+/*                 'PCK DSK' */
+/*                 'CK' */
+/*                 'ALL' */
+
+/*              See the $Examples section for illustrations of the */
+/*              use of KIND. */
 
 /* $ Detailed_Output */
 
-/*     COUNT       is the number of kernels loaded through FURNSH that */
-/*                 belong to the list specified by KIND. */
+/*     COUNT    is the number of kernels loaded through FURNSH that */
+/*              belong to the list specified by KIND. */
 
 /* $ Parameters */
 
@@ -1379,11 +1785,11 @@ L_ktotal:
 
 /* $ Exceptions */
 
-/*     1) If a word on the list specified by KIND is not recognized */
-/*        it is ignored. */
+/*     1)  If a word on the list specified by KIND is not recognized, */
+/*         it is ignored. */
 
-/*     2) If KIND is blank, or none of the words in KIND is on the */
-/*        list specified above, COUNT will be returned as zero. */
+/*     2)  If KIND is blank, or none of the words in KIND is on the */
+/*         list specified above, COUNT will be returned as zero. */
 
 /* $ Files */
 
@@ -1396,38 +1802,144 @@ L_ktotal:
 
 /* $ Examples */
 
-/*     Suppose you wish to determine the number of SPK kernels that */
-/*     have been loaded via the interface FURNSH.  Assign KIND */
-/*     the value 'SPK' and call KTOTAL as shown: */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Load a meta-kernel with a PCK, an LSK and an SPK, and */
+/*        separately, a text kernel and a binary PCK. Show the */
+/*        total number of kernels and meta-kernels loaded. Determine the */
+/*        number of text kernels loaded, and the number of binary */
+/*        kernels. */
+
+/*        Unload all kernels and clear the kernel pool using */
+/*        KCLEAR, and check that no kernels are loaded. */
 
 
-/*        KIND = 'SPK' */
-/*        CALL KTOTAL ( KIND, COUNT ) */
-
-/*        WRITE (*,*) 'The number of loaded SPK files is: ', COUNT */
-
-/*     To determine the number of text kernels that are loaded that */
-/*     are not meta-kernels: */
-
-/*        KIND = 'TEXT' */
-/*        CALL KTOTAL ( KIND, NTEXT ) */
-
-/*        WRITE (*,*) 'The number of non-meta-text kernels loaded is: ' */
-/*       .             NTEXT */
-
-/*     To determine the number of SPK, CK and PCK kernels loaded */
-/*     make the following call: */
-
-/*        KIND = 'SPK PCK CK' */
-/*        CALL KTOTAL ( KIND, COUNT ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*     To get a count of all loaded kernels */
+/*           KPL/MK */
 
-/*        KIND = 'ALL' */
-/*        CALL KTOTAL ( KIND, COUNT ) */
+/*           File name: ktotal_ex1.tm */
 
-/*        WRITE (*,*) 'There are ', COUNT, ' SPICE kernels loaded.' */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00009.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0012.tls                  Leapseconds */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls', */
+/*                                  'pck00009.tpc' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Use the PCK kernel below as the binary PCK required for the */
+/*        example. */
+
+/*           earth_latest_high_prec.bpc */
+
+
+/*        Use the FK kernel below as the text kernel required for the */
+/*        example. */
+
+/*           RSSD0002.TF */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM KTOTAL_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               COUNT */
+
+/*        C */
+/*        C     Load several kernel files. */
+/*        C */
+/*              CALL FURNSH ( 'ktotal_ex1.tm'              ) */
+/*              CALL FURNSH ( 'RSSD0002.TF'                ) */
+/*              CALL FURNSH ( 'earth_latest_high_prec.bpc' ) */
+
+/*        C */
+/*        C     Count the number of loaded kernel files. */
+/*        C */
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'final FURNSH: ', COUNT */
+
+/*        C */
+/*        C     Count the number of meta-kernels. */
+/*        C */
+/*              CALL KTOTAL ( 'META', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of meta-kernels  ' */
+/*             . //               '            : ', COUNT */
+
+/*        C */
+/*        C     Count the number of text kernels. */
+/*        C */
+/*              CALL KTOTAL ( 'TEXT', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of text kernels  ' */
+/*             . //               '            : ', COUNT */
+
+/*        C */
+/*        C     Count the number of binary kernels. These kernels */
+/*        C     are of type CK, DSK, EK, PCK or SPK. */
+/*        C */
+/*              CALL KTOTAL ( 'CK DSK EK PCK SPK', COUNT ) */
+/*              WRITE(*,'(A,I2)') 'The total number of binary kernels' */
+/*             . //               '            : ', COUNT */
+
+/*        C */
+/*        C     Clear the KEEPER system, retrieve the number of loaded */
+/*        C     after the clear. */
+/*        C */
+/*              CALL KCLEAR() */
+
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'KCLEAR      : ', COUNT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        The total number of kernels after final FURNSH:  6 */
+/*        The total number of meta-kernels              :  1 */
+/*        The total number of text kernels              :  3 */
+/*        The total number of binary kernels            :  2 */
+/*        The total number of kernels after KCLEAR      :  0 */
 
 
 /* $ Restrictions */
@@ -1440,24 +1952,33 @@ L_ktotal:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.1, 25-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Created complete code example from existing code fragments. */
+
+/*        Updated $Detailed_Input description of input argument KIND to */
+/*        illustrate use of multi-word lists. Added KERNEL to the list */
+/*        of required readings. */
 
 /* -    SPICELIB Version 5.0.0, 01-FEB-2017 (NJB) (BVS) */
 
 /*        Updated to support use of DSKs. */
 
-/*        Updated the Author_and_Institution section. */
+/*        Updated the $Author_and_Institution section. */
 
 /* -    SPICELIB Version 1.1.0, 02-APR-2009 (NJB) */
 
 /*        Deleted reference to unneeded variable DOALL. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -1510,23 +2031,23 @@ L_ktotal:
     i__1 = loaded;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	add = s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		s_rnge("types", i__2, "keeper_", (ftnlen)1610)) << 3), "CK", (
+		s_rnge("types", i__2, "keeper_", (ftnlen)2136)) << 3), "CK", (
 		ftnlen)8, (ftnlen)2) == 0 && dock || s_cmp(types + (((i__3 = 
 		i__ - 1) < 5300 && 0 <= i__3 ? i__3 : s_rnge("types", i__3, 
-		"keeper_", (ftnlen)1610)) << 3), "DSK", (ftnlen)8, (ftnlen)3) 
+		"keeper_", (ftnlen)2136)) << 3), "DSK", (ftnlen)8, (ftnlen)3) 
 		== 0 && dodsk || s_cmp(types + (((i__4 = i__ - 1) < 5300 && 0 
 		<= i__4 ? i__4 : s_rnge("types", i__4, "keeper_", (ftnlen)
-		1610)) << 3), "EK", (ftnlen)8, (ftnlen)2) == 0 && doek || 
+		2136)) << 3), "EK", (ftnlen)8, (ftnlen)2) == 0 && doek || 
 		s_cmp(types + (((i__5 = i__ - 1) < 5300 && 0 <= i__5 ? i__5 : 
-		s_rnge("types", i__5, "keeper_", (ftnlen)1610)) << 3), "META",
+		s_rnge("types", i__5, "keeper_", (ftnlen)2136)) << 3), "META",
 		 (ftnlen)8, (ftnlen)4) == 0 && dometa || s_cmp(types + (((
 		i__6 = i__ - 1) < 5300 && 0 <= i__6 ? i__6 : s_rnge("types", 
-		i__6, "keeper_", (ftnlen)1610)) << 3), "PCK", (ftnlen)8, (
+		i__6, "keeper_", (ftnlen)2136)) << 3), "PCK", (ftnlen)8, (
 		ftnlen)3) == 0 && dopck || s_cmp(types + (((i__7 = i__ - 1) < 
 		5300 && 0 <= i__7 ? i__7 : s_rnge("types", i__7, "keeper_", (
-		ftnlen)1610)) << 3), "SPK", (ftnlen)8, (ftnlen)3) == 0 && 
+		ftnlen)2136)) << 3), "SPK", (ftnlen)8, (ftnlen)3) == 0 && 
 		dospk || s_cmp(types + (((i__8 = i__ - 1) < 5300 && 0 <= i__8 
-		? i__8 : s_rnge("types", i__8, "keeper_", (ftnlen)1610)) << 3)
+		? i__8 : s_rnge("types", i__8, "keeper_", (ftnlen)2136)) << 3)
 		, "TEXT", (ftnlen)8, (ftnlen)4) == 0 && dotext;
 	if (add) {
 	    ++(*count);
@@ -1534,7 +2055,7 @@ L_ktotal:
     }
     chkout_("KTOTAL", (ftnlen)6);
     return 0;
-/* $Procedure      KDATA ( Kernel Data ) */
+/* $Procedure KDATA ( Kernel Data ) */
 
 L_kdata:
 /* $ Abstract */
@@ -1569,7 +2090,7 @@ L_kdata:
 
 /* $ Required_Reading */
 
-/*     None. */
+/*     KERNEL */
 
 /* $ Keywords */
 
@@ -1581,7 +2102,7 @@ L_kdata:
 /*     CHARACTER*(*)         KIND */
 /*     CHARACTER*(*)         FILE */
 /*     CHARACTER*(*)         FILTYP */
-/*     CHARACTER*(*)         SOURCE */
+/*     CHARACTER*(*)         SRCFIL */
 /*     INTEGER               HANDLE */
 /*     LOGICAL               FOUND */
 
@@ -1593,67 +2114,81 @@ L_kdata:
 /*     KIND       I   The kind of kernel to which fetches are limited. */
 /*     FILE       O   The name of the kernel file. */
 /*     FILTYP     O   The type of the kernel. */
-/*     SOURCE     O   Name of the source file used to load FILE. */
+/*     SRCFIL     O   Name of the source file used to load FILE. */
 /*     HANDLE     O   The handle attached to FILE. */
-/*     FOUND      O   TRUE if the specified file could be located. */
+/*     FOUND      O   .TRUE. if the specified file could be located. */
 
 /* $ Detailed_Input */
 
-/*     WHICH      is the number of the kernel to fetch (matching the */
-/*                type specified by KIND) from the list of kernels that */
-/*                have been loaded through the entry point FURNSH but */
-/*                that have not been unloaded through the entry point */
-/*                UNLOAD. */
+/*     WHICH    is the number of the kernel to fetch (matching the type */
+/*              specified by KIND) from the list of kernels that have */
+/*              been loaded through the routine FURNSH but that have not */
+/*              been unloaded through the routine UNLOAD. */
 
-/*     KIND       is a list of types of kernels to be considered when */
-/*                fetching kernels from the list of loaded kernels. KIND */
-/*                should consist of words from list of kernel types */
-/*                given below. */
+/*              The range of WHICH is 1 to COUNT, where COUNT is the */
+/*              number of kernels loaded via FURNSH of type KIND. This */
+/*              count may be obtained by calling KTOTAL. See the */
+/*              $Examples section for an illustrative example. */
 
-/*                   SPK  --- All SPK files are counted in the total. */
-/*                   CK   --- All CK files are counted in the total. */
-/*                   DSK  --- All DSK files are counted in the total. */
-/*                   PCK  --- All binary PCK files are counted in the */
-/*                            total. */
-/*                   EK   --- All EK files are counted in the total. */
-/*                   TEXT --- All text kernels that are not meta-text */
-/*                            kernels are included in the total. */
-/*                   META --- All meta-text kernels are counted in the */
-/*                            total. */
-/*                   ALL  --- Every type of kernel is counted in the */
-/*                            total. */
+/*     KIND     is a list of types of kernels to be considered when */
+/*              fetching kernels from the list of loaded kernels. KIND */
+/*              should consist of words from list of kernel types */
+/*              given below. */
 
-/*                 KIND is case insensitive.  If a word appears in KIND */
-/*                 that is not one of those listed above it is ignored. */
+/*                 SPK  --- All SPK files are counted in the total. */
+/*                 CK   --- All CK files are counted in the total. */
+/*                 DSK  --- All DSK files are counted in the total. */
+/*                 PCK  --- All binary PCK files are counted in the */
+/*                          total. */
+/*                 EK   --- All EK files are counted in the total. */
+/*                 TEXT --- All text kernels that are not meta-text */
+/*                          kernels are included in the total. */
+/*                 META --- All meta-text kernels are counted in the */
+/*                          total. */
+/*                 ALL  --- Every type of kernel is counted in the */
+/*                          total. */
 
-/*                 See the entry point KTOTAL for examples of the use */
-/*                 of KIND. */
+/*              KIND is case insensitive. If a word appears in KIND */
+/*              that is not one of those listed above, it is ignored. */
+
+/*              When KIND consists of multiple words, the words must */
+/*              be separated by blanks. Examples of valid lists are the */
+/*              strings */
+
+/*                 'SPK CK TEXT' */
+/*                 'SPK CK text' */
+/*                 'PCK DSK' */
+/*                 'CK' */
+/*                 'ALL' */
+
+/*              See the routine KTOTAL for examples of the use of KIND. */
 
 /* $ Detailed_Output */
 
-/*     FILE        is the name of the WHICH'th file of a type matching */
-/*                 KIND that is currently loaded via FURNSH.  FILE */
-/*                 will be blank if there is not a WHICH'th kernel. */
+/*     FILE     is the name of the file having index WHICH in the */
+/*              sequence of files of type KIND that is currently loaded */
+/*              via FURNSH. FILE will be blank if there is not such */
+/*              kernel loaded. */
 
-/*     FILTYP      is the type of the kernel specified by FILE.  FILE */
-/*                 will be blank if there is no file matching the */
-/*                 specification of WHICH and KIND. */
+/*     FILTYP   is the type of the kernel specified by FILE. FILE */
+/*              will be blank if there is no file matching the */
+/*              specification of WHICH and KIND. */
 
-/*     SOURCE      is the name of the source file that was used to */
-/*                 specify FILE as one to load.  If FILE was loaded */
-/*                 directly via a call to FURNSH, SOURCE will be blank. */
-/*                 If there is no file matching the specification of */
-/*                 WHICH and KIND, SOURCE will be blank. */
+/*     SRCFIL   is the name of the source file that was used to */
+/*              specify FILE as one to load. If FILE was loaded */
+/*              directly via a call to FURNSH, SRCFIL will be blank. */
+/*              If there is no file matching the specification of */
+/*              WHICH and KIND, SRCFIL will be blank. */
 
-/*     HANDLE      is the handle attached to FILE if it is a binary */
-/*                 kernel.  If FILE is a text kernel or meta-text kernel */
-/*                 HANDLE will be zero.  If there is no file matching */
-/*                 the specification of WHICH and KIND, HANDLE will be */
-/*                 set to zero. */
+/*     HANDLE   is the handle attached to FILE if it is a binary */
+/*              kernel. If FILE is a text kernel or meta-text kernel */
+/*              HANDLE will be zero. If there is no file matching */
+/*              the specification of WHICH and KIND, HANDLE will be */
+/*              set to zero. */
 
-/*     FOUND       is returned TRUE if a FILE matching the specification */
-/*                 of WHICH and KIND exists.  If there is no such file, */
-/*                 FOUND will be set to FALSE. */
+/*     FOUND    is returned .TRUE. if a FILE matching the specification */
+/*              of WHICH and KIND exists. If there is no such file, */
+/*              FOUND will be set to .FALSE. */
 
 /* $ Parameters */
 
@@ -1663,9 +2198,13 @@ L_kdata:
 
 /*     Error free. */
 
-/*     1) If a file is not loaded matching the specification of WHICH */
-/*        and KIND, FOUND will be FALSE, FILE, FILTYP, and SOURCE */
-/*        will be blank and HANDLE will be set to zero. */
+/*     1)  If a file is not loaded matching the specification of WHICH */
+/*         and KIND, FOUND will be .FALSE., FILE, FILTYP, and SRCFIL will */
+/*         be blank and HANDLE will be set to zero. */
+
+/*     2)  If any of FILE, FILTYP or SRCFIL output strings has length */
+/*         too short to contain the corresponding output string, the */
+/*         string is truncated on the right. */
 
 /* $ Files */
 
@@ -1673,32 +2212,155 @@ L_kdata:
 
 /* $ Particulars */
 
-/*     This entry point allows you to determine which kernels have */
-/*     been loaded via FURNSH and to obtain information sufficient */
-/*     to directly query those files. */
+/*     This routine allows you to determine which kernels have been */
+/*     loaded via FURNSH and to obtain information sufficient to directly */
+/*     query those files. */
 
 /* $ Examples */
 
-/*     The following example shows how you could print a summary */
-/*     of SPK files that have been loaded through the interface */
-/*     FURNSH. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Load a meta-kernel with a PCK, an LSK and an SPK and loop over */
+/*        the loaded kernels, outputting file information for each of */
+/*        them. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
 
-/*     CALL KTOTAL ( 'SPK', COUNT ) */
+/*           KPL/MK */
 
-/*     IF ( COUNT .EQ. 0 ) THEN */
-/*        WRITE (*,*) 'There are no SPK files loaded at this time.' */
-/*     ELSE */
-/*        WRITE (*,*) 'The loaded SPK files are: ' */
-/*        WRITE (*,*) */
-/*     END IF */
+/*           File name: kdata_ex1.tm */
 
-/*     DO WHICH = 1, COUNT */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*        CALL KDATA( WHICH, 'SPK', FILE, FILTYP, SOURCE, HANDLE, FOUND ) */
-/*        WRITE (*,*) FILE */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*     END DO */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00009.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00009.tpc', */
+/*                                  'naif0009.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM KDATA_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER               FNAMLN */
+/*              PARAMETER           ( FNAMLN = 256 ) */
+
+/*              INTEGER               FTYPLN */
+/*              PARAMETER           ( FTYPLN = 33 ) */
+
+/*              INTEGER               SRCLEN */
+/*              PARAMETER           ( SRCLEN = 256 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FNAMLN)    FILE */
+/*              CHARACTER*(FTYPLN)    FILTYP */
+/*              CHARACTER*(SRCLEN)    SRCFIL */
+
+/*              INTEGER               COUNT */
+/*              INTEGER               HANDLE */
+/*              INTEGER               WHICH */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load several kernel files. */
+/*        C */
+/*              CALL FURNSH ( 'kdata_ex1.tm' ) */
+
+/*        C */
+/*        C     Count the number of loaded kernel files. */
+/*        C */
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              DO WHICH= 1, COUNT + 1 */
+
+/*                 CALL KDATA ( WHICH, 'ALL',   FILE, FILTYP, */
+/*             .                SRCFIL, HANDLE, FOUND        ) */
+
+/*                 IF ( FOUND ) THEN */
+
+/*                    WRITE(*,*) 'Index : ', WHICH */
+/*                    WRITE(*,*) 'File  : ', FILE */
+/*                    WRITE(*,*) 'Type  : ', FILTYP */
+/*                    WRITE(*,*) 'Source: ', SRCFIL */
+/*                    WRITE(*,*) 'Handle: ', HANDLE */
+/*                    WRITE(*,*) ' ' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) 'No kernel found with index: ', WHICH */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Index :            1 */
+/*         File  : kdata_ex1.tm */
+/*         Type  : META */
+/*         Source: */
+/*         Handle:            0 */
+
+/*         Index :            2 */
+/*         File  : de421.bsp */
+/*         Type  : SPK */
+/*         Source: kdata_ex1.tm */
+/*         Handle:            1 */
+
+/*         Index :            3 */
+/*         File  : pck00009.tpc */
+/*         Type  : TEXT */
+/*         Source: kdata_ex1.tm */
+/*         Handle:            0 */
+
+/*         Index :            4 */
+/*         File  : naif0009.tls */
+/*         Type  : TEXT */
+/*         Source: kdata_ex1.tm */
+/*         Handle:            0 */
+
+/*         No kernel found with index:            5 */
+
 
 /* $ Restrictions */
 
@@ -1710,17 +2372,33 @@ L_kdata:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.1.0, 08-AUG-2021 (JDR) (NJB) */
+
+/*        Changed argument name SOURCE to SRCFIL for consistency with */
+/*        other routines. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Created complete code example from existing code fragments. */
+
+/*        Updated $Detailed_Input description of input arguments KIND, to */
+/*        illustrate use of multi-word lists, and WHICH, to describe its */
+/*        range. */
+
+/*        Added entry #2 to $Exceptions section. Added KERNEL to the list */
+/*        of required readings. */
 
 /* -    SPICELIB Version 5.0.0, 01-FEB-2017 (NJB) (BVS) */
 
 /*        Updated to support use of DSKs. */
 
-/*        Updated the Author_and_Institution section. */
+/*        Updated the $Author_and_Institution section. */
 
 /* -    SPICELIB Version 1.1.0, 02-APR-2009 (NJB) */
 
@@ -1732,7 +2410,6 @@ L_kdata:
 
 /* -    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT) */
 
-
 /* -& */
 /* $ Index_Entries */
 
@@ -1741,7 +2418,7 @@ L_kdata:
 /* -& */
     s_copy(file, " ", file_len, (ftnlen)1);
     s_copy(filtyp, " ", filtyp_len, (ftnlen)1);
-    s_copy(source, " ", source_len, (ftnlen)1);
+    s_copy(srcfil, " ", srcfil_len, (ftnlen)1);
     *handle = 0;
     *found = FALSE_;
     if (*which < 1 || *which > loaded) {
@@ -1767,20 +2444,20 @@ L_kdata:
 
 	    *found = TRUE_;
 	    s_copy(file, files + ((i__1 = *which - 1) < 5300 && 0 <= i__1 ? 
-		    i__1 : s_rnge("files", i__1, "keeper_", (ftnlen)1866)) * 
+		    i__1 : s_rnge("files", i__1, "keeper_", (ftnlen)2550)) * 
 		    255, file_len, (ftnlen)255);
 	    s_copy(filtyp, types + (((i__1 = *which - 1) < 5300 && 0 <= i__1 ?
-		     i__1 : s_rnge("types", i__1, "keeper_", (ftnlen)1867)) <<
+		     i__1 : s_rnge("types", i__1, "keeper_", (ftnlen)2551)) <<
 		     3), filtyp_len, (ftnlen)8);
 	    *handle = handls[(i__1 = *which - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		    s_rnge("handls", i__1, "keeper_", (ftnlen)1868)];
+		    s_rnge("handls", i__1, "keeper_", (ftnlen)2552)];
 	    if (srces[(i__1 = *which - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-		    "srces", i__1, "keeper_", (ftnlen)1870)] != 0) {
-		s_copy(source, files + ((i__2 = srces[(i__1 = *which - 1) < 
+		    "srces", i__1, "keeper_", (ftnlen)2554)] != 0) {
+		s_copy(srcfil, files + ((i__2 = srces[(i__1 = *which - 1) < 
 			5300 && 0 <= i__1 ? i__1 : s_rnge("srces", i__1, 
-			"keeper_", (ftnlen)1871)] - 1) < 5300 && 0 <= i__2 ? 
-			i__2 : s_rnge("files", i__2, "keeper_", (ftnlen)1871))
-			 * 255, source_len, (ftnlen)255);
+			"keeper_", (ftnlen)2555)] - 1) < 5300 && 0 <= i__2 ? 
+			i__2 : s_rnge("files", i__2, "keeper_", (ftnlen)2555))
+			 * 255, srcfil_len, (ftnlen)255);
 	    }
 	    return 0;
 	} else {
@@ -1810,23 +2487,23 @@ L_kdata:
     i__1 = loaded;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	add = s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		s_rnge("types", i__2, "keeper_", (ftnlen)1898)) << 3), "CK", (
+		s_rnge("types", i__2, "keeper_", (ftnlen)2582)) << 3), "CK", (
 		ftnlen)8, (ftnlen)2) == 0 && dock || s_cmp(types + (((i__3 = 
 		i__ - 1) < 5300 && 0 <= i__3 ? i__3 : s_rnge("types", i__3, 
-		"keeper_", (ftnlen)1898)) << 3), "DSK", (ftnlen)8, (ftnlen)3) 
+		"keeper_", (ftnlen)2582)) << 3), "DSK", (ftnlen)8, (ftnlen)3) 
 		== 0 && dodsk || s_cmp(types + (((i__4 = i__ - 1) < 5300 && 0 
 		<= i__4 ? i__4 : s_rnge("types", i__4, "keeper_", (ftnlen)
-		1898)) << 3), "EK", (ftnlen)8, (ftnlen)2) == 0 && doek || 
+		2582)) << 3), "EK", (ftnlen)8, (ftnlen)2) == 0 && doek || 
 		s_cmp(types + (((i__5 = i__ - 1) < 5300 && 0 <= i__5 ? i__5 : 
-		s_rnge("types", i__5, "keeper_", (ftnlen)1898)) << 3), "META",
+		s_rnge("types", i__5, "keeper_", (ftnlen)2582)) << 3), "META",
 		 (ftnlen)8, (ftnlen)4) == 0 && dometa || s_cmp(types + (((
 		i__6 = i__ - 1) < 5300 && 0 <= i__6 ? i__6 : s_rnge("types", 
-		i__6, "keeper_", (ftnlen)1898)) << 3), "PCK", (ftnlen)8, (
+		i__6, "keeper_", (ftnlen)2582)) << 3), "PCK", (ftnlen)8, (
 		ftnlen)3) == 0 && dopck || s_cmp(types + (((i__7 = i__ - 1) < 
 		5300 && 0 <= i__7 ? i__7 : s_rnge("types", i__7, "keeper_", (
-		ftnlen)1898)) << 3), "SPK", (ftnlen)8, (ftnlen)3) == 0 && 
+		ftnlen)2582)) << 3), "SPK", (ftnlen)8, (ftnlen)3) == 0 && 
 		dospk || s_cmp(types + (((i__8 = i__ - 1) < 5300 && 0 <= i__8 
-		? i__8 : s_rnge("types", i__8, "keeper_", (ftnlen)1898)) << 3)
+		? i__8 : s_rnge("types", i__8, "keeper_", (ftnlen)2582)) << 3)
 		, "TEXT", (ftnlen)8, (ftnlen)4) == 0 && dotext;
 	if (add) {
 	    ++hits;
@@ -1837,28 +2514,28 @@ L_kdata:
 	    if (hits == *which) {
 		*found = TRUE_;
 		s_copy(file, files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? 
-			i__2 : s_rnge("files", i__2, "keeper_", (ftnlen)1916))
+			i__2 : s_rnge("files", i__2, "keeper_", (ftnlen)2600))
 			 * 255, file_len, (ftnlen)255);
 		s_copy(filtyp, types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 
 			? i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)
-			1917)) << 3), filtyp_len, (ftnlen)8);
+			2601)) << 3), filtyp_len, (ftnlen)8);
 		*handle = handls[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 :
-			 s_rnge("handls", i__2, "keeper_", (ftnlen)1918)];
+			 s_rnge("handls", i__2, "keeper_", (ftnlen)2602)];
 		if (srces[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-			s_rnge("srces", i__2, "keeper_", (ftnlen)1920)] != 0) 
+			s_rnge("srces", i__2, "keeper_", (ftnlen)2604)] != 0) 
 			{
-		    s_copy(source, files + ((i__3 = srces[(i__2 = i__ - 1) < 
+		    s_copy(srcfil, files + ((i__3 = srces[(i__2 = i__ - 1) < 
 			    5300 && 0 <= i__2 ? i__2 : s_rnge("srces", i__2, 
-			    "keeper_", (ftnlen)1921)] - 1) < 5300 && 0 <= 
+			    "keeper_", (ftnlen)2605)] - 1) < 5300 && 0 <= 
 			    i__3 ? i__3 : s_rnge("files", i__3, "keeper_", (
-			    ftnlen)1921)) * 255, source_len, (ftnlen)255);
+			    ftnlen)2605)) * 255, srcfil_len, (ftnlen)255);
 		}
 		return 0;
 	    }
 	}
     }
     return 0;
-/* $Procedure      KINFO ( Kernel Information ) */
+/* $Procedure KINFO ( Kernel Information ) */
 
 L_kinfo:
 /* $ Abstract */
@@ -1902,7 +2579,7 @@ L_kinfo:
 
 /*     CHARACTER*(*)         FILE */
 /*     CHARACTER*(*)         FILTYP */
-/*     CHARACTER*(*)         SOURCE */
+/*     CHARACTER*(*)         SRCFIL */
 /*     INTEGER               HANDLE */
 /*     LOGICAL               FOUND */
 
@@ -1912,35 +2589,35 @@ L_kinfo:
 /*     --------  ---  -------------------------------------------------- */
 /*     FILE       I   Name of a kernel to fetch information for */
 /*     FILTYP     O   The type of the kernel */
-/*     SOURCE     O   Name of the source file used to load FILE. */
+/*     SRCFIL     O   Name of the source file used to load FILE. */
 /*     HANDLE     O   The handle attached to FILE. */
-/*     FOUND      O   TRUE if the specified file could be located. */
+/*     FOUND      O   .TRUE. if the specified file could be located. */
 
 /* $ Detailed_Input */
 
-/*     FILE       is the name of a kernel file for which KEEPER */
-/*                information is desired. */
+/*     FILE     is the name of a kernel file for which KEEPER */
+/*              information is desired. */
 
 /* $ Detailed_Output */
 
-/*     FILTYP      is the type of the kernel specified by FILE.  FILE */
-/*                 will be blank if FILE is not on the list of loaded */
-/*                 kernels. */
+/*     FILTYP   is the type of the kernel specified by FILE.  FILE */
+/*              will be blank if FILE is not on the list of loaded */
+/*              kernels. */
 
-/*     SOURCE      is the name of the source file that was used to */
-/*                 specify FILE as one to load.  If FILE was loaded */
-/*                 directly via a call to FURNSH, SOURCE will be blank. */
-/*                 If FILE is not on the list of loaded kernels, SOURCE */
-/*                 will be blank */
+/*     SRCFIL   is the name of the source file that was used to */
+/*              specify FILE as one to load. If FILE was loaded */
+/*              directly via a call to FURNSH, SRCFIL will be blank. */
+/*              If FILE is not on the list of loaded kernels, SRCFIL */
+/*              will be blank */
 
-/*     HANDLE      is the handle attached to FILE if it is a binary */
-/*                 kernel.  If FILE is a text kernel or meta-text kernel */
-/*                 HANDLE will be zero.  If FILE is not on the list of */
-/*                 loaded kernels, HANDLE will be set to zero. */
+/*     HANDLE   is the handle attached to FILE if it is a binary */
+/*              kernel. If FILE is a text kernel or meta-text kernel */
+/*              HANDLE will be zero. If FILE is not on the list of */
+/*              loaded kernels, HANDLE will be set to zero. */
 
-/*     FOUND       is returned TRUE if FILE is on the KEEPER list of */
-/*                 loaded kernels.  If there is no such file, FOUND will */
-/*                 be set to FALSE. */
+/*     FOUND    is returned .TRUE. if FILE is on the KEEPER list of */
+/*              loaded kernels. If there is no such file, FOUND will */
+/*              be set to .FALSE. */
 
 /* $ Parameters */
 
@@ -1950,10 +2627,14 @@ L_kinfo:
 
 /*     Error free. */
 
-/*     1) If the specified file is not on the list of files that */
-/*        are currently loaded via the interface FURNSH, FOUND */
-/*        will be FALSE, HANDLE will be set to zero and FILTYP */
-/*        and SOURCE will be set to blanks. */
+/*     1)  If the specified file is not on the list of files that are */
+/*         currently loaded via the interface FURNSH, FOUND will be */
+/*         .FALSE., HANDLE will be set to zero and FILTYP and SRCFIL will */
+/*         be set to blanks. */
+
+/*     2)  If any of  FILTYP or SRCFIL output strings has length too */
+/*         short to contain the corresponding output string, the string */
+/*         is truncated on the right. */
 
 /* $ Files */
 
@@ -1966,60 +2647,167 @@ L_kinfo:
 
 /* $ Examples */
 
-/*     Suppose you wish to determine the type of a loaded kernel */
-/*     so that you can call the correct summarizing routines */
-/*     for the kernel.  The following bit of pseudo code shows */
-/*     how you might use this entry point together with summarizing */
-/*     code to produce a report on the file.  (Note that the */
-/*     routines SPK_SUMMRY, CK_SUMMRY, PCK_SUMMRY and EK_SUMMRY */
-/*     are simply names to indicate what you might do with the */
-/*     information returned by KINFO.  They are not routines that */
-/*     are part of the SPICE toolkit.) */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     FILE = '<name of the file of interest>' */
+/*     1) Suppose you wish to determine the types of kernels loaded */
+/*        by a given meta-kernel. The following code example shows */
+/*        how you might use this routine to do this. */
 
-/*     CALL KINFO ( FILE, FILTYP, SOURCE, HANDLE, FOUND ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*     IF ( .NOT. FOUND ) THEN */
-/*        WRITE (*,*) FILE */
-/*        WRITE (*,*) 'is not loaded at this time.' */
-/*     ELSE */
 
-/*        IF      ( FILTYP .EQ. 'SPK' ) THEN */
+/*           KPL/MK */
 
-/*           WRITE (*,*) FILE */
-/*           WRITE (*,*) 'is an SPK file.' */
+/*           File name: kinfo_ex1.tm */
 
-/*           CALL SPK_SUMMRY ( HANDLE ) */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*        ELSE IF ( FILTYP .EQ. 'CK'  ) THEN */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*           WRITE (*,*) FILE */
-/*           WRITE (*,*) 'is a CK file.' */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*           CALL CK_SUMMRY ( HANDLE ) */
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00008.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
 
-/*        ELSE IF ( FILTYP .EQ. 'PCK' ) THEN */
 
-/*           WRITE (*,*) FILE */
-/*           WRITE (*,*) 'is a  PCK file.' */
+/*           \begindata */
 
-/*           CALL PCK_SUMMRY ( HANDLE ) */
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00008.tpc', */
+/*                                  'naif0009.tls'  ) */
 
-/*        ELSE IF ( FILTYP .EQ. 'EK'  ) THEN */
+/*           \begintext */
 
-/*           WRITE (*,*) FILE */
-/*           WRITE (*,*) 'is an EK file.' */
+/*           End of meta-kernel */
 
-/*           CALL EK_SUMMRY ( HANDLE ) */
 
-/*        ELSE IF ( FILTYP .EQ. 'META') THEN */
-/*           WRITE (*,*) FILE */
-/*           WRITE (*,*) 'is a meta-text kernel.' */
-/*        ELSE */
-/*           WRITE (*,*) FILE */
-/*           WRITE (*,*) 'is a text kernel.' */
-/*        END IF */
+/*        Example code begins here. */
+
+
+/*              PROGRAM KINFO_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              LOGICAL               EQSTR */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER               FILLEN */
+/*              PARAMETER           ( FILLEN = 32 ) */
+
+/*              INTEGER               TYPLEN */
+/*              PARAMETER           ( TYPLEN = 33 ) */
+
+/*              INTEGER               SRCLEN */
+/*              PARAMETER           ( SRCLEN = 256 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FILLEN)    FILE */
+/*              CHARACTER*(TYPLEN)    FILTYP */
+/*              CHARACTER*(SRCLEN)    SRCFIL */
+
+/*              INTEGER               COUNT */
+/*              INTEGER               HANDLE */
+/*              INTEGER               WHICH */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load the meta-kernel. */
+/*        C */
+/*              CALL FURNSH ( 'kinfo_ex1.tm' ) */
+
+/*        C */
+/*        C     Find out the total number of kernels in the kernel pool. */
+/*        C */
+/*              CALL KTOTAL ( 'all', COUNT ) */
+
+/*              IF ( COUNT .EQ. 0 ) THEN */
+
+/*                 WRITE(*,*) 'No files loaded at this time.' */
+
+/*              ELSE */
+
+/*                 WRITE(*,*) 'The loaded files files are: ' */
+/*                 WRITE(*,*) ' ' */
+
+/*              END IF */
+
+/*        C */
+/*        C     Find the file name, type and source for each of the */
+/*        C     kernels in the kernel pool and print its type. */
+/*        C */
+/*              DO WHICH= 1, COUNT */
+
+/*                 CALL KDATA ( WHICH,  'all',  FILE, FILTYP, */
+/*             .                SRCFIL, HANDLE, FOUND        ) */
+
+/*                 CALL KINFO ( FILE, FILTYP, SRCFIL, HANDLE, FOUND ) */
+
+/*                 IF ( EQSTR( FILTYP, "SPK" ) ) THEN */
+
+/*                    WRITE(*,*) FILE, ' is an SPK file.' */
+
+/*                 ELSE IF ( EQSTR( FILTYP, "CK" ) ) THEN */
+
+/*                    WRITE(*,*) FILE, ' is a CK file.' */
+
+/*                 ELSE IF ( EQSTR( FILTYP, "PCK" ) ) THEN */
+
+/*                    WRITE(*,*) FILE, ' is a PCK file.' */
+
+/*                 ELSE IF ( EQSTR( FILTYP, "DSK" ) ) THEN */
+
+/*                    WRITE(*,*) FILE, ' is a DSK file.' */
+
+/*                 ELSE IF ( EQSTR( FILTYP, "EK" ) ) THEN */
+
+/*                    WRITE(*,*) FILE, ' is an EK file.' */
+
+/*                 ELSE IF ( EQSTR( FILTYP, "META" ) ) THEN */
+
+/*                    WRITE(*,*) FILE, ' is a meta-kernel file.' */
+
+/*                 ELSE */
+
+/*                    WRITE(*,*) FILE, ' is a text kernel.' */
+
+/*                 END IF */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         The loaded files files are: */
+
+/*         kinfo_ex1.tm                     is a meta-kernel file. */
+/*         de421.bsp                        is an SPK file. */
+/*         pck00008.tpc                     is a text kernel. */
+/*         naif0009.tls                     is a text kernel. */
 
 
 /* $ Restrictions */
@@ -2032,20 +2820,30 @@ L_kinfo:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.1.0, 08-AUG-2021 (JDR) */
+
+/*        Changed argument name SOURCE to SRCFIL for consistency with */
+/*        other routines. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Created complete code example from existing code fragments. */
+
+/*        Added entry #2 to $Exceptions section. */
 
 /* -    SPICELIB Version 5.0.0, 01-FEB-2017 (NJB) (BVS) */
 
 /*        Updated to support use of DSKs. */
 
-/*        Updated the Author_and_Institution section. */
+/*        Updated the $Author_and_Institution section. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -2054,28 +2852,28 @@ L_kinfo:
 
 /* -& */
     s_copy(filtyp, " ", filtyp_len, (ftnlen)1);
-    s_copy(source, " ", source_len, (ftnlen)1);
+    s_copy(srcfil, " ", srcfil_len, (ftnlen)1);
     *handle = 0;
     *found = FALSE_;
     i__ = isrchc_(file, &loaded, files, file_len, (ftnlen)255);
     if (i__ > 0) {
 	*found = TRUE_;
 	s_copy(filtyp, types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 :
-		 s_rnge("types", i__1, "keeper_", (ftnlen)2143)) << 3), 
+		 s_rnge("types", i__1, "keeper_", (ftnlen)2948)) << 3), 
 		filtyp_len, (ftnlen)8);
 	*handle = handls[(i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-		"handls", i__1, "keeper_", (ftnlen)2144)];
+		"handls", i__1, "keeper_", (ftnlen)2949)];
 	if (srces[(i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge("srces"
-		, i__1, "keeper_", (ftnlen)2146)] != 0) {
-	    s_copy(source, files + ((i__2 = srces[(i__1 = i__ - 1) < 5300 && 
+		, i__1, "keeper_", (ftnlen)2951)] != 0) {
+	    s_copy(srcfil, files + ((i__2 = srces[(i__1 = i__ - 1) < 5300 && 
 		    0 <= i__1 ? i__1 : s_rnge("srces", i__1, "keeper_", (
-		    ftnlen)2147)] - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge(
-		    "files", i__2, "keeper_", (ftnlen)2147)) * 255, 
-		    source_len, (ftnlen)255);
+		    ftnlen)2952)] - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge(
+		    "files", i__2, "keeper_", (ftnlen)2952)) * 255, 
+		    srcfil_len, (ftnlen)255);
 	}
     }
     return 0;
-/* $Procedure      KCLEAR ( Keeper clear ) */
+/* $Procedure KCLEAR ( Keeper clear ) */
 
 L_kclear:
 /* $ Abstract */
@@ -2123,13 +2921,11 @@ L_kclear:
 
 /* $ Brief_I/O */
 
-/*     VARIABLE  I/O  DESCRIPTION */
-/*     --------  ---  -------------------------------------------------- */
 /*     None. */
 
 /* $ Detailed_Input */
 
-/*     None.  This routine operates by side effects.  See Particulars */
+/*     None. This routine operates by side effects. See $Particulars */
 /*     below. */
 
 /* $ Detailed_Output */
@@ -2142,13 +2938,13 @@ L_kclear:
 
 /* $ Exceptions */
 
-/*     1) Any errors that occur when setting a kernel pool watch */
-/*        or checking watched variables will be diagnosed by */
-/*        routines in the call tree of this routine. */
+/*     1)  If an error occurs when setting a kernel pool watch or */
+/*         checking watched variables, the error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /* $ Files */
 
-/*     See Particulars. */
+/*     See $Particulars. */
 
 /* $ Particulars */
 
@@ -2172,23 +2968,110 @@ L_kclear:
 /*     previous scripts. */
 
 /*     Cleaning up after such programs using explicit UNLOAD commands is */
-/*     tedious and error-prone.  One call to this routine sets the */
+/*     tedious and error-prone. One call to this routine sets the */
 /*     KEEPER system to its initial state, preventing unintentional */
 /*     interaction between scripts via KEEPER's state. */
 
 /* $ Examples */
 
-/*     Clear the KEEPER system; check for residual loaded files. */
-/*     We shouldn't find any. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         CALL KCLEAR */
-/*         CALL KTOTAL ( 'ALL', N ) */
-/*         WRITE (*,*) 'Count of loaded kernels after KCLEAR call: ', N */
+/*     1) Load a meta-kernel containing three kernels, and count the */
+/*        number of files in the kernel pool before and after calling */
+/*        KCLEAR. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: kclear_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00009.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0012.tls                  Leapseconds */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls', */
+/*                                  'pck00009.tpc' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM KCLEAR_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER               COUNT */
+
+/*        C */
+/*        C     Load several kernel files. */
+/*        C */
+/*              CALL FURNSH ( 'kclear_ex1.tm' ) */
+
+/*        C */
+/*        C     Count the number of loaded kernel files. */
+/*        C */
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'FURNSH: ', COUNT */
+
+/*        C */
+/*        C     Clear the KEEPER system, retrieve the number of loaded */
+/*        C     after the clear. */
+/*        C */
+/*              CALL KCLEAR() */
+
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'KCLEAR: ', COUNT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        The total number of kernels after FURNSH:  4 */
+/*        The total number of kernels after KCLEAR:  0 */
+
 
 /* $ Restrictions */
 
-/*     Calling this routine will wipe out any kernel pool data */
-/*     inserted via the PXPOOL API routines. */
+/*     1)  Calling this routine will wipe out any kernel pool data */
+/*         inserted via the SPICELIB API routines to put data into the */
+/*         kernel pool (PCPOOL, PDPOOL and PIPOOL). */
 
 /* $ Literature_References */
 
@@ -2196,17 +3079,25 @@ L_kclear:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     E.D. Wright     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.1, 08-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example from existing code fragments. */
+
+/*        Improved $Restrictions section. */
 
 /* -    SPICELIB Version 5.0.0, 01-FEB-2017 (NJB) (BVS) */
 
 /*        Updated to support use of DSKs. */
 
-/*        Updated the Author_and_Institution section. */
+/*        Updated the $Author_and_Institution section. */
 
 /* -    SPICELIB Version 1.0.1, 01-JUL-2014 (NJB) (EDW) */
 
@@ -2214,7 +3105,7 @@ L_kclear:
 
 /*     Last update was 13-APR-2011 (EDW) */
 
-/*        Trivial edit to Restrictions, replaced P*POOL with */
+/*        Trivial edit to $Restrictions, replaced P*POOL with */
 /*        PXPOOL. The "*" character causes the HTML documentation */
 /*        script to create a link for the "POOL" substring. */
 
@@ -2241,30 +3132,30 @@ L_kclear:
     i__1 = loaded;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		s_rnge("types", i__2, "keeper_", (ftnlen)2327)) << 3), "SPK", 
+		s_rnge("types", i__2, "keeper_", (ftnlen)3227)) << 3), "SPK", 
 		(ftnlen)8, (ftnlen)3) == 0) {
 	    spkuef_(&handls[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("handls", i__2, "keeper_", (ftnlen)2329)]);
+		    s_rnge("handls", i__2, "keeper_", (ftnlen)3229)]);
 	} else if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? 
-		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)2331)) << 3), 
+		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)3231)) << 3), 
 		"CK", (ftnlen)8, (ftnlen)2) == 0) {
 	    ckupf_(&handls[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("handls", i__2, "keeper_", (ftnlen)2333)]);
+		    s_rnge("handls", i__2, "keeper_", (ftnlen)3233)]);
 	} else if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? 
-		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)2335)) << 3), 
+		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)3235)) << 3), 
 		"PCK", (ftnlen)8, (ftnlen)3) == 0) {
 	    pckuof_(&handls[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("handls", i__2, "keeper_", (ftnlen)2337)]);
+		    s_rnge("handls", i__2, "keeper_", (ftnlen)3237)]);
 	} else if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? 
-		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)2339)) << 3), 
+		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)3239)) << 3), 
 		"EK", (ftnlen)8, (ftnlen)2) == 0) {
 	    ekuef_(&handls[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("handls", i__2, "keeper_", (ftnlen)2341)]);
+		    s_rnge("handls", i__2, "keeper_", (ftnlen)3241)]);
 	} else if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? 
-		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)2343)) << 3), 
+		i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)3243)) << 3), 
 		"DSK", (ftnlen)8, (ftnlen)3) == 0) {
 	    zzdskusf_(&handls[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("handls", i__2, "keeper_", (ftnlen)2345)]);
+		    s_rnge("handls", i__2, "keeper_", (ftnlen)3245)]);
 	}
     }
     clpool_();
@@ -2276,14 +3167,14 @@ L_kclear:
     i__1 = loaded;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	s_copy(files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge(
-		"files", i__2, "keeper_", (ftnlen)2360)) * 255, " ", (ftnlen)
+		"files", i__2, "keeper_", (ftnlen)3260)) * 255, " ", (ftnlen)
 		255, (ftnlen)1);
 	handls[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge("handls", 
-		i__2, "keeper_", (ftnlen)2361)] = 0;
+		i__2, "keeper_", (ftnlen)3261)] = 0;
 	srces[(i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge("srces", 
-		i__2, "keeper_", (ftnlen)2362)] = 0;
+		i__2, "keeper_", (ftnlen)3262)] = 0;
 	s_copy(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge(
-		"types", i__2, "keeper_", (ftnlen)2363)) << 3), " ", (ftnlen)
+		"types", i__2, "keeper_", (ftnlen)3263)) << 3), " ", (ftnlen)
 		8, (ftnlen)1);
     }
 
@@ -2301,7 +3192,7 @@ L_kclear:
     cvpool_("FURNSH", &update, (ftnlen)6);
     chkout_("KCLEAR", (ftnlen)6);
     return 0;
-/* $Procedure      UNLOAD ( Unload a kernel ) */
+/* $Procedure UNLOAD ( Unload a kernel ) */
 
 L_unload:
 /* $ Abstract */
@@ -2353,14 +3244,14 @@ L_unload:
 
 /* $ Detailed_Input */
 
-/*     FILE       is the name of a file to unload.  This file */
-/*                should be one loaded through the interface FURNSH. */
-/*                If the file is not on the list of loaded kernels */
-/*                no action is taken. */
+/*     FILE     is the name of a file to unload. This file */
+/*              should be one loaded through the interface FURNSH. */
+/*              If the file is not on the list of loaded kernels */
+/*              no action is taken. */
 
-/*                Note that if FILE is a meta-text kernel, all of */
-/*                the files loaded as a result of loading the meta-text */
-/*                kernel will be unloaded. */
+/*              Note that if FILE is a meta-text kernel, all of */
+/*              the files loaded as a result of loading the meta-text */
+/*              kernel will be unloaded. */
 
 /* $ Detailed_Output */
 
@@ -2374,8 +3265,8 @@ L_unload:
 
 /*     Error free. */
 
-/*     1) If the specified kernel is not on the list of loaded kernels */
-/*        no action is taken. */
+/*     1)  If the specified kernel is not on the list of loaded kernels */
+/*         no action is taken. */
 
 /* $ Files */
 
@@ -2397,14 +3288,14 @@ L_unload:
 /*     through the meta-kernel by unloading the meta-kernel. */
 
 /*     The usual usage of FURNSH is to load each file needed by your */
-/*     program exactly one time.  However, it is possible to load a */
-/*     kernel more than one time.  (Usually, this is a result of loading */
+/*     program exactly one time. However, it is possible to load a */
+/*     kernel more than one time. (Usually, this is a result of loading */
 /*     meta-kernels without taking the care needed to ensure that the */
-/*     meta-kernels do not specify the same file more than once.)  The */
+/*     meta-kernels do not specify the same file more than once.) The */
 /*     effect of unloading a kernel that has been loaded more than once */
-/*     is to "undo" the last loading of the kernel.  Depending upon the */
+/*     is to "undo" the last loading of the kernel. Depending upon the */
 /*     kernel and its relationship to other loaded kernels, this may */
-/*     have no visible effect on the working of your program.  To */
+/*     have no visible effect on the working of your program. To */
 /*     illustrate this behavior suppose that you have a collection of */
 /*     files FILE1, FILE2, FILE3, FILE4, FILE5, FILE6, FILE7, FILE8, */
 /*     META1, META2  where FILE1 ... FILE8 are SPICE kernels and META1 */
@@ -2474,7 +3365,7 @@ L_unload:
 /*                "Load" FILE8 (note that it was loaded from META2) */
 
 /*      As you can see, the data from FILE3 is still available to the */
-/*      program.  All that may have changed is the usage priority */
+/*      program. All that may have changed is the usage priority */
 /*      associated with that data. */
 
 /*      If we unload META2 (or META1) we remove all remaining files that */
@@ -2506,7 +3397,7 @@ L_unload:
 /*                "Load" FILE8 (note that it was loaded from META2) */
 
 /*      So we see that unloading a file does not necessarily make its */
-/*      data unavailable to your program.  Unloading modifies the */
+/*      data unavailable to your program. Unloading modifies the */
 /*      precedence of the files loaded in your program. The data */
 /*      associated with an unloaded file becomes unavailable only when */
 /*      the file has been unloaded as many times as it was loaded. */
@@ -2514,7 +3405,7 @@ L_unload:
 /*      When would you encounter such a scenario? The situation of */
 /*      loading a file more than once might appear if you were trying to */
 /*      contrast the results of computations performed with two */
-/*      different meta-kernels.  In such a scenario you might load a */
+/*      different meta-kernels. In such a scenario you might load a */
 /*      "baseline" set of kernels early in your program and then load */
 /*      and unload meta-kernels to compare results between the two */
 /*      different sets of data. */
@@ -2524,13 +3415,13 @@ L_unload:
 
 /*     Part of the action of unloading text (or meta-kernels) is */
 /*     the clearing of the kernel pool and re-loading any kernels that */
-/*     were not in the specified set of kernels to unload.  Since */
+/*     were not in the specified set of kernels to unload. Since */
 /*     loading of text kernels is not a very fast process, unloading */
 /*     text kernels takes considerably longer than unloading binary */
-/*     kernels.  Moreover, since the kernel pool is cleared, any kernel */
+/*     kernels. Moreover, since the kernel pool is cleared, any kernel */
 /*     pool variables you have set from your program by using one of the */
 /*     interfaces PCPOOL, PDPOOL, PIPOOL, or LMPOOL will be removed from */
-/*     the kernel pool.  For this reason, if you plan to use this */
+/*     the kernel pool. For this reason, if you plan to use this */
 /*     feature in your program, together with one of the routines */
 /*     specified above, you will need to take special precautions to */
 /*     make sure kernel pool variables required by your program do not */
@@ -2543,32 +3434,219 @@ L_unload:
 
 /* $ Examples */
 
-/*     Suppose that you wish to compare two different sets of kernels */
-/*     used to describe the geometry of a mission (for example a predict */
-/*     model and a reconstructed model). You can place all of the */
-/*     kernels for one model in one meta-text kernel, and the other set */
-/*     in a second meta-text kernel.  Let's call these PREDICT.MTA and */
-/*     ACTUAL.MTA. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*        CALL FURNSH ( 'PREDCT.MTA' ) */
+/*     1) Load a meta-kernel with a PCK, an LSK and an SPK, and */
+/*        separately, a text kernel and a binary PCK. Loop over the */
+/*        loaded kernels, outputting file information for each of */
+/*        them. */
 
-/*        compute quantities of interest and store them */
-/*        for comparison with results of reconstructed */
-/*        (actual) kernels. */
+/*        Then unload the text kernels, check that they have been */
+/*        unloaded, and finally unload the meta-kernel. */
 
-/*        Now unload the predict model and load the reconstructed */
-/*        model. */
 
-/*        CALL UNLOAD ( 'PREDCT.MTA' ) */
-/*        CALL FURNSH ( 'ACTUAL.MTA' ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*        re-compute quantities of interest and compare them */
-/*        with the stored quantities. */
+
+/*           KPL/MK */
+
+/*           File name: unload_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00009.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0012.tls                  Leapseconds */
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'naif0012.tls', */
+/*                                  'pck00009.tpc' ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Use the PCK kernel below as the binary PCK required for the */
+/*        example. */
+
+/*           earth_latest_high_prec.bpc */
+
+
+/*        Use the FK kernel below as the text kernel required for the */
+/*        example. */
+
+/*           RSSD0002.TF */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM UNLOAD_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER               FNAMLN */
+/*              PARAMETER           ( FNAMLN = 256 ) */
+
+/*              INTEGER               FTYPLN */
+/*              PARAMETER           ( FTYPLN = 33 ) */
+
+/*              INTEGER               SRCLEN */
+/*              PARAMETER           ( SRCLEN = 256 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(FNAMLN)    FILE */
+/*              CHARACTER*(FTYPLN)    FILTYP */
+/*              CHARACTER*(SRCLEN)    SRCFIL */
+
+/*              INTEGER               COUNT */
+/*              INTEGER               HANDLE */
+
+/*              LOGICAL               FOUND */
+
+/*        C */
+/*        C     Load several kernel files. */
+/*        C */
+/*              CALL FURNSH ( 'unload_ex1.tm'              ) */
+/*              CALL FURNSH ( 'RSSD0002.TF'                ) */
+/*              CALL FURNSH ( 'earth_latest_high_prec.bpc' ) */
+
+/*        C */
+/*        C     Count the number of loaded kernel files. */
+/*        C */
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'final FURNSH: ', COUNT */
+/*              WRITE(*,*) ' ' */
+
+/*        C */
+/*        C     Unload the text kernels. */
+/*        C */
+/*              CALL KTOTAL ( 'TEXT', COUNT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A,I2,A)') 'Unloading', COUNT, */
+/*             .                    ' text kernels...' */
+/*              WRITE(*,*) ' ' */
+
+/*              DO WHILE ( COUNT .NE. 0 ) */
+
+/*                 CALL KDATA (      1, 'TEXT',  FILE, FILTYP, */
+/*             .                SRCFIL, HANDLE, FOUND        ) */
+
+/*        C */
+/*        C        If the kernel is found in the pool, unload it. */
+/*        C */
+/*                 IF ( FOUND ) THEN */
+
+/*                    CALL UNLOAD ( FILE ) */
+
+/*        C */
+/*        C           Check if the file has been unloaded. */
+/*        C */
+/*                    CALL KINFO ( FILE, FILTYP, SRCFIL, HANDLE, FOUND ) */
+
+/*                    IF ( FOUND ) THEN */
+
+/*                       WRITE(*,'(A)') '  Error unloading ' // FILE */
+
+/*                    ELSE */
+
+/*                       WRITE(*,'(A)') '  Success unloading ' // FILE */
+
+/*                    END IF */
+
+/*        C */
+/*        C        Something is not working. Inform NAIF. */
+/*        C */
+/*                 ELSE */
+
+/*                    WRITE(*,*) ' ERROR: No kernel found but KTOTAL ' */
+/*             .      //         'returns ', COUNT */
+
+/*                 END IF */
+
+/*        C */
+/*        C        Check if we have more text kernels to unload from */
+/*        C        the kernel pool. Note that unloading a text kernel */
+/*        C        or meta-kernel implies that the kernel pool is */
+/*        C        cleared, and any kernel(s) that were not to be */
+/*        C        unloaded are re-loaded. Therefore the COUNT value */
+/*        C        changes, and the indexing of the files within the */
+/*        C        kernel pool too. */
+/*        C */
+/*                 CALL KTOTAL ( 'TEXT', COUNT ) */
+
+/*              END DO */
+
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'UNLOAD calls: ', COUNT */
+
+/*        C */
+/*        C     Unload the meta-kernel and retrieve the number of loaded */
+/*        C     after the clear. */
+/*        C */
+/*              CALL UNLOAD ( 'unload_ex1.tm' ) */
+
+/*              CALL KTOTAL ( 'ALL', COUNT ) */
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A,I2)') 'The total number of kernels after ' */
+/*             . //               'final UNLOAD: ', COUNT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        The total number of kernels after final FURNSH:  6 */
+
+
+/*        Unloading 3 text kernels... */
+
+/*          Success unloading naif0012.tls */
+/*          Success unloading pck00009.tpc */
+/*          Success unloading RSSD0002.TF */
+
+/*        The total number of kernels after UNLOAD calls:  3 */
+
+/*        The total number of kernels after final UNLOAD:  1 */
+
 
 /* $ Restrictions */
 
-/*     See the note regarding the unloading of Text and meta-text */
-/*     Kernels. */
+/*     1)  See the note regarding the unloading of Text and meta-text */
+/*         Kernels. */
 
 /* $ Literature_References */
 
@@ -2576,11 +3654,17 @@ L_unload:
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 5.0.1, 08-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Created complete code example from existing code fragments. */
 
 /* -    SPICELIB Version 5.0.0, 01-FEB-2017 (NJB) (BVS) */
 
@@ -2590,28 +3674,27 @@ L_unload:
 /*        unload routines only when those kernels have just */
 /*        one entry in the KEEPER database. */
 
-/*        Updated the Author_and_Institution section. */
+/*        Updated the $Author_and_Institution section. */
 
 /* -    SPICELIB Version 3.0.1, 01-JUL-2014 (NJB) */
 
 /*        Updated discussion of kernel variable watchers. */
 
-/* -    SPICELIB Version 3.0.0 15-NOV-2006 (NJB) */
+/* -    SPICELIB Version 3.0.0, 15-NOV-2006 (NJB) */
 
-/*        Bug fix:  corrected update of source pointers when a */
-/*        meta-kernel is unloaded.  Previously source pointers */
+/*        Bug fix: corrected update of source pointers when a */
+/*        meta-kernel is unloaded. Previously source pointers */
 /*        having higher indices than those of the files referenced */
 /*        by the meta kernel were not adjusted when the database */
 /*        was compressed. */
 
-/* -    SPICELIB VERSION 2.0.0, 23-AUG-2001 (WLT) */
+/* -    SPICELIB Version 2.0.0, 23-AUG-2001 (WLT) */
 
 /*        Added code to make sure that UNLOAD has the effect of */
 /*        loading all remaining kernels in the order they were first */
 /*        introduced. */
 
 /* -    SPICELIB Version 1.0.0, 01-JUL-1999 (WLT) */
-
 
 /* -& */
 /* $ Index_Entries */
@@ -2638,7 +3721,7 @@ L_unload:
     i__ = loaded;
     while(! gotit && i__ > 0) {
 	if (s_cmp(files + ((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		s_rnge("files", i__1, "keeper_", (ftnlen)2738)) * 255, file, (
+		s_rnge("files", i__1, "keeper_", (ftnlen)3831)) * 255, file, (
 		ftnlen)255, file_len) == 0) {
 	    gotit = TRUE_;
 	} else {
@@ -2665,17 +3748,17 @@ L_unload:
 /*     names. */
 
     if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-	    "types", i__1, "keeper_", (ftnlen)2766)) << 3), "SPK", (ftnlen)8, 
+	    "types", i__1, "keeper_", (ftnlen)3859)) << 3), "SPK", (ftnlen)8, 
 	    (ftnlen)3) == 0 || s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <=
-	     i__2 ? i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)2766)) << 
+	     i__2 ? i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)3859)) << 
 	    3), "CK", (ftnlen)8, (ftnlen)2) == 0 || s_cmp(types + (((i__3 = 
 	    i__ - 1) < 5300 && 0 <= i__3 ? i__3 : s_rnge("types", i__3, "kee"
-	    "per_", (ftnlen)2766)) << 3), "DSK", (ftnlen)8, (ftnlen)3) == 0 || 
+	    "per_", (ftnlen)3859)) << 3), "DSK", (ftnlen)8, (ftnlen)3) == 0 || 
 	    s_cmp(types + (((i__4 = i__ - 1) < 5300 && 0 <= i__4 ? i__4 : 
-	    s_rnge("types", i__4, "keeper_", (ftnlen)2766)) << 3), "EK", (
+	    s_rnge("types", i__4, "keeper_", (ftnlen)3859)) << 3), "EK", (
 	    ftnlen)8, (ftnlen)2) == 0 || s_cmp(types + (((i__5 = i__ - 1) < 
 	    5300 && 0 <= i__5 ? i__5 : s_rnge("types", i__5, "keeper_", (
-	    ftnlen)2766)) << 3), "PCK", (ftnlen)8, (ftnlen)3) == 0) {
+	    ftnlen)3859)) << 3), "PCK", (ftnlen)8, (ftnlen)3) == 0) {
 
 /*        Count the occurrences of the file in the database. */
 /*        Stop if we reach two occurrences. */
@@ -2684,19 +3767,19 @@ L_unload:
 	j = 1;
 	while(j <= loaded && nmult < 2) {
 	    if (handls[(i__1 = j - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-		    "handls", i__1, "keeper_", (ftnlen)2780)] == handls[(i__2 
+		    "handls", i__1, "keeper_", (ftnlen)3873)] == handls[(i__2 
 		    = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge("handls", 
-		    i__2, "keeper_", (ftnlen)2780)]) {
+		    i__2, "keeper_", (ftnlen)3873)]) {
 
 /*              To be safe, make sure we're not looking at */
 /*              a text kernel with a random, matching handle */
 /*              value. */
 
 		if (s_cmp(types + (((i__1 = j - 1) < 5300 && 0 <= i__1 ? i__1 
-			: s_rnge("types", i__1, "keeper_", (ftnlen)2786)) << 
+			: s_rnge("types", i__1, "keeper_", (ftnlen)3879)) << 
 			3), "TEXT", (ftnlen)8, (ftnlen)4) != 0 && s_cmp(types 
 			+ (((i__2 = j - 1) < 5300 && 0 <= i__2 ? i__2 : 
-			s_rnge("types", i__2, "keeper_", (ftnlen)2786)) << 3),
+			s_rnge("types", i__2, "keeper_", (ftnlen)3879)) << 3),
 			 "META", (ftnlen)8, (ftnlen)4) != 0) {
 		    ++nmult;
 		}
@@ -2706,52 +3789,52 @@ L_unload:
 	single = nmult == 1;
     }
     if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : s_rnge(
-	    "types", i__1, "keeper_", (ftnlen)2804)) << 3), "SPK", (ftnlen)8, 
+	    "types", i__1, "keeper_", (ftnlen)3897)) << 3), "SPK", (ftnlen)8, 
 	    (ftnlen)3) == 0) {
 	if (single) {
 	    spkuef_(&handls[(i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		    s_rnge("handls", i__1, "keeper_", (ftnlen)2807)]);
+		    s_rnge("handls", i__1, "keeper_", (ftnlen)3900)]);
 	}
 	didspk = TRUE_;
     } else if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-	    s_rnge("types", i__1, "keeper_", (ftnlen)2812)) << 3), "CK", (
+	    s_rnge("types", i__1, "keeper_", (ftnlen)3905)) << 3), "CK", (
 	    ftnlen)8, (ftnlen)2) == 0) {
 	if (single) {
 	    ckupf_(&handls[(i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		    s_rnge("handls", i__1, "keeper_", (ftnlen)2815)]);
+		    s_rnge("handls", i__1, "keeper_", (ftnlen)3908)]);
 	}
 	didck = TRUE_;
     } else if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-	    s_rnge("types", i__1, "keeper_", (ftnlen)2820)) << 3), "DSK", (
+	    s_rnge("types", i__1, "keeper_", (ftnlen)3913)) << 3), "DSK", (
 	    ftnlen)8, (ftnlen)3) == 0) {
 	if (single) {
 	    zzdskusf_(&handls[(i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		    s_rnge("handls", i__1, "keeper_", (ftnlen)2823)]);
+		    s_rnge("handls", i__1, "keeper_", (ftnlen)3916)]);
 	}
 	diddsk = TRUE_;
     } else if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-	    s_rnge("types", i__1, "keeper_", (ftnlen)2828)) << 3), "PCK", (
+	    s_rnge("types", i__1, "keeper_", (ftnlen)3921)) << 3), "PCK", (
 	    ftnlen)8, (ftnlen)3) == 0) {
 	if (single) {
 	    pckuof_(&handls[(i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		    s_rnge("handls", i__1, "keeper_", (ftnlen)2831)]);
+		    s_rnge("handls", i__1, "keeper_", (ftnlen)3924)]);
 	}
 	didpck = TRUE_;
     } else if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-	    s_rnge("types", i__1, "keeper_", (ftnlen)2836)) << 3), "EK", (
+	    s_rnge("types", i__1, "keeper_", (ftnlen)3929)) << 3), "EK", (
 	    ftnlen)8, (ftnlen)2) == 0) {
 	if (single) {
 	    ekuef_(&handls[(i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-		    s_rnge("handls", i__1, "keeper_", (ftnlen)2839)]);
+		    s_rnge("handls", i__1, "keeper_", (ftnlen)3932)]);
 	}
 	didek = TRUE_;
     } else if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-	    s_rnge("types", i__1, "keeper_", (ftnlen)2844)) << 3), "TEXT", (
+	    s_rnge("types", i__1, "keeper_", (ftnlen)3937)) << 3), "TEXT", (
 	    ftnlen)8, (ftnlen)4) == 0) {
 	clpool_();
 	didtxt = TRUE_;
     } else if (s_cmp(types + (((i__1 = i__ - 1) < 5300 && 0 <= i__1 ? i__1 : 
-	    s_rnge("types", i__1, "keeper_", (ftnlen)2849)) << 3), "META", (
+	    s_rnge("types", i__1, "keeper_", (ftnlen)3942)) << 3), "META", (
 	    ftnlen)8, (ftnlen)4) == 0) {
 
 /*        This is a special case, we need to undo the effect of loading */
@@ -2763,7 +3846,7 @@ L_unload:
 	i__1 = src + 1;
 	for (j = loaded; j >= i__1; --j) {
 	    if (srces[(i__2 = j - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge(
-		    "srces", i__2, "keeper_", (ftnlen)2861)] == src) {
+		    "srces", i__2, "keeper_", (ftnlen)3954)] == src) {
 
 /*              This file was loaded by the meta-kernel of interest. */
 /*              We only need to unload the binary kernels as we */
@@ -2777,19 +3860,19 @@ L_unload:
 /*              may have changed since the last pass. */
 
 		if (s_cmp(types + (((i__2 = j - 1) < 5300 && 0 <= i__2 ? i__2 
-			: s_rnge("types", i__2, "keeper_", (ftnlen)2874)) << 
+			: s_rnge("types", i__2, "keeper_", (ftnlen)3967)) << 
 			3), "SPK", (ftnlen)8, (ftnlen)3) == 0 || s_cmp(types 
 			+ (((i__3 = j - 1) < 5300 && 0 <= i__3 ? i__3 : 
-			s_rnge("types", i__3, "keeper_", (ftnlen)2874)) << 3),
+			s_rnge("types", i__3, "keeper_", (ftnlen)3967)) << 3),
 			 "CK", (ftnlen)8, (ftnlen)2) == 0 || s_cmp(types + (((
 			i__4 = j - 1) < 5300 && 0 <= i__4 ? i__4 : s_rnge(
-			"types", i__4, "keeper_", (ftnlen)2874)) << 3), "DSK",
+			"types", i__4, "keeper_", (ftnlen)3967)) << 3), "DSK",
 			 (ftnlen)8, (ftnlen)3) == 0 || s_cmp(types + (((i__5 =
 			 j - 1) < 5300 && 0 <= i__5 ? i__5 : s_rnge("types", 
-			i__5, "keeper_", (ftnlen)2874)) << 3), "EK", (ftnlen)
+			i__5, "keeper_", (ftnlen)3967)) << 3), "EK", (ftnlen)
 			8, (ftnlen)2) == 0 || s_cmp(types + (((i__6 = j - 1) <
 			 5300 && 0 <= i__6 ? i__6 : s_rnge("types", i__6, 
-			"keeper_", (ftnlen)2874)) << 3), "PCK", (ftnlen)8, (
+			"keeper_", (ftnlen)3967)) << 3), "PCK", (ftnlen)8, (
 			ftnlen)3) == 0) {
 
 /*                 Count the occurrences of the file in the database. */
@@ -2800,9 +3883,9 @@ L_unload:
 		    while(k <= loaded && nmult < 2) {
 			if (handls[(i__2 = k - 1) < 5300 && 0 <= i__2 ? i__2 :
 				 s_rnge("handls", i__2, "keeper_", (ftnlen)
-				2889)] == handls[(i__3 = j - 1) < 5300 && 0 <=
+				3982)] == handls[(i__3 = j - 1) < 5300 && 0 <=
 				 i__3 ? i__3 : s_rnge("handls", i__3, "keepe"
-				"r_", (ftnlen)2889)]) {
+				"r_", (ftnlen)3982)]) {
 
 /*                       To be safe, make sure we're not looking at a */
 /*                       text kernel with a random, matching handle */
@@ -2810,11 +3893,11 @@ L_unload:
 
 			    if (s_cmp(types + (((i__2 = k - 1) < 5300 && 0 <= 
 				    i__2 ? i__2 : s_rnge("types", i__2, "kee"
-				    "per_", (ftnlen)2895)) << 3), "TEXT", (
+				    "per_", (ftnlen)3988)) << 3), "TEXT", (
 				    ftnlen)8, (ftnlen)4) != 0 && s_cmp(types 
 				    + (((i__3 = k - 1) < 5300 && 0 <= i__3 ? 
 				    i__3 : s_rnge("types", i__3, "keeper_", (
-				    ftnlen)2895)) << 3), "META", (ftnlen)8, (
+				    ftnlen)3988)) << 3), "META", (ftnlen)8, (
 				    ftnlen)4) != 0) {
 				++nmult;
 			    }
@@ -2824,48 +3907,48 @@ L_unload:
 		    single = nmult == 1;
 		}
 		if (s_cmp(types + (((i__2 = j - 1) < 5300 && 0 <= i__2 ? i__2 
-			: s_rnge("types", i__2, "keeper_", (ftnlen)2913)) << 
+			: s_rnge("types", i__2, "keeper_", (ftnlen)4006)) << 
 			3), "SPK", (ftnlen)8, (ftnlen)3) == 0) {
 		    if (single) {
 			spkuef_(&handls[(i__2 = j - 1) < 5300 && 0 <= i__2 ? 
 				i__2 : s_rnge("handls", i__2, "keeper_", (
-				ftnlen)2916)]);
+				ftnlen)4009)]);
 		    }
 		    didspk = TRUE_;
 		} else if (s_cmp(types + (((i__2 = j - 1) < 5300 && 0 <= i__2 
 			? i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)
-			2921)) << 3), "CK", (ftnlen)8, (ftnlen)2) == 0) {
+			4014)) << 3), "CK", (ftnlen)8, (ftnlen)2) == 0) {
 		    if (single) {
 			ckupf_(&handls[(i__2 = j - 1) < 5300 && 0 <= i__2 ? 
 				i__2 : s_rnge("handls", i__2, "keeper_", (
-				ftnlen)2924)]);
+				ftnlen)4017)]);
 		    }
 		    didck = TRUE_;
 		} else if (s_cmp(types + (((i__2 = j - 1) < 5300 && 0 <= i__2 
 			? i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)
-			2929)) << 3), "DSK", (ftnlen)8, (ftnlen)3) == 0) {
+			4022)) << 3), "DSK", (ftnlen)8, (ftnlen)3) == 0) {
 		    if (single) {
 			zzdskusf_(&handls[(i__2 = j - 1) < 5300 && 0 <= i__2 ?
 				 i__2 : s_rnge("handls", i__2, "keeper_", (
-				ftnlen)2932)]);
+				ftnlen)4025)]);
 		    }
 		    diddsk = TRUE_;
 		} else if (s_cmp(types + (((i__2 = j - 1) < 5300 && 0 <= i__2 
 			? i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)
-			2937)) << 3), "PCK", (ftnlen)8, (ftnlen)3) == 0) {
+			4030)) << 3), "PCK", (ftnlen)8, (ftnlen)3) == 0) {
 		    if (single) {
 			pckuof_(&handls[(i__2 = j - 1) < 5300 && 0 <= i__2 ? 
 				i__2 : s_rnge("handls", i__2, "keeper_", (
-				ftnlen)2940)]);
+				ftnlen)4033)]);
 		    }
 		    didpck = TRUE_;
 		} else if (s_cmp(types + (((i__2 = j - 1) < 5300 && 0 <= i__2 
 			? i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)
-			2945)) << 3), "EK", (ftnlen)8, (ftnlen)2) == 0) {
+			4038)) << 3), "EK", (ftnlen)8, (ftnlen)2) == 0) {
 		    if (single) {
 			ekuef_(&handls[(i__2 = j - 1) < 5300 && 0 <= i__2 ? 
 				i__2 : s_rnge("handls", i__2, "keeper_", (
-				ftnlen)2948)]);
+				ftnlen)4041)]);
 		    }
 		    didek = TRUE_;
 		}
@@ -2889,17 +3972,17 @@ L_unload:
 		i__2 = loaded;
 		for (k = j; k <= i__2; ++k) {
 		    if (srces[(i__3 = k - 1) < 5300 && 0 <= i__3 ? i__3 : 
-			    s_rnge("srces", i__3, "keeper_", (ftnlen)2975)] > 
+			    s_rnge("srces", i__3, "keeper_", (ftnlen)4068)] > 
 			    j) {
 
 /*                    This pointer is affected by the deletion of */
 /*                    the Jth database entry. */
 
 			srces[(i__3 = k - 1) < 5300 && 0 <= i__3 ? i__3 : 
-				s_rnge("srces", i__3, "keeper_", (ftnlen)2980)
+				s_rnge("srces", i__3, "keeper_", (ftnlen)4073)
 				] = srces[(i__4 = k - 1) < 5300 && 0 <= i__4 ?
 				 i__4 : s_rnge("srces", i__4, "keeper_", (
-				ftnlen)2980)] - 1;
+				ftnlen)4073)] - 1;
 		    }
 		}
 	    }
@@ -2926,15 +4009,15 @@ L_unload:
     i__1 = loaded;
     for (j = i__; j <= i__1; ++j) {
 	if (srces[(i__2 = j - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge("srces", 
-		i__2, "keeper_", (ftnlen)3012)] > i__) {
+		i__2, "keeper_", (ftnlen)4105)] > i__) {
 
 /*           This pointer is affected by the deletion of the Ith */
 /*           database entry. */
 
 	    srces[(i__2 = j - 1) < 5300 && 0 <= i__2 ? i__2 : s_rnge("srces", 
-		    i__2, "keeper_", (ftnlen)3017)] = srces[(i__3 = j - 1) < 
+		    i__2, "keeper_", (ftnlen)4110)] = srces[(i__3 = j - 1) < 
 		    5300 && 0 <= i__3 ? i__3 : s_rnge("srces", i__3, "keeper_"
-		    , (ftnlen)3017)] - 1;
+		    , (ftnlen)4110)] - 1;
 	}
     }
 
@@ -2945,16 +4028,16 @@ L_unload:
 	i__1 = loaded;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("types", i__2, "keeper_", (ftnlen)3031)) << 3), 
+		    s_rnge("types", i__2, "keeper_", (ftnlen)4124)) << 3), 
 		    "TEXT", (ftnlen)8, (ftnlen)4) == 0 || s_cmp(types + (((
 		    i__3 = i__ - 1) < 5300 && 0 <= i__3 ? i__3 : s_rnge("typ"
-		    "es", i__3, "keeper_", (ftnlen)3031)) << 3), "META", (
+		    "es", i__3, "keeper_", (ftnlen)4124)) << 3), "META", (
 		    ftnlen)8, (ftnlen)4) == 0) {
 		ldpool_(files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 :
-			 s_rnge("files", i__2, "keeper_", (ftnlen)3034)) * 
+			 s_rnge("files", i__2, "keeper_", (ftnlen)4127)) * 
 			255, (ftnlen)255);
 		if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? 
-			i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)3036))
+			i__2 : s_rnge("types", i__2, "keeper_", (ftnlen)4129))
 			 << 3), "META", (ftnlen)8, (ftnlen)4) == 0) {
 
 /*                 Clean up any debris that may have been left lying */
@@ -2963,7 +4046,7 @@ L_unload:
 		    for (j = 1; j <= 3; ++j) {
 			dvpool_(known + (((i__2 = j - 1) < 3 && 0 <= i__2 ? 
 				i__2 : s_rnge("known", i__2, "keeper_", (
-				ftnlen)3042)) << 5), (ftnlen)32);
+				ftnlen)4135)) << 5), (ftnlen)32);
 		    }
 		    cvpool_("FURNSH", &update, (ftnlen)6);
 		}
@@ -2978,12 +4061,12 @@ L_unload:
 	i__1 = loaded;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("types", i__2, "keeper_", (ftnlen)3062)) << 3), 
+		    s_rnge("types", i__2, "keeper_", (ftnlen)4155)) << 3), 
 		    "SPK", (ftnlen)8, (ftnlen)3) == 0) {
 		spklef_(files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 :
-			 s_rnge("files", i__2, "keeper_", (ftnlen)3063)) * 
+			 s_rnge("files", i__2, "keeper_", (ftnlen)4156)) * 
 			255, &handls[(i__3 = i__ - 1) < 5300 && 0 <= i__3 ? 
-			i__3 : s_rnge("handls", i__3, "keeper_", (ftnlen)3063)
+			i__3 : s_rnge("handls", i__3, "keeper_", (ftnlen)4156)
 			], (ftnlen)255);
 	    }
 	}
@@ -2997,12 +4080,12 @@ L_unload:
 	i__1 = loaded;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("types", i__2, "keeper_", (ftnlen)3076)) << 3), 
+		    s_rnge("types", i__2, "keeper_", (ftnlen)4169)) << 3), 
 		    "CK", (ftnlen)8, (ftnlen)2) == 0) {
 		cklpf_(files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-			s_rnge("files", i__2, "keeper_", (ftnlen)3077)) * 255,
+			s_rnge("files", i__2, "keeper_", (ftnlen)4170)) * 255,
 			 &handls[(i__3 = i__ - 1) < 5300 && 0 <= i__3 ? i__3 :
-			 s_rnge("handls", i__3, "keeper_", (ftnlen)3077)], (
+			 s_rnge("handls", i__3, "keeper_", (ftnlen)4170)], (
 			ftnlen)255);
 	    }
 	}
@@ -3016,13 +4099,13 @@ L_unload:
 	i__1 = loaded;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("types", i__2, "keeper_", (ftnlen)3091)) << 3), 
+		    s_rnge("types", i__2, "keeper_", (ftnlen)4184)) << 3), 
 		    "DSK", (ftnlen)8, (ftnlen)3) == 0) {
 		zzdsklsf_(files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? 
-			i__2 : s_rnge("files", i__2, "keeper_", (ftnlen)3092))
+			i__2 : s_rnge("files", i__2, "keeper_", (ftnlen)4185))
 			 * 255, &handls[(i__3 = i__ - 1) < 5300 && 0 <= i__3 ?
 			 i__3 : s_rnge("handls", i__3, "keeper_", (ftnlen)
-			3092)], (ftnlen)255);
+			4185)], (ftnlen)255);
 	    }
 	}
     }
@@ -3035,12 +4118,12 @@ L_unload:
 	i__1 = loaded;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("types", i__2, "keeper_", (ftnlen)3106)) << 3), 
+		    s_rnge("types", i__2, "keeper_", (ftnlen)4199)) << 3), 
 		    "PCK", (ftnlen)8, (ftnlen)3) == 0) {
 		pcklof_(files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 :
-			 s_rnge("files", i__2, "keeper_", (ftnlen)3107)) * 
+			 s_rnge("files", i__2, "keeper_", (ftnlen)4200)) * 
 			255, &handls[(i__3 = i__ - 1) < 5300 && 0 <= i__3 ? 
-			i__3 : s_rnge("handls", i__3, "keeper_", (ftnlen)3107)
+			i__3 : s_rnge("handls", i__3, "keeper_", (ftnlen)4200)
 			], (ftnlen)255);
 	    }
 	}
@@ -3054,12 +4137,12 @@ L_unload:
 	i__1 = loaded;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (s_cmp(types + (((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-		    s_rnge("types", i__2, "keeper_", (ftnlen)3120)) << 3), 
+		    s_rnge("types", i__2, "keeper_", (ftnlen)4213)) << 3), 
 		    "EK", (ftnlen)8, (ftnlen)2) == 0) {
 		eklef_(files + ((i__2 = i__ - 1) < 5300 && 0 <= i__2 ? i__2 : 
-			s_rnge("files", i__2, "keeper_", (ftnlen)3121)) * 255,
+			s_rnge("files", i__2, "keeper_", (ftnlen)4214)) * 255,
 			 &handls[(i__3 = i__ - 1) < 5300 && 0 <= i__3 ? i__3 :
-			 s_rnge("handls", i__3, "keeper_", (ftnlen)3121)], (
+			 s_rnge("handls", i__3, "keeper_", (ftnlen)4214)], (
 			ftnlen)255);
 	    }
 	}
@@ -3069,12 +4152,12 @@ L_unload:
 } /* keeper_ */
 
 /* Subroutine */ int keeper_(integer *which, char *kind, char *file, integer *
-	count, char *filtyp, integer *handle, char *source, logical *found, 
+	count, char *filtyp, integer *handle, char *srcfil, logical *found, 
 	ftnlen kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen 
-	source_len)
+	srcfil_len)
 {
-    return keeper_0_(0, which, kind, file, count, filtyp, handle, source, 
-	    found, kind_len, file_len, filtyp_len, source_len);
+    return keeper_0_(0, which, kind, file, count, filtyp, handle, srcfil, 
+	    found, kind_len, file_len, filtyp_len, srcfil_len);
     }
 
 /* Subroutine */ int furnsh_(char *file, ftnlen file_len)
@@ -3092,20 +4175,20 @@ L_unload:
     }
 
 /* Subroutine */ int kdata_(integer *which, char *kind, char *file, char *
-	filtyp, char *source, integer *handle, logical *found, ftnlen 
-	kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen source_len)
+	filtyp, char *srcfil, integer *handle, logical *found, ftnlen 
+	kind_len, ftnlen file_len, ftnlen filtyp_len, ftnlen srcfil_len)
 {
     return keeper_0_(3, which, kind, file, (integer *)0, filtyp, handle, 
-	    source, found, kind_len, file_len, filtyp_len, source_len);
+	    srcfil, found, kind_len, file_len, filtyp_len, srcfil_len);
     }
 
-/* Subroutine */ int kinfo_(char *file, char *filtyp, char *source, integer *
+/* Subroutine */ int kinfo_(char *file, char *filtyp, char *srcfil, integer *
 	handle, logical *found, ftnlen file_len, ftnlen filtyp_len, ftnlen 
-	source_len)
+	srcfil_len)
 {
     return keeper_0_(4, (integer *)0, (char *)0, file, (integer *)0, filtyp, 
-	    handle, source, found, (ftnint)0, file_len, filtyp_len, 
-	    source_len);
+	    handle, srcfil, found, (ftnint)0, file_len, filtyp_len, 
+	    srcfil_len);
     }
 
 /* Subroutine */ int kclear_(void)

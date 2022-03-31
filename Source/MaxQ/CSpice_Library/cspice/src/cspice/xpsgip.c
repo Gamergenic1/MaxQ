@@ -62,16 +62,16 @@
 
 /* $ Detailed_Input */
 
-/*     MATRIX     Matrix to be transposed. */
+/*     NROW     is the number of rows of input matrix MATRIX. */
 
-/*     NROW       Number of rows of input matrix MATRIX. */
+/*     NCOL     is the number of columns of input matrix MATRIX. */
 
-/*     NCOL       Number of columns of input matrix MATRIX. */
+/*     MATRIX   is a matrix to be transposed. */
 
 /* $ Detailed_Output */
 
-/*     MATRIX     Transposed matrix:  element (i,j) of the input */
-/*                matrix is element (j,i) of the output matrix. */
+/*     MATRIX   is the transposed matrix: element (i,j) of the input */
+/*              matrix is element (j,i) of the output matrix. */
 
 /* $ Parameters */
 
@@ -79,10 +79,10 @@
 
 /* $ Exceptions */
 
-/*     Error Free. */
+/*     Error free. */
 
-/*     1) If either NROW or NCOL is less than or equal to zero, no action */
-/*        is taken. The routine simply returns. */
+/*     1)  If either NROW or NCOL is less than or equal to zero, no */
+/*         action is taken. The routine simply returns. */
 
 /* $ Files */
 
@@ -93,12 +93,12 @@
 /*     This routine replaces the input matrix MATRIX with its transpose. */
 
 /*     NOTE:  The matrix MATRIX is declared one-dimensional for */
-/*            computational purposes only.  The calling program may */
+/*            computational purposes only. The calling program may */
 /*            declare it as MATRIX(NROW,NCOL) or MATRIX(NCOL,NROW). */
 
 /*            This routine assumes that the elements of the matrix to be */
 /*            transformed are stored in contiguous memory locations as */
-/*            shown here.  On output these elements will be rearranged */
+/*            shown here. On output these elements will be rearranged */
 /*            in consecutive memory locations as shown. */
 
 /*               MATRIX on input      MATRIX on output */
@@ -134,12 +134,12 @@
 /*     For those familiar with permutations, this algorithm relies */
 /*     upon the fact that the transposition of a matrix, which has */
 /*     been stored as a 1-dimensional array, is simply the action of a */
-/*     permutation applied to that array.  Since any permutation */
+/*     permutation applied to that array. Since any permutation */
 /*     can be decomposed as a product of disjoint cycles, it is */
 /*     possible to transpose the matrix with only one additional */
-/*     storage register.  However, once a cycle has been computed */
+/*     storage register. However, once a cycle has been computed */
 /*     it is necessary to find the next entry in the array that */
-/*     has not been moved by the permutation.  For this reason the */
+/*     has not been moved by the permutation. For this reason the */
 /*     algorithm is slower than would be necessary if the numbers */
 /*     of rows and columns were known in advance. */
 
@@ -148,7 +148,7 @@
 /*     This routine is provided for situation where it is convenient to */
 /*     transpose a general two-dimensional matrix */
 /*     in place rather than store the result in a */
-/*     separate array.  Note that the call */
+/*     separate array. Note that the call */
 
 /*        CALL XPOSEG ( MATRIX, NROW, NCOL, MATRIX ) */
 
@@ -159,22 +159,27 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.1, 19-SEP-2006 (EDW) */
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 19-SEP-2006 (EDW) */
 
 /*        Initial version date unknown. Version data entry */
 /*        added this date. */
-
 
 /* -& */
 /* $ Index_Entries */

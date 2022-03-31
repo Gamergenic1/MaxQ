@@ -11,7 +11,7 @@ static integer c__198 = 198;
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure  SPKR19 ( SPK, read record from segment, type 19 ) */
+/* $Procedure SPKR19 ( SPK, read record from segment, type 19 ) */
 /* Subroutine */ int spkr19_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -299,7 +299,7 @@ static integer c__6 = 6;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -309,45 +309,45 @@ static integer c__6 = 6;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for an SPK */
-/*                 segment of type 19. The SPK file designated by HANDLE */
-/*                 must be open for read access. */
+/*     DESCR    are the file handle and segment descriptor for an SPK */
+/*              segment of type 19. The SPK file designated by HANDLE */
+/*              must be open for read access. */
 
-/*     ET          is an epoch for which a data record from a specific */
-/*                 segment is required. ET is expressed as seconds past */
-/*                 J2000 TDB. */
+/*     ET       is an epoch for which a data record from a specific */
+/*              segment is required. ET is expressed as seconds past */
+/*              J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is an array of data from the specified segment which, */
-/*                 when evaluated at epoch ET, will give the state */
-/*                 (position and velocity) of the target body identified */
-/*                 by the input segment descriptor. The descriptor */
-/*                 specifies the center of motion and reference frame of */
-/*                 the state. */
+/*     RECORD   is an array of data from the specified segment which, */
+/*              when evaluated at epoch ET, will give the state */
+/*              (position and velocity) of the target body identified */
+/*              by the input segment descriptor. The descriptor */
+/*              specifies the center of motion and reference frame of */
+/*              the state. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +----------------------+ */
-/*                    | subtype code         | */
-/*                    +----------------------+ */
-/*                    | number of packets (n)| */
-/*                    +----------------------+ */
-/*                    | packet 1             | */
-/*                    +----------------------+ */
-/*                    | packet 2             | */
-/*                    +----------------------+ */
-/*                                . */
-/*                                . */
-/*                                . */
-/*                    +----------------------+ */
-/*                    | packet n             | */
-/*                    +----------------------+ */
-/*                    | epochs 1--n          | */
-/*                    +----------------------+ */
+/*                 +----------------------+ */
+/*                 | subtype code         | */
+/*                 +----------------------+ */
+/*                 | number of packets (n)| */
+/*                 +----------------------+ */
+/*                 | packet 1             | */
+/*                 +----------------------+ */
+/*                 | packet 2             | */
+/*                 +----------------------+ */
+/*                             . */
+/*                             . */
+/*                             . */
+/*                 +----------------------+ */
+/*                 | packet n             | */
+/*                 +----------------------+ */
+/*                 | epochs 1--n          | */
+/*                 +----------------------+ */
 
-/*                 The packet size is a function of the type 19 subtype. */
-/*                 All packets in a record have the same size. */
+/*              The packet size is a function of the type 19 subtype. */
+/*              All packets in a record have the same size. */
 
 /* $ Parameters */
 
@@ -355,25 +355,26 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1) If the input HANDLE does not designate a loaded SPK file, the */
-/*        error will be diagnosed by routines called by this routine. */
+/*     1)  If the input HANDLE does not designate a loaded SPK file, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     2) If the segment specified by DESCR is not of data type 19, */
-/*        the error 'SPICE(WRONGSPKTYPE)' is signaled. */
+/*     2)  If the segment specified by DESCR is not of data type 19, */
+/*         the error SPICE(WRONGSPKTYPE) is signaled. */
 
-/*     3) If the input ET value is not within the range specified */
-/*        in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
-/*        is signaled. */
+/*     3)  If the input ET value is not within the range specified */
+/*         in the segment descriptor, the error SPICE(TIMEOUTOFBOUNDS) */
+/*         is signaled. */
 
-/*     4) If the window size is non-positive or greater than the */
-/*        maximum allowed value, the error SPICE(INVALIDVALUE) is */
-/*        signaled. */
+/*     4)  If the window size is non-positive or greater than the */
+/*         maximum allowed value, the error SPICE(INVALIDVALUE) is */
+/*         signaled. */
 
-/*     5) If the window size is not compatible with the segment */
-/*        subtype, the error SPICE(INVALIDVALUE) is signaled. */
+/*     5)  If the window size is not compatible with the segment */
+/*         subtype, the error SPICE(INVALIDVALUE) is signaled. */
 
-/*     6) If the segment subtype is not recognized, the error */
-/*        SPICE(NOTSUPPORTED) is signaled. */
+/*     6)  If the segment subtype is not recognized, the error */
+/*         SPICE(NOTSUPPORTED) is signaled. */
 
 /* $ Files */
 
@@ -397,9 +398,9 @@ static integer c__6 = 6;
 /* $ Examples */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRxx */
+/*     completely. Given that understanding, however, the SPKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -435,10 +436,15 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     B.V. Semenov    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 2.0.0, 11-MAY-2015 (NJB) */
 
@@ -449,12 +455,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_19 spk segment */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
+/*     read record from type_19 SPK segment */
 
 /* -& */
 
@@ -798,7 +799,7 @@ static integer c__6 = 6;
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
 			i__1 ? i__1 : s_rnge("buffer", i__1, "spkr19_", (
-			ftnlen)742)] <= *et) {
+			ftnlen)744)] <= *et) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -914,7 +915,7 @@ static integer c__6 = 6;
 
 		while(remain > 0 && buffer[(i__1 = nread - 1) < 101 && 0 <= 
 			i__1 ? i__1 : s_rnge("buffer", i__1, "spkr19_", (
-			ftnlen)877)] < *et) {
+			ftnlen)879)] < *et) {
 		    bufbas += nread;
 		    nread = min(remain,101);
 
@@ -1058,9 +1059,9 @@ static integer c__6 = 6;
 	    return 0;
 	}
 	pktsiz = pktszs[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"pktszs", i__1, "spkr19_", (ftnlen)1047)];
+		"pktszs", i__1, "spkr19_", (ftnlen)1049)];
 	maxwnd = mxwnsz[(i__1 = subtyp) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		"mxwnsz", i__1, "spkr19_", (ftnlen)1048)];
+		"mxwnsz", i__1, "spkr19_", (ftnlen)1050)];
 
 /*        Check the window size. */
 
@@ -1190,7 +1191,7 @@ static integer c__6 = 6;
 	    return 0;
 	}
 	while(buffer[(i__1 = nread - 1) < 101 && 0 <= i__1 ? i__1 : s_rnge(
-		"buffer", i__1, "spkr19_", (ftnlen)1196)] < *et && remain > 0)
+		"buffer", i__1, "spkr19_", (ftnlen)1198)] < *et && remain > 0)
 		 {
 	    bufbas += nread;
 	    nread = min(remain,100);

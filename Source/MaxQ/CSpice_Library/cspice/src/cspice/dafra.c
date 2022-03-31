@@ -33,8 +33,7 @@
 
 /* $ Abstract */
 
-/*     Re-order the arrays in a DAF according to a given order */
-/*     vector. */
+/*     Reorder the arrays in a DAF according to a given order vector. */
 
 /* $ Disclaimer */
 
@@ -81,22 +80,22 @@
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle of a DAF that has been opened for */
-/*                 write access.  Use DAFOPW, for example, to open */
-/*                 an existing file and get its handle. */
+/*     HANDLE   is the handle of a DAF that has been opened for */
+/*              write access. Use DAFOPW, for example, to open */
+/*              an existing file and get its handle. */
 
-/*     IORDER      is the order vector to be used to re-order the */
-/*                 arrays stored in the DAF specified by HANDLE. */
+/*     IORDER   is the order vector to be used to re-order the */
+/*              arrays stored in the DAF specified by HANDLE. */
 
-/*                 An integer order vector is an array of length */
-/*                 N whose elements are the integers 1 through N. */
+/*              An integer order vector is an array of length */
+/*              N whose elements are the integers 1 through N. */
 
-/*                 The first element of IORDER is the index of the */
-/*                 first array in the re-ordered file, and so on. */
+/*              The first element of IORDER is the index of the */
+/*              first array in the re-ordered file, and so on. */
 
-/*     N           is the number of elements in the order vector. */
-/*                 This may be less than the number of arrays in */
-/*                 the file. */
+/*     N        is the number of elements in the order vector. */
+/*              This may be less than the number of arrays in */
+/*              the file. */
 
 /* $ Detailed_Output */
 
@@ -105,6 +104,19 @@
 /* $ Parameters */
 
 /*     None. */
+
+/* $ Exceptions */
+
+/*     1)  If IORDER is not an order vector (that is, if it does */
+/*         not contain every integer between 1 and N), the error */
+/*         SPICE(DISORDER) is signaled. */
+
+/*     2)  If N is greater than the number of arrays in the file, */
+/*         the error SPICE(DISARRAY) is signaled. */
+
+/* $ Files */
+
+/*     See argument HANDLE. */
 
 /* $ Particulars */
 
@@ -170,28 +182,23 @@
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1) If IORDER is not an order vector (that is, if it does */
-/*        not contain every integer between 1 and N), the error */
-/*        SPICE(DISORDER) is signalled. */
-
-/*     2) If N is greater than the number of arrays in the file, */
-/*        the error SPICE(DISARRAY) is signalled. */
-
-/* $ Files */
-
-/*     See argument HANDLE. */
-
-/* $ Author_and_Institution */
-
-/*     I.M. Underwood  (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 27-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -203,7 +210,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     reorder daf arrays */
+/*     reorder DAF arrays */
 
 /* -& */
 

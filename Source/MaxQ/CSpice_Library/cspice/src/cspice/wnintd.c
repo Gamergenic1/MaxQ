@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      WNINTD ( Intersect two DP windows ) */
+/* $Procedure WNINTD ( Intersect two DP windows ) */
 /* Subroutine */ int wnintd_(doublereal *a, doublereal *b, doublereal *c__)
 {
     /* System generated locals */
@@ -26,8 +26,8 @@
 
 /* $ Abstract */
 
-/*      Place the intersection of two double precision windows into */
-/*      a third window. */
+/*     Place the intersection of two double precision windows into */
+/*     a third window. */
 
 /* $ Disclaimer */
 
@@ -56,88 +56,107 @@
 
 /* $ Required_Reading */
 
-/*      WINDOWS */
+/*     WINDOWS */
 
 /* $ Keywords */
 
-/*      WINDOWS */
+/*     WINDOWS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A, */
-/*      B          I   Input windows. */
-/*      C          I   Intersection of A and B. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A, */
+/*     B          I   Input windows. */
+/*     C          O   Intersection of A and B. */
 
 /* $ Detailed_Input */
 
-/*      A, */
-/*      B           are windows, each of which contains zero or more */
-/*                  intervals. */
+/*     A, */
+/*     B        are SPICE windows, each of which contains zero or more */
+/*              intervals. */
 
 /* $ Detailed_Output */
 
-/*      C           is the output window, containing the intersection */
-/*                  of A and B---every point contained in both A and B. */
+/*     C        is the output SPICE window, containing the */
+/*              intersection of A and B --- every point contained in both */
+/*              A and B. */
 
-/*                  C must be distinct from both A and B. */
+/*              C must be distinct from both A and B. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The intersection of two windows contains every point contained */
-/*      both in the first window and in the second window. */
-
-/* $ Examples */
-
-/*      Let A contain the intervals */
-
-/*            [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
-
-/*      and B contain the intervals */
-
-/*            [ 2, 4 ]  [ 8, 10 ]  [ 16, 18 ] */
-
-/*      Then the intersection of A and B contains the intervals */
-
-/*            [ 2, 3 ]  [ 8, 10 ] */
-
 /* $ Exceptions */
 
-/*     1. If the intersection of the two windows results in an excess of */
-/*        elements, the error SPICE(WINDOWEXCESS) is signalled. */
+/*     1)  If the intersection of the two windows results in an excess of */
+/*         elements, the error SPICE(WINDOWEXCESS) is signaled. */
+
+/*     2)  The cardinality of the input windows must be even. Left */
+/*         endpoints of stored intervals must be strictly greater than */
+/*         preceding right endpoints. Right endpoints must be greater */
+/*         than or equal to corresponding left endpoints. Invalid window */
+/*         data are not diagnosed by this routine and may lead to */
+/*         unpredictable results. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     The intersection of two windows contains every point contained */
+/*     both in the first window and in the second window. */
+
+/* $ Examples */
+
+/*     Let A contain the intervals */
+
+/*           [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] */
+
+/*     and B contain the intervals */
+
+/*           [ 2, 4 ]  [ 8, 10 ]  [ 16, 18 ] */
+
+/*     Then the intersection of A and B contains the intervals */
+
+/*           [ 2, 3 ]  [ 8, 10 ] */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      H.A. Neilan     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 24-AUG-2021 (JDR) (NJB) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/*        Edited the header to comply with NAIF standard. Fixed I/O type */
+/*        of argument C in $Brief_I/O table. */
+
+/*        Added entry #2 in $Exceptions section. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -147,11 +166,11 @@
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.1.0, 27-FEB-1989  (HAN) */
+/* -    Beta Version 1.1.0, 27-FEB-1989  (HAN) */
 
-/*         Due to the calling sequence and functionality changes */
-/*         in the routine EXCESS, the method of signalling an */
-/*         excess of elements needed to be changed. */
+/*        Due to the calling sequence and functionality changes */
+/*        in the routine EXCESS, the method of signaling an */
+/*        excess of elements needed to be changed. */
 
 /* -& */
 

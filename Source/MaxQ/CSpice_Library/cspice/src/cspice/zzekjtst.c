@@ -982,7 +982,7 @@ static integer c__5 = 5;
 /* $ Exceptions */
 
 /*     1)  If this routine is called directly, the error */
-/*         SPICE(BOGUSENTRY) is signalled. */
+/*         SPICE(BOGUSENTRY) is signaled. */
 
 /*     See the entry points for discussions of exceptions pertaining to */
 /*     those routines. */
@@ -1029,6 +1029,10 @@ static integer c__5 = 5;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    SPICELIB Version 2.0.0, 20-JUL-1998 (NJB) */
 
@@ -1425,15 +1429,15 @@ L_zzekjprp:
 	    lseg = segvec[ltab - 1];
 	    rseg = segvec[rtab - 1];
 	    lhans[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("lhans", 
-		    i__2, "zzekjtst_", (ftnlen)650)] = sthan[lseg - 1];
+		    i__2, "zzekjtst_", (ftnlen)654)] = sthan[lseg - 1];
 	    rhans[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("rhans", 
-		    i__2, "zzekjtst_", (ftnlen)651)] = sthan[rseg - 1];
+		    i__2, "zzekjtst_", (ftnlen)655)] = sthan[rseg - 1];
 	    movei_(&stsdsc[lseg * 24 - 24], &c__24, &lsdsc[(i__2 = j * 24 - 
 		    24) < 2400 && 0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, 
-		    "zzekjtst_", (ftnlen)653)]);
+		    "zzekjtst_", (ftnlen)657)]);
 	    movei_(&stsdsc[rseg * 24 - 24], &c__24, &rsdsc[(i__2 = j * 24 - 
 		    24) < 2400 && 0 <= i__2 ? i__2 : s_rnge("rsdsc", i__2, 
-		    "zzekjtst_", (ftnlen)654)]);
+		    "zzekjtst_", (ftnlen)658)]);
 	    dtptr = stdtpt[lseg - 1];
 	    i__2 = clidx1[j - 1];
 	    for (k = 2; k <= i__2; ++k) {
@@ -1441,7 +1445,7 @@ L_zzekjprp:
 	    }
 	    movei_(&dtdscs[dtptr * 11 - 11], &c__11, &ldscrs[(i__2 = j * 11 - 
 		    11) < 1100 && 0 <= i__2 ? i__2 : s_rnge("ldscrs", i__2, 
-		    "zzekjtst_", (ftnlen)662)]);
+		    "zzekjtst_", (ftnlen)666)]);
 	    dtptr = stdtpt[rseg - 1];
 	    i__2 = clidx2[j - 1];
 	    for (k = 2; k <= i__2; ++k) {
@@ -1449,7 +1453,7 @@ L_zzekjprp:
 	    }
 	    movei_(&dtdscs[dtptr * 11 - 11], &c__11, &rdscrs[(i__2 = j * 11 - 
 		    11) < 1100 && 0 <= i__2 ? i__2 : s_rnge("rdscrs", i__2, 
-		    "zzekjtst_", (ftnlen)672)]);
+		    "zzekjtst_", (ftnlen)676)]);
 	}
     }
 
@@ -1678,10 +1682,10 @@ L_zzekjprp:
 	i__1 = *njcnst;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    locact[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("loca"
-		    "ct", i__2, "zzekjtst_", (ftnlen)935)] = active[i__ - 1];
+		    "ct", i__2, "zzekjtst_", (ftnlen)939)] = active[i__ - 1];
 	}
 	locact[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 : s_rnge("locact",
-		 i__1, "zzekjtst_", (ftnlen)938)] = FALSE_;
+		 i__1, "zzekjtst_", (ftnlen)942)] = FALSE_;
     } else {
 
 /*        This is the `no luck' case.  Save all of the constraints. */
@@ -1689,7 +1693,7 @@ L_zzekjprp:
 	i__1 = *njcnst;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    locact[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("loca"
-		    "ct", i__2, "zzekjtst_", (ftnlen)946)] = active[i__ - 1];
+		    "ct", i__2, "zzekjtst_", (ftnlen)950)] = active[i__ - 1];
 	}
 
 /*        Save the counts pertaining to the input join row sets. */
@@ -1719,11 +1723,11 @@ L_zzekjprp:
     i__1 = svncon;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	svcp1[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp1", 
-		i__2, "zzekjtst_", (ftnlen)980)] = cpidx1[i__ - 1];
+		i__2, "zzekjtst_", (ftnlen)984)] = cpidx1[i__ - 1];
 	svops[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("svops", 
-		i__2, "zzekjtst_", (ftnlen)981)] = ops[i__ - 1];
+		i__2, "zzekjtst_", (ftnlen)985)] = ops[i__ - 1];
 	svcp2[(i__2 = i__ - 1) < 100 && 0 <= i__2 ? i__2 : s_rnge("svcp2", 
-		i__2, "zzekjtst_", (ftnlen)982)] = cpidx2[i__ - 1];
+		i__2, "zzekjtst_", (ftnlen)986)] = cpidx2[i__ - 1];
     }
 
 /*     Initialize the pointers we'll use to keep track of the */
@@ -1922,17 +1926,17 @@ L_zzekjnxt:
 
 	    if (zzekrcmp_(&c__5, &c__1, &lhans[(i__1 = cnstr - 1) < 100 && 0 
 		    <= i__1 ? i__1 : s_rnge("lhans", i__1, "zzekjtst_", (
-		    ftnlen)1197)], &lsdsc[(i__2 = cnstr * 24 - 24) < 2400 && 
+		    ftnlen)1201)], &lsdsc[(i__2 = cnstr * 24 - 24) < 2400 && 
 		    0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjtst_", (
-		    ftnlen)1197)], &ldscrs[(i__3 = cnstr * 11 - 11) < 1100 && 
+		    ftnlen)1201)], &ldscrs[(i__3 = cnstr * 11 - 11) < 1100 && 
 		    0 <= i__3 ? i__3 : s_rnge("ldscrs", i__3, "zzekjtst_", (
-		    ftnlen)1197)], &lrow, &lelt, &rhans[(i__4 = cnstr - 1) < 
+		    ftnlen)1201)], &lrow, &lelt, &rhans[(i__4 = cnstr - 1) < 
 		    100 && 0 <= i__4 ? i__4 : s_rnge("rhans", i__4, "zzekjts"
-		    "t_", (ftnlen)1197)], &rsdsc[(i__5 = cnstr * 24 - 24) < 
+		    "t_", (ftnlen)1201)], &rsdsc[(i__5 = cnstr * 24 - 24) < 
 		    2400 && 0 <= i__5 ? i__5 : s_rnge("rsdsc", i__5, "zzekjt"
-		    "st_", (ftnlen)1197)], &rdscrs[(i__6 = cnstr * 11 - 11) < 
+		    "st_", (ftnlen)1201)], &rdscrs[(i__6 = cnstr * 11 - 11) < 
 		    1100 && 0 <= i__6 ? i__6 : s_rnge("rdscrs", i__6, "zzekj"
-		    "tst_", (ftnlen)1197)], &rrow, &relt)) {
+		    "tst_", (ftnlen)1201)], &rrow, &relt)) {
 
 
 /*              The `left' key entry is smaller.  Advance the bottom */
@@ -1946,17 +1950,17 @@ L_zzekjnxt:
 		}
 	    } else if (zzekrcmp_(&c__1, &c__1, &lhans[(i__1 = cnstr - 1) < 
 		    100 && 0 <= i__1 ? i__1 : s_rnge("lhans", i__1, "zzekjts"
-		    "t_", (ftnlen)1223)], &lsdsc[(i__2 = cnstr * 24 - 24) < 
+		    "t_", (ftnlen)1227)], &lsdsc[(i__2 = cnstr * 24 - 24) < 
 		    2400 && 0 <= i__2 ? i__2 : s_rnge("lsdsc", i__2, "zzekjt"
-		    "st_", (ftnlen)1223)], &ldscrs[(i__3 = cnstr * 11 - 11) < 
+		    "st_", (ftnlen)1227)], &ldscrs[(i__3 = cnstr * 11 - 11) < 
 		    1100 && 0 <= i__3 ? i__3 : s_rnge("ldscrs", i__3, "zzekj"
-		    "tst_", (ftnlen)1223)], &lrow, &lelt, &rhans[(i__4 = cnstr 
+		    "tst_", (ftnlen)1227)], &lrow, &lelt, &rhans[(i__4 = cnstr 
 		    - 1) < 100 && 0 <= i__4 ? i__4 : s_rnge("rhans", i__4, 
-		    "zzekjtst_", (ftnlen)1223)], &rsdsc[(i__5 = cnstr * 24 - 
+		    "zzekjtst_", (ftnlen)1227)], &rsdsc[(i__5 = cnstr * 24 - 
 		    24) < 2400 && 0 <= i__5 ? i__5 : s_rnge("rsdsc", i__5, 
-		    "zzekjtst_", (ftnlen)1223)], &rdscrs[(i__6 = cnstr * 11 - 
+		    "zzekjtst_", (ftnlen)1227)], &rdscrs[(i__6 = cnstr * 11 - 
 		    11) < 1100 && 0 <= i__6 ? i__6 : s_rnge("rdscrs", i__6, 
-		    "zzekjtst_", (ftnlen)1223)], &rrow, &relt)) {
+		    "zzekjtst_", (ftnlen)1227)], &rrow, &relt)) {
 
 
 /*              The `left' key entry is equal.  Form a composite */
@@ -1964,7 +1968,7 @@ L_zzekjnxt:
 /*              constraints. */
 
 		if (svcp1[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("svcp1", i__1, "zzekjtst_", (ftnlen)1241)] <= 
+			s_rnge("svcp1", i__1, "zzekjtst_", (ftnlen)1245)] <= 
 			svnt1) {
 
 /*                 The parent table of the column on the LHS of our */
@@ -1992,20 +1996,20 @@ L_zzekjnxt:
 		i__1 = svncon;
 		for (j = 1; j <= i__1; ++j) {
 		    if (locact[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1274)]
+			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1278)]
 			    ) {
 			ltab = svcp1[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
 				: s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)
-				1275)];
+				1279)];
 			rtab = svcp2[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
 				: s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)
-				1276)];
+				1280)];
 			lrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
 				s_rnge("lrows", i__2, "zzekjtst_", (ftnlen)
-				1277)] = rowvec[ltab - 1];
+				1281)] = rowvec[ltab - 1];
 			rrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
 				s_rnge("rrows", i__2, "zzekjtst_", (ftnlen)
-				1278)] = rowvec[rtab - 1];
+				1282)] = rowvec[rtab - 1];
 		    }
 		}
 		*found = zzekvmch_(&svncon, locact, lhans, lsdsc, ldscrs, 
@@ -2085,20 +2089,20 @@ L_zzekjnxt:
 /*           required. */
 
 	    if (zzekrcmp_(&svops[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 
-		    : s_rnge("svops", i__1, "zzekjtst_", (ftnlen)1374)], &
+		    : s_rnge("svops", i__1, "zzekjtst_", (ftnlen)1378)], &
 		    c__1, &lhans[(i__2 = cnstr - 1) < 100 && 0 <= i__2 ? i__2 
-		    : s_rnge("lhans", i__2, "zzekjtst_", (ftnlen)1374)], &
+		    : s_rnge("lhans", i__2, "zzekjtst_", (ftnlen)1378)], &
 		    lsdsc[(i__3 = cnstr * 24 - 24) < 2400 && 0 <= i__3 ? i__3 
-		    : s_rnge("lsdsc", i__3, "zzekjtst_", (ftnlen)1374)], &
+		    : s_rnge("lsdsc", i__3, "zzekjtst_", (ftnlen)1378)], &
 		    ldscrs[(i__4 = cnstr * 11 - 11) < 1100 && 0 <= i__4 ? 
-		    i__4 : s_rnge("ldscrs", i__4, "zzekjtst_", (ftnlen)1374)],
+		    i__4 : s_rnge("ldscrs", i__4, "zzekjtst_", (ftnlen)1378)],
 		     &lrow, &lelt, &rhans[(i__5 = cnstr - 1) < 100 && 0 <= 
 		    i__5 ? i__5 : s_rnge("rhans", i__5, "zzekjtst_", (ftnlen)
-		    1374)], &rsdsc[(i__6 = cnstr * 24 - 24) < 2400 && 0 <= 
+		    1378)], &rsdsc[(i__6 = cnstr * 24 - 24) < 2400 && 0 <= 
 		    i__6 ? i__6 : s_rnge("rsdsc", i__6, "zzekjtst_", (ftnlen)
-		    1374)], &rdscrs[(i__7 = cnstr * 11 - 11) < 1100 && 0 <= 
+		    1378)], &rdscrs[(i__7 = cnstr * 11 - 11) < 1100 && 0 <= 
 		    i__7 ? i__7 : s_rnge("rdscrs", i__7, "zzekjtst_", (ftnlen)
-		    1374)], &rrow, &relt)) {
+		    1378)], &rrow, &relt)) {
 
 
 /*              This pair of row vectors satisfies the join constraint. */
@@ -2106,7 +2110,7 @@ L_zzekjnxt:
 /*              set of active constraints. */
 
 		if (svcp1[(i__1 = cnstr - 1) < 100 && 0 <= i__1 ? i__1 : 
-			s_rnge("svcp1", i__1, "zzekjtst_", (ftnlen)1392)] <= 
+			s_rnge("svcp1", i__1, "zzekjtst_", (ftnlen)1396)] <= 
 			svnt1) {
 
 /*                 The parent table of the column on the LHS of our */
@@ -2134,20 +2138,20 @@ L_zzekjnxt:
 		i__1 = svncon;
 		for (j = 1; j <= i__1; ++j) {
 		    if (locact[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1426)]
+			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1430)]
 			    ) {
 			ltab = svcp1[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
 				: s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)
-				1427)];
+				1431)];
 			rtab = svcp2[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
 				: s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)
-				1428)];
+				1432)];
 			lrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
 				s_rnge("lrows", i__2, "zzekjtst_", (ftnlen)
-				1429)] = rowvec[ltab - 1];
+				1433)] = rowvec[ltab - 1];
 			rrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
 				s_rnge("rrows", i__2, "zzekjtst_", (ftnlen)
-				1430)] = rowvec[rtab - 1];
+				1434)] = rowvec[rtab - 1];
 		    }
 		}
 		*found = zzekvmch_(&svncon, locact, lhans, lsdsc, ldscrs, 
@@ -2247,20 +2251,20 @@ L_zzekjnxt:
 		i__1 = svncon;
 		for (j = 1; j <= i__1; ++j) {
 		    if (locact[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
-			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1567)]
+			    s_rnge("locact", i__2, "zzekjtst_", (ftnlen)1571)]
 			    ) {
 			ltab = svcp1[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
 				: s_rnge("svcp1", i__2, "zzekjtst_", (ftnlen)
-				1568)];
+				1572)];
 			rtab = svcp2[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 
 				: s_rnge("svcp2", i__2, "zzekjtst_", (ftnlen)
-				1569)];
+				1573)];
 			lrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
 				s_rnge("lrows", i__2, "zzekjtst_", (ftnlen)
-				1570)] = rowvec[ltab - 1];
+				1574)] = rowvec[ltab - 1];
 			rrows[(i__2 = j - 1) < 100 && 0 <= i__2 ? i__2 : 
 				s_rnge("rrows", i__2, "zzekjtst_", (ftnlen)
-				1571)] = rowvec[rtab - 1];
+				1575)] = rowvec[rtab - 1];
 		    }
 		}
 		*found = zzekvmch_(&svncon, locact, lhans, lsdsc, ldscrs, 

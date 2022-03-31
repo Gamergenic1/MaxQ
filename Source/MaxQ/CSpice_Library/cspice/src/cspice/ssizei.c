@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      SSIZEI ( Set the size of an integer cell ) */
+/* $Procedure SSIZEI ( Set the size of an integer cell ) */
 /* Subroutine */ int ssizei_(integer *size, integer *cell)
 {
     integer i__;
@@ -16,7 +16,7 @@
 
 /* $ Abstract */
 
-/*      Set the size (maximum cardinality) of an integer cell. */
+/*     Set the size (maximum cardinality) of an integer cell. */
 
 /* $ Disclaimer */
 
@@ -45,11 +45,11 @@
 
 /* $ Required_Reading */
 
-/*      CELLS */
+/*     CELLS */
 
 /* $ Keywords */
 
-/*      CELLS */
+/*     CELLS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -61,21 +61,28 @@
 
 /* $ Detailed_Input */
 
-/*     SIZE        is the size (maximum number of elements) of the cell. */
+/*     SIZE     is the size (maximum number of elements) of the cell. */
 
 /* $ Detailed_Output */
 
+/*     CELL     is a cell. */
 
-/*      CELL        is a cell. */
 
-
-/*                 On output, the size of the cell is SIZE.  The */
-/*                 cardinality of the cell is 0.  The rest of the */
-/*                 control area is zeroed out. */
+/*                On output, the size of the cell is SIZE. The */
+/*                cardinality of the cell is 0. The rest of the */
+/*                control area is zeroed out. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
+
+/* $ Exceptions */
+
+/*     None. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -128,16 +135,7 @@
 /*           RETURN */
 /*           END */
 
-
 /* $ Restrictions */
-
-/*     None. */
-
-/* $ Exceptions */
-
-/*     None. */
-
-/* $ Files */
 
 /*     None. */
 
@@ -147,19 +145,26 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     C.A. Curzon     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
@@ -171,14 +176,14 @@
 
 /* -    Beta Version 2.0.0, 13-MAR-1989 (NJB) */
 
-/*        Check for invalid size value added.  An error */
-/*        is signalled if the value is out of range.  The cardinality */
-/*        is now automatically reset to 0.  The rest of the control */
+/*        Check for invalid size value added. An error */
+/*        is signaled if the value is out of range. The cardinality */
+/*        is now automatically reset to 0. The rest of the control */
 /*        area is now zeroed out. */
 
 /*        The examples have been updated to illustrate set initialization */
 /*        without the use of the EMPTYx routines, which have been */
-/*        removed from the library.  Errors in the examples have been */
+/*        removed from the library. Errors in the examples have been */
 /*        removed, also. */
 
 /* -& */

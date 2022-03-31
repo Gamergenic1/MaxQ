@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      NPLNPT ( Nearest point on line to point ) */
+/* $Procedure NPLNPT ( Nearest point on line to point ) */
 /* Subroutine */ int nplnpt_(doublereal *linpt, doublereal *lindir, 
 	doublereal *point, doublereal *pnear, doublereal *dist)
 {
@@ -66,7 +66,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     LINPT, */
 /*     LINDIR     I   Point on a line and the line's direction vector. */
@@ -76,24 +76,24 @@
 
 /* $ Detailed_Input */
 
-/*     LINPT */
-/*     LINDIR         are, respectively, a point and a direction vector */
-/*                    that define a line in 3-dimensional space.  The */
-/*                    line is the set of points */
+/*     LINPT, */
+/*     LINDIR   are, respectively, a point and a direction vector */
+/*              that define a line in 3-dimensional space. The */
+/*              line is the set of points */
 
-/*                       LINPT   +   t * LINDIR */
+/*                 LINPT   +   t * LINDIR */
 
-/*                    where t is any real number. */
+/*              where `t' is any real number. */
 
-/*     POINT          is a point in 3-dimensional space. */
+/*     POINT    is a point in 3-dimensional space. */
 
 /* $ Detailed_Output */
 
-/*     PNEAR          is the nearest point on the input line to the input */
-/*                    point. */
+/*     PNEAR    is the nearest point on the input line to the input */
+/*              point. */
 
-/*     DIST           is the distance between the input line and input */
-/*                    point. */
+/*     DIST     is the distance between the input line and input */
+/*              point. */
 
 /* $ Parameters */
 
@@ -111,7 +111,7 @@
 /* $ Particulars */
 
 /*     For every line L and point P, there is a unique closest point */
-/*     on L to P.  Call this closest point C.  It is always true that */
+/*     on L to P. Call this closest point C. It is always true that */
 /*     P - C  is perpendicular to L, and the length of P - C is called */
 /*     the `distance' between P and L. */
 
@@ -152,9 +152,17 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 27-MAY-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 17-SEP-2014 (NJB) */
 
@@ -177,14 +185,6 @@
 
 /*     distance between point and line */
 /*     nearest point on line to point */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.1.0, 09-SEP-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VADD call. */
 
 /* -& */
 

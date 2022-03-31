@@ -343,6 +343,11 @@ static logical c_false = FALSE_;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.0, MAY-27-2020 (EDW) */
+
+/*        Updated descriptions of GEOPHS constants to be consistent */
+/*        with what's used in other routines. */
+
 /* -    SPICELIB Version 1.0.0 22-JUL-2014 (EDW) */
 
 /* -& */
@@ -358,18 +363,20 @@ static logical c_false = FALSE_;
 /*      Gravitational constant indices. */
 
 
-/*     The following parameters give the location in the GEOPHS */
+/*     The following parameters give the indices in the GEOPHS */
 /*     array of the various geophysical parameters needed for */
 /*     the two line element sets. */
 
-/*     K_J2  --- location of J2 */
-/*     K_J3  --- location of J3 */
-/*     K_J4  --- location if J4 */
-/*     K_KE  --- location of KE = sqrt(GM) in earth-radii**1.5/MIN */
-/*     K_QO  --- upper bound of atmospheric model in KM */
-/*     K_SO  --- lower bound of atmospheric model in KM */
-/*     K_ER  --- earth equatorial radius in KM. */
-/*     K_AE  --- distance units/earth radius */
+/*     K_J2  --- index of J2 gravitational harmonic for earth */
+/*     K_J3  --- index of J3 gravitational harmonic for earth */
+/*     K_J4  --- index of J4 gravitational harmonic for earth */
+/*     K_KE  --- index of KE = sqrt(GM) in earth-radii**1.5/MIN */
+/*     K_QO  --- index of high altitude bound for atmospheric */
+/*               model in km */
+/*     K_SO  --- index of low altitude bound for atmospheric */
+/*               model in km */
+/*     K_ER  --- index of earth equatorial radius in km */
+/*     K_AE  --- index of distance units/earth radius */
 
 
 /*     Operation mode values, OPMODE. */
@@ -390,7 +397,7 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Entry Point */
+/*     VARIABLE  I/O  ENTRY POINTS */
 /*     --------  ---  -------------------------------------------------- */
 /*     GEOPHS     I   XXSGP4I */
 /*     ELEMS      I   XXSGP4I */
@@ -412,7 +419,7 @@ static logical c_false = FALSE_;
 
 /* $ Exceptions */
 
-/*     1) 'SPICE(BOGUSENTRY)' will signal if ZZSGP4 is called. */
+/*     1)  If ZZSGP4 is called, the error SPICE(BOGUSENTRY) is signaled. */
 
 /* $ Files */
 
@@ -743,39 +750,46 @@ static logical c_false = FALSE_;
 
 /* $ Literature_References */
 
-/*   [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
-/*       Propagation of the NORAD Element Sets." Spacetrack Report #3. */
-/*       U.S. Air Force: Aerospace Defense Command. */
+/*     [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
+/*         Propagation of the NORAD Element Sets." Spacetrack Report #3. */
+/*         U.S. Air Force: Aerospace Defense Command. */
 
-/*   [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
-/*       of Space Command Element Sets." Space Command, */
-/*       U. S. Air Force, CO. */
+/*     [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
+/*         of Space Command Element Sets." Space Command, */
+/*         U. S. Air Force, CO. */
 
-/*   [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
-/*       History of Analytical Orbit Modeling in the U. S. Space */
-/*       Surveillance System. Journal of Guidance, Control, and */
-/*       Dynamics. 27(2):174-185. */
+/*     [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
+/*         History of Analytical Orbit Modeling in the U. S. Space */
+/*         Surveillance System. Journal of Guidance, Control, and */
+/*         Dynamics. 27(2):174-185. */
 
-/*   [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
-/*       and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
-/*       AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
-/*       Specialist Conference, August 21-24, 2006. Keystone, CO. */
+/*     [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
+/*         and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
+/*         AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
+/*         Specialist Conference, August 21-24, 2006. Keystone, CO. */
 
 /* $ Author_and_Institution */
 
-/*     David Vallado   (AGI) */
-/*     E. D. Wright    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, SEP-15-2014 (EDW) */
+/* -    SPICELIB Version 1.0.1, 30-MAY-2021 (EDW) (JDR) */
+
+/*        Correction of documentation error in listing of GEOPHS */
+/*        constants. The definition of index 5, "High altitude bound */
+/*        for atmospheric model in km.", and index 6, "Low altitude */
+/*        bound for atmospheric model in km." were switched. */
+
+/* -    SPICELIB Version 1.0.0, 15-SEP-2014 (EDW) */
 
 /*        Based on routine SGP4, 28-JUN-2005, Vallado 2006 [4]. */
 
 /* -& */
 /* $ Index_Entries */
 
-/*  SGP4 */
+/*     SGP4 */
 
 /* -& */
 
@@ -850,101 +864,102 @@ L_xxsgp4i:
 
 /* $ Declarations */
 
-/*     Refer to Declarations section in ZZSGP4. */
+/*     DOUBLE PRECISION         GEOPHS    ( 8 ) */
+/*     DOUBLE PRECISION         ELEMS     ( 10 ) */
+/*     INTEGER                  OPMODE */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     GEOPHS     I   Geophysical constants */
-/*     ELEMS      I   Two-line element data */
+/*     GEOPHS     I   Geophysical constants. */
+/*     ELEMS      I   Two-line element data. */
 /*     OPMODE     I   Flag to indicate operation mode for GMST. */
 
 /* $ Detailed_Input */
 
-/*     GEOPHS      is a collection of 8 geophysical constants needed */
-/*                 for computing a state.  The order of these */
-/*                 constants must be: */
+/*     GEOPHS   is a collection of 8 geophysical constants needed */
+/*              for computing a state. The order of these */
+/*              constants must be: */
 
-/*                 GEOPHS(1) = J2 gravitational harmonic for earth */
-/*                 GEOPHS(2) = J3 gravitational harmonic for earth */
-/*                 GEOPHS(3) = J4 gravitational harmonic for earth */
+/*              GEOPHS(1) = J2 gravitational harmonic for earth */
+/*              GEOPHS(2) = J3 gravitational harmonic for earth */
+/*              GEOPHS(3) = J4 gravitational harmonic for earth */
 
-/*                 These first three constants are dimensionless. */
+/*              These first three constants are dimensionless. */
 
-/*                 GEOPHS(4) = KE: Square root of the GM for earth where */
-/*                             GM is expressed in earth radii cubed per */
-/*                             minutes squared. */
+/*              GEOPHS(4) = KE: Square root of the GM for earth where */
+/*                          GM is expressed in earth radii cubed per */
+/*                          minutes squared. */
 
-/*                 GEOPHS(5) = QO: Low altitude bound for atmospheric */
-/*                             model in km. */
+/*              GEOPHS(5) = QO: High altitude bound for atmospheric */
+/*                          model in km. */
 
-/*                 GEOPHS(6) = SO: High altitude bound for atmospheric */
-/*                             model in km. */
+/*              GEOPHS(6) = SO: Low altitude bound for atmospheric */
+/*                          model in km. */
 
-/*                 GEOPHS(7) = RE: Equatorial radius of the earth in km. */
+/*              GEOPHS(7) = RE: Equatorial radius of the earth in km. */
 
+/*              GEOPHS(8) = AE: Distance units/earth radius */
+/*                          (normally 1) */
 
-/*                 GEOPHS(8) = AE: Distance units/earth radius */
-/*                             (normally 1) */
+/*              Below are currently recommended values for these */
+/*              items: */
 
-/*                 Below are currently recommended values for these */
-/*                 items: */
+/*                J2 =    1.082616D-3 */
+/*                J3 =   -2.53881D-6 */
+/*                J4 =   -1.65597D-6 */
 
-/*                   J2 =    1.082616D-3 */
-/*                   J3 =   -2.53881D-6 */
-/*                   J4 =   -1.65597D-6 */
+/*              The next item is the square root of GM for the */
+/*              earth given in units of earth-radii**1.5/Minute */
 
-/*                 The next item is the square root of GM for the */
-/*                 earth given in units of earth-radii**1.5/Minute */
+/*                KE =    7.43669161D-2 */
 
-/*                   KE =    7.43669161D-2 */
+/*              The next two items give the top and */
+/*              bottom of the atmospheric drag model */
+/*              used by the type 10 ephemeris type. */
+/*              Don't adjust these unless you understand */
+/*              the full implications of such changes. */
 
-/*                 The next two items give the top and */
-/*                 bottom of the atmospheric drag model */
-/*                 used by the type 10 ephemeris type. */
-/*                 Don't adjust these unless you understand */
-/*                 the full implications of such changes. */
+/*                QO =  120.0D0 */
+/*                SO =   78.0D0 */
 
-/*                   QO =  120.0D0 */
-/*                   SO =   78.0D0 */
+/*              The following is the equatorial radius */
+/*              of the earth as used by NORAD in km. */
 
-/*                 The following is the equatorial radius */
-/*                 of the earth as used by NORAD in km. */
+/*                ER = 6378.135D0 */
 
-/*                   ER = 6378.135D0 */
+/*              The value of AE is the number of */
+/*              distance units per earth radii used by */
+/*              the NORAD state propagation software. */
+/*              The value should be 1 unless you've got */
+/*              a very good understanding of the NORAD */
+/*              routine SGP4 and the affect of changing */
+/*              this value.. */
 
-/*                 The value of AE is the number of */
-/*                 distance units per earth radii used by */
-/*                 the NORAD state propagation software. */
-/*                 The value should be 1 unless you've got */
-/*                 a very good understanding of the NORAD */
-/*                 routine SGP4 and the affect of changing */
-/*                 this value.. */
+/*                AE =    1.0D0 */
 
-/*                   AE =    1.0D0 */
+/*     ELEMS    is an array containing two-line element data */
+/*              as prescribed below. The elements XNDD6O and BSTAR */
+/*              must already be scaled by the proper exponent stored */
+/*              in the two line elements set. Moreover, the */
+/*              various items must be converted to the units shown */
+/*              here. */
 
-/*     ELEMS       is an array containing two-line element data */
-/*                 as prescribed below. The elements XNDD6O and BSTAR */
-/*                 must already be scaled by the proper exponent stored */
-/*                 in the two line elements set.  Moreover, the */
-/*                 various items must be converted to the units shown */
-/*                 here. */
+/*                 ELEMS (  1 ) = XNDT2O in radians/minute**2 */
+/*                 ELEMS (  2 ) = XNDD6O in radians/minute**3 */
+/*                 ELEMS (  3 ) = BSTAR */
+/*                 ELEMS (  4 ) = XINCL  in radians */
+/*                 ELEMS (  5 ) = XNODEO in radians */
+/*                 ELEMS (  6 ) = EO */
+/*                 ELEMS (  7 ) = OMEGAO in radians */
+/*                 ELEMS (  8 ) = XMO    in radians */
+/*                 ELEMS (  9 ) = XNO    in radians/minute */
+/*                 ELEMS ( 10 ) = EPOCH of the elements in seconds */
+/*                                past ephemeris epoch J2000. */
 
-/*                    ELEMS (  1 ) = XNDT2O in radians/minute**2 */
-/*                    ELEMS (  2 ) = XNDD6O in radians/minute**3 */
-/*                    ELEMS (  3 ) = BSTAR */
-/*                    ELEMS (  4 ) = XINCL  in radians */
-/*                    ELEMS (  5 ) = XNODEO in radians */
-/*                    ELEMS (  6 ) = EO */
-/*                    ELEMS (  7 ) = OMEGAO in radians */
-/*                    ELEMS (  8 ) = XMO    in radians */
-/*                    ELEMS (  9 ) = XNO    in radians/minute */
-/*                    ELEMS ( 10 ) = EPOCH of the elements in seconds */
-/*                                   past ephemeris epoch J2000. */
-
-/*     OPMODE         Flag indicating which technique */
-/*                    to use to calculate sidereal time. */
+/*     OPMODE   Flag indicating which technique */
+/*              to use to calculate sidereal time. */
 
 /* $ Detailed_Output */
 
@@ -956,8 +971,8 @@ L_xxsgp4i:
 
 /* $ Exceptions */
 
-/*     1) SPICE(SUBORBITAL) signals if radius of perigee has */
-/*        value less-than 1. */
+/*     1)  If radius of perigee has value less-than 1, the error */
+/*         SPICE(SUBORBITAL) is signaled. */
 
 /* $ Files */
 
@@ -996,7 +1011,7 @@ L_xxsgp4i:
 
 /* $ Examples */
 
-/*     Refer to Examples section in ZZSGP4. */
+/*     Refer to $Examples section in ZZSGP4. */
 
 /* $ Restrictions */
 
@@ -1004,39 +1019,46 @@ L_xxsgp4i:
 
 /* $ Literature_References */
 
-/*   [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
-/*       Propagation of the NORAD Element Sets." Spacetrack Report #3. */
-/*       U.S. Air Force: Aerospace Defense Command. */
+/*     [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
+/*         Propagation of the NORAD Element Sets." Spacetrack Report #3. */
+/*         U.S. Air Force: Aerospace Defense Command. */
 
-/*   [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
-/*       of Space Command Element Sets." Space Command, */
-/*       U. S. Air Force, CO. */
+/*     [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
+/*         of Space Command Element Sets." Space Command, */
+/*         U. S. Air Force, CO. */
 
-/*   [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
-/*       History of Analytical Orbit Modeling in the U. S. Space */
-/*       Surveillance System. Journal of Guidance, Control, and */
-/*       Dynamics. 27(2):174-185. */
+/*     [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
+/*         History of Analytical Orbit Modeling in the U. S. Space */
+/*         Surveillance System. Journal of Guidance, Control, and */
+/*         Dynamics. 27(2):174-185. */
 
-/*   [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
-/*       and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
-/*       AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
-/*       Specialist Conference, August 21-24, 2006. Keystone, CO. */
+/*     [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
+/*         and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
+/*         AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
+/*         Specialist Conference, August 21-24, 2006. Keystone, CO. */
 
 /* $ Author_and_Institution */
 
-/*     David Vallado   (AGI) */
-/*     E. D. Wright    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, DEC-11-2014 (EDW) */
+/* -    SPICELIB Version 1.0.1, 30-MAY-2021 (EDW) (JDR) */
+
+/*        Correction of documentation error in listing of GEOPHS */
+/*        constants. The definition of index 5, "High altitude bound */
+/*        for atmospheric model in km.", and index 6, "Low altitude */
+/*        bound for atmospheric model in km." were switched. */
+
+/* -    SPICELIB Version 1.0.0, 11-DEC-2014 (EDW) */
 
 /*        Based on routine SGP4INIT, 28-JUN-2005, Vallado 2006 [4]. */
 
 /* -& */
 /* $ Index_Entries */
 
-/*  SGP4 */
+/*     SGP4 */
 
 /* -& */
 
@@ -1310,7 +1332,7 @@ L_xxsgp4e:
 /*     originally published separately in Spacetrack report #3 [1]. */
 /*     This version follows the methodology from the 2006 AIAA */
 /*     Vallado paper [4] describing the history and development of */
-/*     \the code. */
+/*     the code. */
 
 /* $ Disclaimer */
 
@@ -1344,30 +1366,30 @@ L_xxsgp4e:
 /* $ Keywords */
 
 /*     TLE */
-/*     Two line elements */
+/*     TWO LINE ELEMENTS */
 
 /* $ Declarations */
 
-/*     Refer to Declarations section in ZZSGP4. */
+/*     DOUBLE PRECISION         T */
+/*     DOUBLE PRECISION         STATE     ( 6 ) */
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     T          I   Time to evaluate state in minutes from epoch */
-/*     STATE      O   Evaluated state */
+/*     T          I   Time to evaluate state in minutes from epoch. */
+/*     STATE      O   Evaluated state. */
 
 /* $ Detailed_Input */
 
-
-/*     T          The time in minutes from the elements epoch */
-/*                at which to calculate a state from the */
-/*                TLE set. */
+/*     T        is the time in minutes from the elements epoch */
+/*              at which to calculate a state from the */
+/*              TLE set. */
 
 /* $ Detailed_Output */
 
-/*     STATE      the state produced by evaluating the input elements */
-/*                at the input epoch T. Units are km and km/sec. */
+/*     STATE    is the state produced by evaluating the input elements */
+/*              at the input epoch T. Units are km and km/sec. */
 
 /* $ Parameters */
 
@@ -1375,22 +1397,23 @@ L_xxsgp4e:
 
 /* $ Exceptions */
 
-/*     1) SPICE(BADMEANMOTION) Mean motion less than 0.0 */
+/*     1)  If the mean motion is less than 0, the error */
+/*         SPICE(BADMEANMOTION) is signaled.0D0. */
 
-/*     2) SPICE(BADMECCENTRICITY) signals when the mean eccentricity is */
-/*        not bounded by [-0.001, 1]. */
+/*     2)  If the mean eccentricity is not bounded by [-0, the error */
+/*         SPICE(BADMECCENTRICITY) is signaled.001, 1]. */
 
-/*     3) SPICE(BADMSEMIMAJOR) signals when the mean semimajor axis */
-/*        has value less-than .95. */
+/*     3)  If the mean semimajor axis has value less-than ,, the error */
+/*         SPICE(BADMSEMIMAJOR) is signaled.95. */
 
-/*     4) SPICE(BADPECCENTRICITY) signals when the perturbed eccentricity */
-/*       is not bounded by [0, 1]. */
+/*     4)  If the perturbed eccentricity is not bounded by [0, 1], the */
+/*         error SPICE(BADPECCENTRICITY) is signaled. */
 
-/*     5) SPICE(BADSEMILATUS) signals when the semi-latus rectum */
-/*        has value less-than 0. */
+/*     5)  If the semi-latus rectum has value less-than 0, the error */
+/*         SPICE(BADSEMILATUS) is signaled. */
 
-/*     6) SPICE(ORBITDECAY) signals if the scaled orbit radial */
-/*        distance has value less-than 1. */
+/*     6)  If the scaled orbit radial distance has value less than 1, the */
+/*         error SPICE(ORBITDECAY) is signaled. */
 
 /* $ Files */
 
@@ -1429,7 +1452,7 @@ L_xxsgp4e:
 
 /* $ Examples */
 
-/*     Refer to Examples section in ZZSGP4. */
+/*     Refer to $Examples section in ZZSGP4. */
 
 /* $ Restrictions */
 
@@ -1437,39 +1460,46 @@ L_xxsgp4e:
 
 /* $ Literature_References */
 
-/*   [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
-/*       Propagation of the NORAD Element Sets." Spacetrack Report #3. */
-/*       U.S. Air Force: Aerospace Defense Command. */
+/*     [1] Hoots, F. R., and Roehrich, R. L. 1980. "Models for */
+/*         Propagation of the NORAD Element Sets." Spacetrack Report #3. */
+/*         U.S. Air Force: Aerospace Defense Command. */
 
-/*   [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
-/*       of Space Command Element Sets." Space Command, */
-/*       U. S. Air Force, CO. */
+/*     [2] Hoots, Felix R. "Spacetrack Report #6: Models for Propagation */
+/*         of Space Command Element Sets." Space Command, */
+/*         U. S. Air Force, CO. */
 
-/*   [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
-/*       History of Analytical Orbit Modeling in the U. S. Space */
-/*       Surveillance System. Journal of Guidance, Control, and */
-/*       Dynamics. 27(2):174-185. */
+/*     [3] Hoots, Felix R., P. W. Schumacher, and R. A. Glover. 2004. */
+/*         History of Analytical Orbit Modeling in the U. S. Space */
+/*         Surveillance System. Journal of Guidance, Control, and */
+/*         Dynamics. 27(2):174-185. */
 
-/*   [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
-/*       and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
-/*       AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
-/*       Specialist Conference, August 21-24, 2006. Keystone, CO. */
+/*     [4] Vallado, David, Crawford, Paul, Hujsak, Richard, */
+/*         and Kelso, T.S. 2006. Revisiting Spacetrack Report #3. Paper */
+/*         AIAA 2006-6753 presented at the AIAA/AAS Astrodynamics */
+/*         Specialist Conference, August 21-24, 2006. Keystone, CO. */
 
 /* $ Author_and_Institution */
 
-/*     David Vallado   (AGI) */
-/*     E. D. Wright    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, SEP-15-2014 (EDW) */
+/* -    SPICELIB Version 1.1.0, 30-MAY-2021 (BVS) (JDR) */
+
+/*        Added missing 'D' to literal DP constants. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 15-SEP-2014 (EDW) */
 
 /*        Based on routine SGP4, 28-JUN-2005 [4]. */
 
 /* -& */
 /* $ Index_Entries */
 
-/*  SGP4 */
+/*     SGP4 */
 
 /* -& */
 
@@ -1572,7 +1602,7 @@ L_xxsgp4e:
 	chkout_("XXSGP4E", (ftnlen)7);
 	return 0;
     }
-    if (am < .95f) {
+    if (am < .95) {
 	setmsg_("Mean semi-major axis value, #, below allowed minimum of 0.9"
 		"5. This error may indicate a bad TLE set or a decayed orbit.",
 		 (ftnlen)119);

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      LXQSTR ( Lex quoted string ) */
+/* $Procedure LXQSTR ( Lex quoted string ) */
 /* Subroutine */ int lxqstr_(char *string, char *qchar, integer *first, 
 	integer *last, integer *nchar, ftnlen string_len, ftnlen qchar_len)
 {
@@ -21,7 +21,7 @@
 
 /* $ Abstract */
 
-/*     Lex (scan) a quoted string. */
+/*     Scan (lex) a quoted string. */
 
 /* $ Disclaimer */
 
@@ -63,7 +63,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     STRING     I   String to be scanned. */
 /*     QCHAR      I   Quote delimiter character. */
@@ -73,58 +73,58 @@
 
 /* $ Detailed_Input */
 
-/*     STRING         is a character string that may contain a `string */
-/*                    token' starting at the character position */
-/*                    indicated by the input argument FIRST (see below). */
-/*                    String tokens are sequences of characters that */
-/*                    represent literal strings.  Syntactically, a string */
-/*                    token is a sequence of characters that begins and */
-/*                    ends with a designated `quote character'.  Within */
-/*                    the token, any occurrence of the quote character */
-/*                    is indicated by an adjacent pair of quote */
-/*                    characters:  for example, if the quote character is */
+/*     STRING   is a character string that may contain a `string */
+/*              token' starting at the character position */
+/*              indicated by the input argument FIRST (see below). */
+/*              String tokens are sequences of characters that */
+/*              represent literal strings. Syntactically, a string */
+/*              token is a sequence of characters that begins and */
+/*              ends with a designated `quote character'. Within */
+/*              the token, any occurrence of the quote character */
+/*              is indicated by an adjacent pair of quote */
+/*              characters: for example, if the quote character is */
 
-/*                       " */
+/*                 " */
 
-/*                    then the token representing one instance of this */
-/*                    character is */
+/*              then the token representing one instance of this */
+/*              character is */
 
-/*                       """" */
+/*                 """" */
 
-/*                    Here the first quote indicates the beginning of the */
-/*                    token, the next two quotes together indicate a */
-/*                    single quote character that constitutes the */
-/*                    `contents' of the token, and the final quote */
-/*                    indicates the end of the token. */
+/*              Here the first quote indicates the beginning of the */
+/*              token, the next two quotes together indicate a */
+/*              single quote character that constitutes the */
+/*              `contents' of the token, and the final quote */
+/*              indicates the end of the token. */
 
-/*     QCHAR          is the quote character.  This is always a single */
-/*                    character.  The characters */
+/*     QCHAR    is the quote character. This is always a single */
+/*              character. The characters */
 
-/*                       "  and ' */
+/*                 "  and ' */
 
-/*                    are common choices, but any non-blank character is */
-/*                    accepted.  Case *is* significant in QCHAR. */
+/*              are common choices, but any non-blank character is */
+/*              accepted. Case *is* significant in QCHAR. */
 
 
-/*     FIRST          is the character position at which the routine */
-/*                    is to start scanning a quoted string token.  Note */
-/*                    that the character STRING(FIRST:FIRST) must equal */
-/*                    QCHAR if a string token is to be found; this */
-/*                    routine does *not* attempt to locate the first */
-/*                    quoted string following the position FIRST. */
+/*     FIRST    is the character position at which the routine */
+/*              is to start scanning a quoted string token. Note */
+/*              that the character STRING(FIRST:FIRST) must equal */
+/*              QCHAR if a string token is to be found; this */
+/*              routine does *not* attempt to locate the first */
+/*              quoted string following the position FIRST. */
 
 /* $ Detailed_Output */
 
-/*     LAST           is the last character position such that the */
-/*                    subtring STRING(FIRST:LAST) is a quoted string */
-/*                    token, if such a substring exists.  Otherwise, the */
-/*                    returned value of LAST is FIRST-1. */
+/*     LAST     is the last character position such that the */
+/*              substring STRING(FIRST:LAST) is a quoted string */
+/*              token, if such a substring exists. Otherwise, the */
+/*              returned value of LAST is FIRST-1. */
 
-/*     NCHAR          is the length of the string token found by this */
-/*                    routine, if such a token exists.  This length */
-/*                    includes the starting and ending bracketing quotes. */
-/*                    If a string token is not found, the returned value */
-/*                    of NCHAR is zero. */
+/*     NCHAR    is the length of the string token found by this */
+/*              routine, if such a token exists. This length */
+/*              includes the starting and ending bracketing quotes. */
+/*              If a string token is not found, the returned value */
+/*              of NCHAR is zero. */
 
 /* $ Parameters */
 
@@ -134,17 +134,17 @@
 
 /*     Error free. */
 
-/*     1) If the input argument FIRST is less than 1 or greater than */
-/*        LEN(STRING)-1, the returned value of LAST is FIRST-1, and the */
-/*        returned value of NCHAR is zero. */
+/*     1)  If the input argument FIRST is less than 1 or greater than */
+/*         LEN(STRING)-1, the returned value of LAST is FIRST-1, and the */
+/*         returned value of NCHAR is zero. */
 
-/*     2) It is not an error for a quoted string token to consist of */
-/*        two consecutive quote characters with no intervening */
-/*        characters.  Calling routines that require special treatment */
-/*        of null tokens must handle this case. */
+/*     2)  It is not an error for a quoted string token to consist of */
+/*         two consecutive quote characters with no intervening */
+/*         characters. Calling routines that require special treatment */
+/*         of null tokens must handle this case. */
 
-/*     3) If the input argument QCHAR is blank, the returned value of */
-/*        LAST is FIRST-1, and the returned value of NCHAR is zero. */
+/*     3)  If the input argument QCHAR is blank, the returned value of */
+/*         LAST is FIRST-1, and the returned value of NCHAR is zero. */
 
 /* $ Files */
 
@@ -152,12 +152,12 @@
 
 /* $ Particulars */
 
-/*     Quote characters may be ANY non-blank character.  For example, the */
+/*     Quote characters may be ANY non-blank character. For example, the */
 /*     ampersand */
 
 /*        & */
 
-/*     is a perfectly valid quote character.  If we were using the */
+/*     is a perfectly valid quote character. If we were using the */
 /*     ampersand as the quote character, then the term `doubled quote' */
 /*     in the following discussion would refer to the sequence */
 
@@ -168,10 +168,10 @@
 /*        " */
 
 /*     The string tokens identified by this routine are Fortran-style */
-/*     quoted strings:  they start and end with quote characters.  In the */
+/*     quoted strings: they start and end with quote characters. In the */
 /*     interior of any such token, any quote characters are represented */
-/*     by doubled quote characters.  These rules imply that the number of */
-/*     quote characters in a quoted string token is always even.  The end */
+/*     by doubled quote characters. These rules imply that the number of */
+/*     quote characters in a quoted string token is always even. The end */
 /*     of a quoted string token is located at the first even-numbered */
 /*     quote character, counting from the initial quote character, that */
 /*     is  not the first member of a pair of quotes indicating an */
@@ -181,7 +181,7 @@
 /*     the SPICELIB subroutine PARSQS (String parse, quoted).  PARSQS */
 /*     removes the bracketing quotes from a quoted string token and */
 /*     converts each doubled quote between the bracketing quotes to a */
-/*     single quote.  For example, the token */
+/*     single quote. For example, the token */
 
 /*        """" */
 
@@ -217,8 +217,15 @@
 /* $ Author_and_Institution */
 
 /*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 25-FEB-2002 (NJB) */
 

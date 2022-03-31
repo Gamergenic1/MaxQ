@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure   LTRIM ( Left trim ) */
+/* $Procedure LTRIM ( Left trim ) */
 integer ltrim_(char *string, ftnlen string_len)
 {
     /* System generated locals */
@@ -56,7 +56,7 @@ integer ltrim_(char *string, ftnlen string_len)
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 
 /*     STRING     I   String to be trimmed. */
@@ -66,8 +66,8 @@ integer ltrim_(char *string, ftnlen string_len)
 
 /* $ Detailed_Input */
 
-/*     STRING         is a string to be trimmed:  the location of the */
-/*                    first non-blank character is desired. */
+/*     STRING   is a string to be trimmed: the location of the */
+/*              first non-blank character is desired. */
 
 /* $ Detailed_Output */
 
@@ -81,18 +81,18 @@ integer ltrim_(char *string, ftnlen string_len)
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
 
 /*     Error free. */
 
+/* $ Files */
+
+/*     None. */
+
 /* $ Particulars */
 
 /*     When writing a character string to a file, we may wish to omit */
-/*     leading blanks.  We'd like to use FRSTNB as a lower substring */
+/*     leading blanks. We'd like to use FRSTNB as a lower substring */
 /*     bound, but we have to handle the case where FRSTNB returns 0, */
 /*     so we write: */
 
@@ -133,16 +133,24 @@ integer ltrim_(char *string, ftnlen string_len)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 02-MAY-1990  (NJB) */
+/* -    SPICELIB Version 1.0.0, 02-MAY-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */

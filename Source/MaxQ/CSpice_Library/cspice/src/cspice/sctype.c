@@ -5,43 +5,16 @@
 
 #include "f2c.h"
 
-/* Table of constant values */
-
-static integer c__0 = 0;
-static integer c__1 = 1;
-
-/* $Procedure      SCTYPE ( SCLK type ) */
+/* $Procedure SCTYPE ( SCLK type ) */
 integer sctype_(integer *sc)
 {
-    /* Initialized data */
-
-    static logical first = TRUE_;
-    static logical nodata = TRUE_;
-    static integer oldsc = 0;
-
     /* System generated locals */
-    integer ret_val, i__1;
-
-    /* Builtin functions */
-    /* Subroutine */ int s_copy(char *, char *, ftnlen, ftnlen);
+    integer ret_val;
 
     /* Local variables */
-    static integer type__;
-    extern /* Subroutine */ int zzcvpool_(char *, integer *, logical *, 
-	    ftnlen), zzctruin_(integer *);
-    integer n;
-    extern /* Subroutine */ int scli01_(char *, integer *, integer *, integer 
-	    *, integer *, ftnlen), chkin_(char *, ftnlen), repmi_(char *, 
-	    char *, integer *, char *, ftnlen, ftnlen, ftnlen);
-    extern logical failed_(void);
-    char kvname[60];
-    logical update;
-    extern /* Subroutine */ int chkout_(char *, ftnlen), suffix_(char *, 
-	    integer *, char *, ftnlen, ftnlen);
+    extern /* Subroutine */ int chkin_(char *, ftnlen), scty01_(integer *, 
+	    integer *), chkout_(char *, ftnlen);
     extern logical return_(void);
-    static integer usrctr[2];
-    extern /* Subroutine */ int swpool_(char *, integer *, char *, ftnlen, 
-	    ftnlen);
 
 /* $ Abstract */
 
@@ -136,22 +109,22 @@ integer sctype_(integer *sc)
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SC         I   NAIF spacecraft ID code. */
 
-/*     The function returns the spacecraft clock type associated with the */
-/*     spacecraft specified by SC. */
+/*     The function returns the spacecraft clock type associated with */
+/*     the spacecraft specified by SC. */
 
 /* $ Detailed_Input */
 
-/*     SC             is a NAIF ID code for a spacecraft, whose */
-/*                    spacecraft clock `type' is desired. */
+/*     SC       is a NAIF ID code for a spacecraft, whose */
+/*              spacecraft clock `type' is desired. */
 
 /* $ Detailed_Output */
 
-/*     The function returns the spacecraft clock type associated with the */
-/*     spacecraft specified by SC. */
+/*     The function returns the spacecraft clock type associated with */
+/*     the spacecraft specified by SC. */
 
 /* $ Parameters */
 
@@ -160,9 +133,9 @@ integer sctype_(integer *sc)
 /* $ Exceptions */
 
 /*     1)  If the kernel variable that assigns a SCLK type to the */
-/*         spacecraft specified by SC is not found in the kernel pool, */
-/*         the error is diagnosed by routines called by this routine. */
-/*         SCTYPE returns the value 0 in this case. */
+/*         spacecraft specified by SC is not found in the kernel pool, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. SCTYPE returns the value 0 in this case. */
 
 /* $ Files */
 
@@ -171,7 +144,7 @@ integer sctype_(integer *sc)
 /* $ Particulars */
 
 /*     The raison d'etre of this routine is that it consolidates the code */
-/*     that maps spacecraft ID's to clock types.  While any routine may */
+/*     that maps spacecraft ID's to clock types. While any routine may */
 /*     call SCTYPE, it is unlikely that there will be a need for */
 /*     non-SPICELIB routines to call this routine directly. */
 
@@ -180,8 +153,8 @@ integer sctype_(integer *sc)
 /*     1)  Find the SCLK type for Galileo. */
 
 /*            During program initialization, we load a SCLK kernel file */
-/*            into the kernel pool.  We will pretend that the name of */
-/*            this file is GLLSCLK.KER.  You must use the actual name of */
+/*            into the kernel pool. We will pretend that the name of */
+/*            this file is GLLSCLK.KER. You must use the actual name of */
 /*            an SCLK kernel that is accessible by your program to try */
 /*            this example. */
 
@@ -219,8 +192,9 @@ integer sctype_(integer *sc)
 
 /* $ Restrictions */
 
-/*     This routine assumes that an SCLK kernel appropriate to the */
-/*     spacecraft specified by SC has been loaded into the kernel pool. */
+/*     1)  This routine assumes that an SCLK kernel appropriate to the */
+/*         spacecraft specified by SC has been loaded into the kernel */
+/*         pool. */
 
 /* $ Literature_References */
 
@@ -228,11 +202,22 @@ integer sctype_(integer *sc)
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     J.M. Lynch     (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.0, 12-AUG-2021 (NJB) (JDR) */
+
+/*        Re-implemented using the type 1 SCLK database in order to */
+/*        improve performance. The routine still works as before for */
+/*        clock types other than 1. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.3.0, 09-SEP-2013 (BVS) */
 
@@ -254,7 +239,7 @@ integer sctype_(integer *sc)
 /*        1) The routine now uses the kernel pool watch capability. */
 
 /*        2) The routine now returns a value of zero if RETURN is */
-/*           true on entry. */
+/*           .TRUE. on entry. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -273,18 +258,6 @@ integer sctype_(integer *sc)
 /*     SPICELIB functions */
 
 
-/*     Local parameters */
-
-
-/*     Local variables */
-
-
-/*     Saved variables */
-
-
-/*     Initial values */
-
-
 /*     Standard SPICE error handling. */
 
     if (return_()) {
@@ -293,53 +266,9 @@ integer sctype_(integer *sc)
     }
     chkin_("SCTYPE", (ftnlen)6);
 
-/*     On the first pass through the subroutine, or if the spacecraft */
-/*     ID code changes, set a watch on the SCLK kernel variable for */
-/*     the current clock type. */
+/*     Get the type from the type 1 subsystem. */
 
-    if (first || *sc != oldsc) {
-
-/*        Construct the name of the kernel variable that is needed. */
-
-	s_copy(kvname, "SCLK_DATA_TYPE", (ftnlen)60, (ftnlen)14);
-	suffix_("_#", &c__0, kvname, (ftnlen)2, (ftnlen)60);
-	i__1 = -(*sc);
-	repmi_(kvname, "#", &i__1, kvname, (ftnlen)60, (ftnlen)1, (ftnlen)60);
-
-/*        Set a watch on the kernel variable needed. */
-
-	swpool_("SCTYPE", &c__1, kvname, (ftnlen)6, (ftnlen)60);
-
-/*        Keep track of the last spacecraft ID encountered. */
-
-	oldsc = *sc;
-
-/*        Initialize the local POOL counter to user value. */
-
-	zzctruin_(usrctr);
-	first = FALSE_;
-    }
-
-/*     If the kernel pool variable that this routine uses has */
-/*     been updated, or if the spacecraft id code changes, look */
-/*     up the new value from the kernel pool. */
-
-    zzcvpool_("SCTYPE", usrctr, &update, (ftnlen)6);
-    if (update || nodata) {
-
-/*        Find the clock type for the specified mission. */
-
-	type__ = 0;
-	scli01_("SCLK_DATA_TYPE", sc, &c__1, &n, &type__, (ftnlen)14);
-	if (failed_()) {
-	    nodata = TRUE_;
-	    ret_val = 0;
-	    chkout_("SCTYPE", (ftnlen)6);
-	    return ret_val;
-	}
-	nodata = FALSE_;
-    }
-    ret_val = type__;
+    scty01_(sc, &ret_val);
     chkout_("SCTYPE", (ftnlen)6);
     return ret_val;
 } /* sctype_ */

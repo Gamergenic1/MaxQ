@@ -66,7 +66,7 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle of an open DAF file. */
 /*     ND         O   Number of double precision components in summaries. */
@@ -78,48 +78,49 @@
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle assigned to a DAF file opened for */
-/*                 reading. */
+/*     HANDLE   is the handle assigned to a DAF file opened for */
+/*              reading. */
 
 /* $ Detailed_Output */
 
 /*     ND, */
-/*     NI          are the numbers of double precision and integer */
-/*                 components, respectively, in each array summary in */
-/*                 the specified file. */
+/*     NI       are the numbers of double precision and integer */
+/*              components, respectively, in each array summary in */
+/*              the specified file. */
 
-/*     IFNAME      is the internal file name stored in the first */
-/*                 (or file) record of the specified file. */
+/*     IFNAME   is the internal file name stored in the first */
+/*              (or file) record of the specified file. */
 
-/*     FWARD       is the forward list pointer. This points to the */
-/*                 first summary record in the file. (Records between */
-/*                 the first record and the first summary record are */
-/*                 reserved when the file is created, and are invisible */
-/*                 to DAF routines.) */
+/*     FWARD    is the forward list pointer. This points to the */
+/*              first summary record in the file. (Records between */
+/*              the first record and the first summary record are */
+/*              reserved when the file is created, and are invisible */
+/*              to DAF routines.) */
 
-/*     BWARD       is the backward list pointer. This points */
-/*                 to the final summary record in the file. */
+/*     BWARD    is the backward list pointer. This points */
+/*              to the final summary record in the file. */
 
-/*     FREE        is the free address pointer. This contains the */
-/*                 first free address in the file. (That is, the */
-/*                 initial address of the next array to be added */
-/*                 to the file.) */
+/*     FREE     is the free address pointer. This contains the */
+/*              first free address in the file. (That is, the */
+/*              initial address of the next array to be added */
+/*              to the file.) */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the handle passed to this routine is not the handle of an */
-/*        open DAF file, the error will be signaled by a routine called */
-/*        by this routine. */
+/*     1)  If the handle passed to this routine is not the handle of an */
+/*         open DAF file, an error is signaled by a routine in the call */
+/*         tree of this routine. */
 
-/*     2) If the specified DAF file is not open for read access, the */
-/*        error will be diagnosed by a routine called by this routine. */
+/*     2)  If the specified DAF file is not open for read access, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
-/*     3) If the specified record cannot (for some reason) be read, */
-/*        the error SPICE(DAFFRNOTFOUND) is signaled. */
+/*     3)  If the specified record cannot (for some reason) be read, */
+/*         the error SPICE(DAFFRNOTFOUND) is signaled. */
 
 /* $ Files */
 
@@ -155,15 +156,25 @@
 
 /* $ Literature_References */
 
-/*     NAIF Document 167.0, "Double Precision Array Files (DAF) */
-/*     Specification and User's Guide" */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer  (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
+/*     I.M. Underwood     (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.2.0, 02-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 3.1.0, 30-DEC-2009 (EDW) */
 
@@ -171,7 +182,7 @@
 /*        handle corresponding to the error condition. */
 
 /*        Reordered header sections to conform to SPICE format. */
-/*        Merged the Revisions sections, now deleted, with Version. */
+/*        Merged the $Revisions sections, now deleted, with $Version. */
 
 /* -    SPICELIB Version 3.0.0, 16-NOV-2001 (FST) */
 
@@ -179,11 +190,11 @@
 /*        the new handle manager to perform I/O operations. */
 
 /*        This routine now utilizes ZZDAFGFR to retrieve information */
-/*        from the file record.  As this private interface takes a */
+/*        from the file record. As this private interface takes a */
 /*        handle and performs the necessary logical unit to handle */
-/*        mapping, the call to DAFHLU was removed.  The DAFSIH call */
+/*        mapping, the call to DAFHLU was removed. The DAFSIH call */
 /*        remains, since this insures that HANDLE is known to DAFAH. */
-/* C */
+
 /* -    SPICELIB Version 2.0.0, 04-OCT-1993 (KRG) */
 
 /*        The error SPICE(DAFNOIDWORD) is no longer signaled by this */
@@ -199,15 +210,15 @@
 
 /*        The variable name DAFWRD was changed to IDWORD. */
 
-/*        Added two new exceptions to the $ Exceptions section: 1 and 2. */
+/*        Added two new exceptions to the $Exceptions section: 1 and 2. */
 /*        The remaining exception (3) was already present. The exceptions */
 /*        that were added are not new, but are being documented for the */
 /*        first time. */
 
 
-/* -    SPICELIB Version 1.0.3, 6-OCT-1992 (HAN) */
+/* -    SPICELIB Version 1.0.3, 06-OCT-1992 (HAN) */
 
-/*        Corrected a typo in the Brief_I/O section. ND was listed */
+/*        Corrected a typo in the $Brief_I/O section. ND was listed */
 /*        twice as an input, and NI was not listed. */
 
 /* -    SPICELIB Version 1.0.2, 10-MAR-1992 (WLT) */
@@ -224,7 +235,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     read daf file record */
+/*     read DAF file record */
 
 /* -& */
 

@@ -11,7 +11,7 @@ static integer c__3 = 3;
 static integer c__256 = 256;
 static integer c__2 = 2;
 
-/* $Procedure      DASCUD ( DAS, create or update directories ) */
+/* $Procedure DASCUD ( DAS, create or update directories ) */
 /* Subroutine */ int dascud_(integer *handle, integer *type__, integer *
 	nwords)
 {
@@ -93,7 +93,7 @@ static integer c__2 = 2;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   DAS file handle. */
 /*     TYPE       I   Data type specifier. */
@@ -104,47 +104,47 @@ static integer c__2 = 2;
 
 /* $ Detailed_Input */
 
-/*     HANDLE         is the file handle of a DAS file open for writing. */
+/*     HANDLE   is the file handle of a DAS file open for writing. */
 
-/*     TYPE           is a data type specifier.  TYPE may be any of */
-/*                    the parameters */
+/*     TYPE     is a data type specifier. TYPE may be any of */
+/*              the parameters */
 
-/*                       CHAR */
-/*                       DP */
-/*                       INT */
+/*                 CHAR */
+/*                 DP */
+/*                 INT */
 
-/*                    which indicate `character', `double precision', */
-/*                    and `integer' respectively. */
+/*              which indicate `character', `double precision', */
+/*              and `integer' respectively. */
 
-/*     NWORDS         is the number of words of data of the data type */
-/*                    indicated by TYPE whose addition to the indicated */
-/*                    DAS file is to be accounted for. */
+/*     NWORDS   is the number of words of data of the data type */
+/*              indicated by TYPE whose addition to the indicated */
+/*              DAS file is to be accounted for. */
 
 /* $ Detailed_Output */
 
-/*     None.          See $Particulars for a description of the action */
-/*                    of this routine. */
+/*     None. See $Particulars for a description of the action of this */
+/*     routine. */
 
 /* $ Parameters */
 
 /*     CHAR, */
 /*     DP, */
-/*     INT            are data type specifiers which indicate */
-/*                    `character', `double precision', and `integer' */
-/*                    respectively.  These parameters are used in */
-/*                    all DAS routines that require a data type */
-/*                    specifier as input. */
+/*     INT      are data type specifiers which indicate */
+/*              `character', `double precision', and `integer' */
+/*              respectively. These parameters are used in */
+/*              all DAS routines that require a data type */
+/*              specifier as input. */
 
 /* $ Exceptions */
 
-/*     1)  If the input handle is invalid, the error will be diagnosed */
-/*         by routines called by this routine. */
+/*     1)  If the input handle is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  If TYPE is not recognized, the error SPICE(DASINVALIDTYPE) */
-/*         will be signalled. */
+/*         is signaled. */
 
-/*     3)  If NWORDS is negative, the error SPICE(VALUEOUTOFRANGE) will */
-/*         be signalled. */
+/*     3)  If NWORDS is negative, the error SPICE(VALUEOUTOFRANGE) is */
+/*         signaled. */
 
 /* $ Files */
 
@@ -152,7 +152,7 @@ static integer c__2 = 2;
 
 /* $ Particulars */
 
-/*     This routine operates by side effects:  the directories in the */
+/*     This routine operates by side effects: the directories in the */
 /*     indicated DAS file will be updated to reflect the addition of */
 /*     the indicated number of words of the specified data type. */
 /*     If necessary, a new directory record will be added to the file */
@@ -163,12 +163,12 @@ static integer c__2 = 2;
 /*     logical address of the indicated type, as well as with the new */
 /*     value of the free record pointer. */
 
-/*     This routine is used by the DASADx routines:  after each data */
+/*     This routine is used by the DASADx routines: after each data */
 /*     addition, they call this routine to update the directories of the */
 /*     affected DAS file. */
 
 /*     Normally, there will be no need for routines outside of SPICELIB */
-/*     to call this routine directly.  To add data to or update a DAS */
+/*     to call this routine directly. To add data to or update a DAS */
 /*     file, the DASADx and DASUDx routines should be used; these */
 /*     routines take care of directory creation and updates. */
 
@@ -191,37 +191,44 @@ static integer c__2 = 2;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
 
-/* -    SPICELIB Version 1.4.0 07-AUG-2006 (NJB) */
+/* -    SPICELIB Version 1.5.0, 13-AUG-2021 (JDR) */
 
-/*        Bug fix:  added intialization of variable LTYPE to support */
-/*                  operation under the Macintosh Intel Fortran */
-/*                  compiler. Note that this bug did not affect */
-/*                  operation of this routine on other platforms. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -    SPICELIB Version 1.3.0 16-JAN-2003 (NJB) */
+/*        Edited the header to comply with NAIF standard. */
 
-/*        Bug fix:  fixed previous bug fix. */
+/* -    SPICELIB Version 1.4.0, 07-AUG-2006 (NJB) */
 
-/* -    SPICELIB Version 1.2.0 10-DEC-2002 (NJB) */
+/*        Bug fix: added initialization of variable LTYPE to support */
+/*                 operation under the Macintosh Intel Fortran */
+/*                 compiler. Note that this bug did not affect */
+/*                 operation of this routine on other platforms. */
 
-/*        Bug fix:  now a new, empty directory record with valid */
+/* -    SPICELIB Version 1.3.0, 16-JAN-2003 (NJB) */
+
+/*        Bug fix: fixed previous bug fix. */
+
+/* -    SPICELIB Version 1.2.0, 10-DEC-2002 (NJB) */
+
+/*        Bug fix: now a new, empty directory record with valid */
 /*        backward and forward pointers is written immediately */
 /*        when it is created. */
 
-/* -    SPICELIB Version 1.1.1 19-DEC-1995 (NJB) */
+/* -    SPICELIB Version 1.1.1, 19-DEC-1995 (NJB) */
 
 /*        Corrected title of permuted index entry section. */
 
 /* -    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -239,12 +246,12 @@ static integer c__2 = 2;
 
 /* -    SPICELIB Version 1.4.0 07-AUG-2006 (NJB) */
 
-/*        Bug fix:  added intialization of variable LTYPE to support */
-/*                  operation under the Macintosh Intel Fortran */
-/*                  compiler. Note that this bug did not affect */
-/*                  operation of this routine on other platforms. The */
-/*                  statement referencing the uninitialized variable */
-/*                  was: */
+/*        Bug fix: added initialization of variable LTYPE to support */
+/*                 operation under the Macintosh Intel Fortran */
+/*                 compiler. Note that this bug did not affect */
+/*                 operation of this routine on other platforms. The */
+/*                 statement referencing the uninitialized variable */
+/*                 was: */
 
 /*           ELSE IF (       ( TYPE   .EQ. LTYPE ) */
 /*          .          .AND. ( DSCREC .GT. 0     ) */
@@ -253,20 +260,20 @@ static integer c__2 = 2;
 
 /*        In the previous version of the code, LTYPE is uninitialized */
 /*        when the DAS file is empty, which implies DSCREC is 0. */
-/*        Otherwise LTYPE is initialized.  So the value of the logical */
+/*        Otherwise LTYPE is initialized. So the value of the logical */
 /*        expression is not affected by the uninitialized value of */
 /*        LTYPE. */
 
 /*        However, the Intel Fortran compiler for the Mac flags a runtime */
-/*        error when the above code is exercised.  So LTYPE is now */
+/*        error when the above code is exercised. So LTYPE is now */
 /*        initialized to an invalid value prior to execution of this */
-/*        code.  If the invalid value is ever used, a runtime error */
+/*        code. If the invalid value is ever used, a runtime error */
 /*        should result. */
 
 
 /* -    SPICELIB Version 1.3.0 16-JAN-2003 (NJB) */
 
-/*        Bug fix:  fixed previous bug fix. */
+/*        Bug fix: fixed previous bug fix. */
 
 
 /*        The offending line (#778) in previous version) of code is: */
@@ -280,15 +287,15 @@ static integer c__2 = 2;
 
 /* -    SPICELIB Version 1.2.0 10-DEC-2002 (NJB) */
 
-/*        Bug fix:  now a new, empty directory record with valid */
+/*        Bug fix: now a new, empty directory record with valid */
 /*        backward and forward pointers is written immediately */
-/*        when it is created.  This prevents an unsegregated file */
+/*        when it is created. This prevents an unsegregated file */
 /*        from being left with an invalid forward pointer. */
 
 /* -    SPICELIB Version 1.0.1, 26-OCT-1993 (KRG) */
 
 /*        Removed references to specific DAS file open routines in the */
-/*        $ Detailed_Input section of the header. This was done in order */
+/*        $Detailed_Input section of the header. This was done in order */
 /*        to minimize documentation changes if the DAS open routines ever */
 /*        change. */
 
@@ -464,9 +471,9 @@ static integer c__2 = 2;
 
 
     last = lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("las"
-	    "tla", i__1, "dascud_", (ftnlen)513)];
+	    "tla", i__1, "dascud_", (ftnlen)525)];
     dscrec = lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-	    "lastrc", i__1, "dascud_", (ftnlen)514)];
+	    "lastrc", i__1, "dascud_", (ftnlen)526)];
     if (*type__ == 2) {
 	nw = 128;
 	rngloc = 5;
@@ -503,11 +510,11 @@ static integer c__2 = 2;
     ltype = 0;
     for (i__ = 1; i__ <= 3; ++i__) {
 	if (lastrc[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastrc",
-		 i__1, "dascud_", (ftnlen)565)] == lrec && lastwd[(i__2 = i__ 
+		 i__1, "dascud_", (ftnlen)577)] == lrec && lastwd[(i__2 = i__ 
 		- 1) < 3 && 0 <= i__2 ? i__2 : s_rnge("lastwd", i__2, "dascu"
-		"d_", (ftnlen)565)] > lword) {
+		"d_", (ftnlen)577)] > lword) {
 	    lword = lastwd[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)568)];
+		    "lastwd", i__1, "dascud_", (ftnlen)580)];
 	    ltype = i__;
 	}
     }
@@ -553,7 +560,7 @@ static integer c__2 = 2;
 /*        The last logical address of TYPE is now MAXADR. */
 
 	lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastla",
-		 i__1, "dascud_", (ftnlen)621)] = maxadr;
+		 i__1, "dascud_", (ftnlen)633)] = maxadr;
 
 /*        Write out the updated file summary. */
 
@@ -595,7 +602,7 @@ static integer c__2 = 2;
 /*        free record follows the last data record in use. */
 
 	lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("lastla",
-		 i__1, "dascud_", (ftnlen)678)] = maxadr;
+		 i__1, "dascud_", (ftnlen)690)] = maxadr;
 	free += needed;
 
 /*        Write out the updated file summary. */
@@ -627,9 +634,9 @@ static integer c__2 = 2;
 /*           directory. */
 
 	    dirrec[(i__1 = rngloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dirrec", i__1, "dascud_", (ftnlen)723)] = 1;
+		    "dirrec", i__1, "dascud_", (ftnlen)735)] = 1;
 	    dirrec[(i__1 = rngloc) < 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec"
-		    , i__1, "dascud_", (ftnlen)724)] = *nwords;
+		    , i__1, "dascud_", (ftnlen)736)] = *nwords;
 
 /*           Write out this directory. */
 
@@ -645,11 +652,11 @@ static integer c__2 = 2;
 
 	    free = recno + needed + 1;
 	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastla", i__1, "dascud_", (ftnlen)741)] = *nwords;
+		    "lastla", i__1, "dascud_", (ftnlen)753)] = *nwords;
 	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastrc", i__1, "dascud_", (ftnlen)742)] = recno;
+		    "lastrc", i__1, "dascud_", (ftnlen)754)] = recno;
 	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)743)] = 10;
+		    "lastwd", i__1, "dascud_", (ftnlen)755)] = 10;
 	    dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, 
 		    lastrc, lastwd);
 	} else if (lword < 256) {
@@ -683,7 +690,7 @@ static integer c__2 = 2;
 /*           the current last descriptor. */
 
 	    if (*type__ == next[(i__1 = ltype - 1) < 3 && 0 <= i__1 ? i__1 : 
-		    s_rnge("next", i__1, "dascud_", (ftnlen)789)]) {
+		    s_rnge("next", i__1, "dascud_", (ftnlen)801)]) {
 
 /*              TYPE is the successor in the type sequence of the type */
 /*              of the previous descriptor; use a positive count. */
@@ -717,11 +724,11 @@ static integer c__2 = 2;
 
 	    free += needed;
 	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastla", i__1, "dascud_", (ftnlen)829)] = last + *nwords;
+		    "lastla", i__1, "dascud_", (ftnlen)841)] = last + *nwords;
 	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastrc", i__1, "dascud_", (ftnlen)830)] = lrec;
+		    "lastrc", i__1, "dascud_", (ftnlen)842)] = lrec;
 	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)831)] = lword + 1;
+		    "lastwd", i__1, "dascud_", (ftnlen)843)] = lword + 1;
 
 /*           Before writing out the summary, see whether we'll need */
 /*           a new directory; this will decide whether the first free */
@@ -795,10 +802,10 @@ static integer c__2 = 2;
 
 	    dirrec[0] = lrec;
 	    dirrec[(i__1 = rngloc - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		    "dirrec", i__1, "dascud_", (ftnlen)925)] = last + room + 
+		    "dirrec", i__1, "dascud_", (ftnlen)937)] = last + room + 
 		    1;
 	    dirrec[(i__1 = rngloc) < 256 && 0 <= i__1 ? i__1 : s_rnge("dirrec"
-		    , i__1, "dascud_", (ftnlen)926)] = last + *nwords;
+		    , i__1, "dascud_", (ftnlen)938)] = last + *nwords;
 	    dirrec[8] = *type__;
 	    dirrec[9] = needed;
 
@@ -813,11 +820,11 @@ static integer c__2 = 2;
 
 	    free += needed;
 	    lastla[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastla", i__1, "dascud_", (ftnlen)943)] = last + *nwords;
+		    "lastla", i__1, "dascud_", (ftnlen)955)] = last + *nwords;
 	    lastrc[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastrc", i__1, "dascud_", (ftnlen)944)] = recno;
+		    "lastrc", i__1, "dascud_", (ftnlen)956)] = recno;
 	    lastwd[(i__1 = *type__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge(
-		    "lastwd", i__1, "dascud_", (ftnlen)945)] = 10;
+		    "lastwd", i__1, "dascud_", (ftnlen)957)] = 10;
 	    dasufs_(handle, &nresvr, &nresvc, &ncomr, &ncomc, &free, lastla, 
 		    lastrc, lastwd);
 	}

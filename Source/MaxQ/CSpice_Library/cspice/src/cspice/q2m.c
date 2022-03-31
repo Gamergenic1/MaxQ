@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      Q2M ( Quaternion to matrix ) */
+/* $Procedure Q2M ( Quaternion to matrix ) */
 /* Subroutine */ int q2m_(doublereal *q, doublereal *r__)
 {
     doublereal l2, q01, q02, q03, q12, q13, q23, sharpn, q1s, q2s, q3s;
@@ -53,27 +53,27 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     Q          I   A unit quaternion. */
 /*     R          O   A rotation matrix corresponding to Q. */
 
 /* $ Detailed_Input */
 
-/*     Q              is a unit-length SPICE-style quaternion. Q has the */
-/*                    property that */
+/*     Q        is a unit-length SPICE-style quaternion. Q has the */
+/*              property that */
 
-/*                       || Q ||  =  1 */
+/*                 || Q ||  =  1 */
 
-/*                    See the discussion of quaternion styles in */
-/*                    Particulars below. */
+/*              See the discussion of quaternion styles in */
+/*              $Particulars below. */
 
 /* $ Detailed_Output */
 
-/*     R              is a 3 by 3 rotation matrix representing the same */
-/*                    rotation as does Q. See the discussion titled */
-/*                    "Associating SPICE Quaternions with Rotation */
-/*                    Matrices" in Particulars below. */
+/*     R        is a 3 by 3 rotation matrix representing the same */
+/*              rotation as does Q. See the discussion titled */
+/*              "Associating SPICE Quaternions with Rotation */
+/*              Matrices" in $Particulars below. */
 
 /* $ Parameters */
 
@@ -83,12 +83,12 @@
 
 /*     Error free. */
 
-/*     1) If Q is not a unit quaternion, the output matrix M is */
-/*        the rotation matrix that is the result of converting */
-/*        normalized Q to a rotation matrix. */
+/*     1)  If Q is not a unit quaternion, the output matrix R is */
+/*         the rotation matrix that is the result of converting */
+/*         normalized Q to a rotation matrix. */
 
-/*     2) If Q is the zero quaternion, the output matrix M is */
-/*        the identity matrix. */
+/*     2)  If Q is the zero quaternion, the output matrix R is */
+/*         the identity matrix. */
 
 /* $ Files */
 
@@ -110,8 +110,8 @@
 /*        Q = ( cos(r/2), sin(r/2)A(1), sin(r/2)A(2), sin(r/2)A(3) ). */
 
 /*     We can interpret A and r as the axis and rotation angle of a */
-/*     rotation in 3-space.  If we restrict r to the range [0, pi], */
-/*     then r and A are uniquely determined, except if r = pi.  In this */
+/*     rotation in 3-space. If we restrict r to the range [0, pi], */
+/*     then r and A are uniquely determined, except if r = pi. In this */
 /*     special case, A and -A are both valid rotation axes. */
 
 /*     Every rotation is represented by a unique orthogonal matrix; this */
@@ -123,7 +123,7 @@
 /*        CALL M2Q ( R, Q ) */
 /*        CALL Q2M ( Q, R ) */
 
-/*     leave R unchanged, except for round-off error.  However, the */
+/*     leave R unchanged, except for round-off error. However, the */
 /*     calls */
 
 /*        CALL Q2M ( Q, R ) */
@@ -139,12 +139,12 @@
 /*     science and engineering applications. Quaternion styles */
 /*     are characterized by */
 
-/*        - The order of quaternion elements */
+/*     -  The order of quaternion elements */
 
-/*        - The quaternion multiplication formula */
+/*     -  The quaternion multiplication formula */
 
-/*        - The convention for associating quaternions */
-/*          with rotation matrices */
+/*     -  The convention for associating quaternions */
+/*        with rotation matrices */
 
 /*     Two of the commonly used styles are */
 
@@ -224,7 +224,7 @@
 
 /*     the elements of M are derived from the elements of q as follows: */
 
-/*          +-                                                         -+ */
+/*          .-                                                         -. */
 /*          |           2    2                                          | */
 /*          | 1 - 2*( q2 + q3 )   2*(q1*q2 - q0*q3)   2*(q1*q3 + q0*q2) | */
 /*          |                                                           | */
@@ -236,7 +236,7 @@
 /*          |                                                   2    2  | */
 /*          | 2*(q1*q3 - q0*q2)   2*(q2*q3 + q0*q1)   1 - 2*( q1 + q2 ) | */
 /*          |                                                           | */
-/*          +-                                                         -+ */
+/*          `-                                                         -. */
 
 /*     Note that substituting the elements of -q for those of q in the */
 /*     right hand side leaves each element of M unchanged; this shows */
@@ -255,16 +255,16 @@
 
 /*     OMEGA is a skew-symmetric matrix of the form */
 
-/*                   +-             -+ */
+/*                   .-             -. */
 /*                   |  0   -n3   n2 | */
 /*                   |               | */
 /*         OMEGA  =  |  n3   0   -n1 | */
 /*                   |               | */
 /*                   | -n2   n1   0  | */
-/*                   +-             -+ */
+/*                   `-             -' */
 
 /*     The vector N of matrix entries (n1, n2, n3) is the rotation axis */
-/*     of M and theta is M's rotation angle.  Note that N and theta */
+/*     of M and theta is M's rotation angle. Note that N and theta */
 /*     are not unique. */
 
 /*     Let */
@@ -329,7 +329,6 @@
 
 /*        M1*M2 */
 
-
 /* $ Examples */
 
 /*     1)  A case amenable to checking by hand calculation: */
@@ -389,7 +388,7 @@
 /*               A = ( 0, 0, -1 ). */
 
 /*            So Q represents a transformation that rotates vectors by */
-/*            pi/2 about the negative z-axis.  This is equivalent to a */
+/*            pi/2 about the negative z-axis. This is equivalent to a */
 /*            coordinate system rotation of pi/2 about the positive */
 /*            z-axis; and we recognize R as the matrix */
 
@@ -401,7 +400,7 @@
 /*         specified by a quaternion: */
 
 /*            Suppose our rotation R is represented by the quaternion */
-/*            Q.  To find angles TAU, ALPHA, DELTA such that */
+/*            Q. To find angles TAU, ALPHA, DELTA such that */
 
 
 /*               R  =  [ TAU ]  [ pi/2 - DELTA ]  [ ALPHA ] , */
@@ -423,16 +422,23 @@
 
 /* $ Literature_References */
 
-/*     [1]    NAIF document 179.0, "Rotations and their Habits", by */
-/*            W. L. Taber. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     W.L. Taber     (JPL) */
-/*     F.S. Turner    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 12-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Corrected the */
+/*        output argument name in $Exceptions section. */
 
 /* -    SPICELIB Version 1.1.2, 26-FEB-2008 (NJB) */
 
@@ -441,7 +447,7 @@
 
 /* -    SPICELIB Version 1.1.1, 13-JUN-2002 (FST) */
 
-/*        Updated the Exceptions section to clarify exceptions that */
+/*        Updated the $Exceptions section to clarify exceptions that */
 /*        are the result of changes made in the previous version of */
 /*        the routine. */
 

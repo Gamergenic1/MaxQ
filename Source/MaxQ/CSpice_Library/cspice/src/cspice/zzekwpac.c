@@ -524,10 +524,10 @@ static integer c__1 = 1;
 /*         routine. */
 
 /*     3)  If L is negative or greater than the input string length, */
-/*         the error SPICE(INVALIDSIZE) is signalled. */
+/*         the error SPICE(INVALIDSIZE) is signaled. */
 
 /*     4)  If L is greater than the size of the data area of a */
-/*         character page, the error SPICE(INVALIDSIZE) is signalled. */
+/*         character page, the error SPICE(INVALIDSIZE) is signaled. */
 
 /* $ Files */
 
@@ -571,6 +571,10 @@ static integer c__1 = 1;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Corrected typos in comments. */
 
 /* -    Beta Version 1.0.0, 07-NOV-1995 (NJB) */
 

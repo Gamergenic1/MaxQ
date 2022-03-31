@@ -261,7 +261,7 @@ static doublereal c_b26 = -1.;
 /*     point on the ellipse to the ray; the point `m' has the minimum */
 /*     angular separation from the ray. */
 
-/*     The analoguous distinction applies to maximum angular separation */
+/*     The analogous distinction applies to maximum angular separation */
 /*     and maximum distance:  compare the points labeled 'M' and 'F' */
 /*     in the diagram below. */
 
@@ -452,7 +452,7 @@ static doublereal c_b26 = -1.;
 
 /*     [1]  "Numerical Recipes -- The Art of Scientific Computing" by */
 /*           William H. Press, Brian P. Flannery, Saul A. Teukolsky, */
-/*           Willam T. Vetterling. */
+/*           William T. Vetterling. */
 
 /* $ Author_and_Institution */
 
@@ -460,6 +460,10 @@ static doublereal c_b26 = -1.;
 /*     B.V. Semenov    (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.2, 01-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    SPICELIB Version 1.1.1, 28-FEB-2008 (BVS) */
 

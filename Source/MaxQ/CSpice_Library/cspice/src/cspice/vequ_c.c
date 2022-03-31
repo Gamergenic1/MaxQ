@@ -3,10 +3,10 @@
 -Procedure vequ_c ( Vector equality, 3 dimensions )
 
 -Abstract
- 
-    Make one double precision 3-dimensional vector equal to 
-    another. 
- 
+
+   Make one double precision 3-dimensional vector equal to
+   another.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-    None. 
- 
+
+   None.
+
 -Keywords
- 
-    ASSIGNMENT,  VECTOR 
- 
+
+   ASSIGNMENT
+   VECTOR
+
 */
 
    #include "SpiceUsr.h"
@@ -47,79 +48,155 @@
 
 
    void vequ_c ( ConstSpiceDouble   vin[3],
-                 SpiceDouble        vout[3] ) 
+                 SpiceDouble        vout[3] )
+
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   vin       I   3-dimensional double precision vector. 
-   vout      O   3-dimensional double precision vector set equal 
-                 to vin. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   vin        I   Double precision 3-dimensional vector.
+   vout       O   Double precision 3-dimensional vector set equal
+                  to `vin'.
+
 -Detailed_Input
- 
-   vin      This may be ANY 3-dimensional double precision vector. 
- 
+
+   vin         is an arbitrary, double precision 3-dimensional vector.
+
 -Detailed_Output
- 
-   vout    This 3-dimensional double precision vector is set equal 
-           to vin. 
- 
+
+   vout        is a double precision 3-dimensional vector set equal
+               to `vin'.
+
 -Parameters
- 
-   None. 
- 
--Particulars
- 
-   vequ_c simply sets each component of vout in turn equal to vin.  No 
-   error checking is performed because none is needed. 
- 
--Examples
- 
-   Let state be a state vector. The angular momentum vector is 
-   determined by the cross product of the position vector and the 
-   velocity vector. 
- 
-    vequ_c ( state[0], R );
-    vequ_c ( state[3], V ); 
- 
-    vcrss_c ( R, V, H );
- 
- 
--Restrictions
- 
-    None. 
- 
+
+   None.
+
 -Exceptions
- 
-   Error free. 
- 
+
+   Error free.
+
 -Files
- 
-    None. 
- 
--Author_and_Institution
- 
-    W.M. Owen       (JPL) 
- 
+
+   None.
+
+-Particulars
+
+   vequ_c simply sets each component of `vout' in turn equal to `vin'. No
+   error checking is performed because none is needed.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Lets assume we have a pointing record that contains the
+      start time of an interpolation interval, the components of
+      the quaternion that represents the C-matrix associated with
+      the start time of the interval, and the angular velocity vector
+      of the interval. The following example demonstrates how to
+      extract the time, the quaternion and the angular velocity
+      vector into separate variables for their processing.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vequ_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          av     [3];
+         SpiceDouble          quat   [4];
+         SpiceDouble          time;
+
+         /.
+         Define the pointing record. We would normally obtain it
+         from, e.g. CK readers or other non SPICE data files.
+         ./
+         SpiceDouble          record [8] = { 283480.753,        0.99999622,
+                                                  0.0,          0.0,
+                                                 -0.0027499965, 0.0,
+                                                  0.0,          0.01 };
+
+         /.
+         Get the time, quaternion and angular velocity vector
+         into separate variables.
+         ./
+         time = record[0];
+
+         vequg_c ( record+1, 4, quat );
+         vequ_c  ( record+5,    av   );
+
+         /.
+         Display the contents of the variables.
+         ./
+         printf( "Time            : %10.3f\n", time );
+
+         printf( "Quaternion      :\n" );
+         printf( "%15.10f %14.10f %14.10f %14.10f\n",
+                   quat[0], quat[1], quat[2], quat[3] );
+         printf( "Angular velocity:\n" );
+         printf( "%15.10f %14.10f %14.10f\n", av[0], av[1], av[2] );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Time            : 283480.753
+      Quaternion      :
+         0.9999962200   0.0000000000   0.0000000000  -0.0027499965
+      Angular velocity:
+         0.0000000000   0.0000000000   0.0100000000
+
+
+-Restrictions
+
+   None.
+
 -Literature_References
- 
-    None. 
- 
+
+   None.
+
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 23-JUL-2020 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example.
+
    -CSPICE Version 1.1.0, 22-OCT-1998 (NJB)
 
-      Made input vector const.  Removed #include of SpiceZfc.h.
+       Made input vector const. Removed #include of SpiceZfc.h.
 
-   -CSPICE Version 1.0.0, 08-FEB-1998   (EDW)
+   -CSPICE Version 1.0.0, 08-FEB-1998 (EDW) (WMO)
 
 -Index_Entries
- 
-   assign a 3-dimensional vector to another 
- 
+
+   assign a 3-dimensional vector to another
+
 -&
 */
 

@@ -4,7 +4,7 @@
 
 -Abstract
 
-   Function to calculate the derivative of the norm of a 3-vector.
+   Calculate the derivative of the norm of a 3-vector.
 
 -Disclaimer
 
@@ -15,7 +15,7 @@
    PUBLICLY AVAILABLE UNDER U.S. EXPORT LAWS AND IS PROVIDED "AS-IS"
    TO THE RECIPIENT WITHOUT WARRANTY OF ANY KIND, INCLUDING ANY
    WARRANTIES OF PERFORMANCE OR MERCHANTABILITY OR FITNESS FOR A
-   PARTICULAR USE OR PURPOSE (AS set_c FORTH IN UNITED STATES UCC
+   PARTICULAR USE OR PURPOSE (AS SET FORTH IN UNITED STATES UCC
    SECTIONS 2312-2313) OR FOR ANY PURPOSE WHATSOEVER, FOR THE
    SOFTWARE AND RELATED MATERIALS, HOWEVER USED.
 
@@ -58,37 +58,51 @@
    state      I   A 6-vector composed of three coordinates and their
                   derivatives.
 
+   The function returns the derivative of the norm of the position
+   component of the input `state' vector.
+
 -Detailed_Input
 
-   state   A double precision 6-vector, the second three
-           components being the derivatives of the first three
-           with respect to some scalar.
+   state       is a double precision 6-vector, the second three
+               components being the derivatives of the first three
+               with respect to some scalar.
 
-              state =  ( x, dx )
-                            --
-                            ds
+                                dx
+                  state =  ( x, -- )
+                                ds
 
-           A common form for 'state' would contain position and
-           velocity.
+               A common form for `state' would contain position and
+               velocity.
 
 -Detailed_Output
 
-   dvnorm_c   The value of d||x|| corresponding to 'state'.
-                           ------
-                             ds
+   The function returns the derivative of the norm of the position
+   component of the input `state' vector:
 
-                                 1/2         2    2    2  1/2
-            where ||x|| = < x, x >    =  ( x1 + x2 + x3 )
+                  d ||x||
+      dvnorm_c = --------
+                    ds
+
+   where the norm of x is given by:
+
+                                   .----------------
+                 .---------       /    2    2    2
+      ||x|| =  \/ < x, x >  = \  / ( x1 + x2 + x3  )
+                               \/
 
 
-                      v = ( dx1, dx2, dx3 )
-                            ---  ---  ---
-                            ds   ds   ds
+   If the velocity component of `state' is:
 
-                 d||x||   < x, v >
-                 ------ =  ------     =  < xhat, v >
-                   ds            1/2
-                          < x, x >
+                dx1   dx2   dx3
+         v = ( ----, ----, ---- )
+                ds    ds    ds
+
+   then
+
+         d||x||      < x, v >
+         ------ =  ------------  =  < xhat, v >
+           ds        .---------
+                   \/ < x, x >
 
 -Parameters
 
@@ -96,7 +110,11 @@
 
 -Exceptions
 
-   None.
+   Error free.
+
+   1)  If the first three components of `state' ("x") describe the
+       origin (zero vector) the routine returns zero as the
+       derivative of the vector norm.
 
 -Files
 
@@ -109,24 +127,40 @@
 
 -Examples
 
-   Any numerical results shown for this example may differ between
-   platforms as the results depend on the SPICE kernels used as input
-   and the machine specific arithmetic implementation.
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
 
-      #include "SpiceUsr.h"
-      #include <stdio.h>
+   1) Compute the derivative of the norm of three vectors of
+      different magnitudes. Use the first two vectors to define
+      the derivatives as parallel and anti-parallel, and let
+      the third be the zero vector
+
+      Example code begins here.
+
+
+      /.
+         Program dvnorm_ex1
+      ./
       #include <math.h>
+      #include <stdio.h>
+      #include "SpiceUsr.h"
 
       int main()
          {
 
-         SpiceDouble     mag  [3] =
-                          { -4., 4., 12. };
+         /.
+         Local variables.
+         ./
+         SpiceDouble     mag  [3] =  { -4., 4., 12. };
+         SpiceDouble     x1   [3];
+         SpiceDouble     y    [6];
 
-         SpiceDouble     x1   [3] =
-                          { 1., sqrt(2.), sqrt(3.) };
-
-         SpiceDouble     y   [6];
+         /.
+         Initialize `x1'.
+         ./
+         vpack_c( 1., sqrt(2.), sqrt(3.), x1 );
 
          /.
          Parallel...
@@ -166,21 +200,21 @@
          printf( "Zero vector x, large dx/ds: %f\n", dvnorm_c( y ) );
 
          return 0;
-         }
+      }
 
-   The program outputs:
 
-      Parallel x, dx/ds         :  2.449490
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Parallel x, dx/ds         : 2.449490
       Anti-parallel x, dx/ds    : -2.449490
-      Zero vector x, large dx/ds:  0.000000
+      Zero vector x, large dx/ds: 0.000000
+
 
 -Restrictions
 
-   Error free.
-
-   1) If the first three components of 'state' ("x") describes the
-      origin (zero vector) the routine returns zero as the
-      derivative of the vector norm.
+   None.
 
 -Literature_References
 
@@ -188,9 +222,18 @@
 
 -Author_and_Institution
 
-   Ed Wright     (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
+
+   -CSPICE Version 1.0.1, 27-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added example's
+       problem statement. Moved the contents of the -Restrictions section
+       to -Exceptions.
+
+       Updated example code to remove non ANSI-C feature.
 
    -CSPICE Version 1.0.0, 04-MAY-2010 (EDW)
 
@@ -224,4 +267,3 @@
    return( retval );
 
 } /* End dvnorm_c */
-

@@ -523,14 +523,14 @@ static integer c__3 = 3;
 /*         error will be diagnosed by routines called by this routine. */
 
 /*     3)  If LEFT and RIGHT are not neighboring siblings, the error */
-/*         SPICE(BUG) is signalled. */
+/*         SPICE(BUG) is signaled. */
 
 /*     4)  If either LEFT or RIGHT are not children of PARENT, the error */
-/*         SPICE(BUG) is signalled. */
+/*         SPICE(BUG) is signaled. */
 
 /*     5)  If the sum of the number of keys in LEFT and RIGHT does not */
 /*         correspond to an underflow of exactly 1 key, the error */
-/*         SPICE(BUG) is signalled. */
+/*         SPICE(BUG) is signaled. */
 
 /* $ Files */
 
@@ -682,6 +682,10 @@ static integer c__3 = 3;
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1, 03-OCT-2021 (NJB) */
+
+/*        Fixed typo in comments. */
+
 /* -    Beta Version 1.0.0, 16-NOV-1995 (NJB) */
 
 /* -& */
@@ -796,7 +800,7 @@ static integer c__3 = 3;
 /*     Check the left parent key of the middle child. */
 
     psize = ppage[(i__1 = sizbas - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)439)];
+	    "ppage", i__1, "zzektr32_", (ftnlen)443)];
     if (*lpkidx < 1 || *lpkidx > psize - 1) {
 	chkin_("ZZEKTR32", (ftnlen)8);
 	setmsg_("Left parent key of MIDDLE is out of range.  Value is #; val"
@@ -812,19 +816,19 @@ static integer c__3 = 3;
 /*     Retain the left and right parent key values of the middle child. */
 
     lpkey = ppage[(i__1 = keybas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)457)];
+	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)461)];
     rpkey = ppage[(i__1 = keybas + *lpkidx) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)458)];
+	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)462)];
 
 /*     Verify that LEFT, MIDDLE, and RIGHT are siblings, and that PARENT */
 /*     is their common parent. */
 
     lsib = ppage[(i__1 = kidbas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)464)];
+	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)468)];
     msib = ppage[(i__1 = kidbas + *lpkidx) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)465)];
+	    "ppage", i__1, "zzektr32_", (ftnlen)469)];
     rsib = ppage[(i__1 = kidbas + *lpkidx + 1) < 256 && 0 <= i__1 ? i__1 : 
-	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)466)];
+	    s_rnge("ppage", i__1, "zzektr32_", (ftnlen)470)];
     if (lsib != *left || msib != *middle || rsib != *right) {
 	chkin_("ZZEKTR32", (ftnlen)8);
 	setmsg_("LEFT, RIGHT, MIDDLE, PARENT, and PKIDX are inconsistent. LE"
@@ -920,12 +924,12 @@ static integer c__3 = 3;
 	leftsz = lpkey - 1;
     } else {
 	leftsz = lpkey - ppage[(i__1 = keybas + *lpkidx - 2) < 256 && 0 <= 
-		i__1 ? i__1 : s_rnge("ppage", i__1, "zzektr32_", (ftnlen)577)]
+		i__1 ? i__1 : s_rnge("ppage", i__1, "zzektr32_", (ftnlen)581)]
 		 - 1;
     }
     n = 61 - (nlkeys + 1) + 1;
     lmidsz = c2page[(i__1 = n) < 256 && 0 <= i__1 ? i__1 : s_rnge("c2page", 
-	    i__1, "zzektr32_", (ftnlen)582)] - 1;
+	    i__1, "zzektr32_", (ftnlen)586)] - 1;
     midsiz = rpkey - lpkey - 1;
     rmidsz = midsiz - lmidsz - 1;
 
@@ -935,11 +939,11 @@ static integer c__3 = 3;
 /*     LSIZE+1 is unaffected by this move. */
 
     c1page[(i__1 = nlkeys + 1) < 256 && 0 <= i__1 ? i__1 : s_rnge("c1page", 
-	    i__1, "zzektr32_", (ftnlen)592)] = leftsz + 1;
+	    i__1, "zzektr32_", (ftnlen)596)] = leftsz + 1;
     c1page[(i__1 = nlkeys + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge("c1page", 
-	    i__1, "zzektr32_", (ftnlen)593)] = ppage[(i__2 = datbas + *lpkidx 
+	    i__1, "zzektr32_", (ftnlen)597)] = ppage[(i__2 = datbas + *lpkidx 
 	    - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, "zzektr32_"
-	    , (ftnlen)593)];
+	    , (ftnlen)597)];
 
 /*     Move the first N-1 keys and data pointers, and the first N */
 /*     child pointers, from the middle child into the left */
@@ -948,15 +952,15 @@ static integer c__3 = 3;
     i__1 = n - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c1page[(i__2 = nlkeys + 2 + i__ - 1) < 256 && 0 <= i__2 ? i__2 : 
-		s_rnge("c1page", i__2, "zzektr32_", (ftnlen)601)] = c2page[(
+		s_rnge("c1page", i__2, "zzektr32_", (ftnlen)605)] = c2page[(
 		i__3 = i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("c2page", i__3,
-		 "zzektr32_", (ftnlen)601)] + leftsz + 1;
+		 "zzektr32_", (ftnlen)605)] + leftsz + 1;
     }
     i__2 = n - 1;
     movei_(&c2page[128], &i__2, &c1page[(i__1 = nlkeys + 129) < 256 && 0 <= 
-	    i__1 ? i__1 : s_rnge("c1page", i__1, "zzektr32_", (ftnlen)604)]);
+	    i__1 ? i__1 : s_rnge("c1page", i__1, "zzektr32_", (ftnlen)608)]);
     movei_(&c2page[64], &n, &c1page[(i__1 = nlkeys + 65) < 256 && 0 <= i__1 ? 
-	    i__1 : s_rnge("c1page", i__1, "zzektr32_", (ftnlen)605)]);
+	    i__1 : s_rnge("c1page", i__1, "zzektr32_", (ftnlen)609)]);
 
 /*     Set the key count in the left child. */
 
@@ -971,21 +975,21 @@ static integer c__3 = 3;
     rshift = nmkeys - n + 1;
     for (i__ = nrkeys; i__ >= 1; --i__) {
 	c3page[(i__1 = rshift + 1 + i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)622)] = c3page[(
+		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)626)] = c3page[(
 		i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page", i__2,
-		 "zzektr32_", (ftnlen)622)] + rmidsz + 1;
+		 "zzektr32_", (ftnlen)626)] + rmidsz + 1;
     }
     for (i__ = nrkeys; i__ >= 1; --i__) {
 	c3page[(i__1 = rshift + 128 + i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)626)] = c3page[(
+		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)630)] = c3page[(
 		i__2 = i__ + 127) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page",
-		 i__2, "zzektr32_", (ftnlen)626)];
+		 i__2, "zzektr32_", (ftnlen)630)];
     }
     for (i__ = nrkeys + 1; i__ >= 1; --i__) {
 	c3page[(i__1 = rshift + 64 + i__ - 1) < 256 && 0 <= i__1 ? i__1 : 
-		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)630)] = c3page[(
+		s_rnge("c3page", i__1, "zzektr32_", (ftnlen)634)] = c3page[(
 		i__2 = i__ + 63) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page", 
-		i__2, "zzektr32_", (ftnlen)630)];
+		i__2, "zzektr32_", (ftnlen)634)];
     }
 
 /*     The key at location RSHIFT receives the former right parent key */
@@ -994,28 +998,28 @@ static integer c__3 = 3;
 /*     will be set later. */
 
     c3page[(i__1 = rshift) < 256 && 0 <= i__1 ? i__1 : s_rnge("c3page", i__1, 
-	    "zzektr32_", (ftnlen)639)] = rmidsz + 1;
+	    "zzektr32_", (ftnlen)643)] = rmidsz + 1;
     c3page[(i__1 = rshift + 127) < 256 && 0 <= i__1 ? i__1 : s_rnge("c3page", 
-	    i__1, "zzektr32_", (ftnlen)640)] = ppage[(i__2 = datbas + *lpkidx)
+	    i__1, "zzektr32_", (ftnlen)644)] = ppage[(i__2 = datbas + *lpkidx)
 	     < 256 && 0 <= i__2 ? i__2 : s_rnge("ppage", i__2, "zzektr32_", (
-	    ftnlen)640)];
+	    ftnlen)644)];
 
 /*     The first RSHIFT-1 locations in the right child are filled in */
 /*     with data from the middle child.  The moved keys lose LMIDSZ+1 */
-/*     precedessors. */
+/*     predecessors. */
 
     i__1 = rshift - 1;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	c3page[(i__2 = i__) < 256 && 0 <= i__2 ? i__2 : s_rnge("c3page", i__2,
-		 "zzektr32_", (ftnlen)648)] = c2page[(i__3 = n + 1 + i__ - 1) 
+		 "zzektr32_", (ftnlen)652)] = c2page[(i__3 = n + 1 + i__ - 1) 
 		< 256 && 0 <= i__3 ? i__3 : s_rnge("c2page", i__3, "zzektr32_"
-		, (ftnlen)648)] - lmidsz - 1;
+		, (ftnlen)652)] - lmidsz - 1;
     }
     i__2 = rshift - 1;
     movei_(&c2page[(i__1 = n + 128) < 256 && 0 <= i__1 ? i__1 : s_rnge("c2pa"
-	    "ge", i__1, "zzektr32_", (ftnlen)651)], &i__2, &c3page[128]);
+	    "ge", i__1, "zzektr32_", (ftnlen)655)], &i__2, &c3page[128]);
     movei_(&c2page[(i__1 = n + 64) < 256 && 0 <= i__1 ? i__1 : s_rnge("c2page"
-	    , i__1, "zzektr32_", (ftnlen)652)], &rshift, &c3page[64]);
+	    , i__1, "zzektr32_", (ftnlen)656)], &rshift, &c3page[64]);
 
 /*     Update the key count in the right child. */
 
@@ -1029,11 +1033,11 @@ static integer c__3 = 3;
 /*     into the subtree headed by the left child. */
 
     ppage[(i__1 = keybas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)667)] = lpkey + lmidsz + 1;
+	    "ppage", i__1, "zzektr32_", (ftnlen)671)] = lpkey + lmidsz + 1;
     ppage[(i__1 = datbas + *lpkidx - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)668)] = c2page[(i__2 = n + 
+	    "ppage", i__1, "zzektr32_", (ftnlen)672)] = c2page[(i__2 = n + 
 	    127) < 256 && 0 <= i__2 ? i__2 : s_rnge("c2page", i__2, "zzektr3"
-	    "2_", (ftnlen)668)];
+	    "2_", (ftnlen)672)];
 
 /*     The parent keys, data pointers, and child pointers at locations */
 /*     LPKIDX+2 onward get shifted left by one position.  The keys lose */
@@ -1042,33 +1046,33 @@ static integer c__3 = 3;
     i__1 = npkeys - 1;
     for (i__ = *lpkidx + 1; i__ <= i__1; ++i__) {
 	ppage[(i__2 = keybas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		"ppage", i__2, "zzektr32_", (ftnlen)676)] = ppage[(i__3 = 
+		"ppage", i__2, "zzektr32_", (ftnlen)680)] = ppage[(i__3 = 
 		keybas + i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("ppage", 
-		i__3, "zzektr32_", (ftnlen)676)];
+		i__3, "zzektr32_", (ftnlen)680)];
     }
     i__1 = npkeys - 1;
     for (i__ = *lpkidx + 1; i__ <= i__1; ++i__) {
 	ppage[(i__2 = datbas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		"ppage", i__2, "zzektr32_", (ftnlen)680)] = ppage[(i__3 = 
+		"ppage", i__2, "zzektr32_", (ftnlen)684)] = ppage[(i__3 = 
 		datbas + i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("ppage", 
-		i__3, "zzektr32_", (ftnlen)680)];
+		i__3, "zzektr32_", (ftnlen)684)];
     }
     i__1 = npkeys;
     for (i__ = *lpkidx + 1; i__ <= i__1; ++i__) {
 	ppage[(i__2 = kidbas + i__ - 1) < 256 && 0 <= i__2 ? i__2 : s_rnge(
-		"ppage", i__2, "zzektr32_", (ftnlen)684)] = ppage[(i__3 = 
+		"ppage", i__2, "zzektr32_", (ftnlen)688)] = ppage[(i__3 = 
 		kidbas + i__) < 256 && 0 <= i__3 ? i__3 : s_rnge("ppage", 
-		i__3, "zzektr32_", (ftnlen)684)];
+		i__3, "zzektr32_", (ftnlen)688)];
     }
 
 /*     Zero out the freed locations. */
 
     ppage[(i__1 = keybas + npkeys - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)690)] = 0;
+	    "ppage", i__1, "zzektr32_", (ftnlen)694)] = 0;
     ppage[(i__1 = datbas + npkeys - 1) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-	    "ppage", i__1, "zzektr32_", (ftnlen)691)] = 0;
+	    "ppage", i__1, "zzektr32_", (ftnlen)695)] = 0;
     ppage[(i__1 = kidbas + npkeys) < 256 && 0 <= i__1 ? i__1 : s_rnge("ppage",
-	     i__1, "zzektr32_", (ftnlen)692)] = 0;
+	     i__1, "zzektr32_", (ftnlen)696)] = 0;
 
 /*     The only required change to the parent's metadata is */
 /*     updating the key count.  At this point, we can set the */

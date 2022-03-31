@@ -137,9 +137,13 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.0.1 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
+
 /* -    SPICELIB Version 1.0.0 18-JUL-1997 (WLT) */
 
-/*        Adapted Nat'routine to private version making output */
+/*        Adapted Nat's routine to private version making output */
 /*        rate be radians/sec. */
 
 /* -    Beta Version 1.0.0, 29-SEP-1996 (NJB) */

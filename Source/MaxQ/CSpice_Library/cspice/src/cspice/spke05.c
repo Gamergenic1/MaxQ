@@ -84,7 +84,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     ET         I   Target epoch. */
 /*     RECORD     I   Data record. */
@@ -92,41 +92,41 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     ET          is a target epoch, specified as ephemeris seconds past */
-/*                 J2000, at which a state vector is to be computed. */
+/*     ET       is a target epoch, specified as ephemeris seconds past */
+/*              J2000, at which a state vector is to be computed. */
 
-/*     RECORD      is a data record which, when evaluated at epoch ET, */
-/*                 will give the state (position and velocity) of some */
-/*                 body, relative to some center, in some inertial */
-/*                 reference frame. */
+/*     RECORD   is a data record which, when evaluated at epoch ET, */
+/*              will give the state (position and velocity) of some */
+/*              body, relative to some center, in some inertial */
+/*              reference frame. */
 
-/*                 The structure of RECORD is: */
+/*              The structure of RECORD is: */
 
-/*                     RECORD(1) */
-/*                        .            state of the body at epoch 1. */
-/*                        . */
-/*                        . */
-/*                     RECORD(6) */
+/*                  RECORD(1) */
+/*                     .            state of the body at epoch 1. */
+/*                     . */
+/*                     . */
+/*                  RECORD(6) */
 
-/*                     RECORD(7) */
-/*                        . */
-/*                        .            state of the body at epoch 2. */
-/*                        . */
-/*                     RECORD(12) */
-/*                     RECORD(13)      epoch 1 in seconds past 2000. */
-/*                     RECORD(14)      epoch 2 in seconds past 2000. */
-/*                     RECORD(15)      GM for the center of motion. */
+/*                  RECORD(7) */
+/*                     . */
+/*                     .            state of the body at epoch 2. */
+/*                     . */
+/*                  RECORD(12) */
+/*                  RECORD(13)      epoch 1 in seconds past 2000. */
+/*                  RECORD(14)      epoch 2 in seconds past 2000. */
+/*                  RECORD(15)      GM for the center of motion. */
 
-/*                 Epoch 1 and epoch 2 are the times in the segment that */
-/*                 bracket ET.  If ET is less than the first time in the */
-/*                 segment then both epochs 1 and 2 are equal to the */
-/*                 first time.  And if ET is greater than the last time */
-/*                 then, epochs 1 and 2 are set equal to this last time. */
+/*              Epoch 1 and epoch 2 are the times in the segment that */
+/*              bracket ET. If ET is less than the first time in the */
+/*              segment then both epochs 1 and 2 are equal to the */
+/*              first time. And if ET is greater than the last time */
+/*              then, epochs 1 and 2 are set equal to this last time. */
 
 /* $ Detailed_Output */
 
-/*     STATE       is the state produced by evaluating RECORD at ET. */
-/*                 Units are km and km/sec. */
+/*     STATE    is the state produced by evaluating RECORD at ET. */
+/*              Units are km and km/sec. */
 
 /* $ Parameters */
 
@@ -134,9 +134,10 @@ static integer c__6 = 6;
 
 /* $ Exceptions */
 
-/*     1) If there is a problem propagating, subject to the laws of two */
-/*        body motion, either of the states from RECORD to the requested */
-/*        time ET, an error will be signalled by the routine PROP2B. */
+/*     1)  If there is a problem propagating, subject to the laws of two */
+/*         body motion, either of the states from RECORD to the requested */
+/*         time ET, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
@@ -163,9 +164,9 @@ static integer c__6 = 6;
 /*     SPK files. */
 
 /*     The data returned by the SPKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the SPKRnn */
+/*     completely. Given that understanding, however, the SPKRnn */
 /*     routines might be used to examine raw segment data before */
 /*     evaluating it with the SPKEnn routines. */
 
@@ -205,13 +206,20 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     K.R. Gehringer  (JPL) */
-/*     J.M. Lynch      (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+/*     J.M. Lynch         (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 12-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 31-AUG-2005 (NJB) */
 
@@ -230,7 +238,7 @@ static integer c__6 = 6;
 /* -& */
 /* $ Index_Entries */
 
-/*     evaluate type_5 spk segment */
+/*     evaluate type_5 SPK segment */
 
 /* -& */
 /* $ Revisions */

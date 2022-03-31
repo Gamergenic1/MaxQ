@@ -449,6 +449,11 @@
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.1.0, 20-NOV-2020 (NJB) */
+
+/*        Bug fix: in call to ZZADDLNK, size of pointer array was */
+/*        changed from NP to NV. */
+
 /* -    SPICELIB Version 1.0.0, 20-MAY-2016 (NJB) */
 
 /*        Updated error handling. Now ZZVRTPLT performs precise checks */
@@ -566,7 +571,7 @@
 /*           AVAL = PLATES(J,I), vertex J of plate ID I. */
 /*           BVAL = I, plate ID value I. */
 
-	    zzaddlnk_(&plates[j + i__ * 3 - 4], &i__, np, cellsz, vrtptr, &
+	    zzaddlnk_(&plates[j + i__ * 3 - 4], &i__, nv, cellsz, vrtptr, &
 		    ncell, cells);
 	    if (failed_()) {
 		chkout_("ZZVRTPLT", (ftnlen)8);

@@ -12,7 +12,7 @@ static integer c__6 = 6;
 static integer c__1 = 1;
 static integer c__3 = 3;
 
-/* $Procedure      PCKR20 ( PCK, read record from segment, type 20 ) */
+/* $Procedure PCKR20 ( PCK, read record from segment, type 20 ) */
 /* Subroutine */ int pckr20_(integer *handle, doublereal *descr, doublereal *
 	et, doublereal *record)
 {
@@ -93,7 +93,7 @@ static integer c__3 = 3;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   File handle. */
 /*     DESCR      I   Segment descriptor. */
@@ -103,52 +103,52 @@ static integer c__3 = 3;
 /* $ Detailed_Input */
 
 /*     HANDLE, */
-/*     DESCR       are the file handle and segment descriptor for */
-/*                 a PCK segment of type 20. */
+/*     DESCR    are the file handle and segment descriptor for */
+/*              a PCK segment of type 20. */
 
-/*     ET          is an epoch for which a data record from a specific */
-/*                 segment is required. ET is expressed as seconds past */
-/*                 J2000 TDB. */
+/*     ET       is an epoch for which a data record from a specific */
+/*              segment is required. ET is expressed as seconds past */
+/*              J2000 TDB. */
 
 /* $ Detailed_Output */
 
-/*     RECORD      is the record from the specified segment which, when */
-/*                 evaluated at epoch ET, will give Euler angles and */
-/*                 Euler angle rates representing the orientation and */
-/*                 angular velocity of the body-fixed reference frame */
-/*                 associated with the segment. */
+/*     RECORD   is the record from the specified segment which, when */
+/*              evaluated at epoch ET, will give Euler angles and */
+/*              Euler angle rates representing the orientation and */
+/*              angular velocity of the body-fixed reference frame */
+/*              associated with the segment. */
 
-/*                 The structure of the record is as follows: */
+/*              The structure of the record is as follows: */
 
-/*                    +--------------------------------------+ */
-/*                    | record size (excluding this element) | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval midpoint           | */
-/*                    +--------------------------------------+ */
-/*                    | Coverage interval radius             | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for ANGLE_1 rate              | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for ANGLE_2 rate              | */
-/*                    +--------------------------------------+ */
-/*                    | Coeffs for ANGLE_3 rate              | */
-/*                    +--------------------------------------+ */
-/*                    | ANGLE_1 at interval midpoint         | */
-/*                    +--------------------------------------+ */
-/*                    | ANGLE_2 at interval midpoint         | */
-/*                    +--------------------------------------+ */
-/*                    | ANGLE_3 at interval midpoint         | */
-/*                    +--------------------------------------+ */
+/*                 +--------------------------------------+ */
+/*                 | record size (excluding this element) | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval midpoint           | */
+/*                 +--------------------------------------+ */
+/*                 | Coverage interval radius             | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for ANGLE_1 rate              | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for ANGLE_2 rate              | */
+/*                 +--------------------------------------+ */
+/*                 | Coeffs for ANGLE_3 rate              | */
+/*                 +--------------------------------------+ */
+/*                 | ANGLE_1 at interval midpoint         | */
+/*                 +--------------------------------------+ */
+/*                 | ANGLE_2 at interval midpoint         | */
+/*                 +--------------------------------------+ */
+/*                 | ANGLE_3 at interval midpoint         | */
+/*                 +--------------------------------------+ */
 
-/*                 In the above record */
+/*              In the above record */
 
-/*                    - Times are expressed as seconds past J2000 TDB. */
-/*                    - Angular components have units of radians. */
-/*                    - Rate coefficients have units of radians/s. */
+/*                 - Times are expressed as seconds past J2000 TDB. */
+/*                 - Angular components have units of radians. */
+/*                 - Rate coefficients have units of radians/s. */
 
-/*                 RECORD must be declared by the caller with size large */
-/*                 enough to accommodate the largest record that can be */
-/*                 returned by this routine. */
+/*              RECORD must be declared by the caller with size large */
+/*              enough to accommodate the largest record that can be */
+/*              returned by this routine. */
 
 /* $ Parameters */
 
@@ -156,8 +156,8 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-/*     1) Any errors that occur while looking up PCK data will be */
-/*        diagnosed by routines in the call tree of this routine. */
+/*     1)  If an issue is detected while looking up PCK data, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -172,9 +172,9 @@ static integer c__3 = 3;
 /* $ Examples */
 
 /*     The data returned by the PCKRnn routine is in its rawest form, */
-/*     taken directly from the segment.  As such, it will be meaningless */
+/*     taken directly from the segment. As such, it will be meaningless */
 /*     to a user unless he/she understands the structure of the data type */
-/*     completely.  Given that understanding, however, the PCKRxx */
+/*     completely. Given that understanding, however, the PCKRxx */
 /*     routines might be used to "dump" and check segment data for a */
 /*     particular epoch. */
 
@@ -209,17 +209,22 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/*     Version 1.0.0 17-JAN-2014 (NJB) (IMU) */
+/* -    SPICELIB Version 1.0.1, 12-AUG-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 17-JAN-2014 (NJB) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     read record from type_20 pck segment */
+/*     read record from type_20 PCK segment */
 
 /* -& */
 
@@ -316,7 +321,7 @@ static integer c__3 = 3;
 
     for (i__ = 1; i__ <= 3; ++i__) {
 	pos[(i__1 = i__ - 1) < 3 && 0 <= i__1 ? i__1 : s_rnge("pos", i__1, 
-		"pckr20_", (ftnlen)319)] = record[i__ * nterms + 2];
+		"pckr20_", (ftnlen)326)] = record[i__ * nterms + 2];
     }
     size = recsiz + 3;
 

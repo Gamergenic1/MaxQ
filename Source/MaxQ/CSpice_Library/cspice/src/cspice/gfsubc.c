@@ -100,9 +100,9 @@ static logical c_false = FALSE_;
 /* $ Keywords */
 
 /*     COORDINATE */
+/*     EVENT */
 /*     GEOMETRY */
 /*     SEARCH */
-/*     EVENT */
 
 /* $ Declarations */
 /* $ Abstract */
@@ -657,46 +657,46 @@ static logical c_false = FALSE_;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     LBCELL     P   SPICE Cell lower bound */
-/*     CNVTOL     P   Convergence tolerance */
-/*     TARGET     I   Name of the target body */
-/*     FIXREF     I   Body fixed frame associated with TARGET */
-/*     METHOD     I   Name of method type for subpoint calculation */
-/*     ABCORR     I   Aberration correction flag */
-/*     OBSRVR     I   Name of the observing body */
-/*     CRDSYS     I   Name of the coordinate system containing COORD */
-/*     COORD      I   Name of the coordinate of interest */
-/*     RELATE     I   Relational operator */
-/*     REFVAL     I   Reference value */
-/*     ADJUST     I   Adjustment value for absolute extrema searches */
-/*     STEP       I   Step size used for locating extrema and roots */
-/*     CNFINE     I   SPICE window to which the search is confined */
-/*     MW         I   Workspace window size */
+/*     LBCELL     P   SPICE Cell lower bound. */
+/*     CNVTOL     P   Convergence tolerance. */
+/*     TARGET     I   Name of the target body. */
+/*     FIXREF     I   Body fixed frame associated with TARGET. */
+/*     METHOD     I   Name of method type for subpoint calculation. */
+/*     ABCORR     I   Aberration correction flag. */
+/*     OBSRVR     I   Name of the observing body. */
+/*     CRDSYS     I   Name of the coordinate system containing COORD. */
+/*     COORD      I   Name of the coordinate of interest. */
+/*     RELATE     I   Relational operator. */
+/*     REFVAL     I   Reference value. */
+/*     ADJUST     I   Adjustment value for absolute extrema searches. */
+/*     STEP       I   Step size used for locating extrema and roots. */
+/*     CNFINE     I   SPICE window to which the search is confined. */
+/*     MW         I   Workspace window size. */
 /*     NW         I   The number of workspace windows needed for */
-/*                    the search */
-/*     WORK      I-O  Array of workspace windows */
-/*     RESULT    I-O  SPICE window containing results */
+/*                    the search. */
+/*     WORK       O   Array of workspace windows. */
+/*     RESULT    I-O  SPICE window containing results. */
 
 /* $ Detailed_Input */
 
-/*     TARGET   the string name of a target body.  Optionally, you may */
+/*     TARGET   is the string name of a target body. Optionally, you may */
 /*              supply the integer ID code for the object as an */
-/*              integer string.  For example both 'MOON' and '301' */
+/*              integer string. For example both 'MOON' and '301' */
 /*              are legitimate strings that indicate the moon is the */
 /*              target body. */
 
 /*              The target and observer define a position vector */
 /*              that points from the observer to the target. */
 
-/*     FIXREF   the string name of the body-fixed, body-centered */
+/*     FIXREF   is the string name of the body-fixed, body-centered */
 /*              reference frame associated with the target body TARGET. */
 
 /*              The SPICE frame subsystem must recognize the 'fixref' */
 /*              name. */
 
-/*     METHOD   the string name of the method to use for the subpoint */
+/*     METHOD   is the string name of the method to use for the subpoint */
 /*              calculation. The accepted values for METHOD: */
 
 /*                 'Near point: ellipsoid'   The sub-observer point */
@@ -725,132 +725,143 @@ static logical c_false = FALSE_;
 /*              The METHOD string lacks sensitivity to case, embedded, */
 /*              leading and trailing blanks. */
 
-/*     ABCORR   the string description of the aberration corrections to */
-/*              apply to the state evaluations to account for one-way */
+/*     ABCORR   is the string description of the aberration corrections */
+/*              to apply to the state evaluations to account for one-way */
 /*              light time and stellar aberration. */
 
-/*              Any aberration correction accepted by the SPICE */
-/*              routine SPKEZR is accepted here. See the header */
-/*              of SPKEZR for a detailed description of the */
-/*              aberration correction options. For convenience, */
-/*              the options are listed below: */
+/*              This routine accepts the same aberration corrections */
+/*              as does the SPICE routine SPKEZR. See the header of */
+/*              SPKEZR for a detailed description of the aberration */
+/*              correction options. For convenience, the options are */
+/*              listed below: */
 
 /*                 'NONE'     Apply no correction. Returns the "true" */
 /*                            geometric state. */
 
-/*                 'LT'       "Reception" case:  correct for */
+/*                 'LT'       "Reception" case: correct for */
 /*                            one-way light time using a Newtonian */
 /*                            formulation. */
 
-/*                 'LT+S'     "Reception" case:  correct for */
+/*                 'LT+S'     "Reception" case: correct for */
 /*                            one-way light time and stellar */
 /*                            aberration using a Newtonian */
 /*                            formulation. */
 
-/*                 'CN'       "Reception" case:  converged */
+/*                 'CN'       "Reception" case: converged */
 /*                            Newtonian light time correction. */
 
-/*                'CN+S'     "Reception" case:  converged */
+/*                 'CN+S'     "Reception" case: converged */
 /*                            Newtonian light time and stellar */
 /*                            aberration corrections. */
 
-/*                 'XLT'      "Transmission" case:  correct for */
+/*                 'XLT'      "Transmission" case: correct for */
 /*                            one-way light time using a Newtonian */
 /*                            formulation. */
 
-/*                 'XLT+S'    "Transmission" case:  correct for */
+/*                 'XLT+S'    "Transmission" case: correct for */
 /*                            one-way light time and stellar */
 /*                            aberration using a Newtonian */
 /*                            formulation. */
 
-/*                 'XCN'      "Transmission" case:  converged */
+/*                 'XCN'      "Transmission" case: converged */
 /*                            Newtonian light time correction. */
 
-/*                 'XCN+S'    "Transmission" case:  converged */
+/*                 'XCN+S'    "Transmission" case: converged */
 /*                            Newtonian light time and stellar */
 /*                            aberration corrections. */
 
 /*              The ABCORR string lacks sensitivity to case, leading */
 /*              and trailing blanks. */
 
-/*     OBSRVR   the string name of an observing body.  Optionally, you */
+/*     OBSRVR   is the string name of an observing body. Optionally, you */
 /*              may supply the ID code of the object as an integer */
 /*              string. For example, both 'EARTH' and '399' are */
-/*              legitimate strings to indicate the observer as Earth. */
+/*              legitimate strings to indicate that the observer is the */
+/*              Earth. */
 
-/*     CRDSYS   the string name of the coordinate system for which the */
-/*              coordinate of interest is a member */
+/*     CRDSYS   is the string name of the coordinate system for which the */
+/*              coordinate of interest is a member. */
 
-/*     COORD    the string name of the coordinate of interest in CRDSYS */
+/*     COORD    is the string name of the coordinate of interest in */
+/*              CRDSYS. */
 
 /*              The supported coordinate systems and coordinate names: */
 
-/*          Coordinate System (CRDSYS)   Coordinates (COORD)  Range */
+/*                 CRDSYS             COORD               Range */
+/*                 ----------------   -----------------   ------------ */
 
-/*          'RECTANGULAR'              'X' */
-/*                                     'Y' */
-/*                                     'Z' */
+/*                 'RECTANGULAR'      'X' */
+/*                                    'Y' */
+/*                                    'Z' */
 
-/*          'LATITUDINAL'              'RADIUS' */
-/*                                     'LONGITUDE'        (-Pi,Pi] */
-/*                                     'LATITUDE'         [-Pi/2,Pi/2] */
+/*                 'LATITUDINAL'      'RADIUS' */
+/*                                    'LONGITUDE'         (-Pi,Pi] */
+/*                                    'LATITUDE'          [-Pi/2,Pi/2] */
 
-/*          'RA/DEC'                   'RANGE' */
-/*                                     'RIGHT ASCENSION'  [0,2Pi) */
-/*                                     'DECLINATION'      [-Pi/2,Pi/2] */
+/*                 'RA/DEC'           'RANGE' */
+/*                                    'RIGHT ASCENSION'   [0,2Pi) */
+/*                                    'DECLINATION'       [-Pi/2,Pi/2] */
 
-/*          'SPHERICAL'                'RADIUS' */
-/*                                     'COLATITUDE'       [0,Pi] */
-/*                                     'LONGITUDE'        (-Pi,Pi] */
+/*                 'SPHERICAL'        'RADIUS' */
+/*                                    'COLATITUDE'        [0,Pi] */
+/*                                    'LONGITUDE'         (-Pi,Pi] */
 
-/*          'CYLINDRICAL'              'RADIUS' */
-/*                                     'LONGITUDE'        [0,2Pi) */
-/*                                     'Z' */
+/*                 'CYLINDRICAL'      'RADIUS' */
+/*                                    'LONGITUDE'         [0,2Pi) */
+/*                                    'Z' */
 
-/*          'GEODETIC'                 'LONGITUDE'        (-Pi,Pi] */
-/*                                     'LATITUDE'         [-Pi/2,Pi/2] */
-/*                                     'ALTITUDE' */
+/*                 'GEODETIC'         'LONGITUDE'         (-Pi,Pi] */
+/*                                    'LATITUDE'          [-Pi/2,Pi/2] */
+/*                                    'ALTITUDE' */
 
-/*          'PLANETOGRAPHIC'           'LONGITUDE'        [0,2Pi) */
-/*                                     'LATITUDE'         [-Pi/2,Pi/2] */
-/*                                     'ALTITUDE' */
+/*                 'PLANETOGRAPHIC'   'LONGITUDE'         [0,2Pi) */
+/*                                    'LATITUDE'          [-Pi/2,Pi/2] */
+/*                                    'ALTITUDE' */
 
-/*                 The ALTITUDE coordinates have a constant value */
-/*                 of zero +/- roundoff for ellipsoid targets. */
+/*              The 'ALTITUDE' coordinates have a constant value of */
+/*              zero +/- roundoff for ellipsoid targets. */
 
-/*                 Limit searches for coordinate events in the GEODETIC */
-/*                 and PLANETOGRAPHIC coordinate systems to TARGET bodies */
-/*                 with axial symmetry in the equatorial plane, i.e. */
-/*                 equality of the body X and Y radii (oblate or prolate */
-/*                 spheroids). */
+/*              Limit searches for coordinate events in the 'GEODETIC' */
+/*              and 'PLANETOGRAPHIC' coordinate systems to TARGET bodies */
+/*              with axial symmetry in the equatorial plane, i.e. */
+/*              equality of the body X and Y radii (oblate or prolate */
+/*              spheroids). */
 
-/*     RELATE   the string or character describing the relational */
+/*              Searches on 'GEODETIC' or 'PLANETOGRAPHIC' coordinates */
+/*              requires body shape data, and in the case of */
+/*              'PLANETOGRAPHIC' coordinates, body rotation data. */
+
+/*              The body associated with 'GEODETIC' or 'PLANETOGRAPHIC' */
+/*              coordinates is the center of the frame FIXREF. */
+
+/*     RELATE   is the string or character describing the relational */
 /*              operator used to define a constraint on the selected */
 /*              coordinate of the subpoint vector. The result */
 /*              window found by this routine indicates the time intervals */
 /*              where the constraint is satisfied. Supported values of */
 /*              RELATE and corresponding meanings are shown below: */
 
-/*                 '>'       The coordinate value is greater than the */
-/*                           reference value REFVAL. */
+/*                 '>'        The coordinate value is greater than the */
+/*                            reference value REFVAL. */
 
-/*                 '='       The coordinate value is equal to the */
-/*                           reference value REFVAL. */
+/*                 '='        The coordinate value is equal to the */
+/*                            reference value REFVAL. */
 
-/*                 '<'       The coordinate value is less than the */
-/*                           reference value REFVAL. */
+/*                 '<'        The coordinate value is less than the */
+/*                            reference value REFVAL. */
 
-/*                 'ABSMAX'  The coordinate value is at an absolute */
-/*                           maximum. */
+/*                 'ABSMAX'   The coordinate value is at an absolute */
+/*                            maximum. */
 
-/*                 'ABSMIN'  The coordinate value is at an absolute */
-/*                           minimum. */
+/*                 'ABSMIN'   The coordinate value is at an absolute */
+/*                            minimum. */
 
-/*                 'LOCMAX'  The coordinate value is at a local */
-/*                           maximum. */
+/*                 'LOCMAX'   The coordinate value is at a local */
+/*                            maximum. */
 
-/*                 'LOCMIN'  The coordinate value is at a local */
-/*                           minimum. */
+/*                 'LOCMIN'   The coordinate value is at a local */
+/*                            minimum. */
+
 /*              The caller may indicate that the region of interest */
 /*              is the set of time intervals where the quantity is */
 /*              within a specified measure of an absolute extremum. */
@@ -865,35 +876,36 @@ static logical c_false = FALSE_;
 /*              The RELATE string lacks sensitivity to case, leading */
 /*              and trailing blanks. */
 
-/*     REFVAL   the double precision reference value used together with */
-/*              the argument RELATE to define an equality or inequality */
-/*              to satisfy by the selected coordinate of the subpoint */
-/*              vector. See the discussion of RELATE above for */
+/*     REFVAL   is the double precision reference value used together */
+/*              with the argument RELATE to define an equality or */
+/*              inequality to satisfy by the selected coordinate of the */
+/*              subpoint vector. See the discussion of RELATE above for */
 /*              further information. */
 
-/*               The units of REFVAL correspond to the type as defined */
-/*               by COORD, radians for angular measures, kilometers for */
-/*               distance measures. */
+/*              The units of REFVAL correspond to the type as defined */
+/*              by COORD, radians for angular measures, kilometers for */
+/*              distance measures. */
 
-/*     ADJUST   a double precision value used to modify searches for */
-/*              absolute extrema: when RELATE is set to ABSMAX or ABSMIN */
-/*              and ADJUST is set to a positive value, GFSUBC finds */
-/*              times when the subpoint position vector coordinate is */
-/*              within ADJUST radians/kilometers of the specified */
+/*     ADJUST   is a double precision value used to modify searches for */
+/*              absolute extrema: when RELATE is set to 'ABSMAX' or */
+/*              'ABSMIN' and ADJUST is set to a positive value, GFSUBC */
+/*              finds times when the subpoint position vector coordinate */
+/*              is within ADJUST radians/kilometers of the specified */
 /*              extreme value. */
 
-/*              For RELATE set to ABSMAX, the RESULT window contains */
+/*              For RELATE set to 'ABSMAX', the RESULT window contains */
 /*              time intervals when the position vector coordinate has */
 /*              values between ABSMAX - ADJUST and ABSMAX. */
 
-/*              For RELATE set to ABSMIN, the RESULT window contains */
+/*              For RELATE set to 'ABSMIN', the RESULT window contains */
 /*              time intervals when the position vector coordinate has */
 /*              values between ABSMIN and ABSMIN + ADJUST. */
 
 /*              ADJUST is not used for searches for local extrema, */
 /*              equality or inequality conditions. */
 
-/*     STEP     the double precision time step size to use in the search. */
+/*     STEP     is the double precision time step size to use in the */
+/*              search. */
 
 /*              STEP must be short enough to for a search using this step */
 /*              size to locate the time intervals where coordinate */
@@ -901,12 +913,13 @@ static logical c_false = FALSE_;
 /*              decreasing. However, STEP must not be *too* short, or */
 /*              the search will take an unreasonable amount of time. */
 
-/*              For coordinates other than LONGITUDE and RIGHT ASCENSION, */
-/*              the step size must be shorter than the shortest interval, */
-/*              within the confinement window, over which the coordinate */
-/*              is monotone increasing or decreasing. */
+/*              For coordinates other than 'LONGITUDE' and 'RIGHT */
+/*              ASCENSION', the step size must be shorter than the */
+/*              shortest interval, within the confinement window, over */
+/*              which the coordinate is monotone increasing or */
+/*              decreasing. */
 
-/*              For LONGITUDE and RIGHT ASCENSION, the step size must */
+/*              For 'LONGITUDE' and 'RIGHT ASCENSION', the step size must */
 /*              be shorter than the shortest interval, within the */
 /*              confinement window, over which either the sin or cos */
 /*              of the coordinate is monotone increasing or decreasing. */
@@ -919,21 +932,25 @@ static logical c_false = FALSE_;
 
 /*              STEP has units of TDB seconds. */
 
-/*     CNFINE   a double precision SPICE window that confines the time */
+/*     CNFINE   is a double precision SPICE window that confines the time */
 /*              period over which the specified search is conducted. */
 /*              CNFINE may consist of a single interval or a collection */
 /*              of intervals. */
 
 /*              In some cases the confinement window can be used to */
 /*              greatly reduce the time period that must be searched */
-/*              for the desired solution. See the Particulars section */
+/*              for the desired solution. See the $Particulars section */
 /*              below for further discussion. */
 
-/*              See the Examples section below for a code example */
+/*              See the $Examples section below for a code example */
 /*              that shows how to create a confinement window. */
 
 /*              CNFINE must be initialized by the caller using the */
 /*              SPICELIB routine SSIZED. */
+
+/*              In some cases the observer's state may be computed at */
+/*              times outside of CNFINE by as much as 2 seconds. See */
+/*              $Particulars for details. */
 
 /*     MW       is a parameter specifying the length of the SPICE */
 /*              windows in the workspace array WORK (see description */
@@ -976,8 +993,23 @@ static logical c_false = FALSE_;
 /*              an input argument is that this allows run-time */
 /*              error checking to be performed.) */
 
-/*     WORK     is an array used to store workspace windows. This */
-/*              array should be declared by the caller as shown: */
+/*     RESULT   is a double precision SPICE window which will contain */
+/*              the search results. RESULT must be declared and */
+/*              initialized with sufficient size to capture the full */
+/*              set of time intervals within the search region on which */
+/*              the specified condition is satisfied. */
+
+/*              RESULT must be initialized by the caller via the */
+/*              SPICELIB routine SSIZED. */
+
+/*              If RESULT is non-empty on input, its contents will be */
+/*              discarded before GFSUBC conducts its search. */
+
+/* $ Detailed_Output */
+
+/*     WORK     is an array used to store workspace windows. */
+
+/*              This array should be declared by the caller as shown: */
 
 /*                 INCLUDE 'gf.inc' */
 /*                    ... */
@@ -990,26 +1022,16 @@ static logical c_false = FALSE_;
 
 /*              WORK need not be initialized by the caller. */
 
-/*     RESULT   a double precision SPICE window which will contain the */
-/*              search results. RESULT must be initialized using */
-/*              a call to SSIZED. RESULT must be declared and initialized */
-/*              with sufficient size to capture the full set of time */
-/*              intervals  within the search region on which the */
-/*              specified constraint is satisfied. */
+/*              WORK is modified by this routine. The caller should */
+/*              re-initialize this array before attempting to use it for */
+/*              any other purpose. */
 
-/*              If RESULT is non-empty on input, its contents */
-/*              will be discarded before GFSUBC conducts its */
-/*              search. */
-
-/* $ Detailed_Output */
-
-/*     WORK     the input workspace array, modified by this */
-/*              routine. The caller should re-initialize this array */
-/*              before attempting to use it for any other purpose. */
-
-/*     RESULT   the SPICE window of intervals, contained within the */
+/*     RESULT   is the SPICE window of intervals, contained within the */
 /*              confinement window CNFINE, on which the specified */
 /*              constraint is satisfied. */
+
+/*              The endpoints of the time intervals comprising RESULT are */
+/*              interpreted as seconds past J2000 TDB. */
 
 /*              If the search is for local extrema, or for absolute */
 /*              extrema with ADJUST set to zero, then normally each */
@@ -1017,12 +1039,12 @@ static logical c_false = FALSE_;
 /*              right endpoints of each interval will be identical. */
 
 /*              If no times within the confinement window satisfy the */
-/*              constraint, RESULT will be returned with a */
+/*              search criteria, RESULT will be returned with a */
 /*              cardinality of zero. */
 
 /* $ Parameters */
 
-/*     LBCELL   the integer value defining the lower bound for */
+/*     LBCELL   is the integer value defining the lower bound for */
 /*              SPICE Cell arrays (a SPICE window is a kind of cell). */
 
 /*     CNVTOL   is the convergence tolerance used for finding */
@@ -1068,37 +1090,46 @@ static logical c_false = FALSE_;
 /*         slightly contract RESULT using the window routine WNCOND. */
 
 /*     3)  If the window size MW is less than 2 or not an even value, */
-/*         the error SPICE(INVALIDDIMENSION) will signal. */
+/*         the error SPICE(INVALIDDIMENSION) is signaled. */
 
 /*     4)  If the window size of RESULT is less than 2, the error */
-/*         SPICE(INVALIDDIMENSION) will signal. */
+/*         SPICE(INVALIDDIMENSION) is signaled. */
 
-/*     5)  If an error (typically cell overflow) occurs during */
-/*         window arithmetic, the error will be diagnosed by a routine */
+/*     5)  If the output SPICE window RESULT has insufficient capacity */
+/*         to contain the number of intervals on which the specified */
+/*         distance condition is met, an error is signaled */
+/*         by a routine in the call tree of this routine. */
+
+/*     6)  If an error (typically cell overflow) occurs during */
+/*         window arithmetic, the error is signaled by a routine */
 /*         in the call tree of this routine. */
 
-/*     6)  If the relational operator RELATE is not recognized, an */
+/*     7)  If the relational operator RELATE is not recognized, an */
 /*         error is signaled by a routine in the call tree of this */
 /*         routine. */
 
-/*     7)  If the size of the workspace is too small, an error is */
+/*     8)  If the size of the workspace WORK is too small, an error is */
 /*         signaled by a routine in the call tree of this routine. */
 
-/*     8)  If ADJUST is negative, an error is signaled by a routine in */
+/*     9)  If the aberration correction specifier contains an */
+/*         unrecognized value, an error is signaled by a routine in the */
+/*         call tree of this routine. */
+
+/*     10) If ADJUST is negative, an error is signaled by a routine in */
 /*         the call tree of this routine. */
 
-/*     9)  If either of the input body names do not map to NAIF ID */
+/*     11) If either of the input body names do not map to NAIF ID */
 /*         codes, an error is signaled by a routine in the call tree of */
 /*         this routine. */
 
-/*     10) If required ephemerides or other kernel data are not */
+/*     12) If required ephemerides or other kernel data are not */
 /*         available, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*     11) If a body has unequal equatorial radii, a search for */
-/*         coordinate events in the GEODETIC or PLANETOGRAPHIC */
-/*         coordinate systems will cause the SPICE(NOTSUPPORTED) error */
-/*         to signal. */
+/*     13) If the search uses GEODETIC or PLANETOGRAPHIC coordinates, and */
+/*         the center body of the reference frame has unequal equatorial */
+/*         radii, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
@@ -1107,19 +1138,24 @@ static logical c_false = FALSE_;
 
 /*     The following data are required: */
 
-/*        - SPK data: the calling application must load ephemeris data */
-/*          for the targets, observer, and any intermediate objects in */
-/*          a chain connecting the targets and observer that cover the */
-/*          time period specified by the window CNFINE. If aberration */
-/*          corrections are used, the states of target and observer */
-/*          relative to the solar system barycenter must be calculable */
-/*          from the available ephemeris data. Typically ephemeris data */
-/*          are made available by loading one or more SPK files using */
-/*          FURNSH. */
+/*     -  SPK data: the calling application must load ephemeris data */
+/*        for the targets, observer, and any intermediate objects in */
+/*        a chain connecting the targets and observer that cover the */
+/*        time period specified by the window CNFINE. If aberration */
+/*        corrections are used, the states of target and observer */
+/*        relative to the solar system barycenter must be calculable */
+/*        from the available ephemeris data. Typically ephemeris data */
+/*        are made available by loading one or more SPK files using */
+/*        FURNSH. */
 
-/*        - If non-inertial reference frames are used, then PCK */
-/*          files, frame kernels, C-kernels, and SCLK kernels may be */
-/*          needed. */
+/*     -  If non-inertial reference frames are used, then PCK */
+/*        files, frame kernels, C-kernels, and SCLK kernels may be */
+/*        needed. */
+
+/*     -  In some cases the observer's state may be computed at times */
+/*        outside of CNFINE by as much as 2 seconds; data required to */
+/*        compute this state must be provided by loaded kernels. See */
+/*        $Particulars for details. */
 
 /*     Such kernel data are normally loaded once per program run, NOT */
 /*     every time this routine is called. */
@@ -1162,8 +1198,9 @@ static logical c_false = FALSE_;
 /*     of the solution set for any inequality constraint is contained in */
 /*     the union of */
 
-/*        - the set of points where an equality constraint is met */
-/*        - the boundary points of the confinement window */
+/*     -  the set of points where an equality constraint is met */
+
+/*     -  the boundary points of the confinement window */
 
 /*     the solutions of both equality and inequality constraints can be */
 /*     found easily once the monotone windows have been found. */
@@ -1268,6 +1305,37 @@ static logical c_false = FALSE_;
 /*     to use the result window from one search as the confinement window */
 /*     of the next. */
 
+/*     Certain types of searches require the state of the observer, */
+/*     relative to the solar system barycenter, to be computed at times */
+/*     slightly outside the confinement window CNFINE. The time window */
+/*     that is actually used is the result of "expanding" CNFINE by a */
+/*     specified amount "T": each time interval of CNFINE is expanded by */
+/*     shifting the interval's left endpoint to the left and the right */
+/*     endpoint to the right by T seconds. Any overlapping intervals are */
+/*     merged. (The input argument CNFINE is not modified.) */
+
+/*     The window expansions listed below are additive: if both */
+/*     conditions apply, the window expansion amount is the sum of the */
+/*     individual amounts. */
+
+/*     -  If a search uses an equality constraint, the time window */
+/*        over which the state of the observer is computed is expanded */
+/*        by 1 second at both ends of all of the time intervals */
+/*        comprising the window over which the search is conducted. */
+
+/*     -  If a search uses stellar aberration corrections, the time */
+/*        window over which the state of the observer is computed is */
+/*        expanded as described above. */
+
+/*     When light time corrections are used, expansion of the search */
+/*     window also affects the set of times at which the light time- */
+/*     corrected state of the target is computed. */
+
+/*     In addition to the possible 2 second expansion of the search */
+/*     window that occurs when both an equality constraint and stellar */
+/*     aberration corrections are used, round-off error should be taken */
+/*     into account when the need for data availability is analyzed. */
+
 /*     Longitude and Right Ascension */
 /*     ============================= */
 
@@ -1282,16 +1350,33 @@ static logical c_false = FALSE_;
 
 /* $ Examples */
 
-/*     The numerical results shown for these examples may differ across */
+/*     The numerical results shown for this example may differ across */
 /*     platforms. The results depend on the SPICE kernels used as */
 /*     input, the compiler and supporting libraries, and the machine */
 /*     specific arithmetic implementation. */
 
-/*     The examples shown below require a "standard" set of SPICE */
-/*     kernels. We list these kernels in a meta kernel named */
-/*     'standard.tm'. */
+/*     1) Find the time during 2007 for which the subpoint position */
+/*        vector of the Sun on Earth in the IAU_EARTH frame lies within */
+/*        a geodetic latitude-longitude "box" defined as */
 
-/*        KPL/MK */
+/*           16 degrees <= latitude  <= 17 degrees */
+/*           85 degrees <= longitude <= 86 degrees */
+
+/*        This problem requires four searches, each search on one of the */
+/*        box restrictions. The user needs also realize the temporal */
+/*        behavior of latitude greatly differs from that of the */
+/*        longitude. The sub-observer point latitude varies between */
+/*        approximately 23.44 degrees and -23.44 degrees during the */
+/*        year. The sub-observer point longitude varies between -180 */
+/*        degrees and 180 degrees in one day. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: gfsubc_ex1.tm */
 
 /*           This meta-kernel is intended to support operation of SPICE */
 /*           example programs. The kernels shown here should not be */
@@ -1315,307 +1400,330 @@ static logical c_false = FALSE_;
 
 /*           \begindata */
 
-/*           KERNELS_TO_LOAD = ( '/kernels/gen/lsk/naif0008.tls' */
-/*                               '/kernels/gen/spk/de414.bsp' */
-/*                               '/kernels/gen/pck/pck00008.tpc' */
-/*                             ) */
+/*              KERNELS_TO_LOAD = ( 'de414.bsp', */
+/*                                  'pck00008.tpc', */
+/*                                  'naif0008.tls'  ) */
+/*           \begintext */
 
-/*      Example(1): */
-
-/*      Find the time during 2007 for which the subpoint position vector */
-/*      of the sun on earth in the IAU_EARTH frame lies within a geodetic */
-/*      latitude-longitude "box" defined as */
-
-/*         16 degrees <= latitude  <= 17 degrees */
-/*         85 degrees <= longitude <= 86 degrees */
-
-/*      This problem requires four searches, each search on one of the */
-/*      box restrictions. The user needs also realize the temporal */
-/*      behavior of latitude greatly differs from that of the longitude. */
-/*      The sub-observer point latitude varies between approximately */
-/*      23.44 degrees and -23.44 degrees during the year. The */
-/*      sub-observer point longitude varies between -180 degrees and */
-/*      180 degrees in one day. */
-
-/*           PROGRAM GFSUBC_EX1 */
-/*           IMPLICIT              NONE */
-
-/*     C */
-/*     C     Include GF parameter declarations: */
-/*     C */
-/*           INCLUDE               'gf.inc' */
-
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      SPD */
-/*           DOUBLE PRECISION      DPR */
-/*           DOUBLE PRECISION      RPD */
-/*           INTEGER               WNCARD */
-
-/*     C */
-/*     C     Local variables and initial parameters. */
-/*     C */
-/*           INTEGER               LBCELL */
-/*           PARAMETER           ( LBCELL = -5 ) */
-
-/*     C */
-/*     C     Create 50 windows. */
-/*     C */
-/*           INTEGER               MAXWIN */
-/*           PARAMETER           ( MAXWIN = 1000 ) */
-
-/*     C */
-/*     C     One window consists of two intervals. */
-/*     C */
-/*           INTEGER               NINTRVL */
-/*           PARAMETER           ( NINTRVL = MAXWIN *2 ) */
-
-/*           INTEGER               STRLEN */
-/*           PARAMETER           ( STRLEN = 40 ) */
-
-/*           CHARACTER*(STRLEN)    TIMFMT */
-/*           CHARACTER*(STRLEN)    BEGSTR */
-/*           CHARACTER*(STRLEN)    ENDSTR */
-/*           CHARACTER*(STRLEN)    TARGET */
-/*           CHARACTER*(STRLEN)    OBSRVR */
-/*           CHARACTER*(STRLEN)    ABCORR */
-/*           CHARACTER*(STRLEN)    METHOD */
-/*           CHARACTER*(STRLEN)    FIXREF */
-/*           CHARACTER*(STRLEN)    CRDSYS */
-/*           CHARACTER*(STRLEN)    COORD */
-/*           CHARACTER*(STRLEN)    RELATE */
-
-/*           DOUBLE PRECISION      STEP */
-/*           DOUBLE PRECISION      CNFINE  ( LBCELL : NINTRVL ) */
-/*           DOUBLE PRECISION      RESULT1 ( LBCELL : NINTRVL ) */
-/*           DOUBLE PRECISION      RESULT2 ( LBCELL : NINTRVL ) */
-/*           DOUBLE PRECISION      RESULT3 ( LBCELL : NINTRVL ) */
-/*           DOUBLE PRECISION      RESULT4 ( LBCELL : NINTRVL ) */
-/*           DOUBLE PRECISION      WORK    ( LBCELL : NINTRVL, NWMAX ) */
-/*           DOUBLE PRECISION      BEGTIM */
-/*           DOUBLE PRECISION      ENDTIM */
-/*           DOUBLE PRECISION      LEFT */
-/*           DOUBLE PRECISION      RIGHT */
-/*           DOUBLE PRECISION      REFVAL */
-/*           DOUBLE PRECISION      ADJUST */
-/*           DOUBLE PRECISION      RAD    ( 2 ) */
-/*           DOUBLE PRECISION      LON    ( 2 ) */
-/*           DOUBLE PRECISION      LAT    ( 2 ) */
-/*           DOUBLE PRECISION      TRGEPC */
-/*           DOUBLE PRECISION      LPOS   ( 3 ) */
-/*           DOUBLE PRECISION      RPOS   ( 3 ) */
-/*           DOUBLE PRECISION      SRFVEC ( 3 ) */
-
-/*           INTEGER               COUNT */
-/*           INTEGER               I */
-
-/*     C */
-/*     C     Load kernels. */
-/*     C */
-/*           CALL FURNSH ('/kernels/standard.tm') */
-
-/*           TIMFMT = 'YYYY-MON-DD HR:MN:SC.###### (TDB) ::TDB ::RND' */
-
-/*     C */
-/*     C     Initialize windows RESULT and CNFINE. */
-/*     C */
-/*           CALL SSIZED ( NINTRVL, RESULT1 ) */
-/*           CALL SSIZED ( NINTRVL, RESULT2 ) */
-/*           CALL SSIZED ( NINTRVL, RESULT3 ) */
-/*           CALL SSIZED ( NINTRVL, RESULT4 ) */
-/*           CALL SSIZED ( 2,      CNFINE ) */
-
-/*     C */
-/*     C     Store the time bounds of our search interval in */
-/*     C     the CNFINE confinement window. */
-/*     C */
-/*           CALL STR2ET ( '2007 JAN 01', BEGTIM ) */
-/*           CALL STR2ET ( '2008 JAN 01', ENDTIM ) */
-
-/*           CALL WNINSD ( BEGTIM, ENDTIM, CNFINE ) */
-
-/*     C */
-/*     C     The latitude varies relatively slowly (46 degrees) during */
-/*     C     the year. The extrema occur approximately every six months. */
-/*     C     Search using a step size less than half that value */
-/*     C     (180 days). For this example use ninety days (in units */
-/*     C     of seconds). */
-/*     C */
-/*           STEP   = SPD()*90.D0 */
-
-/*     C */
-/*     C     Perform four searches to determine the times when the */
-/*     C     latitude- longitude box restriction conditions apply to the */
-/*     C      subpoint vector. */
-/*     C */
-/*     C     Use geodetic coordinates. */
-/*     C */
-/*           ADJUST = 0.D0 */
-/*           TARGET = 'EARTH' */
-/*           OBSRVR = 'SUN' */
-/*           METHOD = 'Near point: ellipsoid' */
-/*           FIXREF = 'IAU_EARTH' */
-/*           CRDSYS = 'GEODETIC' */
-/*           ABCORR = 'NONE' */
-
-/*     C */
-/*     C     Perform the searches such that the result window of a search */
-/*     C     serves as the confinement window of the subsequent search. */
-/*     C */
-
-/*     C */
-/*     C     Since the latitude coordinate varies slowly and is well */
-/*     C     behaved over the time of the confinement window, search */
-/*     C     first for the windows satisfying the latitude requirements, */
-/*     C     then use that result as confinement for the */
-/*     C     longitude search. */
-/*     C */
-/*           COORD  = 'LATITUDE' */
-/*           REFVAL = 16.D0 * RPD() */
-/*           RELATE = '>' */
-
-/*           CALL GFSUBC (  TARGET,  FIXREF, */
-/*          .               METHOD,  ABCORR, OBSRVR, */
-/*          .               CRDSYS,  COORD, */
-/*          .               RELATE,  REFVAL, */
-/*          .               ADJUST,  STEP,  CNFINE, */
-/*          .               NINTRVL, NWMAX, WORK, RESULT1 ) */
-
-/*           REFVAL = 17.D0 * RPD() */
-/*           RELATE = '<' */
-
-/*           CALL GFSUBC (  TARGET,  FIXREF, */
-/*          .               METHOD,  ABCORR, OBSRVR, */
-/*          .               CRDSYS,  COORD, */
-/*          .               RELATE,  REFVAL, */
-/*          .               ADJUST,  STEP,  RESULT1, */
-/*          .               NINTRVL, NWMAX, WORK, RESULT2 ) */
-
-/*     C */
-/*     C     Now the longitude search. */
-/*     C */
-/*           COORD  = 'LONGITUDE' */
-
-/*     C */
-/*     C     Reset the step size to something appropriate for the 360 */
-/*     C     degrees in 24 hours domain. The longitude shows near */
-/*     C     linear behavior so use a step size less than half the period */
-/*     C     of twelve hours. Ten hours will suffice in this case. */
-/*     C */
-/*           STEP   = SPD() * (10.D0/24.D0) */
-
-/*           REFVAL = 85.D0 * RPD() */
-/*           RELATE = '>' */
+/*           End of meta-kernel */
 
 
-/*           CALL GFSUBC (  TARGET,  FIXREF, */
-/*          .               METHOD,  ABCORR, OBSRVR, */
-/*          .               CRDSYS,  COORD, */
-/*          .               RELATE,  REFVAL, */
-/*          .               ADJUST,  STEP,   RESULT2, */
-/*          .               NINTRVL, NWMAX, WORK, RESULT3 ) */
-
-/*     C */
-/*     C     Contract the endpoints of each window to account */
-/*     C     for possible round-off error at the -180/180 degree branch. */
-/*     C */
-/*     C     A contraction value of a millisecond should eliminate */
-/*     C     any round-off caused branch crossing. */
-/*     C */
-/*           CALL WNCOND ( 1D-3, 1D-3, RESULT3 ) */
-
-/*           REFVAL = 86.D0 * RPD() */
-/*           RELATE = '<' */
-
-/*           CALL GFSUBC (  TARGET,  FIXREF, */
-/*          .               METHOD,  ABCORR, OBSRVR, */
-/*          .               CRDSYS,  COORD, */
-/*          .               RELATE,  REFVAL, */
-/*          .               ADJUST,  STEP,   RESULT3, */
-/*          .               NINTRVL, NWMAX, WORK, RESULT4 ) */
-
-/*     C */
-/*     C     Check the number of intervals in the result window. */
-/*     C */
-/*           COUNT = WNCARD(RESULT4) */
-
-/*     C */
-/*     C     List the beginning and ending points in each interval */
-/*     C     if RESULT contains data. */
-/*     C */
-/*           IF ( COUNT .EQ. 0 ) THEN */
-/*              WRITE(*, '(A)') 'Result window is empty.' */
-/*           ELSE */
-
-/*              DO I = 1, COUNT */
-
-/*     C */
-/*     C           Fetch the endpoints of the Ith interval */
-/*     C           of the result window. */
-/*     C */
-/*                 CALL WNFETD ( RESULT4, I, LEFT, RIGHT  ) */
-
-/*                 CALL TIMOUT ( LEFT, TIMFMT, BEGSTR ) */
-/*                 CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
-
-/*     C */
-/*     C           Determine the latitude and longitude of the subpoint */
-/*     C           at the event interval boundaries. */
-/*     C */
-/*                 CALL SUBPNT ( METHOD, TARGET, LEFT, FIXREF, ABCORR, */
-/*          .                    OBSRVR, LPOS, TRGEPC, SRFVEC ) */
-/*                 CALL RECLAT ( LPOS, RAD(1), LON(1), LAT(1) ) */
-
-/*                 CALL SUBPNT ( METHOD, TARGET, RIGHT, FIXREF, ABCORR, */
-/*          .                    OBSRVR, RPOS, TRGEPC, SRFVEC ) */
-/*                 CALL RECLAT ( RPOS, RAD(2), LON(2), LAT(2) ) */
+/*        Example code begins here. */
 
 
-/*                 WRITE(*,*) 'From : ',BEGSTR,LAT(1)*DPR(),LON(1)*DPR() */
-/*                 WRITE(*,*) 'To   : ',ENDSTR,LAT(2)*DPR(),LON(2)*DPR() */
-/*                 WRITE(*,*) ' ' */
+/*              PROGRAM GFSUBC_EX1 */
+/*              IMPLICIT NONE */
 
-/*              END DO */
+/*        C */
+/*        C     Include GF parameter declarations: */
+/*        C */
+/*              INCLUDE               'gf.inc' */
 
-/*           END IF */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      SPD */
+/*              DOUBLE PRECISION      DPR */
+/*              DOUBLE PRECISION      RPD */
 
-/*           END */
+/*              INTEGER               WNCARD */
 
-/*   The program outputs: */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              INTEGER               LBCELL */
+/*              PARAMETER           ( LBCELL = -5 ) */
 
-/*   Time intervals                                Lat         Lon */
+/*        C */
+/*        C     Create 50 windows. */
+/*        C */
+/*              INTEGER               MAXWIN */
+/*              PARAMETER           ( MAXWIN = 1000 ) */
 
-/*   From : 2007-MAY-05 06:14:04.637734 (TDB)      16.0543561  86. */
-/*   To   : 2007-MAY-05 06:18:04.621907 (TDB)      16.0551478  85.0000042 */
+/*        C */
+/*        C     One window consists of two intervals. */
+/*        C */
+/*              INTEGER               NINTRVL */
+/*              PARAMETER           ( NINTRVL = MAXWIN *2 ) */
 
-/*   From : 2007-MAY-06 06:13:59.583483 (TDB)      16.3371472  86. */
-/*   To   : 2007-MAY-06 06:17:59.569239 (TDB)      16.3379265  85.0000042 */
+/*              INTEGER               STRLEN */
+/*              PARAMETER           ( STRLEN = 28 ) */
 
-/*   From : 2007-MAY-07 06:13:55.102939 (TDB)      16.6154436  86. */
-/*   To   : 2007-MAY-07 06:17:55.090299 (TDB)      16.6162103  85.0000042 */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(STRLEN)    TIMFMT */
+/*              CHARACTER*(STRLEN)    BEGSTR */
+/*              CHARACTER*(STRLEN)    ENDSTR */
+/*              CHARACTER*(STRLEN)    TARGET */
+/*              CHARACTER*(STRLEN)    OBSRVR */
+/*              CHARACTER*(STRLEN)    ABCORR */
+/*              CHARACTER*(STRLEN)    METHOD */
+/*              CHARACTER*(STRLEN)    FIXREF */
+/*              CHARACTER*(STRLEN)    CRDSYS */
+/*              CHARACTER*(STRLEN)    COORD */
+/*              CHARACTER*(STRLEN)    RELATE */
 
-/*   From : 2007-MAY-08 06:13:51.202604 (TDB)      16.8891626  86. */
-/*   To   : 2007-MAY-08 06:17:51.191583 (TDB)      16.8899165  85.0000042 */
+/*              DOUBLE PRECISION      STEP */
+/*              DOUBLE PRECISION      CNFINE  ( LBCELL : 2       ) */
+/*              DOUBLE PRECISION      RESULT1 ( LBCELL : NINTRVL ) */
+/*              DOUBLE PRECISION      RESULT2 ( LBCELL : NINTRVL ) */
+/*              DOUBLE PRECISION      RESULT3 ( LBCELL : NINTRVL ) */
+/*              DOUBLE PRECISION      RESULT4 ( LBCELL : NINTRVL ) */
+/*              DOUBLE PRECISION      WORK    ( LBCELL : NINTRVL, NWMAX ) */
+/*              DOUBLE PRECISION      BEGTIM */
+/*              DOUBLE PRECISION      ENDTIM */
+/*              DOUBLE PRECISION      LEFT */
+/*              DOUBLE PRECISION      RIGHT */
+/*              DOUBLE PRECISION      REFVAL */
+/*              DOUBLE PRECISION      ADJUST */
+/*              DOUBLE PRECISION      RAD    ( 2 ) */
+/*              DOUBLE PRECISION      LON    ( 2 ) */
+/*              DOUBLE PRECISION      LAT    ( 2 ) */
+/*              DOUBLE PRECISION      TRGEPC */
+/*              DOUBLE PRECISION      LPOS   ( 3 ) */
+/*              DOUBLE PRECISION      RPOS   ( 3 ) */
+/*              DOUBLE PRECISION      SRFVEC ( 3 ) */
 
-/*   From : 2007-AUG-06 06:23:17.282927 (TDB)      16.6807174  86. */
-/*   To   : 2007-AUG-06 06:27:17.264009 (TDB)      16.6799616  85.0000042 */
+/*              INTEGER               COUNT */
+/*              INTEGER               I */
 
-/*   From : 2007-AUG-07 06:23:10.545441 (TDB)      16.4064108  86. */
-/*   To   : 2007-AUG-07 06:27:10.524925 (TDB)      16.4056426  85.0000042 */
+/*        C */
+/*        C     Saved variables */
+/*        C */
+/*        C     The confinement, workspace and result windows CNFINE, */
+/*        C     WORK, RESULT1, RESULT2, RESULT3 and RESULT4 are saved */
+/*        C     because this practice helps to prevent stack overflow. */
+/*        C */
+/*              SAVE                  CNFINE */
+/*              SAVE                  RESULT1 */
+/*              SAVE                  RESULT2 */
+/*              SAVE                  RESULT3 */
+/*              SAVE                  RESULT4 */
+/*              SAVE                  WORK */
 
-/*   From : 2007-AUG-08 06:23:03.233995 (TDB)      16.1276778  86. */
-/*   To   : 2007-AUG-08 06:27:03.211889 (TDB)      16.1268975  85.0000042 */
+/*        C */
+/*        C     Load kernels. */
+/*        C */
+/*              CALL FURNSH ('gfsubc_ex1.tm') */
+
+/*              TIMFMT = 'YYYY-MON-DD HR:MN:SC.###### ::TDB ::RND' */
+
+/*        C */
+/*        C     Initialize windows RESULT and CNFINE. */
+/*        C */
+/*              CALL SSIZED ( NINTRVL, RESULT1 ) */
+/*              CALL SSIZED ( NINTRVL, RESULT2 ) */
+/*              CALL SSIZED ( NINTRVL, RESULT3 ) */
+/*              CALL SSIZED ( NINTRVL, RESULT4 ) */
+/*              CALL SSIZED ( 2,       CNFINE  ) */
+
+/*        C */
+/*        C     Store the time bounds of our search interval in */
+/*        C     the CNFINE confinement window. */
+/*        C */
+/*              CALL STR2ET ( '2007 JAN 01', BEGTIM ) */
+/*              CALL STR2ET ( '2008 JAN 01', ENDTIM ) */
+
+/*              CALL WNINSD ( BEGTIM, ENDTIM, CNFINE ) */
+
+/*        C */
+/*        C     The latitude varies relatively slowly (46 degrees) during */
+/*        C     the year. The extrema occur approximately every six */
+/*        C     months. Search using a step size less than half that */
+/*        C     value (180 days). For this example use ninety days (in */
+/*        C     units of seconds). */
+/*        C */
+/*              STEP   = SPD()*90.D0 */
+
+/*        C */
+/*        C     Perform four searches to determine the times when the */
+/*        C     latitude- longitude box restriction conditions apply to */
+/*        C     the subpoint vector. */
+/*        C */
+/*        C     Use geodetic coordinates. */
+/*        C */
+/*              ADJUST = 0.D0 */
+/*              TARGET = 'EARTH' */
+/*              OBSRVR = 'SUN' */
+/*              METHOD = 'Near point: ellipsoid' */
+/*              FIXREF = 'IAU_EARTH' */
+/*              CRDSYS = 'GEODETIC' */
+/*              ABCORR = 'NONE' */
+
+/*        C */
+/*        C     Perform the searches such that the result window of a */
+/*        C     search serves as the confinement window of the */
+/*        C     subsequent search. */
+/*        C */
+/*        C     Since the latitude coordinate varies slowly and is well */
+/*        C     behaved over the time of the confinement window, search */
+/*        C     first for the windows satisfying the latitude */
+/*        C     requirements, then use that result as confinement for */
+/*        C     the longitude search. */
+/*        C */
+/*              COORD  = 'LATITUDE' */
+/*              REFVAL = 16.D0 * RPD() */
+/*              RELATE = '>' */
+
+/*              CALL GFSUBC (  TARGET,  FIXREF, */
+/*             .               METHOD,  ABCORR, OBSRVR, */
+/*             .               CRDSYS,  COORD, */
+/*             .               RELATE,  REFVAL, */
+/*             .               ADJUST,  STEP,  CNFINE, */
+/*             .               NINTRVL, NWMAX, WORK, RESULT1 ) */
+
+/*              REFVAL = 17.D0 * RPD() */
+/*              RELATE = '<' */
+
+/*              CALL GFSUBC (  TARGET,  FIXREF, */
+/*             .               METHOD,  ABCORR, OBSRVR, */
+/*             .               CRDSYS,  COORD, */
+/*             .               RELATE,  REFVAL, */
+/*             .               ADJUST,  STEP,  RESULT1, */
+/*             .               NINTRVL, NWMAX, WORK, RESULT2 ) */
+
+/*        C */
+/*        C     Now the longitude search. */
+/*        C */
+/*              COORD  = 'LONGITUDE' */
+
+/*        C */
+/*        C     Reset the step size to something appropriate for the 360 */
+/*        C     degrees in 24 hours domain. The longitude shows near */
+/*        C     linear behavior so use a step size less than half the */
+/*        C     period of twelve hours. Ten hours will suffice in this */
+/*        C     case. */
+/*        C */
+/*              STEP   = SPD() * (10.D0/24.D0) */
+
+/*              REFVAL = 85.D0 * RPD() */
+/*              RELATE = '>' */
+
+
+/*              CALL GFSUBC (  TARGET,  FIXREF, */
+/*             .               METHOD,  ABCORR, OBSRVR, */
+/*             .               CRDSYS,  COORD, */
+/*             .               RELATE,  REFVAL, */
+/*             .               ADJUST,  STEP,   RESULT2, */
+/*             .               NINTRVL, NWMAX, WORK, RESULT3 ) */
+
+/*        C */
+/*        C     Contract the endpoints of each window to account */
+/*        C     for possible round-off error at the -180/180 degree */
+/*        C     branch. */
+/*        C */
+/*        C     A contraction value of a millisecond should eliminate */
+/*        C     any round-off caused branch crossing. */
+/*        C */
+/*              CALL WNCOND ( 1D-3, 1D-3, RESULT3 ) */
+
+/*              REFVAL = 86.D0 * RPD() */
+/*              RELATE = '<' */
+
+/*              CALL GFSUBC (  TARGET,  FIXREF, */
+/*             .               METHOD,  ABCORR, OBSRVR, */
+/*             .               CRDSYS,  COORD, */
+/*             .               RELATE,  REFVAL, */
+/*             .               ADJUST,  STEP,   RESULT3, */
+/*             .               NINTRVL, NWMAX, WORK, RESULT4 ) */
+
+/*        C */
+/*        C     Check the number of intervals in the result window. */
+/*        C */
+/*              COUNT = WNCARD(RESULT4) */
+
+/*        C */
+/*        C     List the beginning and ending points in each interval */
+/*        C     if RESULT contains data. */
+/*        C */
+/*              IF ( COUNT .EQ. 0 ) THEN */
+
+/*                 WRITE(*, '(A)') 'Result window is empty.' */
+
+/*              ELSE */
+
+/*                 WRITE(*, '(A)') '       Time (TDB)                 ' */
+/*             .   //              '     LAT (deg)      LON (deg)' */
+/*                 WRITE(*, '(A)') '       ---------------------------' */
+/*             .   //              '    -----------   -----------' */
+
+/*                 DO I = 1, COUNT */
+
+/*        C */
+/*        C           Fetch the endpoints of the Ith interval */
+/*        C           of the result window. */
+/*        C */
+/*                    CALL WNFETD ( RESULT4, I, LEFT, RIGHT  ) */
+
+/*                    CALL TIMOUT ( LEFT, TIMFMT, BEGSTR ) */
+/*                    CALL TIMOUT ( RIGHT, TIMFMT, ENDSTR ) */
+
+/*        C */
+/*        C           Determine the latitude and longitude of the */
+/*        C           subpoint at the event interval boundaries. */
+/*        C */
+/*                    CALL SUBPNT ( METHOD, TARGET, LEFT, */
+/*             .                    FIXREF, ABCORR, OBSRVR, */
+/*             .                    LPOS, TRGEPC, SRFVEC   ) */
+/*                    CALL RECLAT ( LPOS, RAD(1), LON(1), LAT(1) ) */
+
+/*                    CALL SUBPNT ( METHOD, TARGET, RIGHT, */
+/*             .                    FIXREF, ABCORR, OBSRVR, */
+/*             .                    RPOS, TRGEPC, SRFVEC   ) */
+/*                    CALL RECLAT ( RPOS, RAD(2), LON(2), LAT(2) ) */
+
+
+/*                    WRITE(*,'(2A,2F14.8)') 'From : ',    BEGSTR, */
+/*             .                              LAT(1)*DPR(), LON(1)*DPR() */
+/*                    WRITE(*,'(2A,2F14.8)') 'To   : ',    ENDSTR, */
+/*             .                              LAT(2)*DPR(), LON(2)*DPR() */
+/*                    WRITE(*,*) ' ' */
+
+/*                 END DO */
+
+/*              END IF */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*               Time (TDB)                      LAT (deg)      LON (deg) */
+/*               ---------------------------    -----------   ----------- */
+/*        From : 2007-MAY-05 06:12:59.452307    16.05435608   86.00000000 */
+/*        To   : 2007-MAY-05 06:16:59.436479    16.05514776   85.00000417 */
+
+/*        From : 2007-MAY-06 06:12:54.398070    16.33714720   86.00000000 */
+/*        To   : 2007-MAY-06 06:16:54.383826    16.33792651   85.00000417 */
+
+/*        From : 2007-MAY-07 06:12:49.917541    16.61544356   86.00000000 */
+/*        To   : 2007-MAY-07 06:16:49.904901    16.61621026   85.00000417 */
+
+/*        From : 2007-MAY-08 06:12:46.017221    16.88916258   86.00000000 */
+/*        To   : 2007-MAY-08 06:16:46.006200    16.88991646   85.00000417 */
+
+/*        From : 2007-AUG-06 06:22:12.099776    16.68071740   86.00000000 */
+/*        To   : 2007-AUG-06 06:26:12.080859    16.67996165   85.00000417 */
+
+/*        From : 2007-AUG-07 06:22:05.362314    16.40641076   86.00000000 */
+/*        To   : 2007-AUG-07 06:26:05.341799    16.40564259   85.00000417 */
+
+/*        From : 2007-AUG-08 06:21:58.050893    16.12767782   86.00000000 */
+/*        To   : 2007-AUG-08 06:25:58.028786    16.12689748   85.00000417 */
+
 
 /* $ Restrictions */
 
-/*     1) The kernel files to be used by this routine must be loaded */
-/*        (normally using the SPICELIB routine FURNSH) before this */
-/*        routine is called. */
+/*     1)  The kernel files to be used by this routine must be loaded */
+/*         (normally using the SPICELIB routine FURNSH) before this */
+/*         routine is called. */
 
-/*     2) This routine has the side effect of re-initializing the */
-/*        coordinate quantity utility package.  Callers may */
-/*        need to re-initialize the package after calling this routine. */
+/*     2)  This routine has the side effect of re-initializing the */
+/*         coordinate quantity utility package. Callers may */
+/*         need to re-initialize the package after calling this routine. */
 
 /* $ Literature_References */
 
@@ -1623,10 +1731,30 @@ static logical c_false = FALSE_;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     E.D. Wright    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 27-OCT-2021 (JDR) (NJB) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Added initialization of QCPARS(10) to pacify Valgrind. */
+
+/*        Modified code example's output to comply with maximum line */
+/*        length of header comments. Added SAVE statements for CNFINE, */
+/*        WORK, RESULT1, RESULT2, RESULT3 and RESULT4 variables in code */
+/*        example. */
+
+/*        Added entries #5 and #9 in $Exceptions section. */
+
+/*        Updated description of WORK and RESULT arguments in $Brief_I/O, */
+/*        $Detailed_Input and $Detailed_Output. Extended description of */
+/*        COORD argument. */
+
+/*        Updated header to describe use of expanded confinement window. */
 
 /* -    SPICELIB Version 1.1.0, 05-SEP-2012 (EDW) */
 
@@ -1638,14 +1766,14 @@ static logical c_false = FALSE_;
 /*        Removed the STEP > 0 error check. The GFSSTP call includes */
 /*        the check. */
 
-/* -   SPICELIB Version 1.0.1, 22-AUG-2009 (EDW) */
+/* -    SPICELIB Version 1.0.1, 22-AUG-2009 (EDW) */
 
-/*       Edited argument descriptions. */
+/*        Edited argument descriptions. */
 
-/*       Edit to Example description, replaced "intercept" with */
-/*       "sub-observer point." */
+/*        Edit to Example description, replaced "intercept" with */
+/*        "sub-observer point." */
 
-/* -   SPICELIB Version 1.0.0, 17-FEB-2009 (NJB) (EDW) */
+/* -    SPICELIB Version 1.0.0, 17-FEB-2009 (NJB) (EDW) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1733,6 +1861,11 @@ static logical c_false = FALSE_;
     qdpars[0] = dvec[0];
     qdpars[1] = dvec[1];
     qdpars[2] = dvec[2];
+
+/*     Initialize QCPARS(10) since GFEVNT will try to */
+/*     left-justify it and convert it to upper case. */
+
+    s_copy(qcpars + 720, " ", (ftnlen)80, (ftnlen)1);
 
 /*     Set the step size. */
 

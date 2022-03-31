@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PREFIX (Prefix a character string) */
+/* $Procedure PREFIX (Prefix a character string) */
 /* Subroutine */ int prefix_(char *pref, integer *spaces, char *string, 
 	ftnlen pref_len, ftnlen string_len)
 {
@@ -21,7 +21,7 @@
 
 /* $ Abstract */
 
-/*      Add a prefix to a character string. */
+/*     Add a prefix to a character string. */
 
 /* $ Disclaimer */
 
@@ -54,99 +54,108 @@
 
 /* $ Keywords */
 
-/*      ASSIGNMENT,  CHARACTER,  STRING */
+/*     ASSIGNMENT */
+/*     CHARACTER */
+/*     STRING */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      PREF       I   Prefix. */
-/*      SPACES     I   Number of spaces separating prefix and suffix. */
-/*      STRING    I/O  Suffix on input, string on output. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     PREF       I   Prefix. */
+/*     SPACES     I   Number of spaces separating prefix and suffix. */
+/*     STRING    I-O  Suffix on input, string on output. */
 
 /* $ Detailed_Input */
 
-/*      PREF        is the prefix to be added to the string. Trailing */
-/*                  blanks are ignored. (A blank prefix is interpreted */
-/*                  as a null prefix.) */
+/*     PREF     is the prefix to be added to the string. Trailing */
+/*              blanks are ignored. (A blank prefix is interpreted */
+/*              as a null prefix.) */
 
-/*      SPACES      is the number of spaces (blanks) in the output */
-/*                  string separating the last non-blank character */
-/*                  of the prefix from the first (blank or non-blank) */
-/*                  character of the suffix. Typically, this will be */
-/*                  zero or one. If not positive, SPACES defaults to */
-/*                  zero. */
+/*     SPACES   is the number of spaces (blanks) in the output */
+/*              string separating the last non-blank character */
+/*              of the prefix from the first (blank or non-blank) */
+/*              character of the suffix. Typically, this will be */
+/*              zero or one. If not positive, SPACES defaults to */
+/*              zero. */
 
-/*      STRING      on input is the suffix to which the prefix is to */
-/*                  be added. Leading blanks are significant. */
+/*     STRING   on input is the suffix to which the prefix is to */
+/*              be added. Leading blanks are significant. */
 
 /* $ Detailed_Output */
 
-/*      STRING      on output is the is the prefixed string. If STRING */
-/*                  is not large enough to contain the output string, */
-/*                  the output string is truncated on the right. */
+/*     STRING   on output is the is the prefixed string. If STRING */
+/*              is not large enough to contain the output string, */
+/*              the output string is truncated on the right. */
 
-/*                  STRING may NOT overwrite PREF. */
+/*              STRING may NOT overwrite PREF. */
 
 /* $ Parameters */
 
 /*     None. */
 
-/* $ Particulars */
-
-/*      The suffix is shifted to the right to make room for the prefix */
-/*      and required spaces, which are then added to the front of the */
-/*      string. (The shift operation handles any necessary truncation.) */
-
-/* $ Examples */
-
-/*      The following examples illustrate the use of PREFIX. */
-
-/*            PREF         STRING (input)   SPACES    STRING (output) */
-/*            ----------   --------------   ------    --------------- */
-/*            'abc     '   'def    '             0    'abcdef ' */
-/*            'abc     '   'def    '             1    'abc def' */
-/*            'abc     '   ' def   '             0    'abc def' */
-/*            'abc     '   ' def   '             1    'abc  de' */
-/*            ' abc    '   'def    '             0    ' abcdef' */
-/*            ' abc    '   'def    '             1    ' abc de' */
-/*            ' abc    '   ' def   '            -1    ' abc de' */
-/*            '        '   'def    '             0    'def    ' */
-/*            '        '   'def    '             1    ' def   ' */
-/*            ' abc    '   '       '             0    ' abc   ' */
-
-/* $ Restrictions */
-
-/*      PREF and STRING must be distinct. */
-
 /* $ Exceptions */
 
-/*      Error free. */
+/*     Error free. */
 
-/*      1) If SPACES is negative it is treated as zero. */
+/*     1)  If SPACES is negative it is treated as zero. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     The suffix is shifted to the right to make room for the prefix */
+/*     and required spaces, which are then added to the front of the */
+/*     string. (The shift operation handles any necessary truncation.) */
+
+/* $ Examples */
+
+/*     The following examples illustrate the use of PREFIX. */
+
+/*           PREF         STRING (input)   SPACES    STRING (output) */
+/*           ----------   --------------   ------    --------------- */
+/*           'abc     '   'def    '             0    'abcdef ' */
+/*           'abc     '   'def    '             1    'abc def' */
+/*           'abc     '   ' def   '             0    'abc def' */
+/*           'abc     '   ' def   '             1    'abc  de' */
+/*           ' abc    '   'def    '             0    ' abcdef' */
+/*           ' abc    '   'def    '             1    ' abc de' */
+/*           ' abc    '   ' def   '            -1    ' abc de' */
+/*           '        '   'def    '             0    'def    ' */
+/*           '        '   'def    '             1    ' def   ' */
+/*           ' abc    '   '       '             0    ' abc   ' */
+
+/* $ Restrictions */
+
+/*     1)  PREF and STRING must be distinct. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 18-MAR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */

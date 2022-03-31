@@ -5,8 +5,8 @@
 
 #include "f2c.h"
 
-/* $Procedure      DRDGEO ( Derivative of rectangular w.r.t. geodetic ) */
-/* Subroutine */ int drdgeo_(doublereal *long__, doublereal *lat, doublereal *
+/* $Procedure DRDGEO ( Derivative of rectangular w.r.t. geodetic ) */
+/* Subroutine */ int drdgeo_(doublereal *lon, doublereal *lat, doublereal *
 	alt, doublereal *re, doublereal *f, doublereal *jacobi)
 {
     /* Builtin functions */
@@ -23,8 +23,8 @@
 
 /* $ Abstract */
 
-/*     This routine computes the Jacobian of the transformation from */
-/*     geodetic to rectangular coordinates. */
+/*     Compute the Jacobian matrix of the transformation from geodetic */
+/*     to rectangular coordinates. */
 
 /* $ Disclaimer */
 
@@ -64,9 +64,9 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     LONG       I   Geodetic longitude of point (radians). */
+/*     LON        I   Geodetic longitude of point (radians). */
 /*     LAT        I   Geodetic latitude of point (radians). */
 /*     ALT        I   Altitude of point above the reference spheroid. */
 /*     RE         I   Equatorial radius of the reference spheroid. */
@@ -75,50 +75,50 @@
 
 /* $ Detailed_Input */
 
-/*     LONG       Geodetic longitude of point (radians). */
+/*     LON      is the geodetic longitude of point (radians). */
 
-/*     LAT        Geodetic latitude  of point (radians). */
+/*     LAT      is the geodetic latitude  of point (radians). */
 
-/*     ALT        Altitude of point above the reference spheroid. */
+/*     ALT      is the altitude of point above the reference spheroid. */
 
-/*     RE         Equatorial radius of the reference spheroid. */
+/*     RE       is the equatorial radius of the reference spheroid. */
 
-/*     F          Flattening coefficient = (RE-RP) / RE,  where RP is */
-/*                the polar radius of the spheroid.  (More importantly */
-/*                RP = RE*(1-F).) */
+/*     F        is the flattening coefficient = (RE-RP) / RE,  where */
+/*              RP is the polar radius of the spheroid. (More */
+/*              importantly RP = RE*(1-F).) */
 
 /* $ Detailed_Output */
 
-/*     JACOBI     is the matrix of partial derivatives of the conversion */
-/*                between geodetic and rectangular coordinates.  It */
-/*                has the form */
+/*     JACOBI   is the matrix of partial derivatives of the conversion */
+/*              between geodetic and rectangular coordinates. It */
+/*              has the form */
 
-/*                   .-                              -. */
-/*                   |  DX/DLONG   DX/DLAT  DX/DALT   | */
-/*                   |  DY/DLONG   DY/DLAT  DY/DALT   | */
-/*                   |  DZ/DLONG   DZ/DLAT  DZ/DALT   | */
-/*                   `-                              -' */
+/*                 .-                             -. */
+/*                 |  DX/DLON   DX/DLAT  DX/DALT   | */
+/*                 |  DY/DLON   DY/DLAT  DY/DALT   | */
+/*                 |  DZ/DLON   DZ/DLAT  DZ/DALT   | */
+/*                 `-                             -' */
 
-/*                evaluated at the input values of LONG, LAT and ALT. */
+/*              evaluated at the input values of LON, LAT and ALT. */
 
-/*                The formulae for computing X, Y, and Z from */
-/*                geodetic coordinates are given below. */
+/*              The formulae for computing X, Y, and Z from */
+/*              geodetic coordinates are given below. */
 
-/*                   X = [ALT +          RE/G(LAT,F)]*COS(LONG)*COS(LAT) */
-/*                   Y = [ALT +          RE/G(LAT,F)]*SIN(LONG)*COS(LAT) */
-/*                   Z = [ALT + RE*(1-F)**2/G(LAT,F)]*          SIN(LAT) */
+/*                 X = [ALT +          RE/G(LAT,F)]*COS(LON)*COS(LAT) */
+/*                 Y = [ALT +          RE/G(LAT,F)]*SIN(LON)*COS(LAT) */
+/*                 Z = [ALT + RE*(1-F)**2/G(LAT,F)]*         SIN(LAT) */
 
-/*                where */
+/*              where */
 
-/*                   RE is the polar radius of the reference spheroid. */
+/*                 RE is the polar radius of the reference spheroid. */
 
-/*                   F  is the flattening factor (the polar radius is */
-/*                      obtained by multiplying the equatorial radius by */
-/*                      1-F). */
+/*                 F  is the flattening factor (the polar radius is */
+/*                    obtained by multiplying the equatorial radius by */
+/*                    1-F). */
 
-/*                   G( LAT, F ) is given by */
+/*                 G( LAT, F ) is given by */
 
-/*                      sqrt ( cos(lat)**2 + (1-f)**2 * sin(lat)**2 ) */
+/*                    sqrt ( cos(lat)**2 + (1-f)**2 * sin(lat)**2 ) */
 
 /* $ Parameters */
 
@@ -126,11 +126,11 @@
 
 /* $ Exceptions */
 
-/*     1) If the flattening coefficient is greater than or equal to */
-/*        one, the error SPICE(VALUEOUTOFRANGE) is signaled. */
+/*     1)  If the flattening coefficient is greater than or equal to */
+/*         one, the error SPICE(VALUEOUTOFRANGE) is signaled. */
 
-/*     2) If the equatorial radius is non-positive, the error */
-/*        SPICE(BADRADIUS) is signaled. */
+/*     2)  If the equatorial radius is non-positive, the error */
+/*         SPICE(BADRADIUS) is signaled. */
 
 /* $ Files */
 
@@ -139,7 +139,7 @@
 /* $ Particulars */
 
 /*     It is often convenient to describe the motion of an object in */
-/*     the geodetic coordinate system.  However, when performing */
+/*     the geodetic coordinate system. However, when performing */
 /*     vector computations its hard to beat rectangular coordinates. */
 
 /*     To transform states given with respect to geodetic coordinates */
@@ -148,57 +148,262 @@
 
 /*     Given a state in geodetic coordinates */
 
-/*          ( long, lat, alt, dlong, dlat, dalt ) */
+/*          ( lon, lat, alt, dlon, dlat, dalt ) */
 
 /*     the velocity in rectangular coordinates is given by the matrix */
 /*     equation: */
 
-/*                    t          |                                   t */
-/*        (dx, dy, dz)   = JACOBI|              * (dlong, dlat, dalt) */
-/*                               |(long,lat,alt) */
+/*                    t          |                                  t */
+/*        (dx, dy, dz)   = JACOBI|              * (dlon, dlat, dalt) */
+/*                               |(lon,lat,alt) */
 
 
 /*     This routine computes the matrix */
 
 /*              | */
 /*        JACOBI| */
-/*              |(long,lat,alt) */
+/*              |(lon,lat,alt) */
 
 /* $ Examples */
 
-/*     Suppose that one has a model that gives radius, longitude and */
-/*     latitude as a function of time (long(t), lat(t), alt(t) ) for */
-/*     which the derivatives ( dlong/dt, dlat/dt, dalt/dt ) are */
-/*     computable. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     To find the velocity of the object in bodyfixed rectangular */
-/*     coordinates, one simply multiplies the Jacobian of the */
-/*     transformation from geodetic to rectangular coordinates, */
-/*     evaluated at (long(t), lat(t), alt(t) ), by the vector of */
-/*     derivatives of the geodetic coordinates. */
+/*     1) Find the geodetic state of the earth as seen from */
+/*        Mars in the IAU_MARS reference frame at January 1, 2005 TDB. */
+/*        Map this state back to rectangular coordinates as a check. */
 
-/*     In code this looks like: */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: drdgeo_ex1.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*              File name                     Contents */
+/*              ---------                     -------- */
+/*              de421.bsp                     Planetary ephemeris */
+/*              pck00010.tpc                  Planet orientation and */
+/*                                            radii */
+/*              naif0009.tls                  Leapseconds */
+
+
+/*           \begindata */
+
+/*              KERNELS_TO_LOAD = ( 'de421.bsp', */
+/*                                  'pck00010.tpc', */
+/*                                  'naif0009.tls'  ) */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DRDGEO_EX1 */
+/*              IMPLICIT NONE */
 
 /*        C */
-/*        C     Load the derivatives of long, lat, and alt into the */
-/*        C     geodetic velocity vector GEOV. */
+/*        C     SPICELIB functions */
 /*        C */
-/*              GEOV(1) = DLONG_DT ( T ) */
-/*              GEOV(2) = DLAT_DT  ( T ) */
-/*              GEOV(3) = DALT_DT  ( T ) */
+/*              DOUBLE PRECISION      RPD */
 
 /*        C */
-/*        C     Determine the Jacobian of the transformation from */
-/*        C     geodetic to rectangular coordinates at the geodetic */
-/*        C     coordinates of time T. */
+/*        C     Local parameters */
 /*        C */
-/*              CALL DRDGEO ( LONG(T), LAT(T), ALT(T), RE, F, JACOBI ) */
+/*              CHARACTER*(*)         FMT1 */
+/*              PARAMETER           ( FMT1 = '(A,E18.8)' ) */
 
 /*        C */
-/*        C     Multiply the Jacobian on the right by the geodetic */
-/*        C     velocity to obtain the rectangular velocity RECV. */
+/*        C     Local variables */
 /*        C */
-/*              CALL MXV ( JACOBI, GEOV, RECV ) */
+/*              DOUBLE PRECISION      ALT */
+/*              DOUBLE PRECISION      DRECTN ( 3 ) */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      F */
+/*              DOUBLE PRECISION      JACOBI ( 3, 3 ) */
+/*              DOUBLE PRECISION      LAT */
+/*              DOUBLE PRECISION      LON */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      GEOVEL ( 3 ) */
+/*              DOUBLE PRECISION      RADII  ( 3 ) */
+/*              DOUBLE PRECISION      RE */
+/*              DOUBLE PRECISION      RECTAN ( 3 ) */
+/*              DOUBLE PRECISION      RP */
+/*              DOUBLE PRECISION      STATE  ( 6 ) */
+
+/*              INTEGER               N */
+
+/*        C */
+/*        C     Load SPK, PCK, and LSK kernels, use a meta kernel for */
+/*        C     convenience. */
+/*        C */
+/*              CALL FURNSH ( 'drdgeo_ex1.tm' ) */
+
+/*        C */
+/*        C     Look up the radii for Mars.  Although we */
+/*        C     omit it here, we could first call BADKPV */
+/*        C     to make sure the variable BODY499_RADII */
+/*        C     has three elements and numeric data type. */
+/*        C     If the variable is not present in the kernel */
+/*        C     pool, BODVRD will signal an error. */
+/*        C */
+/*              CALL BODVRD ( 'MARS', 'RADII', 3, N, RADII ) */
+
+/*        C */
+/*        C     Compute flattening coefficient. */
+/*        C */
+/*              RE  =  RADII(1) */
+/*              RP  =  RADII(3) */
+/*              F   =  ( RE - RP ) / RE */
+
+/*        C */
+/*        C     Look up the apparent state of earth as seen from Mars */
+/*        C     at January 1, 2005 TDB, relative to the IAU_MARS */
+/*        C     reference frame. */
+/*        C */
+/*              CALL STR2ET ( 'January 1, 2005 TDB', ET ) */
+
+/*              CALL SPKEZR ( 'Earth', ET,    'IAU_MARS', 'LT+S', */
+/*             .              'Mars',  STATE, LT                ) */
+
+/*        C */
+/*        C     Convert position to geodetic coordinates. */
+/*        C */
+/*              CALL RECGEO ( STATE, RE, F, LON, LAT, ALT ) */
+
+/*        C */
+/*        C     Convert velocity to geodetic coordinates. */
+/*        C */
+
+/*              CALL DGEODR (  STATE(1), STATE(2), STATE(3), */
+/*             .               RE,       F,        JACOBI   ) */
+
+/*              CALL MXV ( JACOBI, STATE(4), GEOVEL ) */
+
+/*        C */
+/*        C     As a check, convert the geodetic state back to */
+/*        C     rectangular coordinates. */
+/*        C */
+/*              CALL GEOREC ( LON, LAT, ALT, RE, F, RECTAN ) */
+
+/*              CALL DRDGEO ( LON, LAT, ALT, RE, F, JACOBI ) */
+
+/*              CALL MXV ( JACOBI, GEOVEL, DRECTN ) */
+
+
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X (km)                 = ', STATE(1) */
+/*              WRITE(*,FMT1) '  Y (km)                 = ', STATE(2) */
+/*              WRITE(*,FMT1) '  Z (km)                 = ', STATE(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular velocity:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  dX/dt (km/s)           = ', STATE(4) */
+/*              WRITE(*,FMT1) '  dY/dt (km/s)           = ', STATE(5) */
+/*              WRITE(*,FMT1) '  dZ/dt (km/s)           = ', STATE(6) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Ellipsoid shape parameters: ' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Equatorial radius (km) = ', RE */
+/*              WRITE(*,FMT1) '  Polar radius      (km) = ', RP */
+/*              WRITE(*,FMT1) '  Flattening coefficient = ', F */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Geodetic coordinates:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  Longitude (deg)        = ', LON / RPD() */
+/*              WRITE(*,FMT1) '  Latitude  (deg)        = ', LAT / RPD() */
+/*              WRITE(*,FMT1) '  Altitude  (km)         = ', ALT */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Geodetic velocity:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  d Longitude/dt (deg/s) = ', */
+/*             .                                         GEOVEL(1)/RPD() */
+/*              WRITE(*,FMT1) '  d Latitude/dt  (deg/s) = ', */
+/*             .                                         GEOVEL(2)/RPD() */
+/*              WRITE(*,FMT1) '  d Altitude/dt  (km/s)  = ', GEOVEL(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular coordinates from inverse ' // */
+/*             .           'mapping:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  X (km)                 = ', RECTAN(1) */
+/*              WRITE(*,FMT1) '  Y (km)                 = ', RECTAN(2) */
+/*              WRITE(*,FMT1) '  Z (km)                 = ', RECTAN(3) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,*) 'Rectangular velocity from inverse mapping:' */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,FMT1) '  dX/dt (km/s)           = ', DRECTN(1) */
+/*              WRITE(*,FMT1) '  dY/dt (km/s)           = ', DRECTN(2) */
+/*              WRITE(*,FMT1) '  dZ/dt (km/s)           = ', DRECTN(3) */
+/*              WRITE(*,*) ' ' */
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Rectangular coordinates: */
+
+/*          X (km)                 =    -0.76096183E+08 */
+/*          Y (km)                 =     0.32436380E+09 */
+/*          Z (km)                 =     0.47470484E+08 */
+
+/*         Rectangular velocity: */
+
+/*          dX/dt (km/s)           =     0.22952075E+05 */
+/*          dY/dt (km/s)           =     0.53760111E+04 */
+/*          dZ/dt (km/s)           =    -0.20881149E+02 */
+
+/*         Ellipsoid shape parameters: */
+
+/*          Equatorial radius (km) =     0.33961900E+04 */
+/*          Polar radius      (km) =     0.33762000E+04 */
+/*          Flattening coefficient =     0.58860076E-02 */
+
+/*         Geodetic coordinates: */
+
+/*          Longitude (deg)        =     0.10320290E+03 */
+/*          Latitude  (deg)        =     0.81089876E+01 */
+/*          Altitude  (km)         =     0.33653182E+09 */
+
+/*         Geodetic velocity: */
+
+/*          d Longitude/dt (deg/s) =    -0.40539288E-02 */
+/*          d Latitude/dt  (deg/s) =    -0.33189934E-05 */
+/*          d Altitude/dt  (km/s)  =    -0.11211601E+02 */
+
+/*         Rectangular coordinates from inverse mapping: */
+
+/*          X (km)                 =    -0.76096183E+08 */
+/*          Y (km)                 =     0.32436380E+09 */
+/*          Z (km)                 =     0.47470484E+08 */
+
+/*         Rectangular velocity from inverse mapping: */
+
+/*          dX/dt (km/s)           =     0.22952075E+05 */
+/*          dY/dt (km/s)           =     0.53760111E+04 */
+/*          dZ/dt (km/s)           =    -0.20881149E+02 */
+
 
 /* $ Restrictions */
 
@@ -210,9 +415,18 @@
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 26-OCT-2021 (JDR) */
+
+/*        Changed the input argument name LONG to LON for consistency */
+/*        with other routines. */
+
+/*        Edited the header to comply with NAIF standard. */
+/*        Added complete code example. */
 
 /* -    SPICELIB Version 1.0.0, 20-JUL-2001 (WLT) */
 
@@ -220,11 +434,6 @@
 /* $ Index_Entries */
 
 /*     Jacobian of rectangular w.r.t. geodetic coordinates */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 
@@ -373,7 +582,7 @@
 /*     Thus given a point with the same latitude but a non-zero */
 /*     longitude, one can conclude that */
 
-/*                         re * cos (long) *cos (lat) */
+/*                         re * cos (lon) *cos (lat) */
 /*        x_0      =  --------------------------------- */
 /*                        _____________________________ */
 /*                       /      2    2           2 */
@@ -381,7 +590,7 @@
 
 
 
-/*                         re * sin (long) cos (lat) */
+/*                         re * sin (lon) cos (lat) */
 /*        y_0      =  --------------------------------- */
 /*                        _____________________________ */
 /*                       /      2    2           2 */
@@ -398,7 +607,7 @@
 
 /*     The unit normal, n, at this point is simply */
 
-/*        ( cos(long)cos(lat),  sin(long)cos(lat),  sin(lat) ) */
+/*        ( cos(lon)cos(lat),  sin(lon)cos(lat),  sin(lat) ) */
 
 
 /*     Thus for a point at altitude alt, we simply add the vector */
@@ -407,18 +616,18 @@
 
 /*     to the vector ( x_0, y_0, z_0 ).  Hence we have */
 
-/*        x = [ alt +          re/g(lat,f) ] * cos(long) * cos(lat) */
-/*        y = [ alt +          re/g(lat,f) ] * sin(long) * cos(lat) */
-/*        z = [ alt + re*(1-f)**2/g(lat,f) ] *             sin(lat) */
+/*        x = [ alt +          re/g(lat,f) ] * cos(lon) * cos(lat) */
+/*        y = [ alt +          re/g(lat,f) ] * sin(lon) * cos(lat) */
+/*        z = [ alt + re*(1-f)**2/g(lat,f) ] *            sin(lat) */
 
 
-/*     We're going to need the sine and cosine of LAT and LONG many */
+/*     We're going to need the sine and cosine of LAT and LON many */
 /*     times.  We'll just compute them once. */
 
     clat = cos(*lat);
-    clon = cos(*long__);
+    clon = cos(*lon);
     slat = sin(*lat);
-    slon = sin(*long__);
+    slon = sin(*lon);
 
 /*     Referring to the G given in the header we have... */
 
@@ -429,7 +638,7 @@
     dgdlat = (flat2 - 1.) * slat * clat / g;
 
 /*     Now simply take the partial derivatives of the x,y,z w.r.t. */
-/*     long,lat, alt. */
+/*     lon, lat, alt. */
 
     jacobi[0] = -(*alt + *re / g) * slon * clat;
     jacobi[1] = (*alt + *re / g) * clon * clat;

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            SYDIMI ( Return the dimension of a symbol ) */
+/* $Procedure SYDIMI ( Return the dimension of a symbol ) */
 integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval, 
 	ftnlen name_len, ftnlen tabsym_len)
 {
@@ -68,35 +68,31 @@ integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 /*     NAME       I   Name of the symbol whose dimension is desired. */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL     I   Components of the symbol table. */
 
 /*     The function returns the dimension of the symbol NAME. If NAME is */
 /*     not in the symbol table, the function returns the value zero. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose dimension is to be */
-/*                returned. If the symbol is not in the symbol table, the */
-/*                function returns the value zero. This function is case */
-/*                sensitive, NAME must match a symbol exactly. */
+/*     NAME     is the name of the symbol whose dimension is to be */
+/*              returned. If the symbol is not in the symbol table, the */
+/*              function returns the value zero. This function is case */
+/*              sensitive, NAME must match a symbol exactly. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL      are the components of an integer symbol table. */
-/*                 The table may or may not contain the symbol NAME. */
+/*     TABVAL   are the components of an integer symbol table. The table */
+/*              may or may not contain the symbol NAME. */
 
 /* $ Detailed_Output */
 
 /*     The function returns the dimension of the symbol NAME. The */
-/*     dimension of a symbol is the number of values associated with */
-/*     that symbol. If NAME is not in the symbol table, the function */
-/*     returns the value zero. */
+/*     dimension of a symbol is the number of values associated with that */
+/*     symbol. If NAME is not in the symbol table, the function returns */
+/*     the value zero. */
 
 /* $ Parameters */
-
-/*     None. */
-
-/* $ Files */
 
 /*     None. */
 
@@ -104,9 +100,13 @@ integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 
 /*     None. */
 
+/* $ Files */
+
+/*     None. */
+
 /* $ Particulars */
 
-/*    None. */
+/*     None. */
 
 /* $ Examples */
 
@@ -152,24 +152,34 @@ integer sydimi_(char *name__, char *tabsym, integer *tabptr, integer *tabval,
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
+/* -    SPICELIB Version 1.2.0, 07-APR-2021 (JDR) */
 
-/*        If the value of the function RETURN is TRUE upon execution of */
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Updated */
+/*        $Brief_I/O to indicate that TABSYM, TABPTR, TABVAL are input */
+/*        arguments. */
+
+/* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
+
+/*        If the value of the function RETURN is .TRUE. upon execution of */
 /*        this module, this function is assigned a default value of */
 /*        either 0, 0.0D0, .FALSE., or blank depending on the type of */
 /*        the function. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*         Comment section for permuted index source lines was added */
 /*         following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

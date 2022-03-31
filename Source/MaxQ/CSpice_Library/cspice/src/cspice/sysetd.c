@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYSETD ( Set the value associated with a symbol ) */
+/* $Procedure SYSETD ( Set the value associated with a symbol ) */
 /* Subroutine */ int sysetd_(char *name__, doublereal *value, char *tabsym, 
 	integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen 
 	tabsym_len)
@@ -92,63 +92,62 @@ static integer c__1 = 1;
 /*     NAME       I   Name of the symbol whose associated value is to be */
 /*                    set. */
 /*     VALUE      I   Associated value of the symbol NAME. */
-
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose associated value is to */
-/*                be set. If NAME has values associated with it, they are */
-/*                removed, and VALUE becomes the only value associated */
-/*                with NAME. If NAME is not in the symbol table, a new */
-/*                symbol is created, provided there is room in the */
-/*                symbol table. */
+/*     NAME     is the name of the symbol whose associated value is to */
+/*              be set. */
 
-/*     VALUE      is the new value associated with the symbol NAME. */
+/*              If NAME has values associated with it, they are removed, */
+/*              and VALUE becomes the only value associated with NAME. If */
+/*              NAME is not in the symbol table, a new symbol is created, */
+/*              provided there is room in the symbol table. */
+
+/*     VALUE    is the new value associated with the symbol NAME. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a double precision symbol table. */
+/*     TABVAL   are the components of a double precision symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a double precision symbol table. */
-/*                If NAME has values associated with it, they are */
-/*                removed, and VALUE becomes the only value associated */
-/*                with NAME. If NAME is not in the symbol table, a new */
-/*                symbol is created, provided there is room in the */
-/*                symbol table. */
+/*     TABVAL   are the components of a double precision symbol table. */
+
+/*              If NAME has values associated with it, they are removed, */
+/*              and VALUE becomes the only value associated with NAME. If */
+/*              NAME is not in the symbol table, a new symbol is created, */
+/*              provided there is room in the symbol table. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the addition of a new symbol causes an overflow in the */
+/*         name table, the error SPICE(NAMETABLEFULL) is signaled. */
+
+/*     2)  If the addition of a new symbol causes an overflow in the */
+/*         pointer table, the error SPICE(POINTERTABLEFULL) is signaled. */
+
+/*     3)  If the addition of a new symbol causes an overflow in the */
+/*         value table, the error SPICE(VALUETABLEFULL) is signaled. */
+
 /* $ Files */
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1) If the addition of a new symbol causes an overflow in the */
-/*        name table, the error SPICE(NAMETABLEFULL) is signalled. */
-
-/*     2) If the addition of a new symbol causes an overflow in the */
-/*        pointer table, the error SPICE(POINTERTABLEFULL) is signalled. */
-
-/*     3) If the addition of a new symbolcauses an overflow in the */
-/*        value table, the error SPICE(VALUETABLEFULL) is signalled. */
-
 /* $ Particulars */
 
-/*     If NAME has values associated with it, they are */
-/*     removed, and VALUE becomes the only value associated */
-/*     with NAME. If NAME is not in the symbol table, a new */
-/*     symbol is created, provided there is room in the */
-/*     symbol table. */
+/*     If NAME has values associated with it, they are removed, and VALUE */
+/*     becomes the only value associated with NAME. If NAME is not in the */
+/*     symbol table, a new symbol is created, provided there is room in */
+/*     the symbol table. */
 
 /* $ Examples */
 
@@ -204,17 +203,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 17-JUN-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

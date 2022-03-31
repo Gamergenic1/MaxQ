@@ -93,20 +93,32 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle assigned to binary SPK or CK file. */
 /*     UNIT       I   Logical unit connected to text file. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file */
-/*                 which has been opened for read access. */
+/*     HANDLE   is the handle assigned to the binary SPK or CK file */
+/*              which has been opened for read access. */
 
-/*     UNIT        is the logical unit connected to the text file to */
-/*                 which the contents of the comment area of the SPK */
-/*                 or CK file will be written, beginning at the current */
-/*                 position of the file pointer. */
+/*              Use the SPICELIB routine DAFOPR to open the file for read */
+/*              access and get HANDLE unless SPKLEF or CKLPF has already */
+/*              been called and returned the handle. This file is */
+/*              unchanged by calling SPCEC. */
+
+/*     UNIT     is the logical unit connected to the text file to */
+/*              which the contents of the comment area of the SPK */
+/*              or CK file will be written, beginning at the current */
+/*              position of the file pointer. */
+
+/*              Use the SPICELIB routine TXTOPN to open the file and get */
+/*              UNIT. Upon exit, this file will contain the text from the */
+/*              comment area of the binary SPK or CK file, beginning at */
+/*              the line that was the position of the file pointer when */
+/*              SPCEC was called. In other words, SPCEC does not rewind */
+/*              or backspace this file before writing the text to it. */
 
 /* $ Detailed_Output */
 
@@ -118,37 +130,23 @@ static integer c__1 = 1;
 
 /* $ Exceptions */
 
-/*     1) If the comment area of the SPK or CK file is empty, nothing */
-/*        will be written to the text file. */
+/*     1)  If the comment area of the SPK or CK file is empty, nothing */
+/*         will be written to the text file. */
 
-/*     2) If there is a problem reading from the comment area, the error */
-/*        SPICE(FILEREADFAILED) is signalled. */
+/*     2)  If there is a problem reading from the comment area, the error */
+/*         SPICE(FILEREADFAILED) is signaled. */
 
-/*     3) If there is a problem writing to the text file, the error */
-/*        SPICE(FILEWRITEFAILED) is signalled. */
+/*     3)  If there is a problem writing to the text file, the error */
+/*         SPICE(FILEWRITEFAILED) is signaled. */
 
 /* $ Files */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file. */
-/*                 Use DAFOPR to open it for read access and get its */
-/*                 handle unless SPKLEF or CKLPF has already been called */
-/*                 and returned the handle.  This file is unchanged by */
-/*                 calling SPCEC. */
-
-/*     UNIT        is the logical unit connected to the text file which */
-/*                 has been opened for write access.  Use TXTOPN to */
-/*                 open the file and get its logical unit.  Upon exit, */
-/*                 this file will contain the text from the comment */
-/*                 area of the binary SPK or CK file, beginning at */
-/*                 the line that was the position of the file pointer */
-/*                 when SPCEC was called.  In other words, SPCEC does */
-/*                 not rewind or backspace this file before writing */
-/*                 the text to it. */
+/*     See argument HANDLE and UNIT. */
 
 /* $ Particulars */
 
 /*     The structure of SPK and CK files accommodates comments in */
-/*     addition to data.  The following three routines are available */
+/*     addition to data. The following three routines are available */
 /*     for accessing the comment area of a binary SPK or CK file: */
 
 /*           SPCAC           add comments */
@@ -158,7 +156,7 @@ static integer c__1 = 1;
 /*           SPCDC           delete comments */
 
 /*     Note that comments must consist of only text, that is, printable */
-/*     ASCII characters, specifically ASCII 32-126.  This excludes */
+/*     ASCII characters, specifically ASCII 32-126. This excludes */
 /*     tabs (ASCII 9) and control characters. */
 
 /*     The SPC conversion routines---SPCB2A, SPCA2B, SPCB2T, and */
@@ -167,7 +165,7 @@ static integer c__1 = 1;
 
 /* $ Examples */
 
-/*     Suppose we have a binary SPK file called A.BSP.  The following */
+/*     Suppose we have a binary SPK file called A.BSP. The following */
 /*     code fragment stores the contents of the comment area of A.BSP */
 /*     in a text file called COMMENTS.TXT and surrounds the comments */
 /*     with markers. */
@@ -190,13 +188,13 @@ static integer c__1 = 1;
 /*         TXTOPR. */
 
 /*     2)  This routine assumes that the comment area of the binary SPK */
-/*         or CK file contains only text stored by SPCAC.  Comments */
+/*         or CK file contains only text stored by SPCAC. Comments */
 /*         written any other way may not be handled properly. */
 
-/*     3) This routine is only used to read records on environments */
-/*        whose characters are a single byte in size.  Updates */
-/*        to this routine and routines in its call tree may be */
-/*        required to properly handle other cases. */
+/*     3)  This routine is only used to read records on environments */
+/*         whose characters are a single byte in size. Updates */
+/*         to this routine and routines in its call tree may be */
+/*         required to properly handle other cases. */
 
 /* $ Literature_References */
 
@@ -204,9 +202,22 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     F.S. Turner        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Moved the contents of the $Files section to the description of */
+/*        HANDLE and UNIT in $Detailed_Input section, and referred to */
+/*        them from $Files. */
 
 /* -    SPICELIB Version 2.0.0, 16-NOV-2001 (FST) */
 
@@ -223,7 +234,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*     extract comments from spk or ck file */
+/*     extract comments from SPK or CK file */
 
 /* -& */
 /* $ Revisions */
@@ -232,9 +243,9 @@ static integer c__1 = 1;
 
 /*        The call to DAFHLU has been replaced with a call to */
 /*        ZZDDHHLU, the handle manager interface for retrieving */
-/*        a logical unit.  DAFHLU is no longer used, since it */
+/*        a logical unit. DAFHLU is no longer used, since it */
 /*        locks the unit returned to its HANDLE, tying up resources */
-/*        in the handle manager.  A call to DAFSIH was inserted to */
+/*        in the handle manager. A call to DAFSIH was inserted to */
 /*        make certain that HANDLE is present in DAFAH's file table. */
 
 /* -& */

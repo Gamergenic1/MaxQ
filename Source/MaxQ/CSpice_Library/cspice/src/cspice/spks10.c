@@ -15,7 +15,7 @@ static integer c__14 = 14;
 static integer c__4 = 4;
 static integer c__7 = 7;
 
-/* $Procedure      SPKS10 ( S/P Kernel, subset, type 10 ) */
+/* $Procedure SPKS10 ( S/P Kernel, subset, type 10 ) */
 /* Subroutine */ int spks10_(integer *srchan, doublereal *srcdsc, integer *
 	dsthan, doublereal *dstdsc, char *dstsid, ftnlen dstsid_len)
 {
@@ -483,7 +483,7 @@ static integer c__7 = 7;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     SRCHAN     I   Handle of the SPK file with the source segment. */
 /*     SRCDSC     I   Descriptor for the source segment. */
@@ -493,17 +493,18 @@ static integer c__7 = 7;
 
 /* $ Detailed_Input */
 
-/*     SRCHAN   The handle of the SPK file containing the source segment. */
+/*     SRCHAN   is the handle of the SPK file containing the source */
+/*              segment. */
 
-/*     SRCDSC   The SPK descriptor for the source segment. */
+/*     SRCDSC   is the SPK descriptor for the source segment. */
 
-/*     DSTHAN   The handle of the SPK file containing the new segment. */
+/*     DSTHAN   is the handle of the SPK file containing the new segment. */
 
-/*     DSTDSC   The SPK descriptor for the destination segment. It */
+/*     DSTDSC   is the SPK descriptor for the destination segment. It */
 /*              contains the desired start and stop times for the */
 /*              requested subset. */
 
-/*     DSTSID   The segment identifier for the destination segment. */
+/*     DSTSID   is the segment identifier for the destination segment. */
 
 /* $ Detailed_Output */
 
@@ -535,9 +536,9 @@ static integer c__7 = 7;
 
 /* $ Restrictions */
 
-/*     1) We assume that the source descriptor actually describes a */
-/*        segment in the source SPK file containing the time coverage */
-/*        that is desired for the subsetting operation. */
+/*     1)  We assume that the source descriptor actually describes a */
+/*         segment in the source SPK file containing the time coverage */
+/*         that is desired for the subsetting operation. */
 
 /* $ Literature_References */
 
@@ -545,16 +546,21 @@ static integer c__7 = 7;
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber    (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 03-JUN-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 30-JUN-1997 (KRG) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     subset type_10 spk segment */
+/*     subset type_10 SPK segment */
 
 /* -& */
 

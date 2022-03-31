@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PJELPL ( Project ellipse onto plane ) */
+/* $Procedure PJELPL ( Project ellipse onto plane ) */
 /* Subroutine */ int pjelpl_(doublereal *elin, doublereal *plane, doublereal *
 	elout)
 {
@@ -64,26 +64,26 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     ELIN       I   A SPICELIB ellipse to be projected. */
+/*     ELIN       I   A SPICE ellipse to be projected. */
 /*     PLANE      I   A plane onto which ELIN is to be projected. */
-/*     ELOUT      O   A SPICELIB ellipse resulting from the projection. */
+/*     ELOUT      O   A SPICE ellipse resulting from the projection. */
 
 /* $ Detailed_Input */
 
 /*     ELIN, */
-/*     PLANE          are, respectively, a SPICELIB ellipse and a */
-/*                    SPICELIB plane.  The geometric ellipse represented */
-/*                    by ELIN is to be orthogonally projected onto the */
-/*                    geometric plane represented by PLANE. */
+/*     PLANE    are, respectively, a SPICE ellipse and a */
+/*              SPICE plane. The geometric ellipse represented */
+/*              by ELIN is to be orthogonally projected onto the */
+/*              geometric plane represented by PLANE. */
 
 /* $ Detailed_Output */
 
-/*     ELOUT          is a SPICELIB ellipse that represents the geometric */
-/*                    ellipse resulting from orthogonally projecting the */
-/*                    ellipse represented by INEL onto the plane */
-/*                    represented by PLANE. */
+/*     ELOUT    is a SPICE ellipse that represents the geometric */
+/*              ellipse resulting from orthogonally projecting the */
+/*              ellipse represented by INEL onto the plane */
+/*              represented by PLANE. */
 
 /* $ Parameters */
 
@@ -91,11 +91,11 @@
 
 /* $ Exceptions */
 
-/*     1)  If the input plane is invalid, the error will be diagnosed */
-/*         by routines called by this routine. */
+/*     1)  If the input plane is invalid, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     2)  The input ellipse may be degenerate--its semi-axes may be */
-/*         linearly dependent.  Such ellipses are allowed as inputs. */
+/*         linearly dependent. Such ellipses are allowed as inputs. */
 
 /*     3)  The ellipse resulting from orthogonally projecting the input */
 /*         ellipse onto a plane may be degenerate, even if the input */
@@ -110,7 +110,7 @@
 /*     Projecting an ellipse orthogonally onto a plane can be thought of */
 /*     finding the points on the plane that are `under' or `over' the */
 /*     ellipse, with the `up' direction considered to be perpendicular */
-/*     to the plane.  More mathematically, the orthogonal projection is */
+/*     to the plane. More mathematically, the orthogonal projection is */
 /*     the set of points Y in the plane such that for some point X in */
 /*     the ellipse, the vector Y - X is perpendicular to the plane. */
 /*     The orthogonal projection of an ellipse onto a plane yields */
@@ -163,14 +163,14 @@
 
 
 
-/*     3)    An example of actual use:   Suppose we wish to compute the */
-/*           distance from an ellipsoid to a line.   Let the line be */
+/*     3)    An example of actual use: Suppose we wish to compute the */
+/*           distance from an ellipsoid to a line. Let the line be */
 /*           defined by a point P and a direction vector DIRECT; the */
 /*           line is the set of points */
 
 /*              P   +   t * DIRECT, */
 
-/*           where t is any real number.  Let the ellipsoid have semi- */
+/*           where t is any real number. Let the ellipsoid have semi- */
 /*           axis lengths A, B, and C. */
 
 /*           We can reduce the problem to that of finding the distance */
@@ -178,25 +178,25 @@
 /*           considering the fact that the surface normal at the nearest */
 /*           point to the line will be orthogonal to DIRECT; the set of */
 /*           surface points where this condition holds lies in a plane, */
-/*           and hence is an ellipse on the surface.  The problem can be */
+/*           and hence is an ellipse on the surface. The problem can be */
 /*           further simplified by projecting the ellipse orthogonally */
 /*           onto the plane defined by */
 
 /*              < X, DIRECT >  =  0. */
 
-/*           The problem is then a two dimensional one:  find the */
+/*           The problem is then a two dimensional one: find the */
 /*           distance of the projected ellipse from the intersection of */
 /*           the line and this plane (which is necessarily one point). */
 /*           A `paraphrase' of the relevant code is: */
 
 
-/*              C     Step 1.   Find the candidate ellipse CAND. */
+/*              C     Step 1. Find the candidate ellipse CAND. */
 /*              C               NORMAL is a normal vector to the plane */
-/*              C               containing the candidate ellipse.  The */
+/*              C               containing the candidate ellipse. The */
 /*              C               ellipse must exist, since it's the */
 /*              C               intersection of an ellipsoid centered at */
 /*              C               the origin and a plane containing the */
-/*              C               origin.  For this reason, we don't check */
+/*              C               origin. For this reason, we don't check */
 /*              C               INEDPL's `found flag' FOUND below. */
 /*              C */
 /*                    NORMAL(1)  =  DIRECT(1) / A**2 */
@@ -208,8 +208,8 @@
 /*                    CALL INEDPL ( A, B, C, CANDPL, CAND, FOUND ) */
 
 /*              C */
-/*              C     Step 2.   Project the candidate ellipse onto a */
-/*              C               plane orthogonal to the line.  We'll */
+/*              C     Step 2. Project the candidate ellipse onto a */
+/*              C               plane orthogonal to the line. We'll */
 /*              C               call the plane PRJPL and the */
 /*              C               projected ellipse PRJEL. */
 /*              C */
@@ -217,23 +217,23 @@
 /*                     CALL PJELPL ( CAND,    PRJPL,  PRJEL ) */
 
 /*              C */
-/*              C     Step 3.   Find the point on the line lying in the */
+/*              C     Step 3. Find the point on the line lying in the */
 /*              C               projection plane, and then find the */
 /*              C               near point PJNEAR on the projected */
-/*              C               ellipse.  Here PRJPT is the point on the */
+/*              C               ellipse. Here PRJPT is the point on the */
 /*              C               input line that lies in the projection */
-/*              C               plane.  The distance between PRJPT and */
+/*              C               plane. The distance between PRJPT and */
 /*              C               PJNEAR is DIST. */
 
 /*                    CALL VPRJP  ( LINEPT,  PRJPL,  PRJPT         ) */
 /*                    CALL NPEDPT ( PRJEL,   PRJPT,  PJNEAR,  DIST ) */
 
 /*              C */
-/*              C     Step 4.  Find the near point PNEAR on the */
+/*              C     Step 4. Find the near point PNEAR on the */
 /*              C              ellipsoid by taking the inverse */
 /*              C              orthogonal projection of PJNEAR; this is */
 /*              C              the point on the candidate ellipse that */
-/*              C              projects to PJNEAR.  Note that the output */
+/*              C              projects to PJNEAR. Note that the output */
 /*              C              DIST was computed in step 3. */
 /*              C */
 /*              C              The inverse projection of PJNEAR is */
@@ -249,7 +249,6 @@
 /*           The procedure described here is carried out in the routine */
 /*           NPEDLN. */
 
-
 /* $ Restrictions */
 
 /*     None. */
@@ -260,9 +259,17 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PACKAC ( Pack a character array ) */
+/* $Procedure PACKAC ( Pack a character array ) */
 /* Subroutine */ int packac_(char *in, integer *pack, integer *npack, integer 
 	*maxout, integer *nout, char *out, ftnlen in_len, ftnlen out_len)
 {
@@ -77,27 +77,27 @@
 
 /* $ Detailed_Input */
 
-/*     IN          is the input array. */
+/*     IN       is the input array. */
 
-/*     PACK        is the set of elements to be packed into the output */
-/*                 array. PACK(i) is the index of the element in the */
-/*                 input array that is to become the i'th element of */
-/*                 the output array. */
+/*     PACK     is the set of elements to be packed into the output */
+/*              array. PACK(i) is the index of the element in the */
+/*              input array that is to become the i'th element of */
+/*              the output array. */
 
-/*     NPACK       is the number of elements to be packed into the */
-/*                 output array. */
+/*     NPACK    is the number of elements to be packed into the */
+/*              output array. */
 
-/*     MAXOUT      is the maximum number of elements to be packed */
-/*                 into the output array. If NPACK is larger than */
-/*                 MAXOUT, the extra items are ignored. */
+/*     MAXOUT   is the maximum number of elements to be packed */
+/*              into the output array. If NPACK is larger than */
+/*              MAXOUT, the extra items are ignored. */
 
 /* $ Detailed_Output */
 
-/*     NOUT        is the number of elements in the output array. */
+/*     NOUT     is the number of elements in the output array. */
 
-/*     OUT         is the output array. This array contains up to */
-/*                 MAXOUT elements from the input array, located */
-/*                 in the first NOUT elements of the array. */
+/*     OUT      is the output array. This array contains up to */
+/*              MAXOUT elements from the input array, located */
+/*              in the first NOUT elements of the array. */
 
 /* $ Parameters */
 
@@ -105,8 +105,8 @@
 
 /* $ Exceptions */
 
-/*     If an element in the PACK array is less than 1, the error */
-/*     SPICE(INVALIDINDEX) is signalled. */
+/*     1)  If an element in the PACK array is less than 1, the error */
+/*         SPICE(INVALIDINDEX) is signaled. */
 
 /* $ Files */
 
@@ -173,11 +173,19 @@
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 20-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.2, 23-APR-2010 (NJB) */
 
@@ -189,7 +197,7 @@
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */
@@ -203,7 +211,7 @@
 
 /*         Error handling was added to detect array indices that are */
 /*         out of bound. If any element contained in the PACK array is */
-/*         less than one, an error is signalled, and the output array is */
+/*         less than one, an error is signaled, and the output array is */
 /*         not packed. */
 
 /* -& */

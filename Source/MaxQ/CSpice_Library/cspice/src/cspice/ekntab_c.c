@@ -3,9 +3,9 @@
 -Procedure ekntab_c  ( EK, return number of loaded tables )
 
 -Abstract
- 
-   Return the number of loaded EK tables. 
- 
+
+   Return the number of loaded EK tables.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,105 +32,163 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   EK 
- 
+
+   EK
+
 -Keywords
- 
-   EK 
-   FILES 
- 
+
+   EK
+   FILES
+
 */
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
 
-   void ekntab_c ( SpiceInt   * n ) 
+   void ekntab_c ( SpiceInt   * n )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   n          O   Number of loaded tables. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   n          O   Number of loaded tables.
+
 -Detailed_Input
- 
-   None. 
- 
+
+   None.
+
 -Detailed_Output
- 
-   n              is the number of loaded tables.  The count refers 
-                  to the number of logical tables; if multiple 
-                  segments contain data for the same table, these 
-                  segments collectively contribute only one table 
-                  to the count. 
- 
+
+   n           is the number of loaded tables. The count refers
+               to the number of logical tables; if multiple
+               segments contain data for the same table, these
+               segments collectively contribute only one table
+               to the count.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   None. 
- 
+
+   None.
+
 -Files
- 
-   The returned count is based on the currently loaded EK files. 
- 
+
+   The returned count is based on the currently loaded EK files.
+
 -Particulars
- 
-   This routine is a utility that provides the caller with the 
-   number of loaded tables.  Callers of ektnam_c can use this count 
-   as the upper bound on set of table indices when looking up table 
-   names. 
- 
+
+   This routine is a utility that provides the caller with the
+   number of loaded tables. Callers of ektnam_c can use this count
+   as the upper bound on set of table indices when looking up table
+   names.
+
 -Examples
- 
-   1)  Suppose we have the following list of EK files and tables 
-       contained in those files: 
- 
-          File name        Table name 
-          ---------        ---------- 
- 
-          FILE_1.EK        TABLE_1 
-                           TABLE_2 
- 
-          FILE_2.EK        TABLE_1 
-                           TABLE_3 
- 
-          FILE_3.EK        TABLE_2 
-                           TABLE_3 
-                           TABLE_4 
- 
- 
-       Then after loading these files, the call 
- 
-          ekntab_c ( &n );
- 
-       sets n to the value 4. 
- 
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Suppose we have several EK files. Load one at a time and
+      display, right after, the number of loaded EK tables in the
+      system.
+
+      Use the EK kernel below to load the Cassini Science Plan
+      SPICE E-Kernel File based upon integrated science plan. This
+      kernel contains 3 tables.
+
+         S79_CIMSSSUPa.bep
+
+      Use the EK kernel below to load the Cassini Spacecraft
+      Sequence Status SPICE E-Kernel File based upon integrated
+      Predicted Events File. This kernel contains 1 table.
+
+         S79_status_pf.bes
+
+
+      Example code begins here.
+
+
+      /.
+         Program ekntab_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables
+         ./
+         SpiceInt             n;
+
+         /.
+         Load the first EK.
+         ./
+         furnsh_c ( "S79_CIMSSSUPa.bep" );
+
+         /.
+         Display the number of EK tables in the system after
+         the first EK file is loaded.
+         ./
+         ekntab_c ( &n );
+         printf( "EK tables in the system (1 EK): %2d\n", n );
+
+         /.
+         Load the second EK.
+         ./
+         furnsh_c ( "S79_status_pf.bes" );
+
+         /.
+         Display the number of EK tables in the system after
+         the second EK file is loaded.
+         ./
+         ekntab_c ( &n );
+         printf( "EK tables in the system (2 EK): %2d\n", n );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      EK tables in the system (1 EK):  3
+      EK tables in the system (2 EK):  4
+
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman   (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 19-APR-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing fragments.
+
    -CSPICE Version 1.0.0, 14-OCT-2001 (NJB)
 
 -Index_Entries
- 
-   return number of loaded tables 
- 
+
+   return number of loaded tables
+
 -&
 */
 
@@ -148,4 +206,4 @@
 
    chkout_c ( "ekntab_c" );
 
-} /* End ekntab_c */ 
+} /* End ekntab_c */

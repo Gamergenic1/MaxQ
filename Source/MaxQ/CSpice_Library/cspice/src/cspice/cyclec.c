@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      CYCLEC ( Cycle a character string ) */
+/* $Procedure CYCLEC ( Cycle a character string ) */
 /* Subroutine */ int cyclec_(char *instr, char *dir, integer *ncycle, char *
 	outstr, ftnlen instr_len, ftnlen dir_len, ftnlen outstr_len)
 {
@@ -28,7 +28,7 @@
 
 /* $ Abstract */
 
-/*      Cycle the contents of a character string to the left or right. */
+/*     Cycle the contents of a character string to the left or right. */
 
 /* $ Disclaimer */
 
@@ -61,107 +61,115 @@
 
 /* $ Keywords */
 
-/*      CHARACTER,  UTILITY */
+/*     CHARACTER */
+/*     UTILITY */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      INSTR      I   String to be cycled. */
-/*      DIR        I   Direction to cycle. */
-/*      NCYCLE     I   Number of times to cycle. */
-/*      OUTSTR     O   Cycled string. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     INSTR      I   String to be cycled. */
+/*     DIR        I   Direction to cycle. */
+/*     NCYCLE     I   Number of times to cycle. */
+/*     OUTSTR     O   Cycled string. */
 
 /* $ Detailed_Input */
 
-/*      DIR         is the direction in which the characters in the */
-/*                  string are to be cycled. */
+/*     DIR      is the direction in which the characters in the */
+/*              string are to be cycled. */
 
-/*                        'L' or 'l'  to cycle left. */
-/*                        'R' or 'r'  to cycle right. */
+/*                    'L' or 'l'  to cycle left. */
+/*                    'R' or 'r'  to cycle right. */
 
-/*      NCYCLE      is the number of times the characters in the string */
-/*                  are to be cycled. */
+/*     NCYCLE   is the number of times the characters in the string */
+/*              are to be cycled. */
 
-/*      INSTR       is the string to be cycled. */
+/*     INSTR    is the string to be cycled. */
 
 /* $ Detailed_Output */
 
-/*      OUTSTR      the input string after it has been cycled. */
+/*     OUTSTR   is the input string after it has been cycled. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      A string is cycled when its contents are shifted to the left */
-/*      or right by one place. A character pushed off one end of the */
-/*      string is brought around to the other end of the string instead */
-/*      of disappearing. */
-
-/*      Leading and trailing blanks are treated just like any other */
-/*      characters. */
-
-/*      If the output string is not large enough to contain the input */
-/*      string, the cycled string is truncated on the right. */
-
-/* $ Examples */
-
-/*      'abcde'   cycled left twice becomes               'cdeab' */
-/*      'abcde '  cycled left twice becomes               'cde ab' */
-/*      'abcde'   cycled right once becomes               'eabcd' */
-/*      'Apple '  cycled left six times becomes           'Apple ' */
-/*      'Apple '  cycled right twenty-four times becomes  'Apple ' */
-
-/* $ Restrictions */
-
-/*      The memory used for the output string must be identical to that */
-/*      used for the input string or be disjoint from the input string */
-/*      memory. */
-
-/*      That is: */
-
-/*           CALL CYCLEN ( STRING, DIR, NCYCLE, STRING ) */
-
-/*      will produce correct results with output overwriting input. */
-
-/*           CALL CYCLEN ( STRING(4:20), DIR, NCYCLE, STRING(2:18) ) */
-
-/*      will produce garbage results. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1) If the direction flag is not one of the acceptable values */
-/*        'r', 'R', 'l', 'L',  the error 'SPICE(INVALIDDIRECTION)' is */
-/*        signalled. */
+/*     1)  If the direction flag is not one of the acceptable values */
+/*         'r', 'R', 'l', 'L',  the error SPICE(INVALIDDIRECTION) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
-/* $ Author_and_Institution */
+/* $ Particulars */
 
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     A string is cycled when its contents are shifted to the left */
+/*     or right by one place. A character pushed off one end of the */
+/*     string is brought around to the other end of the string instead */
+/*     of disappearing. */
+
+/*     Leading and trailing blanks are treated just like any other */
+/*     characters. */
+
+/*     If the output string is not large enough to contain the input */
+/*     string, the cycled string is truncated on the right. */
+
+/* $ Examples */
+
+/*     'abcde'   cycled left twice becomes               'cdeab' */
+/*     'abcde '  cycled left twice becomes               'cde ab' */
+/*     'abcde'   cycled right once becomes               'eabcd' */
+/*     'Apple '  cycled left six times becomes           'Apple ' */
+/*     'Apple '  cycled right twenty-four times becomes  'Apple ' */
+
+/* $ Restrictions */
+
+/*     1)  The memory used for the output string must be identical to */
+/*         that used for the input string or be disjoint from the input */
+/*         string memory. */
+
+/*         That is: */
+
+/*            CALL CYCLEN ( STRING, DIR, NCYCLE, STRING ) */
+
+/*         will produce correct results with output overwriting input. */
+
+/*            CALL CYCLEN ( STRING(4:20), DIR, NCYCLE, STRING(2:18) ) */
+
+/*         will produce garbage results. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.1.0, 18-JUN-1999 (WLT) */
+/* -    SPICELIB Version 1.2.0, 12-AUG-2021 (JDR) */
 
-/*         Fixed problem with unbalanced CHKIN/CHKOUT calls. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/*        Edited the header to comply with NAIF standard. */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/* -    SPICELIB Version 1.1.0, 18-JUN-1999 (WLT) */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) */
+/*        Fixed problem with unbalanced CHKIN/CHKOUT calls. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (WLT) */
 
 /* -& */
 /* $ Index_Entries */

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      STDIO ( Standard IO ) */
+/* $Procedure STDIO ( Standard IO ) */
 /* Subroutine */ int stdio_(char *name__, integer *unit, ftnlen name_len)
 {
     /* Builtin functions */
@@ -22,8 +22,8 @@
 
 /* $ Abstract */
 
-/*    Return the logical unit associated with some standard input or */
-/*    standard output. */
+/*     Return the logical unit associated with some standard input or */
+/*     standard output. */
 
 /* $ Disclaimer */
 
@@ -56,7 +56,7 @@
 
 /* $ Keywords */
 
-/*     I/O */
+/*     INPUT-OUTPUT */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -68,36 +68,36 @@
 
 /* $ Detailed_Input */
 
-/*     NAME       is the "name" of a FORTRAN unit to return. */
-/*                Recognized names are 'STDIN' and 'STDOUT'. */
-/*                The routine is case insensitive to NAME. */
+/*     NAME     is the "name" of a FORTRAN unit to return. */
+/*              Recognized names are 'STDIN' and 'STDOUT'. */
+/*              The routine is case insensitive to NAME. */
 
-/*                If NAME is not recognized the error */
-/*                'SPICE(BADSTDIONAME)' is signalled and UNIT is */
-/*                set to -100. */
+/*              If NAME is not recognized the error */
+/*              SPICE(BADSTDIONAME) is signaled and UNIT is */
+/*              set to -100. */
 
 /* $ Detailed_Output */
 
-/*     UNIT       is the logical unit associated with NAME.  If */
-/*                NAME is not recognized, UNIT is set to -100. */
+/*     UNIT     is the logical unit associated with NAME. If */
+/*              NAME is not recognized, UNIT is set to -100. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If NAME is not recognized, the error SPICE(BADSTDIONAME) is */
+/*         signaled. */
+
 /* $ Files */
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1)  If NAME is not recognized, the error 'SPICE(BADSTDIONAME)' is */
-/*         signalled. */
-
 /* $ Particulars */
 
 /*     This is a low level utility for retrieving the logical units */
-/*     associated with standard input and output.  It exists to */
+/*     associated with standard input and output. It exists to */
 /*     isolate SPICE based code from compiler writer choices in the */
 /*     implementation of standard input and output. */
 
@@ -105,7 +105,7 @@
 
 /*     Suppose you would like to send a message to standard output */
 /*     and that this message is contained in the array of N character */
-/*     strings MESSGE.  The code below would handle the task. */
+/*     strings MESSGE. The code below would handle the task. */
 
 /*        CALL STDIO ( 'STDOUT', STDOUT ) */
 
@@ -117,18 +117,23 @@
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+
 /* $ Version */
 
-/* -    SPICELIB Version 1.0.0, 18-SEP-1996 (WLT) */
+/* -    SPICELIB Version 1.0.1, 20-AUG-2021 (JDR) */
 
+/*        Edited the header to comply with NAIF standard. Spelled out I/O */
+/*        in $Keywords section. */
+
+/* -    SPICELIB Version 1.0.0, 18-SEP-1996 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

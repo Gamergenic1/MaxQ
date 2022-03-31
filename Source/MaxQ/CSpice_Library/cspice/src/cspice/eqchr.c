@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      EQCHR (Equivalent characters) */
+/* $Procedure EQCHR (Equivalent characters) */
 logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 {
     /* Initialized data */
@@ -24,8 +24,8 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 /* $ Abstract */
 
-/*     This function determines whether two characters are */
-/*     equivalent when the case of the characters is ignored. */
+/*     Return .TRUE. if two given characters are equivalent when the */
+/*     case of the characters is ignored. */
 
 /* $ Disclaimer */
 
@@ -54,11 +54,11 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       CHARACTER */
+/*     CHARACTER */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -72,9 +72,10 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 /* $ Detailed_Input */
 
-/*     A           are two characters that are to be compared to see */
-/*     B           if they are the same letter (although possibly */
-/*                 having different case such as 'a' and 'A') */
+/*     A, */
+/*     B        are two characters that are to be compared to see */
+/*              if they are the same letter (although possibly */
+/*              having different case such as 'a' and 'A') */
 
 /* $ Detailed_Output */
 
@@ -86,20 +87,20 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Exceptions */
 
 /*     Error free. */
 
+/* $ Files */
+
+/*     None. */
+
 /* $ Particulars */
 
 /*     This is a utility routine for comparing two characters to */
-/*     see if they are the same when converted to upper case.  It */
+/*     see if they are the same when converted to upper case. It */
 /*     is particularly useful when writing string analysis routines */
-/*     that should be case insensitive.  Instead of writing the */
+/*     that should be case insensitive. Instead of writing the */
 /*     expression */
 
 /*        A .EQ. B */
@@ -155,23 +156,28 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*     W.L. Taber      (JPL) */
-/*     E.D. Wright     (JPL) */
-
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
+
 /* $ Version */
 
-/* -     Spicelib Version 2.0.0, 17-SEP-1998 (EDW) */
+/* -    SPICELIB Version 2.0.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 2.0.0, 17-SEP-1998 (EDW) */
 
 /*        Replace the UVALUE data statement with a loop to fill */
-/*        UVALUE.  The Absoft Mac compiler failed to compile the */
+/*        UVALUE. The Absoft Mac compiler failed to compile the */
 /*        data statement correctly, and so this function failed */
-/*        to work properly in all situations on the Mac.  The */
+/*        to work properly in all situations on the Mac. The */
 /*        corrects the problem and functions on all platforms. */
 
 /* -    SPICELIB Version 1.0.0, 16-MAY-1995 (WLT) */
@@ -205,61 +211,61 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
     if (first) {
 	for (i__ = 0; i__ <= 255; ++i__) {
 	    uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", 
-		    i__1, "eqchr_", (ftnlen)206)] = i__;
+		    i__1, "eqchr_", (ftnlen)213)] = i__;
 	}
 	first = FALSE_;
 	uvalue[(i__1 = 'a') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)211)] = 'A';
+		 "eqchr_", (ftnlen)218)] = 'A';
 	uvalue[(i__1 = 'b') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)212)] = 'B';
+		 "eqchr_", (ftnlen)219)] = 'B';
 	uvalue[(i__1 = 'c') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)213)] = 'C';
+		 "eqchr_", (ftnlen)220)] = 'C';
 	uvalue[(i__1 = 'd') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)214)] = 'D';
+		 "eqchr_", (ftnlen)221)] = 'D';
 	uvalue[(i__1 = 'e') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)215)] = 'E';
+		 "eqchr_", (ftnlen)222)] = 'E';
 	uvalue[(i__1 = 'f') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)216)] = 'F';
+		 "eqchr_", (ftnlen)223)] = 'F';
 	uvalue[(i__1 = 'g') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)217)] = 'G';
+		 "eqchr_", (ftnlen)224)] = 'G';
 	uvalue[(i__1 = 'h') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)218)] = 'H';
+		 "eqchr_", (ftnlen)225)] = 'H';
 	uvalue[(i__1 = 'i') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)219)] = 'I';
+		 "eqchr_", (ftnlen)226)] = 'I';
 	uvalue[(i__1 = 'j') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)220)] = 'J';
+		 "eqchr_", (ftnlen)227)] = 'J';
 	uvalue[(i__1 = 'k') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)221)] = 'K';
+		 "eqchr_", (ftnlen)228)] = 'K';
 	uvalue[(i__1 = 'l') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)222)] = 'L';
+		 "eqchr_", (ftnlen)229)] = 'L';
 	uvalue[(i__1 = 'm') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)223)] = 'M';
+		 "eqchr_", (ftnlen)230)] = 'M';
 	uvalue[(i__1 = 'n') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)224)] = 'N';
+		 "eqchr_", (ftnlen)231)] = 'N';
 	uvalue[(i__1 = 'o') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)225)] = 'O';
+		 "eqchr_", (ftnlen)232)] = 'O';
 	uvalue[(i__1 = 'p') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)226)] = 'P';
+		 "eqchr_", (ftnlen)233)] = 'P';
 	uvalue[(i__1 = 'q') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)227)] = 'Q';
+		 "eqchr_", (ftnlen)234)] = 'Q';
 	uvalue[(i__1 = 'r') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)228)] = 'R';
+		 "eqchr_", (ftnlen)235)] = 'R';
 	uvalue[(i__1 = 's') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)229)] = 'S';
+		 "eqchr_", (ftnlen)236)] = 'S';
 	uvalue[(i__1 = 't') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)230)] = 'T';
+		 "eqchr_", (ftnlen)237)] = 'T';
 	uvalue[(i__1 = 'u') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)231)] = 'U';
+		 "eqchr_", (ftnlen)238)] = 'U';
 	uvalue[(i__1 = 'v') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)232)] = 'V';
+		 "eqchr_", (ftnlen)239)] = 'V';
 	uvalue[(i__1 = 'w') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)233)] = 'W';
+		 "eqchr_", (ftnlen)240)] = 'W';
 	uvalue[(i__1 = 'x') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)234)] = 'X';
+		 "eqchr_", (ftnlen)241)] = 'X';
 	uvalue[(i__1 = 'y') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)235)] = 'Y';
+		 "eqchr_", (ftnlen)242)] = 'Y';
 	uvalue[(i__1 = 'z') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)236)] = 'Z';
+		 "eqchr_", (ftnlen)243)] = 'Z';
     }
     i__ = *(unsigned char *)a;
     j = *(unsigned char *)b;
@@ -267,18 +273,18 @@ logical eqchr_0_(int n__, char *a, char *b, ftnlen a_len, ftnlen b_len)
 	ret_val = i__ == j;
     } else {
 	ret_val = uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"uvalue", i__1, "eqchr_", (ftnlen)246)] == uvalue[(i__2 = j) <
+		"uvalue", i__1, "eqchr_", (ftnlen)253)] == uvalue[(i__2 = j) <
 		 256 && 0 <= i__2 ? i__2 : s_rnge("uvalue", i__2, "eqchr_", (
-		ftnlen)246)];
+		ftnlen)253)];
     }
     return ret_val;
-/* $Procedure      NECHR (Not Equivalent characters) */
+/* $Procedure NECHR (Not Equivalent characters) */
 
 L_nechr:
 /* $ Abstract */
 
-/*     This function determines whether two characters are */
-/*     not equivalent if the case of the characters is ignored. */
+/*     Return .TRUE. if two given characters are not equivalent if the */
+/*     case of the characters is ignored. */
 
 /* $ Disclaimer */
 
@@ -307,50 +313,53 @@ L_nechr:
 
 /* $ Required_Reading */
 
-/*      None. */
+/*     None. */
 
 /* $ Keywords */
 
-/*       CHARACTER */
+/*     CHARACTER */
 
 /* $ Declarations */
+
+/*     IMPLICIT NONE */
 
 /*     CHARACTER*(1)         A */
 /*     CHARACTER*(1)         B */
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      A          I   one of the characters to check */
-/*      B          I   the other character to check */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     A          I   one of the characters to check */
+/*     B          I   the other character to check */
 
-/*      The function returns .TRUE. if the characters are not equivalent */
+/*     The function returns .TRUE. if the characters are not equivalent */
 
 /* $ Detailed_Input */
 
-/*     A           are two characters that are to be compared to see */
-/*     B           if they are different letters. Letters that have */
-/*                 the same value when converted to uppercase are */
-/*                 considered to be equivalent. */
+/*     A, */
+/*     B        are two characters that are to be compared to see */
+/*              if they are different letters. Letters that have */
+/*              the same value when converted to uppercase are */
+/*              considered to be equivalent. */
 
 /* $ Detailed_Output */
 
 /*     The function returns the value .FALSE. if the two input characters */
 /*     are the same or can be made the same by converting both to */
-/*     upper or lower case.  Otherwise it returns .TRUE. */
+/*     upper or lower case. Otherwise it returns .TRUE. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Files */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
 /*     Error free. */
+
+/* $ Files */
+
+/*     None. */
 
 /* $ Particulars */
 
@@ -360,7 +369,7 @@ L_nechr:
 /* $ Examples */
 
 /*     Suppose you want to determine whether or not two strings */
-/*     are the same up to differences in case.  The following */
+/*     are the same up to differences in case. The following */
 /*     code fragment shows how you can use this routine to check */
 /*     for the equivalence of character strings. */
 
@@ -405,25 +414,31 @@ L_nechr:
 
 /*     None. */
 
-/* $ Author_and_Institution */
-
-/*      W.L. Taber      (JPL) */
-
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
+
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
-/* -     Spicelib Version 2.0.0, 17-SEP-1998 (EDW) */
+/* -    SPICELIB Version 1.0.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.0, 17-SEP-1998 (EDW) */
 
 /*        Replace the UVALUE data statement with a loop to fill */
-/*        UVALUE.  The Absoft Mac compiler failed to compile the */
+/*        UVALUE. The Absoft Mac compiler failed to compile the */
 /*        data statement correctly, and so this function failed */
-/*        to work properly in all situations on the Mac.  The */
+/*        to work properly in all situations on the Mac. The */
 /*        corrects the problem and functions on all platforms. */
 
-/* -     Spicelib Version 1.0.0, 16-MAY-1995 */
+/* -    SPICELIB Version 1.0.0, 16-MAY-1995 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -435,60 +450,60 @@ L_nechr:
 	first = FALSE_;
 	for (i__ = 0; i__ <= 255; ++i__) {
 	    uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", 
-		    i__1, "eqchr_", (ftnlen)421)] = i__;
+		    i__1, "eqchr_", (ftnlen)438)] = i__;
 	}
 	uvalue[(i__1 = 'a') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)424)] = 'A';
+		 "eqchr_", (ftnlen)441)] = 'A';
 	uvalue[(i__1 = 'b') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)425)] = 'B';
+		 "eqchr_", (ftnlen)442)] = 'B';
 	uvalue[(i__1 = 'c') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)426)] = 'C';
+		 "eqchr_", (ftnlen)443)] = 'C';
 	uvalue[(i__1 = 'd') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)427)] = 'D';
+		 "eqchr_", (ftnlen)444)] = 'D';
 	uvalue[(i__1 = 'e') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)428)] = 'E';
+		 "eqchr_", (ftnlen)445)] = 'E';
 	uvalue[(i__1 = 'f') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)429)] = 'F';
+		 "eqchr_", (ftnlen)446)] = 'F';
 	uvalue[(i__1 = 'g') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)430)] = 'G';
+		 "eqchr_", (ftnlen)447)] = 'G';
 	uvalue[(i__1 = 'h') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)431)] = 'H';
+		 "eqchr_", (ftnlen)448)] = 'H';
 	uvalue[(i__1 = 'i') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)432)] = 'I';
+		 "eqchr_", (ftnlen)449)] = 'I';
 	uvalue[(i__1 = 'j') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)433)] = 'J';
+		 "eqchr_", (ftnlen)450)] = 'J';
 	uvalue[(i__1 = 'k') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)434)] = 'K';
+		 "eqchr_", (ftnlen)451)] = 'K';
 	uvalue[(i__1 = 'l') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)435)] = 'L';
+		 "eqchr_", (ftnlen)452)] = 'L';
 	uvalue[(i__1 = 'm') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)436)] = 'M';
+		 "eqchr_", (ftnlen)453)] = 'M';
 	uvalue[(i__1 = 'n') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)437)] = 'N';
+		 "eqchr_", (ftnlen)454)] = 'N';
 	uvalue[(i__1 = 'o') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)438)] = 'O';
+		 "eqchr_", (ftnlen)455)] = 'O';
 	uvalue[(i__1 = 'p') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)439)] = 'P';
+		 "eqchr_", (ftnlen)456)] = 'P';
 	uvalue[(i__1 = 'q') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)440)] = 'Q';
+		 "eqchr_", (ftnlen)457)] = 'Q';
 	uvalue[(i__1 = 'r') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)441)] = 'R';
+		 "eqchr_", (ftnlen)458)] = 'R';
 	uvalue[(i__1 = 's') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)442)] = 'S';
+		 "eqchr_", (ftnlen)459)] = 'S';
 	uvalue[(i__1 = 't') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)443)] = 'T';
+		 "eqchr_", (ftnlen)460)] = 'T';
 	uvalue[(i__1 = 'u') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)444)] = 'U';
+		 "eqchr_", (ftnlen)461)] = 'U';
 	uvalue[(i__1 = 'v') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)445)] = 'V';
+		 "eqchr_", (ftnlen)462)] = 'V';
 	uvalue[(i__1 = 'w') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)446)] = 'W';
+		 "eqchr_", (ftnlen)463)] = 'W';
 	uvalue[(i__1 = 'x') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)447)] = 'X';
+		 "eqchr_", (ftnlen)464)] = 'X';
 	uvalue[(i__1 = 'y') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)448)] = 'Y';
+		 "eqchr_", (ftnlen)465)] = 'Y';
 	uvalue[(i__1 = 'z') < 256 && 0 <= i__1 ? i__1 : s_rnge("uvalue", i__1,
-		 "eqchr_", (ftnlen)449)] = 'Z';
+		 "eqchr_", (ftnlen)466)] = 'Z';
     }
     i__ = *(unsigned char *)a;
     j = *(unsigned char *)b;
@@ -496,9 +511,9 @@ L_nechr:
 	ret_val = i__ != j;
     } else {
 	ret_val = uvalue[(i__1 = i__) < 256 && 0 <= i__1 ? i__1 : s_rnge(
-		"uvalue", i__1, "eqchr_", (ftnlen)459)] != uvalue[(i__2 = j) <
+		"uvalue", i__1, "eqchr_", (ftnlen)476)] != uvalue[(i__2 = j) <
 		 256 && 0 <= i__2 ? i__2 : s_rnge("uvalue", i__2, "eqchr_", (
-		ftnlen)459)];
+		ftnlen)476)];
     }
     return ret_val;
 } /* eqchr_ */

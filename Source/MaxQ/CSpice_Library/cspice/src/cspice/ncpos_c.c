@@ -3,11 +3,11 @@
 -Procedure ncpos_c ( NOT Character position )
 
 -Abstract
- 
-   Find the first occurrence in a string of a character NOT belonging 
-   to a collection of characters, starting at a specified location, 
-   searching forward. 
- 
+
+   Find the first occurrence in a string of a character NOT belonging
+   to a collection of characters, starting at a specified location,
+   searching forward.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -34,15 +34,15 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   SCANNING 
- 
+
+   SCANNING
+
 -Keywords
- 
-   CHARACTER 
-   SEARCH 
-   UTILITY 
- 
+
+   CHARACTER
+   SEARCH
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
@@ -58,125 +58,133 @@
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   str        I   Any character string. 
-   chars      I   A collection of characters. 
-   start      I   Position to begin looking for one not in chars. 
- 
-   The function returns the index of the first character of str 
-   at or following index start that is not in the collection chars. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   str        I   Any character string.
+   chars      I   A collection of characters.
+   start      I   Position to begin looking for one not in chars.
+
+   The function returns the index of the first character of str
+   at or following index start that is not in the collection chars.
+
 -Detailed_Input
- 
-   str        is any character string. 
- 
-   chars      is a character string containing a collection of
-              characters.  Spaces in chars are significant, including
-              trailing blanks.  The order in which characters are
-              listed is not significant.
- 
-   start      is the position in str to begin looking for characters
-              not in chars.  start may range from 0 to n-1, where n is
-              the number of characters in str.
- 
+
+   str         is any character string.
+
+   chars       is a character string containing a collection of
+               characters. Spaces in chars are significant, including
+               trailing blanks. The order in which characters are
+               listed is not significant.
+
+   start       is the position in str to begin looking for characters
+               not in chars. start may range from 0 to n-1, where n is
+               the number of characters in str.
+
 -Detailed_Output
- 
+
    The function returns the index of the first character of str (at or
    following index start) that is not one of the characters in the
-   string chars.  The returned value normally ranges from 0 to n-1,
+   string chars. The returned value normally ranges from 0 to n-1,
    where n is the number of characters in str. If no such character is
    found, the function returns -1.
- 
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
-  
-   1) The error SPICE(NULLPOINTER) is signaled if either of 
-      the input string pointers is null.
 
-   2) If start is less than 0, the search begins at the first 
-      character of the string. 
- 
-   3) If start is greater than or equal to the length of the string, 
-      ncpos_c returns -1. 
+   1)  If `start' is less than 0, the search begins at the first
+       character of the string.
 
-   4) The function returns -1 if either of the input strings is empty.
+   2)  If `start' is greater than the length of the string, ncpos_c
+       returns -1.
+
+   3)  If any of the `str' or `chars' input string pointers is null,
+       the error SPICE(NULLPOINTER) is signaled. The function returns
+       the value -1.
+
+   4)  If any of the `str' or `chars' input string has zero length,
+       the function returns the value -1. This case is not considered
+       an error.
 
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   ncpos_c is case sensitive. 
- 
+
+   ncpos_c is case sensitive.
+
    An entire family of related CSPICE routines
 
       cpos_c
       cposr_c
       ncpos_c
-      ncposr_c 
+      ncposr_c
       pos_c
-      posr_c 
+      posr_c
 
-   is described in the Required Reading. 
-  
+   is described in the Required Reading.
+
 -Examples
- 
-   Let string == "BOB, JOHN, TED, AND MARTIN    " 
-                  012345678901234567890123456789 
 
-   Let chars  == "ABCDEFGHIJKLMNOPQRSTUVWXYZ" 
+   Let string == "BOB, JOHN, TED, AND MARTIN    "
+                  012345678901234567890123456789
+
+   Let chars  == "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-   Normal (Sequential) Searching: 
-   ------------------------------ 
+   Normal (Sequential) Searching:
+   ------------------------------
 
       ncpos_c( string, chars,  0 ) ==  3
-      ncpos_c( string, chars,  4 ) ==  4 
-      ncpos_c( string, chars,  5 ) ==  9 
-      ncpos_c( string, chars, 10 ) == 10 
-      ncpos_c( string, chars, 11 ) == 14 
-      ncpos_c( string, chars, 15 ) == 15 
-      ncpos_c( string, chars, 16 ) == 19 
-      ncpos_c( string, chars, 20 ) == 26 
-      ncpos_c( string, chars, 27 ) == 27 
-      ncpos_c( string, chars, 28 ) == 28 
-      ncpos_c( string, chars, 29 ) == 29 
- 
-   start out of bounds: 
-   -------------------- 
+      ncpos_c( string, chars,  4 ) ==  4
+      ncpos_c( string, chars,  5 ) ==  9
+      ncpos_c( string, chars, 10 ) == 10
+      ncpos_c( string, chars, 11 ) == 14
+      ncpos_c( string, chars, 15 ) == 15
+      ncpos_c( string, chars, 16 ) == 19
+      ncpos_c( string, chars, 20 ) == 26
+      ncpos_c( string, chars, 27 ) == 27
+      ncpos_c( string, chars, 28 ) == 28
+      ncpos_c( string, chars, 29 ) == 29
 
-      ncpos_c( string, chars, -12 ) ==  3 
-      ncpos_c( string, chars,  -1 ) ==  3 
-      ncpos_c( string, chars,  30 ) == -1 
+   start out of bounds:
+   --------------------
+
+      ncpos_c( string, chars, -12 ) ==  3
+      ncpos_c( string, chars,  -1 ) ==  3
+      ncpos_c( string, chars,  30 ) == -1
       ncpos_c( string, chars, 122 ) == -1
- 
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   W.L. Taber      (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 04-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
    -CSPICE Version 1.0.0, 14-AUG-2002 (NJB) (WLT)
 
 -Index_Entries
- 
-   forward search for position of unlisted character 
- 
+
+   forward search for position of unlisted character
+
 -&
 */
 
@@ -199,16 +207,16 @@
 
 
    /*
-   Check for empty strings.  
+   Check for empty strings.
    */
    if (  ( strlen(str) == 0 ) || ( strlen(chars) == 0 )  )
    {
-     return ( -1 );     
+     return ( -1 );
    }
 
 
    /*
-   The rest can be handled by the f2c'd SPICELIB routine.  Adjust 
+   The rest can be handled by the f2c'd SPICELIB routine.  Adjust
    the start index to account for Fortran indexing.
    */
 
@@ -217,7 +225,7 @@
    retval =  ncpos_ ( (char     *) str,
                       (char     *) chars,
                       (integer  *) &fstart,
-                      (ftnlen    ) strlen(str), 
+                      (ftnlen    ) strlen(str),
                       (ftnlen    ) strlen(chars)  );
 
    /*
@@ -225,5 +233,5 @@
    */
    return ( retval-1 );
 
-  
+
 } /* End ncpos_c */

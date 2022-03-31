@@ -3,7 +3,7 @@
 -Procedure sdiff_c ( Symmetric difference of two sets )
 
 -Abstract
- 
+
    Take the symmetric difference of two sets of any data type to form a
    third set.
 
@@ -33,13 +33,14 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   SETS 
- 
+
+   SETS
+
 -Keywords
- 
-   CELLS, SETS 
- 
+
+   CELLS
+   SETS
+
 */
 
    #include "SpiceUsr.h"
@@ -49,80 +50,128 @@
 
    void sdiff_c (  SpiceCell   * a,
                    SpiceCell   * b,
-                   SpiceCell   * c  ) 
+                   SpiceCell   * c  )
 
 /*
 
 -Brief_I/O
 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   a          I   First input set. 
-   b          I   Second input set. 
-   c          O   Symmetric difference of a and b. 
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   a          I   First input set.
+   b          I   Second input set.
+   c          O   Symmetric difference of `a' and `b'.
+
 -Detailed_Input
- 
-   a           is a CSPICE set.  a must be declared as a SpiceCell 
-               of data type character, double precision, or integer.
 
-   b           is a CSPICE set, distinct from a.  b must have the 
-               same data type as a.
- 
+   a           is a SPICE set.
+
+               `a' must be declared as a character, double precision or
+               integer SpiceCell.
+
+               CSPICE provides the following macros, which declare and
+               initialize the cell
+
+                  SPICECHAR_CELL          ( a, ASZ, AMLEN );
+                  SPICEDOUBLE_CELL        ( a, ASZ );
+                  SPICEINT_CELL           ( a, ASZ );
+
+               where ASZ is the maximum capacity of `a' and AMLEN is the
+               maximum length of any member in the character cell.
+
+   b           is a SPICE set, distinct from `a'.
+
+               `b' must be declared as a SpiceCell of the same data type
+               as `a'.
+
+               CSPICE provides the following macros, which declare and
+               initialize the cell
+
+                  SPICECHAR_CELL          ( b, BSZ, BMLEN );
+                  SPICEDOUBLE_CELL        ( b, BSZ );
+                  SPICEINT_CELL           ( b, BSZ );
+
+               where BSZ is the maximum capacity of `b' and BMLEN is the
+               maximum length of any member in the character cell.
+
 -Detailed_Output
- 
-   c           is a CSPICE set, distinct from sets a and b, which
-               contains the symmetric difference of a and b (that is,
-               all of the elements which are in a or in b but not in
-               both). c must have the same data type as a and b.
 
-               When comparing elements of character sets, this routine
-               ignores trailing blanks.  Trailing blanks will be 
-               trimmed from the members of the output set c.
+   c           is a SPICE set, distinct from sets `a' and `b', which contains
+               the symmetric difference of `a' and `b' (that is, all of the
+               elements which are in `a' or in `b' but not in both).
+
+               When comparing elements of character sets, this routine ignores
+               trailing blanks. Trailing blanks will be trimmed from the
+               members of the output set `c'.
+
+               `c' must be declared as a SpiceCell of the same data type
+               as `a' and `b'.
+
+               CSPICE provides the following macros, which declare and
+               initialize the cell
+
+                  SPICECHAR_CELL          ( c, CSZ, CMLEN );
+                  SPICEDOUBLE_CELL        ( c, CSZ );
+                  SPICEINT_CELL           ( c, CSZ );
+
+               where CSZ is the maximum capacity of `c' and CMLEN is the
+               maximum length of any member in the character cell.
 
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
 
-   1) If the input set arguments don't have identical data types,
-      the error SPICE(TYPEMISMATCH) is signaled.
-
-   2) If the symmetric difference of the two sets contains more 
+   1)  If the symmetric difference of the two sets contains more
        elements than can be contained in the output set, the error
-       SPICE(SETEXCESS) is signaled.
+       SPICE(SETEXCESS) is signaled by a routine in the call tree of
+       this routine.
 
-   3) If the set arguments have character type and the length of the 
-      elements of the output set is less than the maximum of the 
-      lengths of the elements of the input sets, the error 
-      SPICE(ELEMENTSTOOSHORT) is signaled. 
+   2)  If the `a', `b' and `c' cell arguments are of type SpiceChar and
+       the length of the elements of the output set is less than the
+       maximum of the lengths of the elements of the input sets, the
+       error SPICE(ELEMENTSTOOSHORT) is signaled by a routine in the
+       call tree of this routine.
 
-   4) If either of the input arguments may be unordered or contain 
-      duplicates, the error SPICE(NOTASET) is signaled.
- 
+   3)  If the `a', `b' and `c' cell arguments do not have identical data
+       types, the error SPICE(TYPEMISMATCH) is signaled.
+
+   4)  If any of the `a', `b' or `c' cell arguments does not qualify as a
+       SPICE set, the error SPICE(NOTASET) is signaled. SPICE sets
+       have their data elements stored in increasing order and contain
+       no duplicate elements.
+
+   5)  If any of the `a', `b' or `c' cell arguments does not have a
+       recognized data type, the error SPICE(NOTSUPPORTED) is signaled.
+
+   6)  If the cell arguments are of type SpiceChar and the string length
+       associated with any of them is non-positive or too short to be
+       usable when constructing the equivalent SPICE character cells
+       required by the wrapped SPICELIB routine, an error is signaled by
+       a routine in the call tree of this routine.
+
 -Files
- 
-   None. 
+
+   None.
 
 -Particulars
 
-   This is a generic CSPICE set routine; it operates on sets of any
+   This is a generic SPICE set routine; it operates on sets of any
    supported data type.
- 
+
 
    The symmetric difference of two sets contains every element which is
    in the first set OR in the second set, but NOT in both sets.
 
-         {a,b}      sym. difference {c,d}     =  {a,b,c,d} 
-         {a,b,c}                    {b,c,d}      {a,d} 
-         {a,b,c,d}                  {}           {a,b,c,d} 
-         {}                         {a,b,c,d}    {a,b,c,d} 
-         {}                         {}           {} 
- 
+         {a,b}      sym. difference {c,d}     =  {a,b,c,d}
+         {a,b,c}                    {b,c,d}      {a,d}
+         {a,b,c,d}                  {}           {a,b,c,d}
+         {}                         {a,b,c,d}    {a,b,c,d}
+         {}                         {}           {}
 
 -Examples
- 
+
    1) The following code fragment places the symmetric difference of
       the character sets planets and asteroids into the character set
       result.
@@ -171,64 +220,73 @@
          sdiff_c ( &planets, &asteroids, &result );
 
 -Restrictions
- 
-   1) The output set must be distinct from both of the input sets. 
-      For example, the following calls are invalid. 
 
-         sdiff_c  ( &current,  &new,      &current );
-         sdiff_c  ( &new,      &current,  &current );
+   1)  The output set must be distinct from both of the input sets.
+       For example, the following calls are invalid.
 
-      In each of the examples above, whether or not the subroutine 
-      signals an error, the results will almost certainly be wrong. 
-      Nearly the same effect can be achieved, however, by placing the 
-      result into a temporary set, which is immediately copied back 
-      into one of the input sets, as shown below. 
+          sdiff_c  ( &current,  &new,      &current );
+          sdiff_c  ( &new,      &current,  &current );
 
-         sdiff_c  ( &current,  &new,  &temp );
-         copy_c  ( &temp,     &new         );
+       In each of the examples above, whether or not the subroutine
+       signals an error, the results will almost certainly be wrong.
+       Nearly the same effect can be achieved, however, by placing the
+       result into a temporary set, which is immediately copied back
+       into one of the input sets, as shown below.
 
- 
-   2) String comparisons performed by this routine are Fortran-style:
-      trailing blanks in the input sets are ignored. This gives
-      consistent behavior with CSPICE code generated by the f2c
-      translator, as well as with the Fortran SPICE Toolkit.
+          sdiff_c  ( &current,  &new,  &temp );
+          copy_c  ( &temp,     &new         );
 
-      Note that this behavior is not identical to that of the ANSI
-      C library functions strcmp and strncmp.
+
+   2)  String comparisons performed by this routine are Fortran-style:
+       trailing blanks in the input sets are ignored. This gives
+       consistent behavior with CSPICE code generated by the f2c
+       translator, as well as with the Fortran SPICE Toolkit.
+
+       Note that this behavior is not identical to that of the ANSI
+       C library functions strcmp and strncmp.
 
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   C.A. Curzon     (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   C.A. Curzon         (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.1, 29-OCT-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Extended description of arguments "a", "b" and "c" to include
+       type and preferred declaration method.
+
+       Added entries #5 and #6 in -Exceptions section.
+
    -CSPICE Version 1.1.0, 15-FEB-2005 (NJB)
 
-       Bug fix:  loop bound changed from 2 to 3 in loop used
+       Bug fix: loop bound changed from 2 to 3 in loop used
        to free dynamically allocated arrays.
 
    -CSPICE Version 1.0.0, 08-AUG-2002 (NJB) (CAC) (WLT) (IMU)
 
 -Index_Entries
- 
-   symmetric difference of two sets 
- 
+
+   symmetric difference of two sets
+
 -&
 */
-
 
 { /* Begin sdiff_c */
 
 
    /*
-   Local variables 
+   Local variables
    */
    SpiceChar             * fCell[3];
 
@@ -237,7 +295,7 @@
 
 
    /*
-   Standard SPICE error handling. 
+   Standard SPICE error handling.
    */
    if ( return_c() )
    {
@@ -247,7 +305,7 @@
    chkin_c ( "sdiff_c" );
 
    /*
-   Make sure data types match. 
+   Make sure data types match.
    */
    CELLMATCH3 ( CHK_STANDARD, "sdiff_c", a, b, c );
 
@@ -257,7 +315,7 @@
    CELLISSETCHK2 ( CHK_STANDARD, "sdiff_c", a, b );
 
    /*
-   Initialize the cells if necessary. 
+   Initialize the cells if necessary.
    */
    CELLINIT3 ( a, b, c );
 
@@ -269,11 +327,11 @@
    {
 
       /*
-      Construct Fortran-style sets suitable for passing to sdiffc_. 
+      Construct Fortran-style sets suitable for passing to sdiffc_.
       */
-      C2F_MAP_CELL3 (  "", 
+      C2F_MAP_CELL3 (  "",
                        a, fCell,   fLen,
-                       b, fCell+1, fLen+1,   
+                       b, fCell+1, fLen+1,
                        c, fCell+2, fLen+2  );
 
 
@@ -293,13 +351,13 @@
 
 
       /*
-      Map the diff back to a C style cell. 
+      Map the diff back to a C style cell.
       */
       F2C_MAP_CELL ( fCell[2], fLen[2], c );
 
 
       /*
-      We're done with the dynamically allocated Fortran-style arrays. 
+      We're done with the dynamically allocated Fortran-style arrays.
       */
       for ( i = 0;  i < 3;  i++ )
       {
@@ -314,7 +372,7 @@
                 (doublereal * )  (b->base),
                 (doublereal * )  (c->base)  );
       /*
-      Sync the output cell. 
+      Sync the output cell.
       */
       if ( !failed_c() )
       {
@@ -327,10 +385,10 @@
    {
       sdiffi_ ( (integer * )  (a->base),
                 (integer * )  (b->base),
-                (integer * )  (c->base)  );      
+                (integer * )  (c->base)  );
 
       /*
-      Sync the output cell. 
+      Sync the output cell.
       */
       if ( !failed_c() )
       {
@@ -349,11 +407,11 @@
 
 
    /*
-   Indicate the result is a set. 
+   Indicate the result is a set.
    */
    c->isSet = SPICETRUE;
 
 
-   chkout_c ( "sdiff_c" );   
+   chkout_c ( "sdiff_c" );
 
 } /* End sdiff_c */

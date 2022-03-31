@@ -1,11 +1,11 @@
 /*
 
--Procedure  ckw01_c ( C-Kernel, write segment to C-kernel, data type 1 )
+-Procedure ckw01_c ( C-Kernel, write segment to C-kernel, data type 1 )
 
 -Abstract
- 
-   Add a type 1 segment to a C-kernel. 
- 
+
+   Add a type 1 segment to a C-kernel.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,16 +32,16 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   CK 
-   DAF 
-   SCLK 
- 
+
+   CK
+   DAF
+   SCLK
+
 -Keywords
- 
-   POINTING 
-   UTILITY 
- 
+
+   POINTING
+   UTILITY
+
 */
 
    #include "SpiceUsr.h"
@@ -49,136 +49,149 @@
    #include "SpiceZmc.h"
    #include "SpiceZim.h"
    #undef    ckw01_c
-   
 
-   void ckw01_c ( SpiceInt            handle, 
+
+   void ckw01_c ( SpiceInt            handle,
                   SpiceDouble         begtim,
                   SpiceDouble         endtim,
                   SpiceInt            inst,
                   ConstSpiceChar    * ref,
                   SpiceBoolean        avflag,
-                  ConstSpiceChar    * segid, 
+                  ConstSpiceChar    * segid,
                   SpiceInt            nrec,
                   ConstSpiceDouble    sclkdp [],
                   ConstSpiceDouble    quats  [][4],
                   ConstSpiceDouble    avvs   [][3]  )
+
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   handle     I   Handle of an open CK file. 
-   begtim     I   The beginning encoded SCLK of the segment. 
-   endtim     I   The ending encoded SCLK of the segment. 
-   inst       I   The NAIF instrument ID code. 
-   ref        I   The reference frame of the segment. 
-   avflag     I   True if the segment will contain angular velocity. 
-   segid      I   Segment identifier. 
-   nrec       I   Number of pointing records. 
-   sclkdp     I   Encoded SCLK times. 
-   quats      I   Quaternions representing instrument pointing. 
-   avvs       I   Angular velocity vectors. 
- 
--Detailed_Input
- 
-   handle     is the handle of the CK file to which the segment will 
-              be written. The file must have been opened with write 
-              access. 
- 
-   begtim     is the beginning encoded SCLK time of the segment. This 
-              value should be less than or equal to the first time in 
-              the segment. 
- 
-   endtim     is the encoded SCLK time at which the segment ends. 
-              This value should be greater than or equal to the last 
-              time in the segment. 
- 
-   inst       is the NAIF integer ID code for the instrument. 
- 
-   ref        is a character string which specifies the  
-              reference frame of the segment. This should be one of 
-              the frames supported by the SPICELIB routine NAMFRM 
-              which is an entry point of FRAMEX. 
- 
-   avflag     is a logical flag which indicates whether or not the 
-              segment will contain angular velocity. 
- 
-   segid      is the segment identifier.  A CK segment identifier may 
-              contain up to 40 characters, excluding the terminating
-              null.
- 
-   nrec       is the number of pointing instances in the segment. 
- 
-   sclkdp     are the encoded spacecraft clock times associated with 
-              each pointing instance. These times must be strictly 
-              increasing. 
- 
-   quats      is an array of SPICE-style quaternions representing a
-              sequence of C-matrices. See the discussion of "Quaternion
-              Styles" in the Particulars section below.
- 
-   avvs       are the angular velocity vectors (optional). 
- 
-              If avflag is FALSE then this array is ignored by the 
-              routine, however it still must be supplied as part of 
-              the calling sequence. 
- 
--Detailed_Output
- 
-   None.  See Files section. 
- 
--Parameters
- 
-   None. 
- 
--Exceptions
- 
-   1)  If handle is not the handle of a C-kernel opened for writing 
-       the error will be diagnosed by routines called by this 
-       routine. 
- 
-   2)  If segid is more than 40 characters long, the error 
-       SPICE(SEGIDTOOLONG) is signaled. 
- 
-   3)  If segid contains any nonprintable characters, the error 
-       SPICE(NONPRINTABLECHARS) is signaled. 
- 
-   4)  If the first encoded SCLK time is negative then the error 
-       SPICE(INVALIDSCLKTIME) is signaled. If any subsequent times 
-       are negative the error SPICE(TIMESOUTOFORDER) is signaled. 
- 
-   5)  If the encoded SCLK times are not strictly increasing, 
-       the error SPICE(TIMESOUTOFORDER) is signaled. 
- 
-   6)  If begtim is greater than sclkdp[0] or endtim is less than 
-       sclkdp[nrec-1], the error SPICE(INVALIDDESCRTIME) is 
-       signaled. 
- 
-   7)  If the name of the reference frame is not one of those 
-       supported by the SPICELIB routine NAMFRM, the error 
-       SPICE(INVALIDREFFRAME) is signaled. 
- 
-   8)  If nrec, the number of pointing records, is less than or 
-       equal to 0, the error SPICE(INVALIDNUMRECS) is signaled. 
- 
-   9)  If any quaternion has magnitude zero, the error
-       SPICE(ZEROQUATERNION) is signaled.
 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   handle     I   Handle of an open CK file.
+   begtim     I   The beginning encoded SCLK of the segment.
+   endtim     I   The ending encoded SCLK of the segment.
+   inst       I   The NAIF instrument ID code.
+   ref        I   The reference frame of the segment.
+   avflag     I   SPICETRUE if the segment will contain angular velocity.
+   segid      I   Segment identifier.
+   nrec       I   Number of pointing records.
+   sclkdp     I   Encoded SCLK times.
+   quats      I   Quaternions representing instrument pointing.
+   avvs       I   Angular velocity vectors.
+
+-Detailed_Input
+
+   handle      is the handle of the CK file to which the segment will
+               be written. The file must have been opened with write
+               access.
+
+   begtim      is the beginning encoded SCLK time of the segment. This
+               value should be less than or equal to the first time in
+               the segment.
+
+   endtim      is the encoded SCLK time at which the segment ends.
+               This value should be greater than or equal to the last
+               time in the segment.
+
+   inst        is the NAIF integer ID code for the instrument.
+
+   ref         is a character string which specifies the
+               reference frame of the segment. This should be one of
+               the frames supported by the SPICELIB routine NAMFRM
+               which is an entry point of FRAMEX.
+
+   avflag      is a logical flag which indicates whether or not the
+               segment will contain angular velocity.
+
+   segid       is the segment identifier.  A CK segment identifier may
+               contain up to 40 characters, excluding the terminating
+               null.
+
+   nrec        is the number of pointing instances in the segment.
+
+   sclkdp      are the encoded spacecraft clock times associated with
+               each pointing instance. These times must be strictly
+               increasing.
+
+   quats       is an array of SPICE-style quaternions representing a
+               sequence of C-matrices. See the discussion of "Quaternion
+               Styles" in the -Particulars section below.
+
+   avvs        are the angular velocity vectors (optional).
+
+               If avflag is SPICEFALSE then this array is ignored by the
+               routine, however it still must be supplied as part of
+               the calling sequence.
+
+-Detailed_Output
+
+   None. See -Files section.
+
+-Parameters
+
+   None.
+
+-Exceptions
+
+   1)  If `handle' is not the handle of a C-kernel opened for writing,
+       an error is signaled by a routine in the call tree of this
+       routine.
+
+   2)  If `segid' is more than 40 characters long, the error
+       SPICE(SEGIDTOOLONG) is signaled by a routine in the call tree
+       of this routine.
+
+   3)  If `segid' contains any nonprintable characters, the error
+       SPICE(NONPRINTABLECHARS) is signaled by a routine in the call
+       tree of this routine.
+
+   4)  If the first encoded SCLK time is negative, the error
+       SPICE(INVALIDSCLKTIME) is signaled by a routine in the call
+       tree of this routine.
+
+   5)  If the second encoded SCLK or any subsequent times, or if the
+       encoded SCLK times are not strictly increasing, the error
+       SPICE(TIMESOUTOFORDER) is signaled by a routine in the call
+       tree of this routine.
+
+   6)  If `begtim' is greater than sclkdp[0] or `endtim' is less than
+       sclkdp[nrec-1], the error SPICE(INVALIDDESCRTIME) is signaled by
+       a routine in the call tree of this routine.
+
+   7)  If the name of the reference frame is not one of those
+       supported by the routine namfrm_c, the error
+       SPICE(INVALIDREFFRAME) is signaled by a routine in the call
+       tree of this routine.
+
+   8)  If `nrec', the number of pointing records, is less than or equal
+       to 0, the error SPICE(INVALIDNUMREC) is signaled by a routine
+       in the call tree of this routine.
+
+   9)  If any quaternion has magnitude zero, the error
+       SPICE(ZEROQUATERNION) is signaled by a routine in the call
+       tree of this routine.
+
+   10) If any of the `ref' or `segid' input string pointers is null,
+       the error SPICE(NULLPOINTER) is signaled.
+
+   11) If any of the `ref' or `segid' input strings has zero length,
+       the error SPICE(EMPTYSTRING) is signaled.
 
 -Files
- 
-   This routine adds a type 1 segment to a C-kernel.  The C-kernel 
-   may be either a new one or an existing one opened for writing. 
- 
+
+   This routine adds a type 1 segment to a C-kernel. The C-kernel
+   may be either a new one or an existing one opened for writing.
+
 -Particulars
- 
-   For a detailed description of a type 1 CK segment please see the 
-   CK Required Reading. 
- 
-   This routine relieves the user from performing the repetitive 
-   calls to the DAF routines necessary to construct a CK segment. 
- 
+
+   For a detailed description of a type 1 CK segment please see the
+   CK Required Reading.
+
+   This routine relieves the user from performing the repetitive
+   calls to the DAF routines necessary to construct a CK segment.
+
 
    Quaternion Styles
    -----------------
@@ -187,12 +200,12 @@
    science and engineering applications. Quaternion styles
    are characterized by
 
-      - The order of quaternion elements
+   -  The order of quaternion elements
 
-      - The quaternion multiplication formula
+   -  The quaternion multiplication formula
 
-      - The convention for associating quaternions
-        with rotation matrices
+   -  The convention for associating quaternions
+      with rotation matrices
 
    Two of the commonly used styles are
 
@@ -272,7 +285,7 @@
 
    the elements of M are derived from the elements of q as follows:
 
-        +-                                                         -+
+        .-                                                         -.
         |           2    2                                          |
         | 1 - 2*( q2 + q3 )   2*(q1*q2 - q0*q3)   2*(q1*q3 + q0*q2) |
         |                                                           |
@@ -284,7 +297,7 @@
         |                                                   2    2  |
         | 2*(q1*q3 - q0*q2)   2*(q2*q3 + q0*q1)   1 - 2*( q1 + q2 ) |
         |                                                           |
-        +-                                                         -+
+        `-                                                         -'
 
    Note that substituting the elements of -q for those of q in the
    right hand side leaves each element of M unchanged; this shows
@@ -303,16 +316,16 @@
 
    OMEGA is a skew-symmetric matrix of the form
 
-                 +-             -+
+                 .-             -.
                  |  0   -n3   n2 |
                  |               |
        OMEGA  =  |  n3   0   -n1 |
                  |               |
                  | -n2   n1   0  |
-                 +-             -+
+                 `-             -'
 
    The vector N of matrix entries (n1, n2, n3) is the rotation axis
-   of M and theta is M's rotation angle.  Note that N and theta
+   of M and theta is M's rotation angle. Note that N and theta
    are not unique.
 
    Let
@@ -377,119 +390,255 @@
 
       M1*M2
 
-
 -Examples
- 
-  
-   This example writes a type 1 C-kernel segment for the 
-   Galileo scan platform to a previously opened file attached to 
-   handle. 
- 
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) The following example creates a CK file with a type 1 segment
+      from a series of pointing instances that represent a structure
+      initially aligned with the J2000 frame, and which is rotating
+      about the J2000 Z-axis. There will be one pointing instance
+      per 10-tick interval.
+
+
+      Example code begins here.
+
+
       /.
-      Include CSPICE interface definitions.
+         Program ckw01_ex1
       ./
       #include "SpiceUsr.h"
-                .
-                .
-                .
-      /.
-      Assume arrays of quaternions, angular velocities, and the 
-      associated SCLK times are produced elsewhere. 
-      ./
-                . 
-                . 
-                . 
-      /.
-      The subroutine ckw01_c needs the following items for the 
-      segment descriptor: 
-      
-         1) SCLK limits of the segment. 
-         2) Instrument code. 
-         3) Reference frame. 
-         4) The angular velocity flag. 
-      ./
-      
-      begtim  = (SpiceChar *) sclk[0]; 
-      endtim  = (SpiceChar *) sclk[nrec-1];
- 
-      inst    = -77001;
-      ref     = "J2000";
-      avflag  = SPICETRUE;
-      segid   = "GLL SCAN PLT - DATA TYPE 1"; 
- 
-      /.
-      Write the segment. 
-      ./
-      ckw01_c ( handle,  begtim,  endtim,  inst,  ref,  avflag, 
-                segid,   nrec,    sclkdp,  quats, avvs         );
-                
-                . 
-                . 
-                . 
-             
-      /.
-      After all segments are written, close the C-kernel.
-      ./
-      ckcls_c ( handle );
-      
- 
+
+      int main( )
+      {
+
+         /.
+         Local parameters.
+         ./
+         #define CK1          "ckw01_ex1.bc"
+         #define SPTICK       0.001
+         #define INST         -77701
+         #define MAXREC       201
+
+         /.
+         Local variables.
+         ./
+         SpiceChar          * ref;
+         SpiceChar          * ifname;
+         SpiceChar          * segid;
+
+         SpiceDouble          avvs   [MAXREC][3];
+         SpiceDouble          begtim;
+         SpiceDouble          endtim;
+         SpiceDouble          quats  [MAXREC][4];
+         SpiceDouble          rate;
+         SpiceDouble          rwmat  [3][3];
+         SpiceDouble          sclkdp [MAXREC];
+         SpiceDouble          spaces;
+         SpiceDouble          sticks;
+         SpiceDouble          theta;
+         SpiceDouble          wmat   [3][3];
+         SpiceDouble          wquat  [4];
+
+         SpiceInt             handle;
+         SpiceInt             i;
+         SpiceInt             ncomch;
+
+         SpiceBoolean         avflag;
+
+         /.
+         `ncomch' is the number of characters to reserve for the
+         kernel's comment area. This example doesn't write
+         comments, so set to zero.
+         ./
+         ncomch = 0;
+
+         /.
+         The base reference from for the rotation data.
+         ./
+         ref = "J2000";
+
+         /.
+         Time spacing in encoded ticks and in seconds
+         ./
+         sticks = 10.0;
+         spaces = sticks * SPTICK;
+
+         /.
+         Declare an angular rate in radians per sec.
+         ./
+         rate = 1.e-2;
+
+         /.
+         Internal file name and segment ID.
+         ./
+         segid  = "Test type 1 CK segment";
+         ifname = "Test CK type 1 segment created by ckw01_c";
+
+         /.
+         Open a new kernel.
+         ./
+         ckopn_c ( CK1, ifname, ncomch, &handle );
+
+         /.
+         Create a 3x3 double precision identity matrix.
+         ./
+         ident_c ( wmat );
+
+         /.
+         Convert the matrix to quaternion.
+         ./
+         m2q_c ( wmat, wquat );
+
+         /.
+         Copy the work quaternion to the first row of
+         `quats'.
+         ./
+         moved_c ( wquat, 4, quats[0] );
+
+         /.
+         Create an angular velocity vector. This vector is in the
+         `ref' reference frame.
+         ./
+         vpack_c ( 0.0, 0.0, rate, avvs[0] );
+
+         /.
+         Set the initial value of the encoded ticks.
+         ./
+         sclkdp[0] = 1000.0;
+
+         /.
+         Fill the rest of the `avvs' and `quats' matrices
+         with simple data.
+         ./
+         for ( i = 1; i < MAXREC; i++ )
+         {
+
+            /.
+            Create the corresponding encoded tick value in
+            increments of `sticks' with an initial value of
+            1000.0 ticks.
+            ./
+            sclkdp[i] = 1000.0 + i * sticks;
+
+            /.
+            Create the transformation matrix for a rotation of
+            `theta' about the Z axis. Calculate `theta' from the
+            constant angular rate `rate' at increments of `spaces'.
+            ./
+            theta = i * rate * spaces;
+            rotmat_c ( wmat, theta, 3, rwmat );
+
+            /.
+            Convert the `rwmat' matrix to SPICE type quaternion.
+            ./
+            m2q_c ( rwmat, wquat );
+
+            /.
+            Store the quaternion in the `quats' matrix.
+            Store angular velocity in `avvs'.
+            ./
+            moved_c ( wquat, 4, quats[i] );
+            vpack_c ( 0.0, 0.0, rate, avvs[i] );
+
+         }
+
+         /.
+         This segment contains angular velocity.
+         ./
+         avflag = SPICETRUE;
+
+         /.
+         Set the segment boundaries equal to the first and last
+         time for the data arrays.
+         ./
+         begtim = sclkdp[0];
+         endtim = sclkdp[MAXREC-1];
+
+         /.
+         All information ready to write. Write to a CK type 1
+         segment to the file indicated by `handle'.
+         ./
+         ckw01_c ( handle, begtim, endtim, INST,  ref, avflag,
+                   segid,  MAXREC, sclkdp, quats, avvs        );
+
+         /.
+         SAFELY close the file.
+         ./
+         ckcls_c ( handle );
+
+         return ( 0 );
+      }
+
+
+      When this program is executed, no output is presented on
+      screen. After run completion, a new CK file exists in the
+      output directory.
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   K.R. Gehringer  (JPL) 
-   N.J. Bachman    (JPL) 
-   J.M. Lynch      (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+
 -Version
+
+   -CSPICE Version 2.0.1, 10-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard. Created complete
+       code example from existing fragment.
 
    -CSPICE Version 2.0.0, 01-JUN-2010 (NJB)
 
-      The check for non-unit quaternions has been replaced
-      with a check for zero-length quaternions. (The
-      implementation of the check is located in ckw01_.)
+       The check for non-unit quaternions has been replaced
+       with a check for zero-length quaternions. (The
+       implementation of the check is located in ckw01_.)
 
    -CSPICE Version 1.3.2, 27-FEB-2008 (NJB)
 
-      Updated header; added information about SPICE 
-      quaternion conventions.
+       Updated header; added information about SPICE
+       quaternion conventions.
 
    -CSPICE Version 1.3.1, 12-JUN-2006 (NJB)
 
-      Corrected typo in example, the sclk indexes for the begtim
-      and endtim assignments used FORTRAN convention.
- 
+       Corrected typo in example, the SCLK indexes for the begtim
+       and endtim assignments used FORTRAN convention.
+
    -CSPICE Version 1.3.0, 28-AUG-2001 (NJB)
 
-      Changed prototype:  inputs sclkdp, quats, and avvs are now
-      const-qualified.  Implemented interface macros for casting 
-      these inputs to const.
-            
-   -CSPICE Version 1.2.0, 02-SEP-1999 (NJB)  
-   
-      Local type logical variable now used for angular velocity
-      flag used in interface of ckw01_.
-            
-   -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)  
-   
-      References to C2F_CreateStr_Sig were removed; code was
-      cleaned up accordingly.  String checks are now done using
-      the macro CHKFSTR.
-       
+       Changed prototype: inputs sclkdp, quats, and avvs are now
+       const-qualified. Implemented interface macros for casting
+       these inputs to const.
+
+   -CSPICE Version 1.2.0, 02-SEP-1999 (NJB)
+
+       Local type logical variable now used for angular velocity
+       flag used in interface of ckw01_.
+
+   -CSPICE Version 1.1.0, 08-FEB-1998 (NJB)
+
+       References to C2F_CreateStr_Sig were removed; code was
+       cleaned up accordingly. String checks are now done using
+       the macro CHKFSTR.
+
    -CSPICE Version 1.0.0, 25-OCT-1997 (NJB)
-   
-      Based on SPICELIB Version 2.0.0, 28-DEC-1993 (WLT)
+
+       Based on SPICELIB Version 2.0.0, 28-DEC-1993 (WLT)
 
 -Index_Entries
- 
-   write ck type_1 pointing data segment 
- 
+
+   write CK type_1 pointing data segment
+
 -&
 */
 
@@ -500,44 +649,44 @@
    Local variables
    */
    logical                 avf;
-   
-   
+
+
    /*
    Participate in error handling.
    */
    chkin_c ( "ckw01_c" );
 
- 
+
    /*
    Check the input strings to make sure the pointers
    are non-null and the string lengths are non-zero.
    */
    CHKFSTR ( CHK_STANDARD, "ckw01_c", ref   );
    CHKFSTR ( CHK_STANDARD, "ckw01_c", segid );
- 
+
    /*
    Get a type logical copy of the a.v. flag.
    */
    avf = avflag;
-   
- 
+
+
    /*
    Write the segment.  Note that the quaternion and angular velocity
    arrays DO NOT require transposition!
    */
 
-   ckw01_( ( integer    * ) &handle, 
-           ( doublereal * ) &begtim, 
-           ( doublereal * ) &endtim, 
-           ( integer    * ) &inst, 
-           ( char       * ) ref, 
-           ( logical    * ) &avf, 
-           ( char       * ) segid, 
-           ( integer    * ) &nrec, 
+   ckw01_( ( integer    * ) &handle,
+           ( doublereal * ) &begtim,
+           ( doublereal * ) &endtim,
+           ( integer    * ) &inst,
+           ( char       * ) ref,
+           ( logical    * ) &avf,
+           ( char       * ) segid,
+           ( integer    * ) &nrec,
            ( doublereal * ) sclkdp,
-           ( doublereal * ) quats, 
-           ( doublereal * ) avvs, 
-           ( ftnlen       ) strlen(ref), 
+           ( doublereal * ) quats,
+           ( doublereal * ) avvs,
+           ( ftnlen       ) strlen(ref),
            ( ftnlen       ) strlen(segid)  );
 
 

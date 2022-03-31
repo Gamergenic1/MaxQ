@@ -22,7 +22,7 @@
 /* $ Abstract */
 
 /*     Find the component of a vector that is perpendicular to a second */
-/*     vector.  All vectors are 3-dimensional. */
+/*     vector. All vectors are 3-dimensional. */
 
 /* $ Disclaimer */
 
@@ -62,28 +62,27 @@
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     A          I    The vector whose orthogonal component is sought. */
-/*     B          I    The vector used as the orthogonal reference. */
-/*     P          O    The component of A orthogonal to B. */
+/*     A          I   The vector whose orthogonal component is sought. */
+/*     B          I   The vector used as the orthogonal reference. */
+/*     P          O   The component of A orthogonal to B. */
 
 /* $ Detailed_Input */
 
-/*     A     is a double precision, 3-dimensional vector.  It the vector */
-/*           whose component orthogonal to B is sought. (There is a */
-/*           unique decomposition of A into a sum V + P, where V is */
-/*           parallel to B and P is orthogonal to B.  We want the */
-/*           component P.) */
+/*     A        is a double precision, 3-dimensional vector. It the */
+/*              vector whose component orthogonal to B is sought. (There */
+/*              is a unique decomposition of A into a sum V + P, where V */
+/*              is parallel to B and P is orthogonal to B. We want the */
+/*              component P.) */
 
-/*     B     is a double precision, 3-dimensional vector.  This */
-/*           vector is the vector used as a reference for the */
-/*           decomposition of A. */
-
+/*     B        is a double precision, 3-dimensional vector. This */
+/*              vector is the vector used as a reference for the */
+/*              decomposition of A. */
 
 /* $ Detailed_Output */
 
-/*     P     is a double precision, 3-dimensional vector containing */
-/*           the component of A that is orthogonal to B. */
-/*           P may overwrite either A or B. */
+/*     P        is a double precision, 3-dimensional vector containing */
+/*              the component of A that is orthogonal to B. */
+/*              P may overwrite either A or B. */
 
 /* $ Parameters */
 
@@ -101,7 +100,7 @@
 
 /*     Given and non-zero vector B and a vector A, there is a unique */
 /*     decomposition of A as a sum V + P such that P is orthogonal */
-/*     to B and V is parallel to B.  This routine finds the vector P. */
+/*     to B and V is parallel to B. This routine finds the vector P. */
 
 /*     If B is a zero vector, P will be identical to A. */
 
@@ -123,34 +122,43 @@
 
 /* $ Literature_References */
 
-/*     Any reasonable calculus text (for example Thomas) */
+/*     [1]  G. Thomas and R. Finney, "Calculus and Analytic Geometry," */
+/*          7th Edition, Addison Wesley, 1988. */
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     W.L. Taber      (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 16-SEP-2020 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.1, 11-MAY-2010 (EDW) */
 
-/*       Minor edit to code comments eliminating typo. */
+/*        Minor edit to code comments eliminating typo. */
 
 /*        Reordered header sections to proper NAIF convention. */
 /*        Removed Revision section, it listed a duplication of a */
-/*        Version section entry. */
+/*        $Version section entry. */
 
 /* -    SPICELIB Version 1.1.0, 09-SEP-2005 (NJB) */
 
 /*        Updated to remove non-standard use of duplicate arguments */
 /*        in VSCL call. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) */
 
 /* -& */
 /* $ Index_Entries */

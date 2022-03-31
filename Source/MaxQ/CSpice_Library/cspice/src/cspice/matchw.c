@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure            MATCHW ( Match string against wildcard template ) */
+/* $Procedure MATCHW ( Match string against wildcard template ) */
 logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen 
 	string_len, ftnlen templ_len, ftnlen wstr_len, ftnlen wchr_len)
 {
@@ -80,30 +80,38 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /* $ Detailed_Input */
 
-/*     STRING      is the input character string to be tested for */
-/*                 a match against the input template. Leading and */
-/*                 trailing blanks are ignored. */
+/*     STRING   is the input character string to be tested for a match */
+/*              against the input template. Leading and trailing blanks */
+/*              are ignored. */
 
-/*     TEMPL       is the input template to be tested for a match */
-/*                 against the input string. TEMPL may contain wild */
-/*                 cards. Leading and trailing blanks are ignored. */
+/*     TEMPL    is the input template to be tested for a match against */
+/*              the input string. TEMPL may contain wild cards. Leading */
+/*              and trailing blanks are ignored. */
 
-/*     WSTR        is the wild string token used in the input template. */
-/*                 The wild string token may represent from zero to */
-/*                 any number of characters. */
+/*     WSTR     is the wild string token used in the input template. The */
+/*              wild string token may represent from zero to any number */
+/*              of characters. */
 
-/*     WCHR        is the wild character token used in the input */
-/*                 template. The wild character token represents */
-/*                 exactly one character. */
+/*     WCHR     is the wild character token used in the input template. */
+/*              The wild character token represents exactly one */
+/*              character. */
 
 /* $ Detailed_Output */
 
-/*     The function is true when the input string matches the input */
-/*     template, and false otherwise. The string and template match */
-/*     whenever the template can expand (through replacement of its */
+/*     The function returns .TRUE. when the input string matches the */
+/*     input template, and .FALSE. otherwise. The string and template */
+/*     match whenever the template can expand (through replacement of its */
 /*     wild cards) to become the input string. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -111,7 +119,7 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /*     MATCHW ignores leading and trailing blanks in both the string */
 /*     and the template. All of the following are equivalent (they */
-/*     all return TRUE). */
+/*     all return .TRUE.). */
 
 /*        MATCHW ( 'ALCATRAZ',     'A*Z',      '*', '%' ) */
 /*        MATCHW ( '  ALCATRAZ  ', 'A*Z',      '*', '%' ) */
@@ -121,10 +129,6 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     MATCHW is case-sensitive:  uppercase characters do not match */
 /*     lowercase characters, and vice versa. Wild characters match */
 /*     characters of both cases. */
-
-/* $ Exceptions */
-
-/*     Error free. */
 
 /* $ Examples */
 
@@ -152,21 +156,26 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan      (JPL) */
-/*     W.L. Taber       (JPL) */
-/*     I.M. Underwood   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary entries from $Revisions section. */
 
 /* -    SPICELIB Version 1.3.1, 11-NOV-2005 (NJB) */
 
@@ -185,15 +194,15 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /* -    SPICELIB Version 1.1.0, 17-MAY-1994 (HAN) */
 
-/*       Set the default function value to either 0, 0.0D0, .FALSE., */
-/*       or blank depending on the type of the function. */
+/*        Set the default function value to either 0, 0.0D0, .FALSE., */
+/*        or blank depending on the type of the function. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (WLT) (IMU) */
 
 /* -& */
 /* $ Index_Entries */
@@ -204,13 +213,13 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /* -& */
 /* $ Revisions */
 
-/* -     Beta Version 1.1.0, 06-OCT-1988 (WLT) */
+/* -    Beta Version 1.1.0, 06-OCT-1988 (WLT) */
 
-/*         The old algorithm just did not work. Strings with wild */
-/*         characters at the beginning or end of the string were not */
-/*         matched correctly. For example, A% matched APPROX, if the */
-/*         wild character token was % and the wild string token was */
-/*         *. Needless to say, a new algorithm was developed. */
+/*        The old algorithm just did not work. Strings with wild */
+/*        characters at the beginning or end of the string were not */
+/*        matched correctly. For example, A% matched APPROX, if the */
+/*        wild character token was % and the wild string token was *. */
+/*        Needless to say, a new algorithm was developed. */
 
 /* -& */
 
@@ -224,7 +233,7 @@ logical matchw_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
     ret_val = FALSE_;
 
-/*     First let's get everybody's measurments. */
+/*     First let's get everybody's measurements. */
 
     sfirst = frstnb_(string, string_len);
     slast = lastnb_(string, string_len);

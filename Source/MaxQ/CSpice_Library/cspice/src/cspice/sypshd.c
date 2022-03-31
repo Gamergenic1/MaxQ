@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYPSHD ( Push a value onto a particular symbol ) */
+/* $Procedure SYPSHD ( Push a value onto a particular symbol ) */
 /* Subroutine */ int sypshd_(char *name__, doublereal *value, char *tabsym, 
 	integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen 
 	tabsym_len)
@@ -85,44 +85,46 @@ static integer c__1 = 1;
 /*     NAME       I   Name of the symbol onto which the value is to be */
 /*                    pushed. */
 /*     VALUE      I   Value that is to be pushed onto the symbol NAME. */
-
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol onto which the value is to */
-/*                be pushed. If NAME is not in the symbol table, a new */
-/*                symbol is created. */
+/*     NAME     is the name of the symbol onto which the value is to */
+/*              be pushed. */
+
+/*              If NAME is not in the symbol table, a new symbol is */
+/*              created. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a double precision symbol table. */
+/*     TABVAL   are the components of a double precision symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a double precision symbol table. */
-/*                The value is added to the symbol table at the front */
-/*                of the previous value(s) associated with the symbol */
-/*                NAME. If NAME is not originally in the symbol table, */
-/*                a new symbol is created. */
+/*     TABVAL   are the components of a double precision symbol table. */
+
+/*              The value is added to the symbol table at the front of */
+/*              the previous value(s) associated with the symbol NAME. If */
+/*              NAME is not originally in the symbol table, a new symbol */
+/*              is created. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the addition of the new value to the symbol table causes an */
+/*         overflow in the value table, the error SPICE(VALUETABLEFULL) */
+/*         is signaled. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If the addition of the new value to the symbol table */
-/*        causes an overflow in the value table, the error */
-/*        SPICE(VALUETABLEFULL) is signalled. */
 
 /* $ Particulars */
 
@@ -143,8 +145,8 @@ static integer c__1 = 1;
 
 /*     The call, */
 
-/*     CALL SYPSHD ( 'BODY4_POLE_RA',  3.17681D2, */
-/*    .               TABSYM,          TABPTR,         TABVAL ) */
+/*        CALL SYPSHD ( 'BODY4_POLE_RA',  3.17681D2, */
+/*       .               TABSYM,          TABPTR,    TABVAL ) */
 
 /*     modifies the contents of the symbol table to be: */
 
@@ -159,8 +161,8 @@ static integer c__1 = 1;
 
 /*     The next call, */
 
-/*     CALL SYPSHC ( 'BODY4_GM', 4.2826286548993737D4, */
-/*    .               TABSYM,     TABPTR,                TABVAL ) */
+/*        CALL SYPSHC ( 'BODY4_GM', 4.2826286548993737D4, */
+/*       .               TABSYM,     TABPTR,              TABVAL ) */
 
 /*     modifies the contents of the symbol table to be: */
 
@@ -186,17 +188,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

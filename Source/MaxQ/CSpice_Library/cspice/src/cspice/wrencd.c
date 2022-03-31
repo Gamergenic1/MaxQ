@@ -10,7 +10,7 @@
 static integer c__3 = 3;
 static integer c__1 = 1;
 
-/* $Procedure  WRENCD  ( Write encoded d.p. numbers to text file ) */
+/* $Procedure WRENCD ( Write encoded d.p. numbers to text file ) */
 /* Subroutine */ int wrencd_(integer *unit, integer *n, doublereal *data)
 {
     /* System generated locals */
@@ -79,47 +79,47 @@ static integer c__1 = 1;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*      UNIT      I    Fortran unit number of output text file. */
-/*      N         I    Number of d.p. numbers to encode and write. */
-/*      DATA      I    List of d.p. numbers to encode and write. */
+/*     UNIT      I    Fortran unit number of output text file. */
+/*     N         I    Number of d.p. numbers to encode and write. */
+/*     DATA      I    List of d.p. numbers to encode and write. */
 
 /* $ Detailed_Input */
 
-/*     UNIT     The Fortran unit number for a previously opened text */
+/*     UNIT     is the Fortran unit number for a previously opened text */
 /*              file. All writing will begin at the CURRENT POSITION */
 /*              in the text file. */
 
-/*     N        The number of double precision numbers to be encoded */
+/*     N        is the number of double precision numbers to be encoded */
 /*              and written to the text file attached to UNIT. */
 
-/*     DATA     List of double precision numbers to be encoded and */
+/*     DATA     is the list of double precision numbers to be encoded and */
 /*              written to the text file attached to UNIT. */
 
 /* $ Detailed_Output */
 
-/*     See the Particulars section for a description of the effect of */
+/*     See the $Particulars section for a description of the effect of */
 /*     this routine. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     1)   If N, the number of data items, is not positive, the error */
-/*          SPICE(INVALIDARGUMENT) will be signalled. */
+/*     1)  If N, the number of data items, is not positive, the error */
+/*         SPICE(INVALIDARGUMENT) is signaled. */
 
-/*     2)   If an error occurs while writing to the text file attached */
-/*          to UNIT, the error SPICE(FILEWRITEFAILED) will be signalled. */
+/*     2)  If an error occurs while writing to the text file attached */
+/*         to UNIT, the error SPICE(FILEWRITEFAILED) is signaled. */
 
-/*     3)   If the Fortran logical unit UNIT is not defined, the results */
-/*          of this routine are unpredictable. */
+/*     3)  If the Fortran logical unit UNIT is not defined, the results */
+/*         of this routine are unpredictable. */
 
 /* $ Files */
 
-/*     See the description of UNIT in the Detailed_Input section. */
+/*     See the description of UNIT in the $Detailed_Input section. */
 
 /* $ Particulars */
 
@@ -202,16 +202,23 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     K.R. Gehringer (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.3.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.2.0, 09-SEP-1993 (KRG) */
 
 /*        The list directed write was changed to a formatted write using */
 /*        the specifier FMT='(A)'. This was done in order to prevent a */
 /*        space from appearing as the first character on each line of the */
-/*        file for certian computer platforms. */
+/*        file for certain computer platforms. */
 
 /* -    SPICELIB Version 1.1.0, 21-JUN-1993 (KRG) */
 
@@ -219,7 +226,7 @@ static integer c__1 = 1;
 /*        lines on some of the supported systems, such as the NeXT with */
 /*        Absoft Fortran 3.2. */
 
-/*        A disclaimer was added to the $ Examples section concerning */
+/*        A disclaimer was added to the $Examples section concerning */
 /*        the output format used. The disclaimer simply states that the */
 /*        output format used in the example is not necessarily the */
 /*        output format actually used by the routine. */
@@ -229,7 +236,7 @@ static integer c__1 = 1;
 /* -& */
 /* $ Index_Entries */
 
-/*      encode and write d.p. numbers to a text file */
+/*     encode and write d.p. numbers to a text file */
 
 /* -& */
 /* $ Revisions */
@@ -239,7 +246,7 @@ static integer c__1 = 1;
 /*        The list directed write was changed to a formatted write using */
 /*        the  specifier FMT='(A)'. This was done in order to prevent a */
 /*        space from appearing as the first character on each line of the */
-/*        file for certian computer platforms. */
+/*        file for certain computer platforms. */
 
 /* -    SPICELIB Version 1.1.0, 21-JUN-1993 (KRG) */
 
@@ -249,14 +256,14 @@ static integer c__1 = 1;
 
 /*        On some of the supported computers this routine would produce */
 /*        very long (greater than 1000 characters) output lines due to */
-/*        the implicit DO loop used in the WRITE statment: */
+/*        the implicit DO loop used in the WRITE statement: */
 
 /*            WRITE (UNIT,IOSTAT=IOSTAT,FMT=*) */
 /*           .   ( QUOTE//WORK(I)(1:LENGTH(I))//QUOTE//' ', I=1,NITMS ) */
 
 /*        This problem was fixed by removing the implicit DO loop from */
 /*        the WRITE statement and placing an equivalent DO loop around */
-/*        the WRITE statemtent: */
+/*        the WRITE statement: */
 
 /*            DO I = 1, NITMS */
 /*               WRITE (UNIT,IOSTAT=IOSTAT,FMT=*) */
@@ -266,7 +273,7 @@ static integer c__1 = 1;
 /*        The net effect of this will be that only a single datum will */
 /*        be written on each line of output. */
 
-/*        A disclaimer was added to the $ Examples section concerning */
+/*        A disclaimer was added to the $Examples section concerning */
 /*        the output format used. The disclaimer simply states that the */
 /*        output format used in the example is not necessarily the */
 /*        output format actually used by the routine. */
@@ -330,9 +337,9 @@ static integer c__1 = 1;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    dp2hx_(&data[itmbeg + i__ - 2], work + (((i__2 = i__ - 1) < 64 && 
 		    0 <= i__2 ? i__2 : s_rnge("work", i__2, "wrencd_", (
-		    ftnlen)324)) << 6), &length[(i__3 = i__ - 1) < 64 && 0 <= 
+		    ftnlen)334)) << 6), &length[(i__3 = i__ - 1) < 64 && 0 <= 
 		    i__3 ? i__3 : s_rnge("length", i__3, "wrencd_", (ftnlen)
-		    324)], (ftnlen)64);
+		    334)], (ftnlen)64);
 	}
 
 /*        Write out the current workspace, placing single quotes around */
@@ -352,14 +359,14 @@ static integer c__1 = 1;
 /* Writing concatenation */
 	    i__4[0] = 1, a__1[0] = "'";
 	    i__4[1] = length[(i__3 = i__ - 1) < 64 && 0 <= i__3 ? i__3 : 
-		    s_rnge("length", i__3, "wrencd_", (ftnlen)335)], a__1[1] =
+		    s_rnge("length", i__3, "wrencd_", (ftnlen)345)], a__1[1] =
 		     work + (((i__2 = i__ - 1) < 64 && 0 <= i__2 ? i__2 : 
-		    s_rnge("work", i__2, "wrencd_", (ftnlen)335)) << 6);
+		    s_rnge("work", i__2, "wrencd_", (ftnlen)345)) << 6);
 	    i__4[2] = 1, a__1[2] = "'";
 	    s_cat(ch__1, a__1, i__4, &c__3, (ftnlen)66);
 	    iostat = do_fio(&c__1, ch__1, length[(i__3 = i__ - 1) < 64 && 0 <=
 		     i__3 ? i__3 : s_rnge("length", i__3, "wrencd_", (ftnlen)
-		    335)] + 2);
+		    345)] + 2);
 	    if (iostat != 0) {
 		goto L100001;
 	    }

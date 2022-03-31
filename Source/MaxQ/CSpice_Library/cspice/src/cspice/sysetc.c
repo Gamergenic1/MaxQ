@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure      SYSETC ( Set the value associated with a symbol ) */
+/* $Procedure SYSETC ( Set the value associated with a symbol ) */
 /* Subroutine */ int sysetc_(char *name__, char *value, char *tabsym, integer 
 	*tabptr, char *tabval, ftnlen name_len, ftnlen value_len, ftnlen 
 	tabsym_len, ftnlen tabval_len)
@@ -90,111 +90,110 @@ static integer c__1 = 1;
 /*     NAME       I   Name of the symbol whose associated value is to be */
 /*                    set. */
 /*     VALUE      I   Associated value of the symbol NAME. */
-
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose associated value is to */
-/*                be set. If NAME has values associated with it, they are */
-/*                removed, and VALUE becomes the only value associated */
-/*                with NAME. If NAME is not in the symbol table, a new */
-/*                symbol is created, provided there is room in the */
-/*                symbol table. */
+/*     NAME     is the name of the symbol whose associated value is to */
+/*              be set. */
 
-/*     VALUE      is the new value associated with the symbol NAME. */
+/*              If NAME has values associated with it, they are removed, */
+/*              and VALUE becomes the only value associated with NAME. If */
+/*              NAME is not in the symbol table, a new symbol is created, */
+/*              provided there is room in the symbol table. */
+
+/*     VALUE    is the new value associated with the symbol NAME. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
+/*     TABVAL   are the components of a character symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are the components of a character symbol table. */
-/*                If NAME has values associated with it, they are */
-/*                removed, and VALUE becomes the only value associated */
-/*                with NAME. If NAME is not in the symbol table, a new */
-/*                symbol is created, provided there is room in the */
-/*                symbol table. */
+/*     TABVAL   are the components of a character symbol table. */
+
+/*              If NAME has values associated with it, they are removed, */
+/*              and VALUE becomes the only value associated with NAME. If */
+/*              NAME is not in the symbol table, a new symbol is created, */
+/*              provided there is room in the symbol table. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If the addition of a new symbol causes an overflow in the */
+/*         name table, the error SPICE(NAMETABLEFULL) is signaled. */
+
+/*     2)  If the addition of a new symbol causes an overflow in the */
+/*         pointer table, the error SPICE(POINTERTABLEFULL) is signaled. */
+
+/*     3)  If the addition of a new symbol causes an overflow in the */
+/*         value table, the error SPICE(VALUETABLEFULL) is signaled. */
+
 /* $ Files */
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*     1) If the addition of a new symbol causes an overflow in the */
-/*        name table, the error SPICE(NAMETABLEFULL) is signalled. */
-
-/*     2) If the addition of a new symbol causes an overflow in the */
-/*        pointer table, the error SPICE(POINTERTABLEFULL) is signalled. */
-
-/*     3) If the addition of a new symbolcauses an overflow in the */
-/*        value table, the error SPICE(VALUETABLEFULL) is signalled. */
-
 /* $ Particulars */
 
-/*     If NAME has values associated with it, they are */
-/*     removed, and VALUE becomes the only value associated */
-/*     with NAME. If NAME is not in the symbol table, a new */
-/*     symbol is created, provided there is room in the */
-/*     symbol table. */
+/*     If NAME has values associated with it, they are removed, and VALUE */
+/*     becomes the only value associated with NAME. If NAME is not in the */
+/*     symbol table, a new symbol is created, provided there is room in */
+/*     the symbol table. */
 
 /* $ Examples */
 
 /*     The contents of the symbol table are: */
 
-/*        BOHR      -->   HYDROGEN ATOM */
-/*        EINSTEIN  -->   SPECIAL RELATIVITY */
-/*                        PHOTOELECTRIC EFFECT */
-/*                        BROWNIAN MOTION */
-/*        FERMI     -->   NUCLEAR FISSION */
-/*        PAULI     -->   EXCLUSION PRINCIPLE */
-/*                        NEUTRINO */
+/*         BOHR      -->   HYDROGEN ATOM */
+/*         EINSTEIN  -->   SPECIAL RELATIVITY */
+/*                         PHOTOELECTRIC EFFECT */
+/*                         BROWNIAN MOTION */
+/*         FERMI     -->   NUCLEAR FISSION */
+/*         PAULI     -->   EXCLUSION PRINCIPLE */
+/*                         NEUTRINO */
 
-/*     The call, */
+/*      The call, */
 
-/*     CALL SYSETC ( 'EINSTEIN', 'GENERAL RELATIVITY', */
-/*    .               TABSYM,     TABPTR,      TABVAL  ) */
+/*      CALL SYSETC ( 'EINSTEIN', 'GENERAL RELATIVITY', */
+/*     .               TABSYM,     TABPTR,      TABVAL  ) */
 
-/*     modifies the contents of the symbol table to be: */
+/*      modifies the contents of the symbol table to be: */
 
-/*        BOHR      -->   HYDROGEN ATOM */
-/*        EINSTEIN  -->   GENERAL RELATIVITY */
-/*        FERMI     -->   NUCLEAR FISSION */
-/*        PAULI     -->   EXCLUSION PRINCIPLE */
-/*                        NEUTRINO */
+/*         BOHR      -->   HYDROGEN ATOM */
+/*         EINSTEIN  -->   GENERAL RELATIVITY */
+/*         FERMI     -->   NUCLEAR FISSION */
+/*         PAULI     -->   EXCLUSION PRINCIPLE */
+/*                         NEUTRINO */
 
-/*     Note that the previous values associated with the symbol */
-/*     "EINSTEIN" have been deleted, and now only the new value is */
-/*     associated with the symbol. */
+/*      Note that the previous values associated with the symbol */
+/*      "EINSTEIN" have been deleted, and now only the new value is */
+/*      associated with the symbol. */
 
 
-/*     The next call, */
+/*      The next call, */
 
-/*     CALL SYSETC ( 'MILLIKAN', 'PHOTOELECTRIC EFFECT' */
-/*    .               TABSYM,     TABPTR,       TABVAL   ) */
+/*      CALL SYSETC ( 'MILLIKAN', 'PHOTOELECTRIC EFFECT' */
+/*     .               TABSYM,     TABPTR,       TABVAL   ) */
 
-/*     modifies the contents of the symbol table to be: */
+/*      modifies the contents of the symbol table to be: */
 
-/*        BOHR      -->   HYDROGEN ATOM */
-/*        EINSTEIN  -->   GENERAL RELATIVITY */
-/*        FERMI     -->   NUCLEAR FISSION */
-/*        MILLIKAN  -->   PHOTOELECTRIC EFFECT */
-/*        PAULI     -->   EXCLUSION PRINCIPLE */
-/*                        NEUTRINOC */
+/*         BOHR      -->   HYDROGEN ATOM */
+/*         EINSTEIN  -->   GENERAL RELATIVITY */
+/*         FERMI     -->   NUCLEAR FISSION */
+/*         MILLIKAN  -->   PHOTOELECTRIC EFFECT */
+/*         PAULI     -->   EXCLUSION PRINCIPLE */
+/*                         NEUTRINOC */
 
-/*     Note that the new symbol "MILLIKAN" was created by the last call. */
-/*     A new symbol is created only if there is room in the symbol */
-/*     table. */
+/*      Note that the new symbol "MILLIKAN" was created by the last call. */
+/*      A new symbol is created only if there is room in the symbol */
+/*      table. */
 
 /* $ Restrictions */
 
@@ -206,17 +205,25 @@ static integer c__1 = 1;
 
 /* $ Author_and_Institution */
 
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 17-JUN-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) (HAN) */
 
 /* -& */
 /* $ Index_Entries */

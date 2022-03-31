@@ -10,7 +10,7 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKNR05 ( C-kernel, number of records, type 05 ) */
+/* $Procedure CKNR05 ( C-kernel, number of records, type 05 ) */
 /* Subroutine */ int cknr05_(integer *handle, doublereal *descr, integer *
 	nrec)
 {
@@ -30,9 +30,9 @@ static integer c__6 = 6;
 
 /* $ Abstract */
 
-/*     Given the handle of a CK file and the descriptor of a type 5 */
-/*     segment in that file, return the number of pointing instances */
-/*     in that segment. */
+/*     Return the number of pointing instances in a CK type 05 segment. */
+/*     The segment is identified by a CK file handle and segment */
+/*     descriptor. */
 
 /* $ Disclaimer */
 
@@ -71,7 +71,7 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   The handle of the file containing the segment. */
 /*     DESCR      I   The descriptor of the type 5 segment. */
@@ -79,14 +79,15 @@ static integer c__6 = 6;
 
 /* $ Detailed_Input */
 
-/*     HANDLE     is the handle of the binary CK file containing the */
-/*                segment. */
+/*     HANDLE   is the handle of the binary CK file containing the */
+/*              segment. */
 
-/*     DESCR      The packed descriptor of a data type 5 segment. */
+/*     DESCR    is the packed descriptor of a data type 5 segment. */
 
 /* $ Detailed_Output */
 
-/*     NREC       The number of pointing instances in the type 5 segment. */
+/*     NREC     is the number of pointing instances in the type 5 */
+/*              segment. */
 
 /* $ Parameters */
 
@@ -95,11 +96,11 @@ static integer c__6 = 6;
 /* $ Exceptions */
 
 /*     1)  If the segment indicated by DESCR is not a type 5 segment, */
-/*         the error 'SPICE(CKWRONGDATATYPE)' is signaled. */
+/*         the error SPICE(CKWRONGDATATYPE) is signaled. */
 
 /*     2)  If the specified handle does not belong to any DAF file that */
-/*         is currently known to be open, an error is diagnosed by a */
-/*         routine that this routine calls. */
+/*         is currently known to be open, an error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     3)  If DESCR is not a valid descriptor of a segment in the CK */
 /*         file specified by HANDLE, the results of this routine are */
@@ -116,14 +117,14 @@ static integer c__6 = 6;
 /*     segment, see the CK required reading. */
 
 /*     This routine returns the number of discrete pointing instances */
-/*     contained in the specified segment.  It is normally used in */
+/*     contained in the specified segment. It is normally used in */
 /*     conjunction with CKGR05 which returns the Ith pointing instance */
 /*     in the segment. */
 
 /* $ Examples */
 
 /*     Suppose that MOC.BC is a CK file that contains segments of */
-/*     data type 5.  Then the following code fragment extracts the */
+/*     data type 5. Then the following code fragment extracts the */
 /*     SCLK time and boresight vector for each pointing instance */
 /*     in the first segment in the file. */
 
@@ -150,7 +151,7 @@ static integer c__6 = 6;
 /*           CALL DAFOPR ( 'MOC.BC', HANDLE ) */
 
 /*     C */
-/*     C     Begin forward search.  Find the first array. */
+/*     C     Begin forward search. Find the first array. */
 /*     C */
 /*           CALL DAFBFS ( HANDLE ) */
 /*           CALL DAFFNA ( FOUND  ) */
@@ -222,17 +223,22 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman (JPL) */
-/*     J.M. Lynch   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.M. Lynch         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.0.1, 26-OCT-2021 (JDR) */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.0.0, 18-AUG-2002 (NJB) (JML) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     number of ck type_5 records */
+/*     number of CK type_5 records */
 
 /* -& */
 

@@ -54,23 +54,23 @@
    #include "zzalloc.h"
    #undef   gfuds_c
 
-   void gfuds_c (  void             ( * udfuns ) ( SpiceDouble       et,
-                                                   SpiceDouble     * value ),
+   void gfuds_c ( void             ( * udfuns ) ( SpiceDouble       et,
+                                                  SpiceDouble     * value ),
 
-                   void             ( * udqdec ) ( void ( * udfuns )
-                                                        ( SpiceDouble   et,
-                                                          SpiceDouble * value ),
+                  void             ( * udqdec ) ( void ( * udfuns )
+                                                       ( SpiceDouble   et,
+                                                         SpiceDouble * value ),
 
-                                                   SpiceDouble       et,
-                                                   SpiceBoolean    * isdecr ),
+                                                  SpiceDouble       et,
+                                                  SpiceBoolean    * isdecr ),
 
-                   ConstSpiceChar     * relate,
-                   SpiceDouble          refval,
-                   SpiceDouble          adjust,
-                   SpiceDouble          step,
-                   SpiceInt             nintvls,
-                   SpiceCell          * cnfine,
-                   SpiceCell          * result )
+                  ConstSpiceChar     * relate,
+                  SpiceDouble          refval,
+                  SpiceDouble          adjust,
+                  SpiceDouble          step,
+                  SpiceInt             nintvls,
+                  SpiceCell          * cnfine,
+                  SpiceCell          * result )
 
 /*
 
@@ -78,8 +78,10 @@
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-   udfuns     I   Name of the routine that computes the scalar quantity
-                  of interest at some time.
+   SPICE_GF_CNVTOL
+              P   Convergence tolerance.
+   udfuns     I   Name of the routine that computes a scalar
+                  quantity corresponding to an `et'.
    udqdec     I   Name of the routine that computes whether the
                   scalar quantity is decreasing.
    relate     I   Operator that either looks for an extreme value
@@ -90,157 +92,218 @@
    adjust     I   Allowed variation for absolute extremal
                   geometric conditions.
    step       I   Step size used for locating extrema and roots.
-   nintvls    I   Workspace window interval count
-   cnfine    I-O  SPICE window to which the search is restricted.
+   nintvls    I   Workspace window interval count.
+   cnfine    I-O  SPICE window to which the search is confined.
    result     O   SPICE window containing results.
 
 -Detailed_Input
 
-   udfuns     the name of the external routine that returns the
-              value of the scalar quantity of interest at time `et'.
-              The calling sequence for "udfuns" is:
+   udfuns      is the routine that returns the value of the scalar
+               quantity of interest at time `et'. The prototype of
+               `udfuns' is:
 
-                 udfuns ( et, &value )
+                  void   ( * udfuns ) ( SpiceDouble       et,
+                                        SpiceDouble     * value )
+
+               where:
+
+                  et      is a double precision value representing
+                          ephemeris time, expressed as seconds past
+                          J2000 TDB, at which to determine the scalar
+                          value.
+
+                  value   is the value of the scalar quantity at `et'.
+
+   udqdec      is the name of the routine that determines if the scalar
+               quantity calculated by `udfuns' is decreasing. The prototype
+               of `udqdec' is:
+
+                 void    ( * udqdec ) ( void          ( * udfuns )
+                                                    ( SpiceDouble   et,
+                                                      SpiceDouble * value ),
+                                        SpiceDouble       et,
+                                        SpiceBoolean    * isdecr )
 
               where:
 
-                 et      an input double precision value
-                         representing the TDB ephemeris seconds time
-                         at which to determine the scalar value.
+                  udfuns   is the name of the scalar function as defined
+                           above.
 
-                 value   is the value of the geometric quantity
-                         at `et'.
+                  et       is a double precision value representing
+                           ephemeris time, expressed as seconds past
+                           J2000 TDB, at which to determine the time
+                           derivative of `udfuns'.
 
-   udqdec     the name of the external routine that determines if
-              the scalar quantity calculated by "udfuns" is decreasing.
-              The calling sequence for "udqdec" is:
+                  isdecr   is a logical output variable indicating whether
+                           or not the scalar value returned by `udfuns' is
+                           decreasing. `isdecr' returns SPICETRUE if the
+                           time derivative of `udfuns' at `et' is negative.
 
-                 udqdec ( udfuns, et, &isdecr )
+   relate      is the scalar string comparison operator indicating
+               the numeric constraint of interest. Values are:
 
-              where:
+                  ">"        value of scalar quantity greater than some
+                             reference (refval).
 
-                 udfuns   the name of the scalar function as defined above.
+                  "="        value of scalar quantity equal to some
+                             reference (refval).
 
-                 et       an input double precision value representing
-                          the TDB ephemeris seconds time at at which
-                          to determine the time derivative of `udfuns'.
+                  "<"        value of scalar quantity less than some
+                             reference (refval).
 
-                 isdecr   a logical variable indicating whether
-                          or not the scalar value returned by udfuns
-                          is decreasing. `isdecr' returns true if the
-                          time derivative of "udfuns" at `et' is negative.
+                  "ABSMAX"   The scalar quantity is at an absolute
+                             maximum.
 
-   relate     the scalar string comparison operator indicating
-              the numeric constraint of interest. Values are:
+                  "ABSMIN"   The scalar quantity is at an absolute
+                             minimum.
 
-                 ">"       value of scalar quantity greater than some
-                           reference (refval).
+                  "LOCMAX"   The scalar quantity is at a local
+                             maximum.
 
-                 "="       value of scalar quantity equal to some
-                           reference (refval).
+                  "LOCMIN"   The scalar quantity is at a local
+                             minimum.
 
-                 "<"       value of scalar quantity less than some
-                           reference (refval).
+               The caller may indicate that the region of interest
+               is the set of time intervals where the quantity is
+               within a specified distance of an absolute extremum.
+               The argument `adjust' (described below) is used to
+               specified this distance.
 
-                 "ABSMAX"  The scalar quantity is at an absolute
-                           maximum.
+               Local extrema are considered to exist only in the
+               interiors of the intervals comprising the confinement
+               window:  a local extremum cannot exist at a boundary
+               point of the confinement window.
 
-                 "ABSMIN"  The scalar quantity is at an absolute
-                            minimum.
+               `relate' is insensitive to case, leading and
+               trailing blanks.
 
-                 "LOCMAX"  The scalar quantity is at a local
-                           maximum.
+   refval      is the reference value used to define an equality or
+               inequality to  satisfied by the scalar quantity.
+               The units of `refval' are those of the scalar quantity.
 
-                 "LOCMIN"  The scalar quantity is at a local
-                           minimum.
+   adjust      is the amount by which the quantity is allowed to vary
+               from an absolute extremum.
 
-              The caller may indicate that the region of interest
-              is the set of time intervals where the quantity is
-              within a specified distance of an absolute extremum.
-              The argument `adjust' (described below) is used to
-              specified this distance.
+               If the search is for an absolute minimum is performed,
+               the resulting window contains time intervals when the
+               geometric quantity value has values between `absmin' and
+               absmin + adjust.
 
-              Local extrema are considered to exist only in the
-              interiors of the intervals comprising the confinement
-              window:  a local extremum cannot exist at a boundary
-              point of the confinement window.
+               If the search is for an absolute maximum, the
+               corresponding range is between absmax - adjust and
+               `absmax'.
 
-              `relate' is insensitive to case, leading and
-              trailing blanks.
+               `adjust' is not used for searches for local extrema,
+               equality or inequality conditions and must have value
+               zero for such searches.
 
-   refval    is the reference value used to define an equality or
-              inequality to  satisfied by the scalar quantity.
-              The units of refval are those of the scalar quantity.
+   step        is the double precision time step size to use in
+               the search.
 
-   adjust     the amount by which the quantity is allowed to vary
-              from an absolute extremum.
+               `step' must be short enough to for a search using this
+               step size to locate the time intervals where the
+               scalar quantity function is monotone increasing or
+               decreasing. However, `step' must not be *too* short,
+               or the search will take an unreasonable amount of time.
 
-              If the search is for an absolute minimum is performed,
-              the resulting window contains time intervals when the
-              geometric quantity value has values between ABSMIN and
-              ABSMIN + adjust.
+               The choice of `step' affects the completeness but not
+               the precision of solutions found by this routine; the
+               precision is controlled by the convergence tolerance.
+               See the discussion of the parameter SPICE_GF_CNVTOL for
+               details.
 
-              If the search is for an absolute maximum, the
-              corresponding range is between ABSMAX - adjust and
-              ABSMAX.
+               `step' has units of TDB seconds.
 
-              `adjust' is not used for searches for local extrema,
-              equality or inequality conditions and must have value
-              zero for such searches.
+   nintvls     is an integer parameter specifying the number of intervals
+               that can be accommodated by each of the dynamically allocated
+               workspace windows used internally by this routine.
 
-   step       the double precision time step size to use in
-              the search.
+               In many cases, it's not necessary to compute an accurate
+               estimate of how many intervals are needed; rather, the user
+               can pick a size considerably larger than what's really
+               required.
 
-              `step' must be short enough to for a search using this
-              step size to locate the time intervals where the
-              scalar quantity function is monotone increasing or
-              decreasing. However, `step' must not be *too* short,
-              or the search will take an
+               However, since excessively large arrays can prevent
+               applications from compiling, linking, or running properly,
+               sometimes `nintvls' must be set according to the actual
+               workspace requirement. A rule of thumb for the number of
+               intervals needed is
 
-              The choice of `step' affects the completeness but not
-              the precision of solutions found by this routine; the
-              precision is controlled by the convergence tolerance.
-              See the discussion of the parameter SPICE_GF_CNVTOL for
-              details.
+                  nintvls  =  2*n  +  ( m / step )
 
-              `step' has units of TDB seconds.
+               where
 
-   nintvls    an integer value specifying the number of intervals in the
-              the internal workspace array used by this routine. `nintvls'
-              should be at least as large as the number of intervals
-              within the search region on which the specified observer-target
-              vector coordinate function is monotone increasing or decreasing.
-              It does no harm to pick a value of `nintvls' larger than the
-              minimum required to execute the specified search, but if chosen
-              too small, the search will fail.
+                  n      is the number of intervals in the confinement
+                         window.
 
-   cnfine     a double precision SPICE window that confines the time
-              period over which the specified search is conducted.
-              cnfine may consist of a single interval or a collection
-              of intervals.
+                  m      is the measure of the confinement window, in units
+                         of seconds.
 
-              In some cases the confinement window can be used to
-              greatly reduce the time period that must be searched
-              for the desired solution. See the Particulars section
-              below for further discussion.
+                  step   is the search step size in seconds.
 
-              See the Examples section below for a code example
-              that shows how to create a confinement window.
+   cnfine      is a SPICE window that confines the time period over
+               which the specified search is conducted. `cnfine' may
+               consist of a single interval or a collection of
+               intervals.
+
+               In some cases the confinement window can be used to
+               greatly reduce the time period that must be searched
+               for the desired solution. See the -Particulars section
+               below for further discussion.
+
+               See the -Examples section below for a code example
+               that shows how to create a confinement window.
+
+               In some cases the observer's state may be computed at
+               times outside of `cnfine' by as much as 2 seconds. See
+               -Particulars for details.
+
+               `cnfine' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( cnfine, CNFINESZ );
+
+               where CNFINESZ is the maximum capacity of `cnfine'.
 
 -Detailed_Output
 
-   cnfine     is the input confinement window, updated if necessary
-              so the control area of its data array indicates the
-              window's size and cardinality. The window data are
-              unchanged.
+   cnfine      is the input confinement window, updated if necessary so the
+               control area of its data array indicates the window's size
+               and cardinality. The window data are unchanged.
 
-   result     is a SPICE window representing the set of time
-              intervals, within the confinement period, when the
-              specified geometric event occurs.
+   result      is a SPICE window containing the time intervals within
+               the confinement window, during which the specified
+               condition on the scalar quantity is met.
 
-              If `result' is non-empty on input, its contents
-              will be discarded before gfuds_c conducts its
-              search.
+               `result' must be declared and initialized with sufficient
+               size to capture the full set of time intervals within the
+               search region on which the specified condition is satisfied.
+
+               If `result' is non-empty on input, its contents will be
+               discarded before gfuds_c conducts its search.
+
+               The endpoints of the time intervals comprising `result' are
+               interpreted as seconds past J2000 TDB.
+
+               If the search is for local extrema, or for absolute
+               extrema with `adjust' set to zero, then normally each
+               interval of `result' will be a singleton: the left and
+               right endpoints of each interval will be identical.
+
+               If no times within the confinement window satisfy the
+               search criteria, `result' will be returned with a
+               cardinality of zero.
+
+               `result' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( result, RESULTSZ );
+
+               where RESULTSZ is the maximum capacity of `result'.
 
 -Parameters
 
@@ -255,77 +318,88 @@
        to run unacceptably slowly and in some cases, find spurious
        roots.
 
-       This routine does not diagnose invalid step sizes, except
-       that if the step size is non-positive, an error is signaled
-       by a routine in the call tree of this routine.
+       This routine does not diagnose invalid step sizes, except that
+       if the step size is non-positive, an error is signaled by a
+       routine in the call tree of this routine.
 
    2)  Due to numerical errors, in particular,
 
-          - Truncation error in time values
-          - Finite tolerance value
-          - Errors in computed geometric quantities
+          - truncation error in time values
+          - finite tolerance value
+          - errors in computed geometric quantities
 
        it is *normal* for the condition of interest to not always be
        satisfied near the endpoints of the intervals comprising the
-       result window.
+       `result' window. One technique to handle such a situation,
+       slightly contract `result' using the window routine wncond_c.
 
-       The result window may need to be contracted slightly by the
-       caller to achieve desired results. The SPICE window routine
-       wncond_c can be used to contract the result window.
+   3)  If the number of intervals `nintvls' is less than 1, the error
+       SPICE(VALUEOUTOFRANGE) is signaled.
 
-   3)  If an error (typically cell overflow) occurs while performing
-       window arithmetic, the error will be diagnosed by a routine
+   4)  If the size of the SPICE window `result' is less than 2 or not
+       an even value, the error SPICE(INVALIDDIMENSION) is signaled
+       by a routine in the call tree of this routine.
+
+   5)  If `result' has insufficient capacity to contain the
+       number of intervals on which the specified condition
+       is met, an error is signaled by a routine in the call
+       tree of this routine.
+
+   6)  If an error (typically cell overflow) occurs during
+       window arithmetic, the error is signaled by a routine
        in the call tree of this routine.
 
-   4)  If the relational operator `relate' is not recognized, an
+   7)  If the relational operator `relate' is not recognized, an
        error is signaled by a routine in the call tree of this
        routine.
 
-   5)  If `adjust' is negative, the error SPICE(VALUEOUTOFRANGE) will
-       signal from a routine in the call tree of this routine.
+   8)  If `adjust' is negative, an error is signaled by a routine in
+       the call tree of this routine.
 
-       A non-zero value for `adjust' when `relate' has any value other than
-       "ABSMIN" or "ABSMAX" causes the error SPICE(INVALIDVALUE) to
-       signal from a routine in the call tree of this routine.
+   9)  If a non-zero value is provided for `adjust' when `relate' has any
+       value other than "ABSMIN" or "ABSMAX", an error is signaled by
+       a routine in the call tree of this routine.
 
-   6)  If required ephemerides or other kernel data are not
+   10) If required ephemerides or other kernel data are not
        available, an error is signaled by a routine in the call tree
        of this routine.
 
-   7)  If the workspace interval count is less than 1, the error
-       SPICE(VALUEOUTOFRANGE) will be signaled.
+   11) If the `relate' input string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
 
-   8)  If the required amount of workspace memory cannot be
-       allocated, the error SPICE(MALLOCFAILURE) will be
+   12) If the `relate' input string has zero length, the error
+       SPICE(EMPTYSTRING) is signaled.
+
+   13) If any the `cnfine' or `result' cell arguments has a type
+       other than SpiceDouble, the error SPICE(TYPEMISMATCH) is
        signaled.
 
-   9)  If any input string argument pointer is null, the error
-       SPICE(NULLPOINTER) will be signaled.
-
-   10) If any input string argument is empty, the error
-       SPICE(EMPTYSTRING) will be signaled.
-
-   11) If either input cell has type other than SpiceDouble,
-       the error SPICE(TYPEMISMATCH) is signaled.
+   14) If memory cannot be allocated to create the temporary variable
+       required for the execution of the underlying Fortran routine,
+       the error SPICE(MALLOCFAILED) is signaled.
 
 -Files
 
    Appropriate kernels must be loaded by the calling program before
    this routine is called.
 
-   If the user defined function requires access to ephemeris data:
+   If the scalar function requires access to ephemeris data:
 
-      - SPK data: ephemeris data for any body over the
-        time period defined by the confinement window must be
-        loaded. If aberration corrections are used, the states of
-        target and observer relative to the solar system barycenter
-        must be calculable from the available ephemeris data.
-        Typically ephemeris data are made available by loading one
-        or more SPK files via furnsh_c.
+   -  SPK data: ephemeris data for any body over the
+      time period defined by the confinement window must be
+      loaded. If aberration corrections are used, the states of
+      target and observer relative to the solar system barycenter
+      must be calculable from the available ephemeris data.
+      Typically ephemeris data are made available by loading one
+      or more SPK files via furnsh_c.
 
-      - If non-inertial reference frames are used, then PCK
-        files, frame kernels, C-kernels, and SCLK kernels may be
-        needed.
+   -  If non-inertial reference frames are used, then PCK
+      files, frame kernels, C-kernels, and SCLK kernels may be
+      needed.
+
+   -  Certain computations can expand the time window over which
+      `udfuns' and `udqdec' require data; such data must be provided by
+      loaded kernels. See -Particulars for details.
 
    In all cases, kernel data are normally loaded once per program
    run, NOT every time this routine is called.
@@ -337,16 +411,12 @@
    satisfies a caller-specified constraint. The resulting set of
    intervals is returned as a SPICE window.
 
-   Below we discuss in greater detail aspects of this routine's
-   solution process that are relevant to correct and efficient
-   use of this routine in user applications.
-
    udqdec Default Template
    =======================
 
    The user must supply a routine to determine whether sign of the
-   time derivative of udfuns is positive or negative at `et'. For
-   cases where udfuns is numerically well behaved, the user
+   time derivative of `udfuns' is positive or negative at `et'. For
+   cases where `udfuns' is numerically well behaved, the user
    may find it convenient to use a routine based on the below
    template. uddc_c determines the truth of the expression
 
@@ -355,26 +425,18 @@
       dt
 
    using the library routine uddf_c to numerically calculate the
-   derivative of udfuns using a three-point estimation. Use
-   of gfdecr requires only changing the "udfuns" argument
-   to that of the user provided scalar function passed to gfuds_c
-   and defining the differential interval size, `dt'. Please see
-   the Examples section for an example of gfdecr use.
+   derivative of `udfuns' using a three-point estimation.
+   Please see the -Examples section for an example of gfdecr use.
 
-   void gfdecr ( SpiceDouble et, SpiceBoolean * isdecr )
+      void gfdecr ( SpiceDouble et, SpiceBoolean * isdecr )
       {
 
-      SpiceDouble         dt = h, double precision interval size;
+         SpiceDouble         dt = h, double precision interval size;
 
-      uddc_c( udfuns, uddf_c, et, dt, isdecr );
+         uddc_c( udfuns, et, dt, isdecr );
 
-      return;
+         return;
       }
-
-   Below we discuss in greater detail aspects of this routine's
-   solution process that are relevant to correct and efficient
-   use of this routine in user applications.
-
 
    The Search Process
    ==================
@@ -393,8 +455,9 @@
    of the solution set for any inequality constraint is contained in
    the union of
 
-      - the set of points where an equality constraint is met
-      - the boundary points of the confinement window
+   -  the set of points where an equality constraint is met
+
+   -  the boundary points of the confinement window
 
    the solutions of both equality and inequality constraints can be
    found easily once the monotone windows have been found.
@@ -445,39 +508,26 @@
    Convergence Tolerance
    =====================
 
-   As described above, the root-finding process used by this routine
-   involves first bracketing roots and then using a search process to
-   locate them.  "Roots" include times when extrema are attained and
-   times when the geometric quantity function is equal to a reference
-   value or adjusted extremum. All endpoints of the intervals comprising
-   the result window are either endpoints of intervals of the confinement
-   window or roots.
-
    Once a root has been bracketed, a refinement process is used to
    narrow down the time interval within which the root must lie.
    This refinement process terminates when the location of the root
    has been determined to within an error margin called the
-   "convergence tolerance." The convergence tolerance used by this
-   routine is set via the parameter SPICE_GF_CNVTOL.
+   "convergence tolerance." The default convergence tolerance
+   used by this routine is set by the parameter SPICE_GF_CNVTOL (defined
+   in SpiceGF.h).
 
    The value of SPICE_GF_CNVTOL is set to a "tight" value so that the
-   tolerance doesn't limit the accuracy of solutions found by this
-   routine. In general the accuracy of input data will be the limiting
-   factor.
+   tolerance doesn't become the limiting factor in the accuracy of
+   solutions found by this routine. In general the accuracy of input
+   data will be the limiting factor.
 
    The user may change the convergence tolerance from the default
    SPICE_GF_CNVTOL value by calling the routine gfstol_c, e.g.
 
-      gfstol_c( tolerance value in seconds )
+      gfstol_c ( tolerance value );
 
    Call gfstol_c prior to calling this routine. All subsequent
    searches will use the updated tolerance value.
-
-   Searches over time windows of long duration may require use of
-   larger tolerance values than the default: the tolerance must be
-   large enough so that it, when added to or subtracted from the
-   confinement window's lower and upper bounds, yields distinct time
-   values.
 
    Setting the tolerance tighter than SPICE_GF_CNVTOL is unlikely to be
    useful, since the results are unlikely to be more accurate.
@@ -497,22 +547,57 @@
    to reduce the size of the time period over which a relatively
    slow search of interest must be performed.
 
+   Certain user-defined computations may expand the window over
+   which computations are performed. Here "expansion" of a window by
+   an amount "T" means that the left endpoint of each interval
+   comprising the window is shifted left by T, the right endpoint of
+   each interval is shifted right by T, and any overlapping
+   intervals are merged. Note that the input window `cnfine' itself is
+   not modified.
+
+   If a search uses an equality constraint, the time window over
+   which the functions `udfuns' and `udqdec' are called is expanded by 1
+   second.
+
+   Computation of observer-target states by spkezr_c or spkez_c, using
+   stellar aberration corrections, requires the state of the
+   observer, relative to the solar system barycenter, to be computed
+   at times offset from the input time by +/- 1 second. If the input
+   time `et' is used by `udfuns' or `udqdec' to compute such a state, the
+   window over which the observer state is computed is expanded by
+   1 second.
+
+   The window expansions described above are additive: if both
+   conditions apply, the window expansion amount is the sum of the
+   individual amounts.
+
+   When light time corrections are used in the computation of
+   observer-target states, expansion of the search window also
+   affects the set of times at which the light time-corrected states
+   of the targets are computed.
+
+   In addition to the possible expansion of the search window that
+   occurs when both an equality constraint and stellar aberration
+   corrections are used, round-off error should be taken into
+   account when the need for data availability is analyzed.
+
 -Examples
 
-   The numerical results shown for these examples may differ across
+   The numerical results shown for this example may differ across
    platforms. The results depend on the SPICE kernels used as
    input, the compiler and supporting libraries, and the machine
    specific arithmetic implementation.
 
-   Conduct a search on the range rate of the vector from the Sun
-   to the Moon. Define a function to calculate the value.
+   1) Conduct a search on the range rate of the vector from the Sun
+      to the Moon. Define a function to calculate the value.
 
-   Use the meta-kernel shown below to load the required SPICE
-   kernels.
+      Use the meta-kernel shown below to load the required SPICE
+      kernels.
+
 
          KPL/MK
 
-         File name: standard.tm
+         File name: gfuds_ex1.tm
 
          This meta-kernel is intended to support operation of SPICE
          example programs. The kernels shown here should not be
@@ -523,6 +608,16 @@
          kernels referenced here must be present in the user's
          current working directory.
 
+         The names and contents of the kernels referenced
+         by this meta-kernel are as follows:
+
+            File name                     Contents
+            ---------                     --------
+            de414.bsp                     Planetary ephemeris
+            pck00008.tpc                  Planet orientation and
+                                          radii
+            naif0009.tls                  Leapseconds
+
 
          \begindata
 
@@ -532,33 +627,40 @@
 
          \begintext
 
-   Code:
+         End of meta-kernel
 
+
+      Example code begins here.
+
+
+      /.
+         Program gfuds_ex1
+      ./
       #include <stdio.h>
       #include <stdlib.h>
       #include <string.h>
-   
+
       #include "SpiceUsr.h"
       #include "SpiceZfc.h"
-   
-   
+
+
       #define       MAXWIN    20000
       #define       TIMFMT    "YYYY-MON-DD HR:MN:SC.###"
       #define       TIMLEN    41
       #define       NLOOPS    7
-   
+
       void    gfq     ( SpiceDouble et, SpiceDouble * value );
       void    gfdecrx ( void ( * udfuns ) ( SpiceDouble    et,
                                             SpiceDouble  * value ),
                         SpiceDouble    et,
                         SpiceBoolean * isdecr );
-   
+
       doublereal dvnorm_(doublereal *state);
-   
-   
-      int main( int argc, char **argv )
+
+
+      int main( )
          {
-   
+
          /.
          Create the needed windows. Note, one interval
          consists of two values, so the total number
@@ -567,7 +669,7 @@
          ./
          SPICEDOUBLE_CELL ( result, 2*MAXWIN );
          SPICEDOUBLE_CELL ( cnfine, 2        );
-   
+
          SpiceDouble       begtim;
          SpiceDouble       endtim;
          SpiceDouble       step;
@@ -575,14 +677,14 @@
          SpiceDouble       refval;
          SpiceDouble       beg;
          SpiceDouble       end;
-   
+
          SpiceChar         begstr [ TIMLEN ];
          SpiceChar         endstr [ TIMLEN ];
-   
+
          SpiceInt          count;
          SpiceInt          i;
          SpiceInt          j;
-   
+
          ConstSpiceChar * relate [NLOOPS] = { "=",
                                               "<",
                                               ">",
@@ -591,23 +693,23 @@
                                               "LOCMAX",
                                               "ABSMAX"
                                             };
-   
+
          printf( "Compile date %s, %s\n\n", __DATE__, __TIME__ );
-   
+
          /.
          Load kernels.
          ./
-         furnsh_c( "standard.tm" );
-   
+         furnsh_c( "gfuds_ex1.tm" );
+
          /.
          Store the time bounds of our search interval in the `cnfine'
          confinement window.
          ./
          str2et_c( "2007 JAN 01", &begtim );
          str2et_c( "2007 APR 01", &endtim );
-   
+
          wninsd_c ( begtim, endtim, &cnfine );
-   
+
          /.
          Search using a step size of 1 day (in units of seconds). The reference
          value is .3365 km/s. We're not using the adjustment feature, so
@@ -616,17 +718,17 @@
          step   = spd_c();
          adjust = 0.;
          refval = .3365;
-   
+
          for ( j = 0;  j < NLOOPS;  j++ )
             {
-   
+
             printf ( "Relation condition: %s \n",  relate[j] );
-   
+
             /.
             Perform the search. The SPICE window `result' contains
             the set of times when the condition is met.
             ./
-   
+
             gfuds_c ( gfq,
                       gfdecrx,
                       relate[j],
@@ -636,9 +738,9 @@
                       MAXWIN,
                       &cnfine,
                       &result );
-   
+
             count = wncard_c( &result );
-   
+
             /.
             Display the results.
             ./
@@ -650,123 +752,123 @@
                {
                for ( i = 0;  i < count;  i++ )
                   {
-   
+
                   /.
                   Fetch the endpoints of the Ith interval
                   of the result window.
                   ./
                   wnfetd_c ( &result, i, &beg, &end );
-   
+
                   timout_c ( beg, TIMFMT, TIMLEN, begstr );
                   timout_c ( end, TIMFMT, TIMLEN, endstr );
-   
+
                   printf ( "Start time, drdt = %s \n", begstr );
                   printf ( "Stop time,  drdt = %s \n", endstr );
-   
+
                   }
-   
+
                }
-   
+
             printf("\n");
-   
+
             }
-   
+
          kclear_c();
          return( 0 );
          }
-   
-   
-   
+
+
+
       /.
       The user defined functions required by GFUDS.
-   
+
          gfq     for udfuns
          gfdecrx for udqdec
       ./
-   
-   
-   
+
+
+
       /.
       -Procedure Procedure gfq
       ./
-   
+
       void gfq ( SpiceDouble et, SpiceDouble * value )
-   
+
       /.
       -Abstract
-   
+
          User defined geometric quantity function. In this case,
          the range rate from the sun to the Moon at TDB time `et'.
-   
+
       ./
          {
-   
+
          /. Initialization ./
          SpiceInt             targ   = 301;
          SpiceInt             obs    = 10;
-   
+
          SpiceChar          * ref    = "J2000";
          SpiceChar          * abcorr = "NONE";
-   
+
          SpiceDouble          state [6];
          SpiceDouble          lt;
-   
+
          /.
          Retrieve the vector from the Sun to the Moon in the J2000
          frame, without aberration correction.
          ./
          spkez_c ( targ, et, ref, abcorr, obs, state, &lt );
-   
+
          /.
          Calculate the scalar range rate corresponding the
         `state' vector.
          ./
-   
+
          *value = dvnorm_( state );
-   
+
          return;
          }
-   
-   
-   
+
+
+
       /.
       -Procedure gfdecrx
       ./
-   
+
       void gfdecrx ( void ( * udfuns ) ( SpiceDouble    et,
                                          SpiceDouble  * value ),
                      SpiceDouble    et,
                      SpiceBoolean * isdecr )
-   
+
       /.
       -Abstract
-   
+
          User defined function to detect if the function derivative
          is negative (the function is decreasing) at TDB time `et'.
       ./
          {
-   
+
          SpiceDouble         dt = 10.;
-   
+
          /.
          Determine if "udfuns" is decreasing at `et'.
-   
+
          uddc_c   - the GF function to determine if
                     the derivative of the user defined
                     function is negative at `et'.
-   
-         uddf_c   - the SPICE function to numerically calculate the
-                    derivative of "udfuns" at `et' for the
-                    interval [et-dt, et+dt].
          ./
-   
+
          uddc_c( udfuns, et, dt, isdecr );
-   
+
          return;
          }
 
 
-   The program outputs:
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Compile date Mar 20 2018, 17:48:10
 
       Relation condition: =
       Start time, drdt = 2007-JAN-02 00:35:19.574
@@ -824,10 +926,11 @@
       Start time, drdt = 2007-MAR-25 17:26:56.150
       Stop time,  drdt = 2007-MAR-25 17:26:56.150
 
+
 -Restrictions
 
-   1) Any kernel files required by this routine must be loaded
-      before this routine is called.
+   1)  Any kernel files required by this routine must be loaded
+       before this routine is called.
 
 -Literature_References
 
@@ -835,22 +938,38 @@
 
 -Author_and_Institution
 
-   N.J. Bachman   (JPL)
-   E.D. Wright    (JPL)
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   E.D. Wright         (JPL)
 
 -Version
 
-   -CSPICE Version 1.1.0, 21-OCT-2013 (NJB)(EDW)
+   -CSPICE Version 1.1.0, 03-NOV-2021 (JDR) (EDW) (NJB)
 
-      Correction to description of UDQDEC to show UDFUNC as 
-      an argument.
+       Added use of ALLOC_CHECK_INTRA to check net null effect on
+       alloc count.
 
-      Header was updated to discuss use of gfstol_c.
+       Updated header to describe use of expanded confinement window.
 
-      Edit to comments to correct search description; eliminate
-      typo in gfq Abstract, "range rate" instead of "range."
+       Edited the header to comply with NAIF standard.
 
-      Improved header detail describing convergence tolerance.
+       Updated the description of "nintvls", "cnfine" and "result"
+       arguments.
+
+       Added entries #4, #5 and #14 in -Exceptions sections, and
+       replaced old entry #5 by new entries #8 and #9.
+
+   -CSPICE Version 1.0.1, 21-OCT-2013 (NJB) (EDW)
+
+       Correction to description of UDQDEC to show UDFUNC as
+       an argument.
+
+       Header was updated to discuss use of gfstol_c.
+
+       Edit to comments to correct search description; eliminate
+       typo in gfq -Abstract, "range rate" instead of "range."
+
+       Improved header detail describing convergence tolerance.
 
    -CSPICE Version 1.0.0, 22-FEB-2010 (EDW)
 
@@ -870,6 +989,8 @@
    doublereal              * work;
 
    static SpiceInt           nw = SPICE_GF_NWMAX;
+
+   int                       nowalloc;
 
    SpiceInt                  nBytes;
 
@@ -930,6 +1051,8 @@
    two values.
    */
 
+   nowalloc = alloc_count();
+
    nintvls = 2 * nintvls;
 
    nBytes = (nintvls + SPICE_CELL_CTRLSZ ) * nw * sizeof(SpiceDouble);
@@ -985,7 +1108,7 @@
      zzsynccl_c ( F2C, result );
      }
 
-   ALLOC_CHECK;
+   ALLOC_CHECK_INTRA(nowalloc);
 
    chkout_c ( "gfuds_c" );
 

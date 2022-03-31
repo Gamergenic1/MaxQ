@@ -245,7 +245,7 @@ static integer c__0 = 0;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     TARG       I   Target body. */
 /*     ET         I   Target epoch. */
@@ -256,31 +256,31 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     TARG        is the standard NAIF ID code for a target body. */
+/*     TARG     is the standard NAIF ID code for a target body. */
 
-/*     ET          is the epoch (ephemeris time) at which the state */
-/*                 of the target body is to be computed. */
+/*     ET       is the epoch (ephemeris time) at which the state */
+/*              of the target body is to be computed. */
 
-/*     REF         is the name of the reference frame to */
-/*                 which the vectors returned by the routine should */
-/*                 be rotated. This may be any frame supported by */
-/*                 the SPICELIB subroutine FRMCHG. */
+/*     REF      is the name of the reference frame to */
+/*              which the vectors returned by the routine should */
+/*              be rotated. This may be any frame supported by */
+/*              the SPICELIB subroutine FRMCHG. */
 
-/*     OBS         is the standard NAIF ID code for an observing body. */
+/*     OBS      is the standard NAIF ID code for an observing body. */
 
 /* $ Detailed_Output */
 
-/*     STATE       contains the geometric position and velocity of the */
-/*                 target body, relative to the observing body, at epoch */
-/*                 ET. STATE has six elements: the first three contain */
-/*                 the target's position; the last three contain the */
-/*                 target's velocity. These vectors are transformed into */
-/*                 the specified reference frame. Units are always km */
-/*                 and km/sec. */
+/*     STATE    is a 6-dimensional vector that contains the geometric */
+/*              position and velocity of the target body, relative to the */
+/*              observing body, at epoch ET. STATE has six elements: the */
+/*              first three contain the target's position; the last three */
+/*              contain the target's velocity. These vectors are */
+/*              transformed into the specified reference frame. Units are */
+/*              always km and km/sec. */
 
-/*     LT          is the one-way light time in seconds from the */
-/*                 observing body to the geometric position of the */
-/*                 target body at the specified epoch. */
+/*     LT       is the one-way light time in seconds from the */
+/*              observing body to the geometric position of the */
+/*              target body at the specified epoch. */
 
 /* $ Parameters */
 
@@ -288,19 +288,19 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1) If insufficient ephemeris data has been loaded to compute */
-/*        the necessary states, the error SPICE(SPKINSUFFDATA) is */
-/*        signaled. */
+/*     1)  If insufficient ephemeris data has been loaded to compute */
+/*         the necessary states, the error SPICE(SPKINSUFFDATA) is */
+/*         signaled. */
 
 /* $ Files */
 
-/*     See: $Restrictions. */
+/*     See $Restrictions. */
 
 /* $ Particulars */
 
 /*     SPKGEO computes the geometric state, T(t), of the target */
 /*     body and the geometric state, O(t), of the observing body */
-/*     relative to the first common center of motion.  Subtracting */
+/*     relative to the first common center of motion. Subtracting */
 /*     O(t) from T(t) gives the geometric state of the target */
 /*     body relative to the observer. */
 
@@ -335,79 +335,167 @@ static integer c__0 = 0;
 
 /*     Ephemeris data from more than one segment may be required */
 /*     to determine the states of the target body and observer */
-/*     relative to a common center.  SPKGEO reads as many segments */
+/*     relative to a common center. SPKGEO reads as many segments */
 /*     as necessary, from as many files as necessary, using files */
-/*     that have been loaded by previous calls to SPKLEF (load */
-/*     ephemeris file). */
+/*     that have been loaded by previous calls to FURNSH or SPKLEF */
+/*     (load ephemeris file). */
 
 /*     SPKGEO is similar to SPKEZ but returns geometric states */
 /*     only, with no option to make planetary (light-time) nor */
-/*     stellar aberration corrections.  The geometric states */
+/*     stellar aberration corrections. The geometric states */
 /*     returned by SPKEZ and SPKGEO are the same. */
 
 /* $ Examples */
 
-/*     The following code example computes the geometric */
-/*     state of the moon with respect to the earth and */
-/*     then prints the distance of the moon from the */
-/*     the earth at a number of epochs. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Assume the SPK file SAMPLE.BSP contains ephemeris data */
-/*     for the moon relative to earth over the time interval */
-/*     from BEGIN to END. */
+/*     1) Return the geometric state vector of Mars (499) as seen from */
+/*        Earth (399) in the J2000 frame and the one-way light time */
+/*        between them at the epoch July 4, 2003 11:00 AM PST. */
 
-/*            INTEGER               EARTH */
-/*            PARAMETER           ( EARTH = 399 ) */
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
 
-/*            INTEGER               MOON */
-/*            PARAMETER           ( MOON  = 301 ) */
 
-/*            INTEGER               N */
-/*            PARAMETER           ( N     = 100 ) */
+/*           KPL/MK */
 
-/*            INTEGER               I */
-/*            CHARACTER*(20)        UTC */
-/*            DOUBLE PRECISION      BEGIN */
-/*            DOUBLE PRECISION      DELTA */
-/*            DOUBLE PRECISION      END */
-/*            DOUBLE PRECISION      ET */
-/*            DOUBLE PRECISION      LT */
-/*            DOUBLE PRECISION      STATE ( 6 ) */
+/*           File: spkgeo_ex1.tm */
 
-/*            DOUBLE PRECISION      VNORM */
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
 
-/*     C */
-/*     C      Load the binary SPK ephemeris file. */
-/*     C */
-/*            CALL FURNSH ( 'SAMPLE.BSP' ) */
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
 
-/*            . */
-/*            . */
-/*            . */
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
 
-/*     C */
-/*     C      Divide the interval of coverage [BEGIN,END] into */
-/*     C      N steps.  At each step, compute the state, and */
-/*     C      print out the epoch in UTC time and position norm. */
-/*     C */
-/*            DELTA = ( END - BEGIN ) / N */
+/*              File name                        Contents */
+/*              ---------                        -------- */
+/*              de430.bsp                        Planetary ephemeris */
+/*              mar097.bsp                       Mars satellite ephemeris */
+/*              naif0011.tls                     Leapseconds */
 
-/*            DO I = 0, N */
 
-/*               ET = BEGIN + I*DELTA */
+/*           \begindata */
 
-/*               CALL SPKGEO ( MOON, ET, 'J2000', EARTH, STATE, LT ) */
+/*              KERNELS_TO_LOAD = ( 'de430.bsp', */
+/*                                  'mar097.bsp', */
+/*                                  'naif0011.tls' ) */
 
-/*               CALL ET2UTC ( ET, 'C', 0, UTC ) */
+/*           \begintext */
 
-/*               WRITE (*,*) UTC, VNORM ( STATE ) */
+/*           End of meta-kernel */
 
-/*            END DO */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM SPKGEO_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      VNORM */
+
+/*        C */
+/*        C     Local parameters. */
+/*        C */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 32 ) */
+
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 26 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(TIMLEN)    EPOCH */
+/*              CHARACTER*(NAMLEN)    REFFRM */
+
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      LT */
+/*              DOUBLE PRECISION      STATE ( 6 ) */
+
+/*              INTEGER               I */
+/*              INTEGER               OBSRVR */
+/*              INTEGER               TARGET */
+
+
+/*        C */
+/*        C     Load a set of kernels: an SPK file, a PCK */
+/*        C     file and a leapseconds file. Use a meta */
+/*        C     kernel for convenience. */
+/*        C */
+/*              CALL FURNSH ( 'spkgeo_ex1.tm' ) */
+
+/*        C */
+/*        C     Define parameters for a state lookup. */
+/*        C */
+/*              TARGET = 499 */
+/*              EPOCH  = 'July 4, 2003 11:00 AM PST' */
+/*              REFFRM = 'J2000' */
+/*              OBSRVR = 399 */
+
+/*        C */
+/*        C     Convert the epoch to ephemeris time. */
+/*        C */
+/*              CALL STR2ET ( EPOCH, ET ) */
+
+/*        C */
+/*        C     Look-up the state for the defined parameters. */
+/*        C */
+/*              CALL SPKGEO ( TARGET, ET, REFFRM, OBSRVR, STATE, LT ) */
+
+/*        C */
+/*        C     Output... */
+/*        C */
+/*              WRITE(*,'(A,I3)') 'The position of    : ', TARGET */
+/*              WRITE(*,'(A,I3)') 'As observed from   : ', OBSRVR */
+/*              WRITE(*,'(2A)')   'In reference frame : ', REFFRM */
+/*              WRITE(*,'(2A)')   'At epoch           : ', EPOCH */
+/*              WRITE(*,*) ' ' */
+
+/*        C */
+/*        C     The first three entries of state contain the */
+/*        C     X, Y, Z position components. The final three contain */
+/*        C     the Vx, Vy, Vz velocity components. */
+/*        C */
+/*              WRITE(*,'(A,3F18.6)') 'R   (km):', ( STATE(I), I=1,3 ) */
+/*              WRITE(*,'(A,3F18.6)') 'V (km/s):', ( STATE(I), I=4,6 ) */
+/*              WRITE(*,*) ' ' */
+/*              WRITE(*,'(A,F19.14)') 'Light time (s) between observer ' */
+/*             .                   // 'and target: ', LT */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*        The position of    : 499 */
+/*        As observed from   : 399 */
+/*        In reference frame : J2000 */
+/*        At epoch           : July 4, 2003 11:00 AM PST */
+
+/*        R   (km):   73826216.435288  -27128030.732406  -18741973.868287 */
+/*        V (km/s):         -6.809504          7.513814          3.001290 */
+
+/*        Light time (s) between observer and target:  269.70264776317532 */
+
 
 /* $ Restrictions */
 
-/*     1) The ephemeris files to be used by SPKGEO must be loaded */
-/*        by SPKLEF before SPKGEO is called. */
+/*     1)  The ephemeris files to be used by SPKGEO must be loaded */
+/*         by FURNSH or SPKLEF before SPKGEO is called. */
 
 /* $ Literature_References */
 
@@ -415,13 +503,28 @@ static integer c__0 = 0;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman  (JPL) */
-/*     J.E. McLean   (JPL) */
-/*     B.V. Semenov  (JPL) */
-/*     W.L. Taber    (JPL) */
-/*     W.D. Wright   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 09-OCT-2021 (JDR) (NJB) */
+
+/*        Bug fix: added calls to FAILED after calls to SPKPVN. */
+/*        Previously only one call to SPKPVN was followed by a FAILED */
+/*        call. Moved some FAILED checks so they will be hit whether */
+/*        or not SPKSFS finds a segment. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example to $Examples section. Removed unnecessary */
+/*        $Revisions section. */
+
+/*        Added reference to FURNSH in $Particulars and $Restrictions */
+/*        sections. */
 
 /* -    SPICELIB Version 3.0.0, 08-JAN-2014 (BVS) */
 
@@ -433,12 +536,12 @@ static integer c__0 = 0;
 /*        ZZNAMFRM, and then calling IRFNUM. The side effect of this */
 /*        change is that now the frame with the fixed name 'DEFAULT' */
 /*        that can be associated with any code via CHGIRF's entry point */
-/*        IRFDEF will be fully masked by a frame with indentical name */
+/*        IRFDEF will be fully masked by a frame with identical name */
 /*        defined via a text kernel. Previously the CHGIRF's 'DEFAULT' */
 /*        frame masked the text kernel frame with the same name. */
 
 /*        Fixed description of STATE in Detailed Output. Replaced */
-/*        SPKLEF with FURNSH and fixed errors in Examples. */
+/*        SPKLEF with FURNSH and fixed errors in $Examples. */
 
 /* -    SPICELIB Version 2.4.0, 01-SEP-2005 (NJB) */
 
@@ -459,7 +562,7 @@ static integer c__0 = 0;
 /*        that most state transformation are between inertial frames. */
 /*        Looking up a transformation between inertial frames is */
 /*        substantially faster than looking up non-inertial */
-/*        transformations.  Consequently slightly more */
+/*        transformations. Consequently slightly more */
 /*        complex code produces about a 50% increase in speed for */
 /*        many users. */
 
@@ -484,14 +587,6 @@ static integer c__0 = 0;
 /* $ Index_Entries */
 
 /*     geometric state of one body relative to another */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 2.4.0, 01-SEP-2005 (NJB) */
-
-/*        Updated to remove non-standard use of duplicate arguments */
-/*        in VADDG calls. */
 
 /* -& */
 
@@ -719,20 +814,20 @@ static integer c__0 = 0;
 
     i__ = 1;
     ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", i__1, 
-	    "spkgeo_", (ftnlen)640)] = *targ;
+	    "spkgeo_", (ftnlen)733)] = *targ;
     found = TRUE_;
     cleard_(&c__6, &starg[(i__1 = i__ * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-	    s_rnge("starg", i__1, "spkgeo_", (ftnlen)643)]);
+	    s_rnge("starg", i__1, "spkgeo_", (ftnlen)736)]);
     while(found && i__ < 20 && ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? 
-	    i__1 : s_rnge("ctarg", i__1, "spkgeo_", (ftnlen)645)] != *obs && 
+	    i__1 : s_rnge("ctarg", i__1, "spkgeo_", (ftnlen)738)] != *obs && 
 	    ctarg[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("ctarg", 
-	    i__2, "spkgeo_", (ftnlen)645)] != 0) {
+	    i__2, "spkgeo_", (ftnlen)738)] != 0) {
 
 /*        Find a file and segment that has state */
 /*        data for CTARG(I). */
 
 	spksfs_(&ctarg[(i__1 = i__ - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"ctarg", i__1, "spkgeo_", (ftnlen)654)], et, &handle, descr, 
+		"ctarg", i__1, "spkgeo_", (ftnlen)746)], et, &handle, descr, 
 		ident, &found, (ftnlen)40);
 	if (found) {
 
@@ -743,21 +838,22 @@ static integer c__0 = 0;
 	    ++i__;
 	    spkpvn_(&handle, descr, et, &tframe[(i__1 = i__ - 1) < 20 && 0 <= 
 		    i__1 ? i__1 : s_rnge("tframe", i__1, "spkgeo_", (ftnlen)
-		    664)], &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
-		    i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)664)], &
+		    756)], &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
+		    i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)756)], &
 		    ctarg[(i__3 = i__ - 1) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		    "ctarg", i__3, "spkgeo_", (ftnlen)664)]);
+		    "ctarg", i__3, "spkgeo_", (ftnlen)756)]);
 
 /*           Here's what we have.  STARG is the state of CTARG(I-1) */
 /*           relative to CTARG(I) in reference frame TFRAME(I) */
 
-/*           If one of the routines above failed during */
-/*           execution, we just give up and check out. */
+	}
 
-	    if (failed_()) {
-		chkout_("SPKGEO", (ftnlen)6);
-		return 0;
-	    }
+/*        If one of the routines above failed during */
+/*        execution, we just give up and check out. */
+
+	if (failed_()) {
+	    chkout_("SPKGEO", (ftnlen)6);
+	    return 0;
 	}
     }
     tframe[0] = tframe[1];
@@ -789,6 +885,10 @@ static integer c__0 = 0;
 /*              STEMP. */
 
 		spkpvn_(&handle, descr, et, &tmpfrm, stemp, &ctarg[19]);
+		if (failed_()) {
+		    chkout_("SPKGEO", (ftnlen)6);
+		    return 0;
+		}
 
 /*              Add STEMP to the state of TARG relative to */
 /*              the old center to get the state of TARG */
@@ -812,14 +912,14 @@ static integer c__0 = 0;
 		}
 		vaddg_(vtemp, stemp, &c__6, &starg[114]);
 		tframe[19] = tmpfrm;
+	    }
 
-/*              If one of the routines above failed during */
-/*              execution, we just give up and check out. */
+/*           If one of the routines above failed during */
+/*           execution, we just give up and check out. */
 
-		if (failed_()) {
-		    chkout_("SPKGEO", (ftnlen)6);
-		    return 0;
-		}
+	    if (failed_()) {
+		chkout_("SPKGEO", (ftnlen)6);
+		return 0;
 	    }
 	}
     }
@@ -855,10 +955,10 @@ static integer c__0 = 0;
 /*     be zero if COBS is not found in CTARG. */
 
     if (ctarg[(i__1 = nct - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("ctarg", 
-	    i__1, "spkgeo_", (ftnlen)800)] == cobs) {
+	    i__1, "spkgeo_", (ftnlen)895)] == cobs) {
 	ctpos = nct;
 	cframe = tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "spkgeo_", (ftnlen)802)];
+		"tframe", i__1, "spkgeo_", (ftnlen)897)];
     } else {
 	ctpos = 0;
     }
@@ -894,6 +994,10 @@ static integer c__0 = 0;
 		spkpvn_(&handle, descr, et, &tmpfrm, sobs, &cobs);
 	    } else {
 		spkpvn_(&handle, descr, et, &tmpfrm, stemp, &cobs);
+	    }
+	    if (failed_()) {
+		chkout_("SPKGEO", (ftnlen)6);
+		return 0;
 	    }
 	    if (nofrm) {
 		nofrm = FALSE_;
@@ -933,20 +1037,19 @@ static integer c__0 = 0;
 		cframe = tmpfrm;
 	    }
 
-/*           Check failed.  We don't want to loop */
-/*           indefinitely. */
-
-	    if (failed_()) {
-		chkout_("SPKGEO", (ftnlen)6);
-		return 0;
-	    }
-
 /*           We now have one more leg of the path for OBS.  Set */
 /*           LEGS to reflect this.  Then see if the new center */
 /*           is a common node. If not, repeat the loop. */
 
 	    ++legs;
 	    ctpos = isrchi_(&cobs, &nct, ctarg);
+	}
+
+/*        Check failed.  We don't want to loop indefinitely. */
+
+	if (failed_()) {
+	    chkout_("SPKGEO", (ftnlen)6);
+	    return 0;
 	}
     }
 
@@ -1026,58 +1129,58 @@ static integer c__0 = 0;
     i__1 = ctpos - 1;
     for (i__ = 2; i__ <= i__1; ++i__) {
 	if (tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : s_rnge("tframe"
-		, i__2, "spkgeo_", (ftnlen)998)] == tframe[(i__3 = i__) < 20 
+		, i__2, "spkgeo_", (ftnlen)1095)] == tframe[(i__3 = i__) < 20 
 		&& 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, "spkgeo_", (
-		ftnlen)998)]) {
+		ftnlen)1095)]) {
 	    vaddg_(&starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : 
-		    s_rnge("starg", i__2, "spkgeo_", (ftnlen)1000)], &starg[(
+		    s_rnge("starg", i__2, "spkgeo_", (ftnlen)1097)], &starg[(
 		    i__3 = (i__ + 1) * 6 - 6) < 120 && 0 <= i__3 ? i__3 : 
-		    s_rnge("starg", i__3, "spkgeo_", (ftnlen)1000)], &c__6, 
+		    s_rnge("starg", i__3, "spkgeo_", (ftnlen)1097)], &c__6, 
 		    vtemp);
 	    moved_(vtemp, &c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
 		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)
-		    1001)]);
+		    1098)]);
 	} else if (tframe[(i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge(
-		"tframe", i__3, "spkgeo_", (ftnlen)1003)] > 0 && tframe[(i__3 
+		"tframe", i__3, "spkgeo_", (ftnlen)1100)] > 0 && tframe[(i__3 
 		= i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", i__3, 
-		"spkgeo_", (ftnlen)1003)] <= 21 && tframe[(i__2 = i__ - 1) < 
+		"spkgeo_", (ftnlen)1100)] <= 21 && tframe[(i__2 = i__ - 1) < 
 		20 && 0 <= i__2 ? i__2 : s_rnge("tframe", i__2, "spkgeo_", (
-		ftnlen)1003)] > 0 && tframe[(i__2 = i__ - 1) < 20 && 0 <= 
-		i__2 ? i__2 : s_rnge("tframe", i__2, "spkgeo_", (ftnlen)1003)]
+		ftnlen)1100)] > 0 && tframe[(i__2 = i__ - 1) < 20 && 0 <= 
+		i__2 ? i__2 : s_rnge("tframe", i__2, "spkgeo_", (ftnlen)1100)]
 		 <= 21) {
 	    irfrot_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tframe", i__2, "spkgeo_", (ftnlen)1005)], &tframe[
+		    s_rnge("tframe", i__2, "spkgeo_", (ftnlen)1102)], &tframe[
 		    (i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", 
-		    i__3, "spkgeo_", (ftnlen)1005)], rot);
+		    i__3, "spkgeo_", (ftnlen)1102)], rot);
 	    mxv_(rot, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? i__2 : 
-		    s_rnge("starg", i__2, "spkgeo_", (ftnlen)1006)], stemp);
+		    s_rnge("starg", i__2, "spkgeo_", (ftnlen)1103)], stemp);
 	    mxv_(rot, &starg[(i__2 = i__ * 6 - 3) < 120 && 0 <= i__2 ? i__2 : 
-		    s_rnge("starg", i__2, "spkgeo_", (ftnlen)1007)], &stemp[3]
+		    s_rnge("starg", i__2, "spkgeo_", (ftnlen)1104)], &stemp[3]
 		    );
 	    vaddg_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= 
 		    i__2 ? i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)
-		    1008)], &c__6, vtemp);
+		    1105)], &c__6, vtemp);
 	    moved_(vtemp, &c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
 		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)
-		    1009)]);
+		    1106)]);
 	} else {
 	    frmchg_(&tframe[(i__2 = i__ - 1) < 20 && 0 <= i__2 ? i__2 : 
-		    s_rnge("tframe", i__2, "spkgeo_", (ftnlen)1013)], &tframe[
+		    s_rnge("tframe", i__2, "spkgeo_", (ftnlen)1110)], &tframe[
 		    (i__3 = i__) < 20 && 0 <= i__3 ? i__3 : s_rnge("tframe", 
-		    i__3, "spkgeo_", (ftnlen)1013)], et, stxfrm);
+		    i__3, "spkgeo_", (ftnlen)1110)], et, stxfrm);
 	    if (failed_()) {
 		chkout_("SPKGEO", (ftnlen)6);
 		return 0;
 	    }
 	    mxvg_(stxfrm, &starg[(i__2 = i__ * 6 - 6) < 120 && 0 <= i__2 ? 
-		    i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)1020)], &
+		    i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)1117)], &
 		    c__6, &c__6, stemp);
 	    vaddg_(stemp, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 <= 
 		    i__2 ? i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)
-		    1021)], &c__6, vtemp);
+		    1118)], &c__6, vtemp);
 	    moved_(vtemp, &c__6, &starg[(i__2 = (i__ + 1) * 6 - 6) < 120 && 0 
 		    <= i__2 ? i__2 : s_rnge("starg", i__2, "spkgeo_", (ftnlen)
-		    1022)]);
+		    1119)]);
 	}
     }
 
@@ -1087,12 +1190,12 @@ static integer c__0 = 0;
 /*     frame transformations. */
 
     if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge("tframe", 
-	    i__1, "spkgeo_", (ftnlen)1035)] == cframe) {
+	    i__1, "spkgeo_", (ftnlen)1132)] == cframe) {
 	vsubg_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1037)], sobs, &c__6, 
+		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1134)], sobs, &c__6, 
 		state);
     } else if (tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-	    "tframe", i__1, "spkgeo_", (ftnlen)1039)] == refid) {
+	    "tframe", i__1, "spkgeo_", (ftnlen)1136)] == refid) {
 
 /*        If the last frame associated with the target is already */
 /*        in the requested output frame, we convert the state of */
@@ -1117,36 +1220,36 @@ static integer c__0 = 0;
 
 	cframe = refid;
 	vsubg_(&starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1071)], stemp, &c__6,
+		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1168)], stemp, &c__6,
 		 state);
     } else if (cframe > 0 && cframe <= 21 && tframe[(i__1 = ctpos - 1) < 20 &&
 	     0 <= i__1 ? i__1 : s_rnge("tframe", i__1, "spkgeo_", (ftnlen)
-	    1074)] > 0 && tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 :
-	     s_rnge("tframe", i__1, "spkgeo_", (ftnlen)1074)] <= 21) {
+	    1171)] > 0 && tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 :
+	     s_rnge("tframe", i__1, "spkgeo_", (ftnlen)1171)] <= 21) {
 
 /*        If both frames are inertial we use IRFROT instead of */
 /*        FRMCHG to get things into a common frame. */
 
 	irfrot_(&tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "spkgeo_", (ftnlen)1080)], &cframe, rot);
+		"tframe", i__1, "spkgeo_", (ftnlen)1176)], &cframe, rot);
 	mxv_(rot, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1081)], stemp);
+		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1177)], stemp);
 	mxv_(rot, &starg[(i__1 = ctpos * 6 - 3) < 120 && 0 <= i__1 ? i__1 : 
-		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1082)], &stemp[3]);
+		s_rnge("starg", i__1, "spkgeo_", (ftnlen)1178)], &stemp[3]);
 	vsubg_(stemp, sobs, &c__6, state);
     } else {
 
 /*        Use the more general routine FRMCHG to make the transformation. */
 
 	frmchg_(&tframe[(i__1 = ctpos - 1) < 20 && 0 <= i__1 ? i__1 : s_rnge(
-		"tframe", i__1, "spkgeo_", (ftnlen)1089)], &cframe, et, 
+		"tframe", i__1, "spkgeo_", (ftnlen)1185)], &cframe, et, 
 		stxfrm);
 	if (failed_()) {
 	    chkout_("SPKGEO", (ftnlen)6);
 	    return 0;
 	}
 	mxvg_(stxfrm, &starg[(i__1 = ctpos * 6 - 6) < 120 && 0 <= i__1 ? i__1 
-		: s_rnge("starg", i__1, "spkgeo_", (ftnlen)1096)], &c__6, &
+		: s_rnge("starg", i__1, "spkgeo_", (ftnlen)1192)], &c__6, &
 		c__6, stemp);
 	vsubg_(stemp, sobs, &c__6, state);
     }

@@ -3,9 +3,9 @@
 -Procedure dafgsr_c ( DAF, get summary/descriptor record )
 
 -Abstract
- 
-   Read a portion of the contents of a summary record in a DAF file. 
- 
+
+   Read a portion of the contents of a summary record in a DAF file.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -30,15 +30,15 @@
    THE SOFTWARE AND ANY RELATED MATERIALS, AND AGREES TO INDEMNIFY
    CALTECH AND NASA FOR ALL THIRD-PARTY CLAIMS RESULTING FROM THE
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
- 
+
 -Required_Reading
- 
-   DAF 
- 
+
+   DAF
+
 -Keywords
- 
-   FILES 
- 
+
+   FILES
+
 */
 
    #include "SpiceUsr.h"
@@ -51,84 +51,92 @@
                     SpiceInt        end,
                     SpiceDouble   * data,
                     SpiceBoolean  * found  )
+
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   handle     I   Handle of DAF. 
-   recno      I   Record number. 
-   begin      I   First word to read from record. 
-   end        I   Last word to read from record. 
-   data       O   Contents of record. 
-   found      O   True if record is found. 
- 
--Detailed_Input
- 
-   handle      is the handle associated with a DAF. 
- 
-   recno       is the record number of a particular double precision 
-               record within the DAF, whose contents are to be read. 
-               DAF record numbers start at 1.
- 
-   begin       is the first word in the specified record to be 
-               returned.  For compatibility with SPICELIB, word
-               numbers range from 1 to 128.
- 
-   end         is the final word in the specified record to be 
-               returned.  For compatibility with SPICELIB, word
-               numbers range from 1 to 128.
- 
--Detailed_Output
- 
-   data        contains the specified portion (from `begin' to `end', 
-               inclusive) of the specified record.
 
-   found       is SPICETRUE when the specified record is found, and is 
-               SPICEFALSE otherwise. 
- 
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   handle     I   Handle of DAF.
+   recno      I   Record number.
+   begin      I   First word to read from record.
+   end        I   Last word to read from record.
+   data       O   Contents of record.
+   found      O   SPICETRUE if record is found.
+
+-Detailed_Input
+
+   handle      is the handle associated with a DAF.
+
+   recno       is the record number of a particular double precision
+               record within the DAF, whose contents are to be read. DAF
+               record numbers start at 1.
+
+   begin       is the first word in the specified record to be returned.
+               Word numbers range from 1 to 128.
+
+   end         is the final word in the specified record to be returned.
+               Word numbers range from 1 to 128.
+
+-Detailed_Output
+
+   data        contains the specified portion (from `begin' to `end',
+               inclusive) of the specified record from the specified
+               file.
+
+   found       is SPICETRUE when the specified record is found, and is
+               SPICEFALSE otherwise.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) Bad values for `begin' and `end' (begin < 1, end < begin,
-      etc.) are not signaled as errors, but result in the actions
-      implied by the pseudo-code:
- 
-         for ( j = 0, i = max(1,begin);  i <= max(128,end);  i++, j++ )
-         {
-            data[j] =  buffered_DAF_record[i];
-         }  
- 
-   2) If `handle' is invalid, the error will be diagnosed by
-      routines called by this routine.
-   
+
+   1)  If `handle' does not belong to any file that is currently open,
+       an error is signaled by a routine in the call tree of this
+       routine.
+
+   2)  If an error occurs while reading the record, the error is
+       signaled by a routine in the call tree of this routine.
+
+   3)  Bad values for `begin' and `end' ( begin < 1, end > 128,
+       end < begin ) are not diagnosed. See -Particulars and
+       -Restrictions for the effect of this routine in this case.
+
 -Files
- 
-   The input handle must refer to a DAF that is open for read or write
-   access.
- 
+
+   The input `handle' must refer to a DAF file that is open for read
+   or write access.
+
 -Particulars
- 
-   dafgsr_c checks the DAF record buffer to see if the requested 
-   record can be returned without actually reading it from 
-   external storage. If not, it reads the record and stores 
-   it in the buffer, typically removing another record from 
-   the buffer as a result. 
- 
-   Once in the buffer, the specified portion of the record is 
-   returned.
- 
+
+   dafgsr_c checks the DAF record buffer to see if the requested
+   record can be returned without actually reading it from
+   external storage. If not, it reads the record and stores
+   it in the buffer, typically removing another record from
+   the buffer as a result.
+
+   Once in the buffer, the specified portion of the record is
+   returned, using the following control loop.
+
+      for ( j = 0, i = max(1,begin);  i <= min(128,end);  i++, j++ )
+      {
+         data[j] =  buffered_DAF_record[i];
+      }
+
+   Therefore bad values for `begin' and `end' (begin < 1, end < begin,
+   etc.) are not signaled as errors, but result in the actions
+   implied by the above.
+
 -Examples
- 
-   The following code fragment illustrates one way that dafgsr_c 
-   and dafwdr_ can be used to update part of a summary record. 
-   If the record does not yet exist, we can assume that it is 
-   filled with zeros. 
- 
+
+   The following code fragment illustrates one way that dafgsr_c
+   and dafwdr_ can be used to update part of a summary record.
+   If the record does not yet exist, we can assume that it is
+   filled with zeros.
+
       #include "SpiceUsr.h"
       #include "SpiceZfc.h"
 
@@ -139,43 +147,62 @@
           .
           .
       dafgsr_c ( handle, recno, 1, 128, drec, &found );
- 
+
       if ( !found )
-      {  
+      {
           cleard_ ( &size, drec );
       }
-      
+
       for ( i = first;  i <= last;  i++ )
       {
           drec[i] = new_value[i];
       }
-  
+
       dafwdr_ ( &handle, &recno, drec );
 
-   Note that since only entire records may be written using dafwdr_, 
-   the entire record needs to be read also. 
- 
+   Note that since only entire records may be written using dafwdr_,
+   the entire record needs to be read also.
+
 -Restrictions
- 
-   None.
- 
+
+   1)  Bad values for `begin' and `end' ( begin < 1, end > 128,
+       end < begin ) are not signaled as errors. The effects of
+       such assignments on the returned data are defined by the
+       following control structure:
+
+          for ( j = 0, i = max(1,begin);  i <= min(128,end);  i++, j++ )
+          {
+             data[j] =  buffered_DAF_record[i];
+          }
+
 -Literature_References
- 
+
    None.
 
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   F.S. Turner     (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   F.S. Turner         (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.0, 08-AUG-2021 (JDR) (NJB)
+
+       Bug fix: now the number of records read is not incremented once
+       it reaches intmax_c, if it does.
+
+       Edited the header to comply with NAIF standard.
+
+       Updated -Detailed_Input, -Exceptions, -Particulars and -Restrictions
+       sections.
+
    -CSPICE Version 1.0.0, 17-JUN-2009 (NJB) (FST)
 
 -Index_Entries
- 
-   read daf summary record 
- 
+
+   read DAF summary record
+
 -&
 */
 

@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      PUTDEV ( Store Error Output Device Specification ) */
+/* $Procedure PUTDEV ( Store Error Output Device Specification ) */
 /* Subroutine */ int putdev_0_(int n__, char *device, ftnlen device_len)
 {
     /* Initialized data */
@@ -59,65 +59,78 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      DEVICE     I   The error output device specification. */
-/*      FILEN      P   The maximum length of a file name. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     DEVICE     I   The error output device specification. */
+/*     FILEN      P   The maximum length of a file name. */
 
 /* $ Detailed_Input */
 
-/*      DEVICE         The new value of the error output device */
-/*                     specification.  This value will be saved. */
+/*     DEVICE   is the new value of the error output device */
+/*              specification. This value will be saved. */
 
 /* $ Detailed_Output */
 
-/*      None. */
+/*     None. */
 
 /* $ Parameters */
 
-/*      FILEN          The maximum length of a file name. */
+/*     FILEN    is the maximum length of a file name. */
 
 /* $ Exceptions */
 
-/*      None. */
+/*     Error free. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     DO NOT CALL THIS ROUTINE. */
 
-/*      This is a data structure access routine for the SPICELIB */
-/*      error output device specification.  This routine should */
-/*      be used for no other purpose; in particular, it should */
-/*      not be used by non-toolkit routines to specify the error */
-/*      error output device to be used by the toolkit.  Use ERRDEV */
-/*      for that. */
+/*     This is a data structure access routine for the SPICELIB */
+/*     error output device specification. This routine should */
+/*     be used for no other purpose; in particular, it should */
+/*     not be used by non-toolkit routines to specify the error */
+/*     error output device to be used by the toolkit. Use ERRDEV */
+/*     for that. */
 
 /* $ Examples */
 
-/*      None. */
+/*     None. */
 
 /* $ Restrictions */
 
-/*      DO NOT CALL THIS ROUTINE. */
+/*     1)  DO NOT CALL THIS ROUTINE. */
 
-/*      Calls to this routine by routines other than the */
-/*      SPICELIB error handling routines may interfere */
-/*      with error processing. */
+/*     2)  Calls to this routine by routines other than the SPICELIB */
+/*         error handling routines may interfere with error processing. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      H.A. Neilan     (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.27.0, 28-NOV-2021 (BVS) */
+
+/*        Updated for MAC-OSX-M1-64BIT-CLANG_C. */
+
+/* -    SPICELIB Version 3.26.0, 13-AUG-2021 (JDR) */
+
+/*        Added IMPLICT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Index_Entries entry. */
 
 /* -    SPICELIB Version 3.25.0, 10-MAR-2014 (BVS) */
 
@@ -226,23 +239,23 @@
 /* -    SPICELIB Version 3.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 3.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
@@ -250,37 +263,37 @@
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/* -     SPICELIB Version 2.1.0, 5-JAN-1995 (HAN) */
+/* -    SPICELIB Version 2.1.0, 05-JAN-1995 (HAN) */
 
-/*         Module was updated to include one declaration for */
-/*         the variable FILEN for the Macintosh environment. */
+/*        Module was updated to include one declaration for */
+/*        the variable FILEN for the Macintosh environment. */
 
-/* -     SPICELIB Version 2.0.0, 9-NOV-1993 (HAN) */
+/* -    SPICELIB Version 2.0.0, 09-NOV-1993 (HAN) */
 
-/*         Module was updated to include the value for FILEN */
-/*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
-/*         NeXT platforms. Also, the previous value of 256 for */
-/*         Unix platforms was changed to 255. */
+/*        Module was updated to include the value for FILEN */
+/*        for the Silicon Graphics, DEC Alpha-OSF/1, and */
+/*        NeXT platforms. Also, the previous value of 256 for */
+/*        Unix platforms was changed to 255. */
 
-/* -     SPICELIB Version 1.1.0, 12-OCT-1992 (HAN) */
+/* -    SPICELIB Version 1.1.0, 12-OCT-1992 (HAN) */
 
-/*         Updated module for multiple environments. */
+/*        Updated module for multiple environments. */
 
-/*         The code was also reformatted so that a utility program can */
-/*         create the source file for a specific environment given a */
-/*         master source file. */
+/*        The code was also reformatted so that a utility program can */
+/*        create the source file for a specific environment given a */
+/*        master source file. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
+/*     store the error output device specification */
 
 /* -& */
 /* $ Revisions */
@@ -289,26 +302,26 @@
 
 /*        Module was updated for the PC-LINUX platform. */
 
-/* -     SPICELIB Version 2.0.0, 9-NOV-1993 (HAN) */
+/* -    SPICELIB Version 2.0.0, 9-NOV-1993 (HAN) */
 
-/*         Module was updated to include the value for FILEN */
-/*         for the Silicon Graphics, DEC Alpha-OSF/1, and */
-/*         NeXT platforms. Also, the previous value of 256 for */
-/*         Unix platforms was changed to 255. */
+/*        Module was updated to include the value for FILEN */
+/*        for the Silicon Graphics, DEC Alpha-OSF/1, and */
+/*        NeXT platforms. Also, the previous value of 256 for */
+/*        Unix platforms was changed to 255. */
 
-/* -     SPICELIB Version 1.1.0, 12-OCT-1992 (HAN) */
+/* -    SPICELIB Version 1.1.0, 12-OCT-1992 (HAN) */
 
-/*         Updated module for multiple environments. */
+/*        Updated module for multiple environments. */
 
-/*         The code was also reformatted so that a utility program can */
-/*         create the source file for a specific environment given a */
-/*         master source file. */
+/*        The code was also reformatted so that a utility program can */
+/*        create the source file for a specific environment given a */
+/*        master source file. */
 
-/* -     Beta Version 1.0.1, 08-FEB-1989 (NJB) */
+/* -    Beta Version 1.0.1, 08-FEB-1989 (NJB) */
 
-/*         Warnings added to discourage use of this routine in */
-/*         non-error-handling code.  Parameters section added. */
-/*         Parameter declarations moved to "Declarations" section. */
+/*        Warnings added to discourage use of this routine in */
+/*        non-error-handling code. $Parameters section added. */
+/*        Parameter declarations moved to "Declarations" section. */
 
 /* -& */
 
@@ -329,13 +342,13 @@
 
     s_copy(savdev, device, (ftnlen)128, device_len);
     return 0;
-/* $Procedure      GETDEV ( Get Error Output Device Specification ) */
+/* $Procedure GETDEV ( Get Error Output Device Specification ) */
 
 L_getdev:
 /* $ Abstract */
 
-/*      Return the value of the current error output device */
-/*      specification. */
+/*     Return the value of the current error output device */
+/*     specification. */
 
 /* $ Disclaimer */
 
@@ -364,69 +377,80 @@ L_getdev:
 
 /* $ Required_Reading */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Keywords */
 
-/*      ERROR */
+/*     ERROR */
 
 /* $ Declarations */
 
-/*      CHARACTER*(*)          DEVICE */
+/*     IMPLICIT NONE */
+
+/*     CHARACTER*(*)          DEVICE */
 
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-
-/*      DEVICE     O   The error output device specification. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     DEVICE     O   The error output device specification. */
 
 /* $ Detailed_Input */
 
-/*      None. */
+/*     None. */
 
 /* $ Detailed_Output */
 
-/*      DEVICE    is the current error output device specification. */
-/*                See the "required reading" file for a detailed */
-/*                discussion of the error output device. */
+/*     DEVICE   is the current error output device specification. */
+/*              See the "required reading" file for a detailed */
+/*              discussion of the error output device. */
 
 /* $ Parameters */
 
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*      None. */
+/*     Error free. */
 
-/*      However, this routine is part of the SPICELIB error */
-/*      handling mechanism. */
+/*     1)  However, this routine is part of the SPICELIB error */
+/*         handling mechanism. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
 
 /* $ Particulars */
 
-/*      None. */
+/*     None. */
 
 /* $ Examples */
 
-/*      None. */
+/*     None. */
 
 /* $ Restrictions */
 
-/*      None. */
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added */
+/*        $Index_Entries entry. */
 
 /* -    SPICELIB Version 3.0.5, 17-JUL-2002 (BVS) */
 
@@ -435,37 +459,37 @@ L_getdev:
 /* -    SPICELIB Version 3.0.4, 08-OCT-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitely given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are WIN-NT */
 
 /* -    SPICELIB Version 3.0.3, 24-SEP-1999 (NJB) */
 
-/*        CSPICE environments were added.  Some typos were corrected. */
+/*        CSPICE environments were added. Some typos were corrected. */
 
 /* -    SPICELIB Version 3.0.2, 28-JUL-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  New */
+/*        environments are now explicitly given. New */
 /*        environments are PC-DIGITAL, SGI-O32 and SGI-N32. */
 
 /* -    SPICELIB Version 3.0.1, 18-MAR-1999 (WLT) */
 
 /*        The environment lines were expanded so that the supported */
-/*        environments are now explicitly given.  Previously, */
+/*        environments are now explicitly given. Previously, */
 /*        environments such as SUN-SUNOS and SUN-SOLARIS were implied */
 /*        by the environment label SUN. */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*     None. */
+/*     get current error output device specification */
 
 /* -& */
 

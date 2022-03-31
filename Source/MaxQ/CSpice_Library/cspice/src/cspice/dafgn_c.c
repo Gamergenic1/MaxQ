@@ -3,9 +3,9 @@
 -Procedure dafgn_c ( DAF, get array name )
 
 -Abstract
- 
-   Return (get) the name for the current array in the current DAF. 
- 
+
+   Return (get) the name for the current array in the current DAF.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -32,13 +32,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   DAF 
- 
+
+   DAF
+
 -Keywords
- 
-   FILES 
- 
+
+   FILES
+
 */
 
    #include "SpiceUsr.h"
@@ -47,69 +47,70 @@
    #include "SpiceZst.h"
 
 
-   void dafgn_c ( SpiceInt     lenout,
-                  SpiceChar  * name   ) 
+   void dafgn_c ( SpiceInt     namlen,
+                  SpiceChar  * name   )
 
 /*
 
 -Brief_I/O
- 
-   Variable  I/O  Description 
-   --------  ---  -------------------------------------------------- 
-   lenout     I   Length of array name string.
-   name       O   Name of current array. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   namlen     I   Length of array name string.
+   name       O   Name of current array.
+
 -Detailed_Input
- 
-   lenout         is the length of the name string, including room for
-                  the null terminator. For a DAF with summary
-                  parameters ND and NI, the maximum length of an array 
-                  name is
- 
-                                        (NI + 1)
-                     NC  =   8 * ( ND + -------- ) (Note that this is
-                                            2       integer division.)
-                                            
-                  Given NC, lenout should be set equal to NC+1.
+
+   namlen      is the length of the `name' string, including room for the null
+               terminator. For a DAF with summary parameters ND and NI, the
+               maximum length of an array name is
+
+                                     (NI + 1)
+                  NC  =   8 * ( ND + -------- ) (Note that this is
+                                         2       integer division.)
+
+               Given NC, `namlen' should be set equal to NC+1.
 
 -Detailed_Output
- 
-   name        is the name for the current array (the array found by
-               the latest call to daffna_c or daffpa_c).
- 
+
+   name        is the name for the current array (the array found by the
+               latest call to daffna_c or daffpa_c).
+
 -Parameters
- 
-   None. 
- 
--Files
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1)  If this routine is called when no search is in progress in the 
-       the current DAF, the error SPICE(DAFNOSEARCH) is signalled. 
- 
-   2)  If the DAF for which the "current" array's name is to be 
-       returned has actually been closed, the error will be diagnosed 
-       by routines called by this routine. 
- 
-   3)  If no array is current in the current DAF, the error 
-       SPICE(NOCURRENTARRAY) is signalled.  There is no current 
-       array when a search is started by dafbfs_c or dafbbs_c, but no 
-       calls to daffna_c or dafbna_c have been made yet, or whenever 
-       daffna_c or daffpa_c return the value SPICEFALSE in the found 
-       argument. 
 
-   4)  The error SPICE(NULLPOINTER) is signaled if the input string
-       pointer is null.
+   1)  If this routine is called when no search is in progress in the
+       current DAF, the error SPICE(DAFNOSEARCH) is signaled by a
+       routine in the call tree of this routine.
 
-   5) The caller must pass a value indicating the length of the output
-      string.  If this value is not at least 2, the error
-      SPICE(STRINGTOOSHORT) is signaled.
- 
+   2)  If the DAF for which the "current" array's name is to be
+       returned has actually been closed, an error is signaled by a
+       routine in the call tree of this routine.
+
+   3)  If no array is current in the current DAF, the error
+       SPICE(NOCURRENTARRAY) is signaled by a routine in the call
+       tree of this routine. There is no current array when a search
+       is started by dafbfs_c or dafbbs_c, but no calls to daffna_c or
+       daffpa_c have been made yet, or whenever daffna_c or daffpa_c return
+       the value SPICEFALSE in the `found' argument.
+
+   4)  If the `name' output string pointer is null, the error
+       SPICE(NULLPOINTER) is signaled.
+
+   5)  If the `name' output string has length less than two
+       characters, the error SPICE(STRINGTOOSHORT) is signaled, since
+       the output string is too short to contain one character of
+       output data plus a null terminator.
+
+-Files
+
+   None.
+
 -Particulars
- 
+
    The DAF search routines are:
 
       dafbfs_c       Begin forward search.
@@ -133,7 +134,7 @@
    backward. It is possible to search multiple DAFs simultaneously.
 
    dafbfs_c (begin forward search) and daffna are used to search the
-   arrays in a DAF in forward order.  In applications that search a
+   arrays in a DAF in forward order. In applications that search a
    single DAF at a time, the normal usage is
 
       dafbfs_c ( handle );
@@ -151,7 +152,7 @@
 
 
    dafbbs_c (begin backward search) and daffpa_c are used to search the
-   arrays in a DAF in backward order.  In applications that search
+   arrays in a DAF in backward order. In applications that search
    a single DAF at a time, the normal usage is
 
       dafbbs_c ( handle );
@@ -171,10 +172,10 @@
    In applications that conduct multiple searches simultaneously,
    the above usage must be modified to specify the handle of the
    file to operate on, in any case where the file may not be the
-   last one specified by dafbfs_c or dafbbs_c.  The routine dafcs_c
-   (DAF, continue search) is used for this purpose.  Below, we
+   last one specified by dafbfs_c or dafbbs_c. The routine dafcs_c
+   (DAF, continue search) is used for this purpose. Below, we
    give an example of an interleaved search of two files specified
-   by the handles handl1 and handl2.  The directions of searches
+   by the handles handl1 and handl2. The directions of searches
    in different DAFs are independent; here we conduct a forward
    search on one file and a backward search on the other.
    Throughout, we use dafcs to specify which file to operate on,
@@ -192,18 +193,18 @@
 
       while ( found1 || found2 )
       {
-         if ( found1 )  
+         if ( found1 )
          {
             dafcs_c ( handl1 );
             dafgs_c ( sum    );
             dafgn_c ( name   );
              .
              .
-            dafcs_c  ( &handl1 );
+            dafcs_c  ( handl1  );
             daffna_c ( &found1 );
          }
 
-         if ( found2 )  
+         if ( found2 )
          {
             dafcs_c ( handl2 );
             dafgs_c ( sum    );
@@ -218,11 +219,11 @@
 
    At any time, the latest array found (whether by daffna_c or daffpa_c)
    is regarded as the "current" array for the file in which the
-   array was found.  The last DAF in which a search was started,
-   executed, or continued by any of dafbfs_c, dafbbs_c, daffna_c, 
-   daffpa_c or dafcs_c is regarded as the "current" DAF.  The summary 
+   array was found. The last DAF in which a search was started,
+   executed, or continued by any of dafbfs_c, dafbbs_c, daffna_c,
+   daffpa_c or dafcs_c is regarded as the "current" DAF. The summary
    and name for the current array in the current DAF can be obtained
-   separately, as shown above, by calls to DAFGS (get summary) and
+   separately, as shown above, by calls to dafgs_c (get summary) and
    dafgn_c (get name).  The handle of the current DAF can also be
    obtained by calling dafgh_c (get handle).
 
@@ -230,34 +231,45 @@
    direction. That is, daffpa_c may be used to back up during a
    forward search, and daffna_c may be used to advance during a
    backward search.
- 
+
 -Examples
- 
-   1) See Particulars. 
- 
+
+   1) See -Particulars.
+
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   NAIF Document 167.0, "Double Precision Array Files (DAF) 
-   Specification and User's Guide" 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.1.0, 25-AUG-2021 (JDR)
+
+       Changed the input argument name "lenout" to "namlen" for consistency
+       with other routines.
+
+       Edited the header to comply with NAIF standard. Moved DAF required
+       reading from -Literature_References to -Required_Reading section.
+
+       Fixed typo in -Exceptions entry #3: daffpa_c is used to find the
+       previous array, not the non existing API dafbna_c.
+
    -CSPICE Version 1.0.0, 01-AUG-1999 (NJB) (WLT) (IMU)
 
 -Index_Entries
- 
-   get daf array name 
- 
+
+   get DAF array name
+
 -&
 */
 
@@ -273,17 +285,17 @@
    Make sure the output string has at least enough room for one output
    character and a null terminator.  Also check for a null pointer.
    */
-   CHKOSTR ( CHK_STANDARD, "dafgn_c", name, lenout );
-   
-   
+   CHKOSTR ( CHK_STANDARD, "dafgn_c", name, namlen );
+
+
    dafgn_ ( ( char   * ) name,
-            ( ftnlen   ) lenout-1 );
-            
+            ( ftnlen   ) namlen-1 );
+
    /*
    Convert the output string to C style.
    */
-   F2C_ConvertStr ( lenout, name );
-   
+   F2C_ConvertStr ( namlen, name );
+
 
    chkout_c ( "dafgn_c" );
 

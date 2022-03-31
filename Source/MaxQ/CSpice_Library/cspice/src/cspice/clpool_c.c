@@ -3,8 +3,8 @@
 -Procedure clpool_c ( Clear the pool of kernel variables )
 
 -Abstract
- 
-   Remove all variables from the kernel pool. Watches
+
+   Remove all kernel variables from the kernel pool. Watches
    on kernel variables are retained.
 
 -Disclaimer
@@ -33,134 +33,198 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   KERNEL 
- 
+
+   KERNEL
+
 -Keywords
- 
-   CONSTANTS 
-   FILES 
- 
+
+   CONSTANTS
+   FILES
+
 */
 
    #include "SpiceUsr.h"
    #include "SpiceZfc.h"
-   
 
-   void clpool_c ( void ) 
+
+   void clpool_c ( void )
 
 /*
 
 -Brief_I/O
- 
-   None. 
- 
--Detailed_Input
- 
-   None. 
- 
--Detailed_Output
- 
-   None. 
- 
--Parameters
- 
-   None. 
- 
--Exceptions
- 
-   1) All known agents (those established through swpool_) will 
-      be "notified" that their watched variables have been updated 
-      whenever clpool_c is called. 
- 
--Files
- 
-   None. 
- 
--Particulars
- 
-   clpool_c clears the pool of kernel variables maintained by 
-   the subroutine pool_. All the variables in the pool are deleted. 
-   However, all watcher information is retained. 
- 
-   Each watched variable will be regarded as having been updated. 
-   Any agent associated with that variable will have a notice 
-   posted for it indicating that its watched variable has been 
-   updated. 
 
-   Application programs can delete watches by calling the function
-   dwpool_, which is located in the source file pool.c. 
-   See the documentation of dwpool_ for details.
- 
+   None.
+
+-Detailed_Input
+
+   None.
+
+-Detailed_Output
+
+   None.
+
+-Parameters
+
+   None.
+
+-Exceptions
+
+   Error free.
+
+   1)  All known agents (those established through the CSPICE
+       routine swpool_c) will be "notified" that their watched
+       variables have been updated whenever clpool_c is called.
+
+-Files
+
+   None.
+
+-Particulars
+
+   clpool_c clears the pool of kernel variables maintained by
+   the kernel POOL subsystem. All the variables in the pool are deleted.
+   However, all watcher information is retained.
+
+   Each watched variable will be regarded as having been updated.
+   Any agent associated with that variable will have a notice
+   posted for it indicating that its watched variable has been
+   updated.
+
+   Application programs can delete watches by calling the SPICELIB
+   routine DWPOOL. See the header of that routine for details.
+
 -Examples
- 
-   The following code fragment demonstrates how to clear to kernel pool
-   to make room for new kernel data.  In this example, three kernels
-   are successively loaded and used, after which the kernel pool is
-   cleared.  The kernels may collectively contain too much data for the
-   kernel pool to hold, but clearing the kernel pool after each use
-   makes it possible to use all three.
-    
- 
-      #include "SpiceUsr.h"
-            .
-            .
-            .
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) This code example demonstrates how to assign values to kernel
+      pool variables, how to check for the existence of kernel pool
+      variables and how to clear the kernel pool, i.e. how to delete
+      all variable assignments loaded into the kernel pool.
+
+      Place a value into the kernel pool and check for the variable
+      to which the value has been assigned. Clear the kernel pool
+      and check for that variable again.
+
+      Example code begins here.
+
+
       /.
-      Store in an array the names of the kernel files whose 
-      values will be loaded into the kernel pool.  These are
-      SCLK kernels for three different spacecraft clocks.
+         Program clpool_ex1
       ./
-      
-      ConstSpiceChar        * kerptr [3] = { "vg1_sclk.ker",
-                                             "vg2_sclk.ker",
-                                             "gll_sclk.ker" };
- 
-      /.
-      Use each kernel in turn.  
-      /.
-      
-      for ( i = 0;  i < 3;  i++ )
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
       {
-         ldpool_c ( kerptr[i] );
-         
-         [ use SCLK data for ith spacecraft ]
-         
+
          /.
-         Clear the kernel pool, making room for new data.
+         Local variables
          ./
-         
-         clpool_c ();
+         SpiceDouble          dvals  [1];
+
+         SpiceInt             n;
+
+         SpiceBoolean         found;
+
+         /.
+         Place a value into the kernel pool. Recall the routines
+         for direct insertion of pool assignments have arrays for
+         input.
+         ./
+         dvals[0] = -666.0;
+         pdpool_c ( "TEST_VAR", 1, dvals );
+
+         /.
+         Check for the variable assignment to TEST_VAR.
+         ./
+         gdpool_c ( "TEST_VAR", 0, 1, &n, dvals, &found );
+
+         printf( "First call to gdpool_c:\n" );
+
+         if ( found )
+         {
+            printf( "   TEST_VAR value: %7.2f\n", dvals[0] );
+         }
+         else
+         {
+            printf( "   TEST_VAR not in kernel pool.\n" );
+         }
+
+         /.
+         Now clear the kernel pool.
+         ./
+         clpool_c();
+
+         /.
+         Again, check for the TEST_VAR assignment.
+         ./
+         gdpool_c ( "TEST_VAR", 0, 1, &n, dvals, &found );
+
+         printf( "Second call to gdpool_c:\n" );
+
+         if ( found )
+         {
+            printf( "   TEST_VAR value: %5.2f\n", dvals[0] );
+         }
+         else
+         {
+            printf( "   TEST_VAR not in kernel pool.\n" );
+         }
+
+         return ( 0 );
       }
- 
- 
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      First call to gdpool_c:
+         TEST_VAR value: -666.00
+      Second call to gdpool_c:
+         TEST_VAR not in kernel pool.
+
+
 -Restrictions
- 
-   None. 
- 
+
+   1)  This routine should not be used to unload kernels that
+       have been loaded via furnsh_c.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL)
-   I.M. Underwood  (JPL) 
-   W.L. Taber      (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
-  
+
+   -CSPICE Version 1.0.2, 13-AUG-2021 (NJB) (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example.
+
+       Added -Restrictions section.
+
    -CSPICE Version 1.0.1, 01-JUL-2014 (NJB)
 
-      Updated comments regarding behavior of the watcher
-      subsystem.
+       Updated comments regarding behavior of the watcher
+       subsystem.
 
    -CSPICE Version 1.0.0, 18-JUN-1999 (IMU) (WLT) (NJB)
 
 -Index_Entries
- 
-   CLEAR the pool of kernel variables 
- 
+
+   CLEAR the pool of kernel variables
+
 -&
 */
 
@@ -171,18 +235,14 @@
    /*
    Participate in error tracing.
    */
-
    chkin_c ( "clpool_c" );
 
    /*
    Just call the f2c'd routine.
    */
-
    clpool_();
 
 
    chkout_c ( "clpool_c" );
 
 } /* End clpool_c */
-
-

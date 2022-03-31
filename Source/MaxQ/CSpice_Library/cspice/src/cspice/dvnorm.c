@@ -18,7 +18,7 @@ doublereal dvnorm_(doublereal *state)
 
 /* $ Abstract */
 
-/*     Function to calculate the derivative of the norm of a 3-vector. */
+/*     Calculate the derivative of the norm of a 3-vector. */
 
 /* $ Disclaimer */
 
@@ -63,37 +63,51 @@ doublereal dvnorm_(doublereal *state)
 /*     STATE      I   A 6-vector composed of three coordinates and their */
 /*                    derivatives. */
 
+/*     The function returns the derivative of the norm of the position */
+/*     component of the input STATE vector. */
+
 /* $ Detailed_Input */
 
-/*     STATE      A double precision 6-vector, the second three */
-/*                components being the derivatives of the first three */
-/*                with respect to some scalar. */
+/*     STATE    is a double precision 6-vector, the second three */
+/*              components being the derivatives of the first three */
+/*              with respect to some scalar. */
 
-/*                   STATE =  ( x, dx ) */
-/*                                 -- */
-/*                                 ds */
+/*                               dx */
+/*                 STATE =  ( x, -- ) */
+/*                               ds */
 
-/*                A common form for STATE would contain position and */
-/*                velocity. */
+/*              A common form for STATE would contain position and */
+/*              velocity. */
 
 /* $ Detailed_Output */
 
-/*     DVNORM     The value of d||x|| corresponding to STATE. */
-/*                             ------ */
-/*                               ds */
+/*     The function returns the derivative of the norm of the position */
+/*     component of the input STATE vector: */
 
-/*                                   1/2         2    2    2  1/2 */
-/*              where ||x|| = < x, x >    =  ( x1 + x2 + x3 ) */
+/*                  d ||x|| */
+/*        DVNORM = -------- */
+/*                    ds */
+
+/*     where the norm of x is given by: */
+
+/*                                     .---------------- */
+/*                   .---------       /    2    2    2 */
+/*        ||x|| =  \/ < x, x >  = \  / ( x1 + x2 + x3  ) */
+/*                                 \/ */
 
 
-/*                        v = ( dx1, dx2, dx3 ) */
-/*                              ---  ---  --- */
-/*                              ds   ds   ds */
+/*     If the velocity component of STATE is: */
 
-/*                   d||x||   < x, v > */
-/*                   ------ =  ------     =  < xhat, v > */
-/*                     ds            1/2 */
-/*                            < x, x > */
+/*                  dx1   dx2   dx3 */
+/*           v = ( ----, ----, ---- ) */
+/*                  ds    ds    ds */
+
+/*     then */
+
+/*           d||x||      < x, v > */
+/*           ------ =  ------------  =  < xhat, v > */
+/*             ds        .--------- */
+/*                     \/ < x, x > */
 
 /* $ Parameters */
 
@@ -101,7 +115,11 @@ doublereal dvnorm_(doublereal *state)
 
 /* $ Exceptions */
 
-/*     None. */
+/*     Error free. */
+
+/*     1)  If the first three components of STATE ("x") describe the */
+/*         origin (zero vector) the routine returns zero as the */
+/*         derivative of the vector norm. */
 
 /* $ Files */
 
@@ -109,100 +127,108 @@ doublereal dvnorm_(doublereal *state)
 
 /* $ Particulars */
 
-/*   A common use for this routine is to calculate the time derivative */
-/*   of the radius corresponding to a state vector. */
+/*     A common use for this routine is to calculate the time derivative */
+/*     of the radius corresponding to a state vector. */
 
 /* $ Examples */
 
-/*   Any numerical results shown for this example may differ between */
-/*   platforms as the results depend on the SPICE kernels used as input */
-/*   and the machine specific arithmetic implementation. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Compute the derivative of the norm of three vectors of */
+/*        different magnitudes. Use the first two vectors to define */
+/*        the derivatives as parallel and anti-parallel, and let */
+/*        the third be the zero vector. */
+
+/*        Example code begins here. */
 
 
-/*           PROGRAM DVNORM_T */
-/*           IMPLICIT NONE */
+/*              PROGRAM DVNORM_EX1 */
+/*              IMPLICIT NONE */
 
-/*           DOUBLE PRECISION      X     (3) */
-/*           DOUBLE PRECISION      MAG   (3) */
-/*           DOUBLE PRECISION      DVMAG (3) */
-/*           DOUBLE PRECISION      Y     (6) */
+/*              DOUBLE PRECISION      X     (3) */
+/*              DOUBLE PRECISION      MAG   (3) */
+/*              DOUBLE PRECISION      DVMAG (3) */
+/*              DOUBLE PRECISION      Y     (6) */
 
-/*           DOUBLE PRECISION      DVNORM */
-/*     C */
-/*     C     Create several 6-vectors (6x1 arrays) with the structure */
-/*     C */
-/*     C        s = |  x  | */
-/*     C            |     | */
-/*     C            |  dx | */
-/*     C            |  -- | */
-/*     C            |  ds | */
-/*     C */
-/*     C      where 'x' is a 3-vector (3x1 array). */
-/*     C */
+/*              DOUBLE PRECISION      DVNORM */
+/*        C */
+/*        C     Create several 6-vectors (6x1 arrays) with the structure */
+/*        C */
+/*        C        s = |  x  | */
+/*        C            |     | */
+/*        C            |  dx | */
+/*        C            |  -- | */
+/*        C            |  ds | */
+/*        C */
+/*        C      where 'x' is a 3-vector (3x1 array). */
+/*        C */
 
-/*     C */
-/*     C      Create 's' with 'x' of varying magnitudes. Use 'x' */
-/*     C      and '-x' to define the derivative as parallel and */
-/*     C      anti-parallel. */
-/*     C */
-/*           MAG(1) =  -4.D0 */
-/*           MAG(2) =   4.D0 */
-/*           MAG(3) =  12.D0 */
+/*        C */
+/*        C      Create 's' with 'x' of varying magnitudes. Use 'x' */
+/*        C      and '-x' to define the derivative as parallel and */
+/*        C      anti-parallel. */
+/*        C */
+/*              MAG(1) =  -4.D0 */
+/*              MAG(2) =   4.D0 */
+/*              MAG(3) =  12.D0 */
 
-/*           X(1)   = 1.D0 */
-/*           X(2)   = DSQRT( 2.D0 ) */
-/*           X(3)   = DSQRT( 3.D0 ) */
+/*              X(1)   = 1.D0 */
+/*              X(2)   = DSQRT( 2.D0 ) */
+/*              X(3)   = DSQRT( 3.D0 ) */
 
-/*     C */
-/*     C     Parallel... */
-/*     C */
-/*           Y(1)   = X(1) * 10.D0**MAG(1) */
-/*           Y(2)   = X(2) * 10.D0**MAG(1) */
-/*           Y(3)   = X(3) * 10.D0**MAG(1) */
-/*           Y(4)   = X(1) */
-/*           Y(5)   = X(2) */
-/*           Y(6)   = X(3) */
+/*        C */
+/*        C     Parallel... */
+/*        C */
+/*              Y(1)   = X(1) * 10.D0**MAG(1) */
+/*              Y(2)   = X(2) * 10.D0**MAG(1) */
+/*              Y(3)   = X(3) * 10.D0**MAG(1) */
+/*              Y(4)   = X(1) */
+/*              Y(5)   = X(2) */
+/*              Y(6)   = X(3) */
 
-/*           WRITE(*,*) 'Parallel x, dx/ds         : ', DVNORM( Y ) */
+/*              WRITE(*,*) 'Parallel x, dx/ds         : ', DVNORM( Y ) */
 
-/*     C */
-/*     C     ... anti-parallel... */
-/*     C */
-/*           Y(1)   = X(1) * 10.D0**MAG(2) */
-/*           Y(2)   = X(2) * 10.D0**MAG(2) */
-/*           Y(3)   = X(3) * 10.D0**MAG(2) */
-/*           Y(4)   = -X(1) */
-/*           Y(5)   = -X(2) */
-/*           Y(6)   = -X(3) */
+/*        C */
+/*        C     ... anti-parallel... */
+/*        C */
+/*              Y(1)   = X(1) * 10.D0**MAG(2) */
+/*              Y(2)   = X(2) * 10.D0**MAG(2) */
+/*              Y(3)   = X(3) * 10.D0**MAG(2) */
+/*              Y(4)   = -X(1) */
+/*              Y(5)   = -X(2) */
+/*              Y(6)   = -X(3) */
 
-/*           WRITE(*,*) 'Anti-parallel x, dx/ds    : ', DVNORM( Y ) */
+/*              WRITE(*,*) 'Anti-parallel x, dx/ds    : ', DVNORM( Y ) */
 
-/*     C */
-/*     C     ... 'x' zero vector */
-/*     C */
-/*           Y(1)   = 0.D0 */
-/*           Y(2)   = 0.D0 */
-/*           Y(3)   = 0.D0 */
-/*           Y(4)   = X(1) * 10.D0**MAG(3) */
-/*           Y(5)   = X(2) * 10.D0**MAG(3) */
-/*           Y(6)   = X(3) * 10.D0**MAG(3) */
+/*        C */
+/*        C     ... 'x' zero vector */
+/*        C */
+/*              Y(1)   = 0.D0 */
+/*              Y(2)   = 0.D0 */
+/*              Y(3)   = 0.D0 */
+/*              Y(4)   = X(1) * 10.D0**MAG(3) */
+/*              Y(5)   = X(2) * 10.D0**MAG(3) */
+/*              Y(6)   = X(3) * 10.D0**MAG(3) */
 
-/*           WRITE(*,*) 'Zero vector x, large dx/ds: ', DVNORM( Y ) */
-/*           END */
+/*              WRITE(*,*) 'Zero vector x, large dx/ds: ', DVNORM( Y ) */
+/*              END */
 
-/*   The program outputs: */
 
-/*      Parallel x, dx/ds         :   2.44948974 */
-/*      Anti-parallel x, dx/ds    :  -2.44948974 */
-/*      Zero vector x, large dx/ds:   0. */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Parallel x, dx/ds         :    2.4494897427831779 */
+/*         Anti-parallel x, dx/ds    :   -2.4494897427831779 */
+/*         Zero vector x, large dx/ds:    0.0000000000000000 */
+
 
 /* $ Restrictions */
 
-/*     Error free. */
-
-/*     1) If the first three components of STATE ("x") describes the */
-/*        origin (zero vector) the routine returns zero as the */
-/*        derivative of the vector norm. */
+/*     None. */
 
 /* $ Literature_References */
 
@@ -210,16 +236,25 @@ doublereal dvnorm_(doublereal *state)
 
 /* $ Author_and_Institution */
 
-/*     Ed Wright     (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added problem */
+/*        statement to the example. Moved the contents of the */
+/*        $Restrictions section to $Exceptions. */
 
 /* -    SPICELIB Version 1.0.0, 03-MAY-2010 (EDW) */
 
 /* -& */
 /* $ Index_Entries */
 
-/*   derivative of 3-vector norm */
+/*     derivative of 3-vector norm */
 
 /* -& */
 

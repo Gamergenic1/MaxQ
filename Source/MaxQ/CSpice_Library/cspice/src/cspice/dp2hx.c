@@ -9,9 +9,9 @@
 
 static integer c__2 = 2;
 
-/* $Procedure  DP2HX  ( D.p. number to hexadecimal string ) */
-/* Subroutine */ int dp2hx_(doublereal *number, char *string, integer *length,
-	 ftnlen string_len)
+/* $Procedure DP2HX ( D.p. number to hexadecimal string ) */
+/* Subroutine */ int dp2hx_(doublereal *number, char *hxstr, integer *hxssiz, 
+	ftnlen hxstr_len)
 {
     /* Initialized data */
 
@@ -40,7 +40,7 @@ static integer c__2 = 2;
 /* $ Abstract */
 
 /*     Convert a double precision number to an equivalent character */
-/*     string using a base 16 ``scientific notation.'' */
+/*     string using a base 16 "scientific notation." */
 
 /* $ Disclaimer */
 
@@ -81,19 +81,20 @@ static integer c__2 = 2;
 
 /*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
+/*     STRLEN     P   Max number of characters allowed in output string. */
 /*     NUMBER     I   D.p. number to be converted. */
-/*     STRING     O   Equivalent character string, left justified. */
-/*     LENGTH     O   Length of the character string produced. */
+/*     HXSTR      O   Equivalent character string, left justified. */
+/*     HXSSIZ     O   Length of the character string produced. */
 
 /* $ Detailed_Input */
 
-/*     NUMBER   The double precision number to be converted to a */
+/*     NUMBER   is the double precision number to be converted to a */
 /*              character string representation. */
 
 /* $ Detailed_Output */
 
-/*     STRING   The character string produced by this routine which */
-/*              represents NUMBER in a base 16 ``scientific notation,'' */
+/*     HXSTR    is the character string produced by this routine that */
+/*              represents NUMBER in a base 16 "scientific notation," */
 /*              e.g.: */
 
 /*                 672.0 = '2A^3' = ( 2/16 + 10/( 16**2 ) ) * 16**3 */
@@ -106,18 +107,18 @@ static integer c__2 = 2;
 /*              represent the hexadecimal digits and their corresponding */
 /*              values. */
 
-/*                   Character    Value         Character    Value */
-/*                   ---------    ------        ---------    ------ */
-/*                     '0'         0.0D0          '8'         8.0D0 */
-/*                     '1'         1.0D0          '9'         9.0D0 */
-/*                     '2'         2.0D0          'A'        10.0D0 */
-/*                     '3'         3.0D0          'B'        11.0D0 */
-/*                     '4'         4.0D0          'C'        12.0D0 */
-/*                     '5'         5.0D0          'D'        13.0D0 */
-/*                     '6'         6.0D0          'E'        14.0D0 */
-/*                     '7'         7.0D0          'F'        15.0D0 */
+/*                 Character    Value         Character    Value */
+/*                 ---------    ------        ---------    ------ */
+/*                   '0'         0.0D0          '8'         8.0D0 */
+/*                   '1'         1.0D0          '9'         9.0D0 */
+/*                   '2'         2.0D0          'A'        10.0D0 */
+/*                   '3'         3.0D0          'B'        11.0D0 */
+/*                   '4'         4.0D0          'C'        12.0D0 */
+/*                   '5'         5.0D0          'D'        13.0D0 */
+/*                   '6'         6.0D0          'E'        14.0D0 */
+/*                   '7'         7.0D0          'F'        15.0D0 */
 
-/*              The carat, or hat, character, '^', is used to */
+/*              The caret, or hat, character, '^', is used to */
 /*              distinguish the exponent. */
 
 /*              The plus sign, '+', and the minus sign, '-', are used, */
@@ -128,13 +129,13 @@ static integer c__2 = 2;
 /*              at least N characters long, where */
 
 
-/*                        # of bits per double precision mantissa + 3 */
-/*              N = 3 + ---------------------------------------------- */
-/*                                            4 */
+/*                          # of bits per double precision mantissa + 3 */
+/*                 N = 3 + --------------------------------------------- */
+/*                                               4 */
 
-/*                        # of bits per double precision exponent + 3 */
-/*                    + ---------------------------------------------- . */
-/*                                            4 */
+/*                          # of bits per double precision exponent + 3 */
+/*                       + --------------------------------------------- */
+/*                                               4 */
 
 /*              There should be one character position for the sign of */
 /*              the mantissa, one for the sign of the exponent, one for */
@@ -147,30 +148,30 @@ static integer c__2 = 2;
 /*              string produced by this routine for some typical */
 /*              implementations of double precision numbers. */
 
-/*              Double precision number */
-/*              Size Mantissa Exponent    Minimum output string length */
-/*              bits   bits     bits */
-/*              ---- -------- --------    ---------------------------- */
-/*              64   48       15          3 + 12 + 4 = 19 */
-/*              64   55+1     8           3 + 14 + 2 = 19 (VAX) */
-/*              64   52       11          3 + 13 + 3 = 19 (IEEE) */
+/*                 Double precision number */
+/*                 Size Mantissa Exponent   Minimum output string */
+/*                 bits   bits     bits     length */
+/*                 ---- -------- --------   ---------------------- */
+/*                 64   48       15         3 + 12 + 4 = 19 */
+/*                 64   55+1     8          3 + 14 + 2 = 19 (VAX) */
+/*                 64   52       11         3 + 13 + 3 = 19 (IEEE) */
 
-/*              The base 16 ``scientific notation'' character string */
+/*              The base 16 "scientific notation" character string */
 /*              produced by this routine will be left justified and */
 /*              consist of a contiguous sequence of characters with one */
-/*              of following formats: */
+/*              of the following formats: */
 
-/*                  (1)   h h h h  ... h ^H H  ... H */
+/*                 (1)   h h h h  ... h ^H H  ... H */
+/*                        1 2 3 4      n  1 2      m */
+
+/*                 (2)   -h h h h  ... h ^H H  ... H */
 /*                         1 2 3 4      n  1 2      m */
 
-/*                  (2)   -h h h h  ... h ^H H  ... H */
-/*                          1 2 3 4      n  1 2      m */
+/*                 (3)   h h h h  ... h ^-H H  ... H */
+/*                        1 2 3 4      n   1 2      m */
 
-/*                  (3)   h h h h  ... h ^-H H  ... H */
+/*                 (4)   -h h h h  ... h ^-H H  ... H */
 /*                         1 2 3 4      n   1 2      m */
-
-/*                  (4)   -h h h h  ... h ^-H H  ... H */
-/*                          1 2 3 4      n   1 2      m */
 
 /*              where */
 
@@ -184,25 +185,26 @@ static integer c__2 = 2;
 /*                 '+' and '-'  have their usual interpretations. */
 
 /*              The character string produced will be blank padded on */
-/*              the right if LENGTH < LEN( STRING ). */
+/*              the right if HXSSIZ < LEN( HXSTR ). */
 
-/*     LENGTH   Length of the base 16 ``scientific notation'' character */
-/*              string produced by this routine. */
+/*     HXSSIZ   is the length of the base 16 "scientific notation" */
+/*              character string produced by this routine. */
 
 /* $ Parameters */
 
-/*     None. */
+/*     STRLEN   is the maximum number of characters permitted in the */
+/*              output string. The value of STRLEN is 255. */
 
 /* $ Exceptions */
 
 /*     Error free. */
 
-/*     1)   If the output character string is not long enough to */
-/*          contain the entire character string that was produced, */
-/*          the string will be truncated on the right. */
+/*     1)  If the output character string is not long enough to */
+/*         contain the entire character string that was produced, */
+/*         the string will be truncated on the right. */
 
-/*     2)   If LEN( STRING ) > LENGTH, the output character string will */
-/*          be blank padded on the right. */
+/*     2)  If LEN( HXSTR ) > HXSSIZ, the output character string will */
+/*         be blank padded on the right. */
 
 /* $ Files */
 
@@ -211,53 +213,131 @@ static integer c__2 = 2;
 /* $ Particulars */
 
 /*     This routine converts a double precision number into an equivalent */
-/*     character string using a base 16 ``scientific notation.'' This */
+/*     character string using a base 16 "scientific notation." This */
 /*     representation allows the full precision of a number to be placed */
 /*     in a format that is suitable for porting or archival storage. */
 
 /*     This routine is one of a pair of routines which are used to */
 /*     perform conversions between double precision numbers and */
-/*     an equivalent base 16 ``scientific notation'' character string */
+/*     an equivalent base 16 "scientific notation" character string */
 /*     representation: */
 
-/*           DP2HX  -- Convert a double precision number into a base 16 */
-/*                     ``scientific notation'' character string. */
+/*        DP2HX  -- Convert a double precision number into a base 16 */
+/*                  "scientific notation" character string. */
 
-/*           HX2DP  -- Convert a base 16 ``scientific notation'' */
-/*                     character string into a double precision number. */
+/*        HX2DP  -- Convert a base 16 "scientific notation" */
+/*                  character string into a double precision number. */
 
 /* $ Examples */
 
-/*     The following input and output argument values illustrate the */
-/*     action of DP2HX for various input values of NUMBER. */
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*     Note: The hat or carat, '^', signals an exponent. */
+/*     1) Convert a set of double precision numbers to their equivalent */
+/*        character string using a base 16 "scientific notation." */
 
-/*         NUMBER             STRING                         LENGTH */
-/*         -----------------  -----------------------------  ------ */
-/*              2.0D-9         89705F4136B4A6^-7             17 */
-/*              1.0D0          1^1                           3 */
-/*             -1.0D0         -1^1                           4 */
-/*           1024.0D0          4^3                           3 */
-/*          -1024.0D0         -4^3                           4 */
-/*         521707.0D0          7F5EB^5                       7 */
-/*             27.0D0          1B^2                          4 */
-/*              0.0D0          0^0                           3 */
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM DP2HX_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER               HXSLEN */
+/*              PARAMETER           ( HXSLEN = 40 ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              CHARACTER*(HXSLEN)    STRVAL */
+
+/*              DOUBLE PRECISION      NUMBER (8) */
+
+/*              INTEGER               I */
+/*              INTEGER               SVALLN */
+
+/*        C */
+/*        C     Assign an array of double precision numbers. */
+/*        C */
+/*              DATA                  NUMBER /    2.0D-9,       1.0D0, */
+/*             .                                  -1.0D0,    1024.0D0, */
+/*             .                               -1024.0D0,  521707.0D0, */
+/*             .                                  27.0D0,       0.0D0 / */
+
+/*        C */
+/*        C     Loop over the NUMBER array, call DP2HX for each */
+/*        C     element of NUMBER. */
+/*        C */
+/*              WRITE(*,*) 'number       string             length' */
+/*              WRITE(*,*) '-----------  -----------------  ------' */
+
+/*              DO I= 1, 8 */
+
+/*                 CALL DP2HX ( NUMBER(I), STRVAL, SVALLN ) */
+/*                 WRITE(*,'(E12.4,2X,A17,2X,I5)') NUMBER(I), STRVAL, */
+/*             .                                              SVALLN */
+
+/*              END DO */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         number       string             length */
+/*         -----------  -----------------  ------ */
+/*          0.2000E-08  89705F4136B4A8^-7     17 */
+/*          0.1000E+01  1^1                    3 */
+/*         -0.1000E+01  -1^1                   4 */
+/*          0.1024E+04  4^3                    3 */
+/*         -0.1024E+04  -4^3                   4 */
+/*          0.5217E+06  7F5EB^5                7 */
+/*          0.2700E+02  1B^2                   4 */
+/*          0.0000E+00  0^0                    3 */
+
+
+/*        Note: the hat or caret, '^', signals an exponent. */
 
 /* $ Restrictions */
 
-/*     The maximum number of characters permitted in the output string */
-/*     is specified by the local parameter STRLEN. */
-
-/* $ Author_and_Institution */
-
-/*     K.R. Gehringer   (JPL) */
+/*     1)  The maximum number of characters permitted in the output */
+/*         string is specified by the parameter STRLEN. */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     J. Diaz del Rio    (ODC Space) */
+/*     K.R. Gehringer     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 06-JUL-2021 (JDR) */
+
+/*        Changed the argument names "STRING" and "LENGTH" to "HXSTR" */
+/*        and "HXSSIZ" for consistency with other routines. */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        The declaration of STRLEN has been promoted to the */
+/*        $Declarations section. */
+
+/*        Edited the header to comply with NAIF standard. Removed */
+/*        unnecessary $Revisions section. */
+
+/*        Added complete example code. */
+
+/*        Updated $Brief_I/O, $Parameters and $Restrictions sections to */
+/*        properly describe STRLEN. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1994 (KRG) */
 
@@ -274,24 +354,6 @@ static integer c__2 = 2;
 /*     convert d.p. to signed normalized hexadecimal string */
 /*     convert d.p. number to encoded d.p. number */
 /*     convert d.p. to base 16 scientific notation */
-
-/* -& */
-/* $ Revisions */
-
-/* -    SPICELIB Version 1.0.1, 10-MAR-1994 (KRG) */
-
-/*        Fixed a typo in the description of the input argument STRING. */
-/*        The example showing the expansion of 160 into hexadecimal */
-/*        was incorrect. 160 was replaced with 672 which makes the */
-/*        example correct. */
-
-/*        Old Example: */
-
-/*           160.0 = '2A^3' = ( 2/16 + 10/( 16**2 ) ) * 16**3 */
-
-/*        New Example: */
-
-/*           672.0 = '2A^3' = ( 2/16 + 10/( 16**2 ) ) * 16**3 */
 
 /* -& */
 
@@ -492,7 +554,7 @@ static integer c__2 = 2;
 	    remndr = tmpnum - (doublereal) result;
 	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&digits[
 		    (i__1 = -result) < 16 && 0 <= i__1 ? i__1 : s_rnge("digi"
-		    "ts", i__1, "dp2hx_", (ftnlen)554)];
+		    "ts", i__1, "dp2hx_", (ftnlen)619)];
 	}
 
 /*        Put the exponent on the end of the number and update the */
@@ -531,7 +593,7 @@ static integer c__2 = 2;
 	    remndr = tmpnum - (doublereal) result;
 	    *(unsigned char *)&tmpstr[positn - 1] = *(unsigned char *)&digits[
 		    (i__1 = result) < 16 && 0 <= i__1 ? i__1 : s_rnge("digits"
-		    , i__1, "dp2hx_", (ftnlen)589)];
+		    , i__1, "dp2hx_", (ftnlen)654)];
 	}
 
 /*        Put the exponent on the end of the number and update the */
@@ -555,14 +617,14 @@ static integer c__2 = 2;
 /*     Set the value for the length of the character string produced */
 /*     before returning. */
 
-    *length = positn;
+    *hxssiz = positn;
 
 /*     Set the value of the output string before returning. Let the */
 /*     Fortran string assignment deal with the left justification, and */
-/*     the truncation on the right if STRING is not long enough to */
+/*     the truncation on the right if HXSTR is not long enough to */
 /*     contain all of the characters produced. */
 
-    s_copy(string, tmpstr, string_len, (*length));
+    s_copy(hxstr, tmpstr, hxstr_len, (*hxssiz));
     return 0;
 } /* dp2hx_ */
 

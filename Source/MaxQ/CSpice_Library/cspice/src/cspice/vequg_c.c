@@ -51,71 +51,155 @@
    void vequg_c ( ConstSpiceDouble  * vin,
                   SpiceInt            ndim,
                   SpiceDouble       * vout )
+
 /*
 
 -Brief_I/O
 
    VARIABLE  I/O  DESCRIPTION
    --------  ---  --------------------------------------------------
-    vin       I   ndim-dimensional double precision vector.
-    ndim      I   Dimension of vin (and also vout).
-    vout      O   ndim-dimensional double precision vector set
-                  equal to vin.
+   vin        I   Double precision n-dimensional vector.
+   ndim       I   Dimension of `vin' (and also `vout').
+   vout       O   Double precision n-dimensional vector set equal
+                  to `vin'.
 
 -Detailed_Input
 
-   vin      is a double precision vector of arbitrary dimension.
+   vin         is an arbitrary, double precision n-dimensional vector.
 
-   ndim     is the number of components of vin.
+   ndim        is the dimension of `vin' and `vout'.
 
 -Detailed_Output
 
-   vout     is a double precision vector set equal to vin.
+   vout        is a double precision n-dimensional vector set equal
+               to `vin'.
 
 -Parameters
 
    None.
 
--Particulars
-
-   The code simply sets each component of vout equal to the
-   corresponding component of vin.
-
--Examples
-
-   Let state be a state vector. Set abstat equal to state.
-
-   vequg_c  ( state, 6, abstate );
-
-   Note that this routine may be used in place of MOVED, which
-   sets each output array element equal to the corresponding
-   input array element.
-
--Restrictions
-
-   None.
-
 -Exceptions
 
-   1)  If ndim is not physically realistic, greater than zero, a
-       BADDIMENSION error is flagged.
+   Error free.
 
 -Files
 
    None.
 
--Author_and_Institution
+-Particulars
 
-   W.M. Owen       (JPL)
-   E.D. Wright     (JPL)
+   The code simply sets each component of `vout' equal to the
+   corresponding component of `vin'.
+
+   Note that this routine may be used in place of moved_c, which
+   sets each output array element equal to the corresponding
+   input array element.
+
+-Examples
+
+   The numerical results shown for this example may differ across
+   platforms. The results depend on the SPICE kernels used as
+   input, the compiler and supporting libraries, and the machine
+   specific arithmetic implementation.
+
+   1) Lets assume we have a pointing record that contains the
+      start time of an interpolation interval, the components of
+      the quaternion that represents the C-matrix associated with
+      the start time of the interval, and the angular velocity vector
+      of the interval. The following example demonstrates how to
+      extract the time, the quaternion and the angular velocity
+      vector into separate variables for their processing.
+
+
+      Example code begins here.
+
+
+      /.
+         Program vequg_ex1
+      ./
+      #include <stdio.h>
+      #include "SpiceUsr.h"
+
+      int main( )
+      {
+
+         /.
+         Local variables.
+         ./
+         SpiceDouble          av     [3];
+         SpiceDouble          quat   [4];
+         SpiceDouble          time;
+
+         /.
+         Define the pointing record. We would normally obtain it
+         from, e.g. CK readers or other non SPICE data files.
+         ./
+         SpiceDouble          record [8] = { 283480.753,        0.99999622,
+                                                  0.0,          0.0,
+                                                 -0.0027499965, 0.0,
+                                                  0.0,          0.01 };
+
+         /.
+         Get the time, quaternion and angular velocity vector
+         into separate variables.
+         ./
+         time = record[0];
+
+         vequg_c ( record+1, 4, quat );
+         vequ_c  ( record+5,    av   );
+
+         /.
+         Display the contents of the variables.
+         ./
+         printf( "Time            : %10.3f\n", time );
+
+         printf( "Quaternion      :\n" );
+         printf( "%15.10f %14.10f %14.10f %14.10f\n",
+                   quat[0], quat[1], quat[2], quat[3] );
+         printf( "Angular velocity:\n" );
+         printf( "%15.10f %14.10f %14.10f\n", av[0], av[1], av[2] );
+
+         return ( 0 );
+      }
+
+
+      When this program was executed on a Mac/Intel/cc/64-bit
+      platform, the output was:
+
+
+      Time            : 283480.753
+      Quaternion      :
+         0.9999962200   0.0000000000   0.0000000000  -0.0027499965
+      Angular velocity:
+         0.0000000000   0.0000000000   0.0100000000
+
+
+-Restrictions
+
+   None.
 
 -Literature_References
 
    None.
 
+-Author_and_Institution
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   W.M. Owen           (JPL)
+   E.D. Wright         (JPL)
+
 -Version
 
-   -CSPICE Version 1.0.0, 23-AUG-1999   (EDW) (NJB)
+   -CSPICE Version 1.1.0, 23-JUL-2020 (JDR)
+
+       Edited the header to comply with NAIF standard. Added complete
+       code example based on existing example.
+
+       Removed check for "ndim" being positive in order to replicate
+       behaviour of SPICELIB equivalent routine.
+
+   -CSPICE Version 1.0.0, 23-AUG-1999 (EDW) (NJB) (WMO)
 
 -Index_Entries
 
@@ -126,30 +210,17 @@
 
 { /* Begin vequg_c */
 
-
    /*
-   Use discovery check-in.
+   Error free:  no error tracing required.
    */
 
 
-   /* Check ndim is cool.  Dimension is positive definite. */
-
-   if ( ndim <= 0 )
-      {
-
-      chkin_c    ( "vequg_c"                                      );
-      SpiceError ( "Vector dimension less than or equal to zero",
-                   "BADDIMENSION"                                 );
-      chkout_c   ( "vequg_c"                                     );
-      return;
-
-      }
-
-
-   /* Do the equality thing. */
-
-   MOVED ( vin, ndim, vout );
-
+   /*
+   Do the equality thing if `ndim' is positive
+   */
+   if ( ndim > 0 )
+   {
+      MOVED ( vin, ndim, vout );
+   }
 
 } /* End vequg_c */
-

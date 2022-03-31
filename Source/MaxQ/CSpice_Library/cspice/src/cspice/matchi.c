@@ -9,7 +9,7 @@
 
 static integer c__1 = 1;
 
-/* $Procedure            MATCHI ( Match string against wildcard template ) */
+/* $Procedure MATCHI ( Match string against wildcard template ) */
 logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen 
 	string_len, ftnlen templ_len, ftnlen wstr_len, ftnlen wchr_len)
 {
@@ -31,7 +31,7 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /* $ Abstract */
 
 /*     Determine whether a string is matched by a template containing */
-/*     wild cards.  This routine is case-insensitive. */
+/*     wild cards. This routine is case-insensitive. */
 
 /* $ Disclaimer */
 
@@ -82,30 +82,38 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /* $ Detailed_Input */
 
-/*     STRING      is the input character string to be tested for */
-/*                 a match against the input template. Leading and */
-/*                 trailing blanks are ignored. */
+/*     STRING   is the input character string to be tested for a match */
+/*              against the input template. Leading and trailing blanks */
+/*              are ignored. */
 
-/*     TEMPL       is the input template to be tested for a match */
-/*                 against the input string. TEMPL may contain wild */
-/*                 cards. Leading and trailing blanks are ignored. */
+/*     TEMPL    is the input template to be tested for a match against */
+/*              the input string. TEMPL may contain wild cards. Leading */
+/*              and trailing blanks are ignored. */
 
-/*     WSTR        is the wild string token used in the input template. */
-/*                 The wild string token may represent from zero to */
-/*                 any number of characters. */
+/*     WSTR     is the wild string token used in the input template. The */
+/*              wild string token may represent from zero to any number */
+/*              of characters. */
 
-/*     WCHR        is the wild character token used in the input */
-/*                 template. The wild character token represents */
-/*                 exactly one character. */
+/*     WCHR     is the wild character token used in the input template. */
+/*              The wild character token represents exactly one */
+/*              character. */
 
 /* $ Detailed_Output */
 
-/*     The function is true when the input string matches the input */
-/*     template, and false otherwise. The string and template match */
-/*     whenever the template can expand (through replacement of its */
+/*     The function returns .TRUE. when the input string matches the */
+/*     input template, and .FALSE. otherwise. The string and template */
+/*     match whenever the template can expand (through replacement of its */
 /*     wild cards) to become the input string. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -113,7 +121,7 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /*     MATCHI ignores leading and trailing blanks in both the string */
 /*     and the template. All of the following are equivalent (they */
-/*     all return TRUE). */
+/*     all return .TRUE.). */
 
 /*        MATCHI ( 'ALCATRAZ',     'A*Z',      '*', '%' ) */
 /*        MATCHI ( '  ALCATRAZ  ', 'A*Z',      '*', '%' ) */
@@ -123,10 +131,6 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 /*     MATCHI is case-insensitive:  uppercase characters match */
 /*     lowercase characters, and vice versa. Wild characters match */
 /*     characters of both cases. */
-
-/* $ Exceptions */
-
-/*     Error free. */
 
 /* $ Examples */
 
@@ -154,31 +158,34 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
 /*     None. */
 
-/* $ Files */
-
-/*     None. */
-
 /* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     W.L. Taber      (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.4.0, 17-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
 
 /* -    SPICELIB Version 1.3.1, 11-NOV-2005 (NJB) */
 
 /*        Corrected example calls in header; made other minor */
 /*        edits to header. */
 
-/* -     SPICELIB Version 1.1.0 08-JUN-1999 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-JUN-1999 (WLT) */
 
 /*         Fixed comments in detailed output and example sections. */
 
-/* -     SPICELIB Version 1.0.0 01-DEC-1995 (WLT) */
+/* -    SPICELIB Version 1.0.0, 01-DEC-1995 (WLT) */
 
 /* -& */
 /* $ Index_Entries */
@@ -198,7 +205,7 @@ logical matchi_(char *string, char *templ, char *wstr, char *wchr, ftnlen
 
     ret_val = FALSE_;
 
-/*     First let's get everybody's measurments. */
+/*     First let's get everybody's measurements. */
 
     sfirst = frstnb_(string, string_len);
     slast = lastnb_(string, string_len);

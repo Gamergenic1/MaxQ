@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure      REMOVI ( Remove an item from an integer set ) */
+/* $Procedure REMOVI ( Remove an item from an integer set ) */
 /* Subroutine */ int removi_(integer *item, integer *a)
 {
     /* System generated locals */
@@ -24,7 +24,7 @@
 
 /* $ Abstract */
 
-/*      Remove an item from an integer set. */
+/*     Remove an item from an integer set. */
 
 /* $ Disclaimer */
 
@@ -53,111 +53,200 @@
 
 /* $ Required_Reading */
 
-/*      SETS */
+/*     SETS */
 
 /* $ Keywords */
 
-/*      CELLS, SETS */
+/*     CELLS */
+/*     SETS */
 
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*      VARIABLE  I/O  DESCRIPTION */
-/*      --------  ---  -------------------------------------------------- */
-/*      ITEM       I   Item to be removed. */
-/*      A         I/O  Removal set. */
-/*      ERROR      O   Error flag. */
+/*     VARIABLE  I/O  DESCRIPTION */
+/*     --------  ---  -------------------------------------------------- */
+/*     ITEM       I   Item to be removed. */
+/*     A         I-O  Removal set. */
 
 /* $ Detailed_Input */
 
-/*      ITEM        is an item which is to be removed from the */
-/*                  specified set. ITEM may or may not already */
-/*                  be an element of the set. */
+/*     ITEM     is an item which is to be removed from the specified set. */
+/*              ITEM may or may not already be an element of the set. */
 
+/*     A        is a SPICE set. */
 
-/*      A           is a set. */
-
-
-/*                  On input, A may or may not contain the input item */
-/*                  as an element. */
+/*              On input, A may or may not contain the input item as an */
+/*              element. */
 
 /* $ Detailed_Output */
 
-/*      A           on output contains the difference of the input set */
-/*                  and the input item. If the item is not an element of */
-/*                  the set, the set is not changed. */
+/*     A        on output, contains the difference of the input set and */
+/*              the input item. If the item is not an element of the set, */
+/*              the set is not changed. */
 
 /* $ Parameters */
 
-/*      None. */
-
-/* $ Particulars */
-
-/*      None. */
-
-/* $ Examples */
-
-/*      In the following example, the element 'PLUTO' is removed from */
-/*      the character set PLANETS and inserted into the character set */
-/*      ASTEROIDS. */
-
-/*            CALL REMOVC ( 'PLUTO', PLANETS          ) */
-/*            CALL INSRTC ( 'PLUTO', ASTEROIDS, ERROR ) */
-
-/*      If 'PLUTO' is not an element of PLANETS, then the contents of */
-/*      PLANETS are not changed. Similarly, if 'PLUTO' is already an */
-/*      element of ASTEROIDS, the contents of ASTEROIDS remain unchanged. */
-
-/*      Because inserting an element into a set can increase the */
-/*      cardinality of the set, the insertion routines return an */
-/*      error flag. The flag is blank if the set is large enough to */
-/*      hold the new element. Otherwise, a message (constructed by */
-/*      the cell routine EXCESS) is returned. */
-
-/* $ Restrictions */
-
-/*      None. */
+/*     None. */
 
 /* $ Exceptions */
 
-/*     None. */
+/*     1)  If the input set A has invalid cardinality, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     2)  If the input set A has invalid size, an error is signaled by a */
+/*         routine in the call tree of this routine. */
+
+/*     3)  The data values in set A must be monotone strictly increasing. */
+/*         This is not checked. If this condition is not met, the results */
+/*         are unpredictable. */
 
 /* $ Files */
 
-/*      None. */
+/*     None. */
+
+/* $ Particulars */
+
+/*     None. */
+
+/* $ Examples */
+
+/*     The numerical results shown for this example may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
+
+/*     1) Create an integer set for ten elements, insert items */
+/*        to it and then remove the even values. */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM REMOVI_EX1 */
+/*              IMPLICIT NONE */
+
+/*        C */
+/*        C     SPICELIB functions. */
+/*        C */
+/*              INTEGER                 CARDI */
+
+/*        C */
+/*        C     Local constants. */
+/*        C */
+/*              INTEGER                 LBCELL */
+/*              PARAMETER             ( LBCELL = -5 ) */
+
+/*              INTEGER                 SETDIM */
+/*              PARAMETER             ( SETDIM   = 10  ) */
+
+/*        C */
+/*        C     Local variables. */
+/*        C */
+/*              INTEGER                 A      ( LBCELL:SETDIM ) */
+/*              INTEGER                 EVEN   ( SETDIM        ) */
+/*              INTEGER                 I */
+/*              INTEGER                 ITEMS  ( SETDIM        ) */
+
+/*        C */
+/*        C     Create a list of items and even numbers. */
+/*        C */
+/*              DATA                    EVEN  /  0,  2,  4,  6,  8, */
+/*             .                                10, 12, 14, 16, 18  / */
+
+/*              DATA                    ITEMS /  0,  1,  1,  2,  3, */
+/*             .                                 5,  8, 10, 13, 21  / */
+
+/*        C */
+/*        C     Initialize the empty set. */
+/*        C */
+/*              CALL VALIDI ( SETDIM, 0, A ) */
+
+/*        C */
+/*        C     Insert the list of integers into the set. If the item is */
+/*        C     an element of the set, the set is not changed. */
+/*        C */
+/*              DO I = 1, SETDIM */
+
+/*                 CALL INSRTI ( ITEMS(I), A ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Output the original contents of set A. */
+/*        C */
+/*              WRITE(*,*) 'Items in original set A:' */
+/*              WRITE(*,'(10I6)') ( A(I), I=1, CARDI ( A ) ) */
+/*              WRITE(*,*) ' ' */
+
+/*        C */
+/*        C     Remove the even values. If the item is not an element of */
+/*        C     the set, the set is not changed. */
+/*        C */
+/*              DO I = 1, SETDIM */
+
+/*                 CALL REMOVI ( EVEN(I), A ) */
+
+/*              END DO */
+
+/*        C */
+/*        C     Output the contents of A. */
+/*        C */
+/*              WRITE(*,*) 'Odd numbers in set A:' */
+/*              WRITE(*,'(10I6)') ( A(I), I=1, CARDI ( A ) ) */
+/*              WRITE(*,*) ' ' */
+
+/*              END */
+
+
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
+
+
+/*         Items in original set A: */
+/*             0     1     2     3     5     8    10    13    21 */
+
+/*         Odd numbers in set A: */
+/*             1     3     5    13    21 */
+
+
+/* $ Restrictions */
+
+/*     None. */
 
 /* $ Literature_References */
 
-/*      None. */
+/*     None. */
 
 /* $ Author_and_Institution */
 
-/*      N.J. Bachman    (JPL) */
-/*      C.A. Curzon     (JPL) */
-/*      W.L. Taber      (JPL) */
-/*      I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     C.A. Curzon        (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Added complete */
+/*        code example. Extended the $Exceptions section. */
+
+/*        Removed unnecessary $Revisions section. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
 /*        Comment section for permuted index source lines was added */
 /*        following the header. */
 
-/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) */
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (CAC) (WLT) (IMU) (NJB) */
 
 /* -& */
 /* $ Index_Entries */
 
 /*     remove an item from an integer set */
-
-/* -& */
-/* $ Revisions */
-
-/* -    Beta Version 2.0.0, 13-MAR-1989 (NJB) */
-
-/*        Now participates in error handling.  References to RETURN, */
-/*        CHKIN, and CHKOUT added. */
 
 /* -& */
 

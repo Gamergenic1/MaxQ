@@ -10,10 +10,10 @@
 static integer c__2 = 2;
 static integer c__6 = 6;
 
-/* $Procedure      CKCOV ( CK coverage ) */
-/* Subroutine */ int ckcov_(char *ck, integer *idcode, logical *needav, char *
-	level, doublereal *tol, char *timsys, doublereal *cover, ftnlen 
-	ck_len, ftnlen level_len, ftnlen timsys_len)
+/* $Procedure CKCOV ( CK coverage ) */
+/* Subroutine */ int ckcov_(char *ckfnm, integer *idcode, logical *needav, 
+	char *level, doublereal *tol, char *timsys, doublereal *cover, ftnlen 
+	ckfnm_len, ftnlen level_len, ftnlen timsys_len)
 {
     /* System generated locals */
     integer i__1;
@@ -116,143 +116,126 @@ static integer c__6 = 6;
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
-/*     CK         I   Name of CK file. */
+/*     CKFNM      I   Name of CK file. */
 /*     IDCODE     I   ID code of object. */
 /*     NEEDAV     I   Flag indicating whether angular velocity is needed. */
-/*     LEVEL      I   Coverage level:  'SEGMENT' OR 'INTERVAL'. */
+/*     LEVEL      I   Coverage level: 'SEGMENT' OR 'INTERVAL'. */
 /*     TOL        I   Tolerance in ticks. */
 /*     TIMSYS     I   Time system used to represent coverage. */
-/*     COVER     I/O  Window giving coverage for IDCODE. */
+/*     COVER     I-O  Window giving coverage for IDCODE. */
 
 /* $ Detailed_Input */
 
-/*     CK             is the name of a C-kernel. */
+/*     CKFNM    is the name of a C-kernel. */
 
-/*     IDCODE         is the integer ID code of an object, normally */
-/*                    a spacecraft structure or instrument, for which */
-/*                    pointing data are expected to exist in the */
-/*                    specified CK file. */
+/*     IDCODE   is the integer ID code of an object, normally a */
+/*              spacecraft structure or instrument, for which pointing */
+/*              data are expected to exist in the specified CK file. */
 
-/*     NEEDAV         is a logical variable indicating whether only */
-/*                    segments having angular velocity are to be */
-/*                    considered when determining coverage.  When */
-/*                    NEEDAV is .TRUE., segments without angular */
-/*                    velocity don't contribute to the coverage */
-/*                    window; when NEEDAV is .FALSE., all segments for */
-/*                    IDCODE may contribute to the coverage window. */
+/*     NEEDAV   is a logical variable indicating whether only segments */
+/*              having angular velocity are to be considered when */
+/*              determining coverage. When NEEDAV is .TRUE., segments */
+/*              without angular velocity don't contribute to the coverage */
+/*              window; when NEEDAV is .FALSE., all segments for IDCODE */
+/*              may contribute to the coverage window. */
 
+/*     LEVEL    is the level (granularity) at which the coverage is */
+/*              examined. Allowed values and corresponding meanings are: */
 
-/*     LEVEL          is the level (granularity) at which the coverage */
-/*                    is examined.  Allowed values and corresponding */
-/*                    meanings are: */
+/*                 'SEGMENT'    The output coverage window contains */
+/*                              intervals defined by the start and stop */
+/*                              times of segments for the object */
+/*                              designated by IDCODE. */
 
-/*                       'SEGMENT'    The output coverage window */
-/*                                    contains intervals defined by the */
-/*                                    start and stop times of segments */
-/*                                    for the object designated by */
-/*                                    IDCODE. */
+/*                 'INTERVAL'   The output coverage window contains */
+/*                              interpolation intervals of segments for */
+/*                              the object designated by IDCODE. For type */
+/*                              1 segments, which don't have */
+/*                              interpolation intervals, each epoch */
+/*                              associated with a pointing instance is */
+/*                              treated as a singleton interval; these */
+/*                              intervals are added to the coverage */
+/*                              window. */
 
-/*                       'INTERVAL'   The output coverage window */
-/*                                    contains interpolation intervals */
-/*                                    of segments for the object */
-/*                                    designated by IDCODE.  For type 1 */
-/*                                    segments, which don't have */
-/*                                    interpolation intervals, each */
-/*                                    epoch associated with a pointing */
-/*                                    instance is treated as a singleton */
-/*                                    interval; these intervals are */
-/*                                    added to the coverage window. */
+/*                              All interpolation intervals are */
+/*                              considered to lie within the segment */
+/*                              bounds for the purpose of this summary: */
+/*                              if an interpolation interval extends */
+/*                              beyond the segment coverage interval, */
+/*                              only its intersection with the segment */
+/*                              coverage interval is considered to */
+/*                              contribute to the total coverage. */
 
-/*                                    All interpolation intervals are */
-/*                                    considered to lie within the */
-/*                                    segment bounds for the purpose of */
-/*                                    this summary:  if an interpolation */
-/*                                    interval extends beyond the */
-/*                                    segment coverage interval, only */
-/*                                    its intersection with the segment */
-/*                                    coverage interval is considered to */
-/*                                    contribute to the total coverage. */
+/*     TOL      is a tolerance value expressed in ticks of the spacecraft */
+/*              clock associated with IDCODE. Before each interval is */
+/*              inserted into the coverage window, the interval is */
+/*              intersected with the segment coverage interval, then if */
+/*              the intersection is non-empty, it is expanded by TOL: the */
+/*              left endpoint of the intersection interval is reduced by */
+/*              TOL and the right endpoint is increased by TOL. Adjusted */
+/*              interval endpoints, when expressed as encoded SCLK, never */
+/*              are less than zero ticks. Any intervals that overlap as a */
+/*              result of the expansion are merged. */
 
+/*              The coverage window returned when TOL > 0 indicates the */
+/*              coverage provided by the file to the CK readers CKGPAV */
+/*              and CKGP when that value of TOL is passed to them as an */
+/*              input. */
 
-/*     TOL            is a tolerance value expressed in ticks of the */
-/*                    spacecraft clock associated with IDCODE.  Before */
-/*                    each interval is inserted into the coverage */
-/*                    window, the interval is intersected with the */
-/*                    segment coverage interval, then if the */
-/*                    intersection is non-empty, it is expanded by TOL: */
-/*                    the left endpoint of the intersection interval is */
-/*                    reduced by TOL and the right endpoint is increased */
-/*                    by TOL. Adjusted interval endpoints, when */
-/*                    expressed as encoded SCLK, never are less than */
-/*                    zero ticks.  Any intervals that overlap as a */
-/*                    result of the expansion are merged. */
+/*     TIMSYS   is a string indicating the time system used in the output */
+/*              coverage window. TIMSYS may have the values: */
 
-/*                    The coverage window returned when TOL > 0 */
-/*                    indicates the coverage provided by the file to the */
-/*                    CK readers CKGPAV and CKGP when that value of TOL */
-/*                    is passed to them as an input. */
+/*                  'SCLK'    Elements of COVER are expressed in encoded */
+/*                            SCLK ("ticks"), where the clock is */
+/*                            associated with the object designated by */
+/*                            IDCODE. */
 
-
-/*     TIMSYS         is a string indicating the time system used */
-/*                    in the output coverage window.  TIMSYS may */
-/*                    have the values: */
-
-/*                        'SCLK'    Elements of COVER are expressed in */
-/*                                  encoded SCLK ("ticks"), where the */
-/*                                  clock is associated with the object */
-/*                                  designated by IDCODE. */
-
-/*                        'TDB'     Elements of COVER are expressed as */
-/*                                  seconds past J2000 TDB. */
+/*                  'TDB'     Elements of COVER are expressed as seconds */
+/*                            past J2000 TDB. */
 
 
-/*     COVER          is an initialized SPICELIB window data structure. */
-/*                    COVER optionally may contain coverage data on */
-/*                    input; on output, the data already present in */
-/*                    COVER will be combined with coverage found for the */
-/*                    object designated by IDCODE in the file CK. */
+/*     COVER    is an initialized SPICE window data structure. COVER */
+/*              optionally may contain coverage data on input; on output, */
+/*              the data already present in COVER will be combined with */
+/*              coverage found for the object designated by IDCODE in the */
+/*              file CKFNM. */
 
-/*                    If COVER contains no data on input, its size and */
-/*                    cardinality still must be initialized. */
+/*              If COVER contains no data on input, its size and */
+/*              cardinality still must be initialized. */
 
 /* $ Detailed_Output */
 
-/*     COVER          is a SPICELIB window data structure which */
-/*                    represents the merged coverage for IDCODE. When */
-/*                    the coverage level is 'INTERVAL', this is the set */
-/*                    of time intervals for which data for IDCODE are */
-/*                    present in the file CK, merged with the set of */
-/*                    time intervals present in COVER on input.  The */
-/*                    merged coverage is represented as the union of one */
-/*                    or more disjoint time intervals.  The window COVER */
-/*                    contains the pairs of endpoints of these */
-/*                    intervals. */
+/*     COVER    is a SPICE window data structure which represents the */
+/*              merged coverage for IDCODE. When the coverage level is */
+/*              'INTERVAL', this is the set of time intervals for which */
+/*              data for IDCODE are present in the file CKFNM, merged */
+/*              with the set of time intervals present in COVER on input. */
+/*              The merged coverage is represented as the union of one or */
+/*              more disjoint time intervals. The window COVER contains */
+/*              the pairs of endpoints of these intervals. */
 
-/*                    When the coverage level is 'SEGMENT', COVER is */
-/*                    computed in a manner similar to that described */
-/*                    above, but the coverage intervals used in the */
-/*                    computation are those of segments rather than */
-/*                    interpolation intervals within segments. */
+/*              When the coverage level is 'SEGMENT', COVER is computed */
+/*              in a manner similar to that described above, but the */
+/*              coverage intervals used in the computation are those of */
+/*              segments rather than interpolation intervals within */
+/*              segments. */
 
-/*                    When TOL is > 0, the intervals comprising the */
-/*                    coverage window for IDCODE are expanded by TOL and */
-/*                    any intervals overlapping as a result are merged. */
-/*                    The resulting window is returned in COVER.  The */
-/*                    expanded window in no case extends beyond the */
-/*                    segment bounds in either direction by more than */
-/*                    TOL. */
+/*              When TOL is > 0, the intervals comprising the coverage */
+/*              window for IDCODE are expanded by TOL and any intervals */
+/*              overlapping as a result are merged. The resulting window */
+/*              is returned in COVER. The expanded window in no case */
+/*              extends beyond the segment bounds in either direction by */
+/*              more than TOL. */
 
-/*                    The interval endpoints contained in COVER are */
-/*                    encoded spacecraft clock times if TIMSYS is */
-/*                    'SCLK'; otherwise the times are converted from */
-/*                    encoded spacecraft clock to seconds past J2000 */
-/*                    TDB. */
+/*              The interval endpoints contained in COVER are encoded */
+/*              spacecraft clock times if TIMSYS is 'SCLK'; otherwise the */
+/*              times are converted from encoded spacecraft clock to */
+/*              seconds past J2000 TDB. */
 
-/*                    See the Examples section below for a complete */
-/*                    example program showing how to retrieve the */
-/*                    endpoints from COVER. */
+/*              See the $Examples section below for a complete example */
+/*              program showing how to retrieve the endpoints from COVER. */
 
 /* $ Parameters */
 
@@ -264,19 +247,19 @@ static integer c__6 = 6;
 /*         SPICE(INVALIDFORMAT) is signaled. */
 
 /*     2)  If the input file is not a transfer file but has architecture */
-/*         other than DAF, the error SPICE(BADARCHTYPE) is signaled. */
+/*         other than DAF, the error SPICE(INVALIDARCHTYPE) is signaled. */
 
-/*     3)  If the input file is a binary DAF file of type other than */
-/*         CK, the error SPICE(BADFILETYPE) is signaled. */
+/*     3)  If the input file is a binary DAF file of type other than CK, */
+/*         the error SPICE(INVALIDFILETYPE) is signaled. */
 
-/*     4)  If the CK file cannot be opened or read, the error will */
-/*         be diagnosed by routines called by this routine. The output */
+/*     4)  If the CK file cannot be opened or read, an error is signaled */
+/*         by a routine in the call tree of this routine. The output */
 /*         window will not be modified. */
 
-/*     5)  If the size of the output WINDOW argument COVER is */
+/*     5)  If the size of the output window argument COVER is */
 /*         insufficient to contain the actual number of intervals in the */
-/*         coverage window for IDCODE, the error will be diagnosed by */
-/*         routines called by this routine. */
+/*         coverage window for IDCODE, an error is signaled by a routine */
+/*         in the call tree of this routine. */
 
 /*     6)  If TOL is negative, the error SPICE(VALUEOUTOFRANGE) is */
 /*         signaled. */
@@ -287,14 +270,18 @@ static integer c__6 = 6;
 /*     8)  If TIMSYS is not recognized, the error SPICE(NOTSUPPORTED) */
 /*         is signaled. */
 
-/*     9)  If a time conversion error occurs, the error will be */
-/*         diagnosed by a routine in the call tree of this routine. */
+/*     9)  If a time conversion error occurs, the error is signaled by a */
+/*         routine in the call tree of this routine. */
 
 /*     10) If the output time system is TDB, the CK subsystem must be */
-/*         able to map IDCODE to the ID code of the associated */
-/*         spacecraft clock.  If this mapping cannot be performed, the */
-/*         error will be diagnosed by a routine in the call tree of this */
-/*         routine. */
+/*         able to map IDCODE to the ID code of the associated spacecraft */
+/*         clock. If this mapping cannot be performed, an error is */
+/*         signaled by a routine in the call tree of this routine. */
+
+/*     11) If the input CK type is not one of the supported CK types, the */
+/*         error SPICE(NOTSUPPORTED) is signaled. This problem may */
+/*         indicate the version of the SPICE Toolkit being used is */
+/*         outdated and a new version is required. */
 
 /* $ Files */
 
@@ -314,7 +301,7 @@ static integer c__6 = 6;
 /*        CK_<IDCODE>_SCLK */
 
 /*     must be present in the kernel pool to identify the clock */
-/*     associated with IDCODE.  This variable must contain the ID code */
+/*     associated with IDCODE. This variable must contain the ID code */
 /*     to be used for conversion between SCLK and TDB. Normally this */
 /*     variable is provided in a text kernel loaded via FURNSH. */
 
@@ -326,17 +313,25 @@ static integer c__6 = 6;
 
 /* $ Examples */
 
-/*     1)  Display the interval-level coverage for each object in a */
-/*         specified CK file. Use tolerance of zero ticks. Do not */
-/*         request angular velocity. Express the results in the TDB time */
-/*         system. */
+/*     The numerical results shown for these examples may differ across */
+/*     platforms. The results depend on the SPICE kernels used as */
+/*     input, the compiler and supporting libraries, and the machine */
+/*     specific arithmetic implementation. */
 
-/*         Find the set of objects in the file. Loop over the contents */
-/*         of the ID code set:  find the coverage for each item in the */
-/*         set and display the coverage. */
+/*     1) Display the interval-level coverage for each object in a */
+/*        specified CK file. Use tolerance of zero ticks. Do not */
+/*        request angular velocity. Express the results in the TDB time */
+/*        system. */
+
+/*        Find the set of objects in the file. Loop over the contents */
+/*        of the ID code set: find the coverage for each item in the */
+/*        set and display the coverage. */
 
 
-/*              PROGRAM CKCVR */
+/*        Example code begins here. */
+
+
+/*              PROGRAM CKCOV_EX1 */
 /*              IMPLICIT NONE */
 
 /*        C */
@@ -372,7 +367,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Local variables */
 /*        C */
-/*              CHARACTER*(FILSIZ)    CK */
+/*              CHARACTER*(FILSIZ)    CKFNM */
 /*              CHARACTER*(FILSIZ)    LSK */
 /*              CHARACTER*(FILSIZ)    SCLK */
 /*              CHARACTER*(TIMLEN)    TIMSTR */
@@ -400,7 +395,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Get name of CK file. */
 /*        C */
-/*              CALL PROMPT ( 'Name of CK file            > ', CK ) */
+/*              CALL PROMPT ( 'Name of CK file            > ', CKFNM ) */
 
 /*        C */
 /*        C     Initialize the set IDS. */
@@ -415,7 +410,7 @@ static integer c__6 = 6;
 /*        C */
 /*        C     Find the set of objects in the CK file. */
 /*        C */
-/*              CALL CKOBJ ( CK, IDS ) */
+/*              CALL CKOBJ ( CKFNM, IDS ) */
 
 /*        C */
 /*        C     We want to display the coverage for each object.  Loop */
@@ -429,7 +424,7 @@ static integer c__6 = 6;
 /*        C        so we don't include data for the previous object. */
 /*        C */
 /*                 CALL SCARDD ( 0,   COVER ) */
-/*                 CALL CKCOV  ( CK,          IDS(I),  .FALSE., */
+/*                 CALL CKCOV  ( CKFNM,       IDS(I),  .FALSE., */
 /*             .                 'INTERVAL',  0.D0,    'TDB',    COVER ) */
 
 /*        C */
@@ -481,13 +476,102 @@ static integer c__6 = 6;
 /*              END */
 
 
-/*     2)  Find the segment-level coverage for the object designated by */
-/*         IDCODE provided by the set of CK files loaded via a */
-/*         metakernel. (The metakernel must also specify leapseconds and */
-/*         SCLK kernels.)  Use tolerance of zero ticks. Do not request */
-/*         angular velocity. Express the results in the TDB time system. */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the LSK file named naif0010.tls, the SCLK file */
+/*        named cas00145.tsc and the CK file named 08052_08057ra.bc, the */
+/*        output was: */
 
-/*              PROGRAM CKMET */
+
+/*        Name of leapseconds kernel > naif0010.tls */
+/*        Name of SCLK kernel        > cas00145.tsc */
+/*        Name of CK file            > 08052_08057ra.bc */
+/*         ======================================== */
+/*         Coverage for object       -82000 */
+
+/*         Interval:            1 */
+/*         Start:    2008 FEB 21 00:01:07.771186 (TDB) */
+/*         Stop:     2008 FEB 23 22:53:30.001738 (TDB) */
+
+
+/*         Interval:            2 */
+/*         Start:    2008 FEB 23 22:58:13.999732 (TDB) */
+/*         Stop:     2008 FEB 24 02:22:25.913175 (TDB) */
+
+
+/*         Interval:            3 */
+/*         Start:    2008 FEB 24 02:27:49.910886 (TDB) */
+/*         Stop:     2008 FEB 24 19:46:33.470587 (TDB) */
+
+
+/*         Interval:            4 */
+/*         Start:    2008 FEB 24 19:49:33.469315 (TDB) */
+/*         Stop:     2008 FEB 25 04:25:21.250677 (TDB) */
+
+
+/*         Interval:            5 */
+/*         Start:    2008 FEB 25 04:29:33.248897 (TDB) */
+/*         Stop:     2008 FEB 25 15:23:44.971594 (TDB) */
+
+
+/*         Interval:            6 */
+/*         Start:    2008 FEB 25 15:24:12.971396 (TDB) */
+/*         Stop:     2008 FEB 25 20:25:04.843864 (TDB) */
+
+
+/*         Interval:            7 */
+/*         Start:    2008 FEB 25 20:25:48.843553 (TDB) */
+/*         Stop:     2008 FEB 26 00:01:04.752306 (TDB) */
+
+/*         ======================================== */
+
+
+/*     2) Find the segment-level coverage for the object designated by */
+/*        IDCODE provided by the set of CK files loaded via a */
+/*        metakernel. (The metakernel must also specify leapseconds and */
+/*        SCLK kernels.) Use tolerance of zero ticks. Do not request */
+/*        angular velocity. Express the results in the TDB time system. */
+
+/*        Use the meta-kernel shown below to load the required SPICE */
+/*        kernels. */
+
+
+/*           KPL/MK */
+
+/*           File name: ckcov_ex2.tm */
+
+/*           This meta-kernel is intended to support operation of SPICE */
+/*           example programs. The kernels shown here should not be */
+/*           assumed to contain adequate or correct versions of data */
+/*           required by SPICE-based user applications. */
+
+/*           In order for an application to use this meta-kernel, the */
+/*           kernels referenced here must be present in the user's */
+/*           current working directory. */
+
+/*           The names and contents of the kernels referenced */
+/*           by this meta-kernel are as follows: */
+
+/*             File name                      Contents */
+/*             ---------                      -------- */
+/*             naif0010.tls                   Leapseconds */
+/*             cas00145.tsc                   Cassini SCLK */
+/*             08052_08057ra.bc               Orientation for Cassini */
+
+/*           \begindata */
+
+/*             KERNELS_TO_LOAD = ( 'naif0010.tls' */
+/*                                 'cas00145.tsc' */
+/*                                 '08052_08057ra.bc') */
+
+/*           \begintext */
+
+/*           End of meta-kernel */
+
+
+/*        Example code begins here. */
+
+
+/*              PROGRAM CKCOV_EX2 */
 /*              IMPLICIT NONE */
 /*        C */
 /*        C     SPICELIB functions */
@@ -569,8 +653,8 @@ static integer c__6 = 6;
 /*                 CALL KDATA ( I,       'CK',    FILE,  TYPE, */
 /*             .                SOURCE,  HANDLE,  FOUND       ) */
 
-/*                 CALL CKCOV  (  FILE,       IDCODE,  .FALSE., */
-/*             .                  'SEGMENT',  0.0,     'TDB',    COVER ) */
+/*                 CALL CKCOV ( FILE,      IDCODE,  .FALSE., */
+/*             .                'SEGMENT', 0.D0,    'TDB',    COVER ) */
 
 /*              END DO */
 
@@ -621,12 +705,27 @@ static integer c__6 = 6;
 /*              END */
 
 
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, using the meta-kernel file named ckcov_ex2.tm and */
+/*        the NAIF ID "-82000" (Cassini spacecraft bus), the output was: */
+
+
+/*        Enter name of metakernel > ckcov_ex2.tm */
+/*        Enter ID code            > -82000 */
+
+/*         Coverage for object       -82000 */
+
+/*         Interval:            1 */
+/*         Start:    2008 FEB 21 00:01:07.771186 (TDB) */
+/*         Stop:     2008 FEB 26 00:01:04.752306 (TDB) */
+
+
 /* $ Restrictions */
 
-/*     1) When this routine is used to accumulate coverage for IDCODE */
-/*        provided by multiple CK files, the inputs NEEDAV, LEVEL, TOL, */
-/*        and TIMSYS  must have the same values for all files in order */
-/*        for the result to be meaningful. */
+/*     1)  When this routine is used to accumulate coverage for IDCODE */
+/*         provided by multiple CK files, the inputs NEEDAV, LEVEL, TOL, */
+/*         and TIMSYS  must have the same values for all files in order */
+/*         for the result to be meaningful. */
 
 /* $ Literature_References */
 
@@ -634,22 +733,35 @@ static integer c__6 = 6;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 08-OCT-2021 (JDR) */
+
+/*        Bug fix: added call to FAILED after call to GETFAT. */
+
+/*        Changed input argument name "CK" to "CKFNM" for consistency */
+/*        with other routines. */
+
+/*        Edited the header to comply with NAIF standard. Added solutions */
+/*        using CASSINI data. Fixed a bug on Example #2. Added entry #11 */
+/*        in $Exceptions section and corrected short error messages in */
+/*        entry #2 and #3. */
 
 /* -    SPICELIB Version 2.0.0, 05-JAN-2014 (NJB) (BVS) */
 
 /*        Updated index entries. */
 
-/*     Last update was 05-JAN-2014 (NJB) (BVS) */
+/*        Last update was 05-JAN-2014 (NJB) (BVS) */
 
-/*        Updated to support type 6. */
+/*           Updated to support type 6. */
 
 /* -    SPICELIB Version 1.0.1, 30-NOV-2007 (NJB) */
 
-/*        Corrected bug in first program in header Examples section: */
+/*        Corrected bug in first program in header $Examples section: */
 /*        program now empties the coverage window prior to collecting */
 /*        data for the current object. Updated examples to use WNCARD */
 /*        rather than CARDD. */
@@ -661,8 +773,8 @@ static integer c__6 = 6;
 
 /*     get coverage window for ck_object */
 /*     get coverage start and stop time for ck_object */
-/*     get coverage start and stop time for ck frame */
-/*     get coverage start and stop time for ck instrument */
+/*     get coverage start and stop time for CK frame */
+/*     get coverage start and stop time for CK instrument */
 
 /* -& */
 
@@ -713,13 +825,17 @@ static integer c__6 = 6;
 
 /*     See whether GETFAT thinks we've got a CK file. */
 
-    getfat_(ck, arch, kertyp, ck_len, (ftnlen)80, (ftnlen)80);
+    getfat_(ckfnm, arch, kertyp, ckfnm_len, (ftnlen)80, (ftnlen)80);
+    if (failed_()) {
+	chkout_("CKCOV", (ftnlen)5);
+	return 0;
+    }
     if (s_cmp(arch, "XFR", (ftnlen)80, (ftnlen)3) == 0) {
 	setmsg_("Input file # has architecture #. The file must be a binary "
 		"CK file to be readable by this routine.  If the input file i"
 		"s an CK file in transfer format, run TOBIN on the file to co"
 		"nvert it to binary format.", (ftnlen)205);
-	errch_("#", ck, (ftnlen)1, ck_len);
+	errch_("#", ckfnm, (ftnlen)1, ckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFORMAT)", (ftnlen)20);
 	chkout_("CKCOV", (ftnlen)5);
@@ -731,7 +847,7 @@ static integer c__6 = 6;
 		" CK file, the problem may be due to the file being an old no"
 		"n-native file lacking binary file format information. It's a"
 		"lso possible the file has been corrupted.", (ftnlen)340);
-	errch_("#", ck, (ftnlen)1, ck_len);
+	errch_("#", ckfnm, (ftnlen)1, ckfnm_len);
 	errch_("#", arch, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDARCHTYPE)", (ftnlen)22);
 	chkout_("CKCOV", (ftnlen)5);
@@ -743,7 +859,7 @@ static integer c__6 = 6;
 		" being an old non-native file lacking binary file format inf"
 		"ormation. It's also possible the file has been corrupted.", (
 		ftnlen)296);
-	errch_("#", ck, (ftnlen)1, ck_len);
+	errch_("#", ckfnm, (ftnlen)1, ckfnm_len);
 	errch_("#", kertyp, (ftnlen)1, (ftnlen)80);
 	sigerr_("SPICE(INVALIDFILETYPE)", (ftnlen)22);
 	chkout_("CKCOV", (ftnlen)5);
@@ -780,7 +896,7 @@ static integer c__6 = 6;
 
 /*     Open the file for reading. */
 
-    dafopr_(ck, &handle, ck_len);
+    dafopr_(ckfnm, &handle, ckfnm_len);
     if (failed_()) {
 	chkout_("CKCOV", (ftnlen)5);
 	return 0;
@@ -844,9 +960,9 @@ static integer c__6 = 6;
 		    for (i__ = 1; i__ <= 2; ++i__) {
 			sct2e_(&clkid, &dctol[(i__1 = i__ - 1) < 2 && 0 <= 
 				i__1 ? i__1 : s_rnge("dctol", i__1, "ckcov_", 
-				(ftnlen)880)], &et);
+				(ftnlen)998)], &et);
 			dctol[(i__1 = i__ - 1) < 2 && 0 <= i__1 ? i__1 : 
-				s_rnge("dctol", i__1, "ckcov_", (ftnlen)881)] 
+				s_rnge("dctol", i__1, "ckcov_", (ftnlen)999)] 
 				= et;
 		    }
 		}

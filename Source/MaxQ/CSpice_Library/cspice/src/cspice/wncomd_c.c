@@ -3,10 +3,10 @@
 -Procedure wncomd_c ( Complement a DP window )
 
 -Abstract
- 
-   Determine the complement of a double precision window with 
-   respect to a specified interval. 
- 
+
+   Determine the complement of a double precision window with
+   respect to a specified interval.
+
 -Disclaimer
 
    THIS SOFTWARE AND ANY RELATED MATERIALS WERE CREATED BY THE
@@ -33,13 +33,13 @@
    ACTIONS OF RECIPIENT IN THE USE OF THE SOFTWARE.
 
 -Required_Reading
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 -Keywords
- 
-   WINDOWS 
- 
+
+   WINDOWS
+
 */
 
    #include "SpiceUsr.h"
@@ -50,132 +50,166 @@
    void wncomd_c ( SpiceDouble    left,
                    SpiceDouble    right,
                    SpiceCell    * window,
-                   SpiceCell    * result ) 
+                   SpiceCell    * result )
 
 /*
 
 -Brief_I/O
- 
-   VARIABLE  I/O  DESCRIPTION 
-   --------  ---  -------------------------------------------------- 
-   left, 
-   right      I   Left, right endpoints of complement interval. 
-   window     I   Input window. 
-   result     O   Complement of window with respect to [left,right]. 
- 
+
+   VARIABLE  I/O  DESCRIPTION
+   --------  ---  --------------------------------------------------
+   left,
+   right      I   Left, right endpoints of complement interval.
+   window     I   Input window.
+   result     O   Complement of window with respect to [left,right].
+
 -Detailed_Input
- 
-   left, 
-   right       are the left and right endpoints of the complement 
-               interval. 
 
-   window      is the window to be complemented.  window must be
-               declared as a double precision SpiceCell.
- 
+   left,
+   right       are the left and right endpoints of the complement
+               interval.
+
+   window      is the window to be complemented.
+
+               `window' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( window, WINDOWSZ );
+
+               where WINDOWSZ is the maximum capacity of `window'.
+
 -Detailed_Output
- 
-   result      is the output window, containing the complement 
-               of window with respect to the interval from left 
-               to right. If the output window is not large enough 
-               to contain the result, as many intervals as will 
-               fit are returned. 
 
-               result must be declared as a double precision SpiceCell.
+   result      is the output window, containing the complement
+               of `window' with respect to the interval from `left'
+               to `right'. If the output window is not large enough
+               to contain the result, as many intervals as will
+               fit are returned.
 
-               result must be distinct from window. 
- 
+               `result' must be distinct from `window'.
+
+               `result' must be declared as a double precision SpiceCell.
+
+               CSPICE provides the following macro, which declares and
+               initializes the cell
+
+                  SPICEDOUBLE_CELL        ( result, RESULTSZ );
+
+               where RESULTSZ is the maximum capacity of `result'.
+
 -Parameters
- 
-   None. 
- 
+
+   None.
+
 -Exceptions
- 
-   1) If either input window does not have double precision type,
-      the error SPICE(TYPEMISMATCH) is signaled.
 
-   2) If left is greater than right, the error SPICE(BADENDPOINTS) is 
-      signaled. 
- 
+   1)  If `left' is greater than `right', the error SPICE(BADENDPOINTS)
+       is signaled by a routine in the call tree of this routine.
+
+   2)  The cardinality of the input `window' must be even. Left
+       endpoints of stored intervals must be strictly greater than
+       preceding right endpoints. Right endpoints must be greater
+       than or equal to corresponding left endpoints. Invalid window
+       data are not diagnosed by this routine and may lead to
+       unpredictable results.
+
+   3)  If any the `window' or `result' cell arguments has a type
+       other than SpiceDouble, the error SPICE(TYPEMISMATCH) is
+       signaled.
+
 -Files
- 
-   None. 
- 
+
+   None.
+
 -Particulars
- 
-   Mathematically, the complement of a window contains those 
-   points that are not contained in the window. That is, the 
-   complement of the set of closed intervals 
 
-      [ a(0), b(0) ], [ a(1), b(1) ], ..., [ a(n), b(n) ] 
+   Mathematically, the complement of a window contains those
+   points that are not contained in the window. That is, the
+   complement of the set of closed intervals
 
-   is the set of open intervals 
+      [ a(0), b(0) ], [ a(1), b(1) ], ..., [ a(n), b(n) ]
 
-      ( -inf, a(0) ), ( b(0), a(1) ), ..., ( b(n), +inf ) 
+   is the set of open intervals
 
-   Because ANSI C offers no satisfactory representation of 
-   infinity, we must take the complement with respect to a 
-   finite interval. 
+      ( -inf, a(0) ), ( b(0), a(1) ), ..., ( b(n), +inf )
 
-   In addition, ANSI C offers no satisfactory floating point 
-   representation of open intervals. Therefore, the complement 
-   of a floating point window is closure of the set theoretical 
-   complement. In short, the floating point complement of the 
-   window 
+   Because ANSI C offers no satisfactory representation of
+   infinity, we must take the complement with respect to a
+   finite interval.
 
-      [ a(0), b(0) ], [ a(1), b(1) ], ..., [ a(n), b(n) ] 
+   In addition, ANSI C offers no satisfactory floating point
+   representation of open intervals. Therefore, the complement
+   of a floating point window is closure of the set theoretical
+   complement. In short, the floating point complement of the
+   window
 
-   with respect to the interval from left to right is the 
-   intersection of the windows 
+      [ a(0), b(0) ], [ a(1), b(1) ], ..., [ a(n), b(n) ]
 
-      ( -inf, a(0) ), ( b(0), a(1) ), ..., ( b(n), +inf ) 
- 
-   and 
- 
-      [ left, right ] 
- 
-   Note that floating point intervals of measure zero (singleton 
-   intervals) in the original window are replaced by gaps of 
-   measure zero, which are filled. Thus, complementing a floating 
-   point window twice does not necessarily yield the original window. 
- 
+   with respect to the interval from left to right is the
+   intersection of the windows
+
+      ( -inf, a(0) ), ( b(0), a(1) ), ..., ( b(n), +inf )
+
+   and
+
+      [ left, right ]
+
+   Note that floating point intervals of measure zero (singleton
+   intervals) in the original window are replaced by gaps of
+   measure zero, which are filled. Thus, complementing a floating
+   point window twice does not necessarily yield the original window.
+
 -Examples
- 
-   Let window contain the intervals 
- 
-     [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ] 
- 
-   Then the floating point complement of window with respect 
-   to [2,20] contains the intervals 
- 
-      [ 3, 7 ]  [ 11, 20 ] 
- 
-   and the complement with respect to [ 0, 100 ] contains 
- 
-      [ 0, 1 ]  [ 3, 7 ]  [ 11, 23 ]  [ 27, 100 ] 
+
+   Let window contain the intervals
+
+      [ 1, 3 ]  [ 7, 11 ]  [ 23, 27 ]
+
+   Then the floating point complement of window with respect
+   to [2,20] contains the intervals
+
+      [ 3, 7 ]  [ 11, 20 ]
+
+   and the complement with respect to [ 0, 100 ] contains
+
+      [ 0, 1 ]  [ 3, 7 ]  [ 11, 23 ]  [ 27, 100 ]
 
 -Restrictions
- 
-   None. 
- 
+
+   None.
+
 -Literature_References
- 
-   None. 
- 
+
+   None.
+
 -Author_and_Institution
- 
-   N.J. Bachman    (JPL) 
-   H.A. Neilan     (JPL) 
-   W.L. Taber      (JPL) 
-   I.M. Underwood  (JPL) 
- 
+
+   N.J. Bachman        (JPL)
+   J. Diaz del Rio     (ODC Space)
+   H.A. Neilan         (JPL)
+   W.L. Taber          (JPL)
+   I.M. Underwood      (JPL)
+
 -Version
- 
+
+   -CSPICE Version 1.0.1, 05-AUG-2021 (JDR)
+
+       Edited the header to comply with NAIF standard.
+
+       Extended description of argument "window" in -Detailed_Input and
+       "result" in -Detailed_Output to include type and preferred declaration
+       method.
+
+       Added entry #2 in -Exceptions section.
+
    -CSPICE Version 1.0.0, 27-AUG-2002 (NJB) (HAN) (WLT) (IMU)
 
 -Index_Entries
- 
-   complement a d.p. window 
- 
+
+   complement a d.p. window
+
 -&
 */
 
@@ -194,18 +228,18 @@
 
 
    /*
-   Make sure data types are d.p. 
+   Make sure data types are d.p.
    */
    CELLTYPECHK2 ( CHK_STANDARD, "wncomd_c", SPICE_DP, window, result );
 
-   
+
    /*
-   Initialize the cells if necessary. 
+   Initialize the cells if necessary.
    */
    CELLINIT2 ( window, result );
-   
+
    /*
-   Let the f2c'd routine do the work. 
+   Let the f2c'd routine do the work.
    */
    wncomd_ ( (doublereal * )  &left,
              (doublereal * )  &right,
@@ -213,7 +247,7 @@
              (doublereal * )  (result->base)  );
 
    /*
-   Sync the output cell. 
+   Sync the output cell.
    */
    if ( !failed_c() )
    {

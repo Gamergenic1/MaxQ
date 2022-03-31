@@ -9,7 +9,7 @@
 
 static integer c__0 = 0;
 
-/* $Procedure      LPARSS ( Parse a list of items; return a set. ) */
+/* $Procedure LPARSS ( Parse a list of items; return a set. ) */
 /* Subroutine */ int lparss_(char *list, char *delims, char *set, ftnlen 
 	list_len, ftnlen delims_len, ftnlen set_len)
 {
@@ -85,30 +85,35 @@ static integer c__0 = 0;
 
 /* $ Detailed_Input */
 
-/*     LIST        is a list of items delimited by any one of the */
-/*                 characters in the string DELIMS. Consecutive */
-/*                 delimiters, and delimiters at the beginning and */
-/*                 end of the list, are considered to delimit blank */
-/*                 items. A blank list is considered to contain */
-/*                 a single (blank) item. */
+/*     LIST     is a list of items delimited by any one of the characters */
+/*              in the string DELIMS. Consecutive delimiters, and */
+/*              delimiters at the beginning and end of the list, are */
+/*              considered to delimit blank items. A blank list is */
+/*              considered to contain a single, blank item. Leading and */
+/*              trailing blanks in list are ignored. */
 
-/*     DELIMS      contains the individual characters which delimit */
-/*                 the items in the list. These may be any ASCII */
-/*                 characters, including blanks. */
+/*     DELIMS   contains the individual characters which delimit the */
+/*              items in the list. These may be any ASCII characters, */
+/*              including blanks. */
 
-/*                 However, by definition, consecutive blanks are NOT */
-/*                 considered to be consecutive delimiters. Nor are */
-/*                 a blank and any other delimiter considered to be */
-/*                 consecutive delimiters. In addition, leading and */
-/*                 trailing blanks are ignored. */
+/*              However, by definition, consecutive blanks are NOT */
+/*              considered to be consecutive delimiters. Nor are a blank */
+/*              and any other delimiter considered to be consecutive */
+/*              delimiters. In addition, leading and trailing blanks are */
+/*              ignored. */
 
 /* $ Detailed_Output */
 
-/*     SET         is a set containing the items in the list, left */
-/*                 justified. Any item in the list too long to fit */
-/*                 into an element of SET is truncated on the right. */
-/*                 The size of the set must be initialized prior */
-/*                 to calling LPARSS. */
+/*     SET      is a SPICE set containing the items in the list, left */
+/*              justified. Any item in the list too long to fit into an */
+/*              element of SET is truncated on the right. */
+
+/*              The strings in SET will be sorted in increasing order, */
+/*              and duplicates will be removed. Trailing blanks are */
+/*              ignored in string comparisons. */
+
+/*              The size of the set must be initialized prior to calling */
+/*              LPARSS. */
 
 /* $ Parameters */
 
@@ -116,16 +121,16 @@ static integer c__0 = 0;
 
 /* $ Exceptions */
 
-/*     1) If the size of the set is not large enough to accommodate all */
-/*        of the items in the set, the error is diagnosed by routines in */
-/*        the call tree of this routine. */
+/*     1)  If the size of the set is not large enough to accommodate all */
+/*         of the items in the set, an error is signaled by a routine in */
+/*         the call tree of this routine. */
 
-/*     2) If the string length of ITEMS is too short to accommodate */
-/*        an item, the item will be truncated on the right. */
+/*     2)  If the string length of SET is too short to accommodate an */
+/*         item, the item will be truncated on the right. */
 
-/*     3) If the string length of ITEMS is too short to permit encoding */
-/*        of integers via ENCHAR, the error is diagnosed by routines in */
-/*        the call tree of this routine. */
+/*     3)  If the string length of SET is too short to permit encoding of */
+/*         integers via the SPICELIB routine ENCHAR, an error is signaled */
+/*         by a routine in the call tree of this routine. */
 
 /* $ Files */
 
@@ -222,26 +227,38 @@ static integer c__0 = 0;
 /*              SET (1)     = ' ' */
 /*              SET (2)     = '1 2 3 4 5 6 7 8 9 10' */
 
-
 /* $ Restrictions */
 
 /*     None. */
-
-/* $ Author_and_Institution */
-
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
 
 /* $ Literature_References */
 
 /*     None. */
 
+/* $ Author_and_Institution */
+
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
+
 /* $ Version */
+
+/* -    SPICELIB Version 1.2.0, 24-AUG-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. Improved */
+/*        documentation of arguments LIST, DELIM and SET. */
+
+/*        Updated entries #2 and #3 in $Exceptions section: changed */
+/*        wrong argument name, and indicated that the routine used */
+/*        for encoding is part of SPICELIB. */
 
 /* -    SPICELIB Version 1.1.0, 26-OCT-2005 (NJB) */
 
-/*        Bug fix:  code was modified to avoid out-of-range */
+/*        Bug fix: code was modified to avoid out-of-range */
 /*        substring bound conditions. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
@@ -261,8 +278,8 @@ static integer c__0 = 0;
 
 /* -    SPICELIB Version 1.1.0, 26-OCT-2005 (NJB) */
 
-/*        Bug fix:  code was modified to avoid out-of-range */
-/*        substring bound conditions.  The previous version */
+/*        Bug fix: code was modified to avoid out-of-range */
+/*        substring bound conditions. The previous version */
 /*        of this routine used DO WHILE statements of the form */
 
 /*                  DO WHILE (      ( B         .LE. EOL   ) */

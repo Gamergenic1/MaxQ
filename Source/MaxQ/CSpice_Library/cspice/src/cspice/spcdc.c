@@ -58,14 +58,20 @@
 /* $ Declarations */
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     HANDLE     I   Handle assigned to binary SPK or CK file. */
 
 /* $ Detailed_Input */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file */
-/*                 which has been opened for write access. */
+/*     HANDLE   is the handle assigned to the binary SPK or CK file */
+/*              which has been opened for write access. */
+
+/*              Use the SPICELIB routine DAFOPW to open the file for */
+/*              write access and get HANDLE. Upon exit, this binary file */
+/*              will have an empty comment area: all previous comments */
+/*              are deleted. Note, however, that the size of the file */
+/*              does not change. */
 
 /* $ Detailed_Output */
 
@@ -77,22 +83,17 @@
 
 /* $ Exceptions */
 
-/*     1) If the file does not contain any comments in its comment area */
-/*        on input, it will be unchanged by this routine. */
+/*     1)  If the file does not contain any comments in its comment area */
+/*         on input, it will be unchanged by this routine. */
 
 /* $ Files */
 
-/*     HANDLE      is the handle assigned to the binary SPK or CK file. */
-/*                 Use DAFOPW to open it for write access and get its */
-/*                 handle.  Upon exit, this binary file will have an */
-/*                 empty comment area:  all previous comments are */
-/*                 deleted.  Note, however, that the size of the */
-/*                 file does not change. */
+/*     See argument HANDLE. */
 
 /* $ Particulars */
 
 /*     The structure of SPK and CK files accommodates comments in */
-/*     addition to data.  The following three routines are available */
+/*     addition to data. The following three routines are available */
 /*     for accessing the comment area of a binary SPK or CK file: */
 
 /*           SPCAC           add comments */
@@ -102,7 +103,7 @@
 /*           SPCDC           delete comments */
 
 /*     Note that comments must consist of only text, that is, printable */
-/*     ASCII characters, specifically ASCII 32-126.  This excludes */
+/*     ASCII characters, specifically ASCII 32-126. This excludes */
 /*     tabs (ASCII 9) and control characters. */
 
 /*     The SPC conversion routines---SPCB2A, SPCA2B, SPCB2T, and */
@@ -111,7 +112,7 @@
 
 /* $ Examples */
 
-/*     1)  Suppose we have a binary SPK file called A.BSP.  The following */
+/*     1)  Suppose we have a binary SPK file called A.BSP. The following */
 /*         code fragment deletes any comments that may have been stored */
 /*         in the comment area of the file. */
 
@@ -120,7 +121,7 @@
 /*                 CALL SPCDC  ( HANDLE ) */
 
 /*     2)  Suppose B.BSP is a binary SPK file with comments in its */
-/*         comment area.  The routine TXTOPN opens a new text file. */
+/*         comment area. The routine TXTOPN opens a new text file. */
 
 /*           C */
 /*           C     Open the binary SPK file with write access and */
@@ -161,9 +162,21 @@
 
 /* $ Author_and_Institution */
 
-/*     J.E. McLean (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     J.E. McLean        (JPL) */
+/*     W.L. Taber         (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 1.1.0, 03-JUN-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Edited the header to comply with NAIF standard. */
+
+/*        Moved the contents of the $Files section to the description of */
+/*        HANDLE in $Detailed_Input section, and referred to it from */
+/*        $Files. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -175,7 +188,7 @@
 /* -& */
 /* $ Index_Entries */
 
-/*     delete comments from spk or ck file */
+/*     delete comments from SPK or CK file */
 
 /* -& */
 

@@ -407,8 +407,8 @@ static integer c__13 = 13;
 
 /*     LXBEGS, */
 /*     LXENDS         are, respectively, arrays of begin and end pointers */
-/*                    for the lexemes occuring in QUERY.  Lexemes are the */
-/*                    strings in QUERY that correspond to tokens.  For */
+/*                    for the lexemes occurring in QUERY. Lexemes are */
+/*                    the strings in QUERY that correspond to tokens. For */
 /*                    example, '4.9D0' and '3' are both lexemes that map */
 /*                    to the token <number>. */
 
@@ -576,6 +576,10 @@ static integer c__13 = 13;
 /*     N.J. Bachman   (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 3.0.2, 02-OCT-2021 (NJB) */
+
+/*        Corrected typo in comments. */
 
 /* -    SPICELIB Version 3.0.1, 22-OCT-1996 (NJB) */
 
@@ -992,7 +996,7 @@ static integer c__13 = 13;
 		tokens[*ntoken - 1] = 1;
 		values[*ntoken - 1] = kwvals[(i__1 = i__ - 1) < 29 && 0 <= 
 			i__1 ? i__1 : s_rnge("kwvals", i__1, "zzekscan_", (
-			ftnlen)952)];
+			ftnlen)956)];
 		lxbegs[*ntoken - 1] = cptr;
 		lxends[*ntoken - 1] = last;
 		state = 1;
@@ -1045,14 +1049,14 @@ static integer c__13 = 13;
 		++(*ntoken);
 		tokens[*ntoken - 1] = spctok[(i__1 = j - 1) < 13 && 0 <= i__1 
 			? i__1 : s_rnge("spctok", i__1, "zzekscan_", (ftnlen)
-			1013)];
+			1017)];
 		values[*ntoken - 1] = spcval[(i__1 = j - 1) < 13 && 0 <= i__1 
 			? i__1 : s_rnge("spcval", i__1, "zzekscan_", (ftnlen)
-			1014)];
+			1018)];
 		lxbegs[*ntoken - 1] = cptr;
 		lxends[*ntoken - 1] = cptr - 1 + rtrim_(spcstr + (((i__1 = j 
 			- 1) < 13 && 0 <= i__1 ? i__1 : s_rnge("spcstr", i__1,
-			 "zzekscan_", (ftnlen)1016)) << 1), (ftnlen)2);
+			 "zzekscan_", (ftnlen)1020)) << 1), (ftnlen)2);
 		state = 1;
 	    } else {
 		s_copy(errmsg, "Invalid character found at location #. ", 

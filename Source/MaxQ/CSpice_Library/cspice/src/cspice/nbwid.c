@@ -5,7 +5,7 @@
 
 #include "f2c.h"
 
-/* $Procedure            NBWID ( Non-blank width of a character array ) */
+/* $Procedure NBWID ( Non-blank width of a character array ) */
 integer nbwid_(char *array, integer *nelt, ftnlen array_len)
 {
     /* System generated locals */
@@ -53,7 +53,8 @@ integer nbwid_(char *array, integer *nelt, ftnlen array_len)
 
 /* $ Keywords */
 
-/*     ARRAY, CHARACTER */
+/*     ARRAY */
+/*     CHARACTER */
 
 /* $ Declarations */
 /* $ Brief_I/O */
@@ -62,23 +63,32 @@ integer nbwid_(char *array, integer *nelt, ftnlen array_len)
 /*     --------  ---  -------------------------------------------------- */
 /*     ARRAY      I   Input array. */
 /*     NELT       I   Number of elements in the array. */
-/*     NBWID      O   Maximum value of LASTNB for the array. */
+
+/*     The function returns the index of the rightmost non-blank */
+/*     character in the entire array of strings ARRAY. */
 
 /* $ Detailed_Input */
 
-/*     ARRAY       is the input array. */
+/*     ARRAY    is the input array. */
 
-/*     NELT        is the number of elements in the input array. */
+/*     NELT     is the number of elements in the input array. */
 
 /* $ Detailed_Output */
 
-/*     NBWID       is the index of the rightmost non-blank character */
-/*                 in the entire array. This is equivalent to the */
-/*                 maximum value of LASTNB for the array, but somewhat */
-/*                 more efficient to compute. If NELT is not greater */
-/*                 than zero, NBWID is zero. */
+/*     The function returns the index of the rightmost non-blank */
+/*     character in the entire array. This is equivalent to the maximum */
+/*     value of LASTNB for the array, but somewhat more efficient to */
+/*     compute. If NELT is not greater than zero, NBWID is zero. */
 
 /* $ Parameters */
+
+/*     None. */
+
+/* $ Exceptions */
+
+/*     Error free. */
+
+/* $ Files */
 
 /*     None. */
 
@@ -117,30 +127,30 @@ integer nbwid_(char *array, integer *nelt, ftnlen array_len)
 
 /*     None. */
 
-/* $ Exceptions */
-
-/*      Error free. */
-
-/* $ Files */
+/* $ Literature_References */
 
 /*     None. */
 
 /* $ Author_and_Institution */
 
-/*     I.M. Underwood  (JPL) */
-
-/* $ Literature_References */
-
-/*     None. */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
-/* -     SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+/* -    SPICELIB Version 1.1.0, 08-APR-2021 (JDR) */
 
-/*         Comment section for permuted index source lines was added */
-/*         following the header. */
+/*        Added IMPLICIT NONE statement. */
 
-/* -     SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
+/*        Edited the header to comply with NAIF standard. */
+
+/* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
+
+/*        Comment section for permuted index source lines was added */
+/*        following the header. */
+
+/* -    SPICELIB Version 1.0.0, 31-JAN-1990 (IMU) */
 
 /* -& */
 /* $ Index_Entries */

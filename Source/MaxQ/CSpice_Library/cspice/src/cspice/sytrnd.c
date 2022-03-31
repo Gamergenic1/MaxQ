@@ -5,9 +5,9 @@
 
 #include "f2c.h"
 
-/* $Procedure      SYTRND (Transpose two values associated with a symbol) */
-/* Subroutine */ int sytrnd_(char *name__, integer *i__, integer *j, char *
-	tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen 
+/* $Procedure SYTRND (Transpose two values associated with a symbol) */
+/* Subroutine */ int sytrnd_(char *name__, integer *idx1, integer *idx2, char 
+	*tabsym, integer *tabptr, doublereal *tabval, ftnlen name_len, ftnlen 
 	tabsym_len)
 {
     /* System generated locals */
@@ -73,60 +73,58 @@
 /*     --------  ---  -------------------------------------------------- */
 /*     NAME       I   Name of the symbol whose associated values are to */
 /*                    be transposed. */
-/*     I          I   Index of the first associated value to be */
-/*                    transposed. */
-/*     J          I   Index of the second associated value to be */
-/*                    transposed. */
-
+/*     IDX1       I   Index of first associated value to be transposed. */
+/*     IDX2       I   Index of second associated value to be transposed. */
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL    I/O  Components of the symbol table. */
+/*     TABVAL    I-O  Components of the symbol table. */
 
 /* $ Detailed_Input */
 
-/*     NAME       is the name of the symbol whose associated values are */
-/*                to be transposed. If NAME is not in the symbol table, */
-/*                the symbol tables are not modified. */
+/*     NAME     is the name of the symbol whose associated values are */
+/*              to be transposed. If NAME is not in the symbol table, */
+/*              the symbol tables are not modified. */
 
-/*     I          is the index of the first associated value to be */
-/*                transposed. If this index is not valid ( I < 1 or */
-/*                I > the dimension of NAME) the symbol table is not */
-/*                modified. */
+/*     IDX1     is the index of the first associated value to be */
+/*              transposed. If this index is not valid (IDX1 < 1 or */
+/*              IDX1 > the dimension of NAME) the symbol table is not */
+/*              modified. */
 
-/*     J          is the index of the second associated value to be */
-/*                transposed. If this index is not valid ( J < 1 or */
-/*                J > the dimension of NAME) the symbol table is not */
-/*                modified. */
+/*     IDX2     is the index of the second associated value to be */
+/*              transposed. If this index is not valid (IDX2 < 1 or */
+/*              IDX2 > the dimension of NAME) the symbol table is not */
+/*              modified. */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are components of the double precision symbol table. */
+/*     TABVAL   are components of the double precision symbol table. */
 
 /* $ Detailed_Output */
 
 /*     TABSYM, */
 /*     TABPTR, */
-/*     TABVAL     are components of the double precision symbol table. */
-/*                If the symbol NAME is not in the symbol table */
-/*                the symbol tables are not modified. Otherwise, */
-/*                the values that I and J refer to are transposed */
-/*                in the value table. */
+/*     TABVAL   are components of the double precision symbol table. */
+
+/*              If the symbol NAME is not in the symbol table the symbol */
+/*              tables are not modified. Otherwise, the values that IDX1 */
+/*              and IDX2 refer to are transposed in the value table. */
 
 /* $ Parameters */
 
 /*     None. */
 
+/* $ Exceptions */
+
+/*     1)  If IDX1 < 1, IDX2 < 1, IDX1 > the dimension of NAME, or */
+/*         IDX2 > the dimension of NAME, the error SPICE(INVALIDINDEX) */
+/*         is signaled. */
+
+/*     2)  If NAME is not in the symbol table, the symbol tables are not */
+/*         modified. */
+
 /* $ Files */
 
 /*     None. */
-
-/* $ Exceptions */
-
-/*     1) If I < 1, J < 1, I > the dimension of NAME, or J > the */
-/*        dimension of NAME, the error SPICE(INVALIDINDEX) is signaled. */
-
-/*     2) If NAME is not in the symbol table, the symbol tables are not */
-/*        modified. */
 
 /* $ Particulars */
 
@@ -175,15 +173,26 @@
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman    (JPL) */
-/*     H.A. Neilan     (JPL) */
-/*     I.M. Underwood  (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     H.A. Neilan        (JPL) */
+/*     W.L. Taber         (JPL) */
+/*     I.M. Underwood     (JPL) */
 
 /* $ Version */
 
+/* -    SPICELIB Version 1.2.0, 08-APR-2021 (JDR) */
+
+/*        Added IMPLICIT NONE statement. */
+
+/*        Changed the name of input arguments "I" and "J" to "IDX1" and */
+/*        "IDX2" for consistency with other routines. */
+
+/*        Edited the header to comply with NAIF standard. */
+
 /* -    SPICELIB Version 1.1.0, 09-SEP-2005 (NJB) */
 
-/*        Updated so no "exchange" occurs if I equals J. */
+/*        Updated so no "exchange" occurs if IDX1 equals IDX2. */
 
 /* -    SPICELIB Version 1.0.1, 10-MAR-1992 (WLT) */
 
@@ -202,7 +211,7 @@
 
 /* -    SPICELIB Version 1.1.0, 09-SEP-2005 (NJB) */
 
-/*        Updated so no "exchange" occurs if I equals J. */
+/*        Updated so no "exchange" occurs if IDX1 equals IDX2. */
 
 /* -     Beta Version 2.0.0, 16-JAN-1989 (HAN) */
 
@@ -222,9 +231,8 @@
 
     if (return_()) {
 	return 0;
-    } else {
-	chkin_("SYTRND", (ftnlen)6);
     }
+    chkin_("SYTRND", (ftnlen)6);
 
 /*     How many symbols? */
 
@@ -242,20 +250,21 @@
 
 /*        Are the indices valid? */
 
-	if (*i__ >= 1 && *i__ <= n && *j >= 1 && *j <= n) {
+	if (*idx1 >= 1 && *idx1 <= n && *idx2 >= 1 && *idx2 <= n) {
 
 /*           Exchange the values in place. */
 
-	    if (*i__ != *j) {
+	    if (*idx1 != *idx2) {
 		i__1 = locsym - 1;
 		locval = sumai_(&tabptr[6], &i__1) + 1;
-		swapd_(&tabval[locval + *i__ + 4], &tabval[locval + *j + 4]);
+		swapd_(&tabval[locval + *idx1 + 4], &tabval[locval + *idx2 + 
+			4]);
 	    }
 	} else {
 	    setmsg_("The first index was *. The second index was *.", (ftnlen)
 		    46);
-	    errint_("*", i__, (ftnlen)1);
-	    errint_("*", j, (ftnlen)1);
+	    errint_("*", idx1, (ftnlen)1);
+	    errint_("*", idx2, (ftnlen)1);
 	    sigerr_("SPICE(INVALIDINDEX)", (ftnlen)19);
 	}
     }

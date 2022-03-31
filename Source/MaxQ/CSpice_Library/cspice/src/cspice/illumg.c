@@ -8,7 +8,6 @@
 /* Table of constant values */
 
 static integer c__100 = 100;
-static integer c__3 = 3;
 
 /* $Procedure ILLUMG ( Illumination angles, general source ) */
 /* Subroutine */ int illumg_(char *method, char *target, char *ilusrc, 
@@ -37,15 +36,14 @@ static integer c__3 = 3;
     extern /* Subroutine */ int vequ_(doublereal *, doublereal *);
     integer type__;
     static logical xmit;
-    extern /* Subroutine */ int zznamfrm_(integer *, char *, integer *, char *
-	    , integer *, ftnlen, ftnlen), zzvalcor_(char *, logical *, ftnlen)
-	    , zzsbfnrm_(integer *, integer *, integer *, doublereal *, 
-	    integer *, doublereal *, doublereal *), zzctruin_(integer *), 
-	    zzprsmet_(integer *, char *, integer *, char *, char *, logical *,
-	     integer *, integer *, char *, char *, ftnlen, ftnlen, ftnlen, 
-	    ftnlen, ftnlen);
-    integer n;
-    extern /* Subroutine */ int zzsrftrk_(integer *, logical *);
+    extern /* Subroutine */ int zzgftreb_(integer *, doublereal *), zznamfrm_(
+	    integer *, char *, integer *, char *, integer *, ftnlen, ftnlen), 
+	    zzvalcor_(char *, logical *, ftnlen), zzsbfnrm_(integer *, 
+	    integer *, integer *, doublereal *, integer *, doublereal *, 
+	    doublereal *), zzctruin_(integer *), zzprsmet_(integer *, char *, 
+	    integer *, char *, char *, logical *, integer *, integer *, char *
+	    , char *, ftnlen, ftnlen, ftnlen, ftnlen, ftnlen), zzsrftrk_(
+	    integer *, logical *);
     doublereal s, radii[3];
     extern /* Subroutine */ int chkin_(char *, ftnlen), errch_(char *, char *,
 	     ftnlen, ftnlen);
@@ -57,8 +55,6 @@ static integer c__3 = 3;
     static integer svctr3[2], svctr4[2];
     doublereal lt;
     integer fxfcde, obscde;
-    extern /* Subroutine */ int bodvcd_(integer *, char *, integer *, integer 
-	    *, doublereal *, ftnlen);
     static integer trgcde;
     extern logical return_(void);
     char pntdef[20], shpstr[9], subtyp[20], trmstr[20];
@@ -544,7 +540,7 @@ static integer c__3 = 3;
 
 /* $ Brief_I/O */
 
-/*     Variable  I/O  Description */
+/*     VARIABLE  I/O  DESCRIPTION */
 /*     --------  ---  -------------------------------------------------- */
 /*     METHOD     I   Computation method. */
 /*     TARGET     I   Name of target body. */
@@ -562,311 +558,308 @@ static integer c__3 = 3;
 
 /* $ Detailed_Input */
 
-/*     METHOD      is a short string providing parameters defining */
-/*                 the computation method to be used. In the syntax */
-/*                 descriptions below, items delimited by brackets */
-/*                 are optional. */
+/*     METHOD   is a short string providing parameters defining */
+/*              the computation method to be used. In the syntax */
+/*              descriptions below, items delimited by brackets */
+/*              are optional. */
 
-/*                 METHOD may be assigned the following values: */
+/*              METHOD may be assigned the following values: */
 
-/*                    'ELLIPSOID' */
+/*                 'ELLIPSOID' */
 
-/*                       The illumination angle computation uses a */
-/*                       triaxial ellipsoid to model the surface of the */
-/*                       target body. The ellipsoid's radii must be */
-/*                       available in the kernel pool. */
-
-
-/*                    'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
-
-/*                       The illumination angle computation uses */
-/*                       topographic data to model the surface of the */
-/*                       target body. These data must be provided by */
-/*                       loaded DSK files. */
-
-/*                       The surface list specification is optional. The */
-/*                       syntax of the list is */
-
-/*                          <surface 1> [, <surface 2>...] */
-
-/*                       If present, it indicates that data only for the */
-/*                       listed surfaces are to be used; however, data */
-/*                       need not be available for all surfaces in the */
-/*                       list. If absent, loaded DSK data for any surface */
-/*                       associated with the target body are used. */
-
-/*                       The surface list may contain surface names or */
-/*                       surface ID codes. Names containing blanks must */
-/*                       be delimited by double quotes, for example */
-
-/*                          SURFACES = "Mars MEGDR 128 PIXEL/DEG" */
-
-/*                       If multiple surfaces are specified, their names */
-/*                       or IDs must be separated by commas. */
-
-/*                       See the Particulars section below for details */
-/*                       concerning use of DSK data. */
+/*                    The illumination angle computation uses a */
+/*                    triaxial ellipsoid to model the surface of the */
+/*                    target body. The ellipsoid's radii must be */
+/*                    available in the kernel pool. */
 
 
-/*                 Neither case nor white space are significant in */
-/*                 METHOD, except within double-quoted strings. For */
-/*                 example, the string ' eLLipsoid ' is valid. */
+/*                 'DSK/UNPRIORITIZED[/SURFACES = <surface list>]' */
 
-/*                 Within double-quoted strings, blank characters are */
-/*                 significant, but multiple consecutive blanks are */
-/*                 considered equivalent to a single blank. Case is */
-/*                 not significant. So */
+/*                    The illumination angle computation uses */
+/*                    topographic data to model the surface of the */
+/*                    target body. These data must be provided by */
+/*                    loaded DSK files. */
 
-/*                    "Mars MEGDR 128 PIXEL/DEG" */
+/*                    The surface list specification is optional. The */
+/*                    syntax of the list is */
 
-/*                 is equivalent to */
+/*                       <surface 1> [, <surface 2>...] */
 
-/*                    " mars megdr  128  pixel/deg " */
+/*                    If present, it indicates that data only for the */
+/*                    listed surfaces are to be used; however, data */
+/*                    need not be available for all surfaces in the */
+/*                    list. If absent, loaded DSK data for any surface */
+/*                    associated with the target body are used. */
 
-/*                 but not to */
+/*                    The surface list may contain surface names or */
+/*                    surface ID codes. Names containing blanks must */
+/*                    be delimited by double quotes, for example */
 
-/*                    "MARS MEGDR128PIXEL/DEG" */
+/*                       'SURFACES = "Mars MEGDR 128 PIXEL/DEG"' */
 
+/*                    If multiple surfaces are specified, their names */
+/*                    or IDs must be separated by commas. */
 
-/*     TARGET      is the name of the target body. TARGET is */
-/*                 case-insensitive, and leading and trailing blanks in */
-/*                 TARGET are not significant. Optionally, you may */
-/*                 supply a string containing the integer ID code for */
-/*                 the object. For example both 'MOON' and '301' are */
-/*                 legitimate strings that indicate the Moon is the */
-/*                 target body. */
-
-
-/*     ILUSRC      is the name of the illumination source. This source */
-/*                 may be any ephemeris object. Case, blanks, and */
-/*                 numeric values are treated in the same way as for the */
-/*                 input TARGET. */
+/*                    See the $Particulars section below for details */
+/*                    concerning use of DSK data. */
 
 
-/*     ET          is the epoch, expressed as seconds past J2000 TDB, */
-/*                 for which the apparent illumination angles at the */
-/*                 specified surface point on the target body, as seen */
-/*                 from the observing body, are to be computed. */
+/*              Neither case nor white space are significant in METHOD, */
+/*              except within double-quoted strings representing surface */
+/*              names. For example, the string ' eLLipsoid ' is valid. */
+
+/*              Within double-quoted strings representing surface names, */
+/*              blank characters are significant, but multiple */
+/*              consecutive blanks are considered equivalent to a single */
+/*              blank. Case is not significant. So */
+
+/*                 "Mars MEGDR 128 PIXEL/DEG" */
+
+/*              is equivalent to */
+
+/*                 " mars megdr  128  pixel/deg " */
+
+/*              but not to */
+
+/*                 "MARS MEGDR128PIXEL/DEG" */
+
+/*     TARGET   is the name of the target body. TARGET is */
+/*              case-insensitive, and leading and trailing blanks in */
+/*              TARGET are not significant. Optionally, you may */
+/*              supply a string containing the integer ID code for */
+/*              the object. For example both 'MOON' and '301' are */
+/*              legitimate strings that indicate the Moon is the */
+/*              target body. */
+
+/*     ILUSRC   is the name of the illumination source. This source */
+/*              may be any ephemeris object. Case, blanks, and */
+/*              numeric values are treated in the same way as for the */
+/*              input TARGET. */
+
+/*     ET       is the epoch, expressed as seconds past J2000 TDB, */
+/*              for which the apparent illumination angles at the */
+/*              specified surface point on the target body, as seen */
+/*              from the observing body, are to be computed. */
+
+/*     FIXREF   is the name of the body-fixed, body-centered */
+/*              reference frame associated with the target body. The */
+/*              input surface point SPOINT and the output vector */
+/*              SRFVEC are expressed relative to this reference */
+/*              frame. The string FIXREF is case-insensitive, and */
+/*              leading and trailing blanks in FIXREF are not */
+/*              significant. */
+
+/*     ABCORR   is the aberration correction to be used in computing */
+/*              the position and orientation of the target body and */
+/*              the location of the illumination source. */
+
+/*              For remote sensing applications, where the apparent */
+/*              illumination angles seen by the observer are desired, */
+/*              normally either of the corrections */
+
+/*                 'LT+S' */
+/*                 'CN+S' */
+
+/*              should be used. These and the other supported options */
+/*              are described below. ABCORR may be any of the */
+/*              following: */
+
+/*                 'NONE'     No aberration correction. */
+
+/*              Let LT represent the one-way light time between the */
+/*              observer and the input surface point SPOINT (note: NOT */
+/*              between the observer and the target body's center). The */
+/*              following values of ABCORR apply to the "reception" case */
+/*              in which photons depart from SPOINT at the light-time */
+/*              corrected epoch ET-LT and *arrive* at the observer's */
+/*              location at ET: */
+
+/*                 'LT'       Correct both the position of SPOINT as */
+/*                            seen by the observer, and the position */
+/*                            of the illumination source as seen by */
+/*                            the target, for light time. Correct the */
+/*                            orientation of the target for light */
+/*                            time. */
+
+/*                 'LT+S'     Correct both the position of SPOINT as */
+/*                            seen by the observer, and the position */
+/*                            of the illumination source as seen by */
+/*                            the target, for light time and stellar */
+/*                            aberration. Correct the orientation of */
+/*                            the target for light time. */
+
+/*                 'CN'       Converged Newtonian light time */
+/*                            correction. In solving the light time */
+/*                            equations for SPOINT and the */
+/*                            illumination source, the 'CN' */
+/*                            correction iterates until the solution */
+/*                            converges. */
+
+/*                 'CN+S'     Converged Newtonian light time and */
+/*                            stellar aberration corrections. This */
+/*                            option produces a solution that is at */
+/*                            least as accurate at that obtainable */
+/*                            with the 'LT+S' option. Whether the */
+/*                            'CN+S' solution is substantially more */
+/*                            accurate depends on the geometry of the */
+/*                            participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. */
+
+/*              The following values of ABCORR apply to the */
+/*              "transmission" case in which photons *arrive* at */
+/*              SPOINT at the light-time corrected epoch ET+LT and */
+/*              *depart* from the observer's location at ET: */
+
+/*                 'XLT'      "Transmission" case: correct for */
+/*                            one-way light time using a Newtonian */
+/*                            formulation. This correction yields the */
+/*                            illumination angles at the moment that */
+/*                            SPOINT receives photons emitted from the */
+/*                            observer's location at ET. */
+
+/*                            The light time correction uses an */
+/*                            iterative solution of the light time */
+/*                            equation. The solution invoked by the */
+/*                            'XLT' option uses one iteration. */
+
+/*                            Both the target position as seen by the */
+/*                            observer, and rotation of the target */
+/*                            body, are corrected for light time. */
+
+/*                 'XLT+S'    "Transmission" case: correct for */
+/*                            one-way light time and stellar */
+/*                            aberration using a Newtonian */
+/*                            formulation  This option modifies the */
+/*                            angles obtained with the 'XLT' option */
+/*                            to account for the observer's and */
+/*                            target's velocities relative to the */
+/*                            solar system barycenter (the latter */
+/*                            velocity is used in computing the */
+/*                            direction to the apparent illumination */
+/*                            source). */
+
+/*                 'XCN'      Converged Newtonian light time */
+/*                            correction. This is the same as XLT */
+/*                            correction but with further iterations */
+/*                            to a converged Newtonian light time */
+/*                            solution. */
+
+/*                 'XCN+S'    "Transmission" case: converged */
+/*                            Newtonian light time and stellar */
+/*                            aberration corrections. This option */
+/*                            produces a solution that is at least as */
+/*                            accurate at that obtainable with the */
+/*                            'XLT+S' option. Whether the 'XCN+S' */
+/*                            solution is substantially more accurate */
+/*                            depends on the geometry of the */
+/*                            participating objects and on the */
+/*                            accuracy of the input data. In all */
+/*                            cases this routine will execute more */
+/*                            slowly when a converged solution is */
+/*                            computed. */
 
 
-/*     FIXREF      is the name of the body-fixed, body-centered */
-/*                 reference frame associated with the target body. The */
-/*                 input surface point SPOINT and the output vector */
-/*                 SRFVEC are expressed relative to this reference */
-/*                 frame. The string FIXREF is case-insensitive, and */
-/*                 leading and trailing blanks in FIXREF are not */
-/*                 significant. */
+/*              Neither case nor white space are significant in */
+/*              ABCORR. For example, the string */
 
+/*                'Lt + s' */
 
-/*     ABCORR      is the aberration correction to be used in computing */
-/*                 the position and orientation of the target body and */
-/*                 the location of the illumination source. */
+/*              is valid. */
 
-/*                 For remote sensing applications, where the apparent */
-/*                 illumination angles seen by the observer are desired, */
-/*                 normally either of the corrections */
+/*     OBSRVR   is the name of the observing body. The observing body is */
+/*              an ephemeris object: it typically is a spacecraft, an */
+/*              extended body, or a surface point for which ephemeris */
+/*              data are available. OBSRVR is case-insensitive, and */
+/*              leading and trailing blanks in OBSRVR are not */
+/*              significant. Optionally, you may supply a string */
+/*              containing the integer ID code for the object. For */
+/*              example both 'MOON' and '301' are legitimate strings that */
+/*              indicate the Moon is the observer. */
 
-/*                    'LT+S' */
-/*                    'CN+S' */
+/*              OBSRVR may be not be identical to TARGET. */
 
-/*                 should be used. These and the other supported options */
-/*                 are described below. ABCORR may be any of the */
-/*                 following: */
+/*     SPOINT   is a surface point on the target body, expressed in */
+/*              Cartesian coordinates, relative to the body-fixed */
+/*              target frame designated by FIXREF. */
 
-/*                    'NONE'     No aberration correction. */
+/*              SPOINT need not be visible from the observer's */
+/*              location at the epoch ET. */
 
-/*                 Let LT represent the one-way light time between the */
-/*                 observer and SPOINT (note: NOT between the observer */
-/*                 and the target body's center). The following values */
-/*                 of ABCORR apply to the "reception" case in which */
-/*                 photons depart from SPOINT at the light-time */
-/*                 corrected epoch ET-LT and *arrive* at the observer's */
-/*                 location at ET: */
-
-/*                    'LT'       Correct both the position of SPOINT as */
-/*                               seen by the observer, and the position */
-/*                               of the illumination source as seen by */
-/*                               the target, for light time. Correct the */
-/*                               orientation of the target for light */
-/*                               time. */
-
-/*                    'LT+S'     Correct both the position of SPOINT as */
-/*                               seen by the observer, and the position */
-/*                               of the illumination source as seen by */
-/*                               the target, for light time and stellar */
-/*                               aberration. Correct the orientation of */
-/*                               the target for light time. */
-
-/*                    'CN'       Converged Newtonian light time */
-/*                               correction. In solving the light time */
-/*                               equations for target and the */
-/*                               illumination source, the "CN" */
-/*                               correction iterates until the solution */
-/*                               converges. */
-
-/*                    'CN+S'     Converged Newtonian light time and */
-/*                               stellar aberration corrections. This */
-/*                               option produces a solution that is at */
-/*                               least as accurate at that obtainable */
-/*                               with the 'LT+S' option. Whether the */
-/*                               'CN+S' solution is substantially more */
-/*                               accurate depends on the geometry of the */
-/*                               participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. */
-
-/*                 The following values of ABCORR apply to the */
-/*                 "transmission" case in which photons *arrive* at */
-/*                 SPOINT at the light-time corrected epoch ET+LT and */
-/*                 *depart* from the observer's location at ET: */
-
-/*                    'XLT'      "Transmission" case: correct for */
-/*                               one-way light time using a Newtonian */
-/*                               formulation. This correction yields the */
-/*                               illumination angles at the moment that */
-/*                               SPOINT receives photons emitted from the */
-/*                               observer's location at ET. */
-
-/*                               The light time correction uses an */
-/*                               iterative solution of the light time */
-/*                               equation. The solution invoked by the */
-/*                               'XLT' option uses one iteration. */
-
-/*                               Both the target position as seen by the */
-/*                               observer, and rotation of the target */
-/*                               body, are corrected for light time. */
-
-/*                    'XLT+S'    "Transmission" case: correct for */
-/*                               one-way light time and stellar */
-/*                               aberration using a Newtonian */
-/*                               formulation  This option modifies the */
-/*                               angles obtained with the 'XLT' option */
-/*                               to account for the observer's and */
-/*                               target's velocities relative to the */
-/*                               solar system barycenter (the latter */
-/*                               velocity is used in computing the */
-/*                               direction to the apparent illumination */
-/*                               source). */
-
-/*                    'XCN'      Converged Newtonian light time */
-/*                               correction. This is the same as XLT */
-/*                               correction but with further iterations */
-/*                               to a converged Newtonian light time */
-/*                               solution. */
-
-/*                    'XCN+S'    "Transmission" case: converged */
-/*                               Newtonian light time and stellar */
-/*                               aberration corrections. This option */
-/*                               produces a solution that is at least as */
-/*                               accurate at that obtainable with the */
-/*                               'XLT+S' option. Whether the 'XCN+S' */
-/*                               solution is substantially more accurate */
-/*                               depends on the geometry of the */
-/*                               participating objects and on the */
-/*                               accuracy of the input data. In all */
-/*                               cases this routine will execute more */
-/*                               slowly when a converged solution is */
-/*                               computed. */
-
-
-/*                 Neither case nor white space are significant in */
-/*                 ABCORR. For example, the string */
-
-/*                   'Lt + s' */
-
-/*                 is valid. */
-
-
-/*     OBSRVR      is the name of the observing body. The observing body */
-/*                 is an ephemeris object: it typically is a spacecraft, */
-/*                 the earth, or a surface point on the earth. OBSRVR is */
-/*                 case-insensitive, and leading and trailing blanks in */
-/*                 OBSRVR are not significant. Optionally, you may */
-/*                 supply a string containing the integer ID code for */
-/*                 the object. For example both 'MOON' and '301' are */
-/*                 legitimate strings that indicate the Moon is the */
-/*                 observer. */
-
-/*                 OBSRVR may be not be identical to TARGET. */
-
-
-/*     SPOINT      is a surface point on the target body, expressed in */
-/*                 Cartesian coordinates, relative to the body-fixed */
-/*                 target frame designated by FIXREF. */
-
-/*                 SPOINT need not be visible from the observer's */
-/*                 location at the epoch ET. */
-
-/*                 The components of SPOINT have units of km. */
-
+/*              The components of SPOINT have units of km. */
 
 /* $ Detailed_Output */
 
+/*     TRGEPC   is the "target surface point epoch." TRGEPC is defined as */
+/*              follows: letting LT be the one-way light time between the */
+/*              observer and the input surface point SPOINT, TRGEPC is */
+/*              either the epoch ET-LT, ET+LT or ET depending on whether */
+/*              the requested aberration correction is, respectively, for */
+/*              received radiation, transmitted radiation or omitted. LT */
+/*              is computed using the method indicated by ABCORR. */
 
-/*     TRGEPC      is the "surface point epoch." TRGEPC is defined as */
-/*                 follows: letting LT be the one-way light time between */
-/*                 the observer and the input surface point SPOINT, */
-/*                 TRGEPC is either the epoch ET-LT or ET depending on */
-/*                 whether the requested aberration correction is, */
-/*                 respectively, for received radiation or omitted. LT */
-/*                 is computed using the method indicated by ABCORR. */
+/*              TRGEPC is expressed as seconds past J2000 TDB. */
 
-/*                 TRGEPC is expressed as seconds past J2000 TDB. */
+/*     SRFVEC   is the vector from the observer's position at ET to */
+/*              the aberration-corrected (or optionally, geometric) */
+/*              position of SPOINT, where the aberration corrections */
+/*              are specified by ABCORR. SRFVEC is expressed in the */
+/*              target body-fixed reference frame designated by */
+/*              FIXREF, evaluated at TRGEPC. */
 
+/*              The components of SRFVEC are given in units of km. */
 
-/*     SRFVEC      is the vector from the observer's position at ET to */
-/*                 the aberration-corrected (or optionally, geometric) */
-/*                 position of SPOINT, where the aberration corrections */
-/*                 are specified by ABCORR. SRFVEC is expressed in the */
-/*                 target body-fixed reference frame designated by */
-/*                 FIXREF, evaluated at TRGEPC. */
+/*              One can use the SPICELIB function VNORM to obtain the */
+/*              distance between the observer and SPOINT: */
 
-/*                 The components of SRFVEC are given in units of km. */
+/*                 DIST = VNORM ( SRFVEC ) */
 
-/*                 One can use the SPICELIB function VNORM to obtain the */
-/*                 distance between the observer and SPOINT: */
+/*              The observer's position OBSPOS, relative to the */
+/*              target body's center, where the center's position is */
+/*              corrected for aberration effects as indicated by */
+/*              ABCORR, can be computed via the call: */
 
-/*                    DIST = VNORM ( SRFVEC ) */
+/*                 CALL VSUB ( SPOINT, SRFVEC, OBSPOS ) */
 
-/*                 The observer's position OBSPOS, relative to the */
-/*                 target body's center, where the center's position is */
-/*                 corrected for aberration effects as indicated by */
-/*                 ABCORR, can be computed via the call: */
+/*              To transform the vector SRFVEC from a reference frame */
+/*              FIXREF at time TRGEPC to a time-dependent reference */
+/*              frame REF at time ET, the routine PXFRM2 should be */
+/*              called. Let XFORM be the 3x3 matrix representing the */
+/*              rotation from the reference frame FIXREF at time */
+/*              TRGEPC to the reference frame REF at time ET. Then */
+/*              SRFVEC can be transformed to the result REFVEC as */
+/*              follows: */
 
-/*                    CALL VSUB ( SPOINT, SRFVEC, OBSPOS ) */
-
-/*                 To transform the vector SRFVEC to a time-dependent */
-/*                 reference frame REF at ET, a sequence of calls is */
-/*                 required. For example, let XFORM be 3x3 matrix */
-/*                 describing the transformation between the target */
-/*                 body-fixed frame at TRGEPC to the time-dependent */
-/*                 frame REF at ET. Then SRFVEC can be transformed to */
-/*                 the result REFVEC as follows: */
-
-/*                     CALL PXFRM2 ( FIXREF, REF,    TRGEPC, ET, XFORM ) */
-/*                     CALL MXV    ( XFORM,  SRFVEC, REFVEC ) */
+/*                  CALL PXFRM2 ( FIXREF, REF,    TRGEPC, ET, XFORM ) */
+/*                  CALL MXV    ( XFORM,  SRFVEC, REFVEC ) */
 
 
-/*     PHASE       is the phase angle at SPOINT, as seen from OBSRVR at */
-/*                 time ET. This is the angle between the negative of */
-/*                 the vector SRFVEC and the SPOINT-source vector at */
-/*                 TRGEPC. Units are radians. The range of PHASE is */
-/*                 [0, pi]. */
+/*     The following outputs depend on the existence of a well-defined */
+/*     outward normal vector to the surface at SPOINT. See restriction 1. */
 
-/*     INCDNC      is the illumination source incidence angle at SPOINT, */
-/*                 as seen from OBSRVR at time ET. This is the angle */
-/*                 between the surface normal vector at SPOINT and the */
-/*                 SPOINT-source vector at TRGEPC. Units are radians. */
-/*                 The range of INCDNC is [0, pi]. */
 
-/*     EMISSN      is the emission angle at SPOINT, as seen from OBSRVR */
-/*                 at time ET. This is the angle between the surface */
-/*                 normal vector at SPOINT and the negative of the */
-/*                 vector SRFVEC. Units are radians. The range of EMISSN */
-/*                 is [0, pi]. */
+/*     PHASE    is the phase angle at SPOINT, as seen from OBSRVR at time */
+/*              ET. This is the angle between the negative of the vector */
+/*              SRFVEC and the SPOINT-illumination source vector at */
+/*              TRGEPC. Units are radians. The range of PHASE is [0, pi]. */
+/*              See $Particulars below for a detailed discussion of the */
+/*              definition. */
 
+/*     INCDNC   is the illumination source incidence angle at SPOINT, as */
+/*              seen from OBSRVR at time ET. This is the angle between */
+/*              the surface normal vector at SPOINT and the */
+/*              SPOINT-illumination source vector at TRGEPC. Units are */
+/*              radians. The range of INCDNC is [0, pi]. See $Particulars */
+/*              below for a detailed discussion of the definition. */
+
+/*     EMISSN   is the emission angle at SPOINT, as seen from OBSRVR at */
+/*              time ET. This is the angle between the surface normal */
+/*              vector at SPOINT and the negative of the vector SRFVEC. */
+/*              Units are radians. The range of EMISSN is [0, pi]. See */
+/*              $Particulars below for a detailed discussion of the */
+/*              definition. */
 
 /* $ Parameters */
 
@@ -874,78 +867,84 @@ static integer c__3 = 3;
 
 /* $ Exceptions */
 
-
 /*     1)  If the specified aberration correction is relativistic or */
 /*         calls for stellar aberration but not light time correction, */
-/*         the error SPICE(NOTSUPPORTED) is signaled. If the specified */
-/*         aberration correction is any other unrecognized value, the */
-/*         error will be diagnosed and signaled by a routine in the call */
-/*         tree of this routine. */
+/*         the error SPICE(NOTSUPPORTED) is signaled. */
 
-/*     2)  If any of the target, observer, or illumination source */
+/*     2)  If the specified aberration correction is any other */
+/*         unrecognized value, an error is signaled by a routine in the */
+/*         call tree of this routine. */
+
+/*     3)  If any of the target, observer, or illumination source */
 /*         input strings cannot be converted to an integer ID code, the */
 /*         error SPICE(IDCODENOTFOUND) is signaled. */
 
-/*     3)  If OBSRVR and TARGET map to the same NAIF integer ID code, */
+/*     4)  If OBSRVR and TARGET map to the same NAIF integer ID code, */
 /*         the error SPICE(BODIESNOTDISTINCT) is signaled. */
 
-/*     4)  If the input target body-fixed frame FIXREF is not */
+/*     5)  If the input target body-fixed frame FIXREF is not */
 /*         recognized, the error SPICE(NOFRAME) is signaled. A frame */
 /*         name may fail to be recognized because a required frame */
 /*         specification kernel has not been loaded; another cause is a */
 /*         misspelling of the frame name. */
 
-/*     5)  If the input frame FIXREF is not centered at the target body, */
+/*     6)  If the input frame FIXREF is not centered at the target body, */
 /*         the error SPICE(INVALIDFRAME) is signaled. */
 
-/*     6)  If the input argument METHOD is not recognized, the error */
+/*     7)  If the input argument METHOD is not recognized, the error */
 /*         SPICE(INVALIDMETHOD) is signaled. */
 
-/*     7)  If insufficient ephemeris data have been loaded prior to */
-/*         calling ILLUMG, the error will be diagnosed and signaled by a */
+/*     8)  If insufficient ephemeris data have been loaded prior to */
+/*         calling ILLUMG, an error is signaled by a */
 /*         routine in the call tree of this routine. Note that when */
 /*         light time correction is used, sufficient ephemeris data must */
 /*         be available to propagate the states of observer, target, and */
 /*         the illumination source to the solar system barycenter. */
 
-/*     8)  If the computation method specifies an ellipsoidal target */
+/*     9)  If the computation method specifies an ellipsoidal target */
 /*         shape and triaxial radii of the target body have not been */
-/*         loaded into the kernel pool prior to calling ILLUMG, the */
-/*         error will be diagnosed and signaled by a routine in the call */
-/*         tree of this routine. */
+/*         loaded into the kernel pool prior to calling ILLUMG, an error */
+/*         is signaled by a routine in the call tree of this routine. */
 
-/*     9)  The target must be an extended body: if any of the radii of */
-/*         the target body are non-positive, the error will be */
-/*         diagnosed and signaled by routines in the call tree of this */
-/*         routine. */
-
-/*     10) If PCK data specifying the target body-fixed frame */
-/*         orientation have not been loaded prior to calling ILLUMG, */
-/*         the error will be diagnosed and signaled by a routine in the */
-/*         call tree of this routine. */
+/*     10) If PCK data specifying the target body-fixed frame orientation */
+/*         have not been loaded prior to calling ILLUMG, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /*     11) If METHOD specifies that the target surface is represented by */
 /*         DSK data, and no DSK files are loaded for the specified */
-/*         target, the error is signaled by a routine in the call tree */
+/*         target, an error is signaled by a routine in the call tree */
 /*         of this routine. */
 
-/*     12) If METHOD specifies that the target surface is represented */
-/*         by DSK data, and data representing the portion of the surface */
-/*         on which SPOINT is located are not available, an error will */
-/*         be signaled by a routine in the call tree of this routine. */
+/*     12) If METHOD specifies that the target surface is represented by */
+/*         DSK data, and data representing the portion of the surface on */
+/*         which SPOINT is located are not available, an error is */
+/*         signaled by a routine in the call tree of this routine. */
 
 /*     13) If METHOD specifies that the target surface is represented */
 /*         by DSK data, SPOINT must lie on the target surface, not above */
 /*         or below it. A small tolerance is used to allow for round-off */
 /*         error in the calculation determining whether SPOINT is on the */
-/*         surface. If, in the DSK case, SPOINT is too far from the */
-/*         surface, an error will be signaled by a routine in the call */
-/*         tree of this routine. */
+/*         surface. */
+
+/*         If, in the DSK case, SPOINT is too far from the surface, an */
+/*         error is signaled by a routine in the call tree of this */
+/*         routine. */
 
 /*         If the surface is represented by a triaxial ellipsoid, SPOINT */
 /*         is not required to be close to the ellipsoid; however, the */
 /*         results computed by this routine will be unreliable if SPOINT */
 /*         is too far from the ellipsoid. */
+
+/*     14) If radii for TARGET are not found in the kernel pool, an error */
+/*         is signaled by a routine in the call tree of this routine. */
+
+/*     15) If the size of the TARGET body radii kernel variable is not */
+/*         three, an error is signaled by a routine in the call tree of */
+/*         this routine. */
+
+/*     16) If any of the three TARGET body radii is less-than or equal to */
+/*         zero, an error is signaled by a routine in the call tree of */
+/*         this routine. */
 
 /* $ Files */
 
@@ -954,79 +953,78 @@ static integer c__3 = 3;
 
 /*     The following data are required: */
 
-/*        - SPK data: ephemeris data for target, observer, and the */
-/*          illumination source must be loaded. If aberration */
-/*          corrections are used, the states of target, observer, and */
-/*          the illumination source relative to the solar system */
-/*          barycenter must be calculable from the available ephemeris */
-/*          data. Typically ephemeris data are made available by loading */
-/*          one or more SPK files via FURNSH. */
+/*     -  SPK data: ephemeris data for target, observer, and the */
+/*        illumination source must be loaded. If aberration */
+/*        corrections are used, the states of target, observer, and */
+/*        the illumination source relative to the solar system */
+/*        barycenter must be calculable from the available ephemeris */
+/*        data. Typically ephemeris data are made available by loading */
+/*        one or more SPK files via FURNSH. */
 
-/*        - PCK data: rotation data for the target body must be */
-/*          loaded. These may be provided in a text or binary PCK file. */
+/*     -  PCK data: rotation data for the target body must be */
+/*        loaded. These may be provided in a text or binary PCK file. */
 
-/*        - Shape data for the target body: */
+/*     -  Shape data for the target body: */
 
-/*            PCK data: */
+/*           PCK data: */
 
-/*               If the target body shape is modeled as an ellipsoid, */
-/*               triaxial radii for the target body must be loaded into */
-/*               the kernel pool. Typically this is done by loading a */
-/*               text PCK file via FURNSH. */
+/*              If the target body shape is modeled as an ellipsoid, */
+/*              triaxial radii for the target body must be loaded into */
+/*              the kernel pool. Typically this is done by loading a */
+/*              text PCK file via FURNSH. */
 
-/*               Triaxial radii are also needed if the target shape is */
-/*               modeled by DSK data, but the DSK NADIR method is */
-/*               selected. */
+/*              Triaxial radii are also needed if the target shape is */
+/*              modeled by DSK data, but the DSK NADIR method is */
+/*              selected. */
 
-/*            DSK data: */
+/*           DSK data: */
 
-/*               If the target shape is modeled by DSK data, DSK files */
-/*               containing topographic data for the target body must be */
-/*               loaded. If a surface list is specified, data for at */
-/*               least one of the listed surfaces must be loaded. */
+/*              If the target shape is modeled by DSK data, DSK files */
+/*              containing topographic data for the target body must be */
+/*              loaded. If a surface list is specified, data for at */
+/*              least one of the listed surfaces must be loaded. */
 
 /*     The following data may be required: */
 
-/*        - Frame data: if a frame definition is required to convert the */
-/*          observer and target states to the body-fixed frame of the */
-/*          target, that definition must be available in the kernel */
-/*          pool. Typically the definition is supplied by loading a */
-/*          frame kernel via FURNSH. */
+/*     -  Frame data: if a frame definition is required to convert the */
+/*        observer and target states to the body-fixed frame of the */
+/*        target, that definition must be available in the kernel */
+/*        pool. Typically the definition is supplied by loading a */
+/*        frame kernel via FURNSH. */
 
-/*        - Surface name-ID associations: if surface names are specified */
-/*          in METHOD, the association of these names with their */
-/*          corresponding surface ID codes must be established by */
-/*          assignments of the kernel variables */
+/*     -  Surface name-ID associations: if surface names are specified */
+/*        in METHOD, the association of these names with their */
+/*        corresponding surface ID codes must be established by */
+/*        assignments of the kernel variables */
 
-/*             NAIF_SURFACE_NAME */
-/*             NAIF_SURFACE_CODE */
-/*             NAIF_SURFACE_BODY */
+/*           NAIF_SURFACE_NAME */
+/*           NAIF_SURFACE_CODE */
+/*           NAIF_SURFACE_BODY */
 
-/*          Normally these associations are made by loading a text */
-/*          kernel containing the necessary assignments. An example */
-/*          of such an assignment is */
+/*        Normally these associations are made by loading a text */
+/*        kernel containing the necessary assignments. An example */
+/*        of such an assignment is */
 
-/*             NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
-/*             NAIF_SURFACE_CODE += 1 */
-/*             NAIF_SURFACE_BODY += 499 */
+/*           NAIF_SURFACE_NAME += 'Mars MEGDR 128 PIXEL/DEG' */
+/*           NAIF_SURFACE_CODE += 1 */
+/*           NAIF_SURFACE_BODY += 499 */
 
 /*     In all cases, kernel data are normally loaded once per program */
 /*     run, NOT every time this routine is called. */
-
 
 /* $ Particulars */
 
 /*     SPICELIB contains four routines that compute illumination angles: */
 
-/*        ILLUMF (same as this routine, except that illumination */
-/*                and visibility flags are returned) */
+/*        ILLUMF   (same as this routine, except that illumination */
+/*                  and visibility flags are returned) */
 
-/*        ILLUMG (this routine) */
+/*        ILLUMG   (this routine) */
 
-/*        ILUMIN (same as ILLUMG, except that the sun is fixed */
-/*                as the illumination source) */
+/*        ILUMIN   (same as ILLUMG, except that the sun is fixed */
+/*                  as the illumination source) */
 
-/*        ILLUM  (deprecated) */
+/*        ILLUM    (deprecated) */
 
 /*     ILLUMF is the most capable of the set. */
 
@@ -1058,6 +1056,7 @@ static integer c__3 = 3;
 /*     and phase angles are "inc.", "e.", and "phase". */
 
 
+
 /*                                                      * */
 /*                                              illumination source */
 
@@ -1076,6 +1075,7 @@ static integer c__3 = 3;
 /*      viewing            vector            target body */
 /*      location           to viewing */
 /*      (observer)         location */
+
 
 
 /*     Note that if the target-observer vector, the target normal vector */
@@ -1272,8 +1272,7 @@ static integer c__3 = 3;
 /*        An example of a METHOD argument that could be constructed */
 /*        using one of the surface lists above is */
 
-/*              'DSK/UNPRIORITIZED/SURFACES = ' */
-/*           // '"Mars MEGDR 64 PIXEL/DEG", 3' */
+/*           'DSK/UNPRIORITIZED/SURFACES = "Mars MEGDR 64 PIXEL/DEG", 3' */
 
 
 /*        Aberration corrections using DSK data */
@@ -1287,7 +1286,6 @@ static integer c__3 = 3;
 /*        using an iterative algorithm, may converge slowly or not at */
 /*        all. In all cases, the light time computation will terminate, */
 /*        but the result may be less accurate than expected. */
-
 
 /* $ Examples */
 
@@ -1306,6 +1304,7 @@ static integer c__3 = 3;
 
 /*        Use the meta-kernel shown below to load the required SPICE */
 /*        kernels. */
+
 
 /*           KPL/MK */
 
@@ -1346,205 +1345,204 @@ static integer c__3 = 3;
 /*           \begintext */
 
 
-
 /*        Example code begins here. */
 
 
-/*           PROGRAM EX1 */
-/*           IMPLICIT NONE */
-/*     C */
-/*     C     SPICELIB functions */
-/*     C */
-/*           DOUBLE PRECISION      DPR */
-/*     C */
-/*     C     Local parameters */
-/*     C */
-/*           CHARACTER*(*)         F1 */
-/*           PARAMETER           ( F1     = '(A,F15.9)' ) */
+/*              PROGRAM ILLUMG_EX1 */
+/*              IMPLICIT NONE */
+/*        C */
+/*        C     SPICELIB functions */
+/*        C */
+/*              DOUBLE PRECISION      DPR */
+/*        C */
+/*        C     Local parameters */
+/*        C */
+/*              CHARACTER*(*)         F1 */
+/*              PARAMETER           ( F1     = '(A,F15.9)' ) */
 
-/*           CHARACTER*(*)         F2 */
-/*           PARAMETER           ( F2     = '(A)' ) */
+/*              CHARACTER*(*)         F2 */
+/*              PARAMETER           ( F2     = '(A)' ) */
 
-/*           CHARACTER*(*)         F3 */
-/*           PARAMETER           ( F3     = '(A,2(2X,L))' ) */
+/*              CHARACTER*(*)         F3 */
+/*              PARAMETER           ( F3     = '(A,2(2X,L))' ) */
 
-/*           CHARACTER*(*)         META */
-/*           PARAMETER           ( META   = 'illumg_ex1.tm' ) */
+/*              CHARACTER*(*)         META */
+/*              PARAMETER           ( META   = 'illumg_ex1.tm' ) */
 
-/*           INTEGER               NAMLEN */
-/*           PARAMETER           ( NAMLEN = 32 ) */
+/*              INTEGER               NAMLEN */
+/*              PARAMETER           ( NAMLEN = 32 ) */
 
-/*           INTEGER               TIMLEN */
-/*           PARAMETER           ( TIMLEN = 25 ) */
+/*              INTEGER               TIMLEN */
+/*              PARAMETER           ( TIMLEN = 25 ) */
 
-/*           INTEGER               CORLEN */
-/*           PARAMETER           ( CORLEN = 5 ) */
+/*              INTEGER               CORLEN */
+/*              PARAMETER           ( CORLEN = 5 ) */
 
-/*           INTEGER               MTHLEN */
-/*           PARAMETER           ( MTHLEN = 50 ) */
+/*              INTEGER               MTHLEN */
+/*              PARAMETER           ( MTHLEN = 50 ) */
 
-/*           INTEGER               NMETH */
-/*           PARAMETER           ( NMETH  = 2 ) */
-/*     C */
-/*     C     Local variables */
-/*     C */
-/*           CHARACTER*(CORLEN)    ABCORR */
-/*           CHARACTER*(NAMLEN)    FIXREF */
-/*           CHARACTER*(MTHLEN)    ILUMTH ( NMETH ) */
-/*           CHARACTER*(NAMLEN)    OBSRVR */
-/*           CHARACTER*(MTHLEN)    SUBMTH ( NMETH ) */
-/*           CHARACTER*(NAMLEN)    TARGET */
-/*           CHARACTER*(TIMLEN)    UTC */
+/*              INTEGER               NMETH */
+/*              PARAMETER           ( NMETH  = 2 ) */
+/*        C */
+/*        C     Local variables */
+/*        C */
+/*              CHARACTER*(CORLEN)    ABCORR */
+/*              CHARACTER*(NAMLEN)    FIXREF */
+/*              CHARACTER*(MTHLEN)    ILUMTH ( NMETH ) */
+/*              CHARACTER*(NAMLEN)    OBSRVR */
+/*              CHARACTER*(MTHLEN)    SUBMTH ( NMETH ) */
+/*              CHARACTER*(NAMLEN)    TARGET */
+/*              CHARACTER*(TIMLEN)    UTC */
 
-/*           DOUBLE PRECISION      ET */
-/*           DOUBLE PRECISION      SRFVEC ( 3 ) */
-/*           DOUBLE PRECISION      SSCEMI */
-/*           DOUBLE PRECISION      SSCPHS */
-/*           DOUBLE PRECISION      SSCPT  ( 3 ) */
-/*           DOUBLE PRECISION      SSCSOL */
-/*           DOUBLE PRECISION      SSLEMI */
-/*           DOUBLE PRECISION      SSLPHS */
-/*           DOUBLE PRECISION      SSLSOL */
-/*           DOUBLE PRECISION      SSOLPT ( 3 ) */
-/*           DOUBLE PRECISION      TRGEPC */
+/*              DOUBLE PRECISION      ET */
+/*              DOUBLE PRECISION      SRFVEC ( 3 ) */
+/*              DOUBLE PRECISION      SSCEMI */
+/*              DOUBLE PRECISION      SSCPHS */
+/*              DOUBLE PRECISION      SSCPT  ( 3 ) */
+/*              DOUBLE PRECISION      SSCSOL */
+/*              DOUBLE PRECISION      SSLEMI */
+/*              DOUBLE PRECISION      SSLPHS */
+/*              DOUBLE PRECISION      SSLSOL */
+/*              DOUBLE PRECISION      SSOLPT ( 3 ) */
+/*              DOUBLE PRECISION      TRGEPC */
 
-/*           INTEGER               I */
+/*              INTEGER               I */
 
 
-/*     C */
-/*     C     Initial values */
-/*     C */
-/*           DATA                  ILUMTH / 'Ellipsoid', */
-/*          .                               'DSK/Unprioritized' / */
+/*        C */
+/*        C     Initial values */
+/*        C */
+/*              DATA                  ILUMTH / 'Ellipsoid', */
+/*             .                               'DSK/Unprioritized' / */
 
-/*           DATA                  SUBMTH / 'Near Point/Ellipsoid', */
-/*          .                            'DSK/Nadir/Unprioritized' / */
+/*              DATA                  SUBMTH / 'Near Point/Ellipsoid', */
+/*             .                            'DSK/Nadir/Unprioritized' / */
 
-/*     C */
-/*     C     Load kernel files. */
-/*     C */
-/*           CALL FURNSH ( META ) */
-/*     C */
-/*     C     Convert the UTC request time string to seconds past */
-/*     C     J2000 TDB. */
-/*     C */
-/*           UTC = '2003 OCT 13 06:00:00 UTC' */
+/*        C */
+/*        C     Load kernel files. */
+/*        C */
+/*              CALL FURNSH ( META ) */
+/*        C */
+/*        C     Convert the UTC request time string to seconds past */
+/*        C     J2000 TDB. */
+/*        C */
+/*              UTC = '2003 OCT 13 06:00:00 UTC' */
 
-/*           CALL UTC2ET ( UTC, ET ) */
-
-/*           WRITE (*,F2) ' ' */
-/*           WRITE (*,F2) 'UTC epoch is '//UTC */
-/*     C */
-/*     C     Assign observer and target names. The acronym MGS */
-/*     C     indicates Mars Global Surveyor. See NAIF_IDS for a */
-/*     C     list of names recognized by SPICE. Also set the */
-/*     C     aberration correction flag. */
-/*     C */
-/*           TARGET = 'Mars' */
-/*           OBSRVR = 'MGS' */
-/*           FIXREF = 'IAU_MARS' */
-/*           ABCORR = 'CN+S' */
-
-/*           DO I = 1, NMETH */
-/*     C */
-/*     C        Find the sub-solar point on Mars as */
-/*     C        seen from the MGS spacecraft at ET. Use the */
-/*     C        "near point" style of sub-point definition */
-/*     C        when the shape model is an ellipsoid, and use */
-/*     C        the "nadir" style when the shape model is */
-/*     C        provided by DSK data. This makes it easy to */
-/*     C        verify the solar incidence angle when */
-/*     C        the target is modeled as an  ellipsoid. */
-/*     C */
-/*              CALL SUBSLR ( SUBMTH(I),  TARGET,  ET, */
-/*          .                 FIXREF,     ABCORR,  OBSRVR, */
-/*          .                 SSOLPT,     TRGEPC,  SRFVEC  ) */
-/*     C */
-/*     C        Now find the sub-spacecraft point. */
-/*     C */
-/*              CALL SUBPNT ( SUBMTH(I),  TARGET,  ET, */
-/*          .                 FIXREF,     ABCORR,  OBSRVR, */
-/*          .                 SSCPT,      TRGEPC,  SRFVEC ) */
-/*     C */
-/*     C        Find the phase, solar incidence, and emission */
-/*     C        angles at the sub-solar point on Mars as */
-/*     C        seen from MGS at time ET. */
-/*     C */
-/*              CALL ILLUMG ( ILUMTH(I), TARGET,  'SUN', */
-/*          .                 ET,        FIXREF,  ABCORR, */
-/*          .                 OBSRVR,    SSOLPT,  TRGEPC, */
-/*          .                 SRFVEC,    SSLPHS,  SSLSOL, */
-/*          .                 SSLEMI                      ) */
-/*     C */
-/*     C        Do the same for the sub-spacecraft point. */
-/*     C */
-/*              CALL ILLUMG ( ILUMTH(I), TARGET,  'SUN', */
-/*          .                 ET,        FIXREF,  ABCORR, */
-/*          .                 OBSRVR,    SSCPT,   TRGEPC, */
-/*          .                 SRFVEC,    SSCPHS,  SSCSOL, */
-/*          .                 SSCEMI                      ) */
-/*     C */
-/*     C        Convert the angles to degrees and write them out. */
-/*     C */
-/*              SSLPHS = DPR() * SSLPHS */
-/*              SSLSOL = DPR() * SSLSOL */
-/*              SSLEMI = DPR() * SSLEMI */
-
-/*              SSCPHS = DPR() * SSCPHS */
-/*              SSCSOL = DPR() * SSCSOL */
-/*              SSCEMI = DPR() * SSCEMI */
+/*              CALL UTC2ET ( UTC, ET ) */
 
 /*              WRITE (*,F2) ' ' */
-/*              WRITE (*,F2) '   ILLUMG method: '//ILUMTH(I) */
-/*              WRITE (*,F2) '   SUBPNT method: '//SUBMTH(I) */
-/*              WRITE (*,F2) '   SUBSLR method: '//SUBMTH(I) */
-/*              WRITE (*,F2) ' ' */
-/*              WRITE (*,F2) '      Illumination angles at the ' */
-/*          .   //           'sub-solar point:' */
-/*              WRITE (*,F2) ' ' */
+/*              WRITE (*,F2) 'UTC epoch is '//UTC */
+/*        C */
+/*        C     Assign observer and target names. The acronym MGS */
+/*        C     indicates Mars Global Surveyor. See NAIF_IDS for a */
+/*        C     list of names recognized by SPICE. Also set the */
+/*        C     aberration correction flag. */
+/*        C */
+/*              TARGET = 'Mars' */
+/*              OBSRVR = 'MGS' */
+/*              FIXREF = 'IAU_MARS' */
+/*              ABCORR = 'CN+S' */
 
-/*              WRITE (*,F1) '      Phase angle           (deg.): ', */
-/*          .                SSLPHS */
-/*              WRITE (*,F1) '      Solar incidence angle (deg.): ', */
-/*          .                SSLSOL */
-/*              WRITE (*,F1) '      Emission angle        (deg.): ', */
-/*          .                SSLEMI */
-/*              WRITE (*,F2) ' ' */
+/*              DO I = 1, NMETH */
+/*        C */
+/*        C        Find the sub-solar point on Mars as */
+/*        C        seen from the MGS spacecraft at ET. Use the */
+/*        C        "near point" style of sub-point definition */
+/*        C        when the shape model is an ellipsoid, and use */
+/*        C        the "nadir" style when the shape model is */
+/*        C        provided by DSK data. This makes it easy to */
+/*        C        verify the solar incidence angle when */
+/*        C        the target is modeled as an  ellipsoid. */
+/*        C */
+/*                 CALL SUBSLR ( SUBMTH(I),  TARGET,  ET, */
+/*             .                 FIXREF,     ABCORR,  OBSRVR, */
+/*             .                 SSOLPT,     TRGEPC,  SRFVEC  ) */
+/*        C */
+/*        C        Now find the sub-spacecraft point. */
+/*        C */
+/*                 CALL SUBPNT ( SUBMTH(I),  TARGET,  ET, */
+/*             .                 FIXREF,     ABCORR,  OBSRVR, */
+/*             .                 SSCPT,      TRGEPC,  SRFVEC ) */
+/*        C */
+/*        C        Find the phase, solar incidence, and emission */
+/*        C        angles at the sub-solar point on Mars as */
+/*        C        seen from MGS at time ET. */
+/*        C */
+/*                 CALL ILLUMG ( ILUMTH(I), TARGET,  'SUN', */
+/*             .                 ET,        FIXREF,  ABCORR, */
+/*             .                 OBSRVR,    SSOLPT,  TRGEPC, */
+/*             .                 SRFVEC,    SSLPHS,  SSLSOL, */
+/*             .                 SSLEMI                      ) */
+/*        C */
+/*        C        Do the same for the sub-spacecraft point. */
+/*        C */
+/*                 CALL ILLUMG ( ILUMTH(I), TARGET,  'SUN', */
+/*             .                 ET,        FIXREF,  ABCORR, */
+/*             .                 OBSRVR,    SSCPT,   TRGEPC, */
+/*             .                 SRFVEC,    SSCPHS,  SSCSOL, */
+/*             .                 SSCEMI                      ) */
+/*        C */
+/*        C        Convert the angles to degrees and write them out. */
+/*        C */
+/*                 SSLPHS = DPR() * SSLPHS */
+/*                 SSLSOL = DPR() * SSLSOL */
+/*                 SSLEMI = DPR() * SSLEMI */
 
-/*              IF ( I .EQ. 1 ) THEN */
-/*                 WRITE (*,F2) '        The solar incidence angle ' */
-/*          .      //           'should be 0.' */
-/*                 WRITE (*,F2) '        The emission and phase ' */
-/*          .      //           'angles should be equal.' */
+/*                 SSCPHS = DPR() * SSCPHS */
+/*                 SSCSOL = DPR() * SSCSOL */
+/*                 SSCEMI = DPR() * SSCEMI */
+
 /*                 WRITE (*,F2) ' ' */
-/*              END IF */
+/*                 WRITE (*,F2) '   ILLUMG method: '//ILUMTH(I) */
+/*                 WRITE (*,F2) '   SUBPNT method: '//SUBMTH(I) */
+/*                 WRITE (*,F2) '   SUBSLR method: '//SUBMTH(I) */
+/*                 WRITE (*,F2) ' ' */
+/*                 WRITE (*,F2) '      Illumination angles at the ' */
+/*             .   //           'sub-solar point:' */
+/*                 WRITE (*,F2) ' ' */
+
+/*                 WRITE (*,F1) '      Phase angle           (deg.): ', */
+/*             .                SSLPHS */
+/*                 WRITE (*,F1) '      Solar incidence angle (deg.): ', */
+/*             .                SSLSOL */
+/*                 WRITE (*,F1) '      Emission angle        (deg.): ', */
+/*             .                SSLEMI */
+/*                 WRITE (*,F2) ' ' */
+
+/*                 IF ( I .EQ. 1 ) THEN */
+/*                    WRITE (*,F2) '        The solar incidence angle ' */
+/*             .      //           'should be 0.' */
+/*                    WRITE (*,F2) '        The emission and phase ' */
+/*             .      //           'angles should be equal.' */
+/*                    WRITE (*,F2) ' ' */
+/*                 END IF */
 
 
-/*              WRITE (*,F2) '      Illumination angles at the ' */
-/*          .   //          'sub-s/c point:' */
-/*              WRITE (*,F2) ' ' */
-/*              WRITE (*,F1) '      Phase angle           (deg.): ', */
-/*          .               SSCPHS */
-/*              WRITE (*,F1) '      Solar incidence angle (deg.): ', */
-/*          .               SSCSOL */
-/*              WRITE (*,F1) '      Emission angle        (deg.): ', */
-/*          .               SSCEMI */
-/*              WRITE (*,F2) ' ' */
+/*                 WRITE (*,F2) '      Illumination angles at the ' */
+/*             .   //          'sub-s/c point:' */
+/*                 WRITE (*,F2) ' ' */
+/*                 WRITE (*,F1) '      Phase angle           (deg.): ', */
+/*             .               SSCPHS */
+/*                 WRITE (*,F1) '      Solar incidence angle (deg.): ', */
+/*             .               SSCSOL */
+/*                 WRITE (*,F1) '      Emission angle        (deg.): ', */
+/*             .               SSCEMI */
+/*                 WRITE (*,F2) ' ' */
 
-/*              IF ( I .EQ. 1 ) THEN */
-/*                 WRITE (*,F2) '        The emission angle ' */
-/*          .      //           'should be 0.' */
-/*                 WRITE (*,F2) '        The solar incidence ' */
-/*          .      //           'and phase angles should be equal.' */
-/*              END IF */
+/*                 IF ( I .EQ. 1 ) THEN */
+/*                    WRITE (*,F2) '        The emission angle ' */
+/*             .      //           'should be 0.' */
+/*                    WRITE (*,F2) '        The solar incidence ' */
+/*             .      //           'and phase angles should be equal.' */
+/*                 END IF */
 
-/*           END DO */
+/*              END DO */
 
-/*           END */
+/*              END */
 
 
-/*     When this program was executed on a PC/Linux/gfortran 64-bit */
-/*     platform, the output was: */
+/*        When this program was executed on a Mac/Intel/gfortran/64-bit */
+/*        platform, the output was: */
 
 
 /*        UTC epoch is 2003 OCT 13 06:00:00 UTC */
@@ -1590,7 +1588,10 @@ static integer c__3 = 3;
 
 /* $ Restrictions */
 
-/*     None. */
+/*     1)  Results from this routine are not meaningful if the input */
+/*         point lies on a ridge or vertex of a surface represented by */
+/*         DSK data, or if for any other reason the direction of the */
+/*         outward normal vector at the point is undefined. */
 
 /* $ Literature_References */
 
@@ -1598,10 +1599,21 @@ static integer c__3 = 3;
 
 /* $ Author_and_Institution */
 
-/*     N.J. Bachman   (JPL) */
-/*     B.V. Semenov   (JPL) */
+/*     N.J. Bachman       (JPL) */
+/*     J. Diaz del Rio    (ODC Space) */
+/*     B.V. Semenov       (JPL) */
+/*     E.D. Wright        (JPL) */
 
 /* $ Version */
+
+/* -    SPICELIB Version 2.1.0, 20-NOV-2021 (JDR) (EDW) (NJB) */
+
+/*        Bug fix: PRVCOR is no longer set to blank before */
+/*        ABCORR is parsed. */
+
+/*        Body radii accessed from kernel pool using ZZGFTREB. */
+
+/*        Minor edits to header. */
 
 /* -    SPICELIB Version 2.0.0, 04-APR-2017 (NJB) */
 
@@ -1609,7 +1621,7 @@ static integer c__3 = 3;
 
 /*        Upgraded to support surfaces represented by DSKs. */
 
-/* -    SPICELIB Version 1.0.0, 31-MAR-2014 (NJB)(BVS) */
+/* -    SPICELIB Version 1.0.0, 31-MAR-2014 (NJB) (BVS) */
 
 /* -& */
 /* $ Index_Entries */
@@ -1619,11 +1631,6 @@ static integer c__3 = 3;
 /*     phase angle general source */
 /*     incidence angle general source */
 /*     emission angle general source */
-
-/* -& */
-/* $ Revisions */
-
-/*     None. */
 
 /* -& */
 
@@ -1692,11 +1699,6 @@ static integer c__3 = 3;
 /*     If necessary, parse the aberration correction flag. */
 
     if (first || s_cmp(abcorr, prvcor, abcorr_len, (ftnlen)5) != 0) {
-
-/*        Make sure the results of this block won't be reused */
-/*        if we bail out due to an error. */
-
-	s_copy(prvcor, " ", (ftnlen)5, (ftnlen)1);
 
 /*        The aberration correction flag differs from the value it */
 /*        had on the previous call, if any. Analyze the new flag. */
@@ -1938,7 +1940,7 @@ static integer c__3 = 3;
 
 /*        We'll need the radii of the target body. */
 
-	bodvcd_(&trgcde, "RADII", &c__3, &n, radii, (ftnlen)5);
+	zzgftreb_(&trgcde, radii);
 	surfnm_(radii, &radii[1], &radii[2], spoint, normal);
 
 /*        We check FAILED at the end of the IF block. */
